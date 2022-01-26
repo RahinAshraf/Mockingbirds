@@ -1,5 +1,20 @@
 # veloplan
 
+# Team *Mockingbirds* Large Group project
+
+## Team members
+- *Rahin Ashraf - k20034059*
+- *Marija Buivyte*
+- *Fariha Choudhury - k20059723*
+- *Elisabeth Halvorsen*
+- *Nicole Lehchevska*
+- *Eduard Ragea*
+- *Hristina-Andreea Sararu*
+- *Lilianna Szabo*
+- *Tayyibah Uddin - k20059556*
+
+
+
 A new Flutter project.
 
 ## Getting Started
