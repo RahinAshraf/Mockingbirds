@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import './screens/map_screen.dart';
 import './screens/auth_screen.dart';
+import './providers/auth.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,28 +19,37 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-          title: 'Veloplan',
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSwatch(
-              primarySwatch: Colors.green,
-            ).copyWith(
-              secondary: Colors.black,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (ctx) => Auth(),
+        ),
+      ],
+      child: Consumer<Auth>(
+        builder: (ctx, auth, _) => MaterialApp(
+              title: 'Veloplan',
+              theme: ThemeData(
+                colorScheme: ColorScheme.fromSwatch(
+                  primarySwatch: Colors.green,
+                ).copyWith(
+                  secondary: Colors.black,
+                ),
+              ),
+              //home: const MyHomePage(title: 'Topper'),
+              initialRoute: '/auth',
+              routes: {
+                '/': (ctx) => MapPage(),
+                '/auth' : (ctx) => const AuthScreen(),
+              },
+              onGenerateRoute: (settings) {
+                //print(settings.arguments);
+                return MaterialPageRoute(builder: (ctx) => AuthScreen());
+              },
+              onUnknownRoute: (settings) {
+                return MaterialPageRoute(builder: (ctx) => AuthScreen());
+              },
             ),
-          ),
-          //home: const MyHomePage(title: 'Topper'),
-          initialRoute: '/auth',
-          routes: {
-            '/': (ctx) => MapPage(),
-            '/auth' : (ctx) => const AuthScreen(),
-          },
-          onGenerateRoute: (settings) {
-            //print(settings.arguments);
-            return MaterialPageRoute(builder: (ctx) => AuthScreen());
-          },
-          onUnknownRoute: (settings) {
-            return MaterialPageRoute(builder: (ctx) => AuthScreen());
-          },
-        );
+      ),
+    );
   }
 }
