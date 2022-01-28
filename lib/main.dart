@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import './screens/map_screen.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -15,6 +17,28 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return MaterialApp(
+          title: 'Veloplan',
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSwatch(
+              primarySwatch: Colors.green,
+            ).copyWith(
+              secondary: Colors.black,
+            ),
+          ),
+          //home: const MyHomePage(title: 'Topper'),
+          initialRoute: '/auth',
+          routes: {
+            '/': (ctx) => const MapPage(),
+            '/auth' : (ctx) => const AuthScreen(),
+          },
+          onGenerateRoute: (settings) {
+            //print(settings.arguments);
+            return MaterialPageRoute(builder: (ctx) => const MapPage());
+          },
+          onUnknownRoute: (settings) {
+            return MaterialPageRoute(builder: (ctx) => const MapPage());
+          },
+        );
   }
 }
