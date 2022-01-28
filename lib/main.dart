@@ -1,8 +1,6 @@
-// import 'dart:js';
-
 import 'package:flutter/material.dart';
-import 'screens/map.dart';
-import 'screens/login.dart';
+import 'screens/map_screen.dart';
+import 'screens/login_screen.dart';
 
 void main() {
   runApp(MaterialApp(
