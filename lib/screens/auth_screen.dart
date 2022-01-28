@@ -62,7 +62,7 @@ class AuthScreen extends StatelessWidget {
                         ],
                       ),
                       child: Text(
-                        'Topper',
+                        'Veloplan',
                         style: TextStyle(
                           color: Theme.of(context).primaryColor,
                           fontSize: 50,
