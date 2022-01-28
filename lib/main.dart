@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import './screens/map_screen.dart';
+import './screens/auth_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -29,15 +30,15 @@ class _MyAppState extends State<MyApp> {
           //home: const MyHomePage(title: 'Topper'),
           initialRoute: '/auth',
           routes: {
-            '/': (ctx) => const MapPage(),
+            '/': (ctx) => MapPage(),
             '/auth' : (ctx) => const AuthScreen(),
           },
           onGenerateRoute: (settings) {
             //print(settings.arguments);
-            return MaterialPageRoute(builder: (ctx) => const MapPage());
+            return MaterialPageRoute(builder: (ctx) => AuthScreen());
           },
           onUnknownRoute: (settings) {
-            return MaterialPageRoute(builder: (ctx) => const MapPage());
+            return MaterialPageRoute(builder: (ctx) => AuthScreen());
           },
         );
   }
