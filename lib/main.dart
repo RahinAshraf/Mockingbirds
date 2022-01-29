@@ -36,9 +36,9 @@ class _MyAppState extends State<MyApp> {
                 ),
               ),
               //home: const MyHomePage(title: 'Topper'),
-              initialRoute: '/auth',
+              home: auth.isAuth ? MapPage() : AuthScreen(),
               routes: {
-                '/': (ctx) => MapPage(),
+                '/map': (ctx) => MapPage(),
                 '/auth' : (ctx) => const AuthScreen(),
               },
               onGenerateRoute: (settings) {
