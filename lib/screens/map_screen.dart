@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_flutter_platform_interface/src/types/bitmap.dart';
 import 'package:google_maps_flutter_platform_interface/src/types/location.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/auth.dart';
 
 const LatLng SOURCE_LOCATION = LatLng(51.51185004458236, -0.11580820118980878); //points to bush house - CHANGE this to users current live location
 const LatLng DEST_LOCATION = LatLng(42.744421,-71.1698939); //dummy value for time being - change DEST_LOCATION to what the user inputs later on
@@ -75,6 +78,9 @@ class _MyHomePageState extends State<MapPage>{
               },
             ),
           ),
+          FloatingActionButton(onPressed: () {
+              Provider.of<Auth>(context, listen: false).logout();
+          })
         ],
       )
     );
