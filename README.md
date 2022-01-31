@@ -7,7 +7,7 @@
 - *Marija Buivyte*
 - *Fariha Choudhury - k20059723*
 - *Elisabeth Halvorsen*
-- *Nicole Lehchevska*
+- *Nicole Lehchevska - k20041914*
 - *Eduard Ragea*
 - *Hristina-Andreea Sararu*
 - *Lilianna Szabo*
