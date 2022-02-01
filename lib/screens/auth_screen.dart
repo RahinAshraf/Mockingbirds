@@ -21,6 +21,8 @@ class _AuthScreenState extends State<AuthScreen> {
     String email,
     String password,
     String username,
+    String firstName,
+    String lastName,
     // File image,
     bool isLogin,
     BuildContext ctx,
@@ -57,6 +59,8 @@ class _AuthScreenState extends State<AuthScreen> {
             .set({
           'username': username,
           'email': email,
+          'firstName': firstName,
+          'lastName': lastName,
           // 'image_url': url,
         });
       }

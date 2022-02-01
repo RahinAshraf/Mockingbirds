@@ -15,6 +15,8 @@ class AuthForm extends StatefulWidget {
     String email,
     String password,
     String userName,
+    String firstName,
+    String lastName,
     // File image,
     bool isLogin,
     BuildContext ctx,
@@ -30,6 +32,9 @@ class _AuthFormState extends State<AuthForm> {
   var _userEmail = '';
   var _userName = '';
   var _userPassword = '';
+  var _firstName = '';
+  var _lastName = '';
+
   // File _userImageFile;
 
   // void _pickedImage(File image) {
@@ -56,6 +61,8 @@ class _AuthFormState extends State<AuthForm> {
         _userEmail.trim(),
         _userPassword.trim(),
         _userName.trim(),
+        _firstName,
+        _lastName,
         // _userImageFile,
         _isLogin,
         context,
@@ -77,6 +84,40 @@ class _AuthFormState extends State<AuthForm> {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   // if (!_isLogin) UserImagePicker(_pickedImage),
+                  if (!_isLogin)
+                    TextFormField(
+                      key: ValueKey('firstName'),
+                      autocorrect: true,
+                      textCapitalization: TextCapitalization.words,
+                      enableSuggestions: false,
+                      validator: (value) {
+                        if (value!.isEmpty || value.length < 2) {
+                          return 'Please enter at least 2 characters';
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(labelText: 'First Name'),
+                      onSaved: (value) {
+                        _firstName = value!;
+                      },
+                    ),
+                  if (!_isLogin)
+                    TextFormField(
+                      key: ValueKey('lastName'),
+                      autocorrect: true,
+                      textCapitalization: TextCapitalization.words,
+                      enableSuggestions: false,
+                      validator: (value) {
+                        if (value!.isEmpty || value.length < 2) {
+                          return 'Please enter at least 2 characters';
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(labelText: 'Last Name'),
+                      onSaved: (value) {
+                        _lastName = value!;
+                      },
+                    ),
                   TextFormField(
                     key: ValueKey('email'),
                     autocorrect: false,
