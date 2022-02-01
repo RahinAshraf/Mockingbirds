@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-class Jurney extends StatelessWidget {
+class Journey extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Your jurney'),
+        title: const Text('Your journey'),
       ),
       body: Center(
-        child: Text("Jurney page!"),
+        child: Text("Journey page!"),
       ),
     );
   }

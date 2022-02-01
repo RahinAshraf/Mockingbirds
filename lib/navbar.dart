@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'screens/favourite_screen.dart';
 import 'screens/help_screen.dart';
-import 'screens/jurney_screen.dart';
+import 'screens/journey_screen.dart';
 import 'screens/map_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/setting_screen.dart';
@@ -29,7 +29,7 @@ class _MainPageState extends State<MainPage> {
   final screens = [
     Favourite(),
     Help(),
-    Jurney(),
+    Journey(),
     MapPage(),
     Profile(),
     Settings()
@@ -68,7 +68,7 @@ class _MainPageState extends State<MainPage> {
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.timeline),
-              label: 'jurney',
+              label: 'journey',
               //backgroundColor: Colors.red),
             ),
             BottomNavigationBarItem(
