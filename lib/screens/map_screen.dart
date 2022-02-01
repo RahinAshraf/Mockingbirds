@@ -79,9 +79,11 @@ class _MyHomePageState extends State<MapPage>{
               },
             ),
           ),
-          FloatingActionButton(onPressed: () {
+          Padding(
+            padding:EdgeInsets.all(56.0),
+            child: FloatingActionButton(onPressed: () {
                 FirebaseAuth.instance.signOut();
-            },)
+            },)),
         ],
       )
     );
