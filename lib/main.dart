@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+
 
 import './screens/map_screen.dart';
 import './screens/auth_screen.dart';
@@ -20,45 +23,39 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (ctx) => Auth(),
-        ),
-      ],
-      child: Consumer<Auth>(
-        builder: (ctx, auth, _) => MaterialApp(
-          title: 'Veloplan',
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSwatch(
-              primarySwatch: Colors.green,
-            ).copyWith(
-              secondary: Colors.black,
+    final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+    return FutureBuilder(
+      // Initialize FlutterFire:
+      future: _initialization,
+      builder: (context, appSnapshot) {
+
+
+      return MaterialApp(
+        title: 'Veloplan',
+        theme: ThemeData(
+          primarySwatch: Colors.green,
+          backgroundColor: Colors.white,
+          accentColor: Colors.amber,
+          accentColorBrightness: Brightness.dark,
+          buttonTheme: ButtonTheme.of(context).copyWith(
+            buttonColor: Colors.green,
+            textTheme: ButtonTextTheme.primary,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
             ),
           ),
-          //home: const MyHomePage(title: 'Topper'),
-          home: auth.isAuth
-              ? MapPage()
-              : FutureBuilder(
-                  future: auth.tryAutoLogin(),
-                  builder: (ctx, authResultSnapshot) =>
-                      authResultSnapshot.connectionState ==
-                              ConnectionState.waiting
-                          ? SplashScreen()
-                          : AuthScreen()),
-          routes: {
-            '/map': (ctx) => MapPage(),
-            '/auth': (ctx) => const AuthScreen(),
-          },
-          onGenerateRoute: (settings) {
-            //print(settings.arguments);
-            return MaterialPageRoute(builder: (ctx) => AuthScreen());
-          },
-          onUnknownRoute: (settings) {
-            return MaterialPageRoute(builder: (ctx) => AuthScreen());
-          },
         ),
-      ),
-    );
+        home: appSnapshot.connectionState != ConnectionState.done ? SplashScreen() : StreamBuilder(stream: FirebaseAuth.instance.authStateChanges(), builder: (ctx, userSnapshot) {
+          if (userSnapshot.connectionState == ConnectionState.waiting) {
+            return SplashScreen();
+          }
+          if (userSnapshot.hasData) {
+            return MapPage();
+          }
+          return AuthScreen();
+        }),
+      );
+
+    });
   }
 }

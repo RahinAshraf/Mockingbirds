@@ -4,6 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_flutter_platform_interface/src/types/bitmap.dart';
 import 'package:google_maps_flutter_platform_interface/src/types/location.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../providers/auth.dart';
 
@@ -79,8 +80,8 @@ class _MyHomePageState extends State<MapPage>{
             ),
           ),
           FloatingActionButton(onPressed: () {
-              Provider.of<Auth>(context, listen: false).logout();
-          })
+                FirebaseAuth.instance.signOut();
+            },)
         ],
       )
     );
