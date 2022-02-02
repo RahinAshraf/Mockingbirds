@@ -3,9 +3,9 @@ import './user.dart';
 class UserPreferences {
   static const myUser = User(
     imagePath:
-        'https://images.unsplash.com/photo-1554151228-14d9def656e4?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=333&q=80',
+        'https://png.pngitem.com/pimgs/s/524-5246388_anonymous-user-hd-png-download.png',
     name: 'Sarah Abs',
     email: 'sarah.abs@gmail.com',
-    age: 'thirteen',
+    age: 13,
   );
 }

@@ -43,7 +43,8 @@ class _ProfileState extends State<Profile> {
             style: TextStyle(color: Colors.grey),
           ),
           Text(
-            user.age,
+            //AGE WIDGET- SHOULD IT BE TEXT?
+            user.age.toString(),
             style: TextStyle(color: Colors.grey),
           ),
           // const SizedBox(height: 24),

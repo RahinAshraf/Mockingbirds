@@ -20,7 +20,10 @@ class ProfileWidget extends StatelessWidget {
     return Center(
       child: Stack(
         children: [
-          buildImage(),
+          Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: buildImage(),
+          ),
           Positioned(
             bottom: 0,
             right: 4,

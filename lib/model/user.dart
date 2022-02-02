@@ -2,7 +2,7 @@ class User {
   final String imagePath;
   final String name;
   final String email;
-  final String age; //change to int?
+  final int age;
 
   const User({
     required this.imagePath,
