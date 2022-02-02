@@ -23,7 +23,7 @@ class _AuthScreenState extends State<AuthScreen> {
     String username,
     String firstName,
     String lastName,
-    // File image,
+    File? image,
     bool isLogin,
     BuildContext ctx,
   ) async {
@@ -44,14 +44,18 @@ class _AuthScreenState extends State<AuthScreen> {
           password: password,
         );
 
-        // final ref = FirebaseStorage.instance
-        //     .ref()
-        //     .child('user_image')
-        //     .child(authResult.user.uid + '.jpg');
+        var url = "";
 
-        // await ref.putFile(image);
+        if (image != null) {
+          final ref = FirebaseStorage.instance
+              .ref()
+              .child('user_image')
+              .child(authResult.user!.uid + '.jpg');
 
-        // final url = await ref.getDownloadURL();
+          await ref.putFile(image);
+
+          url = await ref.getDownloadURL();
+        }
 
         await FirebaseFirestore.instance
             .collection('users')
@@ -61,7 +65,7 @@ class _AuthScreenState extends State<AuthScreen> {
           'email': email,
           'firstName': firstName,
           'lastName': lastName,
-          // 'image_url': url,
+          'image_url': url,
         });
       }
     } on PlatformException catch (err) {

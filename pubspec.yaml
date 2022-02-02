@@ -36,6 +36,10 @@ dependencies:
   shared_preferences: ^2.0.12
   cloud_firestore: ^3.1.7
   firebase_auth: ^3.3.6
+  firebase_storage: ^10.2.6
+  image_picker: ^0.8.4+5
+
+
     firebase_storage: ^10.2.6
   google_maps_routes: ^1.1.2
     location: ^4.3.0
