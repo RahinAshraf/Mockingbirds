@@ -102,6 +102,4 @@ class _MainPageState extends State<MainPage> {
       scaffoldKey.currentState!.openDrawer();
     }
   }
-
-  void onClicked() {}
 }

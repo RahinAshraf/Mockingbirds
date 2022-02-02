@@ -8,10 +8,10 @@ class SideBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('SIDEBAR'),
+        title: const Text('need to get rid of this!!!'),
       ),
       body: Center(
-        child: Text("SIDEBAR"),
+        child: Text("need to get rid of this!!"),
       ),
     );
   }
