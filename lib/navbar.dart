@@ -27,8 +27,10 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int currentIndex = 0;
+  final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
   final screens = [
     SideBar(),
+    //NavigationDrawerWidget(),
     MapPage(),
     Profile(),
   ];
@@ -42,6 +44,8 @@ class _MainPageState extends State<MainPage> {
         children: screens, //keeps the screens alive
       ),
       drawer: NavigationDrawerWidget(),
+      key: scaffoldKey,
+
       floatingActionButton: Container(
         height: 80.0,
         width: 80.0,
@@ -70,11 +74,12 @@ class _MainPageState extends State<MainPage> {
           showSelectedLabels: true,
           showUnselectedLabels: true,
           currentIndex: currentIndex,
-          onTap: (index) => setState(() => currentIndex = index),
+          onTap: onTabTapped, //(index) => setState(() => currentIndex = index),
+
           items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.format_align_justify_sharp),
-              label: '',
+              label: 'drawer',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.add_link_rounded),
@@ -92,5 +97,11 @@ class _MainPageState extends State<MainPage> {
     setState(() {
       currentIndex = index;
     });
+    //opens the drawer if you click the first button on the nav bar:
+    if (currentIndex == 0) {
+      scaffoldKey.currentState!.openDrawer();
+    }
   }
+
+  void onClicked() {}
 }
