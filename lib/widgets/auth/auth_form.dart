@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-// import 'package:flutter_push_test/widgets/pickers/user_image_picker.dart';
+import '../pickers/image_picker.dart';
 
 class AuthForm extends StatefulWidget {
   AuthForm(
@@ -17,7 +17,7 @@ class AuthForm extends StatefulWidget {
     String userName,
     String firstName,
     String lastName,
-    // File image,
+    File? image,
     bool isLogin,
     BuildContext ctx,
   ) submitFn;
@@ -35,11 +35,11 @@ class _AuthFormState extends State<AuthForm> {
   var _firstName = '';
   var _lastName = '';
 
-  // File _userImageFile;
+  File? _userImageFile;
 
-  // void _pickedImage(File image) {
-  //   _userImageFile = image;
-  // }
+  void _pickedImage(File image) {
+    _userImageFile = image;
+  }
 
   void _trySubmit() {
     final isValid = _formKey.currentState!.validate();
@@ -63,7 +63,7 @@ class _AuthFormState extends State<AuthForm> {
         _userName.trim(),
         _firstName,
         _lastName,
-        // _userImageFile,
+        _userImageFile,
         _isLogin,
         context,
       );
@@ -83,7 +83,7 @@ class _AuthFormState extends State<AuthForm> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  // if (!_isLogin) UserImagePicker(_pickedImage),
+                  if (!_isLogin) UserImagePicker(_pickedImage),
                   if (!_isLogin)
                     TextFormField(
                       key: ValueKey('firstName'),
