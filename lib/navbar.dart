@@ -5,6 +5,7 @@ import 'screens/help_screen.dart';
 import 'screens/journey_screen.dart';
 import 'screens/map_screen.dart';
 import 'screens/profile_screen.dart';
+import 'screens/edit_profile_screen.dart';
 import 'screens/setting_screen.dart';
 
 // void main() => runApp(MyApp());
@@ -31,7 +32,7 @@ class _MainPageState extends State<MainPage> {
     Help(),
     Journey(),
     MapPage(),
-    Profile(),
+    EditProfile(),
     Settings()
   ];
 
