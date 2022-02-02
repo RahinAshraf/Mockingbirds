@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'screens/favourite_screen.dart';
 import 'screens/help_screen.dart';
-import 'screens/journey_screen.dart';
+import 'screens/side_bar_screen.dart';
 import 'screens/map_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/setting_screen.dart';
+import '../widget/navigation_drawer_widget.dart';
 
 // void main() => runApp(MyApp());
 
@@ -27,7 +28,7 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   int currentIndex = 0;
   final screens = [
-    Journey(), //remove this once you add side menu bar
+    SideBar(),
     MapPage(),
     Profile(),
   ];
@@ -40,18 +41,23 @@ class _MainPageState extends State<MainPage> {
         index: currentIndex,
         children: screens, //keeps the screens alive
       ),
+      drawer: NavigationDrawerWidget(),
       floatingActionButton: Container(
         height: 80.0,
         width: 80.0,
         child: FloatingActionButton(
-        onPressed: () {
-          onTabTapped(1);
-        },
-        child:  Icon(Icons.directions_bike , color: Colors.green, size: 50,),
-        elevation: 8.0,
-        backgroundColor:  Colors.white,
+          onPressed: () {
+            onTabTapped(1);
+          },
+          child: Icon(
+            Icons.directions_bike,
+            color: Colors.green,
+            size: 50,
+          ),
+          elevation: 8.0,
+          backgroundColor: Colors.white,
+        ),
       ),
-    ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType
@@ -69,9 +75,9 @@ class _MainPageState extends State<MainPage> {
             BottomNavigationBarItem(
               icon: Icon(Icons.format_align_justify_sharp),
               label: '',
-            ), 
+            ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.add_link_rounded ),
+              icon: Icon(Icons.add_link_rounded),
               label: '',
             ),
             BottomNavigationBarItem(
@@ -82,11 +88,9 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-    void onTabTapped(int index){
-      setState( () {
-        currentIndex = index;
-      }
-    );
+  void onTabTapped(int index) {
+    setState(() {
+      currentIndex = index;
+    });
   }
-
 }
