@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_flutter_platform_interface/src/types/bitmap.dart';
 import 'package:google_maps_flutter_platform_interface/src/types/location.dart';
+import 'package:google_maps_routes/google_maps_routes.dart';
 
 const LatLng SOURCE_LOCATION = LatLng(51.51185004458236,
     -0.11580820118980878); //points to bush house - CHANGE this to users current live location
@@ -45,6 +46,10 @@ class _MyHomePageState extends State<MapPage> {
         LatLng(DEST_LOCATION.latitude, DEST_LOCATION.longitude);
   }
 
+  // void drawRoute(points){
+  //   await
+  // }
+
   @override
   Widget build(BuildContext context) {
     CameraPosition _initialCameraPosition = CameraPosition(
@@ -69,6 +74,15 @@ class _MyHomePageState extends State<MapPage> {
             },
           ),
         ),
+        Positioned(
+          child: FlatButton(
+              onPressed: null,
+              child: Icon(
+                Icons.add_circle_sharp,
+                size: 100,
+              )),
+          bottom: 5,
+        )
       ],
     ));
   }
