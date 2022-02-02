@@ -80,10 +80,10 @@ class _MainPageState extends State<MainPage> {
               label: 'profile',
               //backgroundColor: Colors.red),
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.settings),
-              label: 'settings',
-            ), //backgroundColor: Colors.green)
+            // BottomNavigationBarItem(
+            //   icon: Icon(Icons.settings),
+            //   label: 'settings',
+            // ), //backgroundColor: Colors.green)
           ]),
     );
   }
