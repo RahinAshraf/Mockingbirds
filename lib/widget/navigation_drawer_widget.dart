@@ -32,7 +32,7 @@ class NavigationDrawerWidget extends StatelessWidget {
               icon: Icons.assessment_outlined,
               onClicked: () => selectedItem(context, 3),
             ),
-            //decided to remove this, not sure if it
+            //decided to remove this, not sure if it looks nice
             //const SizedBox(height: 24),
             //Divider(color: Colors.green),
             //const SizedBox(height: 24),
