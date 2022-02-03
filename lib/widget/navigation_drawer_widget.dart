@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../screens/schedule_screen.dart';
+import '../screens/favourite_screen.dart';
+import '../screens/setting_screen.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
   final padding = EdgeInsets.symmetric(horizontal: 20);
@@ -78,7 +80,7 @@ class NavigationDrawerWidget extends StatelessWidget {
         break;
       case 2:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => Placeholder(),
+          builder: (context) => Favourite(),
         ));
         break;
       case 3:
@@ -98,7 +100,7 @@ class NavigationDrawerWidget extends StatelessWidget {
         break;
       case 5:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => Placeholder(),
+          builder: (context) => Settings(),
         ));
         break;
     }
