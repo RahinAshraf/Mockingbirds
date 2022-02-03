@@ -29,7 +29,7 @@ class _MyHomePageState extends State<MapPage> {
   Set<Marker> _markers = Set<Marker>();
   late LatLng currentLocation;
   late LatLng destinationLocation;
-  late Future<List<Dock>> futureDock;
+  late Future<List<Dock>> future_docks;
 
   @override
   void initState() {
@@ -40,7 +40,7 @@ class _MyHomePageState extends State<MapPage> {
 
     //get the docking stations
     //  futureDock = fetchDock();
-    fetchDock();
+    future_docks = fetchDock();
   }
 
   void setInitialLocation() {
@@ -67,7 +67,7 @@ class _MyHomePageState extends State<MapPage> {
             myLocationEnabled: false,
             compassEnabled: false,
             tiltGesturesEnabled: false,
-            markers: _markers,
+            //markers: Set.from(future_docks),
             mapType: MapType.normal,
             initialCameraPosition: _initialCameraPosition,
             onMapCreated: (GoogleMapController controller) {

@@ -9,8 +9,8 @@
 - *Elisabeth Halvorsen*
 - *Nicole Lehchevska - k20041914*
 - *Eduard Ragea - k20067643*
-- *Hristina-Andreea Sararu*
-- *Lilianna Szabo*
+- *Hristina-Andreea Sararu - k20036771*
+- *Lilianna Szabo - k20070238*
 - *Tayyibah Uddin - k20059556*
 
 

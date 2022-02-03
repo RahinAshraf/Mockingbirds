@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'screens/favourite_screen.dart';
 import 'screens/help_screen.dart';
-import 'screens/journey_screen.dart';
 import 'screens/map_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/setting_screen.dart';
+import '../widget/navigation_drawer_widget.dart';
 
 // void main() => runApp(MyApp());
 
@@ -25,9 +25,11 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  int currentIndex = 0;
+  int currentIndex = 1; //index of the screens
+
+  final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
   final screens = [
-    Journey(), //remove this once you add side menu bar
+    Placeholder(), //need to replace this with something?
     MapPage(),
     Profile(),
   ];
@@ -40,6 +42,9 @@ class _MainPageState extends State<MainPage> {
         index: currentIndex,
         children: screens, //keeps the screens alive
       ),
+      drawer: NavigationDrawerWidget(),
+      key: scaffoldKey,
+
       floatingActionButton: Container(
         height: 80.0,
         width: 80.0,
@@ -57,6 +62,7 @@ class _MainPageState extends State<MainPage> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+
       bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType
               .fixed, //looks past the backround colors specified
@@ -68,7 +74,8 @@ class _MainPageState extends State<MainPage> {
           showSelectedLabels: true,
           showUnselectedLabels: true,
           currentIndex: currentIndex,
-          onTap: (index) => setState(() => currentIndex = index),
+          onTap: onTabTapped, //(index) => setState(() => currentIndex = index),
+
           items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.format_align_justify_sharp),
@@ -88,7 +95,11 @@ class _MainPageState extends State<MainPage> {
 
   void onTabTapped(int index) {
     setState(() {
-      currentIndex = index;
+      if (index == 0) {
+        scaffoldKey.currentState!.openDrawer();
+      } else {
+        currentIndex = index;
+      }
     });
   }
 }

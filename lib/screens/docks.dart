@@ -41,21 +41,26 @@ Future<List<Dock>> fetchDock() async {
   var response = await http.get(Uri.parse('https://api.tfl.gov.uk/bikepoint'));
 
   var json = jsonDecode(response.body);
-  var jsonResult = json as List;
+  //var jsonResult = json as List;
   //log("this is the result $json.toList()");
-  log("i have done: $jsonResult.map((dock) => Dock.fromJson(dock)).toList()");
+  //log("i have done: $jsonResult.map((dock) => Dock.fromJson(dock)).toList()");
 
-  return jsonResult.map((dock) => Dock.fromJson(dock)).toList();
+  List<Dock> all_docks = [];
+  for (var dock in json) {
+    Dock new_dock = Dock(dock["lon"], dock["lat"]);
+    all_docks.add(new_dock);
+  }
+  print("here is the data $all_docks");
+  return all_docks;
+
+  //return jsonResult.map((dock) => Dock.fromJson(dock)).toList();
 }
 
 class Dock {
   final double lon;
   final double lat;
 
-  const Dock({
-    required this.lon,
-    required this.lat,
-  });
+  Dock(this.lon, this.lat);
 
   Dock.fromJson(Map<dynamic, dynamic> parsedJson)
       : lat = parsedJson['lat'],
