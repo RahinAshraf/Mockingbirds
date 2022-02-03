@@ -91,6 +91,7 @@ class _MyHomePageState extends State<MapPage> {
           ),
           onMapCreated: (GoogleMapController controller){
             _googleController = controller;
+            getLocation();
           },
           markers: _markers,
         ) ,
