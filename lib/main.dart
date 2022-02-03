@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -7,7 +6,6 @@ import 'package:firebase_core/firebase_core.dart';
 import './screens/map_screen.dart';
 import './screens/auth_screen.dart';
 import './screens/splash_screen.dart';
-import './providers/auth.dart';
 
 void main() {
   runApp(const MyApp());
@@ -45,14 +43,14 @@ class _MyAppState extends State<MyApp> {
             ),
           ),
         ),
-        home: appSnapshot.connectionState != ConnectionState.done ? SplashScreen() : StreamBuilder(stream: FirebaseAuth.instance.authStateChanges(), builder: (ctx, userSnapshot) {
+        home: appSnapshot.connectionState != ConnectionState.done ? const SplashScreen() : StreamBuilder(stream: FirebaseAuth.instance.authStateChanges(), builder: (ctx, userSnapshot) {
           if (userSnapshot.connectionState == ConnectionState.waiting) {
-            return SplashScreen();
+            return const SplashScreen();
           }
           if (userSnapshot.hasData) {
             return MapPage();
           }
-          return AuthScreen();
+          return const AuthScreen();
         }),
       );
 

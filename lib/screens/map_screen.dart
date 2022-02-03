@@ -6,8 +6,6 @@ import 'package:google_maps_flutter_platform_interface/src/types/location.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../providers/auth.dart';
-
 const LatLng SOURCE_LOCATION = LatLng(51.51185004458236, -0.11580820118980878); //points to bush house - CHANGE this to users current live location
 const LatLng DEST_LOCATION = LatLng(42.744421,-71.1698939); //dummy value for time being - change DEST_LOCATION to what the user inputs later on
 const double CAMERA_ZOOM = 16;

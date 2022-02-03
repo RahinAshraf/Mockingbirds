@@ -5,10 +5,11 @@ import 'package:flutter/material.dart';
 import '../pickers/image_picker.dart';
 
 class AuthForm extends StatefulWidget {
-  AuthForm(
+  const AuthForm(
     this.submitFn,
     this.isLoading,
-  );
+    {Key? key}
+  ) : super(key: key);
 
   final bool isLoading;
   final void Function(
@@ -74,10 +75,10 @@ class _AuthFormState extends State<AuthForm> {
   Widget build(BuildContext context) {
     return Center(
       child: Card(
-        margin: EdgeInsets.all(20),
+        margin: const EdgeInsets.all(20),
         child: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Form(
               key: _formKey,
               child: Column(
@@ -86,7 +87,7 @@ class _AuthFormState extends State<AuthForm> {
                   if (!_isLogin) UserImagePicker(_pickedImage),
                   if (!_isLogin)
                     TextFormField(
-                      key: ValueKey('firstName'),
+                      key: const ValueKey('firstName'),
                       autocorrect: true,
                       textCapitalization: TextCapitalization.words,
                       enableSuggestions: false,
@@ -96,14 +97,14 @@ class _AuthFormState extends State<AuthForm> {
                         }
                         return null;
                       },
-                      decoration: InputDecoration(labelText: 'First Name'),
+                      decoration: const InputDecoration(labelText: 'First Name'),
                       onSaved: (value) {
                         _firstName = value!;
                       },
                     ),
                   if (!_isLogin)
                     TextFormField(
-                      key: ValueKey('lastName'),
+                      key: const ValueKey('lastName'),
                       autocorrect: true,
                       textCapitalization: TextCapitalization.words,
                       enableSuggestions: false,
@@ -113,13 +114,13 @@ class _AuthFormState extends State<AuthForm> {
                         }
                         return null;
                       },
-                      decoration: InputDecoration(labelText: 'Last Name'),
+                      decoration: const InputDecoration(labelText: 'Last Name'),
                       onSaved: (value) {
                         _lastName = value!;
                       },
                     ),
                   TextFormField(
-                    key: ValueKey('email'),
+                    key: const ValueKey('email'),
                     autocorrect: false,
                     textCapitalization: TextCapitalization.none,
                     enableSuggestions: false,
@@ -130,7 +131,7 @@ class _AuthFormState extends State<AuthForm> {
                       return null;
                     },
                     keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Email address',
                     ),
                     onSaved: (value) {
@@ -139,7 +140,7 @@ class _AuthFormState extends State<AuthForm> {
                   ),
                   if (!_isLogin)
                     TextFormField(
-                      key: ValueKey('username'),
+                      key: const ValueKey('username'),
                       autocorrect: true,
                       textCapitalization: TextCapitalization.words,
                       enableSuggestions: false,
@@ -149,27 +150,27 @@ class _AuthFormState extends State<AuthForm> {
                         }
                         return null;
                       },
-                      decoration: InputDecoration(labelText: 'Username'),
+                      decoration: const InputDecoration(labelText: 'Username'),
                       onSaved: (value) {
                         _userName = value!;
                       },
                     ),
                   TextFormField(
-                    key: ValueKey('password'),
+                    key: const ValueKey('password'),
                     validator: (value) {
                       if (value!.isEmpty || value.length < 7) {
                         return 'Password must be at least 7 characters long.';
                       }
                       return null;
                     },
-                    decoration: InputDecoration(labelText: 'Password'),
+                    decoration: const InputDecoration(labelText: 'Password'),
                     obscureText: true,
                     onSaved: (value) {
                       _userPassword = value!;
                     },
                   ),
-                  SizedBox(height: 12),
-                  if (widget.isLoading) CircularProgressIndicator(),
+                  const SizedBox(height: 12),
+                  if (widget.isLoading) const CircularProgressIndicator(),
                   if (!widget.isLoading)
                     RaisedButton(
                       child: Text(_isLogin ? 'Login' : 'Signup'),

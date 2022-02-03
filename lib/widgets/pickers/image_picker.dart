@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UserImagePicker extends StatefulWidget {
-  UserImagePicker(this.imagePickFn);
+  const UserImagePicker(this.imagePickFn, {Key? key}) : super(key: key);
 
   final void Function(File pickedImage) imagePickFn;
 
@@ -16,15 +16,17 @@ class _UserImagePickerState extends State<UserImagePicker> {
   File? _pickedImage;
 
   void _pickImage(bool isCamera) async {
-    final pickedImageFile = await ImagePicker().getImage(
+    final pickedImageFile = await ImagePicker().pickImage(
       source: isCamera ? ImageSource.camera : ImageSource.gallery,
       imageQuality: 50,
       maxWidth: 150,
     );
-    setState(() {
-      _pickedImage = File(pickedImageFile!.path);
-    });
-    widget.imagePickFn(File(pickedImageFile!.path));
+    if (pickedImageFile != null) {
+      setState(() {
+        _pickedImage = File(pickedImageFile.path);
+      });
+      widget.imagePickFn(File(pickedImageFile.path));
+    }
   }
 
   @override
@@ -40,14 +42,14 @@ class _UserImagePickerState extends State<UserImagePicker> {
         FlatButton.icon(
           textColor: Theme.of(context).primaryColor,
           onPressed: () => _pickImage(true),
-          icon: Icon(Icons.camera),
-          label: Text('Take a picture'),
+          icon: const Icon(Icons.camera),
+          label: const Text('Take a picture'),
         ),
         FlatButton.icon(
           textColor: Theme.of(context).primaryColor,
           onPressed: () => _pickImage(false),
-          icon: Icon(Icons.image),
-          label: Text('Choose from gallery'),
+          icon: const Icon(Icons.image),
+          label: const Text('Choose from gallery'),
         ),
       ],
     );
