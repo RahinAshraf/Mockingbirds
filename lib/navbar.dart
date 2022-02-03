@@ -26,13 +26,11 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  int selectedIndex = 0;
   int currentIndex = 1; //index of the screens
 
   final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
   final screens = [
-    Placeholder(), //need to replace this with something ://
-    //NavigationDrawerWidget(),
+    Placeholder(), //need to replace this with something?
     MapPage(),
     Profile(),
   ];
