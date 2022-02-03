@@ -31,7 +31,7 @@ class _MainPageState extends State<MainPage> {
 
   final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
   final screens = [
-    SideBar(),
+    Placeholder(), //need to replace this with something ://
     //NavigationDrawerWidget(),
     MapPage(),
     Profile(),
