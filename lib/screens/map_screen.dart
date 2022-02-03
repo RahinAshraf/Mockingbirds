@@ -16,7 +16,7 @@ const double CAMERA_ZOOM = 16;
 const double CAMERA_TILT = 80;
 const double CAMERA_BEARING = 30;
 
-const String GOOGLE_API_KEY = "AIzaSyB7YSQkjjqm-YU1LAz91lyYAvCpqFRhFdU";
+const String GOOGLE_API_KEY = 'AIzaSyB7YSQkjjqm-YU1LAz91lyYAvCpqFRhFdU';
 
 class MapPage extends StatefulWidget {
   @override
@@ -33,22 +33,27 @@ class _MyHomePageState extends State<MapPage> {
   GoogleMapController? _googleController;
   Location _currentLocation = Location();
 
+  static final CameraPosition _initialCameraPosition = CameraPosition(
+      zoom: CAMERA_ZOOM,
+      tilt: CAMERA_TILT,
+      bearing: CAMERA_BEARING,
+      target: SOURCE_LOCATION);
+
   // Routing
-  List<LatLng> destinations = [
+  List<LatLng> points = [
     LatLng(51.514951, -0.112762),
     LatLng(51.513146, -0.115256),
     LatLng(51.511407, -0.125497),
     LatLng(51.506053, -0.130310)
   ];
-  Set<Polyline> polylines = Set<Polyline>();
-  List<LatLng> polylineCoordinates = [];
-  late PolylinePoints polylinePoints;
+  MapsRoutes route = new MapsRoutes();
+  DistanceCalculator distanceCalculator = new DistanceCalculator();
+  String googleApiKey = 'AIzaSyB7YSQkjjqmYU1LAz91lyYAvCpqFRhFdU';
+  String totalDistance = 'No route';
 
   @override
   void initState() {
     super.initState();
-
-    polylinePoints = PolylinePoints();
 
     //set up inital locations
     this.setInitialLocation();
@@ -82,45 +87,69 @@ class _MyHomePageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
-    CameraPosition _initialCameraPosition = CameraPosition(
-        zoom: CAMERA_ZOOM,
-        tilt: CAMERA_TILT,
-        bearing: CAMERA_BEARING,
-        target: SOURCE_LOCATION);
-
-    late GoogleMapController _googleMapController;
-
-    @override
-    void dispose() {
-      _googleMapController.dispose();
-      super.dispose();
-    }
-
     return Scaffold(
-        body: Stack(children: [
-      Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        child: GoogleMap(
+      body: Stack(children: [
+        Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: GoogleMap(
             myLocationEnabled: false,
             compassEnabled: false,
             tiltGesturesEnabled: false,
-            polylines: polylines,
+            polylines: route.routes,
             markers: _markers,
             mapType: MapType.normal,
             initialCameraPosition: _initialCameraPosition,
-            onMapCreated: (controller) => _googleMapController = controller),
-      ),
-      Container(
-          alignment: Alignment.bottomLeft,
+            onMapCreated: (GoogleMapController controller) {
+              _controller.complete(controller);
+            },
+          ),
+        ),
+        Container(
+          alignment: Alignment(-0.9, 0),
           child: FloatingActionButton(
-            backgroundColor: Colors.green,
-            foregroundColor: Colors.white,
-            onPressed: () => _googleMapController.animateCamera(
-                CameraUpdate.newCameraPosition(_initialCameraPosition)),
-            child: const Icon(Icons.center_focus_strong),
-          )),
-    ]));
+            child: Icon(Icons.arrow_upward, color: Colors.white),
+            onPressed: () async {
+              await route.drawRoute(points, 'Test routes',
+                  Color.fromRGBO(255, 0, 0, 1.0), GOOGLE_API_KEY,
+                  travelMode: TravelModes.bicycling);
+              setState(() {
+                totalDistance = distanceCalculator
+                    .calculateRouteDistance(points, decimals: 1);
+              });
+            },
+          ),
+        ),
+        Container(
+            alignment: Alignment(-0.9, -0.5),
+            child: FloatingActionButton(
+                child: Icon(Icons.location_searching, color: Colors.white),
+                backgroundColor: Colors.green,
+                onPressed: _goToInitialPosition)),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+                width: 200,
+                height: 50,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15.0)),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text(totalDistance, style: TextStyle(fontSize: 25.0)),
+                )),
+          ),
+        )
+      ]),
+    );
+  }
+
+  Future<void> _goToInitialPosition() async {
+    final GoogleMapController controller = await _controller.future;
+    controller
+        .animateCamera(CameraUpdate.newCameraPosition(_initialCameraPosition));
   }
 }
 
