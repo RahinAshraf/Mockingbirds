@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'screens/favourite_screen.dart';
 import 'screens/help_screen.dart';
-import 'screens/journey_screen.dart';
 import 'screens/map_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/edit_profile_screen.dart';
 import 'screens/setting_screen.dart';
+import '../widget/navigation_drawer_widget.dart';
 
 // void main() => runApp(MyApp());
 
@@ -26,14 +26,13 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  int currentIndex = 0;
+  int currentIndex = 1; //index of the screens
+
+  final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
   final screens = [
-    Favourite(),
-    Help(),
-    Journey(),
+    Placeholder(), //need to replace this with something?
     MapPage(),
-    EditProfile(),
-    Settings()
+    Profile(),
   ];
 
   @override
@@ -44,48 +43,64 @@ class _MainPageState extends State<MainPage> {
         index: currentIndex,
         children: screens, //keeps the screens alive
       ),
+      drawer: NavigationDrawerWidget(),
+      key: scaffoldKey,
+
+      floatingActionButton: Container(
+        height: 80.0,
+        width: 80.0,
+        child: FloatingActionButton(
+          onPressed: () {
+            onTabTapped(1);
+          },
+          child: Icon(
+            Icons.directions_bike,
+            color: Colors.green,
+            size: 50,
+          ),
+          elevation: 8.0,
+          backgroundColor: Colors.white,
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+
       bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType
               .fixed, //looks past the backround colors specified
-          backgroundColor: Colors.purple[200],
-          selectedItemColor: Colors.grey[900],
-          unselectedItemColor: Colors.grey[400],
-          //iconSize: 20,
+          backgroundColor: Colors.green[200],
+          selectedItemColor: Colors.black,
+          unselectedItemColor: Colors.grey[10],
+          iconSize: 33,
           //selectedFontSize: 16,
           showSelectedLabels: true,
-          showUnselectedLabels: false,
+          showUnselectedLabels: true,
           currentIndex: currentIndex,
-          onTap: (index) => setState(() => currentIndex = index),
+          onTap: onTabTapped, //(index) => setState(() => currentIndex = index),
+
           items: const [
             BottomNavigationBarItem(
-              icon: Icon(Icons.favorite),
-              label: 'favourite',
-              //backgroundColor: Colors.blue),
+              icon: Icon(Icons.format_align_justify_sharp),
+              label: '',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.help),
-              label: 'help',
-              //backgroundColor: Colors.red),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.timeline),
-              label: 'journey',
-              //backgroundColor: Colors.red),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.map_outlined),
-              label: 'map',
+              icon: Icon(Icons.add_link_rounded),
+              label: '',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person),
-              label: 'profile',
-              //backgroundColor: Colors.red),
+              label: '',
             ),
-            // BottomNavigationBarItem(
-            //   icon: Icon(Icons.settings),
-            //   label: 'settings',
-            // ), //backgroundColor: Colors.green)
           ]),
     );
+  }
+
+  void onTabTapped(int index) {
+    setState(() {
+      if (index == 0) {
+        scaffoldKey.currentState!.openDrawer();
+      } else {
+        currentIndex = index;
+      }
+    });
   }
 }

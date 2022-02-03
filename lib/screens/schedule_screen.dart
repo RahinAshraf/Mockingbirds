@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-class Journey extends StatelessWidget {
+class Schedule extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Your journey'),
+        title: const Text('Schedule'),
       ),
       body: Center(
-        child: Text("Journey page!"),
+        child: Text("schedule page!"),
       ),
     );
   }
