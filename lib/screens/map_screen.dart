@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_flutter_platform_interface/src/types/bitmap.dart';
 import 'package:google_maps_flutter_platform_interface/src/types/location.dart';
+import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 const LatLng SOURCE_LOCATION = LatLng(51.51185004458236,
     -0.11580820118980878); //points to bush house - CHANGE this to users current live location
@@ -12,9 +14,9 @@ const double CAMERA_ZOOM = 16;
 const double CAMERA_TILT = 80;
 const double CAMERA_BEARING = 30;
 
-// void main() {
-//   runApp(MapPage());
-// }
+void main() {
+  runApp(MapPage());
+}
 
 class MapPage extends StatefulWidget {
   @override
@@ -69,6 +71,13 @@ class _MyHomePageState extends State<MapPage> {
             },
           ),
         ),
+        Padding(
+            padding: EdgeInsets.all(56.0),
+            child: FloatingActionButton(
+              onPressed: () {
+                FirebaseAuth.instance.signOut();
+              },
+            )),
       ],
     ));
   }
