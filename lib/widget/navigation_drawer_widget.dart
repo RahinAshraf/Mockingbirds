@@ -10,8 +10,16 @@ class NavigationDrawerWidget extends StatelessWidget {
           children: <Widget>[
             const SizedBox(height: 48),
             buildMenuItem(
-              text: 'Calander',
+              text: 'Schedule',
               icon: Icons.date_range,
+            ),
+            buildMenuItem(
+              text: 'My Journeys',
+              icon: Icons.history,
+            ),
+            buildMenuItem(
+              text: 'Favourites',
+              icon: Icons.favorite,
             ),
             buildMenuItem(
               text: 'Statistics',

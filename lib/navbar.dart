@@ -104,23 +104,5 @@ class _MainPageState extends State<MainPage> {
         currentIndex = index;
       }
     });
-
-    //opens the drawer if you click the first button on the nav bar:
-    //if (currentIndex == 0) {
-    //scaffoldKey.currentState!.openDrawer();
-    // }
   }
-
-  // void onTabTapped(int index) {
-  //   setState(() {
-  //     currentIndex = index;
-  //   });
-  //   print("tapped $index");
-
-  //   //opens the drawer if you click the first button on the nav bar:
-  //   if (currentIndex == 0) {
-  //     scaffoldKey.currentState!.openDrawer();
-  //   }
-  // }
-
 }
