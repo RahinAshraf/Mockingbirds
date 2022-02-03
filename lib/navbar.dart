@@ -26,7 +26,9 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  int currentIndex = 1;
+  int selectedIndex = 0;
+  int currentIndex = 1; //index of the screens
+
   final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
   final screens = [
     SideBar(),
@@ -63,6 +65,7 @@ class _MainPageState extends State<MainPage> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+
       bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType
               .fixed, //looks past the backround colors specified
@@ -79,7 +82,7 @@ class _MainPageState extends State<MainPage> {
           items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.format_align_justify_sharp),
-              label: 'drawer',
+              label: '',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.add_link_rounded),
@@ -95,11 +98,29 @@ class _MainPageState extends State<MainPage> {
 
   void onTabTapped(int index) {
     setState(() {
-      currentIndex = index;
+      if (index == 0) {
+        scaffoldKey.currentState!.openDrawer();
+      } else {
+        currentIndex = index;
+      }
     });
+
     //opens the drawer if you click the first button on the nav bar:
-    if (currentIndex == 0) {
-      scaffoldKey.currentState!.openDrawer();
-    }
+    //if (currentIndex == 0) {
+    //scaffoldKey.currentState!.openDrawer();
+    // }
   }
+
+  // void onTabTapped(int index) {
+  //   setState(() {
+  //     currentIndex = index;
+  //   });
+  //   print("tapped $index");
+
+  //   //opens the drawer if you click the first button on the nav bar:
+  //   if (currentIndex == 0) {
+  //     scaffoldKey.currentState!.openDrawer();
+  //   }
+  // }
+
 }
