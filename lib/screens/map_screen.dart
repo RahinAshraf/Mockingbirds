@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_flutter_platform_interface/src/types/bitmap.dart';
 import 'package:google_maps_flutter_platform_interface/src/types/location.dart';
+import 'package:veloplan/screens/docks.dart';
 
 const LatLng SOURCE_LOCATION = LatLng(51.51185004458236,
     -0.11580820118980878); //points to bush house - CHANGE this to users current live location
@@ -28,6 +29,7 @@ class _MyHomePageState extends State<MapPage> {
   Set<Marker> _markers = Set<Marker>();
   late LatLng currentLocation;
   late LatLng destinationLocation;
+  late Future<List<Dock>> futureDock;
 
   @override
   void initState() {
@@ -35,6 +37,10 @@ class _MyHomePageState extends State<MapPage> {
 
     //set up inital locations
     this.setInitialLocation();
+
+    //get the docking stations
+    //  futureDock = fetchDock();
+    fetchDock();
   }
 
   void setInitialLocation() {

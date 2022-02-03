@@ -44,14 +44,18 @@ class _MainPageState extends State<MainPage> {
         height: 80.0,
         width: 80.0,
         child: FloatingActionButton(
-        onPressed: () {
-          onTabTapped(1);
-        },
-        child:  Icon(Icons.directions_bike , color: Colors.green, size: 50,),
-        elevation: 8.0,
-        backgroundColor:  Colors.white,
+          onPressed: () {
+            onTabTapped(1);
+          },
+          child: Icon(
+            Icons.directions_bike,
+            color: Colors.green,
+            size: 50,
+          ),
+          elevation: 8.0,
+          backgroundColor: Colors.white,
+        ),
       ),
-    ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType
@@ -69,9 +73,9 @@ class _MainPageState extends State<MainPage> {
             BottomNavigationBarItem(
               icon: Icon(Icons.format_align_justify_sharp),
               label: '',
-            ), 
+            ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.add_link_rounded ),
+              icon: Icon(Icons.add_link_rounded),
               label: '',
             ),
             BottomNavigationBarItem(
@@ -82,11 +86,9 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-    void onTabTapped(int index){
-      setState( () {
-        currentIndex = index;
-      }
-    );
+  void onTabTapped(int index) {
+    setState(() {
+      currentIndex = index;
+    });
   }
-
 }
