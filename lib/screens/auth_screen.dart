@@ -9,6 +9,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import '../widgets/auth/auth_form.dart';
 
 class AuthScreen extends StatefulWidget {
+  const AuthScreen({Key? key}) : super(key: key);
+
   @override
   _AuthScreenState createState() => _AuthScreenState();
 }
@@ -85,7 +87,7 @@ class _AuthScreenState extends State<AuthScreen> {
         _isLoading = false;
       });
     } catch (err) {
-      print(err);
+      // print(err);
       setState(() {
         _isLoading = false;
       });
