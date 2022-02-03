@@ -4,6 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_flutter_platform_interface/src/types/bitmap.dart';
 import 'package:google_maps_flutter_platform_interface/src/types/location.dart';
 import 'package:google_maps_routes/google_maps_routes.dart';
+import 'package:location/location.dart';
 
 const LatLng SOURCE_LOCATION = LatLng(51.51185004458236,
     -0.11580820118980878); //points to bush house - CHANGE this to users current live location
@@ -29,6 +30,9 @@ class _MyHomePageState extends State<MapPage> {
   Set<Marker> _markers = Set<Marker>();
   late LatLng currentLocation;
   late LatLng destinationLocation;
+  GoogleMapController? _googleController;
+  Location _currentLocation = Location();
+
 
   @override
   void initState() {
@@ -50,6 +54,23 @@ class _MyHomePageState extends State<MapPage> {
   //   await
   // }
 
+  void getLocation() async{
+    var location = await _currentLocation.getLocation();
+    _currentLocation.onLocationChanged.listen((LocationData loc){
+      _googleController?.animateCamera(CameraUpdate.newCameraPosition(new CameraPosition(
+        target: LatLng(loc.latitude ?? 0.0,loc.longitude?? 0.0),
+        zoom: 17.0,
+      )));
+      print(loc.latitude);
+      print(loc.longitude);
+      setState(() {
+        _markers.add(Marker(markerId: MarkerId('Home'),
+            position: LatLng(loc.latitude ?? 0.0, loc.longitude ?? 0.0)
+        ));
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     CameraPosition _initialCameraPosition = CameraPosition(
@@ -58,32 +79,29 @@ class _MyHomePageState extends State<MapPage> {
         bearing: CAMERA_BEARING,
         target: SOURCE_LOCATION);
 
-    return MaterialApp(
-        home: Stack(
-      children: <Widget>[
-        Positioned.fill(
-          child: GoogleMap(
-            myLocationEnabled: false,
-            compassEnabled: false,
-            tiltGesturesEnabled: false,
-            markers: _markers,
-            mapType: MapType.normal,
-            initialCameraPosition: _initialCameraPosition,
-            onMapCreated: (GoogleMapController controller) {
-              _controller.complete(controller);
-            },
+    return Scaffold(
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        child:GoogleMap(
+          zoomControlsEnabled: true,
+          initialCameraPosition:CameraPosition(
+            target: LatLng(48.8561, 2.2930),
+            zoom: 16.0,
           ),
-        ),
-        Positioned(
-          child: FlatButton(
-              onPressed: null,
-              child: Icon(
-                Icons.add_circle_sharp,
-                size: 100,
-              )),
-          bottom: 5,
-        )
-      ],
-    ));
+          onMapCreated: (GoogleMapController controller){
+            _googleController = controller;
+          },
+          markers: _markers,
+        ) ,
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.location_searching,color: Colors.white,),
+        onPressed: (){
+          getLocation();
+        },
+      ),
+    );
   }
-}
+  }
+
