@@ -67,6 +67,7 @@ class NavigationDrawerWidget extends StatelessWidget {
   }
 
   selectedItem(BuildContext context, int i) {
+    Navigator.of(context).pop();
     switch (i) {
       case 0:
         Navigator.of(context).push(MaterialPageRoute(
