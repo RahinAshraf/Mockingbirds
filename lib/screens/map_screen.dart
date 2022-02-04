@@ -5,6 +5,8 @@ import 'package:google_maps_flutter_platform_interface/src/types/bitmap.dart';
 import 'package:google_maps_flutter_platform_interface/src/types/location.dart';
 import 'package:google_maps_routes/google_maps_routes.dart';
 import 'package:location/location.dart';
+import 'package:search_map_location/search_map_location.dart';
+import 'package:http/http.dart';
 
 const double CAMERA_ZOOM = 17;
 const double CAMERA_TILT = 80;
@@ -53,19 +55,35 @@ class _MyHomePageState extends State<MapPage> {
     );
 
     return Scaffold(
-        body: Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          child:GoogleMap(
-            zoomControlsEnabled: true,
-            initialCameraPosition: _initialCameraPosition,
-            onMapCreated: (GoogleMapController controller){
-              _googleController = controller;
-              showUsersCurrentLocationOnMap();
-            },
-            markers: _markers,
-          ) ,
+        body: ListView(
+          children: <Widget> [
+            SearchLocation(
+            apiKey: 'AIzaSyB7YSQkjjqm-YU1LAz91lyYAvCpqFRhFdU',
+            country: 'GB',
+            language: 'en',
+            // onSelected: (Place place) async {
+            //   _markers.add(Marker(markerId: MarkerId('Home'),
+            //   position: LatLng(loc.latitude ?? 0.0, loc.longitude ?? 0.0)
+            //   )); 
+            // },  
+          ),
+          Container(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            child:GoogleMap(
+              zoomControlsEnabled: true,
+              initialCameraPosition: _initialCameraPosition,
+              onMapCreated: (GoogleMapController controller){
+                _googleController = controller;
+                showUsersCurrentLocationOnMap();
+              },
+              markers: _markers,
+            ) ,
+          ),
+          ],
+
         ),
+        
       );
     }
   }
