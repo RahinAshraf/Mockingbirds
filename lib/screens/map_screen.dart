@@ -38,9 +38,9 @@ class _MyHomePageState extends State<MapPage> {
         zoom: CAMERA_ZOOM,
       )));
       setState(() {
-        _markers.add(Marker(markerId: MarkerId('Home'),
-            position: LatLng(loc.latitude ?? 0.0, loc.longitude ?? 0.0)
-        ));
+        // _markers.add(Marker(markerId: MarkerId('Home'),
+        //     position: LatLng(loc.latitude ?? 0.0, loc.longitude ?? 0.0)
+        // ));
       });
     });
   }
@@ -72,6 +72,7 @@ class _MyHomePageState extends State<MapPage> {
             width: MediaQuery.of(context).size.width,
             child:GoogleMap(
               zoomControlsEnabled: true,
+              myLocationEnabled :true,
               initialCameraPosition: _initialCameraPosition,
               onMapCreated: (GoogleMapController controller){
                 _googleController = controller;
