@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:google_maps_flutter_platform_interface/src/types/bitmap.dart';
 import 'package:google_maps_flutter_platform_interface/src/types/location.dart';
+import 'package:veloplan/providers/docking_station_manager.dart';
+import '../models/docking_station.dart';
 
 const LatLng SOURCE_LOCATION = LatLng(51.51185004458236,
     -0.11580820118980878); //points to bush house - CHANGE this to users current live location
@@ -26,8 +27,12 @@ class MapPage extends StatefulWidget {
 class _MyHomePageState extends State<MapPage> {
   Completer<GoogleMapController> _controller = Completer();
   Set<Marker> _markers = Set<Marker>();
+
   late LatLng currentLocation;
   late LatLng destinationLocation;
+  late Future<List<DockingStation>> future_docks;
+
+
 
   @override
   void initState() {
@@ -35,6 +40,7 @@ class _MyHomePageState extends State<MapPage> {
 
     //set up inital locations
     this.setInitialLocation();
+    this.fetchDockingStations();
   }
 
   void setInitialLocation() {
@@ -43,6 +49,22 @@ class _MyHomePageState extends State<MapPage> {
 
     destinationLocation =
         LatLng(DEST_LOCATION.latitude, DEST_LOCATION.longitude);
+  }
+
+  void fetchDockingStations(){
+    final dockingStationManager _stationManager = dockingStationManager();
+     _stationManager.importStations().then((value) => placeDockMarkers(_stationManager.stations));
+  }
+
+  void placeDockMarkers(List<DockingStation> docks){
+    int i =0;
+    setState(() {
+      for (var station in docks) {
+        _markers.add(Marker(markerId: MarkerId(i.toString()),
+            position: LatLng(station.lat ?? 0.0, station.lon ?? 0.0)));
+        }
+    });
+
   }
 
   @override
