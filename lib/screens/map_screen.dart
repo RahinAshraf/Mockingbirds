@@ -7,6 +7,7 @@ import 'package:google_maps_routes/google_maps_routes.dart';
 import 'package:location/location.dart';
 import 'package:search_map_location/search_map_location.dart';
 import 'package:http/http.dart';
+import 'package:veloplan/screens/location_service.dart';
 
 const double CAMERA_ZOOM = 17;
 const double CAMERA_TILT = 80;
@@ -24,6 +25,7 @@ class _MyHomePageState extends State<MapPage> {
   Set<Marker> _markers = Set<Marker>();
   GoogleMapController? _googleController;
   Location _currentLocation = Location();
+  TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -38,9 +40,9 @@ class _MyHomePageState extends State<MapPage> {
         zoom: CAMERA_ZOOM,
       )));
       setState(() {
-        // _markers.add(Marker(markerId: MarkerId('Home'),
-        //     position: LatLng(loc.latitude ?? 0.0, loc.longitude ?? 0.0)
-        // ));
+        _markers.add(Marker(markerId: MarkerId('Home'),
+            position: LatLng(loc.latitude ?? 0.0, loc.longitude ?? 0.0)
+        ));
       });
     });
   }
@@ -55,37 +57,50 @@ class _MyHomePageState extends State<MapPage> {
     );
 
     return Scaffold(
-        body: ListView(
-          children: <Widget> [
-            SearchLocation(
-            apiKey: 'AIzaSyB7YSQkjjqm-YU1LAz91lyYAvCpqFRhFdU',
-            country: 'GB',
-            language: 'en',
-            // onSelected: (Place place) async {
-            //   _markers.add(Marker(markerId: MarkerId('Home'),
-            //   position: LatLng(loc.latitude ?? 0.0, loc.longitude ?? 0.0)
-            //   )); 
-            // },  
-          ),
-          Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            child:GoogleMap(
-              zoomControlsEnabled: true,
-              myLocationEnabled :true,
-              initialCameraPosition: _initialCameraPosition,
-              onMapCreated: (GoogleMapController controller){
-                _googleController = controller;
-                showUsersCurrentLocationOnMap();
-              },
-              markers: _markers,
-            ) ,
-          ),
-          ],
+      appBar: AppBar(title: Text("Google maps"),),
+        body: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(child: TextFormField(
+                  controller: _searchController,
+                  textCapitalization: TextCapitalization.words,
+                  decoration: InputDecoration(hintText: "Search for a location"),
+                  onChanged: (value) {
+                    print(value);
+                    },
+                )),
+                IconButton(onPressed: () {
+                  LocationService().getPlace(_searchController.text);
+                },
+                    icon: const Icon(Icons.search))
+              ],
+            ),
 
+            Expanded(
+                child: GoogleMap(
+                  zoomControlsEnabled: true,
+                  myLocationEnabled :true,
+                  initialCameraPosition: _initialCameraPosition,
+                  onMapCreated: (GoogleMapController controller){
+                    _googleController = controller;
+                    showUsersCurrentLocationOnMap();
+                  },
+                  markers: _markers,
+                ) ,
+            ),
+
+              ],
+            ),
+        floatingActionButton: FloatingActionButton(
+            onPressed: (() {
+              print("SUIIIIIIII");
+            })
         ),
-        
-      );
+
+          );
+
+
     }
   }
 
