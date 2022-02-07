@@ -21,6 +21,7 @@ class MapPage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MapPage> {
+  final String key = "AIzaSyB7YSQkjjqm-YU1LAz91lyYAvCpqFRhFdU";
   Completer<GoogleMapController> _controller = Completer();
   Set<Marker> _markers = Set<Marker>();
   GoogleMapController? _googleController;
@@ -47,6 +48,19 @@ class _MyHomePageState extends State<MapPage> {
     });
   }
 
+  void findPlace(String placeName) async {
+    if(placeName.length > 1){
+      String autoCompleteUrl = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$placeName&key=$key&components=country:gb";
+      var res = await RequestAssistance.getRequest(autoCompleteUrl);
+
+      if(res == "Failed") { return; }
+
+      print("PLACES PREDICTION:");
+      print(res);
+
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     CameraPosition _initialCameraPosition = CameraPosition(
@@ -66,9 +80,7 @@ class _MyHomePageState extends State<MapPage> {
                   controller: _searchController,
                   textCapitalization: TextCapitalization.words,
                   decoration: InputDecoration(hintText: "Search for a location"),
-                  onChanged: (value) {
-                    print(value);
-                    },
+                  onChanged: (value) { findPlace(value); },
                 )),
                 IconButton(onPressed: () {
                   LocationService().getPlace(_searchController.text);
@@ -89,18 +101,14 @@ class _MyHomePageState extends State<MapPage> {
                   markers: _markers,
                 ) ,
             ),
-
-              ],
-            ),
+          ],
+        ),
         floatingActionButton: FloatingActionButton(
             onPressed: (() {
               print("SUIIIIIIII");
             })
-        ),
-
-          );
-
-
+          ),
+      );
     }
   }
 
