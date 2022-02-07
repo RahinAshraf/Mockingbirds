@@ -1,6 +1,7 @@
 import 'dart:async';
 // import 'dart:html';
 import 'package:flutter/material.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_flutter_platform_interface/src/types/bitmap.dart';
 import 'package:google_maps_flutter_platform_interface/src/types/location.dart';
@@ -41,15 +42,18 @@ class _MyHomePageState extends State<MapPage> {
 
   // Routing
   List<LatLng> points = [
-    LatLng(51.514951, -0.112762),
-    LatLng(51.513146, -0.115256),
-    LatLng(51.511407, -0.125497),
-    LatLng(51.506053, -0.130310)
+    const LatLng(51.514951, -0.112762),
+    const LatLng(51.513146, -0.115256),
+    const LatLng(51.511407, -0.125497),
+    const LatLng(51.506053, -0.130310)
   ];
   MapsRoutes route = new MapsRoutes();
   DistanceCalculator distanceCalculator = new DistanceCalculator();
-  String googleApiKey = 'AIzaSyB7YSQkjjqmYU1LAz91lyYAvCpqFRhFdU';
   String totalDistance = 'No route';
+
+  Map<PolylineId, Polyline> polylines = {};
+  List<LatLng> polylineCoordinates = [];
+  PolylinePoints polylinePoints = PolylinePoints();
 
   @override
   void initState() {
@@ -96,7 +100,7 @@ class _MyHomePageState extends State<MapPage> {
             myLocationEnabled: false,
             compassEnabled: false,
             tiltGesturesEnabled: false,
-            polylines: route.routes,
+            polylines: Set<Polyline>.of(polylines.values),
             markers: _markers,
             mapType: MapType.normal,
             initialCameraPosition: _initialCameraPosition,
@@ -108,21 +112,20 @@ class _MyHomePageState extends State<MapPage> {
         Container(
           alignment: Alignment(-0.9, 0),
           child: FloatingActionButton(
+            heroTag: "btn1",
             child: Icon(Icons.arrow_upward, color: Colors.white),
             onPressed: () async {
-              await route.drawRoute(points, 'Test routes',
-                  Color.fromRGBO(255, 0, 0, 1.0), GOOGLE_API_KEY,
-                  travelMode: TravelModes.bicycling);
-              setState(() {
-                totalDistance = distanceCalculator
-                    .calculateRouteDistance(points, decimals: 1);
-              });
+              if (polylineCoordinates.isNotEmpty) {
+                clearDirections();
+              }
+              _getPolyline(points);
             },
           ),
         ),
         Container(
             alignment: Alignment(-0.9, -0.5),
             child: FloatingActionButton(
+                heroTag: "btn2",
                 child: Icon(Icons.location_searching, color: Colors.white),
                 backgroundColor: Colors.green,
                 onPressed: _goToInitialPosition)),
@@ -151,28 +154,63 @@ class _MyHomePageState extends State<MapPage> {
     controller
         .animateCamera(CameraUpdate.newCameraPosition(_initialCameraPosition));
   }
+
+  _addPolyLine() {
+    PolylineId id = PolylineId("poly");
+    Polyline polyline = Polyline(
+        polylineId: id,
+        color: Colors.red,
+        points: polylineCoordinates,
+        width: 5);
+    polylines[id] = polyline;
+    setState(() {});
+  }
+
+  _getPolyline(List<LatLng> _jurney) async {
+    List<PolylineResult> jurney = await getJurneyResult(_jurney);
+    if (jurney.isNotEmpty) {
+      jurney.forEach((subJurney) {
+        List<PointLatLng> points = subJurney.points;
+        if (points.isNotEmpty) {
+          points.forEach((PointLatLng point) {
+            polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+          });
+        }
+      });
+    }
+
+    setDistance();
+    _addPolyLine();
+  }
+
+  Future<List<PolylineResult>> getJurneyResult(List<LatLng> jurney) async {
+    List<PolylineResult> results = [];
+    if (jurney.length > 1) {
+      for (int i = 0; i < jurney.length - 1; ++i) {
+        results.add(await polylinePoints.getRouteBetweenCoordinates(
+          GOOGLE_API_KEY,
+          PointLatLng(jurney[i].latitude, jurney[i].longitude),
+          PointLatLng(jurney[i + 1].latitude, jurney[i + 1].longitude),
+          travelMode: TravelMode.bicycling,
+        ));
+      }
+    }
+    return results;
+  }
+
+  void clearDirections() {
+    polylines = {};
+    polylineCoordinates = [];
+    polylinePoints = PolylinePoints();
+  }
+
+  void setDistance() {
+    setState(() {
+      totalDistance = distanceCalculator
+          .calculateRouteDistance(polylineCoordinates, decimals: 1);
+    });
+  }
 }
-
-
-//     return Scaffold(
-//       body: Container(
-//         height: MediaQuery.of(context).size.height,
-//         width: MediaQuery.of(context).size.width,
-//         child:GoogleMap(
-//           zoomControlsEnabled: true,
-//           initialCameraPosition:CameraPosition(
-//             target: LatLng(48.8561, 2.2930),
-//             zoom: 16.0,
-//           ),
-//           ,
-//           markers: _markers,
-//         ) ,
-//       ),
-//       ,
-// >>>>>>> 632786326e0db07f12fc16d520e19ecdf984c71c
-//     );
-//   }
-//   }
 
 //!
 // onMapCreated: (GoogleMapController controller){
