@@ -1,19 +1,17 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:google_maps_flutter_platform_interface/src/types/bitmap.dart';
 import 'package:google_maps_flutter_platform_interface/src/types/location.dart';
-import 'package:google_maps_routes/google_maps_routes.dart';
 import 'package:location/location.dart';
-import 'package:search_map_location/search_map_location.dart';
-import 'package:http/http.dart';
 import 'package:veloplan/screens/location_service.dart';
 
-const double CAMERA_ZOOM = 17;
-const double CAMERA_TILT = 80;
-const double CAMERA_BEARING = 30;
+const double cameraZoom = 17;
+const double cameraTilt = 80;
+const double cameraBearing = 30;
 
 class MapPage extends StatefulWidget {
+  const MapPage({Key? key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return _MyHomePageState();
@@ -22,7 +20,6 @@ class MapPage extends StatefulWidget {
 
 class _MyHomePageState extends State<MapPage> {
   final String key = "AIzaSyB7YSQkjjqm-YU1LAz91lyYAvCpqFRhFdU";
-  Completer<GoogleMapController> _controller = Completer();
   Set<Marker> _markers = Set<Marker>();
   GoogleMapController? _googleController;
   Location _currentLocation = Location();
@@ -38,7 +35,7 @@ class _MyHomePageState extends State<MapPage> {
     _currentLocation.onLocationChanged.listen((LocationData loc){
       _googleController?.animateCamera(CameraUpdate.newCameraPosition(new CameraPosition(
         target: LatLng(loc.latitude ?? 0.0,loc.longitude?? 0.0),
-        zoom: CAMERA_ZOOM,
+        zoom: cameraZoom,
       )));
       setState(() {
         _markers.add(Marker(markerId: MarkerId('Home'),
@@ -48,25 +45,12 @@ class _MyHomePageState extends State<MapPage> {
     });
   }
 
-  void findPlace(String placeName) async {
-    if(placeName.length > 1){
-      String autoCompleteUrl = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$placeName&key=$key&components=country:gb";
-      var res = await RequestAssistance.getRequest(autoCompleteUrl);
-
-      if(res == "Failed") { return; }
-
-      print("PLACES PREDICTION:");
-      print(res);
-
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     CameraPosition _initialCameraPosition = CameraPosition(
-        zoom: CAMERA_ZOOM,
-        tilt: CAMERA_TILT,
-        bearing: CAMERA_BEARING,
+        zoom: cameraZoom,
+        tilt: cameraTilt,
+        bearing: cameraBearing,
         target: LatLng(51.51185004458236,-0.11580820118980878),
     );
 
@@ -76,19 +60,22 @@ class _MyHomePageState extends State<MapPage> {
           children: [
             Row(
               children: [
-                Expanded(child: TextFormField(
-                  controller: _searchController,
-                  textCapitalization: TextCapitalization.words,
-                  decoration: InputDecoration(hintText: "Search for a location"),
-                  onChanged: (value) { findPlace(value); },
-                )),
-                IconButton(onPressed: () {
-                  LocationService().getPlace(_searchController.text);
-                },
-                    icon: const Icon(Icons.search))
-              ],
-            ),
-
+                Expanded(
+                    child: TextFormField(
+                      controller: _searchController,
+                      textCapitalization: TextCapitalization.words,
+                      decoration: const InputDecoration(hintText: "Search for a location"),
+                      onChanged: (value) { LocationService().findPlace(value); },
+                    )
+                ),
+                IconButton(
+                    onPressed: () {
+                    LocationService().getPlace(_searchController.text);
+                    },
+                    icon: const Icon(Icons.search)
+                  )
+                ],
+              ),
             Expanded(
                 child: GoogleMap(
                   zoomControlsEnabled: true,
@@ -99,15 +86,15 @@ class _MyHomePageState extends State<MapPage> {
                     showUsersCurrentLocationOnMap();
                   },
                   markers: _markers,
-                ) ,
-            ),
-          ],
+                ),
+              ),
+            ],
         ),
         floatingActionButton: FloatingActionButton(
             onPressed: (() {
-              print("SUIIIIIIII");
+              print("When the user presses this btn, a new search box should show - to be implemented!");
             })
-          ),
+        ),
       );
     }
   }
