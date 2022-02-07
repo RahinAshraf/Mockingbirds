@@ -32,7 +32,7 @@ class _MyHomePageState extends State<MapPage> {
     super.initState();
   }
 
-  void showUsersCurrentLocationOnMap() async{
+  void showUsersCurrentLocationOnMap() async {
     var location = await _currentLocation.getLocation();
     _currentLocation.onLocationChanged.listen((LocationData loc){
       _googleController?.animateCamera(CameraUpdate.newCameraPosition(new CameraPosition(
