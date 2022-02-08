@@ -8,6 +8,8 @@ import 'package:google_maps_flutter_platform_interface/src/types/location.dart';
 import 'package:google_maps_routes/google_maps_routes.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:location/location.dart';
+import 'package:latlong/latlong.dart' as ll;
+import 'package:trotter/trotter.dart';
 
 const LatLng SOURCE_LOCATION = LatLng(51.51185004458236,
     -0.11580820118980878); //points to bush house - CHANGE this to users current live location
@@ -210,7 +212,31 @@ class _MyHomePageState extends State<MapPage> {
           .calculateRouteDistance(polylineCoordinates, decimals: 1);
     });
   }
+
+  double calculateDistance(List<LatLng> coords) {
+    return 0;
+  }
+
+  num getDistance(ll.LatLng a, ll.LatLng b) {
+    ll.Distance dist = new ll.Distance();
+    return dist.as(ll.LengthUnit.Centimeter, a, b);
+  }
+
+  List<ll.LatLng> sortByDist(ll.LatLng start, List<ll.LatLng> points) {
+    points.sort((a, b) =>
+        getDistance(start, a).compareTo(getDistance(start, b).toDouble()));
+    return points;
+  }
+
+  // void sortByDist(){
+
+  // }
 }
+//! def distance(a, b):
+// !    return math.sqrt((a[0]-b[0])**2 + (a[1]-b[1])**2)
+
+//! self.coords = sorted(self.coords, key=lambda p: distance(p, current_positoin), reverse=True)
+
 
 //!
 // onMapCreated: (GoogleMapController controller){
