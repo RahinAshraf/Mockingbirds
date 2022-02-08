@@ -21,10 +21,10 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+    //final Future<FirebaseApp> _initialization = Firebase.initializeApp();
     return FutureBuilder(
       // Initialize FlutterFire:
-      future: _initialization,
+      future: Firebase.initializeApp(), // _initialization,
       builder: (context, appSnapshot) {
 
 
