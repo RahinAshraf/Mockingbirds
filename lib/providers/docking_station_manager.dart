@@ -8,6 +8,7 @@ class dockingStationManager{
   List<DockingStation> stations = [];
 
 
+
   Future<void> importStations() async {var data =
   await http.get(Uri.parse("https://api.tfl.gov.uk/BikePoint"));
   var jsonData = json.decode(data.body);
@@ -46,10 +47,11 @@ class dockingStationManager{
     return openStations;
   }
 
+
   List<DockingStation> get_all_stations_with_number_of_bikes(int numberOfBikes){
     List<DockingStation> openStations = [];
     for (var station in stations) {
-      if(station.nb_bikes<numberOfBikes){
+      if(station.nb_bikes>=numberOfBikes){
         openStations.add(station);
       }
     }
@@ -59,7 +61,7 @@ class dockingStationManager{
   List<DockingStation> get_all_stations_with_number_empty_docks(int numberOfDocks){
     List<DockingStation> openStations = [];
     for (var station in stations) {
-      if(station.nb_empty_docks<numberOfDocks){
+      if(station.nb_empty_docks>=numberOfDocks){
         openStations.add(station);
       }
     }

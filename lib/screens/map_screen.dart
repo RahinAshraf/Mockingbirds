@@ -41,8 +41,11 @@ class MapPage extends StatefulWidget {
 class _MyHomePageState extends State<MapPage> {
   final String key = "AIzaSyB7YSQkjjqm-YU1LAz91lyYAvCpqFRhFdU";
   Set<Marker> _markers = Set<Marker>();
+<<<<<<< HEAD
   GoogleMapController? _googleController;
   Location _currentLocation = Location();
+=======
+>>>>>>> Only display open stations
   late LatLng currentLocation;
   late LatLng destinationLocation;
   late Future<List<DockingStation>> future_docks;
@@ -109,6 +112,7 @@ class _MyHomePageState extends State<MapPage> {
             position: LatLng(station.lat, station.lon)));
         i++;
       }
+
     });
 
   }
