@@ -27,7 +27,6 @@ class MapPage extends StatefulWidget {
 class _MyHomePageState extends State<MapPage> {
   Completer<GoogleMapController> _controller = Completer();
   Set<Marker> _markers = Set<Marker>();
-
   late LatLng currentLocation;
   late LatLng destinationLocation;
   late Future<List<DockingStation>> future_docks;
@@ -53,7 +52,7 @@ class _MyHomePageState extends State<MapPage> {
 
   void fetchDockingStations(){
     final dockingStationManager _stationManager = dockingStationManager();
-     _stationManager.importStations().then((value) => placeDockMarkers(_stationManager.stations));
+     _stationManager.importStations().then((value) => placeDockMarkers(_stationManager.get_all_stations_with_number_of_bikes(8)));
   }
 
   void placeDockMarkers(List<DockingStation> docks){
@@ -61,7 +60,8 @@ class _MyHomePageState extends State<MapPage> {
     setState(() {
       for (var station in docks) {
         _markers.add(Marker(markerId: MarkerId(i.toString()),
-            position: LatLng(station.lat ?? 0.0, station.lon ?? 0.0)));
+            position: LatLng(station.lat, station.lon)));
+        i++;
         }
     });
 

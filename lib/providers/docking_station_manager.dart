@@ -14,7 +14,6 @@ class dockingStationManager{
      var jsonData = json.decode(data.body);
       stations.clear();
      for (var station in jsonData) {
-       print(i++);
        try {
          DockingStation newStation =
          DockingStation(
@@ -28,9 +27,10 @@ class dockingStationManager{
              station["lon"],
              station["lat"]
          );
-         stations.add(newStation);
+         if(!newStation.locked){
+           stations.add(newStation);
+         }
        } on FormatException{
-         print(station["additionalProperties"][8]["value"]);
        }
      }
    }
@@ -48,7 +48,7 @@ class dockingStationManager{
   List<DockingStation> get_all_stations_with_number_of_bikes(int numberOfBikes){
     List<DockingStation> openStations = [];
     for (var station in stations) {
-      if(station.nb_bikes<numberOfBikes){
+      if(station.nb_bikes>=numberOfBikes){
         openStations.add(station);
       }
     }
@@ -58,7 +58,7 @@ class dockingStationManager{
   List<DockingStation> get_all_stations_with_number_empty_docks(int numberOfDocks){
     List<DockingStation> openStations = [];
     for (var station in stations) {
-      if(station.nb_empty_docks<numberOfDocks){
+      if(station.nb_empty_docks>=numberOfDocks){
         openStations.add(station);
       }
     }
