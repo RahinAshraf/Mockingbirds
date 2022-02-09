@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:html';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
@@ -78,8 +77,6 @@ class _MyHomePageState extends State<MapPage> {
   @override
   void initState() {
     super.initState();
-
-
     this.fetchDockingStations();
   }
 
@@ -101,16 +98,17 @@ class _MyHomePageState extends State<MapPage> {
 
   void fetchDockingStations(){
     final dockingStationManager _stationManager = dockingStationManager();
-     _stationManager.importStations().then((value) => placeDockMarkers(_stationManager.stations));
+    _stationManager.importStations().then((value) => placeDockMarkers(_stationManager.stations));
   }
 
   void placeDockMarkers(List<DockingStation> docks){
     int i =0;
     setState(() {
       for (var station in docks) {
-        _markers.add(Marker(markerId: MarkerId(i.toString()),
-            position: LatLng(station.lat ?? 0.0, station.lon ?? 0.0)));
-        }
+        _markers.add(Marker(markerId: MarkerId("dockingStation" + i.toString()),
+            position: LatLng(station.lat, station.lon)));
+        i++;
+      }
     });
 
   }
@@ -177,7 +175,7 @@ class _MyHomePageState extends State<MapPage> {
                   child: Align(
                     alignment: Alignment.center,
                     child:
-                        Text(totalDistance, style: TextStyle(fontSize: 25.0)),
+                    Text(totalDistance, style: TextStyle(fontSize: 25.0)),
                   )),
             ),
           ),
@@ -187,7 +185,7 @@ class _MyHomePageState extends State<MapPage> {
                 controller: _searchController,
                 textCapitalization: TextCapitalization.words,
                 decoration:
-                    const InputDecoration(hintText: "Search for a location"),
+                const InputDecoration(hintText: "Search for a location"),
                 onChanged: (value) {
                   LocationService().findPlace(value);
                 },
