@@ -31,8 +31,6 @@ class _MyHomePageState extends State<MapPage> {
   late LatLng destinationLocation;
   late Future<List<DockingStation>> future_docks;
 
-
-
   @override
   void initState() {
     super.initState();
@@ -40,6 +38,7 @@ class _MyHomePageState extends State<MapPage> {
     //set up inital locations
     this.setInitialLocation();
     this.fetchDockingStations();
+    this.checkFilter();
   }
 
   void setInitialLocation() {
@@ -50,21 +49,29 @@ class _MyHomePageState extends State<MapPage> {
         LatLng(DEST_LOCATION.latitude, DEST_LOCATION.longitude);
   }
 
-  void fetchDockingStations(){
+  void fetchDockingStations() {
     final dockingStationManager _stationManager = dockingStationManager();
-     _stationManager.importStations().then((value) => placeDockMarkers(_stationManager.get_all_stations_with_number_of_bikes(8)));
+    _stationManager.importStations().then((value) => placeDockMarkers(
+        _stationManager.get_all_stations_with_number_of_bikes(8)));
   }
 
-  void placeDockMarkers(List<DockingStation> docks){
-    int i =0;
+  void checkFilter() {
+    final dockingStationManager _stationManager = dockingStationManager();
+    List<DockingStation> l =
+        _stationManager.get_all_stations_with_number_of_bikes(8);
+    print(_stationManager.filter_all_stations_by_distance(l[0], l));
+  }
+
+  void placeDockMarkers(List<DockingStation> docks) {
+    int i = 0;
     setState(() {
       for (var station in docks) {
-        _markers.add(Marker(markerId: MarkerId(i.toString()),
+        _markers.add(Marker(
+            markerId: MarkerId(i.toString()),
             position: LatLng(station.lat, station.lon)));
         i++;
-        }
+      }
     });
-
   }
 
   @override
