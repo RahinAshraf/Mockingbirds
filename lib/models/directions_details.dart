@@ -1,7 +1,59 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+// class DirectionsDetails {
+//   int? distanceValue;
+//   int? durationValue;
+//   String? distanceText;
+//   String? durationText;
+//   List<String>? instructions;
+
+//   DirectionsDetails(
+//       {this.distanceValue,
+//       this.durationValue,
+//       this.distanceText,
+//       this.durationText,
+//       this.instructions});
+// }
+
 class DirectionsDetails {
-  int distanceValue;
-  int durationValue;
-  String distanceText;
-  String durationText;
-  List<String> instructions;
+  // final LatLngBounds? bounds;
+  // final List<PointLatLng>? polylinePoints;
+  final String? totalDistance;
+  final String? totalDuration;
+
+  DirectionsDetails(
+      {
+      // {@required this.bounds,
+      // @required this.polylinePoints,
+      @required this.totalDistance,
+      @required this.totalDuration});
+
+  factory DirectionsDetails.fromMap(Map<String, dynamic> map) {
+    // if ((map['routes'] as List).isEmpty)
+    //   return null; //turn into try catch statement
+
+    final data = Map<String, dynamic>.from(map['routes'][0]);
+    // final northeast = data['bounds']['northeast'];
+    // final southwest = data['bounds']['southwest'];
+    // final bounds = LatLngBounds(
+    //   northeast: LatLng(northeast['lat'], northeast['lng']),
+    //   southwest: LatLng(southwest['lat'], southwest['lng']),
+    //);
+
+    String distance = '';
+    String duration = '';
+
+    if ((data['legs'] as List).isNotEmpty) {
+      final leg = data['legs'][0];
+      distance = leg['distance']['text'];
+      duration = leg['duration']['text'];
+    }
+
+    return DirectionsDetails(
+        //bounds: bounds,
+        // polylinePoints: PolylinePoints()
+        //     .decodePolyline(data['overview_polyline']['points']),
+        totalDistance: distance,
+        totalDuration: duration);
+  }
 }

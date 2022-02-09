@@ -10,6 +10,7 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:location/location.dart';
 // import 'package:latlong/latlong.dart' as ll;
 import 'package:veloplan/screens/location_service.dart';
+import '../providers/directions_manager.dart';
 
 // ! remove
 const LatLng SOURCE_LOCATION = LatLng(51.51185004458236,
@@ -116,6 +117,16 @@ class _MyHomePageState extends State<MapPage> {
               },
             ),
           ),
+          //BUTTON FOR TESTING DIRESTIONS
+          // Container(
+          //   alignment: Alignment(-0.9, 0),
+          //   child: FloatingActionButton(
+          //     heroTag: "btn1",
+          //     child: Icon(Icons.arrow_upward, color: Colors.white),
+          //     onPressed: DirectionsManager().getDirectionDetails();
+          //     },
+          //),
+          // ),
           Container(
             alignment: Alignment(-0.9, 0),
             child: FloatingActionButton(
