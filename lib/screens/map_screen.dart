@@ -302,9 +302,7 @@ class MyHomePageState extends State<MapScreen> {
                 width: 80.0,
                 height: 80.0,
                 point: latLng.LatLng(51.5, -0.09),
-                builder: (ctx) => Container(
-                  child: FlutterLogo(),
-                ),
+                builder: (ctx) => Container(),
               ),
             ],
           ),
