@@ -30,7 +30,7 @@ class _MainPageState extends State<MainPage> {
   final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
   final screens = [
     Placeholder(), //need to replace this with something?
-    MapPage(),
+    MyHomePage(),
     Profile(),
   ];
 
