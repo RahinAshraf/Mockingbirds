@@ -27,15 +27,24 @@ class MyHomePageState extends State<MapScreen> {
               'accessToken': MAPBOX_ACCESS_TOKEN,
               'id': 'mapbox.mapbox-streets-v8'
             },
+            attributionBuilder: (_) {
+              return Text("VeloPlan");
+            },
           ),
           MarkerLayerOptions(
             markers: [
               Marker(
-                width: 80.0,
-                height: 80.0,
-                point: latLng.LatLng(51.5, -0.09),
-                builder: (ctx) => Container(),
-              ),
+                  point: latLng.LatLng(51.51185004458236, -0.11580820118980878),
+                  builder: (_) {
+                    return Container(
+                      height: 50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                        color: Colors.red[300],
+                        shape: BoxShape.circle,
+                      ),
+                    );
+                  }),
             ],
           ),
         ],
