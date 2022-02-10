@@ -4,59 +4,13 @@ import '../navbar.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart' as latLng;
 import '../.env.dart';
-import 'package:location/location.dart';
-import 'package:geolocator/geolocator.dart';
 
 class MapScreen extends StatefulWidget {
   @override
   MyHomePageState createState() => MyHomePageState();
 }
 
-// class MyHomePageState extends State<MapScreen> {
-//   Location _currentLocation = Location();
-
-//   @override
-//   Widget build(BuildContext build) {
-//     return Scaffold(
-//       body: FlutterMap(
-//         options: MapOptions(
-//           center: latLng.LatLng(51.51185004458236, -0.11580820118980878),
-//           zoom: 16.0,
-//         ),
-//         layers: [
-//           TileLayerOptions(
-//             urlTemplate:
-//                 "https://api.mapbox.com/styles/v1/mockingbirds/ckzh4k81i000n16lcev9vknm5/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibW9ja2luZ2JpcmRzIiwiYSI6ImNremd3NW9weDM2ZmEybm45dzlhYzN0ZnUifQ.lSzpNOhK2CH9-PODR0ojLg",
-//             additionalOptions: {
-//               'accessToken': MAPBOX_ACCESS_TOKEN,
-//               'id': 'mapbox.mapbox-streets-v8'
-//             },
-//           ),
-//           MarkerLayerOptions(
-//             markers: [
-//               Marker(
-//                   point: latLng.LatLng(51.51185004458236, -0.11580820118980878),
-//                   builder: (_) {
-//                     return Container(
-//                       height: 50,
-//                       width: 50,
-//                       decoration: BoxDecoration(
-//                         color: Colors.red[300],
-//                         shape: BoxShape.circle,
-//                       ),
-//                     );
-//                   }),
-//             ],
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
 class MyHomePageState extends State<MapScreen> {
-  Location _currentLocation = Location();
-
   @override
   Widget build(BuildContext build) {
     return Scaffold(
@@ -76,7 +30,7 @@ class MyHomePageState extends State<MapScreen> {
                     "https://api.mapbox.com/styles/v1/mockingbirds/ckzh4k81i000n16lcev9vknm5/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibW9ja2luZ2JpcmRzIiwiYSI6ImNremd3NW9weDM2ZmEybm45dzlhYzN0ZnUifQ.lSzpNOhK2CH9-PODR0ojLg",
                 additionalOptions: {
                   'accessToken': MAPBOX_ACCESS_TOKEN,
-                  'id': 'mapbox.mapbox-streets-v8'
+                  'id': 'mapbox.mapbox-streets-v8',
                 },
               ),
               MarkerLayerOptions(
@@ -104,30 +58,6 @@ class MyHomePageState extends State<MapScreen> {
   }
 }
 
-Future<Position> _determinePosition() async {
-  bool serviceEnabled;
-  LocationPermission permission;
-
-  // Test if location services are enabled.
-  serviceEnabled = await Geolocator.isLocationServiceEnabled();
-  if (!serviceEnabled) {
-    return Future.error('Location services are disabled.');
-  }
-
-  permission = await Geolocator.checkPermission();
-  if (permission == LocationPermission.denied) {
-    permission = await Geolocator.requestPermission();
-    if (permission == LocationPermission.denied) {
-      return Future.error('Location permissions are denied');
-    }
-  }
-
-  if (permission == LocationPermission.deniedForever) {
-    return Future.error(
-        'Location permissions are permanently denied, we cannot request permissions.');
-  }
-  return await Geolocator.getCurrentPosition();
-}
 
 //this is the old google maps stuff:
 
