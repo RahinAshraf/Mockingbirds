@@ -27,9 +27,6 @@ class MyHomePageState extends State<MapScreen> {
               'accessToken': MAPBOX_ACCESS_TOKEN,
               'id': 'mapbox.mapbox-streets-v8'
             },
-            attributionBuilder: (_) {
-              return Text("VeloPlan");
-            },
           ),
           MarkerLayerOptions(
             markers: [
