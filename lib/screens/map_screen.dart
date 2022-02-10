@@ -1,22 +1,57 @@
-// import 'dart:async';
-// import 'dart:math';
-// // import 'dart:html';
-// import 'package:flutter/material.dart';
-// import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-// import 'package:google_maps_flutter/google_maps_flutter.dart';
-// import 'package:google_maps_flutter_platform_interface/src/types/location.dart';
-// import 'package:google_maps_routes/google_maps_routes.dart';
-// import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-// import 'package:location/location.dart';
-// // import 'package:latlong/latlong.dart' as ll;
-// import 'package:veloplan/screens/location_service.dart';
-
 import 'package:flutter/material.dart';
 import '../screens/login_screen.dart';
 import '../navbar.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart' as latLng;
 import '../.env.dart';
+
+class MapScreen extends StatefulWidget {
+  @override
+  MyHomePageState createState() => MyHomePageState();
+}
+
+class MyHomePageState extends State<MapScreen> {
+  @override
+  Widget build(BuildContext build) {
+    return Scaffold(
+      body: FlutterMap(
+        options: MapOptions(
+          center: latLng.LatLng(51.51185004458236, -0.11580820118980878),
+          zoom: 16.0,
+        ),
+        layers: [
+          TileLayerOptions(
+            urlTemplate:
+                "https://api.mapbox.com/styles/v1/mockingbirds/ckzh4k81i000n16lcev9vknm5/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibW9ja2luZ2JpcmRzIiwiYSI6ImNremd3NW9weDM2ZmEybm45dzlhYzN0ZnUifQ.lSzpNOhK2CH9-PODR0ojLg",
+            additionalOptions: {
+              'accessToken': MAPBOX_ACCESS_TOKEN,
+              'id': 'mapbox.mapbox-streets-v8'
+            },
+            attributionBuilder: (_) {
+              return Text("VeloPlan");
+            },
+          ),
+          MarkerLayerOptions(
+            markers: [
+              Marker(
+                width: 80.0,
+                height: 80.0,
+                point: latLng.LatLng(51.5, -0.09),
+                builder: (ctx) => Container(),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+
+
+
+//this is the old google maps stuff:
+
 
 // // ! remove
 // const LatLng SOURCE_LOCATION = LatLng(51.51185004458236,
@@ -270,44 +305,15 @@ import '../.env.dart';
 //   }
 // }
 
-class MapScreen extends StatefulWidget {
-  @override
-  MyHomePageState createState() => MyHomePageState();
-}
-
-class MyHomePageState extends State<MapScreen> {
-  @override
-  Widget build(BuildContext build) {
-    return Scaffold(
-      body: FlutterMap(
-        options: MapOptions(
-          center: latLng.LatLng(51.5, -0.09),
-          zoom: 13.0,
-        ),
-        layers: [
-          TileLayerOptions(
-            urlTemplate:
-                "https://api.mapbox.com/styles/v1/mockingbirds/ckzh4k81i000n16lcev9vknm5/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibW9ja2luZ2JpcmRzIiwiYSI6ImNremd3NW9weDM2ZmEybm45dzlhYzN0ZnUifQ.lSzpNOhK2CH9-PODR0ojLg",
-            additionalOptions: {
-              'accessToken': MAPBOX_ACCESS_TOKEN,
-              'id': 'mapbox.mapbox-streets-v8'
-            },
-            attributionBuilder: (_) {
-              return Text("VeloPlan");
-            },
-          ),
-          MarkerLayerOptions(
-            markers: [
-              Marker(
-                width: 80.0,
-                height: 80.0,
-                point: latLng.LatLng(51.5, -0.09),
-                builder: (ctx) => Container(),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
+// import 'dart:async';
+// import 'dart:math';
+// // import 'dart:html';
+// import 'package:flutter/material.dart';
+// import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+// import 'package:google_maps_flutter/google_maps_flutter.dart';
+// import 'package:google_maps_flutter_platform_interface/src/types/location.dart';
+// import 'package:google_maps_routes/google_maps_routes.dart';
+// import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+// import 'package:location/location.dart';
+// // import 'package:latlong/latlong.dart' as ll;
+// import 'package:veloplan/screens/location_service.dart';
