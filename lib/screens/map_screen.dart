@@ -25,7 +25,7 @@ class MyHomePageState extends State<MapPage> {
   @override
   void initState() {
     super.initState();
-    //showUsersCurrentLocationOnMap();
+    showUsersCurrentLocationOnMap();
   }
 
 
