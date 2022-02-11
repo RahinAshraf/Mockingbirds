@@ -45,7 +45,7 @@ class dockingStationManager {
       int numberOfBikes) {
     List<DockingStation> openStations = [];
     for (var station in stations) {
-      if (station.nb_bikes >= numberOfBikes) {
+      if (!station.locked) {
         openStations.add(station);
       }
     }
