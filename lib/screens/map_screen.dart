@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:math';
-// import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -10,6 +9,9 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:location/location.dart';
 // import 'package:latlong/latlong.dart' as ll;
 import 'package:veloplan/screens/location_service.dart';
+import 'package:veloplan/providers/docking_station_manager.dart';
+import '../models/docking_station.dart';
+
 
 // ! remove
 const LatLng SOURCE_LOCATION = LatLng(51.51185004458236,
@@ -41,6 +43,9 @@ class _MyHomePageState extends State<MapPage> {
   Set<Marker> _markers = Set<Marker>();
   GoogleMapController? _googleController;
   Location _currentLocation = Location();
+  late LatLng currentLocation;
+  late LatLng destinationLocation;
+  late Future<List<DockingStation>> future_docks;
 
   // ! remove
   static final CameraPosition _initialCameraPosition = CameraPosition(
@@ -66,9 +71,13 @@ class _MyHomePageState extends State<MapPage> {
 
   TextEditingController _searchController = TextEditingController();
 
+
+
+
   @override
   void initState() {
     super.initState();
+    this.fetchDockingStations();
   }
 
   void showUsersCurrentLocationOnMap() async {
@@ -85,6 +94,24 @@ class _MyHomePageState extends State<MapPage> {
             position: LatLng(loc.latitude ?? 0.0, loc.longitude ?? 0.0)));
       });
     });
+  }
+
+  void fetchDockingStations(){
+    final dockingStationManager _stationManager = dockingStationManager();
+    _stationManager.importStations().then((value) => placeDockMarkers(_stationManager.stations));
+  }
+
+  void placeDockMarkers(List<DockingStation> docks){
+    int i =0;
+    setState(() {
+      for (var station in docks) {
+        _markers.add(Marker(markerId: MarkerId("dockingStation" + i.toString()),
+            position: LatLng(station.lat, station.lon)));
+        i++;
+      }
+
+    });
+
   }
 
   @override
@@ -149,7 +176,7 @@ class _MyHomePageState extends State<MapPage> {
                   child: Align(
                     alignment: Alignment.center,
                     child:
-                        Text(totalDistance, style: TextStyle(fontSize: 25.0)),
+                    Text(totalDistance, style: TextStyle(fontSize: 25.0)),
                   )),
             ),
           ),
@@ -159,7 +186,7 @@ class _MyHomePageState extends State<MapPage> {
                 controller: _searchController,
                 textCapitalization: TextCapitalization.words,
                 decoration:
-                    const InputDecoration(hintText: "Search for a location"),
+                const InputDecoration(hintText: "Search for a location"),
                 onChanged: (value) {
                   LocationService().findPlace(value);
                 },
