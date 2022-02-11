@@ -102,16 +102,14 @@ class _MyHomePageState extends State<MapPage> {
   }
 
   void placeDockMarkers(List<DockingStation> docks){
-    int i =0;
+    int i = 0;
     setState(() {
       for (var station in docks) {
         _markers.add(Marker(markerId: MarkerId("dockingStation" + i.toString()),
             position: LatLng(station.lat, station.lon)));
         i++;
       }
-
     });
-
   }
 
   @override

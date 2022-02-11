@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
 import '../screens/login_screen.dart';
 import '../navbar.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart' as latLng;
 import '../.env.dart';
+
+// double currentLatitude = 51.89717158976396;
+// double currentLongitude = -0.4285377978372715;
+
 
 class MapPage extends StatefulWidget {
   @override
@@ -11,6 +16,29 @@ class MapPage extends StatefulWidget {
 }
 
 class MyHomePageState extends State<MapPage> {
+  Location _currentLocation = Location();
+  late double currentLatitude;
+  late double currentLongitude;
+  MapController? _mapController;
+  bool hasOpened = false;
+
+  @override
+  void initState() {
+    super.initState();
+    //showUsersCurrentLocationOnMap();
+  }
+
+
+  void showUsersCurrentLocationOnMap() async {
+      var location = await _currentLocation.getLocation();
+      print(location.latitude);
+      _currentLocation.onLocationChanged.listen((LocationData loc) {
+        currentLatitude = loc.latitude ?? 0.0;
+        currentLongitude = loc.longitude ?? 0.0;
+        _mapController?.move(latLng.LatLng(loc.latitude ?? 0.0 , loc.longitude ?? 0.0), 15);
+      });
+  }
+
   @override
   Widget build(BuildContext build) {
     return Scaffold(
@@ -21,7 +49,11 @@ class MyHomePageState extends State<MapPage> {
           width: MediaQuery.of(context).size.width,
           child: FlutterMap(
             options: MapOptions(
-              center: latLng.LatLng(51.51185004458236, -0.11580820118980878),
+              onMapCreated: (MapController controller) {
+                _mapController = controller;
+                //showUsersCurrentLocationOnMap();
+              },
+              center: latLng.LatLng(51.51324313368016, -0.1174160748370747), //CHANGE THIS TO LIVE LOCATION
               zoom: 16.0,
             ),
             layers: [
@@ -36,8 +68,7 @@ class MyHomePageState extends State<MapPage> {
               MarkerLayerOptions(
                 markers: [
                   Marker(
-                      point: latLng.LatLng(
-                          51.51185004458236, -0.11580820118980878),
+                      point: latLng.LatLng(51.51324313368016, -0.1174160748370747),  //CHANGE THIS TO LIVE LOCATION
                       builder: (_) {
                         return Container(
                           height: 50,
@@ -53,6 +84,13 @@ class MyHomePageState extends State<MapPage> {
             ],
           ),
         ),
+        Container(
+            alignment: Alignment(-0.9, -0.5),
+            child: FloatingActionButton(
+                heroTag: "btn2",
+                child: Icon(Icons.location_searching, color: Colors.white),
+                backgroundColor: Colors.green,
+                onPressed: showUsersCurrentLocationOnMap)),
       ],
     ));
   }
