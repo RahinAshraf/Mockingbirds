@@ -16,12 +16,11 @@ class MyHomePageState extends State<MapPage> {
   late double currentLatitude;
   late double currentLongitude;
   MapController? _mapController;
-  bool hasOpened = false;
 
   @override
   void initState() {
     super.initState();
-    showUsersCurrentLocationOnMap();
+    showUsersCurrentLocationOnMap(); //initialises the map to users current location - feel free to comment this line during development. Any questions contact Rahin
   }
 
   void showUsersCurrentLocationOnMap() async {
@@ -29,7 +28,7 @@ class MyHomePageState extends State<MapPage> {
     _currentLocation.onLocationChanged.listen((LocationData loc) {
         currentLatitude = loc.latitude ?? 0.0;
         currentLongitude = loc.longitude ?? 0.0;
-        print("SUIIII");
+        print("LAT AND LONG BELOW");
         print(currentLatitude);
         print(currentLongitude);
 
@@ -81,13 +80,13 @@ class MyHomePageState extends State<MapPage> {
             ],
           ),
         ),
-        Container(
-            alignment: Alignment(-0.9, -0.5),
-            child: FloatingActionButton(
-                heroTag: "btn2",
-                child: Icon(Icons.location_searching, color: Colors.white),
-                backgroundColor: Colors.green,
-                onPressed: showUsersCurrentLocationOnMap)),
+        // Container(
+        //     alignment: Alignment(-0.9, -0.5),
+        //     child: FloatingActionButton(
+        //         heroTag: "btn2",
+        //         child: Icon(Icons.location_searching, color: Colors.white),
+        //         backgroundColor: Colors.green,
+        //         onPressed: showUsersCurrentLocationOnMap)),
       ],
     ));
   }
