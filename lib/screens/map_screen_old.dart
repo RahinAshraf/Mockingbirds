@@ -84,7 +84,7 @@ class _MyHomePageState extends State<MapPage> {
     var location = await _currentLocation.getLocation();
     _currentLocation.onLocationChanged.listen((LocationData loc) {
       _googleController
-          ?.animateCamera(CameraUpdate.newCameraPosition(new CameraPosition(
+          ?.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
         target: LatLng(loc.latitude ?? 0.0, loc.longitude ?? 0.0),
         zoom: cameraZoom,
       )));

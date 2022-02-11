@@ -6,10 +6,6 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart' as latLng;
 import '../.env.dart';
 
-// double currentLatitude = 51.89717158976396;
-// double currentLongitude = -0.4285377978372715;
-
-
 class MapPage extends StatefulWidget {
   @override
   MyHomePageState createState() => MyHomePageState();
@@ -28,15 +24,17 @@ class MyHomePageState extends State<MapPage> {
     showUsersCurrentLocationOnMap();
   }
 
-
   void showUsersCurrentLocationOnMap() async {
-      var location = await _currentLocation.getLocation();
-      print(location.latitude);
-      _currentLocation.onLocationChanged.listen((LocationData loc) {
+    var location = await _currentLocation.getLocation();
+    _currentLocation.onLocationChanged.listen((LocationData loc) {
         currentLatitude = loc.latitude ?? 0.0;
         currentLongitude = loc.longitude ?? 0.0;
-        _mapController?.move(latLng.LatLng(loc.latitude ?? 0.0 , loc.longitude ?? 0.0), 15);
-      });
+        print("SUIIII");
+        print(currentLatitude);
+        print(currentLongitude);
+
+        _mapController?.move(latLng.LatLng(loc.latitude ?? 0.0 , loc.longitude ?? 0.0), 15); //moves the camera to the users live location
+    });
   }
 
   @override
@@ -51,9 +49,8 @@ class MyHomePageState extends State<MapPage> {
             options: MapOptions(
               onMapCreated: (MapController controller) {
                 _mapController = controller;
-                //showUsersCurrentLocationOnMap();
               },
-              center: latLng.LatLng(51.51324313368016, -0.1174160748370747), //CHANGE THIS TO LIVE LOCATION
+              center: latLng.LatLng(51.51324313368016, -0.1174160748370747),
               zoom: 16.0,
             ),
             layers: [
@@ -68,7 +65,7 @@ class MyHomePageState extends State<MapPage> {
               MarkerLayerOptions(
                 markers: [
                   Marker(
-                      point: latLng.LatLng(51.51324313368016, -0.1174160748370747),  //CHANGE THIS TO LIVE LOCATION
+                      point: latLng.LatLng(51.51324313368016, -0.1174160748370747),
                       builder: (_) {
                         return Container(
                           height: 50,
