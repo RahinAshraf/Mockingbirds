@@ -41,6 +41,7 @@ class _MyHomePageState extends State<MapPage> {
   Set<Marker> _markers = Set<Marker>();
   GoogleMapController? _googleController;
   Location _currentLocation = Location();
+  bool myBool = true;
 
   // ! remove
   static final CameraPosition _initialCameraPosition = CameraPosition(
@@ -71,14 +72,23 @@ class _MyHomePageState extends State<MapPage> {
     super.initState();
   }
 
+  void moveMap(GoogleMapController gmc, LocationData ld){
+    gmc.animateCamera(CameraUpdate.newCameraPosition(new CameraPosition(
+        target: LatLng(ld.latitude ?? 0,ld.longitude ?? 0),
+      zoom: cameraZoom,
+      )
+    ));
+  }
+
+
   void showUsersCurrentLocationOnMap() async {
     var location = await _currentLocation.getLocation();
     _currentLocation.onLocationChanged.listen((LocationData loc) {
-      _googleController
-          ?.animateCamera(CameraUpdate.newCameraPosition(new CameraPosition(
-        target: LatLng(loc.latitude ?? 0.0, loc.longitude ?? 0.0),
-        zoom: cameraZoom,
-      )));
+      // _googleController
+      //     ?.animateCamera(CameraUpdate.newCameraPosition(new CameraPosition(
+      //   target: LatLng(loc.latitude ?? 0.0, loc.longitude ?? 0.0),
+      //   zoom: cameraZoom,
+      // )));
       setState(() {
         _markers.add(Marker(
             markerId: MarkerId('Home'),
@@ -93,7 +103,7 @@ class _MyHomePageState extends State<MapPage> {
       zoom: cameraZoom,
       tilt: cameraTilt,
       bearing: cameraBearing,
-      target: LatLng(51.51185004458236, -0.11580820118980878),
+       target: LatLng(51.51185004458236, -0.11580820118980878),
     );
 
     return Scaffold(
@@ -103,18 +113,24 @@ class _MyHomePageState extends State<MapPage> {
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             child: GoogleMap(
-              myLocationEnabled: false,
+              myLocationEnabled: true,
               compassEnabled: false,
               tiltGesturesEnabled: false,
               zoomControlsEnabled: true,
               polylines: Set<Polyline>.of(polylines.values),
               markers: _markers,
+              myLocationButtonEnabled: false,
               mapType: MapType.normal,
               initialCameraPosition: _initialCameraPosition,
               onMapCreated: (GoogleMapController controller) {
                 _googleController = controller;
-              },
+                showUsersCurrentLocationOnMap();
+                }
             ),
+          ),
+          Container(
+            height: 300,
+            width: double.infinity,
           ),
           Container(
             alignment: Alignment(-0.9, 0),
@@ -135,7 +151,14 @@ class _MyHomePageState extends State<MapPage> {
                   heroTag: "btn2",
                   child: Icon(Icons.location_searching, color: Colors.white),
                   backgroundColor: Colors.green,
-                  onPressed: showUsersCurrentLocationOnMap)),
+                  onPressed: () {
+                    _googleController
+                        ?.animateCamera(CameraUpdate.newCameraPosition(new CameraPosition(
+                      target: LatLng(51.51316968754006, -0.11735170182175114), //takes the camera to point to bush house - we want it to change to users live location
+                      //target: LatLng(getMyLocation().then((value) => value.latitude) , getMyLocation().then((value) => value.longitude)),
+                      zoom: cameraZoom,
+                    )));
+                  })),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Align(
