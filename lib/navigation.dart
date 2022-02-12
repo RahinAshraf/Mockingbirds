@@ -48,49 +48,49 @@ class _SampleNavigationAppState extends State<SampleNavigationApp> {
   bool _routeBuilt = false;
   bool _isNavigating = false;
 
-  Future<void> _onRouteEvent(e) async {
-    _distanceRemaining = await _directions.distanceRemaining;
-    _durationRemaining = await _directions.durationRemaining;
-
-    switch (e.eventType) {
-      case MapBoxEvent.progress_change:
-        var progressEvent = e.data as RouteProgressEvent;
-        _arrived = progressEvent.arrived;
-        if (progressEvent.currentStepInstruction != null)
-          _instruction = progressEvent.currentStepInstruction.toString();
-        break;
-      case MapBoxEvent.route_building:
-      case MapBoxEvent.route_built:
-        _routeBuilt = true;
-        break;
-      case MapBoxEvent.route_build_failed:
-        _routeBuilt = false;
-        break;
-      case MapBoxEvent.navigation_running:
-        _isNavigating = true;
-        break;
-      case MapBoxEvent.on_arrival:
-        _arrived = true;
-        if (!_isMultipleStop) {
-          await Future.delayed(Duration(seconds: 3));
-          await _controller.finishNavigation();
-        } else {}
-        break;
-      case MapBoxEvent.navigation_finished:
-      case MapBoxEvent.navigation_cancelled:
-        _routeBuilt = false;
-        _isNavigating = false;
-        break;
-      default:
-        break;
-    }
-    //refresh UI
-    setState(() {});
-  }
-
   @override
   void initState() {
-    _directions = MapBoxNavigation(onRouteEvent: _onRouteEvent);
+    super.initState();
+    initialize();
+  }
+
+  // Platform messages are asynchronous, so we initialize in an async method.
+  Future<void> initialize() async {
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
+    _directions = MapBoxNavigation(onRouteEvent: _onEmbeddedRouteEvent);
+    _options = MapBoxOptions(
+        //initialLatitude: 36.1175275,
+        //initialLongitude: -115.1839524,
+        zoom: 15.0,
+        tilt: 0.0,
+        bearing: 0.0,
+        enableRefresh: false,
+        alternatives: true,
+        voiceInstructionsEnabled: true,
+        bannerInstructionsEnabled: true,
+        allowsUTurnAtWayPoints: true,
+        mode: MapBoxNavigationMode.drivingWithTraffic,
+        units: VoiceUnits.imperial,
+        simulateRoute: false,
+        animateBuildRoute: true,
+        longPressDestinationEnabled: true,
+        language: "en");
+
+    String platformVersion;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      platformVersion = await _directions.platformVersion;
+    } on PlatformException {
+      platformVersion = 'Failed to get platform version.';
+    }
+
+    setState(() {
+      _platformVersion = platformVersion;
+    });
   }
 
   @override
