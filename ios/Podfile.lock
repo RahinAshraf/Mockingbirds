@@ -9,9 +9,17 @@ PODS:
   - GoogleMaps/Maps (4.1.0):
     - GoogleMaps/Base
 
+  - flutter_mapbox_navigation (0.0.26):
+    - Flutter
+    - MapboxCoreNavigation (~> 2.0)
+    - MapboxNavigation (~> 2.1)
+  
+
 DEPENDENCIES:
   - Flutter (from `Flutter`)
+  - flutter_mapbox_navigation (from `.symlinks/plugins/flutter_mapbox_navigation/ios`)
   - google_maps_flutter (from `.symlinks/plugins/google_maps_flutter/ios`)
+
 
 SPEC REPOS:
   trunk:
