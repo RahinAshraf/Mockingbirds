@@ -1,4 +1,4 @@
-List<Map> docking_stations_placeholder = [
+List<Map> locations_placeholder = [
   {
     'id': '0',
     'name': 'buckingham palace',
