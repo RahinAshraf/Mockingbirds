@@ -43,7 +43,6 @@ dependencies:
   dio: ^4.0.4
   flutter_dotenv: ^5.0.2
   mapbox_gl: ^0.15.0
-  mapbox_navigation: ^1.0.3
 
 
 
