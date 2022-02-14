@@ -4,12 +4,6 @@ import 'navbar.dart';
 
 void main() {
   runApp(MaterialApp(
-<<<<<<< Updated upstream
-    // ThemeData(primarySwatch: Colors.lime),
-    initialRoute: '/',
-    routes: {'/': (context) => Login(), '/map': (context) => Navbar()},
-  ));
-=======
       initialRoute: '/',
       routes: {'/': (context) => Login(), '/map': (context) => Navbar()},
       theme: ThemeData(
@@ -30,5 +24,4 @@ void main() {
           },
         ),
       )));
->>>>>>> Stashed changes
 }
