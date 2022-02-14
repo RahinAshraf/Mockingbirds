@@ -47,7 +47,6 @@ class dockingStationManager{
     return openStations;
   }
 
-
   List<DockingStation> get_all_stations_with_number_of_bikes(int numberOfBikes){
     List<DockingStation> openStations = [];
     for (var station in stations) {
