@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:email_validator/email_validator.dart';
 
 import '../pickers/image_picker.dart';
 
@@ -124,12 +125,9 @@ class _AuthFormState extends State<AuthForm> {
                     autocorrect: false,
                     textCapitalization: TextCapitalization.none,
                     enableSuggestions: false,
-                    validator: (value) {
-                      if (value!.isEmpty || !value.contains('@')) {
-                        return 'Please enter a valid email address.';
-                      }
-                      return null;
-                    },
+                    validator: (value) => EmailValidator.validate(value!)
+                        ? null
+                        : "Please enter a valid email",
                     keyboardType: TextInputType.emailAddress,
                     decoration: const InputDecoration(
                       labelText: 'Email address',

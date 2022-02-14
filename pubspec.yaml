@@ -39,6 +39,8 @@ dependencies:
   firebase_auth: ^3.3.6
   firebase_storage: ^10.2.6
   image_picker: ^0.8.4+5
+  email_validator: ^2.0.1
+  intl: ^0.17.0
 
 
 
