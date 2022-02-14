@@ -17,3 +17,11 @@ List<LatLng> sortByDistance(LatLng start, List<LatLng> points) {
       .compareTo(calculateDistance(start, b).toDouble()));
   return points;
 }
+
+double distanceCalulator(List<LatLng> points) {
+  double totalDistance = 0.0;
+  for (int i = 0; i < points.length - 1; ++i) {
+    totalDistance += calculateDistance(points[i], points[i + 1]);
+  }
+  return round(totalDistance, decimals: 2);
+}

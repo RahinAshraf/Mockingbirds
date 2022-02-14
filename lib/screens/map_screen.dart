@@ -8,7 +8,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import '../.env.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-// import 'package:flutter_mapbox_navigation/library.dart';
+import '../helpers/navigation_helpers.dart';
 
 class MapPage extends StatefulWidget {
   @override
@@ -32,7 +32,7 @@ class MyHomePageState extends State<MapPage> {
     LatLng(51.506053, -0.130310)
   ];
 
-  late List<LatLng> poly = [];
+  String totalDistance = 'No route';
 
   @override
   void initState() {
@@ -135,6 +135,22 @@ class MyHomePageState extends State<MapPage> {
             },
           ),
         ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+                width: 200,
+                height: 50,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15.0)),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text(totalDistance, style: TextStyle(fontSize: 25.0)),
+                )),
+          ),
+        ),
       ],
     ));
   }
@@ -166,10 +182,17 @@ class MyHomePageState extends State<MapPage> {
         }
       });
     }
+    setDistance();
   }
 
   void clearDirections() {
     polylineCoordinates = [];
     polylinePoints = PolylinePoints();
+  }
+
+  void setDistance() {
+    setState(() {
+      totalDistance = distanceCalulator(polylineCoordinates).toString();
+    });
   }
 }
