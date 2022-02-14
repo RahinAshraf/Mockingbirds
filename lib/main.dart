@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'screens/login_screen.dart';
+import 'screens/landing_screen.dart';
 import 'navbar.dart';
 
 void main() {
   runApp(MaterialApp(
       initialRoute: '/',
-      routes: {'/': (context) => Login(), '/map': (context) => Navbar()},
+      routes: {'/': (context) => Landing(), '/map': (context) => Navbar()},
       theme: ThemeData(
         scaffoldBackgroundColor: Color(0xffffffff),
         primarySwatch: const MaterialColor(
