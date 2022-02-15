@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
-import '../screens/login_screen.dart';
-import '../navbar.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import '../.env.dart';
 import '../widget/custom_carousel.dart';
 import '../widget/custom_card.dart';
-
-import 'package:carousel_slider/carousel_slider.dart';
 
 class MapPage extends StatefulWidget {
   @override
@@ -18,8 +14,6 @@ class MapPage extends StatefulWidget {
 
 class MyHomePageState extends State<MapPage> {
   List<Widget> cardList = [carouselCard("one"), carouselCard("two")];
-
-  //CustomCarousel customCarousel = CustomCarousel(cards: cardList);
 
   @override
   Widget build(BuildContext build) {
@@ -64,10 +58,6 @@ class MyHomePageState extends State<MapPage> {
 
   late Future<List<DockingStation>> future_docks;
   Set<Marker> _markers = Set<Marker>();
-
-  List<Map> carouselData = [];
-  int pageIndex = 0; // index of the cards on the carousel
-  late List<Widget> carouselItems;
 
   @override
   void initState() {
