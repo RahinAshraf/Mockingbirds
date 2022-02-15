@@ -5,7 +5,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import '../.env.dart';
 import '../widget/custom_carousel.dart';
-import '../widget/custom_card.dart';
+import '../widget/docking_station_card.dart';
 
 class MapPage extends StatefulWidget {
   @override
@@ -13,7 +13,10 @@ class MapPage extends StatefulWidget {
 }
 
 class MyHomePageState extends State<MapPage> {
-  List<Widget> cardList = [carouselCard("one"), carouselCard("two")];
+  List<Widget> cardList = [
+    dockingStationCard("one"),
+    dockingStationCard("two")
+  ];
 
   @override
   Widget build(BuildContext build) {

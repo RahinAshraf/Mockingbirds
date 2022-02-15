@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'custom_card.dart';
+
+/// Creates a custom carousel that must be populated with a list of cards on instantiation
 
 class CustomCarousel extends StatefulWidget {
   final List<Widget> cards;
@@ -14,7 +15,7 @@ class CustomCarousel extends StatefulWidget {
 }
 
 class CustomCarouselState extends State<CustomCarousel> {
-  late List<Widget> cards = [];
+  List<Widget> cards = [];
 
   @override
   void initState() {
@@ -58,24 +59,14 @@ class CustomCarouselState extends State<CustomCarousel> {
     return AnimatedBuilder(
       animation: _pageController,
       builder: (BuildContext context, widget) {
-        return Center(child: widget);
+        return Container(child: Center(child: widget));
       },
       child: Container(child: cards[position]),
     );
   }
-  //List<Widget> cards = [carouselCard("one"), carouselCard("two")];
 
   late PageController _pageController;
   int _position = 0;
-
-  // void addCardToList(Widget card) {
-  //   //List<Widget> cards = [carouselCard("one"), carouselCard("two")];
-  //   cards.add(card);
-  // }
-
-  // List<Widget> getCardList() {
-  //   return cards;
-  // }
 }
 
 class AnimatedPageIndicatorFb1 extends StatelessWidget {
