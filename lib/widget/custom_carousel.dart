@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'custom_card.dart';
 
 class CustomCarousel extends StatefulWidget {
-  final List<Widget>? cards;
+  final List<Widget> cards;
 
   const CustomCarousel({
     Key? key,
-    this.cards,
+    required this.cards,
   }) : super(key: key);
 
   @override
@@ -14,7 +14,7 @@ class CustomCarousel extends StatefulWidget {
 }
 
 class CustomCarouselState extends State<CustomCarousel> {
-  List<Widget>? cards = [];
+  late List<Widget> cards = [];
 
   @override
   void initState() {
@@ -30,7 +30,7 @@ class CustomCarouselState extends State<CustomCarousel> {
         Flexible(
           child: PageView.builder(
               controller: _pageController,
-              itemCount: cards!.length,
+              itemCount: cards.length,
               onPageChanged: (int position) {
                 setState(() {
                   _position = position;
@@ -43,7 +43,7 @@ class CustomCarouselState extends State<CustomCarousel> {
         Flexible(
             child: AnimatedPageIndicatorFb1(
           currentPage: _position,
-          numPages: cards!.length,
+          numPages: cards.length,
           gradient: LinearGradient(colors: [
             Colors.blue.withOpacity(.4),
             Colors.purple.withOpacity(.4)
@@ -60,7 +60,7 @@ class CustomCarouselState extends State<CustomCarousel> {
       builder: (BuildContext context, widget) {
         return Center(child: widget);
       },
-      child: Container(child: cards![position]),
+      child: Container(child: cards[position]),
     );
   }
   //List<Widget> cards = [carouselCard("one"), carouselCard("two")];
