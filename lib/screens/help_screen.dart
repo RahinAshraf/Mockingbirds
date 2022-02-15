@@ -41,16 +41,16 @@ class MyHomePageState extends State<HelpPage> {
                 mainAxisSize: MainAxisSize.max,
                 //mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  for (String item in helpBot.getAllMessageTopics())
-                    TextButton(
-                      onPressed: () {
-                        setState(() {
-                          someList.add(helpBot.getMessageTextsbyTopic(item));
-                          someList.add(helpBot.getAnswerToQuestion(item));
-                        });
-                      },
-                      child: Text(item),
-                    ),
+                  // for (String item in helpBot.getAllMessageTopics())
+                  //   TextButton(
+                  //     onPressed: () {
+                  //       setState(() {
+                  //         // someList.add(helpBot.getMessageTextsbyTopic(item));
+                  //         // someList.add(helpBot.getAnswerToQuestion(item));
+                  //       });
+                  //     },
+                  //     // child: Text(item),
+                  //   ),
                 ],
               ),
             ),

@@ -1,49 +1,36 @@
-import 'package:veloplan/models/answer.dart';
 import 'package:veloplan/models/message.dart';
 
 class HelpBotManager {
-  Map<Message, Answer> questionAnswers = {};
+  Map<Message, Message> questionAnswers = {};
 
   HelpBotManager() {
-    questionAnswers.putIfAbsent(
-        Message("Login", "is this working?1"), () => Answer("yes"));
-    questionAnswers.putIfAbsent(
-        Message("Signup", "is this working?2"), () => Answer("yes"));
-    questionAnswers.putIfAbsent(
-        Message("Planning", "is this working?3"), () => Answer("yes"));
-    questionAnswers.putIfAbsent(
-        Message("Credentials", "is this working?4"), () => Answer("yes"));
-    questionAnswers.putIfAbsent(
-        Message("Password", "is this working?4"), () => Answer("yes"));
-    questionAnswers.putIfAbsent(
-        Message("Password1", "is this working?4"), () => Answer("yes"));
-    questionAnswers.putIfAbsent(
-        Message("Password2", "is this working?4"), () => Answer("yes"));
+    questionAnswers.putIfAbsent(Message("test", "is this working?", false),
+        () => Message("test", "yes", true));
   }
 
-  Set<String> getAllMessageTopics() {
-    Set<String> ret = {};
+  Set<Message> getAllMessageTexts() {
+    Set<Message> ret = {};
     for (Message question in questionAnswers.keys) {
-      ret.add(question.topic);
+      ret.add(question);
     }
     return ret;
   }
 
-  String getMessageTextsbyTopic(String topic) {
-    for (Message question in questionAnswers.keys) {
-      if (question.topic == topic) {
-        return question.text;
-      }
-    }
-    return "Internal error. Please reload.";
-  }
-
-  String getAnswerToQuestion(String questionTopic) {
+  Message getMessageTextsbyTopic(String questionTopic) {
     for (Message question in questionAnswers.keys) {
       if (question.topic == questionTopic) {
-        return questionAnswers[question]!.text;
+        return question;
       }
     }
-    return "Sorry I can't help";
+    return Message("error", "Internal error. Please reload", true);
+  }
+
+  Message? getAnswerToQuestion(String questionTopic) {
+    for (Message question in questionAnswers.keys) {
+      if (question.topic == questionTopic) {
+        return questionAnswers[question];
+      }
+    }
+    return Message("error", "Internal error. Please reload", true);
   }
 }
