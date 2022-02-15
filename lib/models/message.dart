@@ -1,7 +1,9 @@
 class Message {
   final String text;
+  final String topic;
 
   Message(
-      this.text
-      );
+    this.topic,
+    this.text,
+  );
 }
