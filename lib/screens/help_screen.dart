@@ -34,16 +34,16 @@ class MyHomePageState extends State<HelpPage> {
             ),
             Row(
               children: <Widget>[
-                for (String item in helpBot.getAllMessageTopics())
+               /* for (String item in helpBot.getAllMessageTopics())
                   TextButton(
                     onPressed: () {
                       setState(() {
-                        someList.add(helpBot.getMessageTextsbyTopic(item));
-                        someList.add(helpBot.getAnswerToQuestion(item));
+                      //  someList.add(helpBot.getMessageTextsbyTopic(item));
+                      //  someList.add(helpBot.getAnswerToQuestion(item));
                       });
                     },
                     child: Text(item),
-                  ),
+                  ),*/
               ],
             ),
           ],

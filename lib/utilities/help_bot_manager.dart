@@ -1,41 +1,37 @@
-import 'package:veloplan/models/answer.dart';
+
 import 'package:veloplan/models/message.dart';
 
 class HelpBotManager {
-  Map<Message, Answer> questionAnswers = {};
+  Map<Message,Message> questionAnswers = {};
 
-  HelpBotManager() {
-    questionAnswers.putIfAbsent(
-        Message("test", "is this working?1"), () => Answer("yes"));
-    questionAnswers.putIfAbsent(
-        Message("test2", "is this working?2"), () => Answer("yes"));
-    questionAnswers.putIfAbsent(
-        Message("test3", "is this working?3"), () => Answer("yes"));
+  HelpBotManager( ){
+    questionAnswers.putIfAbsent(Message("test","is this working?",false), () => Message("test","yes",true));
   }
 
-  Set<String> getAllMessageTopics() {
-    Set<String> ret = {};
-    for (Message question in questionAnswers.keys) {
-      ret.add(question.topic);
+  Set<Message> getAllMessageTexts(){
+    Set<Message> ret = {};
+    for(Message question in questionAnswers.keys){
+      ret.add(question);
     }
     return ret;
   }
 
-  String getMessageTextsbyTopic(String topic) {
-    for (Message question in questionAnswers.keys) {
-      if (question.topic == topic) {
-        return question.text;
+  Message getMessageTextsbyTopic(String questionTopic){
+    for(Message question in questionAnswers.keys){
+      if(question.topic == questionTopic){
+        return question;
       }
     }
-    return "Internal error. Please reload.";
+    return Message("error", "Internal error. Please reload", true);
   }
 
-  String getAnswerToQuestion(String questionTopic) {
-    for (Message question in questionAnswers.keys) {
-      if (question.topic == questionTopic) {
-        return questionAnswers[question]!.text;
+
+  Message? getAnswerToQuestion(String questionTopic){
+    for(Message question in questionAnswers.keys){
+      if(question.topic == questionTopic){
+        return questionAnswers[question];
       }
     }
-    return "Sorry I can't help";
+    return Message("error", "Internal error. Please reload", true);
   }
 }
