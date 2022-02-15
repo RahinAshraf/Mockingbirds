@@ -6,6 +6,7 @@ import '../navbar.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import '../.env.dart';
+import '../widget/custom_carousel.dart';
 
 class MapPage extends StatefulWidget {
   @override
@@ -22,6 +23,11 @@ class MyHomePageState extends State<MapPage> {
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           child: _buildMap(),
+        ),
+        Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: CustomCarousel(),
         ),
       ],
     ));
