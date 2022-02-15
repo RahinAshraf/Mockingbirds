@@ -17,9 +17,8 @@ class MapPage extends StatefulWidget {
 }
 
 class MyHomePageState extends State<MapPage> {
-  //List<Widget> pslcards = [carouselCard("one"), carouselCard("two")];
-  CustomCarousel customCarousel =
-      CustomCarousel(cards: [carouselCard("one"), carouselCard("two")]);
+  List<Widget> cardList = [carouselCard("one"), carouselCard("two")];
+  CustomCarousel customCarousel = CustomCarousel(cards: cardList);
 
   @override
   Widget build(BuildContext build) {

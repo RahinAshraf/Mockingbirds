@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'custom_card.dart';
 
 class CustomCarousel extends StatefulWidget {
-  final List<Widget> cards;
+  final List<Widget>? cards;
+
   const CustomCarousel({
     Key? key,
-    required this.cards,
+    this.cards,
   }) : super(key: key);
 
   @override
@@ -13,6 +14,15 @@ class CustomCarousel extends StatefulWidget {
 }
 
 class CustomCarouselState extends State<CustomCarousel> {
+  List<Widget>? cards = [];
+
+  @override
+  void initState() {
+    super.initState();
+    cards = widget.cards;
+    _pageController = PageController(initialPage: 0, viewportFraction: .5);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -20,7 +30,7 @@ class CustomCarouselState extends State<CustomCarousel> {
         Flexible(
           child: PageView.builder(
               controller: _pageController,
-              itemCount: widget.cards!.length,
+              itemCount: cards!.length,
               onPageChanged: (int position) {
                 setState(() {
                   _position = position;
@@ -33,7 +43,7 @@ class CustomCarouselState extends State<CustomCarousel> {
         Flexible(
             child: AnimatedPageIndicatorFb1(
           currentPage: _position,
-          numPages: widget.cards!.length,
+          numPages: cards!.length,
           gradient: LinearGradient(colors: [
             Colors.blue.withOpacity(.4),
             Colors.purple.withOpacity(.4)
@@ -50,21 +60,13 @@ class CustomCarouselState extends State<CustomCarousel> {
       builder: (BuildContext context, widget) {
         return Center(child: widget);
       },
-      child: Container(child: widget.cards![position]),
+      child: Container(child: cards![position]),
     );
   }
-
-  // List<Widget> cards = [];
   //List<Widget> cards = [carouselCard("one"), carouselCard("two")];
 
   late PageController _pageController;
   int _position = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    _pageController = PageController(initialPage: 0, viewportFraction: .5);
-  }
 
   // void addCardToList(Widget card) {
   //   //List<Widget> cards = [carouselCard("one"), carouselCard("two")];
