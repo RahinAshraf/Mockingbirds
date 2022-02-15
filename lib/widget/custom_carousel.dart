@@ -16,14 +16,19 @@ class _CustomCarouselState extends State<CustomCarousel> {
           child: PageView.builder(
               controller: _pageController,
               itemCount: cards.length,
+              onPageChanged: (int position) {
+                setState(() {
+                  _position = position;
+                });
+              },
               itemBuilder: (BuildContext context, int position) {
                 return imageSlider(position);
               }),
         ),
         Flexible(
             child: AnimatedPageIndicatorFb1(
-          currentPage: 0,
-          numPages: 6,
+          currentPage: _position,
+          numPages: cards.length,
           gradient: LinearGradient(colors: [
             Colors.blue.withOpacity(.4),
             Colors.purple.withOpacity(.4)
