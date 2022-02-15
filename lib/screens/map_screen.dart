@@ -6,6 +6,8 @@ import '../.env.dart';
 const double zoom = 16;
 
 class MapPage extends StatefulWidget {
+  const MapPage({Key? key}) : super(key: key);
+
   @override
   MyHomePageState createState() => MyHomePageState();
 }

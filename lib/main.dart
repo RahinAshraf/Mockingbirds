@@ -11,16 +11,15 @@ late SharedPreferences sharedPreferences;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   sharedPreferences = await SharedPreferences.getInstance();
-  print("Test!");
-  initializeLocationAndSave();
+  initializeLocation(); //Upon opening the app, store the users current location
   runApp(MaterialApp(
     initialRoute: '/',
     routes: {'/': (context) => Login(), '/map': (context) => Navbar()},
   ));
 }
 
-//At opening the app, store the users current location
-void initializeLocationAndSave() async {
+
+void initializeLocation() async {
   Location _location = Location();
   bool? _serviceEnabled;
   PermissionStatus? _permissionGranted;
@@ -38,10 +37,10 @@ void initializeLocationAndSave() async {
   LocationData _locationData = await _location.getLocation();
   LatLng currentLatLng = LatLng(_locationData.latitude!, _locationData.longitude!);
 
+  saveLocation(_locationData);
+}
+
+void saveLocation(LocationData _locationData){
   sharedPreferences.setDouble('latitude', _locationData.latitude!);
   sharedPreferences.setDouble('longitude', _locationData.longitude!);
-
-  print(sharedPreferences.getDouble('latitude'));
-  print(sharedPreferences.getDouble('longitude'));
-  print("hELLO");
 }
