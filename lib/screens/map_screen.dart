@@ -115,11 +115,11 @@ class MyHomePageState extends State<MapPage> {
               return _buildCustomMarker();
             }));
       }
-      createCarousel(docks);
+      createCarouselCards(docks);
     });
   }
 
-  void createCarousel(List<DockingStation> docks) {
+  void createCarouselCards(List<DockingStation> docks) {
     List<Map> carouselData = [];
 
     for (int index = 0; index < docks.length; index++) {

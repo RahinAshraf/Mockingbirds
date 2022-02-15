@@ -31,7 +31,7 @@ import 'package:favorite_button/favorite_button.dart';
 // }
 
 Widget dockingStationCard(
-    int index, String name, int bikeNumber, int nb_empty_docks) {
+    int index, String name, int nb_bikes, int nb_empty_docks) {
   return Card(
     clipBehavior: Clip.antiAlias,
     child: Padding(
@@ -39,6 +39,7 @@ Widget dockingStationCard(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          FavoriteButton(valueChanged: (_isFavorite) {}),
           CircleAvatar(
             backgroundImage: NetworkImage("https://picsum.photos/200/300"),
             radius: 20,
