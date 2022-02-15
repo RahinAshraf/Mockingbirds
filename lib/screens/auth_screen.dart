@@ -26,6 +26,7 @@ class _AuthScreenState extends State<AuthScreen> {
     String firstName,
     String lastName,
     File? image,
+    DateTime dateTime,
     bool isLogin,
     BuildContext ctx,
   ) async {
@@ -68,6 +69,7 @@ class _AuthScreenState extends State<AuthScreen> {
           'firstName': firstName,
           'lastName': lastName,
           'image_url': url,
+          'birthDate': dateTime,
         });
       }
     } on PlatformException catch (err) {
