@@ -1,4 +1,5 @@
 PODS:
+<<<<<<< HEAD
   - abseil/algorithm (0.20200225.0):
     - abseil/algorithm/algorithm (= 0.20200225.0)
     - abseil/algorithm/container (= 0.20200225.0)
@@ -400,10 +401,13 @@ PODS:
   - FirebaseStorage (8.11.0):
     - FirebaseCore (~> 8.0)
     - GTMSessionFetcher/Core (~> 1.5)
+=======
+>>>>>>> main
   - Flutter (1.0.0)
   - google_maps_flutter (0.0.1):
     - Flutter
     - GoogleMaps
+<<<<<<< HEAD
   - GoogleDataTransport (9.1.2):
     - GoogleUtilities/Environment (~> 7.2)
     - nanopb (~> 2.30908.0)
@@ -504,10 +508,28 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_core/ios"
   firebase_storage:
     :path: ".symlinks/plugins/firebase_storage/ios"
+=======
+  - GoogleMaps (4.1.0):
+    - GoogleMaps/Maps (= 4.1.0)
+  - GoogleMaps/Base (4.1.0)
+  - GoogleMaps/Maps (4.1.0):
+    - GoogleMaps/Base
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - google_maps_flutter (from `.symlinks/plugins/google_maps_flutter/ios`)
+
+SPEC REPOS:
+  trunk:
+    - GoogleMaps
+
+EXTERNAL SOURCES:
+>>>>>>> main
   Flutter:
     :path: Flutter
   google_maps_flutter:
     :path: ".symlinks/plugins/google_maps_flutter/ios"
+<<<<<<< HEAD
   image_picker:
     :path: ".symlinks/plugins/image_picker/ios"
   shared_preferences_ios:
@@ -541,5 +563,14 @@ SPEC CHECKSUMS:
   shared_preferences_ios: aef470a42dc4675a1cdd50e3158b42e3d1232b32
 
 PODFILE CHECKSUM: fe0e1ee7f3d1f7d00b11b474b62dd62134535aea
+=======
+
+SPEC CHECKSUMS:
+  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  google_maps_flutter: abdb8dee6c52d4be36ad131ee6ebfacd14417c5a
+  GoogleMaps: 008e2c80e38605b56b560e8deb73d4194ff30bef
+
+PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
+>>>>>>> main
 
 COCOAPODS: 1.11.2

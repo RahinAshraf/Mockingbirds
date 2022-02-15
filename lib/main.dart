@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -56,4 +57,14 @@ class _MyAppState extends State<MyApp> {
 
     });
   }
+=======
+import 'screens/login_screen.dart';
+import 'navbar.dart';
+
+void main() {
+  runApp(MaterialApp(
+    initialRoute: '/',
+    routes: {'/': (context) => Login(), '/map': (context) => Navbar()},
+  ));
+>>>>>>> main
 }
