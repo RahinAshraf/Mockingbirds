@@ -38,6 +38,7 @@ class _AuthFormState extends State<AuthForm> {
   var _lastName = '';
 
   File? _userImageFile;
+  var _confirmPassword = '';
 
   void _pickedImage(File image) {
     _userImageFile = image;
@@ -156,7 +157,11 @@ class _AuthFormState extends State<AuthForm> {
                   TextFormField(
                     key: const ValueKey('password'),
                     validator: (value) {
-                      if (value!.isEmpty || value.length < 7) {
+                      if (value!.isEmpty) {
+                        return 'This field can not be empty';
+                      }
+                      _confirmPassword = value;
+                      if (value.length < 7) {
                         return 'Password must be at least 7 characters long.';
                       }
                       return null;
@@ -167,6 +172,22 @@ class _AuthFormState extends State<AuthForm> {
                       _userPassword = value!;
                     },
                   ),
+                  if (!_isLogin)
+                    TextFormField(
+                      key: const ValueKey('passwordConfirmation'),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'This field can not be empty';
+                        }
+                        if (value != _confirmPassword) {
+                          return 'The passwords did not match';
+                        }
+                        return null;
+                      },
+                      decoration:
+                          const InputDecoration(labelText: 'Confirm Password'),
+                      obscureText: true,
+                    ),
                   const SizedBox(height: 12),
                   if (widget.isLoading) const CircularProgressIndicator(),
                   if (!widget.isLoading)
