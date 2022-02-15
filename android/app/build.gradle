@@ -48,6 +48,7 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -67,6 +68,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "com.mapbox.navigation:android:2.2.2"
     implementation 'com.mapbox.maps:android:10.2.0'
+    implementation 'androidx.multidex:multidex:2.0.1'
 }
 
 configurations {

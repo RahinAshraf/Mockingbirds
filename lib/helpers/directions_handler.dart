@@ -1,7 +1,5 @@
 // //import 'package:flutter_map/flutter_map.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
-import 'package:veloplan/main.dart';
-
 import '../constants/locations_placeholder.dart';
 import '../requests/mapbox_requests.dart';
 
@@ -28,6 +26,6 @@ Future<Map> getDirectionsAPIResponse(LatLng currentLatLng, int index) async {
   return modifiedResponse;
 }
 
-void saveDirectionsAPIResponse(int index, String response) {
-  sharedPreferences.setString('locations--$index', response);
-}
+// void saveDirectionsAPIResponse(int index, String response) {
+//   sharedPreferences.setString('locations--$index', response);
+// }
