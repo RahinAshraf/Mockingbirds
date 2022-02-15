@@ -26,25 +26,33 @@ class MyHomePageState extends State<HelpPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: buildAppBar(),
-      body: Center(
+      body: SafeArea(
         child: Column(
           children: [
             Column(
               children: _createChildren(),
             ),
-            Row(
-              children: <Widget>[
-                for (String item in helpBot.getAllMessageTopics())
-                  TextButton(
-                    onPressed: () {
-                      setState(() {
-                        someList.add(helpBot.getMessageTextsbyTopic(item));
-                        someList.add(helpBot.getAnswerToQuestion(item));
-                      });
-                    },
-                    child: Text(item),
-                  ),
-              ],
+            Spacer(),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisSize: MainAxisSize.max,
+                //mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  for (String item in helpBot.getAllMessageTopics())
+                    TextButton(
+                      onPressed: () {
+                        setState(() {
+                          someList.add(helpBot.getMessageTextsbyTopic(item));
+                          someList.add(helpBot.getAnswerToQuestion(item));
+                        });
+                      },
+                      child: Text(item),
+                    ),
+                ],
+              ),
             ),
           ],
         ),

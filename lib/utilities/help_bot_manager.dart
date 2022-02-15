@@ -6,11 +6,19 @@ class HelpBotManager {
 
   HelpBotManager() {
     questionAnswers.putIfAbsent(
-        Message("test", "is this working?1"), () => Answer("yes"));
+        Message("Login", "is this working?1"), () => Answer("yes"));
     questionAnswers.putIfAbsent(
-        Message("test2", "is this working?2"), () => Answer("yes"));
+        Message("Signup", "is this working?2"), () => Answer("yes"));
     questionAnswers.putIfAbsent(
-        Message("test3", "is this working?3"), () => Answer("yes"));
+        Message("Planning", "is this working?3"), () => Answer("yes"));
+    questionAnswers.putIfAbsent(
+        Message("Credentials", "is this working?4"), () => Answer("yes"));
+    questionAnswers.putIfAbsent(
+        Message("Password", "is this working?4"), () => Answer("yes"));
+    questionAnswers.putIfAbsent(
+        Message("Password1", "is this working?4"), () => Answer("yes"));
+    questionAnswers.putIfAbsent(
+        Message("Password2", "is this working?4"), () => Answer("yes"));
   }
 
   Set<String> getAllMessageTopics() {
