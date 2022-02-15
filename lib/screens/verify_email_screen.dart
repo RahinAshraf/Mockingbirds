@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import './map_screen.dart';
+import '../navbar.dart';
 
 class VerifyEmailScreen extends StatefulWidget {
   const VerifyEmailScreen({Key? key}) : super(key: key);
@@ -78,7 +78,7 @@ class _VerifyEmailSCreenState extends State<VerifyEmailScreen> {
   @override
   Widget build(BuildContext context) {
     return isVerified
-        ? MapPage()
+        ? Navbar()
         : Scaffold(
             body: Padding(
               padding: const EdgeInsets.all(16),
