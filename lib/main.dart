@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 
-import './screens/map_screen.dart';
+import './screens/verify_email_screen.dart';
 import './screens/auth_screen.dart';
 import './screens/splash_screen.dart';
 
@@ -48,7 +48,7 @@ class _MyAppState extends State<MyApp> {
             return const SplashScreen();
           }
           if (userSnapshot.hasData) {
-            return MapPage();
+            return const VerifyEmailScreen();
           }
           return const AuthScreen();
         }),
