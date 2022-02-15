@@ -13,10 +13,6 @@ class MapPage extends StatefulWidget {
 }
 
 class MyHomePageState extends State<MapPage> {
-  // List<Widget> cardList = [
-  //   dockingStationCard("one"),
-  //   dockingStationCard("two")
-  // ];
   late List<Widget> carouselItems;
 
   @override
@@ -74,39 +70,9 @@ class MyHomePageState extends State<MapPage> {
     _stationManager
         .importStations()
         .then((value) => placeDockMarkers(_stationManager.stations));
-
-    // //refactor this later:
-
-    // var stations =
-    //     _stationManager.get_all_open_stations(); //list of all the stations
-
-    // List<Map> carouselData = [];
-
-    // for (int index = 0; index < stations.length; index++) {
-    //   for (var station in stations) {
-    //     carouselData.add(
-    //       {
-    //         'index': index,
-    //         'name': station.name,
-    //         'nb_bikes': station.nb_bikes,
-    //         'nb_empty_docks': station.nb_empty_docks
-    //       },
-    //     );
-    //   }
-    // }
-
-    // carouselItems = List<Widget>.generate(
-    //     stations.length,
-    //     (index) => dockingStationCard(
-    //           carouselData[index]['index'],
-    //           carouselData[index]['name'],
-    //           carouselData[index]['nb_bikes'],
-    //           carouselData[index]['nb_empty_docks'],
-    //         ));
   }
 
   void placeDockMarkers(List<DockingStation> docks) {
-    int i = 0;
     setState(() {
       for (var station in docks) {
         _markers.add(Marker(
@@ -115,11 +81,11 @@ class MyHomePageState extends State<MapPage> {
               return _buildCustomMarker();
             }));
       }
-      createCarouselCards(docks);
+      createDockingCards(docks);
     });
   }
 
-  void createCarouselCards(List<DockingStation> docks) {
+  void createDockingCards(List<DockingStation> docks) {
     List<Map> carouselData = [];
 
     for (int index = 0; index < docks.length; index++) {
@@ -128,8 +94,8 @@ class MyHomePageState extends State<MapPage> {
           {
             'index': index,
             'name': station.name,
-            'nb_bikes': station.nb_bikes,
-            'nb_empty_docks': station.nb_empty_docks
+            'nb_bikes': station.nb_bikes.toString(),
+            'nb_empty_docks': station.nb_empty_docks.toString()
           },
         );
       }
