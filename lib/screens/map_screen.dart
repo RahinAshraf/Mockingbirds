@@ -6,6 +6,7 @@ import '../navbar.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import '../.env.dart';
+import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
 
 class MapPage extends StatefulWidget {
   @override
@@ -13,45 +14,7 @@ class MapPage extends StatefulWidget {
 }
 
 class MyHomePageState extends State<MapPage> {
-  late Future<List<DockingStation>> future_docks;
-  Set<Marker> _markers = Set<Marker>();
-  @override
-  void initState() {
-    super.initState();
-    fetchDockingStations();
-  }
-
-  void fetchDockingStations() {
-    final dockingStationManager _stationManager = dockingStationManager();
-    _stationManager
-        .importStations()
-        .then((value) => placeDockMarkers(_stationManager.stations));
-  }
-
-  void placeDockMarkers(List<DockingStation> docks) {
-    int i = 0;
-    setState(() {
-      for (var station in docks) {
-        _markers.add(Marker(
-            point: LatLng(station.lat, station.lon),
-            builder: (_) {
-              return Container(
-                height: 30,
-                width: 30,
-                decoration: BoxDecoration(
-                  color: Colors.red[100],
-                  shape: BoxShape.circle,
-                  image: const DecorationImage(
-                    image: NetworkImage(
-                        'https://www.iconpacks.net/icons/1/free-icon-bicycle-1054.png'),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              );
-            }));
-      }
-    });
-  }
+  List<Map> carouselData = [];
 
   @override
   Widget build(BuildContext build) {
@@ -86,6 +49,51 @@ class MyHomePageState extends State<MapPage> {
           markers: _markers.toList(),
         ),
       ],
+    );
+  }
+
+  late Future<List<DockingStation>> future_docks;
+  Set<Marker> _markers = Set<Marker>();
+
+  @override
+  void initState() {
+    super.initState();
+    fetchDockingStations();
+  }
+
+  void fetchDockingStations() {
+    final dockingStationManager _stationManager = dockingStationManager();
+    _stationManager
+        .importStations()
+        .then((value) => placeDockMarkers(_stationManager.stations));
+  }
+
+  void placeDockMarkers(List<DockingStation> docks) {
+    int i = 0;
+    setState(() {
+      for (var station in docks) {
+        _markers.add(Marker(
+            point: LatLng(station.lat, station.lon),
+            builder: (_) {
+              return _buildCustomMarker();
+            }));
+      }
+    });
+  }
+
+  Container _buildCustomMarker() {
+    return Container(
+      height: 30,
+      width: 30,
+      decoration: BoxDecoration(
+        color: Colors.red[100],
+        shape: BoxShape.circle,
+        image: const DecorationImage(
+          image: NetworkImage(
+              'https://www.iconpacks.net/icons/1/free-icon-bicycle-1054.png'),
+          fit: BoxFit.cover,
+        ),
+      ),
     );
   }
 }
