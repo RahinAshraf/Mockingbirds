@@ -13,10 +13,11 @@ class MapPage extends StatefulWidget {
 }
 
 class MyHomePageState extends State<MapPage> {
-  List<Widget> cardList = [
-    dockingStationCard("one"),
-    dockingStationCard("two")
-  ];
+  // List<Widget> cardList = [
+  //   dockingStationCard("one"),
+  //   dockingStationCard("two")
+  // ];
+  late List<Widget> carouselItems;
 
   @override
   Widget build(BuildContext build) {
@@ -31,7 +32,7 @@ class MyHomePageState extends State<MapPage> {
         Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
-          child: CustomCarousel(cards: cardList),
+          child: CustomCarousel(cards: carouselItems),
         ),
       ],
     ));
@@ -74,19 +75,33 @@ class MyHomePageState extends State<MapPage> {
         .importStations()
         .then((value) => placeDockMarkers(_stationManager.stations));
 
-    //refactor this later:
+    // //refactor this later:
 
-    // int totalStations = _stationManager.get_number_of_open_stations();
-    // for (int index = 0; index < totalStations; index++) {
-    //   carouselData.add({'index': index});
+    // var stations =
+    //     _stationManager.get_all_open_stations(); //list of all the stations
+
+    // List<Map> carouselData = [];
+
+    // for (int index = 0; index < stations.length; index++) {
+    //   for (var station in stations) {
+    //     carouselData.add(
+    //       {
+    //         'index': index,
+    //         'name': station.name,
+    //         'nb_bikes': station.nb_bikes,
+    //         'nb_empty_docks': station.nb_empty_docks
+    //       },
+    //     );
+    //   }
     // }
 
-    //generate list of carousel widgets
-
     // carouselItems = List<Widget>.generate(
-    //     totalStations,
-    //     (index) => carouselCard(
+    //     stations.length,
+    //     (index) => dockingStationCard(
     //           carouselData[index]['index'],
+    //           carouselData[index]['name'],
+    //           carouselData[index]['nb_bikes'],
+    //           carouselData[index]['nb_empty_docks'],
     //         ));
   }
 
@@ -100,7 +115,34 @@ class MyHomePageState extends State<MapPage> {
               return _buildCustomMarker();
             }));
       }
+      createCarousel(docks);
     });
+  }
+
+  void createCarousel(List<DockingStation> docks) {
+    List<Map> carouselData = [];
+
+    for (int index = 0; index < docks.length; index++) {
+      for (var station in docks) {
+        carouselData.add(
+          {
+            'index': index,
+            'name': station.name,
+            'nb_bikes': station.nb_bikes,
+            'nb_empty_docks': station.nb_empty_docks
+          },
+        );
+      }
+    }
+
+    carouselItems = List<Widget>.generate(
+        docks.length,
+        (index) => dockingStationCard(
+              carouselData[index]['index'],
+              carouselData[index]['name'],
+              carouselData[index]['nb_bikes'],
+              carouselData[index]['nb_empty_docks'],
+            ));
   }
 
   Container _buildCustomMarker() {
