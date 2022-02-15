@@ -6,7 +6,6 @@ import '../navbar.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import '../.env.dart';
-import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
 
 class MapPage extends StatefulWidget {
   @override
@@ -71,18 +70,18 @@ class MyHomePageState extends State<MapPage> {
 
     //refactor this later:
 
-    int totalStations = _stationManager.get_number_of_open_stations();
-    for (int index = 0; index < totalStations; index++) {
-      carouselData.add({'index': index});
-    }
+    // int totalStations = _stationManager.get_number_of_open_stations();
+    // for (int index = 0; index < totalStations; index++) {
+    //   carouselData.add({'index': index});
+    // }
 
     //generate list of carousel widgets
 
-    carouselItems = List<Widget>.generate(
-        totalStations,
-        (index) => carouselCard(
-              carouselData[index]['index'],
-            ));
+    // carouselItems = List<Widget>.generate(
+    //     totalStations,
+    //     (index) => carouselCard(
+    //           carouselData[index]['index'],
+    //         ));
   }
 
   void placeDockMarkers(List<DockingStation> docks) {

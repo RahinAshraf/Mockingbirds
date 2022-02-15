@@ -40,7 +40,7 @@ dependencies:
   flutter_map: ^0.14.0
   latlong2: ^0.8.1
   geolocator: ^8.1.1 
-  flutter_map_marker_popup: ^2.1.1+1
+  carousel_slider: ^4.0.0
 
 
 
