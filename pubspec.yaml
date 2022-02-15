@@ -41,8 +41,14 @@ dependencies:
   latlong2: ^0.8.1
   geolocator: ^8.1.1 
   dio: ^4.0.4
-  flutter_dotenv: ^5.0.2
+  flutter_dotenv: ^5.0.2  # for global variables - in .env file
   mapbox_gl: ^0.15.0
+  shared_preferences: ^2.0.13   # to store data for now (later use firebase)
+  
+  
+  
+  # to load global variables 
+
 
 
 
