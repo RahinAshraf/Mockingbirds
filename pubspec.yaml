@@ -39,7 +39,7 @@ dependencies:
   flutter_google_places: ^0.3.0
   flutter_map: ^0.14.0
   latlong2: ^0.8.1
-  geolocator: ^8.1.1 
+  geolocator: ^8.1.1
 
 
 
