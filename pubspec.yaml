@@ -41,6 +41,8 @@ dependencies:
   latlong2: ^0.8.1
   geolocator: ^8.1.1
   provider: ^3.0.0
+  shared_preferences: ^2.0.13
+  mapbox_gl: ^0.15.0
 
 
 
