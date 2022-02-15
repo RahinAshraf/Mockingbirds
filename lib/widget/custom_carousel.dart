@@ -2,12 +2,17 @@ import 'package:flutter/material.dart';
 import 'custom_card.dart';
 
 class CustomCarousel extends StatefulWidget {
-  const CustomCarousel({Key? key}) : super(key: key);
+  final List<Widget> cards;
+  const CustomCarousel({
+    Key? key,
+    required this.cards,
+  }) : super(key: key);
+
   @override
-  _CustomCarouselState createState() => _CustomCarouselState();
+  CustomCarouselState createState() => CustomCarouselState();
 }
 
-class _CustomCarouselState extends State<CustomCarousel> {
+class CustomCarouselState extends State<CustomCarousel> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -15,7 +20,7 @@ class _CustomCarouselState extends State<CustomCarousel> {
         Flexible(
           child: PageView.builder(
               controller: _pageController,
-              itemCount: cards.length,
+              itemCount: widget.cards!.length,
               onPageChanged: (int position) {
                 setState(() {
                   _position = position;
@@ -28,7 +33,7 @@ class _CustomCarouselState extends State<CustomCarousel> {
         Flexible(
             child: AnimatedPageIndicatorFb1(
           currentPage: _position,
-          numPages: cards.length,
+          numPages: widget.cards!.length,
           gradient: LinearGradient(colors: [
             Colors.blue.withOpacity(.4),
             Colors.purple.withOpacity(.4)
@@ -45,11 +50,12 @@ class _CustomCarouselState extends State<CustomCarousel> {
       builder: (BuildContext context, widget) {
         return Center(child: widget);
       },
-      child: Container(child: cards[position]),
+      child: Container(child: widget.cards![position]),
     );
   }
 
-  List<Widget> cards = [carouselCard("one"), carouselCard("two")];
+  // List<Widget> cards = [];
+  //List<Widget> cards = [carouselCard("one"), carouselCard("two")];
 
   late PageController _pageController;
   int _position = 0;
@@ -59,6 +65,15 @@ class _CustomCarouselState extends State<CustomCarousel> {
     super.initState();
     _pageController = PageController(initialPage: 0, viewportFraction: .5);
   }
+
+  // void addCardToList(Widget card) {
+  //   //List<Widget> cards = [carouselCard("one"), carouselCard("two")];
+  //   cards.add(card);
+  // }
+
+  // List<Widget> getCardList() {
+  //   return cards;
+  // }
 }
 
 class AnimatedPageIndicatorFb1 extends StatelessWidget {

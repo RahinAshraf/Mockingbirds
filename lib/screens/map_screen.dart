@@ -7,6 +7,9 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import '../.env.dart';
 import '../widget/custom_carousel.dart';
+import '../widget/custom_card.dart';
+
+import 'package:carousel_slider/carousel_slider.dart';
 
 class MapPage extends StatefulWidget {
   @override
@@ -14,6 +17,10 @@ class MapPage extends StatefulWidget {
 }
 
 class MyHomePageState extends State<MapPage> {
+  //List<Widget> pslcards = [carouselCard("one"), carouselCard("two")];
+  CustomCarousel customCarousel =
+      CustomCarousel(cards: [carouselCard("one"), carouselCard("two")]);
+
   @override
   Widget build(BuildContext build) {
     return Scaffold(
@@ -27,7 +34,7 @@ class MyHomePageState extends State<MapPage> {
         Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
-          child: CustomCarousel(),
+          child: customCarousel,
         ),
       ],
     ));
