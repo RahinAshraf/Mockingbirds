@@ -1,9 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:intl/intl.dart';
 
 import '../pickers/image_picker.dart';
+import '../pickers/bottom_date_picker.dart';
 
 class AuthForm extends StatefulWidget {
   const AuthForm(
@@ -20,6 +23,7 @@ class AuthForm extends StatefulWidget {
     String firstName,
     String lastName,
     File? image,
+    DateTime dateTime,
     bool isLogin,
     BuildContext ctx,
   ) submitFn;
@@ -39,6 +43,8 @@ class _AuthFormState extends State<AuthForm> {
 
   File? _userImageFile;
   var _confirmPassword = '';
+  final TextEditingController _dateController = TextEditingController();
+  DateTime _dateTime = DateTime.now();
 
   void _pickedImage(File image) {
     _userImageFile = image;
@@ -67,6 +73,7 @@ class _AuthFormState extends State<AuthForm> {
         _firstName,
         _lastName,
         _userImageFile,
+        _dateTime,
         _isLogin,
         context,
       );
@@ -187,6 +194,38 @@ class _AuthFormState extends State<AuthForm> {
                       decoration:
                           const InputDecoration(labelText: 'Confirm Password'),
                       obscureText: true,
+                    ),
+                  if (!_isLogin)
+                    TextFormField(
+                      controller: _dateController,
+                      key: const ValueKey('date'),
+                      onTap: () {
+                        FocusScope.of(context).requestFocus(FocusNode());
+                        //_selectDate();
+                        showCupertinoModalPopup<void>(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return BottomDatePicker(
+                              CupertinoDatePicker(
+                                mode: CupertinoDatePickerMode.date,
+                                initialDateTime: _dateTime,
+                                onDateTimeChanged: (DateTime newDateTime) {
+                                  if (mounted) {
+                                    setState(() {
+                                      _dateTime = newDateTime;
+                                      _dateController.text =
+                                          DateFormat('dd-MM-yyyy')
+                                              .format(_dateTime);
+                                    });
+                                  }
+                                },
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      decoration:
+                          const InputDecoration(labelText: 'Date of birth'),
                     ),
                   const SizedBox(height: 12),
                   if (widget.isLoading) const CircularProgressIndicator(),
