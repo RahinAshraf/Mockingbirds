@@ -41,16 +41,16 @@ class CustomCarouselState extends State<CustomCarousel> {
                 return imageSlider(position);
               }),
         ),
-        Flexible(
-            child: AnimatedPageIndicatorFb1(
-          currentPage: _position,
-          numPages: cards.length,
-          gradient: LinearGradient(colors: [
-            Colors.blue.withOpacity(.4),
-            Colors.purple.withOpacity(.4)
-          ]),
-          activeGradient: LinearGradient(colors: [Colors.blue, Colors.purple]),
-        ))
+        // Flexible(
+        //     child: AnimatedPageIndicatorFb1(
+        //   currentPage: _position,
+        //   numPages: cards.length,
+        //   gradient: LinearGradient(colors: [
+        //     Colors.blue.withOpacity(.4),
+        //     Colors.purple.withOpacity(.4)
+        //   ]),
+        //   activeGradient: LinearGradient(colors: [Colors.blue, Colors.purple]),
+        // ))
       ],
     );
   }

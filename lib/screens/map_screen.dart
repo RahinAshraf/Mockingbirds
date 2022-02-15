@@ -15,25 +15,6 @@ class MapPage extends StatefulWidget {
 class MyHomePageState extends State<MapPage> {
   late List<Widget> carouselItems;
 
-  @override
-  Widget build(BuildContext build) {
-    return Scaffold(
-        body: Stack(
-      children: [
-        Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          child: _buildMap(),
-        ),
-        Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          child: CustomCarousel(cards: carouselItems),
-        ),
-      ],
-    ));
-  }
-
   FlutterMap _buildMap() {
     return FlutterMap(
       options: MapOptions(
@@ -125,5 +106,24 @@ class MyHomePageState extends State<MapPage> {
         ),
       ),
     );
+  }
+
+  @override
+  Widget build(BuildContext build) {
+    return Scaffold(
+        body: Stack(
+      children: [
+        Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: _buildMap(),
+        ),
+        Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: CustomCarousel(cards: carouselItems),
+        ),
+      ],
+    ));
   }
 }
