@@ -21,15 +21,15 @@ class MyHomePageState extends State<MapPage> {
     fetchDockingStations();
   }
 
-
-
-  void fetchDockingStations(){
+  void fetchDockingStations() {
     final dockingStationManager _stationManager = dockingStationManager();
-    _stationManager.importStations().then((value) => placeDockMarkers(_stationManager.stations));
+    _stationManager
+        .importStations()
+        .then((value) => placeDockMarkers(_stationManager.stations));
   }
 
-  void placeDockMarkers(List<DockingStation> docks){
-    int i =0;
+  void placeDockMarkers(List<DockingStation> docks) {
+    int i = 0;
     setState(() {
       for (var station in docks) {
         _markers.add(Marker(
@@ -42,62 +42,50 @@ class MyHomePageState extends State<MapPage> {
                   color: Colors.red[100],
                   shape: BoxShape.circle,
                   image: const DecorationImage(
-                    image: NetworkImage('https://www.iconpacks.net/icons/1/free-icon-bicycle-1054.png'),
+                    image: NetworkImage(
+                        'https://www.iconpacks.net/icons/1/free-icon-bicycle-1054.png'),
                     fit: BoxFit.cover,
                   ),
                 ),
               );
-            })
-        );
+            }));
       }
-
     });
-
   }
 
   @override
   Widget build(BuildContext build) {
     return Scaffold(
         body: Stack(
-          children: [
-            Container(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              child: FlutterMap(
-                options: MapOptions(
-                  center: LatLng(51.51185004458236, -0.11580820118980878),
-                  zoom: 16.0,
-                ),
-                layers: [
-                  TileLayerOptions(
-                    urlTemplate:
-                    "https://api.mapbox.com/styles/v1/mockingbirds/ckzh4k81i000n16lcev9vknm5/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibW9ja2luZ2JpcmRzIiwiYSI6ImNremd3NW9weDM2ZmEybm45dzlhYzN0ZnUifQ.lSzpNOhK2CH9-PODR0ojLg",
-                    additionalOptions: {
-                      'accessToken': MAPBOX_ACCESS_TOKEN,
-                      'id': 'mapbox.mapbox-streets-v8',
-                    },
-                  ),
-                  MarkerLayerOptions(
-                    markers:_markers.toList()
-                    // Marker(
-                    //     point: LatLng(
-                    //         51.51185004458236, -0.11580820118980878),
-                    //     builder: (_) {
-                    //       return Container(
-                    //         height: 50,
-                    //         width: 50,
-                    //         decoration: BoxDecoration(
-                    //           color: Colors.red[300],
-                    //           shape: BoxShape.circle,
-                    //         ),
-                    //       );
-                    //     }),
-                    ,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ));
+      children: [
+        Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: _buildMap(),
+        ),
+      ],
+    ));
+  }
+
+  FlutterMap _buildMap() {
+    return FlutterMap(
+      options: MapOptions(
+        center: LatLng(51.51185004458236, -0.11580820118980878),
+        zoom: 16.0,
+      ),
+      layers: [
+        TileLayerOptions(
+          urlTemplate:
+              "https://api.mapbox.com/styles/v1/mockingbirds/ckzh4k81i000n16lcev9vknm5/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibW9ja2luZ2JpcmRzIiwiYSI6ImNremd3NW9weDM2ZmEybm45dzlhYzN0ZnUifQ.lSzpNOhK2CH9-PODR0ojLg",
+          additionalOptions: {
+            'accessToken': MAPBOX_ACCESS_TOKEN,
+            'id': 'mapbox.mapbox-streets-v8',
+          },
+        ),
+        MarkerLayerOptions(
+          markers: _markers.toList(),
+        ),
+      ],
+    );
   }
 }
