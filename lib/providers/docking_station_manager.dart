@@ -40,6 +40,10 @@ class dockingStationManager {
     return openStations;
   }
 
+  int hi() {
+    return get_all_open_stations().length;
+  }
+
   List<DockingStation> get_all_stations_with_number_of_bikes(
       int numberOfBikes) {
     List<DockingStation> openStations = [];

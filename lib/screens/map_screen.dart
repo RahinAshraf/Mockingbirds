@@ -14,8 +14,6 @@ class MapPage extends StatefulWidget {
 }
 
 class MyHomePageState extends State<MapPage> {
-  List<Map> carouselData = [];
-
   @override
   Widget build(BuildContext build) {
     return Scaffold(
@@ -33,7 +31,7 @@ class MyHomePageState extends State<MapPage> {
   FlutterMap _buildMap() {
     return FlutterMap(
       options: MapOptions(
-        center: LatLng(51.51185004458236, -0.11580820118980878),
+        center: LatLng(51.512067, -0.039765),
         zoom: 16.0,
       ),
       layers: [
@@ -55,6 +53,10 @@ class MyHomePageState extends State<MapPage> {
   late Future<List<DockingStation>> future_docks;
   Set<Marker> _markers = Set<Marker>();
 
+  List<Map> carouselData = [];
+  int pageIndex = 0; // index of the cards on the carousel
+  late List<Widget> carouselItems;
+
   @override
   void initState() {
     super.initState();
@@ -66,6 +68,21 @@ class MyHomePageState extends State<MapPage> {
     _stationManager
         .importStations()
         .then((value) => placeDockMarkers(_stationManager.stations));
+
+    //refactor this later:
+
+    int totalStations = _stationManager.get_number_of_open_stations();
+    for (int index = 0; index < totalStations; index++) {
+      carouselData.add({'index': index});
+    }
+
+    //generate list of carousel widgets
+
+    carouselItems = List<Widget>.generate(
+        totalStations,
+        (index) => carouselCard(
+              carouselData[index]['index'],
+            ));
   }
 
   void placeDockMarkers(List<DockingStation> docks) {
