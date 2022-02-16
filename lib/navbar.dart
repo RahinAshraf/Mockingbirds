@@ -40,7 +40,6 @@ class _MainPageState extends State<MainPage> {
       ),
       drawer: NavigationDrawerWidget(),
       key: scaffoldKey,
-
       floatingActionButton: Container(
         height: 80.0,
         width: 80.0,
