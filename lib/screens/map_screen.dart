@@ -17,6 +17,7 @@ class MapPage extends StatefulWidget {
 
 class MyHomePageState extends State<MapPage> {
   late Future<List<DockingStation>> future_docks;
+  bool isRouteDisplayed = false;
   // Set<Marker> _markers = Set<Marker>();
 
   // var zoom = LatLng(51.51185004458236, -0.11580820118980878);
@@ -140,19 +141,26 @@ class MyHomePageState extends State<MapPage> {
           //   ],
           // ),
         ),
-        // Container(
-        //   alignment: Alignment(-0.9, 0),
-        //   child: FloatingActionButton(
-        //     heroTag: "btn1",
-        //     child: Icon(Icons.arrow_upward, color: Colors.white),
-        //     onPressed: () async {
-        //       if (polylineCoordinates.isNotEmpty) {
-        //         clearDirections();
-        //       }
-        //       _getPolyline(points);
-        //     },
-        //   ),
-        // ),
+        Container(
+          alignment: Alignment(-0.9, 0),
+          child: FloatingActionButton(
+            heroTag: "btn1",
+            child: Icon(Icons.arrow_upward, color: Colors.white),
+            onPressed: () async {
+              _addRoute();
+            },
+          ),
+        ),
+        Container(
+          alignment: Alignment(-0.5, 0),
+          child: FloatingActionButton(
+            heroTag: "btn2",
+            child: Icon(Icons.remove, color: Colors.white),
+            onPressed: () async {
+              _addRoute();
+            },
+          ),
+        ),
         // Padding(
         //   padding: const EdgeInsets.all(8.0),
         //   child: Align(
@@ -174,35 +182,43 @@ class MyHomePageState extends State<MapPage> {
   }
 
   _onStyleLoadedCallback() async {
-    _addRoute();
+    //! Add markers here
   }
 
+  // TODO: Add List<LatLng> poits in method header
   _addRoute() async {
-    RouteManager manager = await RouteManager();
-    Map routeResponse = await manager.getDirections(points[0], points[3]);
+    if (isRouteDisplayed == false) {
+      RouteManager manager = await RouteManager();
+      Map routeResponse = await manager.getDirections(points[0], points[3]);
 
-    final _fills = {
-      "type": "FeatureCollection",
-      "features": [
-        {
-          "type": "Feature",
-          "id": 0,
-          "geometry": routeResponse['geometry'],
-        },
-      ],
-    };
-    await controller.addSource(
-        "fills", GeojsonSourceProperties(data: _fills)); //creates the line
-    await controller.addLineLayer(
-      "fills",
-      "lines",
-      LineLayerProperties(
-        lineColor: Color.fromARGB(255, 197, 23, 23).toHexStringRGB(),
-        lineCap: "round",
-        lineJoin: "round",
-        lineWidth: 5,
-      ),
-    );
+      final _fills = {
+        "type": "FeatureCollection",
+        "features": [
+          {
+            "type": "Feature",
+            "id": 0,
+            "geometry": routeResponse['geometry'],
+          },
+        ],
+      };
+      await controller.addSource(
+          "fills", GeojsonSourceProperties(data: _fills)); //creates the line
+      await controller.addLineLayer(
+        "fills",
+        "lines",
+        LineLayerProperties(
+          lineColor: Color.fromARGB(255, 197, 23, 23).toHexStringRGB(),
+          lineCap: "round",
+          lineJoin: "round",
+          lineWidth: 5,
+        ),
+      );
+      isRouteDisplayed = true;
+    } else {
+      await controller.removeLayer("lines");
+      await controller.removeSource("fills");
+      isRouteDisplayed = false;
+    }
   }
 
   Future<List<PolylineResult>> getJurneyResult(List<LatLng> journey) async {
