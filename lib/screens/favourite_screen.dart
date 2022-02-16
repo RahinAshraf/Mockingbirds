@@ -14,18 +14,20 @@ class _FavouriteState extends State<Favourite> {
 
   @override
   void initState() {
+    print("1");
     super.initState();
-    fetchDockingStations().whenComplete(() {
+    retrieveAllCards().whenComplete(() {
       setState(() {});
     });
   }
 
-  Future<List<Widget>> fetchDockingStations() {
+  Future<List<Widget>> retrieveAllCards() {
     final dockingStationManager _stationManager = dockingStationManager();
     var list = _stationManager
         .importStations()
         .then((value) => createDockingCards(_stationManager.stations));
     return list;
+    print("2");
   }
 
   List<Widget> createDockingCards(List<DockingStation> docks) {
@@ -42,7 +44,6 @@ class _FavouriteState extends State<Favourite> {
           },
         );
       }
-      print(index);
     }
 
     dockingStationCards = List<Widget>.generate(
@@ -53,23 +54,26 @@ class _FavouriteState extends State<Favourite> {
               carouselData[index]['nb_bikes'],
               carouselData[index]['nb_empty_docks'],
             ));
+    print("3");
+
     return dockingStationCards;
   }
 
   @override
   Widget build(BuildContext build) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Help'),
-        ),
-        body: Stack(
-          children: [
-            Container(
-              height: 200,
-              width: MediaQuery.of(context).size.width,
-              child: CustomCarousel(cards: dockingStationCards),
-            )
-          ],
-        ));
+      body: Stack(
+        children: [
+          Container(
+            height: 200,
+            width: MediaQuery.of(context).size.width,
+            child: CustomCarousel(cards: dockingStationCards),
+          )
+        ],
+      ),
+      appBar: AppBar(
+        title: const Text('My favourites'),
+      ),
+    );
   }
 }

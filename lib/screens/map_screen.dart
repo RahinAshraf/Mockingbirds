@@ -14,8 +14,6 @@ class MapPage extends StatefulWidget {
 }
 
 class MyHomePageState extends State<MapPage> {
-  late List<Widget> dockingStationCards;
-
   FlutterMap _buildMap() {
     return FlutterMap(
       options: MapOptions(
@@ -63,35 +61,7 @@ class MyHomePageState extends State<MapPage> {
               return _buildCustomMarker();
             }));
       }
-      createDockingCards(docks);
     });
-  }
-
-  void createDockingCards(List<DockingStation> docks) {
-    List<Map> carouselData = [];
-
-    for (int index = 0; index < docks.length; index++) {
-      for (var station in docks) {
-        carouselData.add(
-          {
-            'index': index,
-            'name': station.name,
-            'nb_bikes': station.nb_bikes.toString(),
-            'nb_empty_docks': station.nb_empty_docks.toString()
-          },
-        );
-      }
-      print(index);
-    }
-
-    dockingStationCards = List<Widget>.generate(
-        docks.length,
-        (index) => dockingStationCard(
-              carouselData[index]['index'],
-              carouselData[index]['name'],
-              carouselData[index]['nb_bikes'],
-              carouselData[index]['nb_empty_docks'],
-            ));
   }
 
   Container _buildCustomMarker() {

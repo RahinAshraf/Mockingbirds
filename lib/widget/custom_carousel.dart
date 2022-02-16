@@ -17,7 +17,7 @@ class CustomCarousel extends StatefulWidget {
 
 class CustomCarouselState extends State<CustomCarousel>
     with TickerProviderStateMixin {
-  List<Widget> cards = [];
+  late List<Widget> cards;
   late PageController _pageController;
   late TabController _tabController;
 
