@@ -4,6 +4,7 @@ import 'package:google_maps_routes/google_maps_routes.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
+import 'package:veloplan/providers/route_manager.dart';
 import '../screens/login_screen.dart';
 import '../navbar.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
@@ -19,7 +20,7 @@ class MyHomePageState extends State<MapPage> {
   // Set<Marker> _markers = Set<Marker>();
 
   // var zoom = LatLng(51.51185004458236, -0.11580820118980878);
-  // String googleMapsApi = 'AIzaSyB7YSQkjjqm-YU1LAz91lyYAvCpqFRhFdU';
+  String googleMapsApi = 'AIzaSyB7YSQkjjqm-YU1LAz91lyYAvCpqFRhFdU';
   String accessToken =
       'pk.eyJ1IjoibW9ja2luZ2JpcmRzIiwiYSI6ImNrempyNnZtajNkbmkybm8xb3lybWE3MTIifQ.AsZJbQPNRb2N3unNdA98nQ';
 
@@ -42,7 +43,7 @@ class MyHomePageState extends State<MapPage> {
   @override
   void initState() {
     super.initState();
-    _initialCameraPosition = CameraPosition(target: currentLatLng, zoom: 15);
+    _initialCameraPosition = CameraPosition(target: currentLatLng, zoom: 12);
     // fetchDockingStations();
   }
 
@@ -93,10 +94,10 @@ class MyHomePageState extends State<MapPage> {
             accessToken: accessToken, //dotenv.env['MAPBOX_ACCESS_TOKEN'],
             initialCameraPosition: _initialCameraPosition,
             onMapCreated: _onMapCreated,
-            // onStyleLoadedCallback: _onStyleLoadedCallback,
+            onStyleLoadedCallback: _onStyleLoadedCallback,
             myLocationEnabled: true,
             myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
-            minMaxZoomPreference: const MinMaxZoomPreference(14, 17),
+            // minMaxZoomPreference: const MinMaxZoomPreference(14, 17),
           ),
           // child: FlutterMap(
           //   options: MapOptions(
@@ -170,6 +171,38 @@ class MyHomePageState extends State<MapPage> {
         // ),
       ],
     ));
+  }
+
+  _onStyleLoadedCallback() async {
+    _addRoute();
+  }
+
+  _addRoute() async {
+    RouteManager manager = await RouteManager();
+    Map routeResponse = await manager.getDirections(points[0], points[3]);
+
+    final _fills = {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "id": 0,
+          "geometry": routeResponse['geometry'],
+        },
+      ],
+    };
+    await controller.addSource(
+        "fills", GeojsonSourceProperties(data: _fills)); //creates the line
+    await controller.addLineLayer(
+      "fills",
+      "lines",
+      LineLayerProperties(
+        lineColor: Color.fromARGB(255, 197, 23, 23).toHexStringRGB(),
+        lineCap: "round",
+        lineJoin: "round",
+        lineWidth: 5,
+      ),
+    );
   }
 
   Future<List<PolylineResult>> getJurneyResult(List<LatLng> journey) async {

@@ -1,26 +1,24 @@
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:mapbox_gl/mapbox_gl.dart';
+// import 'package:flutter_dotenv/flutter_dotenv.dart';
+// import 'package:mapbox_gl/mapbox_gl.dart';
 
 class RouteManager {
   String baseUrl = 'https://api.mapbox.com/directions/v5/mapbox';
-  String accessToken = dotenv.env['MAPBOX_ACCESS_TOKEN']!;
+  String accessToken =
+      'pk.eyJ1IjoibW9ja2luZ2JpcmRzIiwiYSI6ImNrempyNnZtajNkbmkybm8xb3lybWE3MTIifQ.AsZJbQPNRb2N3unNdA98nQ';
   String navType = 'cycling';
   Dio _dio = Dio();
 
   Future<Map> getDirections(
-      LatLng currentLatLng, Map location_placeholder) async {
-    final response = await getCyclingRoute(
-        currentLatLng,
-        LatLng(double.parse(location_placeholder['coordinates']['latitude']),
-            double.parse(location_placeholder['coordinates']['longitude'])));
+      LatLng currentLatLng, LatLng location_placeholder) async {
+    final response = await getCyclingRoute(currentLatLng, location_placeholder);
     Map geometry = response['routes'][0]['geometry'];
     num duration = response['routes'][0]['duration'];
     num distance = response['routes'][0]['distance'];
-    print(
-        '-------------------${location_placeholder['name']}-------------------');
+    // print(
+    //     '-------------------${location_placeholder['name']}-------------------');
     print(distance);
     print(duration);
     return {
