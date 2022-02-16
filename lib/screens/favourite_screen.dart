@@ -59,14 +59,17 @@ class _FavouriteState extends State<Favourite> {
   @override
   Widget build(BuildContext build) {
     return Scaffold(
+        appBar: AppBar(
+          title: const Text('Help'),
+        ),
         body: Stack(
-      children: [
-        Container(
-          height: 200,
-          width: MediaQuery.of(context).size.width,
-          child: CustomCarousel(cards: dockingStationCards),
-        )
-      ],
-    ));
+          children: [
+            Container(
+              height: 200,
+              width: MediaQuery.of(context).size.width,
+              child: CustomCarousel(cards: dockingStationCards),
+            )
+          ],
+        ));
   }
 }
