@@ -38,7 +38,6 @@ class MyHomePageState extends State<MapPage> {
   void initState() {
     super.initState();
     fetchDockingStations();
-    // points = _getPolyline();
   }
 
   void fetchDockingStations() {
@@ -138,7 +137,7 @@ class MyHomePageState extends State<MapPage> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Align(
-            alignment: Alignment.bottomCenter,
+            alignment: Alignment(0, 0.9),
             child: Container(
                 width: 200,
                 height: 50,
@@ -196,3 +195,12 @@ class MyHomePageState extends State<MapPage> {
     });
   }
 }
+
+
+// TODO: use mapbox direction api instead
+// * https://www.youtube.com/watch?v=oFDx6tLipmw
+
+// TODO: Change camera zoom to midpoint between the given points
+
+
+// TODO: when user doesn't have internet don't error message + cancle quries
