@@ -6,6 +6,7 @@ import 'package:latlong2/latlong.dart';
 import '../.env.dart';
 import '../widget/custom_carousel.dart';
 import '../widget/docking_station_card.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class MapPage extends StatefulWidget {
   @override
@@ -13,7 +14,7 @@ class MapPage extends StatefulWidget {
 }
 
 class MyHomePageState extends State<MapPage> {
-  late List<Widget> carouselItems;
+  late List<Widget> dockingStationCards;
 
   FlutterMap _buildMap() {
     return FlutterMap(
@@ -80,9 +81,10 @@ class MyHomePageState extends State<MapPage> {
           },
         );
       }
+      print(index);
     }
 
-    carouselItems = List<Widget>.generate(
+    dockingStationCards = List<Widget>.generate(
         docks.length,
         (index) => dockingStationCard(
               carouselData[index]['index'],
@@ -118,11 +120,28 @@ class MyHomePageState extends State<MapPage> {
           width: MediaQuery.of(context).size.width,
           child: _buildMap(),
         ),
+        // Container(
+        //     height: MediaQuery.of(context).size.height,
+        //     width: MediaQuery.of(context).size.width,
+        //     child: //CustomCarousel(cards: dockingStationCards),
+        //         CarouselSlider(
+        //             items: dockingStationCards,
+        //             options: CarouselOptions(
+        //               height: 200,
+        //               aspectRatio: 16 / 9,
+        //               viewportFraction: 0.8,
+        //               initialPage: 0,
+        //               enableInfiniteScroll: false,
+        //               reverse: false,
+        //               enlargeCenterPage: true,
+        //               //onPageChanged: callbackFunction,
+        //               scrollDirection: Axis.horizontal,
+        //             ))),
         Container(
-          height: MediaQuery.of(context).size.height,
+          height: 300,
           width: MediaQuery.of(context).size.width,
-          child: CustomCarousel(cards: carouselItems),
-        ),
+          child: CustomCarousel(cards: dockingStationCards),
+        )
       ],
     ));
   }

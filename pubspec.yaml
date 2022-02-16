@@ -41,6 +41,8 @@ dependencies:
   latlong2: ^0.8.1
   geolocator: ^8.1.1 
   favorite_button: ^0.0.4
+  carousel_slider: ^4.0.0
+  smooth_page_indicator: ^1.0.0+2
 
 
 
