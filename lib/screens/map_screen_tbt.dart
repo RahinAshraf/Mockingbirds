@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 import '../screens/login_screen.dart';
 import '../navbar.dart';
 // import 'package:flutter_map/flutter_map.dart';
@@ -18,6 +19,9 @@ import '../constants/locations_placeholder.dart';
 import '../helpers/location_helper.dart';
 import '../helpers/directions_handler.dart';
 import '../screens/profile_screen.dart';
+
+import '../screens/nav_screen_tbt.dart';
+
 //import '../helpers/shared_prefs.dart';
 
 class MapPageTBT extends StatefulWidget {
@@ -39,6 +43,7 @@ class MyHomePageState extends State<MapPageTBT> {
   late MapboxMapController controller;
   late List<CameraPosition> _LocationsList;
   List<Map> carouselData = [];
+  late Map _geometry;
 
   //carousel related:
   int pageIndex = 0;
@@ -132,7 +137,8 @@ class MyHomePageState extends State<MapPageTBT> {
         await getDirectionsAPIResponse(currentLatLng, currentDestination);
 
     //print(modifiedResponse);
-    Map geometry = routeResponse['geometry'];
+    _geometry = routeResponse['geometry'];
+    // route.add(geometry);
 
     final _fills = {
       //holds the geometries for the polylines -> used to render
@@ -142,7 +148,7 @@ class MyHomePageState extends State<MapPageTBT> {
           "type": "Feature",
           "id": 0,
           "properties": <String, dynamic>{},
-          "geometry": geometry,
+          "geometry": _geometry,
         },
       ],
     };
@@ -163,31 +169,20 @@ class MyHomePageState extends State<MapPageTBT> {
         lineColor: Color.fromARGB(255, 197, 23, 23).toHexStringRGB(),
         lineCap: "round",
         lineJoin: "round",
-        lineWidth: 6,
+        lineWidth: 5,
       ),
     );
   }
 
   _onMapCreated(MapboxMapController controller) async {
     this.controller = controller;
-    for (CameraPosition _location in _LocationsList) {
-      print("here");
-      print(_location.target);
-      await controller.addSymbol(
-        SymbolOptions(
-          geometry: _location.target,
-          iconSize: 7.8,
-          iconImage: "assets/icon/bike.png",
-        ),
-      );
-    }
   }
 
   _onStyleLoadedCallback() async {
     //ADDS MARKERS----- doesnt work ???
     for (CameraPosition _location in _LocationsList) {
-      print("here");
-      print(_location.target);
+      // print("here");
+      // print(_location.target);
       await controller.addSymbol(
         SymbolOptions(
           geometry: _location.target,
@@ -247,6 +242,14 @@ class MyHomePageState extends State<MapPageTBT> {
             child: FloatingActionButton(
               heroTag: "startTBTBtn",
               onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => NavPageTBT(
+                              locationsList: _LocationsList,
+                              initialCameraPosition: _initialCameraPosition,
+                              geometry: _geometry,
+                            )));
                 // controller.animateCamera(
                 //     CameraUpdate.newCameraPosition(_initialCameraPosition));
               },
