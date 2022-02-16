@@ -120,23 +120,6 @@ class MyHomePageState extends State<MapPage> {
           width: MediaQuery.of(context).size.width,
           child: _buildMap(),
         ),
-        // Container(
-        //     height: MediaQuery.of(context).size.height,
-        //     width: MediaQuery.of(context).size.width,
-        //     child: //CustomCarousel(cards: dockingStationCards),
-        //         CarouselSlider(
-        //             items: dockingStationCards,
-        //             options: CarouselOptions(
-        //               height: 200,
-        //               aspectRatio: 16 / 9,
-        //               viewportFraction: 0.8,
-        //               initialPage: 0,
-        //               enableInfiniteScroll: false,
-        //               reverse: false,
-        //               enlargeCenterPage: true,
-        //               //onPageChanged: callbackFunction,
-        //               scrollDirection: Axis.horizontal,
-        //             ))),
         Container(
           height: 300,
           width: MediaQuery.of(context).size.width,

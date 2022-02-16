@@ -68,6 +68,7 @@ class CustomCarouselState extends State<CustomCarousel>
   Widget buildIndicator() => AnimatedSmoothIndicator(
         activeIndex: _position,
         count: cards.length,
-        effect: ScrollingDotsEffect(fixedCenter: true),
+        effect: const ScrollingDotsEffect(
+            fixedCenter: true, activeDotColor: Colors.green),
       );
 }
