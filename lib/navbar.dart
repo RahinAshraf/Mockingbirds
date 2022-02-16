@@ -57,21 +57,25 @@ class _MainPageState extends State<MainPage> {
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType
-              .fixed, //looks past the backround colors specified
-          backgroundColor: Colors.green[200],
-          selectedItemColor: Colors.black,
-          unselectedItemColor: Colors.grey[10],
-          iconSize: 33,
-          //selectedFontSize: 16,
-          showSelectedLabels: true,
-          showUnselectedLabels: true,
-          currentIndex: currentIndex,
-          onTap: onTabTapped, //(index) => setState(() => currentIndex = index),
+        bottomNavigationBar: createNavBar());
+  }
 
-          items: retrieveNavItems(),
-        ));
+  BottomNavigationBar createNavBar() {
+    return BottomNavigationBar(
+      type: BottomNavigationBarType
+          .fixed, //looks past the backround colors specified
+      backgroundColor: Colors.green[200],
+      selectedItemColor: Colors.black,
+      unselectedItemColor: Colors.grey[10],
+      iconSize: 33,
+      //selectedFontSize: 16,
+      showSelectedLabels: true,
+      showUnselectedLabels: true,
+      currentIndex: currentIndex,
+      onTap: onTabTapped, //(index) => setState(() => currentIndex = index),
+
+      items: retrieveNavItems(),
+    );
   }
 
   List<BottomNavigationBarItem> retrieveNavItems() {
