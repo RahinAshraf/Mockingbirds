@@ -33,33 +33,31 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // body: screens[currentIndex], //looses the progress
-      body: IndexedStack(
-        index: currentIndex,
-        children: screens, //keeps the screens alive
-      ),
-      drawer: NavigationDrawerWidget(),
-      key: scaffoldKey,
-
-      floatingActionButton: Container(
-        height: 80.0,
-        width: 80.0,
-        child: FloatingActionButton(
-          onPressed: () {
-            onTabTapped(1);
-          },
-          child: Icon(
-            Icons.directions_bike,
-            color: Colors.green,
-            size: 50,
-          ),
-          elevation: 8.0,
-          backgroundColor: Colors.white,
+        // body: screens[currentIndex], //looses the progress
+        body: IndexedStack(
+          index: currentIndex,
+          children: screens, //keeps the screens alive
         ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-
-      bottomNavigationBar: BottomNavigationBar(
+        drawer: NavigationDrawerWidget(),
+        key: scaffoldKey,
+        floatingActionButton: Container(
+          height: 80.0,
+          width: 80.0,
+          child: FloatingActionButton(
+            onPressed: () {
+              onTabTapped(1);
+            },
+            child: Icon(
+              Icons.directions_bike,
+              color: Colors.green,
+              size: 50,
+            ),
+            elevation: 8.0,
+            backgroundColor: Colors.white,
+          ),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType
               .fixed, //looks past the backround colors specified
           backgroundColor: Colors.green[200],
@@ -72,21 +70,25 @@ class _MainPageState extends State<MainPage> {
           currentIndex: currentIndex,
           onTap: onTabTapped, //(index) => setState(() => currentIndex = index),
 
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.format_align_justify_sharp),
-              label: '',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.add_link_rounded),
-              label: '',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: '',
-            ),
-          ]),
-    );
+          items: retrieveNavItems(),
+        ));
+  }
+
+  List<BottomNavigationBarItem> retrieveNavItems() {
+    return const [
+      BottomNavigationBarItem(
+        icon: Icon(Icons.format_align_justify_sharp),
+        label: '',
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.add_link_rounded),
+        label: '',
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.person),
+        label: '',
+      ),
+    ];
   }
 
   void onTabTapped(int index) {
