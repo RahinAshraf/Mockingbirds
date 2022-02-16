@@ -9,20 +9,18 @@ class RouteManager {
   String accessToken = dotenv.env['MAPBOX_ACCESS_TOKEN']!;
   String navType = 'cycling';
   Dio _dio = Dio();
+
   Future<Map> getDirections(
-      LatLng currentLatLng, int index, List<Map> location_placeholders) async {
+      LatLng currentLatLng, Map location_placeholder) async {
     final response = await getCyclingRoute(
         currentLatLng,
-        LatLng(
-            double.parse(
-                location_placeholders[index]['coordinates']['latitude']),
-            double.parse(
-                location_placeholders[index]['coordinates']['longitude'])));
+        LatLng(double.parse(location_placeholder['coordinates']['latitude']),
+            double.parse(location_placeholder['coordinates']['longitude'])));
     Map geometry = response['routes'][0]['geometry'];
     num duration = response['routes'][0]['duration'];
     num distance = response['routes'][0]['distance'];
     print(
-        '-------------------${location_placeholders[index]['name']}-------------------');
+        '-------------------${location_placeholder['name']}-------------------');
     print(distance);
     print(duration);
     return {

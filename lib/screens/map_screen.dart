@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_routes/google_maps_routes.dart';
+import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
 import '../screens/login_screen.dart';
 import '../navbar.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
-import '../.env.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import '../helpers/navigation_helpers.dart';
 
@@ -17,10 +16,12 @@ class MapPage extends StatefulWidget {
 
 class MyHomePageState extends State<MapPage> {
   late Future<List<DockingStation>> future_docks;
-  Set<Marker> _markers = Set<Marker>();
+  // Set<Marker> _markers = Set<Marker>();
 
-  var zoom = LatLng(51.51185004458236, -0.11580820118980878);
-  String googleMapsApi = 'AIzaSyB7YSQkjjqm-YU1LAz91lyYAvCpqFRhFdU';
+  // var zoom = LatLng(51.51185004458236, -0.11580820118980878);
+  // String googleMapsApi = 'AIzaSyB7YSQkjjqm-YU1LAz91lyYAvCpqFRhFdU';
+  String accessToken =
+      'pk.eyJ1IjoibW9ja2luZ2JpcmRzIiwiYSI6ImNrempyNnZtajNkbmkybm8xb3lybWE3MTIifQ.AsZJbQPNRb2N3unNdA98nQ';
 
   PolylinePoints polylinePoints = PolylinePoints();
   List<LatLng> polylineCoordinates = [];
@@ -32,44 +33,52 @@ class MyHomePageState extends State<MapPage> {
     LatLng(51.506053, -0.130310)
   ];
 
+  late MapboxMapController controller;
+  late CameraPosition _initialCameraPosition;
+  LatLng currentLatLng = const LatLng(51.51185004458236, -0.11580820118980878);
+
   String totalDistance = 'No route';
 
   @override
   void initState() {
     super.initState();
-    fetchDockingStations();
+    _initialCameraPosition = CameraPosition(target: currentLatLng, zoom: 15);
+    // fetchDockingStations();
   }
 
-  void fetchDockingStations() {
-    final dockingStationManager _stationManager = dockingStationManager();
-    _stationManager
-        .importStations()
-        .then((value) => placeDockMarkers(_stationManager.stations));
-  }
+  // void fetchDockingStations() {
+  //   final dockingStationManager _stationManager = dockingStationManager();
+  //   _stationManager
+  //       .importStations()
+  //       .then((value) => placeDockMarkers(_stationManager.stations));
+  // }
 
-  void placeDockMarkers(List<DockingStation> docks) {
-    int i = 0;
-    setState(() {
-      for (var station in docks) {
-        _markers.add(Marker(
-            point: LatLng(station.lat, station.lon),
-            builder: (_) {
-              return Container(
-                height: 30,
-                width: 30,
-                decoration: BoxDecoration(
-                  color: Colors.red[100],
-                  shape: BoxShape.circle,
-                  image: const DecorationImage(
-                    image: NetworkImage(
-                        'https://www.iconpacks.net/icons/1/free-icon-bicycle-1054.png'),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              );
-            }));
-      }
-    });
+  // void placeDockMarkers(List<DockingStation> docks) {
+  //   int i = 0;
+  //   setState(() {
+  //     for (var station in docks) {
+  //       _markers.add(Marker(
+  //           point: LatLng(station.lat, station.lon),
+  //           builder: (_) {
+  //             return Container(
+  //               height: 30,
+  //               width: 30,
+  //               decoration: BoxDecoration(
+  //                 color: Colors.red[100],
+  //                 shape: BoxShape.circle,
+  //                 image: const DecorationImage(
+  //                   image: NetworkImage(
+  //                       'https://www.iconpacks.net/icons/1/free-icon-bicycle-1054.png'),
+  //                   fit: BoxFit.cover,
+  //                 ),
+  //               ),
+  //             );
+  //           }));
+  //     }
+  //   });
+  // }
+  _onMapCreated(MapboxMapController controller) async {
+    this.controller = controller;
   }
 
   @override
@@ -80,76 +89,85 @@ class MyHomePageState extends State<MapPage> {
         Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
-          child: FlutterMap(
-            options: MapOptions(
-              center: zoom,
-              zoom: 14.0,
-              minZoom: 5,
-            ),
-            layers: [
-              TileLayerOptions(
-                urlTemplate:
-                    "https://api.mapbox.com/styles/v1/mockingbirds/ckzh4k81i000n16lcev9vknm5/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibW9ja2luZ2JpcmRzIiwiYSI6ImNremd3NW9weDM2ZmEybm45dzlhYzN0ZnUifQ.lSzpNOhK2CH9-PODR0ojLg",
-                additionalOptions: {
-                  'accessToken': MAPBOX_ACCESS_TOKEN,
-                  'id': 'mapbox.mapbox-streets-v8',
-                },
-              ),
-              MarkerLayerOptions(
-                markers: _markers.toList()
-                // Marker(
-                //     point: LatLng(
-                //         51.51185004458236, -0.11580820118980878),
-                //     builder: (_) {
-                //       return Container(
-                //         height: 50,
-                //         width: 50,
-                //         decoration: BoxDecoration(
-                //           color: Colors.red[300],
-                //           shape: BoxShape.circle,
-                //         ),
-                //       );
-                //     }),
-                ,
-              ),
-              PolylineLayerOptions(polylines: [
-                Polyline(
-                    points: polylineCoordinates, // points
-                    strokeWidth: 5.0,
-                    color: Colors.red)
-              ])
-            ],
+          child: MapboxMap(
+            accessToken: accessToken, //dotenv.env['MAPBOX_ACCESS_TOKEN'],
+            initialCameraPosition: _initialCameraPosition,
+            onMapCreated: _onMapCreated,
+            // onStyleLoadedCallback: _onStyleLoadedCallback,
+            myLocationEnabled: true,
+            myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
+            minMaxZoomPreference: const MinMaxZoomPreference(14, 17),
           ),
+          // child: FlutterMap(
+          //   options: MapOptions(
+          //     center: zoom,
+          //     zoom: 14.0,
+          //     minZoom: 5,
+          //   ),
+          //   layers: [
+          //     TileLayerOptions(
+          //       urlTemplate:
+          //           "https://api.mapbox.com/styles/v1/mockingbirds/ckzh4k81i000n16lcev9vknm5/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibW9ja2luZ2JpcmRzIiwiYSI6ImNremd3NW9weDM2ZmEybm45dzlhYzN0ZnUifQ.lSzpNOhK2CH9-PODR0ojLg",
+          //       additionalOptions: {
+          //         'accessToken': MAPBOX_ACCESS_TOKEN,
+          //         'id': 'mapbox.mapbox-streets-v8',
+          //       },
+          //     ),
+          //     MarkerLayerOptions(
+          //       markers: _markers.toList()
+          //       // Marker(
+          //       //     point: LatLng(
+          //       //         51.51185004458236, -0.11580820118980878),
+          //       //     builder: (_) {
+          //       //       return Container(
+          //       //         height: 50,
+          //       //         width: 50,
+          //       //         decoration: BoxDecoration(
+          //       //           color: Colors.red[300],
+          //       //           shape: BoxShape.circle,
+          //       //         ),
+          //       //       );
+          //       //     }),
+          //       ,
+          //     ),
+          //     PolylineLayerOptions(polylines: [
+          //       Polyline(
+          //           points: polylineCoordinates, // points
+          //           strokeWidth: 5.0,
+          //           color: Colors.red)
+          //     ])
+          //   ],
+          // ),
         ),
-        Container(
-          alignment: Alignment(-0.9, 0),
-          child: FloatingActionButton(
-            heroTag: "btn1",
-            child: Icon(Icons.arrow_upward, color: Colors.white),
-            onPressed: () async {
-              if (polylineCoordinates.isNotEmpty) {
-                clearDirections();
-              }
-              _getPolyline(points);
-            },
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Align(
-            alignment: Alignment(0, 0.9),
-            child: Container(
-                width: 200,
-                height: 50,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(15.0)),
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Text(totalDistance, style: TextStyle(fontSize: 25.0)),
-                )),
-          ),
-        ),
+        // Container(
+        //   alignment: Alignment(-0.9, 0),
+        //   child: FloatingActionButton(
+        //     heroTag: "btn1",
+        //     child: Icon(Icons.arrow_upward, color: Colors.white),
+        //     onPressed: () async {
+        //       if (polylineCoordinates.isNotEmpty) {
+        //         clearDirections();
+        //       }
+        //       _getPolyline(points);
+        //     },
+        //   ),
+        // ),
+        // Padding(
+        //   padding: const EdgeInsets.all(8.0),
+        //   child: Align(
+        //     alignment: Alignment(0, 0.9),
+        //     child: Container(
+        //         width: 200,
+        //         height: 50,
+        //         decoration: BoxDecoration(
+        //             color: Colors.white,
+        //             borderRadius: BorderRadius.circular(15.0)),
+        //         child: Align(
+        //           alignment: Alignment.center,
+        //           child: Text(totalDistance, style: TextStyle(fontSize: 25.0)),
+        //         )),
+        //   ),
+        // ),
       ],
     ));
   }
@@ -181,7 +199,7 @@ class MyHomePageState extends State<MapPage> {
         }
       });
     }
-    setDistance();
+    // setDistance();
   }
 
   void clearDirections() {
@@ -189,11 +207,11 @@ class MyHomePageState extends State<MapPage> {
     polylinePoints = PolylinePoints();
   }
 
-  void setDistance() {
-    setState(() {
-      totalDistance = distanceCalulator(polylineCoordinates).toString();
-    });
-  }
+  // void setDistance() {
+  //   setState(() {
+  //     totalDistance = distanceCalulator(polylineCoordinates).toString();
+  //   });
+  // }
 }
 
 
