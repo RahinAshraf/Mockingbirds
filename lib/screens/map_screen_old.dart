@@ -186,7 +186,7 @@ class _MyHomePageState extends State<MapPage> {
                 decoration:
                 const InputDecoration(hintText: "Search for a location"),
                 onChanged: (value) {
-                  LocationService().findPlace(value);
+                  //LocationService().findPlace(value);
                 },
               )),
           Container(
@@ -195,7 +195,7 @@ class _MyHomePageState extends State<MapPage> {
                 iconSize: 40,
                 color: Colors.red, //red for developement - change this!
                 onPressed: () {
-                  LocationService().getPlace(_searchController.text);
+                  //LocationService().getPlace(_searchController.text);
                 },
                 icon: const Icon(Icons.search)),
           ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import '../.env.dart';
+import 'package:veloplan/screens/location_service.dart';
 
 const double zoom = 16;
 
@@ -16,6 +17,8 @@ class MyHomePageState extends State<MapPage> {
   LatLng latLng = getLatLngFromSharedPrefs();
   late CameraPosition _initialCameraPosition;
   late MapboxMapController controller;
+
+  TextEditingController _searchController = TextEditingController();
 
 
   @override
@@ -45,7 +48,7 @@ class MyHomePageState extends State<MapPage> {
                   myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
                   minMaxZoomPreference: const MinMaxZoomPreference(14, 17),
                 ),
-              )
+              ),
             ],
           ),
         ),
