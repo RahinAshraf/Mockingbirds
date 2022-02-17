@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -5,13 +6,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../screens/login_screen.dart';
 import '../navbar.dart';
-// import 'package:flutter_map/flutter_map.dart';
-//import 'package:latlong2/latlong.dart' as latLng;
-//import '../.env.dart';
 
-// import 'package:latlong2/latlong.dart' ;
 import 'package:mapbox_gl/mapbox_gl.dart';
-//import 'package:veloplan/screens/profile_screen.dart';
+
 import 'dart:convert';
 import 'package:location/location.dart';
 import '../main.dart';
@@ -21,8 +18,6 @@ import '../helpers/directions_handler.dart';
 import '../screens/profile_screen.dart';
 
 import '../screens/nav_screen_tbt.dart';
-
-//import '../helpers/shared_prefs.dart';
 
 class MapPageTBT extends StatefulWidget {
   @override
@@ -41,6 +36,9 @@ class MyHomePageState extends State<MapPageTBT> {
   late CameraPosition _initialCameraPosition;
 
   late MapboxMapController controller;
+
+  //mapBoxNavigationViewController; //-- NEED NAVIGATION SDK
+  // late MapView mapView;
   late List<CameraPosition> _LocationsList;
   List<Map> carouselData = [];
   late Map _geometry;
@@ -65,66 +63,6 @@ class MyHomePageState extends State<MapPageTBT> {
     _LocationsList.add(CameraPosition(target: currentLatLng, zoom: 15));
   }
 
-  //void initializeLocationAndSave() async {
-  //Ensure all permissions are collected for Locations
-  // Location _location = Location();
-  // bool? _serviceEnabled;
-  // PermissionStatus? _permissionGranted;
-
-  // _serviceEnabled = await _location.serviceEnabled();
-  // if (!_serviceEnabled) {
-  //   _serviceEnabled = await _location.requestService();
-  // }
-
-  // _permissionGranted = await _location.hasPermission();
-  // if (_permissionGranted == PermissionStatus.denied) {
-  //   _permissionGranted = await _location.requestPermission();
-  // }
-
-  // Capture the current user location
-  // LocationData _locationData = await _location.getLocation();
-  // LatLng currentLatLng =
-  //     LatLng(_locationData.latitude!, _locationData.longitude!);
-  // LatLng currentLatLng = LatLng(51.51185004458236, -0.11580820118980878);
-
-  // Store the user location in sharedPreferences
-
-  // sharedPreferences.setDouble('latitude',
-  //     (51.51185004458236)); //had ! for null, removed as we provided doubles rather than vars for latlng
-  // sharedPreferences.setDouble('longitude', (-0.11580820118980878));
-  // sharedPreferences.setDouble('latitude', _locationData.latitude!);
-  // sharedPreferences.setDouble('longitude', _locationData.longitude!);
-
-  // Get and store the directions API response in sharedPreferences
-  // for (int i = 0; i < locations_placeholder.length; i++) {
-  //   Map modifiedResponse = await getDirectionsAPIResponse(currentLatLng, i);
-  //   //print(currentLatLng.toString());
-  //  //saveDirectionsAPIResponse(i, json.encode(modifiedResponse));
-  // }
-
-// // Calculate the distance and time from data in SharedPreferences
-//       for (int index = 0; index < locations_placeholder.length; index++) {
-//         num distance = getDistanceFromSharedPrefs(index) / 1000;
-//         num duration = getDurationFromSharedPrefs(index) / 60;
-//         carouselData
-//             .add({'index': index, 'distance': distance, 'duration': duration});
-//       }
-//       carouselData.sort((a, b) => a['duration'] < b['duration'] ? 0 : 1);
-
-//       // initialize map symbols in the same order as carousel widgets
-  // _LocationsList = (List<CameraPosition>.generate(
-  //     locations_placeholder.length,
-  //     (index) => CameraPosition(
-  //         //target: getLatLngFromLocationData(carouselData[index]['index']),
-  //         target: getLatLngFromLocationData(1),
-  //         zoom: 15)));
-
-//       for (int i = 0; i < _LocationsList.length; i++) {
-//         print(_LocationsList[i]);
-//       }
-
-  //}
-
   //ROUTE:    //from restaurantsmap:
   _addSourceAndLineLayer(int index, bool removeLayer) async {
     // Can animate camera to focus on the item
@@ -147,7 +85,7 @@ class MyHomePageState extends State<MapPageTBT> {
         {
           "type": "Feature",
           "id": 0,
-          "properties": <String, dynamic>{},
+          //"properties": <String, dynamic>{},
           "geometry": _geometry,
         },
       ],
@@ -242,6 +180,7 @@ class MyHomePageState extends State<MapPageTBT> {
             child: FloatingActionButton(
               heroTag: "startTBTBtn",
               onPressed: () {
+                //controller.startNavigation();  //NEED NAVIGATION SDK
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -250,8 +189,8 @@ class MyHomePageState extends State<MapPageTBT> {
                               initialCameraPosition: _initialCameraPosition,
                               geometry: _geometry,
                             )));
-                // controller.animateCamera(
-                //     CameraUpdate.newCameraPosition(_initialCameraPosition));
+                controller.animateCamera(
+                    CameraUpdate.newCameraPosition(_initialCameraPosition));
               },
               child: const Icon(Icons.star),
             ),

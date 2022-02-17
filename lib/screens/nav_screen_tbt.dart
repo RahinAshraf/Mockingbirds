@@ -139,6 +139,19 @@ class MyHomePageState extends State<NavPageTBT> {
               minMaxZoomPreference: const MinMaxZoomPreference(14, 17),
             ),
           ),
+          // Container(
+          //   height: MediaQuery.of(context).size.height,
+          //   width: MediaQuery.of(context).size.width,
+          //   child: NavigationMapView(
+          //     accessToken: dotenv.env['MAPBOX_ACCESS_TOKEN'],
+          //     initialCameraPosition: widget.initialCameraPosition,
+          //     onMapCreated: _onMapCreated,
+          //     onStyleLoadedCallback: _onStyleLoadedCallback,
+          //     myLocationEnabled: true,
+          //     myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
+          //     minMaxZoomPreference: const MinMaxZoomPreference(14, 17),
+          //   ),
+          // ),
         ],
       ),
     );
