@@ -14,11 +14,7 @@ class _FavouriteState extends State<Favourite> {
 
   @override
   void initState() {
-    print("1");
     super.initState();
-    retrieveAllCards().whenComplete(() {
-      setState(() {});
-    });
   }
 
   Future<List<Widget>> retrieveAllCards() {
@@ -27,7 +23,6 @@ class _FavouriteState extends State<Favourite> {
         .importStations()
         .then((value) => createDockingCards(_stationManager.stations));
     return list;
-    print("2");
   }
 
   List<Widget> createDockingCards(List<DockingStation> docks) {
@@ -54,7 +49,6 @@ class _FavouriteState extends State<Favourite> {
               carouselData[index]['nb_bikes'],
               carouselData[index]['nb_empty_docks'],
             ));
-    print("3");
 
     return dockingStationCards;
   }
@@ -76,7 +70,12 @@ class _FavouriteState extends State<Favourite> {
                 ],
               );
             } else {
-              return CircularProgressIndicator();
+              return SizedBox(
+                height: MediaQuery.of(context).size.height / 1.3,
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
             }
           }),
       appBar: AppBar(
