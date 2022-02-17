@@ -20,18 +20,23 @@ class PlaceSearchState extends State<PlaceSearchScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            TextField(
-              decoration: const InputDecoration(
-                  hintText: "Search for a location in London",
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black))),
-              onChanged: (value) {
-                // Call get place function
-               Future.delayed(const Duration(seconds: 1), (){
-                 widget.locService.getPlaceFeatures(value);
-               });
-              },
+            Padding(
+              padding: EdgeInsets.only(left: 20,right: 20,top: 20),
+              child: TextField(
+                decoration: const InputDecoration(
+                    hintText: "Search for a location in London",
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black))),
+                onChanged: (value) {
+                  // Call get place function
+                  Future.delayed(const Duration(seconds: 1), (){
+                    widget.locService.getPlaceFeatures(value);
+                  });
+                },
+              ),
+
             ),
+
             Expanded(
                 child: Card(
               child: StreamBuilder<List<Feature>?>(
