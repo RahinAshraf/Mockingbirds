@@ -2,12 +2,14 @@ import 'docking_station_card.dart';
 import 'package:flutter/material.dart';
 import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
+import 'custom_carousel.dart';
 
-class AllDocksCarousel {
+///Class that loads information of docking stations into cards and builds a carousel
+class dockingStationCarousel {
   late List<Widget> dockingStationCards;
   List<Map> carouselData = [];
 
-  AllDocksCarousel() {
+  AllDocksCard() {
     retrieveAllCards();
   }
 
@@ -43,5 +45,30 @@ class AllDocksCarousel {
             ));
 
     return dockingStationCards;
+  }
+
+  FutureBuilder<List<Widget>> buildCarousel() {
+    return FutureBuilder<List<Widget>>(
+        future: retrieveAllCards(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Stack(
+              children: [
+                Container(
+                  height: 200,
+                  width: MediaQuery.of(context).size.width,
+                  child: CustomCarousel(cards: dockingStationCards),
+                )
+              ],
+            );
+          } else {
+            return SizedBox(
+              height: MediaQuery.of(context).size.height / 1.3,
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
+        });
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:favorite_button/favorite_button.dart';
 
+///Creates a card for a docking station, to include its name, number of bikes and empty bikes.
+
 Widget dockingStationCard(
     int index, String name, String nb_bikes, String nb_empty_docks) {
   return Card(

@@ -4,9 +4,6 @@ import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import '../.env.dart';
-import '../widget/custom_carousel.dart';
-import '../widget/docking_station_card.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 
 class MapPage extends StatefulWidget {
   @override
