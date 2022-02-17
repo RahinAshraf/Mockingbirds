@@ -62,15 +62,23 @@ class _FavouriteState extends State<Favourite> {
   @override
   Widget build(BuildContext build) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            height: 200,
-            width: MediaQuery.of(context).size.width,
-            child: CustomCarousel(cards: dockingStationCards),
-          )
-        ],
-      ),
+      body: FutureBuilder<List<Widget>>(
+          future: retrieveAllCards(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Stack(
+                children: [
+                  Container(
+                    height: 200,
+                    width: MediaQuery.of(context).size.width,
+                    child: CustomCarousel(cards: dockingStationCards),
+                  )
+                ],
+              );
+            } else {
+              return CircularProgressIndicator();
+            }
+          }),
       appBar: AppBar(
         title: const Text('My favourites'),
       ),
