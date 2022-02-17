@@ -9,11 +9,7 @@ import '../pickers/image_picker.dart';
 import '../pickers/bottom_date_picker.dart';
 
 class AuthForm extends StatefulWidget {
-  const AuthForm(
-    this.submitFn,
-    this.isLoading,
-    {Key? key}
-  ) : super(key: key);
+  const AuthForm(this.submitFn, this.isLoading, {Key? key}) : super(key: key);
 
   final bool isLoading;
   final void Function(
@@ -106,7 +102,9 @@ class _AuthFormState extends State<AuthForm> {
                         }
                         return null;
                       },
-                      decoration: const InputDecoration(labelText: 'First Name'),
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'First Name'),
                       onSaved: (value) {
                         _firstName = value!;
                       },
@@ -123,7 +121,8 @@ class _AuthFormState extends State<AuthForm> {
                         }
                         return null;
                       },
-                      decoration: const InputDecoration(labelText: 'Last Name'),
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(), labelText: 'Last Name'),
                       onSaved: (value) {
                         _lastName = value!;
                       },
@@ -138,6 +137,7 @@ class _AuthFormState extends State<AuthForm> {
                         : "Please enter a valid email",
                     keyboardType: TextInputType.emailAddress,
                     decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
                       labelText: 'Email address',
                     ),
                     onSaved: (value) {
@@ -156,7 +156,8 @@ class _AuthFormState extends State<AuthForm> {
                         }
                         return null;
                       },
-                      decoration: const InputDecoration(labelText: 'Username'),
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(), labelText: 'Username'),
                       onSaved: (value) {
                         _userName = value!;
                       },
@@ -173,7 +174,8 @@ class _AuthFormState extends State<AuthForm> {
                       }
                       return null;
                     },
-                    decoration: const InputDecoration(labelText: 'Password'),
+                    decoration: const InputDecoration(
+                        border: OutlineInputBorder(), labelText: 'Password'),
                     obscureText: true,
                     onSaved: (value) {
                       _userPassword = value!;
@@ -191,8 +193,9 @@ class _AuthFormState extends State<AuthForm> {
                         }
                         return null;
                       },
-                      decoration:
-                          const InputDecoration(labelText: 'Confirm Password'),
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Confirm Password'),
                       obscureText: true,
                     ),
                   if (!_isLogin)
@@ -230,7 +233,7 @@ class _AuthFormState extends State<AuthForm> {
                   const SizedBox(height: 12),
                   if (widget.isLoading) const CircularProgressIndicator(),
                   if (!widget.isLoading)
-                    RaisedButton(
+                    ElevatedButton(
                       child: Text(_isLogin ? 'Login' : 'Signup'),
                       onPressed: _trySubmit,
                     ),
