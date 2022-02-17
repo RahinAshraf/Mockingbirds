@@ -21,7 +21,7 @@ class PlaceSearchState extends State<PlaceSearchScreen> {
         child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.only(left: 20,right: 20,top: 20),
+              padding: EdgeInsets.only(top: 20, left: 20,right: 20),
               child: TextField(
                 decoration: const InputDecoration(
                     hintText: "Search for a location in London",
@@ -34,7 +34,6 @@ class PlaceSearchState extends State<PlaceSearchScreen> {
                   });
                 },
               ),
-
             ),
 
             Expanded(
