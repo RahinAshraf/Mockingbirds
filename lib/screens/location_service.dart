@@ -4,18 +4,17 @@ import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
 /*
-*LocationService class retrieves the data from the google cloud maps api
+*LocationService class to retrieve results from Mapbox API
 * */
 class LocationService {
-  final String key = 'pk.eyJ1IjoibW9ja2luZ2JpcmRzIiwiYSI6ImNremd3NW9weDM2ZmEybm45dzlhYzN0ZnUifQ.lSzpNOhK2CH9-PODR0ojLg'; //google cloud API KEY
+  final String key = 'pk.eyJ1IjoibW9ja2luZ2JpcmRzIiwiYSI6ImNremd3NW9weDM2ZmEybm45dzlhYzN0ZnUifQ.lSzpNOhK2CH9-PODR0ojLg'; //Mapbox api key
 
   final StreamController<List<Feature>?> _feature = StreamController.broadcast();
   Stream<List<Feature>?> get feature => _feature.stream;
 
-  //returns the id of the place the user inputs
+  //Adds the retrived json data to a list
   void getPlaceFeatures(String input) async {
-    //final String url = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=$input&inputtype=textquery&key=$key";
-    final String url = "https://api.mapbox.com/geocoding/v5/mapbox.places/$input.json?access_token=$key";
+    final String url = "https://api.mapbox.com/geocoding/v5/mapbox.places/$input.json?bbox=-0.591614,51.265980,0.279053,51.707474&access_token=$key"; //geocoding Api url request for data based on the users input, only showing retrieving matching results that are in London
     var response = await http.get(Uri.parse(url));
     var json = convert.jsonDecode(response.body);
 

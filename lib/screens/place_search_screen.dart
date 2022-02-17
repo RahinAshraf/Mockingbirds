@@ -22,7 +22,7 @@ class PlaceSearchState extends State<PlaceSearchScreen> {
           children: [
             TextField(
               decoration: const InputDecoration(
-                  hintText: "Search location",
+                  hintText: "Search for a location in London",
                   border: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.black))),
               onChanged: (value) {
