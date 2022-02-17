@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
+import 'package:veloplan/widget/station_carousel.dart';
 import '../widget/custom_carousel.dart';
 import '../widget/docking_station_card.dart';
 
@@ -9,54 +11,19 @@ class Favourite extends StatefulWidget {
 }
 
 class _FavouriteState extends State<Favourite> {
-  late List<Widget> dockingStationCards;
+  var allDocksCarousel =
+      AllDocksCarousel(); //creates a carousel with all the docking station cards
 
   @override
   void initState() {
     super.initState();
   }
 
-  Future<List<Widget>> retrieveAllCards() {
-    final dockingStationManager _stationManager = dockingStationManager();
-    var list = _stationManager
-        .importStations()
-        .then((value) => createDockingCards(_stationManager.stations));
-    return list;
-  }
-
-  List<Widget> createDockingCards(List<DockingStation> docks) {
-    List<Map> carouselData = [];
-
-    for (int index = 0; index < docks.length; index++) {
-      for (var station in docks) {
-        carouselData.add(
-          {
-            'index': index,
-            'name': station.name,
-            'nb_bikes': station.nb_bikes.toString(),
-            'nb_empty_docks': station.nb_empty_docks.toString()
-          },
-        );
-      }
-    }
-
-    dockingStationCards = List<Widget>.generate(
-        docks.length,
-        (index) => dockingStationCard(
-              carouselData[index]['index'],
-              carouselData[index]['name'],
-              carouselData[index]['nb_bikes'],
-              carouselData[index]['nb_empty_docks'],
-            ));
-
-    return dockingStationCards;
-  }
-
   @override
   Widget build(BuildContext build) {
     return Scaffold(
       body: FutureBuilder<List<Widget>>(
-          future: retrieveAllCards(),
+          future: allDocksCarousel.retrieveAllCards(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return Stack(
@@ -64,7 +31,8 @@ class _FavouriteState extends State<Favourite> {
                   Container(
                     height: 200,
                     width: MediaQuery.of(context).size.width,
-                    child: CustomCarousel(cards: dockingStationCards),
+                    child: CustomCarousel(
+                        cards: allDocksCarousel.dockingStationCards),
                   )
                 ],
               );

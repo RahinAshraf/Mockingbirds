@@ -8,25 +8,18 @@ class AllDocksCarousel {
   List<Map> carouselData = [];
 
   AllDocksCarousel() {
-    importStations();
+    retrieveAllCards();
   }
 
-  // Future<List<Widget>> retrieveAllCards() {
-  //   final dockingStationManager _stationManager = dockingStationManager();
-  //   var list = _stationManager
-  //       .importStations()
-  //       .then((value) => addDockingCardData(_stationManager.stations));
-  //   return list;
-  // }
-
-  void importStations() {
+  Future<List<Widget>> retrieveAllCards() {
     final dockingStationManager _stationManager = dockingStationManager();
     var list = _stationManager
         .importStations()
-        .then((value) => addDockingCardData(_stationManager.stations));
+        .then((value) => createDockingCards(_stationManager.stations));
+    return list;
   }
 
-  void addDockingCardData(List<DockingStation> docks) {
+  List<Widget> createDockingCards(List<DockingStation> docks) {
     for (int index = 0; index < docks.length; index++) {
       for (var station in docks) {
         carouselData.add(
@@ -40,10 +33,6 @@ class AllDocksCarousel {
       }
     }
 
-    generateDockingCards(docks);
-  }
-
-  void generateDockingCards(List<DockingStation> docks) {
     dockingStationCards = List<Widget>.generate(
         docks.length,
         (index) => dockingStationCard(
@@ -53,10 +42,6 @@ class AllDocksCarousel {
               carouselData[index]['nb_empty_docks'],
             ));
 
-    // return dockingStationCards;
-  }
-
-  List<Widget> getDockingCards() {
     return dockingStationCards;
   }
 }
