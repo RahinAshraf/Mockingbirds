@@ -113,10 +113,3 @@ class NavigationDrawerWidget extends StatelessWidget {
     }
   }
 }
-
-//things to go on the side bar:
-//history
-//stats
-//settings ?
-//calander
-//chatbox

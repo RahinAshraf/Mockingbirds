@@ -87,11 +87,6 @@ class MyHomePageState extends State<MapPage> {
           width: MediaQuery.of(context).size.width,
           child: _buildMap(),
         ),
-        // Container(
-        //   height: 300,
-        //   width: MediaQuery.of(context).size.width,
-        //   child: CustomCarousel(cards: dockingStationCards),
-        // )
       ],
     ));
   }
