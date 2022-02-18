@@ -39,7 +39,7 @@ class MyHomePageState extends State<MapPage> {
   ];
 
   late MapboxMapController controller;
-  late CameraPosition _initialCameraPosition;
+  late CameraPosition _cameraPosition;
   LatLng currentLatLng = const LatLng(51.51185004458236, -0.11580820118980878);
 
   String totalDistance = 'No route';
@@ -47,7 +47,7 @@ class MyHomePageState extends State<MapPage> {
   @override
   void initState() {
     super.initState();
-    _initialCameraPosition = CameraPosition(target: currentLatLng, zoom: 12);
+    _cameraPosition = CameraPosition(target: currentLatLng, zoom: 12);
     getRouteResponse();
     // fetchDockingStations();
   }
@@ -101,7 +101,7 @@ class MyHomePageState extends State<MapPage> {
           width: MediaQuery.of(context).size.width,
           child: MapboxMap(
             accessToken: accessToken, //dotenv.env['MAPBOX_ACCESS_TOKEN'],
-            initialCameraPosition: _initialCameraPosition,
+            initialCameraPosition: _cameraPosition,
             onMapCreated: _onMapCreated,
             onStyleLoadedCallback: _onStyleLoadedCallback,
             myLocationEnabled: true,
@@ -115,7 +115,10 @@ class MyHomePageState extends State<MapPage> {
             heroTag: "btn1",
             child: Icon(Icons.arrow_upward, color: Colors.white),
             onPressed: () async {
-              addJurney(points);
+              if (!isRouteDisplayed) {
+                displayJurneyAndRefocus(points);
+                isRouteDisplayed = true;
+              }
             },
           ),
         ),
@@ -125,7 +128,10 @@ class MyHomePageState extends State<MapPage> {
             heroTag: "btn2",
             child: Icon(Icons.remove, color: Colors.white),
             onPressed: () async {
-              displayJurneyAndRefocus(points);
+              if (isRouteDisplayed) {
+                removeFills();
+                isRouteDisplayed = false;
+              }
             },
           ),
         ),
@@ -167,17 +173,15 @@ class MyHomePageState extends State<MapPage> {
   }
 
   void displayJurneyAndRefocus(List<LatLng> journey) {
-    addJurney(journey);
+    setJourney(journey);
+    refocusCamera(journey);
   }
 
-  addJurney(List<LatLng> journey) async {
-    if (isRouteDisplayed == false) {
-      setJourney(journey);
-      isRouteDisplayed = true;
-    } else {
-      removeFills();
-      isRouteDisplayed = false;
-    }
+  void refocusCamera(List<LatLng> journey) {
+    LatLng center = getCentroid(journey);
+    _cameraPosition = CameraPosition(
+        target: center, zoom: getZoom(getRadius(journey, center)));
+    controller.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
   }
 
   void addFills() async {
@@ -217,10 +221,6 @@ class MyHomePageState extends State<MapPage> {
     }
   }
 }
-
-// TODO: fix initialization
-
-// TODO: Change camera zoom to midpoint between the given points
 
 // TODO: Getter for total time functionality
 

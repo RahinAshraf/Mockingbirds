@@ -1,5 +1,5 @@
 import 'dart:math';
-import 'package:latlong2/latlong.dart';
+import 'package:mapbox_gl/mapbox_gl.dart';
 
 double calculateDistance(LatLng pos1, LatLng pos2) {
   var p = 0.017453292519943295;
@@ -23,7 +23,7 @@ double distanceCalulator(List<LatLng> points) {
   for (int i = 0; i < points.length - 1; ++i) {
     totalDistance += calculateDistance(points[i], points[i + 1]);
   }
-  return round(totalDistance, decimals: 2);
+  return totalDistance;
 }
 
 LatLng getCentroid(List<LatLng> points) {
@@ -39,12 +39,17 @@ LatLng getCentroid(List<LatLng> points) {
   return LatLng(lat / n, lng / n);
 }
 
-double getRadius(List<LatLng> points) {
+double getRadius(List<LatLng> points, LatLng center) {
   double max = 0;
+  for (LatLng point in points) {
+    double dist = calculateDistance(center, point);
+    if (dist > max) {
+      max = dist;
+    }
+  }
   return max;
 }
 
-
-// TODO: calculate zoom
-
-//TODO: calculate the center from  List<LatLng>
+double getZoom(double radius) {
+  return log(2048 / radius * 350);
+}
