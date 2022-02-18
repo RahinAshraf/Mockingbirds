@@ -25,3 +25,8 @@ double distanceCalulator(List<LatLng> points) {
   }
   return round(totalDistance, decimals: 2);
 }
+
+
+// TODO: calculate zoom
+
+//TODO: calculate the center from  List<LatLng>

@@ -1,8 +1,6 @@
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
-// import 'package:flutter_dotenv/flutter_dotenv.dart';
-// import 'package:mapbox_gl/mapbox_gl.dart';
 
 class RouteManager {
   String baseUrl = 'https://api.mapbox.com/directions/v5/mapbox';
@@ -40,4 +38,24 @@ class RouteManager {
       debugPrint(errorMessage);
     }
   }
+
+  // Future<dynamic> getGeometry() async {
+  //   print("I got here!!!!!!!!!!!!!!!!!!!");
+  //   print(routeResponse['geometry']);
+  //   return routeResponse['geometry'];
+  // }
+
+  // dynamic getDuration() async {
+  //   return routeResponse['duration'];
+  // }
+
+  // dynamic getDistance() async {
+  //   return routeResponse['distance'];
+  // }
+
+  //TODO: get geometry
+  //TODO: get duration
+  //TODO: get distance
+
+  //TODO: get geometry
 }

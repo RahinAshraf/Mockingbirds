@@ -16,8 +16,11 @@ class MapPage extends StatefulWidget {
 }
 
 class MyHomePageState extends State<MapPage> {
+  late RouteManager manager;
   late Future<List<DockingStation>> future_docks;
   bool isRouteDisplayed = false;
+  Map<String, Object> _fills = {};
+  Map routeResponse = {};
   // Set<Marker> _markers = Set<Marker>();
 
   // var zoom = LatLng(51.51185004458236, -0.11580820118980878);
@@ -100,46 +103,6 @@ class MyHomePageState extends State<MapPage> {
             myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
             // minMaxZoomPreference: const MinMaxZoomPreference(14, 17),
           ),
-          // child: FlutterMap(
-          //   options: MapOptions(
-          //     center: zoom,
-          //     zoom: 14.0,
-          //     minZoom: 5,
-          //   ),
-          //   layers: [
-          //     TileLayerOptions(
-          //       urlTemplate:
-          //           "https://api.mapbox.com/styles/v1/mockingbirds/ckzh4k81i000n16lcev9vknm5/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibW9ja2luZ2JpcmRzIiwiYSI6ImNremd3NW9weDM2ZmEybm45dzlhYzN0ZnUifQ.lSzpNOhK2CH9-PODR0ojLg",
-          //       additionalOptions: {
-          //         'accessToken': MAPBOX_ACCESS_TOKEN,
-          //         'id': 'mapbox.mapbox-streets-v8',
-          //       },
-          //     ),
-          //     MarkerLayerOptions(
-          //       markers: _markers.toList()
-          //       // Marker(
-          //       //     point: LatLng(
-          //       //         51.51185004458236, -0.11580820118980878),
-          //       //     builder: (_) {
-          //       //       return Container(
-          //       //         height: 50,
-          //       //         width: 50,
-          //       //         decoration: BoxDecoration(
-          //       //           color: Colors.red[300],
-          //       //           shape: BoxShape.circle,
-          //       //         ),
-          //       //       );
-          //       //     }),
-          //       ,
-          //     ),
-          //     PolylineLayerOptions(polylines: [
-          //       Polyline(
-          //           points: polylineCoordinates, // points
-          //           strokeWidth: 5.0,
-          //           color: Colors.red)
-          //     ])
-          //   ],
-          // ),
         ),
         Container(
           alignment: Alignment(-0.9, 0),
@@ -185,40 +148,52 @@ class MyHomePageState extends State<MapPage> {
     //! Add markers here
   }
 
+  Future<void> setFills(dynamic routeResponse) async {
+    _fills = {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "id": 0,
+          "geometry": routeResponse,
+        },
+      ],
+    };
+  }
+
   // TODO: Add List<LatLng> poits in method header
   _addRoute() async {
     if (isRouteDisplayed == false) {
-      RouteManager manager = await RouteManager();
-      Map routeResponse = await manager.getDirections(points[0], points[3]);
+      manager = RouteManager();
+      routeResponse = await manager.getDirections(points[0], points[3]);
 
-      final _fills = {
-        "type": "FeatureCollection",
-        "features": [
-          {
-            "type": "Feature",
-            "id": 0,
-            "geometry": routeResponse['geometry'],
-          },
-        ],
-      };
-      await controller.addSource(
-          "fills", GeojsonSourceProperties(data: _fills)); //creates the line
-      await controller.addLineLayer(
-        "fills",
-        "lines",
-        LineLayerProperties(
-          lineColor: Color.fromARGB(255, 197, 23, 23).toHexStringRGB(),
-          lineCap: "round",
-          lineJoin: "round",
-          lineWidth: 5,
-        ),
-      );
+      setFills(routeResponse['geometry']);
+      addFills();
       isRouteDisplayed = true;
     } else {
-      await controller.removeLayer("lines");
-      await controller.removeSource("fills");
+      removeFills();
       isRouteDisplayed = false;
     }
+  }
+
+  void addFills() async {
+    await controller.addSource(
+        "fills", GeojsonSourceProperties(data: _fills)); //creates the line
+    await controller.addLineLayer(
+      "fills",
+      "lines",
+      LineLayerProperties(
+        lineColor: Color.fromARGB(255, 197, 23, 23).toHexStringRGB(),
+        lineCap: "round",
+        lineJoin: "round",
+        lineWidth: 5,
+      ),
+    );
+  }
+
+  void removeFills() async {
+    await controller.removeLayer("lines");
+    await controller.removeSource("fills");
   }
 
   Future<List<PolylineResult>> getJurneyResult(List<LatLng> journey) async {
@@ -248,26 +223,18 @@ class MyHomePageState extends State<MapPage> {
         }
       });
     }
-    // setDistance();
   }
 
   void clearDirections() {
     polylineCoordinates = [];
     polylinePoints = PolylinePoints();
   }
-
-  // void setDistance() {
-  //   setState(() {
-  //     totalDistance = distanceCalulator(polylineCoordinates).toString();
-  //   });
-  // }
 }
 
-
-// TODO: use mapbox direction api instead
-// * https://www.youtube.com/watch?v=oFDx6tLipmw
+// TODO: Multistops
 
 // TODO: Change camera zoom to midpoint between the given points
 
+// TODO: Refactor
 
 // TODO: when user doesn't have internet don't error message + cancle quries
