@@ -16,7 +16,7 @@ class MapPage extends StatefulWidget {
 }
 
 class MyHomePageState extends State<MapPage> {
-  late RouteManager manager;
+  RouteManager manager = RouteManager();
   late Future<List<DockingStation>> future_docks;
   bool isRouteDisplayed = false;
   Map<String, Object> _fills = {};
@@ -110,7 +110,7 @@ class MyHomePageState extends State<MapPage> {
             heroTag: "btn1",
             child: Icon(Icons.arrow_upward, color: Colors.white),
             onPressed: () async {
-              _addRoute();
+              addJurney(points);
             },
           ),
         ),
@@ -120,7 +120,7 @@ class MyHomePageState extends State<MapPage> {
             heroTag: "btn2",
             child: Icon(Icons.remove, color: Colors.white),
             onPressed: () async {
-              _addRoute();
+              addJurney(points);
             },
           ),
         ),
@@ -161,13 +161,10 @@ class MyHomePageState extends State<MapPage> {
     };
   }
 
-  // TODO: Add List<LatLng> poits in method header
-  _addRoute() async {
+  // TODO: Add List<LatLng> points in method header
+  addJurney(List<LatLng> journey) async {
     if (isRouteDisplayed == false) {
-      manager = RouteManager();
-      routeResponse = await manager.getDirections(points[0], points[3]);
-
-      setFills(routeResponse['geometry']);
+      setJourney(journey);
       addFills();
       isRouteDisplayed = true;
     } else {
@@ -196,42 +193,23 @@ class MyHomePageState extends State<MapPage> {
     await controller.removeSource("fills");
   }
 
-  Future<List<PolylineResult>> getJurneyResult(List<LatLng> journey) async {
-    List<PolylineResult> results = [];
+  void setJourney(List<LatLng> journey) async {
+    List<dynamic> jurneyPoints = [];
     if (journey.length > 1) {
-      for (int i = 0; i < journey.length - 1; ++i) {
-        results.add(await polylinePoints.getRouteBetweenCoordinates(
-          googleMapsApi,
-          PointLatLng(journey[i].latitude, journey[i].longitude),
-          PointLatLng(journey[i + 1].latitude, journey[i + 1].longitude),
-          travelMode: TravelMode.bicycling,
-        ));
+      routeResponse = await manager.getDirections(points[0], points[1]);
+      for (int i = 1; i < journey.length - 1; ++i) {
+        var directions = await manager.getDirections(points[i], points[i + 1]);
+        for (dynamic a in directions['geometry']['coordinates']) {
+          jurneyPoints.add(a);
+        }
+        routeResponse['geometry']
+            .update("coordinates", (value) => jurneyPoints);
+        setFills(routeResponse['geometry']);
       }
     }
-    return results;
-  }
-
-  _getPolyline(List<LatLng> _journey) async {
-    List<PolylineResult> journey = await getJurneyResult(_journey);
-    if (journey.isNotEmpty) {
-      journey.forEach((subJurney) {
-        List<PointLatLng> points = subJurney.points;
-        if (points.isNotEmpty) {
-          points.forEach((PointLatLng point) {
-            polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-          });
-        }
-      });
-    }
-  }
-
-  void clearDirections() {
-    polylineCoordinates = [];
-    polylinePoints = PolylinePoints();
   }
 }
 
-// TODO: Multistops
 
 // TODO: Change camera zoom to midpoint between the given points
 
