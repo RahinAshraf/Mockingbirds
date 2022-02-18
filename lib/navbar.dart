@@ -3,8 +3,6 @@ import 'screens/map_screen.dart';
 import 'screens/profile_screen.dart';
 import '../widget/navigation_drawer_widget.dart';
 
-// void main() => runApp(MyApp());
-
 class Navbar extends StatelessWidget {
   //We need to override the Build method because StatelessWidget has a build method
   @override
@@ -33,60 +31,66 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // body: screens[currentIndex], //looses the progress
-      body: IndexedStack(
-        index: currentIndex,
-        children: screens, //keeps the screens alive
-      ),
-      drawer: NavigationDrawerWidget(),
-      key: scaffoldKey,
-
-      floatingActionButton: Container(
-        height: 80.0,
-        width: 80.0,
-        child: FloatingActionButton(
-          onPressed: () {
-            onTabTapped(1);
-          },
-          child: Icon(
-            Icons.directions_bike,
-            color: Colors.green,
-            size: 50,
-          ),
-          elevation: 8.0,
-          backgroundColor: Colors.white,
+        // body: screens[currentIndex], //looses the progress
+        body: IndexedStack(
+          index: currentIndex,
+          children: screens, //keeps the screens alive
         ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        drawer: NavigationDrawerWidget(),
+        key: scaffoldKey,
+        floatingActionButton: Container(
+          height: 80.0,
+          width: 80.0,
+          child: FloatingActionButton(
+            onPressed: () {
+              onTabTapped(1);
+            },
+            child: Icon(
+              Icons.directions_bike,
+              color: Colors.green,
+              size: 50,
+            ),
+            elevation: 8.0,
+            backgroundColor: Colors.white,
+          ),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        bottomNavigationBar: createNavBar());
+  }
 
-      bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType
-              .fixed, //looks past the backround colors specified
-          backgroundColor: Colors.green[200],
-          selectedItemColor: Colors.black,
-          unselectedItemColor: Colors.grey[10],
-          iconSize: 33,
-          //selectedFontSize: 16,
-          showSelectedLabels: true,
-          showUnselectedLabels: true,
-          currentIndex: currentIndex,
-          onTap: onTabTapped, //(index) => setState(() => currentIndex = index),
+  BottomNavigationBar createNavBar() {
+    return BottomNavigationBar(
+      type: BottomNavigationBarType
+          .fixed, //looks past the backround colors specified
+      backgroundColor: Colors.green[200],
+      selectedItemColor: Colors.black,
+      unselectedItemColor: Colors.grey[10],
+      iconSize: 33,
+      //selectedFontSize: 16,
+      showSelectedLabels: true,
+      showUnselectedLabels: true,
+      currentIndex: currentIndex,
+      onTap: onTabTapped, //(index) => setState(() => currentIndex = index),
 
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.format_align_justify_sharp),
-              label: '',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.add_link_rounded),
-              label: '',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: '',
-            ),
-          ]),
+      items: retrieveNavItems(),
     );
+  }
+
+  List<BottomNavigationBarItem> retrieveNavItems() {
+    return const [
+      BottomNavigationBarItem(
+        icon: Icon(Icons.format_align_justify_sharp),
+        label: '',
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.add_link_rounded),
+        label: '',
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.person),
+        label: '',
+      ),
+    ];
   }
 
   void onTabTapped(int index) {
