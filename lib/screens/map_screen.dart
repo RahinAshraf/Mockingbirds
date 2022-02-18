@@ -17,7 +17,8 @@ class MapPage extends StatefulWidget {
 
 class MyHomePageState extends State<MapPage> {
   late Future<List<DockingStation>> future_docks;
-  late Future<Weather> weather;
+  late Weather weather;
+  String weatherIcon = "10n";
   Set<Marker> _markers = Set<Marker>();
   @override
   void initState() {
@@ -30,9 +31,12 @@ class MyHomePageState extends State<MapPage> {
     final WeatherManager _weatherManager = WeatherManager();
     _weatherManager
         .importWeatherForecast()
-        .then((value) => print(_weatherManager.getWeatherData()));
+        .then((value) => initialiseWeather(_weatherManager.all_weather_data));
+  }
 
-    // .then((value) => log('the data: $_weatherManager.getWeatherData()'));
+  void initialiseWeather(Weather w) {
+    weather = w;
+    weatherIcon = w.current_icon;
   }
 
   void fetchDockingStations() {
@@ -90,25 +94,31 @@ class MyHomePageState extends State<MapPage> {
                 },
               ),
               MarkerLayerOptions(
-                markers: _markers.toList()
-                // Marker(
-                //     point: LatLng(
-                //         51.51185004458236, -0.11580820118980878),
-                //     builder: (_) {
-                //       return Container(
-                //         height: 50,
-                //         width: 50,
-                //         decoration: BoxDecoration(
-                //           color: Colors.red[300],
-                //           shape: BoxShape.circle,
-                //         ),
-                //       );
-                //     }),
-                ,
+                markers: _markers.toList(),
               ),
             ],
           ),
         ),
+        Padding(
+          padding: EdgeInsets.only(left: 300, top: 150, right: 40),
+          child: Ink(
+            decoration: const ShapeDecoration(
+              color: Colors.blue,
+              shape: CircleBorder(),
+            ),
+            child: IconButton(
+              icon: Image.network(
+                //late problem sort it
+                'http://openweathermap.org/img/w/$weatherIcon.png',
+              ),
+              iconSize: 48,
+              color: Colors.red,
+              onPressed: () {
+                setState(() {});
+              },
+            ),
+          ),
+        )
       ],
     ));
   }

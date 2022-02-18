@@ -17,4 +17,8 @@ class Weather {
       this.current_wind_speed,
       this.current_description,
       this.current_icon);
+
+  String getCurrentWeatherIcon(Weather w) {
+    return w.current_icon;
+  }
 }
