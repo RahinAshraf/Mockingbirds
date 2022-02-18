@@ -3,10 +3,6 @@ import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
-
-
-
-
 /*
 *LocationService class to retrieve results from Mapbox API
 * */
