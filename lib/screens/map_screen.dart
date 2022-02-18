@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:veloplan/screens/place_search_screen.dart';
 import '../.env.dart';
 import 'package:veloplan/screens/location_service.dart';
 
@@ -48,6 +49,16 @@ class MyHomePageState extends State<MapPage> {
                   myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
                   minMaxZoomPreference: const MinMaxZoomPreference(14, 17),
                 ),
+              ),
+
+              //PLACEHOLDER FAB
+              FloatingActionButton(
+                heroTag: "btn3",
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => PlaceSearchScreen(LocationService())));
+                  print("This btn is to the search location screen. There is a screen in the design that comes before the search location screen so it is accessible from here for now");
+                },
               ),
             ],
           ),

@@ -49,9 +49,8 @@ class _MainPageState extends State<MainPage> {
         child: FloatingActionButton(
           heroTag: "btn2",
           onPressed: () {
-            //onTabTapped(1);
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => PlaceSearchScreen(LocationService())));
+            onTabTapped(1);
+            print("Link journey_planner screen to this btn");
           },
           child: const Icon(
             Icons.directions_bike,

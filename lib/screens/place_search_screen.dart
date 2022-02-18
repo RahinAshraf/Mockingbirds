@@ -21,15 +21,46 @@ class PlaceSearchState extends State<PlaceSearchScreen> {
         child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.only(top: 20, left: 20,right: 20),
+              padding: const EdgeInsets.only(left: 20,right: 20),
               child: TextField(
-                decoration: const InputDecoration(
-                    hintText: "Search for a location in London",
+                decoration:  InputDecoration(
+                    prefixIcon:  IconButton(
+                      icon: const Icon(Icons.arrow_back_rounded, color: Colors.green),
+                      onPressed: () {
+                          print("PREFIX");
+                        },
+                    ),
+                    hintText: "Search for a London location",
+
+                    //Textfield front-end customization
                     border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black))),
+                        borderRadius: BorderRadius.circular(30.0),
+                        borderSide: const BorderSide(color: Colors.green, width: 1.0),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                        borderSide: const BorderSide(color: Colors.green, width: 1.0),
+                    ),
+                    disabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                      borderSide: const BorderSide(color: Colors.green, width: 1.0),
+                    ),
+                    errorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                      borderSide: const BorderSide(color: Colors.green, width: 1.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                      borderSide: const BorderSide(color: Colors.green, width: 1.0),
+                    ),
+                    focusedErrorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                      borderSide: const BorderSide(color: Colors.green, width: 1.0),
+                    ),
+                ),
                 onChanged: (value) {
                   // Call get place function
-                  Future.delayed(const Duration(seconds: 1), (){
+                  Future.delayed(const Duration(milliseconds: 100), (){
                     widget.locService.getPlaceFeatures(value);
                   });
                 },
