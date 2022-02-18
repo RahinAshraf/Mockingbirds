@@ -13,6 +13,7 @@ class JourneyPlanner extends StatefulWidget{
   _JourneyPlanner createState() => _JourneyPlanner();
 }
 
+
 class _JourneyPlanner extends State<JourneyPlanner>{
   LatLng latLng = getLatLngFromSharedPrefs();
   late CameraPosition _initialCameraPosition;
