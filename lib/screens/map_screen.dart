@@ -20,7 +20,7 @@ class MyHomePageState extends State<MapPage> {
   late Future<List<DockingStation>> future_docks;
   bool isRouteDisplayed = false;
   Map<String, Object> _fills = {};
-  Map routeResponse = {};
+  late Map routeResponse;
   // Set<Marker> _markers = Set<Marker>();
 
   // var zoom = LatLng(51.51185004458236, -0.11580820118980878);
@@ -48,7 +48,12 @@ class MyHomePageState extends State<MapPage> {
   void initState() {
     super.initState();
     _initialCameraPosition = CameraPosition(target: currentLatLng, zoom: 12);
+    getRouteResponse();
     // fetchDockingStations();
+  }
+
+  void getRouteResponse() async {
+    routeResponse = await manager.getDirections(points[0], points[1]);
   }
 
   // void fetchDockingStations() {
@@ -120,7 +125,7 @@ class MyHomePageState extends State<MapPage> {
             heroTag: "btn2",
             child: Icon(Icons.remove, color: Colors.white),
             onPressed: () async {
-              addJurney(points);
+              displayJurneyAndRefocus(points);
             },
           ),
         ),
@@ -161,11 +166,13 @@ class MyHomePageState extends State<MapPage> {
     };
   }
 
-  // TODO: Add List<LatLng> points in method header
+  void displayJurneyAndRefocus(List<LatLng> journey) {
+    addJurney(journey);
+  }
+
   addJurney(List<LatLng> journey) async {
     if (isRouteDisplayed == false) {
       setJourney(journey);
-      addFills();
       isRouteDisplayed = true;
     } else {
       removeFills();
@@ -197,22 +204,30 @@ class MyHomePageState extends State<MapPage> {
     List<dynamic> jurneyPoints = [];
     if (journey.length > 1) {
       routeResponse = await manager.getDirections(points[0], points[1]);
-      for (int i = 1; i < journey.length - 1; ++i) {
+      for (int i = 0; i < journey.length - 1; ++i) {
         var directions = await manager.getDirections(points[i], points[i + 1]);
         for (dynamic a in directions['geometry']['coordinates']) {
           jurneyPoints.add(a);
         }
         routeResponse['geometry']
             .update("coordinates", (value) => jurneyPoints);
-        setFills(routeResponse['geometry']);
       }
+      setFills(routeResponse['geometry']);
+      addFills();
     }
   }
 }
 
+// TODO: fix initialization
 
 // TODO: Change camera zoom to midpoint between the given points
 
-// TODO: Refactor
+// TODO: Getter for total time functionality
+
+// TODO: Getter for total distance
+
+// TODO: Display total time and distance in padding
+
+// TODO: Code review
 
 // TODO: when user doesn't have internet don't error message + cancle quries

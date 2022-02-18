@@ -26,6 +26,24 @@ double distanceCalulator(List<LatLng> points) {
   return round(totalDistance, decimals: 2);
 }
 
+LatLng getCentroid(List<LatLng> points) {
+  double lat = 0;
+  double lng = 0;
+  int n = points.length;
+
+  for (LatLng point in points) {
+    lat += point.latitude;
+    lng += point.longitude;
+  }
+
+  return LatLng(lat / n, lng / n);
+}
+
+double getRadius(List<LatLng> points) {
+  double max = 0;
+  return max;
+}
+
 
 // TODO: calculate zoom
 
