@@ -4,6 +4,7 @@ import 'package:mapbox_gl/mapbox_gl.dart';
 import '../.env.dart';
 import 'map_screen.dart';
 
+//Skeleton code for juorney planner screen
 
 class JourneyPlanner extends StatefulWidget{
   const JourneyPlanner({Key? key}) : super(key: key);
@@ -26,6 +27,7 @@ class _JourneyPlanner extends State<JourneyPlanner>{
   _onMapCreated(MapboxMapController controller) async {
     this.controller = controller;
   }
+
 
   @override
   Widget build(BuildContext context) {
