@@ -103,19 +103,18 @@ class MyHomePageState extends State<MapPage> {
           padding: EdgeInsets.only(left: 300, top: 150, right: 40),
           child: Ink(
             decoration: const ShapeDecoration(
-              color: Colors.blue,
+              color: Colors.red,
               shape: CircleBorder(),
             ),
-            child: IconButton(
-              icon: Image.network(
+            child: FloatingActionButton(
+              onPressed: () {
+                // Add your onPressed code here!
+              },
+              backgroundColor: Colors.green,
+              child: Image.network(
                 //late problem sort it
                 'http://openweathermap.org/img/w/$weatherIcon.png',
               ),
-              iconSize: 48,
-              color: Colors.red,
-              onPressed: () {
-                setState(() {});
-              },
             ),
           ),
         )
