@@ -117,43 +117,34 @@ class MyHomePageState extends State<MapPage> {
     ));
   }
 
-  GestureDetector _buildWeatherIcon() {
-    return GestureDetector(
-        behavior: HitTestBehavior.translucent,
-        onTap: () {
-          Navigator.of(context).push(
-            HeroDialogRoute(
-              builder: (context) => Center(
-                child: _WeatherPopupCard(weather: weather),
+  Widget _buildWeatherIcon() {
+    return Padding(
+        padding: EdgeInsets.only(left: 300, top: 150, right: 40),
+        child: GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () {
+            Navigator.of(context).push(HeroDialogRoute(builder: (context) {
+              return _WeatherPopupCard(
+                weather: weather,
+              );
+            }));
+          },
+          child: Hero(
+            tag: "_heroWeather",
+            child: Material(
+              color: Colors.green,
+              elevation: 2,
+
+              //shape: RoundedRectangleBorder(
+              //  borderRadius: BorderRadius.circular(32)),
+              shape: CircleBorder(side: BorderSide(color: Colors.green)),
+              child: Image.network(
+                //late problem sort it
+                'http://openweathermap.org/img/w/$weatherIcon.png',
               ),
             ),
-          );
-        },
-        child: AbsorbPointer(
-            child: Hero(
-                tag: 1,
-                child: Padding(
-                    padding: EdgeInsets.only(left: 300, top: 1, right: 40),
-                    child: Material(
-                      color: Colors.transparent,
-                      child: Ink(
-                        decoration: const ShapeDecoration(
-                          color: Colors.red,
-                          shape: CircleBorder(),
-                        ),
-                        child: FloatingActionButton(
-                          heroTag: null,
-                          onPressed: () {
-                            // Add your onPressed code here!
-                          },
-                          backgroundColor: Colors.green,
-                          child: Image.network(
-                            //late problem sort it
-                            'http://openweathermap.org/img/w/$weatherIcon.png',
-                          ),
-                        ),
-                      ),
-                    )))));
+          ),
+        ));
   }
 }
 
@@ -163,40 +154,48 @@ class _WeatherPopupCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Hero(
-      tag: 1,
+    return Center(
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Material(
-          borderRadius: BorderRadius.circular(16),
-          color: Colors.green,
-          child: SizedBox(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: SingleChildScrollView(
+        padding: const EdgeInsets.all(32.0),
+        child: Hero(
+          tag: "_heroWeather",
+          child: Material(
+            color: Colors.green,
+            elevation: 2,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    //_TodoTitle(title: todo.description),
-                    const SizedBox(
-                      height: 8,
+                    const TextField(
+                      decoration: InputDecoration(
+                        hintText: 'New todo',
+                        border: InputBorder.none,
+                      ),
+                      cursorColor: Colors.white,
                     ),
-                    Container(
-                      margin: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Colors.black12,
-                        borderRadius: BorderRadius.circular(8),
+                    const Divider(
+                      color: Colors.white,
+                      thickness: 0.2,
+                    ),
+                    const TextField(
+                      decoration: InputDecoration(
+                        hintText: 'Write a note',
+                        border: InputBorder.none,
                       ),
-                      child:
-                          // here goes the weather parameters
-                          const TextField(
-                        maxLines: 8,
-                        cursorColor: Colors.white,
-                        decoration: InputDecoration(
-                            contentPadding: EdgeInsets.all(8),
-                            hintText: 'Write a note...',
-                            border: InputBorder.none),
-                      ),
+                      cursorColor: Colors.white,
+                      maxLines: 6,
+                    ),
+                    const Divider(
+                      color: Colors.white,
+                      thickness: 0.2,
+                    ),
+                    FlatButton(
+                      onPressed: () {},
+                      child: const Text('Add'),
                     ),
                   ],
                 ),
