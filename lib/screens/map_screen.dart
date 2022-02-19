@@ -170,33 +170,37 @@ class _WeatherPopupCard extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const TextField(
-                      decoration: InputDecoration(
-                        hintText: 'New todo',
-                        border: InputBorder.none,
-                      ),
-                      cursorColor: Colors.white,
+                    Image.network(
+                      //late problem sort it
+                      'http://openweathermap.org/img/w/${weather.current_icon}.png',
                     ),
                     const Divider(
                       color: Colors.white,
                       thickness: 0.2,
                     ),
-                    const TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Write a note',
-                        border: InputBorder.none,
-                      ),
-                      cursorColor: Colors.white,
-                      maxLines: 6,
-                    ),
+                    Text(weather.current_description),
+                    Text("current temp: " +
+                        weather.getCurrentWeatherTemp().toInt().toString() +
+                        "C"),
+                    Text("current feels like temp: " +
+                        weather
+                            .getCurrentFeelsLikeTemp()
+                            .roundToDouble()
+                            .toString() +
+                        "C"),
                     const Divider(
                       color: Colors.white,
                       thickness: 0.2,
                     ),
-                    FlatButton(
-                      onPressed: () {},
-                      child: const Text('Add'),
-                    ),
+                    Text("current clouds: " +
+                        weather.getCurrentClouds().toString()),
+                    Text("current visibility: " +
+                        weather.getCurrentVisibility().toString()),
+                    Text("current wind speed: " +
+                        weather
+                            .getCurrentWindSpeed()
+                            .roundToDouble()
+                            .toString()),
                   ],
                 ),
               ),

@@ -18,7 +18,31 @@ class Weather {
       this.current_description,
       this.current_icon);
 
-  String getCurrentWeatherIcon(Weather w) {
-    return w.current_icon;
+  String getCurrentWeatherIcon() {
+    return current_icon;
+  }
+
+  double getCurrentWeatherTemp() {
+    return convertKelvinToCelsius(current_temp);
+  }
+
+  double getCurrentFeelsLikeTemp() {
+    return convertKelvinToCelsius(current_feels_like);
+  }
+
+  int getCurrentClouds() {
+    return current_clouds;
+  }
+
+  int getCurrentVisibility() {
+    return current_visibility;
+  }
+
+  double getCurrentWindSpeed() {
+    return current_wind_speed;
+  }
+
+  double convertKelvinToCelsius(double kel) {
+    return kel - 273.15;
   }
 }
