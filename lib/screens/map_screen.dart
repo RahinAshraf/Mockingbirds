@@ -54,6 +54,7 @@ class MyHomePageState extends State<MapPage> {
     final WeatherManager _weatherManager = WeatherManager();
     _weatherManager
         .importWeatherForecast()
+        //.then((value) => initialiseWeather(_weatherManager.all_weather_data));
         .then((value) => initialiseWeather(_weatherManager.all_weather_data));
   }
 
@@ -110,15 +111,15 @@ class MyHomePageState extends State<MapPage> {
         Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
-          child: _buildWeatherIcon(build, weather, weatherIcon),
+          child: _buildWeatherIcon(),
         )
       ],
     ));
   }
 
-  GestureDetector _buildWeatherIcon(
-      BuildContext context, Weather weather, String weatherIcon) {
+  GestureDetector _buildWeatherIcon() {
     return GestureDetector(
+        behavior: HitTestBehavior.translucent,
         onTap: () {
           Navigator.of(context).push(
             HeroDialogRoute(
@@ -128,27 +129,31 @@ class MyHomePageState extends State<MapPage> {
             ),
           );
         },
-        child: Hero(
-            tag: weather.hashCode,
-            child: Padding(
-              padding: EdgeInsets.only(left: 300, top: 150, right: 40),
-              child: Ink(
-                decoration: const ShapeDecoration(
-                  color: Colors.red,
-                  shape: CircleBorder(),
-                ),
-                child: FloatingActionButton(
-                  onPressed: () {
-                    // Add your onPressed code here!
-                  },
-                  backgroundColor: Colors.green,
-                  child: Image.network(
-                    //late problem sort it
-                    'http://openweathermap.org/img/w/$weatherIcon.png',
-                  ),
-                ),
-              ),
-            )));
+        child: AbsorbPointer(
+            child: Hero(
+                tag: 1,
+                child: Padding(
+                    padding: EdgeInsets.only(left: 300, top: 1, right: 40),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: Ink(
+                        decoration: const ShapeDecoration(
+                          color: Colors.red,
+                          shape: CircleBorder(),
+                        ),
+                        child: FloatingActionButton(
+                          heroTag: null,
+                          onPressed: () {
+                            // Add your onPressed code here!
+                          },
+                          backgroundColor: Colors.green,
+                          child: Image.network(
+                            //late problem sort it
+                            'http://openweathermap.org/img/w/$weatherIcon.png',
+                          ),
+                        ),
+                      ),
+                    )))));
   }
 }
 
@@ -159,7 +164,7 @@ class _WeatherPopupCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Hero(
-      tag: weather.hashCode,
+      tag: 1,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Material(
