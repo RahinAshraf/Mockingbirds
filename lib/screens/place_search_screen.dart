@@ -85,7 +85,7 @@ class PlaceSearchState extends State<PlaceSearchScreen> {
                             )
                           : ListTile(
                         onTap: (){
-                          print("Delcare your action here!!");
+                          Navigator.of(context).pop(address);
                         },
                               title: Text(address),
                             );
