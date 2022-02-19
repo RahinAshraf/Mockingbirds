@@ -9,6 +9,8 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import '../.env.dart';
 import 'dart:developer';
+import '../animation/custom_rect_tween.dart';
+import '../animation/hero_dialog_route.dart';
 
 class MapPage extends StatefulWidget {
   @override
@@ -99,26 +101,90 @@ class MyHomePageState extends State<MapPage> {
             ],
           ),
         ),
-        Padding(
-          padding: EdgeInsets.only(left: 300, top: 150, right: 40),
-          child: Ink(
-            decoration: const ShapeDecoration(
-              color: Colors.red,
-              shape: CircleBorder(),
-            ),
-            child: FloatingActionButton(
-              onPressed: () {
-                // Add your onPressed code here!
-              },
-              backgroundColor: Colors.green,
-              child: Image.network(
-                //late problem sort it
-                'http://openweathermap.org/img/w/$weatherIcon.png',
+        GestureDetector(
+            onTap: () {
+              Navigator.of(context).push(
+                HeroDialogRoute(
+                  builder: (context) => Center(
+                    child: _WeatherPopupCard(weather: weather),
+                  ),
+                ),
+              );
+            },
+            child: Hero(
+                tag: weather.hashCode,
+                child: Padding(
+                  padding: EdgeInsets.only(left: 300, top: 150, right: 40),
+                  child: Ink(
+                    decoration: const ShapeDecoration(
+                      color: Colors.red,
+                      shape: CircleBorder(),
+                    ),
+                    child: FloatingActionButton(
+                      onPressed: () {
+                        // Add your onPressed code here!
+                      },
+                      backgroundColor: Colors.green,
+                      child: Image.network(
+                        //late problem sort it
+                        'http://openweathermap.org/img/w/$weatherIcon.png',
+                      ),
+                    ),
+                  ),
+                )))
+      ],
+    ));
+  }
+}
+
+class _WeatherPopupCard extends StatelessWidget {
+  const _WeatherPopupCard({Key? key, required this.weather}) : super(key: key);
+  final Weather weather;
+
+  @override
+  Widget build(BuildContext context) {
+    return Hero(
+      tag: weather.hashCode,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Material(
+          borderRadius: BorderRadius.circular(16),
+          color: Colors.green,
+          child: SizedBox(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    //_TodoTitle(title: todo.description),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    Container(
+                      margin: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.black12,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child:
+                          // here goes the weather parameters
+                          const TextField(
+                        maxLines: 8,
+                        cursorColor: Colors.white,
+                        decoration: InputDecoration(
+                            contentPadding: EdgeInsets.all(8),
+                            hintText: 'Write a note...',
+                            border: InputBorder.none),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        )
-      ],
-    ));
+        ),
+      ),
+    );
   }
 }
