@@ -119,7 +119,7 @@ class MyHomePageState extends State<MapPage> {
 
   Widget _buildWeatherIcon() {
     return Padding(
-        padding: EdgeInsets.only(left: 300, top: 150, right: 40),
+        padding: EdgeInsets.only(left: 300, top: 150, right: 40, bottom: 550),
         child: GestureDetector(
           behavior: HitTestBehavior.translucent,
           onTap: () {
@@ -135,9 +135,9 @@ class MyHomePageState extends State<MapPage> {
               color: Colors.green,
               elevation: 2,
 
-              //shape: RoundedRectangleBorder(
-              //  borderRadius: BorderRadius.circular(32)),
-              shape: CircleBorder(side: BorderSide(color: Colors.green)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(32)),
+              //shape: CircleBorder(side: BorderSide(color: Colors.green)),
               child: Image.network(
                 //late problem sort it
                 'http://openweathermap.org/img/w/$weatherIcon.png',
