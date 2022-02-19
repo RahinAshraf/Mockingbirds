@@ -8,14 +8,14 @@ import 'map_screen.dart';
 
 //Skeleton code for journey planner screen
 
-class JourneyPlanner extends StatefulWidget{
+class JourneyPlanner extends StatefulWidget {
   const JourneyPlanner({Key? key}) : super(key: key);
 
   @override
   _JourneyPlanner createState() => _JourneyPlanner();
 }
 
-class _JourneyPlanner extends State<JourneyPlanner>{
+class _JourneyPlanner extends State<JourneyPlanner> {
   LatLng latLng = getLatLngFromSharedPrefs();
   late CameraPosition _initialCameraPosition;
   late MapboxMapController controller;
@@ -31,43 +31,45 @@ class _JourneyPlanner extends State<JourneyPlanner>{
     this.controller = controller;
   }
 
+
   @override
   Widget build(BuildContext context) {
     final panelHeightClosed = MediaQuery.of(context).size.height * 0.1;
     final panelHeightOpen = MediaQuery.of(context).size.height * 0.6;
 
     return Scaffold(
-        body: SlidingUpPanel(
-          minHeight: panelHeightClosed,
-          maxHeight: panelHeightOpen,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-          parallaxEnabled: true,
-          parallaxOffset: .5,
-          controller: panelController,
-
-          body: SafeArea(
-            child: Stack(
-              children: [
-                SizedBox(
-                  height: MediaQuery.of(context).size.height,
-                  width: MediaQuery.of(context).size.width,
-                  child: MapboxMap(
-                    accessToken: MAPBOX_ACCESS_TOKEN,
-                    initialCameraPosition: _initialCameraPosition,
-                    onMapCreated: _onMapCreated,
-                    myLocationEnabled: true,
-                    myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
-                    minMaxZoomPreference: const MinMaxZoomPreference(14, 17),
-                  ),
+      body: SlidingUpPanel(
+        minHeight: panelHeightClosed,
+        maxHeight: panelHeightOpen,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        parallaxEnabled: true,
+        parallaxOffset: .5,
+        controller: panelController,
+        body: SafeArea(
+          child: Stack(
+            children: [
+              SizedBox(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                child: MapboxMap(
+                  accessToken: MAPBOX_ACCESS_TOKEN,
+                  initialCameraPosition: _initialCameraPosition,
+                  onMapCreated: _onMapCreated,
+                  myLocationEnabled: true,
+                  myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
+                  minMaxZoomPreference: const MinMaxZoomPreference(14, 17),
                 ),
-              ],
-            ),
-          ),
-          panelBuilder: (controller) => PanelWidget(
-            controller: controller,
-            panelController: panelController,
+              ),
+            ],
           ),
         ),
+        panelBuilder: (controller) => PanelWidget(
+          controller: controller,
+          panelController: panelController,
+        ),
+      ),
     );
   }
 }
+
+
