@@ -3,8 +3,6 @@ import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/models/weather.dart';
 import 'package:veloplan/providers/weather_manager.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
-import '../screens/login_screen.dart';
-import '../navbar.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import '../.env.dart';
@@ -18,10 +16,33 @@ class MapPage extends StatefulWidget {
 }
 
 class MyHomePageState extends State<MapPage> {
+  FlutterMap _buildMap() {
+    return FlutterMap(
+      options: MapOptions(
+        center: LatLng(51.512067, -0.039765),
+        zoom: 16.0,
+      ),
+      layers: [
+        TileLayerOptions(
+          urlTemplate:
+              "https://api.mapbox.com/styles/v1/mockingbirds/ckzh4k81i000n16lcev9vknm5/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibW9ja2luZ2JpcmRzIiwiYSI6ImNremd3NW9weDM2ZmEybm45dzlhYzN0ZnUifQ.lSzpNOhK2CH9-PODR0ojLg",
+          additionalOptions: {
+            'accessToken': MAPBOX_ACCESS_TOKEN,
+            'id': 'mapbox.mapbox-streets-v8',
+          },
+        ),
+        MarkerLayerOptions(
+          markers: _markers.toList(),
+        ),
+      ],
+    );
+  }
+
   late Future<List<DockingStation>> future_docks;
   late Weather weather;
   String weatherIcon = "10n";
   Set<Marker> _markers = Set<Marker>();
+
   @override
   void initState() {
     super.initState();
@@ -49,28 +70,31 @@ class MyHomePageState extends State<MapPage> {
   }
 
   void placeDockMarkers(List<DockingStation> docks) {
-    int i = 0;
     setState(() {
       for (var station in docks) {
         _markers.add(Marker(
             point: LatLng(station.lat, station.lon),
             builder: (_) {
-              return Container(
-                height: 30,
-                width: 30,
-                decoration: BoxDecoration(
-                  color: Colors.red[100],
-                  shape: BoxShape.circle,
-                  image: const DecorationImage(
-                    image: NetworkImage(
-                        'https://www.iconpacks.net/icons/1/free-icon-bicycle-1054.png'),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              );
+              return _buildCustomMarker();
             }));
       }
     });
+  }
+
+  Container _buildCustomMarker() {
+    return Container(
+      height: 30,
+      width: 30,
+      decoration: BoxDecoration(
+        color: Colors.red[100],
+        shape: BoxShape.circle,
+        image: const DecorationImage(
+          image: NetworkImage(
+              'https://www.iconpacks.net/icons/1/free-icon-bicycle-1054.png'),
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
   }
 
   @override
@@ -81,59 +105,50 @@ class MyHomePageState extends State<MapPage> {
         Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
-          child: FlutterMap(
-            options: MapOptions(
-              center: LatLng(51.51185004458236, -0.11580820118980878),
-              zoom: 16.0,
-            ),
-            layers: [
-              TileLayerOptions(
-                urlTemplate:
-                    "https://api.mapbox.com/styles/v1/mockingbirds/ckzh4k81i000n16lcev9vknm5/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibW9ja2luZ2JpcmRzIiwiYSI6ImNremd3NW9weDM2ZmEybm45dzlhYzN0ZnUifQ.lSzpNOhK2CH9-PODR0ojLg",
-                additionalOptions: {
-                  'accessToken': MAPBOX_ACCESS_TOKEN,
-                  'id': 'mapbox.mapbox-streets-v8',
-                },
-              ),
-              MarkerLayerOptions(
-                markers: _markers.toList(),
-              ),
-            ],
-          ),
+          child: _buildMap(),
         ),
-        GestureDetector(
-            onTap: () {
-              Navigator.of(context).push(
-                HeroDialogRoute(
-                  builder: (context) => Center(
-                    child: _WeatherPopupCard(weather: weather),
-                  ),
-                ),
-              );
-            },
-            child: Hero(
-                tag: weather.hashCode,
-                child: Padding(
-                  padding: EdgeInsets.only(left: 300, top: 150, right: 40),
-                  child: Ink(
-                    decoration: const ShapeDecoration(
-                      color: Colors.red,
-                      shape: CircleBorder(),
-                    ),
-                    child: FloatingActionButton(
-                      onPressed: () {
-                        // Add your onPressed code here!
-                      },
-                      backgroundColor: Colors.green,
-                      child: Image.network(
-                        //late problem sort it
-                        'http://openweathermap.org/img/w/$weatherIcon.png',
-                      ),
-                    ),
-                  ),
-                )))
+        Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: _buildWeatherIcon(build, weather, weatherIcon),
+        )
       ],
     ));
+  }
+
+  GestureDetector _buildWeatherIcon(
+      BuildContext context, Weather weather, String weatherIcon) {
+    return GestureDetector(
+        onTap: () {
+          Navigator.of(context).push(
+            HeroDialogRoute(
+              builder: (context) => Center(
+                child: _WeatherPopupCard(weather: weather),
+              ),
+            ),
+          );
+        },
+        child: Hero(
+            tag: weather.hashCode,
+            child: Padding(
+              padding: EdgeInsets.only(left: 300, top: 150, right: 40),
+              child: Ink(
+                decoration: const ShapeDecoration(
+                  color: Colors.red,
+                  shape: CircleBorder(),
+                ),
+                child: FloatingActionButton(
+                  onPressed: () {
+                    // Add your onPressed code here!
+                  },
+                  backgroundColor: Colors.green,
+                  child: Image.network(
+                    //late problem sort it
+                    'http://openweathermap.org/img/w/$weatherIcon.png',
+                  ),
+                ),
+              ),
+            )));
   }
 }
 
