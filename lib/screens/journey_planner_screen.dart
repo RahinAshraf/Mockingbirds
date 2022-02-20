@@ -8,12 +8,8 @@ import '../.env.dart';
 import '../widget/panel_widget.dart';
 import 'map_screen.dart';
 
-//Skeleton code for journey planner screen
-
 class JourneyPlanner extends StatefulWidget {
-
-   JourneyPlanner({Key? key}) : super(key: key);
-
+  JourneyPlanner({Key? key}) : super(key: key);
 
   @override
   _JourneyPlanner createState() => _JourneyPlanner();
@@ -25,7 +21,8 @@ class _JourneyPlanner extends State<JourneyPlanner> {
   late MapboxMapController controller;
   final panelController = PanelController();
   final standAloneSearchController = TextEditingController();
-  final StreamController<List<DynamicWidget>> dynamicWidgets = StreamController.broadcast();
+  final StreamController<List<DynamicWidget>> dynamicWidgets =
+      StreamController.broadcast();
 
   List<DynamicWidget> dynamicWidgetList = [];
   List<List<double?>> cordsList = [];
@@ -40,7 +37,6 @@ class _JourneyPlanner extends State<JourneyPlanner> {
     this.controller = controller;
   }
 
-
   @override
   Widget build(BuildContext context) {
     final panelHeightClosed = MediaQuery.of(context).size.height * 0.1;
@@ -48,6 +44,7 @@ class _JourneyPlanner extends State<JourneyPlanner> {
 
     return Scaffold(
       body: SlidingUpPanel(
+        padding: const EdgeInsets.only(left: 10, right: 10),
         minHeight: panelHeightClosed,
         maxHeight: panelHeightOpen,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
@@ -76,12 +73,11 @@ class _JourneyPlanner extends State<JourneyPlanner> {
           controller: controller,
           listDynamic: dynamicWidgetList,
           textEditingController: standAloneSearchController,
-          dynamicWidgets:dynamicWidgets,
-          panelController: panelController, selectedCords: cordsList,
+          dynamicWidgets: dynamicWidgets,
+          panelController: panelController,
+          selectedCords: cordsList,
         ),
       ),
     );
   }
 }
-
-
