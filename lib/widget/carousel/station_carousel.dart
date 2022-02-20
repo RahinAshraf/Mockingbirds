@@ -1,7 +1,7 @@
 import 'docking_station_card.dart';
 import 'package:flutter/material.dart';
 import 'package:veloplan/models/docking_station.dart';
-import 'package:veloplan/providers/docking_station_manager.dart';
+import 'package:veloplan/utilities/docking_station_manager.dart';
 import 'custom_carousel.dart';
 
 ///Class that loads information of docking stations into cards and builds a carousel
@@ -13,11 +13,9 @@ class dockingStationCarousel {
     retrieveAllCards();
   }
 
-  Future<List<Widget>> retrieveAllCards() {
+  List<Widget> retrieveAllCards() {
     final dockingStationManager _stationManager = dockingStationManager();
-    var list = _stationManager
-        .importStations()
-        .then((value) => createDockingCards(_stationManager.stations));
+    var list =  createDockingCards(_stationManager.stations));
     return list;
   }
 

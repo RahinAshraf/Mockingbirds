@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:veloplan/models/docking_station.dart';
-import 'package:veloplan/providers/docking_station_manager.dart';
+import 'package:veloplan/utilities/docking_station_manager.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import '../.env.dart';
@@ -44,9 +44,7 @@ class MyHomePageState extends State<MapPage> {
 
   void fetchDockingStations() {
     final dockingStationManager _stationManager = dockingStationManager();
-    _stationManager
-        .importStations()
-        .then((value) => placeDockMarkers(_stationManager.stations));
+    placeDockMarkers(_stationManager.stations);
   }
 
   void placeDockMarkers(List<DockingStation> docks) {
