@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
@@ -9,7 +11,9 @@ import 'map_screen.dart';
 //Skeleton code for journey planner screen
 
 class JourneyPlanner extends StatefulWidget {
-  const JourneyPlanner({Key? key}) : super(key: key);
+
+   JourneyPlanner({Key? key}) : super(key: key);
+
 
   @override
   _JourneyPlanner createState() => _JourneyPlanner();
@@ -20,6 +24,11 @@ class _JourneyPlanner extends State<JourneyPlanner> {
   late CameraPosition _initialCameraPosition;
   late MapboxMapController controller;
   final panelController = PanelController();
+  final standAloneSearchController = TextEditingController();
+  final StreamController<List<DynamicWidget>> dynamicWidgets = StreamController.broadcast();
+
+  List<DynamicWidget> dynamicWidgetList = [];
+  List<List<double?>> cordsList = [];
 
   @override
   void initState() {
@@ -65,7 +74,10 @@ class _JourneyPlanner extends State<JourneyPlanner> {
         ),
         panelBuilder: (controller) => PanelWidget(
           controller: controller,
-          panelController: panelController,
+          listDynamic: dynamicWidgetList,
+          textEditingController: standAloneSearchController,
+          dynamicWidgets:dynamicWidgets,
+          panelController: panelController, selectedCords: cordsList,
         ),
       ),
     );

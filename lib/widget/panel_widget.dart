@@ -10,9 +10,17 @@ import '../screens/location_service.dart';
 class PanelWidget extends StatefulWidget{
   final ScrollController controller;
   final PanelController panelController;
+  final   StreamController<List<DynamicWidget>> dynamicWidgets;
+  final List<DynamicWidget> listDynamic;
+  final List<List<double?>?> selectedCords;
+  final TextEditingController textEditingController;
 
   const PanelWidget({
       required this.controller,
+    required this.dynamicWidgets,
+    required this.listDynamic,
+    required this.selectedCords,
+    required this.textEditingController,
       required this.panelController, Key? key}): super(key: key);
 
   @override
@@ -24,19 +32,75 @@ class PanelWidget extends StatefulWidget{
 
 class PanelWidgetState extends State<PanelWidget>{
 
-  final StreamController<DynamicWidget> dynamicWidgets = StreamController.broadcast();
-  Stream<DynamicWidget> get  dynamicWidgetsStream  => dynamicWidgets.stream;
-  //List<DynamicWidget> listDynamic = [];
-
+  Stream<List<DynamicWidget>> get  dynamicWidgetsStream  => widget.dynamicWidgets.stream;
 
   addDynamic() {
-   // listDynamic.add(DynamicWidget(TextEditingController()));
-    dynamicWidgets.sink.add(DynamicWidget());
+   widget. listDynamic.add(DynamicWidget(selectedCords: widget.selectedCords,));
+    widget.dynamicWidgets.sink.add(widget.listDynamic);
+  }
+
+
+  Widget _buildStatic(){
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Row(
+        children: [
+          const Text("From: ",  style: TextStyle(fontWeight: FontWeight.normal, fontSize: 20, )),
+          const SizedBox(width: 20),
+          Expanded(
+            child: SizedBox(
+              height: 50,
+              child: TextField(
+                controller: widget.textEditingController,
+                enabled: false,
+                decoration: InputDecoration(
+                  hintText: 'Search',
+                  focusedBorder:OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.black, width: 2.0),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: const BorderSide(color: Colors.black, width: 1.0),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: const BorderSide(color: Colors.black, width: 1.0),
+                  ),
+                  disabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: const BorderSide(color: Colors.black, width: 1.0),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: const BorderSide(color: Colors.black, width: 1.0),
+                  ),
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: const BorderSide(color: Colors.black, width: 1.0),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          //SizedBox(width: 10),
+          TextButton(
+            onPressed: () {
+              _handleSearchClick(context);
+              print("Take me to the place search screen");
+            },
+            child:const Icon(Icons.keyboard_arrow_right_rounded, size: 50, color: Colors.green,),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context){
-    List<DynamicWidget> listOfDynamics = [];
+
+    //widget. listDynamic.add(DynamicWidget(selectedCords: widget.selectedCords,));
+
     return ListView(
       controller: widget.controller,
       padding: EdgeInsets.zero,
@@ -47,64 +111,11 @@ class PanelWidgetState extends State<PanelWidget>{
         const Center(
           child: Text("Explore London", style: TextStyle(fontWeight: FontWeight.normal, fontSize: 35),),
         ),
-        Padding(
-          padding: const EdgeInsets.all(20),
-          child: Row(
-            children: [
-              const Text("From: ",  style: TextStyle(fontWeight: FontWeight.normal, fontSize: 20, )),
-              const SizedBox(width: 20),
-              Expanded(
-                child: SizedBox(
-                  height: 50,
-                  child: TextField(
-                    enabled: false,
-                    decoration: InputDecoration(
-                      hintText: 'Search',
-                      focusedBorder:OutlineInputBorder(
-                        borderSide: const BorderSide(color: Colors.black, width: 2.0),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide: const BorderSide(color: Colors.black, width: 1.0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide: const BorderSide(color: Colors.black, width: 1.0),
-                      ),
-                      disabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide: const BorderSide(color: Colors.black, width: 1.0),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide: const BorderSide(color: Colors.black, width: 1.0),
-                      ),
-                      focusedErrorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide: const BorderSide(color: Colors.black, width: 1.0),
-                      ),
-                    ),
-
-                  ),
-                ),
-              ),
-              //SizedBox(width: 10),
-              TextButton(
-                onPressed: () {
-                  print("Take me to the place search screen");
-                },
-                child:const Icon(Icons.keyboard_arrow_right_rounded, size: 50, color: Colors.green,),
-              ),
-            ],
-          ),
-        ),
+        _buildStatic(),
         Column(
           children: [
-            StreamBuilder<DynamicWidget>(builder: (_, snapshot){
-              if(snapshot.data != null){
-                listOfDynamics.add(snapshot.requireData);
-              }
+            StreamBuilder<List<DynamicWidget>>(builder: (_, snapshot){
+              List<DynamicWidget> listOfDynamics = snapshot.data ?? [];
 
               print("DynamicWidget => ${listOfDynamics.length}");
               return ListView.builder(
@@ -131,7 +142,7 @@ class PanelWidgetState extends State<PanelWidget>{
               primary: Colors.white,
             ),
             onPressed: () {
-              print("START");
+              print("ALL_COORDINATES => ${widget.selectedCords}");
             },
             child: const Text("START", style: TextStyle(fontWeight: FontWeight.normal, fontSize: 20),),
           ),
@@ -140,6 +151,19 @@ class PanelWidgetState extends State<PanelWidget>{
 
       ],
     );
+  }
+
+  void _handleSearchClick(BuildContext context) async{
+    final result = await Navigator.of(context).push(MaterialPageRoute(builder:
+        (settings) => PlaceSearchScreen(LocationService())));
+    final feature = result as Feature?;
+    if(feature != null){
+      widget.textEditingController.text = feature.placeName ?? "N/A";
+      widget.selectedCords.add(feature.geometry?.coordinates);
+
+      print("MapOfList => ${feature.geometry?.coordinates}");
+    }
+    print("RESULT => $result");
   }
 
   Widget buildDragHandle() => GestureDetector(
@@ -160,8 +184,10 @@ class PanelWidgetState extends State<PanelWidget>{
 }
 
 class DynamicWidget extends StatelessWidget {
-    //late TextEditingController textController = TextEditingController();
-    DynamicWidget({Key? key}) : super(key: key);
+    late TextEditingController textController = TextEditingController();
+    List<List<double?>?>? selectedCords;
+    DynamicWidget({Key? key, required this.selectedCords}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
@@ -171,25 +197,35 @@ class DynamicWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const  Expanded(child:  TextField(
+            Expanded(child:  TextField(
             enabled: true,
-            //controller: textController,
-            decoration: InputDecoration(
+            controller: textController,
+            decoration: const InputDecoration(
               hintText: 'Search',
             ),
           )),
           Expanded(child: IconButton(
-            onPressed: () async{
-              final result = await Navigator.of(context).push(MaterialPageRoute(builder:
-                  (settings) => PlaceSearchScreen(LocationService())));
-             // textController.text = result.toString();
-              print("RESULT => $result");
+            onPressed: () {
+              _handleSearchClick(context);
             },
             icon: const Icon(Icons.keyboard_arrow_right_rounded),
           )),
         ],
       ),
     );
+  }
+
+  void _handleSearchClick(BuildContext context) async{
+    final result = await Navigator.of(context).push(MaterialPageRoute(builder:
+        (settings) => PlaceSearchScreen(LocationService())));
+    final feature = result as Feature?;
+    if(feature != null){
+      textController.text = feature.placeName ?? "N/A";
+      selectedCords?.add(feature.geometry?.coordinates);
+
+      print("MapOfList => ${feature.geometry?.coordinates}");
+    }
+    print("RESULT => $result");
   }
 }
 

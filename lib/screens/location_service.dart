@@ -50,19 +50,40 @@ class PlaceModel {
 class Feature {
   String? placeName;
   String? matchingPlaceName;
+  Geometry? geometry;
+
 
   Feature.fromJson(Map<String, dynamic> json){
     matchingPlaceName = json['matching_place_name'];
     placeName = json['place_name'];
+    geometry = Geometry.fromJson(json['geometry']);
   }
 
   Map<String, dynamic> toJson(){
     final Map<String, dynamic> json = {};
     json['matching_place_name'] = matchingPlaceName;
     json['place_name'] = placeName;
+    json['geometry'] = geometry;
     return json;
   }
 }
+
+class Geometry{
+  List<double?> coordinates = [];
+
+  Geometry.fromJson(Map<String, dynamic> json){
+    if(json['coordinates'] != null){
+      coordinates = List.from(json['coordinates']).map((e) => double.tryParse(e.toString())).toList();
+    }
+  }
+
+  Map<String, dynamic> toJson(){
+    final Map<String, dynamic> json ={};
+    json['coordinates'] = coordinates;
+    return json;
+  }
+}
+
 
 
 /*
