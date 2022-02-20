@@ -109,27 +109,18 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: ListView(children: <Widget>[
-      Container(
-          height: 170.0,
-          width: 170.0,
-          alignment: Alignment.topRight,
-          child: Image.asset('assets/images/right_bubbles_shapes.png')),
-      Container(
-          height: 120.0,
-          width: 120.0,
-          child: Center(child: Image.asset('assets/images/woman_cycling.png'))),
-      Container(
-          alignment: Alignment.center,
-          padding: const EdgeInsets.all(10),
-          child: const Text(
-            'Welcome back!',
-            style: TextStyle(
-                color: Colors.black, fontWeight: FontWeight.w500, fontSize: 25),
-          )),
+        body: Stack(children: <Widget>[
       AuthForm(
         _submitAuthForm,
         _isLoading,
+      ),
+      Align(
+        alignment: Alignment.topRight,
+        child: Container(
+            height: 170.0,
+            width: 170.0,
+            alignment: Alignment.topRight,
+            child: Image.asset('assets/images/right_bubbles_shapes.png')),
       ),
     ]));
   }
