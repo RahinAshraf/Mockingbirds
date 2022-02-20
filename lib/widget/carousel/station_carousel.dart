@@ -15,7 +15,7 @@ class dockingStationCarousel {
 
   List<Widget> retrieveAllCards() {
     final dockingStationManager _stationManager = dockingStationManager();
-    var list =  createDockingCards(_stationManager.stations));
+    var list = createDockingCards(_stationManager.stations);
     return list;
   }
 
@@ -45,28 +45,35 @@ class dockingStationCarousel {
     return dockingStationCards;
   }
 
-  FutureBuilder<List<Widget>> buildCarousel() {
-    return FutureBuilder<List<Widget>>(
-        future: retrieveAllCards(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Stack(
-              children: [
-                Container(
-                  height: 200,
-                  width: MediaQuery.of(context).size.width,
-                  child: CustomCarousel(cards: dockingStationCards),
-                )
-              ],
-            );
-          } else {
-            return SizedBox(
-              height: MediaQuery.of(context).size.height / 1.3,
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
-          }
-        });
+  // FutureBuilder<List<Widget>> buildCarousel() {
+  //   return FutureBuilder<List<Widget>>(
+  //       future: retrieveAllCards(),
+  //       builder: (context, snapshot) {
+  //         if (snapshot.hasData) {
+  //           return Stack(
+  //             children: [
+  //               Container(
+  //                 height: 200,
+  //                 width: MediaQuery.of(context).size.width,
+  //                 child: CustomCarousel(cards: dockingStationCards),
+  //               )
+  //             ],
+  //           );
+  //         } else {
+  //           return SizedBox(
+  //             height: MediaQuery.of(context).size.height / 1.3,
+  //             child: Center(
+  //               child: CircularProgressIndicator(),
+  //             ),
+  //           );
+  //         }
+  //       });
+  // }
+
+  Container buildCarousel(context) {
+    return Container(
+        height: 200,
+        width: MediaQuery.of(context).size.width,
+        child: CustomCarousel(cards: dockingStationCards));
   }
 }

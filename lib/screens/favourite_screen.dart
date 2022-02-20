@@ -17,7 +17,7 @@ class _FavouriteState extends State<Favourite> {
   @override
   Widget build(BuildContext build) {
     return Scaffold(
-      body: _dockingStationCarousel.buildCarousel(),
+      body: _dockingStationCarousel.buildCarousel(build),
       appBar: AppBar(
         title: const Text('My favourites'),
       ),
