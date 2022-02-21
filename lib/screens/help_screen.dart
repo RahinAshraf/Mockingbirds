@@ -86,25 +86,6 @@ class _HelpPageState extends State<HelpPage> {
   }
 }
 
-//   AppBar buildAppBar() {
-//     return AppBar(
-//       title: Row(
-//         children: [
-//           CircleAvatar(
-//             backgroundImage: NetworkImage(
-//                 'https://cdn.vox-cdn.com/thumbor/qCfHPH_9Mw78vivDlVDMu7xYc78=/715x248:1689x721/920x613/filters:focal(972x299:1278x605):format(webp)/cdn.vox-cdn.com/uploads/chorus_image/image/69305239/shrek4_disneyscreencaps.com_675.0.jpg'),
-//           ),
-//           SizedBox(width: 30),
-//           Column(
-//             crossAxisAlignment: CrossAxisAlignment.start,
-//             children: [Text("HelpBot")],
-//           )
-//         ],
-//       ),
-//     );
-//   }
-// }
-
 class MessageBubble extends StatelessWidget {
   MessageBubble(
       {required this.text, required this.sender, required this.isSentByBot});
@@ -154,3 +135,22 @@ class MessageBubble extends StatelessWidget {
     );
   }
 }
+
+//   AppBar buildAppBar() {
+//     return AppBar(
+//       title: Row(
+//         children: [
+//           CircleAvatar(
+//             backgroundImage: NetworkImage(
+//                 'https://cdn.vox-cdn.com/thumbor/qCfHPH_9Mw78vivDlVDMu7xYc78=/715x248:1689x721/920x613/filters:focal(972x299:1278x605):format(webp)/cdn.vox-cdn.com/uploads/chorus_image/image/69305239/shrek4_disneyscreencaps.com_675.0.jpg'),
+//           ),
+//           SizedBox(width: 30),
+//           Column(
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             children: [Text("HelpBot")],
+//           )
+//         ],
+//       ),
+//     );
+//   }
+// }
