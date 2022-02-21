@@ -11,19 +11,19 @@ class HelpBotManager {
   ];
 
   List<String> getAllQuestions() {
-    List<String> newlist = [];
+    List<String> allQuestions = [];
     for (Message message in _questionBank) {
-      newlist.add(message.questionText);
+      allQuestions.add(message.questionText);
     }
-    return newlist;
+    return allQuestions;
   }
 
   List<String> getAllTopics() {
-    List<String> newlist = [];
+    List<String> allTopics = [];
     for (Message message in _questionBank) {
-      newlist.add(message.topic);
+      allTopics.add(message.topic);
     }
-    return newlist;
+    return allTopics;
   }
 
   String getQuestionText(String topic) {
