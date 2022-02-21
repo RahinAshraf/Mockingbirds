@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mapbox_navigation/library.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
-import 'package:veloplan/screens/map_screen_old.dart';
+import 'package:veloplan/screens/map_screen.dart';
 // import 'package:mapbox_turn_by_turn/helpers/shared_prefs.dart';
 // import 'package:mapbox_turn_by_turn/ui/rate_ride.dart';
 
@@ -46,7 +46,7 @@ class _TurnByTurnState extends State<TurnByTurn> {
         zoom: 18.0,
         voiceInstructionsEnabled: true,
         bannerInstructionsEnabled: true,
-        mode: MapBoxNavigationMode.drivingWithTraffic,
+        mode: MapBoxNavigationMode.cycling,
         isOptimized: true,
         units: VoiceUnits.metric,
         simulateRoute: true,
