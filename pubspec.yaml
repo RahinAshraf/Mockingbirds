@@ -39,18 +39,16 @@ dependencies:
   flutter_google_places: ^0.3.0
   flutter_map: ^0.14.0
   latlong2: ^0.8.1
-  geolocator: ^8.1.1 
-
-
-
-
+  geolocator: ^8.1.1
+  provider: ^3.0.0
+  shared_preferences: ^2.0.13
+  mapbox_gl: ^0.15.0
 
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   flutter_polyline_points: ^1.0.0
-  mapbox_gl: ^0.15.0
   dio: ^4.0.4
   flutter_dotenv: ^5.0.2
 

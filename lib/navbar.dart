@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:veloplan/screens/location_service.dart';
+import 'package:veloplan/screens/place_search_screen.dart';
 import 'screens/map_screen.dart';
 import 'screens/profile_screen.dart';
 import '../widget/navigation_drawer_widget.dart';
@@ -45,10 +47,12 @@ class _MainPageState extends State<MainPage> {
         height: 80.0,
         width: 80.0,
         child: FloatingActionButton(
+          heroTag: "btn2",
           onPressed: () {
             onTabTapped(1);
+            print("Link journey_planner screen to this btn");
           },
-          child: Icon(
+          child: const Icon(
             Icons.directions_bike,
             color: Colors.green,
             size: 50,
@@ -60,8 +64,8 @@ class _MainPageState extends State<MainPage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 
       bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType
-              .fixed, //looks past the backround colors specified
+          type: BottomNavigationBarType.fixed,
+          //looks past the backround colors specified
           backgroundColor: Colors.green[200],
           selectedItemColor: Colors.black,
           unselectedItemColor: Colors.grey[10],
@@ -70,7 +74,8 @@ class _MainPageState extends State<MainPage> {
           showSelectedLabels: true,
           showUnselectedLabels: true,
           currentIndex: currentIndex,
-          onTap: onTabTapped, //(index) => setState(() => currentIndex = index),
+          onTap: onTabTapped,
+          //(index) => setState(() => currentIndex = index),
 
           items: const [
             BottomNavigationBarItem(

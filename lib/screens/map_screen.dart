@@ -9,8 +9,16 @@ import '../screens/login_screen.dart';
 import '../navbar.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import '../helpers/navigation_helpers.dart';
+import 'package:veloplan/helpers/shared_prefs.dart';
+import 'package:veloplan/screens/place_search_screen.dart';
+import '../.env.dart';
+import 'package:veloplan/screens/location_service.dart';
+
+const double zoom = 16;
 
 class MapPage extends StatefulWidget {
+  const MapPage({Key? key}) : super(key: key);
+
   @override
   MyHomePageState createState() => MyHomePageState();
 }
@@ -44,11 +52,16 @@ class MyHomePageState extends State<MapPage> {
   LatLng currentLatLng = const LatLng(51.51185004458236, -0.11580820118980878);
 
   String totalDistance = 'No route';
+  LatLng latLng = getLatLngFromSharedPrefs();
+  // late CameraPosition _initialCameraPosition;
+
+  TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _cameraPosition = CameraPosition(target: currentLatLng, zoom: 12);
+    // _initialCameraPosition = CameraPosition(target: latLng, zoom: zoom);
     getRouteResponse();
     // fetchDockingStations();
   }
@@ -88,6 +101,7 @@ class MyHomePageState extends State<MapPage> {
   //     }
   //   });
   // }
+
   _onMapCreated(MapboxMapController controller) async {
     this.controller = controller;
   }
