@@ -44,9 +44,11 @@ double getRadius(List<LatLng> points, LatLng center) {
   for (LatLng point in points) {
     double dist = calculateDistance(center, point);
     if (dist > max) {
+      print(point);
       max = dist;
     }
   }
+  print(max);
   return max;
 }
 

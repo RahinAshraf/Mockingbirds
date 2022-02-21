@@ -35,7 +35,8 @@ class MyHomePageState extends State<MapPage> {
     LatLng(51.514951, -0.112762),
     LatLng(51.513146, -0.115256),
     LatLng(51.511407, -0.125497),
-    LatLng(51.506053, -0.130310)
+    LatLng(51.506053, -0.130310),
+    LatLng(51.502254, -0.217760),
   ];
 
   late MapboxMapController controller;
@@ -180,7 +181,7 @@ class MyHomePageState extends State<MapPage> {
   void refocusCamera(List<LatLng> journey) {
     LatLng center = getCentroid(journey);
     _cameraPosition = CameraPosition(
-        target: center, zoom: getZoom(getRadius(journey, center)));
+        target: center, zoom: getZoom(getRadius(journey, center)), tilt: 5);
     controller.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
   }
 
