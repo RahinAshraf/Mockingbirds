@@ -5,6 +5,7 @@ import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:veloplan/providers/route_manager.dart';
+import 'package:veloplan/screens/turn_by_turn_screen.dart';
 import '../screens/login_screen.dart';
 import '../navbar.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
@@ -148,6 +149,15 @@ class MyHomePageState extends State<MapPage> {
                 isRouteDisplayed = false;
               }
             },
+          ),
+        ),
+        Container(
+          alignment: Alignment(-0.9, -0.5),
+          child: FloatingActionButton(
+            heroTag: "btn3",
+            child: Icon(Icons.start, color: Colors.white),
+            onPressed: () => Navigator.push(
+                context, MaterialPageRoute(builder: (_) => const TurnByTurn())),
           ),
         ),
         // Padding(
