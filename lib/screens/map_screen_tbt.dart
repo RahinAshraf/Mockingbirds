@@ -1,14 +1,10 @@
 import 'dart:collection';
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-
 import '../screens/login_screen.dart';
 import '../navbar.dart';
-
 import 'package:mapbox_gl/mapbox_gl.dart';
-
 import 'dart:convert';
 import 'package:location/location.dart';
 import '../main.dart';
@@ -28,13 +24,9 @@ class MyHomePageState extends State<MapPageTBT> {
   @override
   //Mapbox related:
   //LatLng latLng = getLatLngFromSharedPrefs();
-
   LatLng currentLatLng = LatLng(51.51185004458236, -0.11580820118980878);
-
   int currentDestination = 2; //tower bridge
-
   late CameraPosition _initialCameraPosition;
-
   late MapboxMapController controller;
 
   //mapBoxNavigationViewController; //-- NEED NAVIGATION SDK
@@ -44,14 +36,13 @@ class MyHomePageState extends State<MapPageTBT> {
   late Map _geometry;
 
   //carousel related:
-  int pageIndex = 0;
-  bool accessed = false;
-  late List<Widget> carouselItems;
+  // int pageIndex = 0;
+  // bool accessed = false;
+  // late List<Widget> carouselItems;
 
   @override
   void initState() {
     super.initState();
-    // _initialCameraPosition = CameraPosition(target: latLng, zoom: 15);
     _initialCameraPosition = CameraPosition(target: currentLatLng, zoom: 15);
 
     _LocationsList = (List<CameraPosition>.generate(
@@ -64,9 +55,8 @@ class MyHomePageState extends State<MapPageTBT> {
   }
 
   //ROUTE:    //from restaurantsmap:
-  _addSourceAndLineLayer(int index, bool removeLayer) async {
+  _addSourceAndLineLayer(bool removeLayer) async {
     // Can animate camera to focus on the item
-    // print(index);
     controller.animateCamera(
         CameraUpdate.newCameraPosition(_LocationsList[currentDestination]));
 
@@ -74,9 +64,7 @@ class MyHomePageState extends State<MapPageTBT> {
     Map routeResponse =
         await getDirectionsAPIResponse(currentLatLng, currentDestination);
 
-    //print(modifiedResponse);
     _geometry = routeResponse['geometry'];
-    // route.add(geometry);
 
     final _fills = {
       //holds the geometries for the polylines -> used to render
@@ -117,10 +105,8 @@ class MyHomePageState extends State<MapPageTBT> {
   }
 
   _onStyleLoadedCallback() async {
-    //ADDS MARKERS----- doesnt work ???
+    //ADDS MARKERS----- doesn't work
     for (CameraPosition _location in _LocationsList) {
-      // print("here");
-      // print(_location.target);
       await controller.addSymbol(
         SymbolOptions(
           geometry: _location.target,
@@ -130,7 +116,7 @@ class MyHomePageState extends State<MapPageTBT> {
         ),
       );
     }
-    _addSourceAndLineLayer(1, false);
+    _addSourceAndLineLayer(false);
   }
 
 //USING MAPBOXMAP----
@@ -154,12 +140,11 @@ class MyHomePageState extends State<MapPageTBT> {
           Align(
             alignment: Alignment(-0.7, -0.6),
             child: ElevatedButton(
-              // heroTag: "RouteBtn",
               onPressed: () {
                 setState(() {
-                  pageIndex = 2;
+                  //pageIndex = 2;
                 });
-                _addSourceAndLineLayer(pageIndex, true);
+                _addSourceAndLineLayer(true);
               },
               child: const Text('show!'),
             ),

@@ -1,17 +1,9 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-// import '../screens/nav_screen_tbt.dart';
 import '../screens/login_screen.dart';
 import '../navbar.dart';
-// import 'package:flutter_map/flutter_map.dart';
-//import 'package:latlong2/latlong.dart' as latLng;
-//import '../.env.dart';
-
-// import 'package:latlong2/latlong.dart' ;
 import 'package:mapbox_gl/mapbox_gl.dart';
-//import 'package:veloplan/screens/profile_screen.dart';
 import 'dart:convert';
 import 'package:location/location.dart';
 import '../main.dart';
@@ -19,7 +11,6 @@ import '../constants/locations_placeholder.dart';
 import '../helpers/location_helper.dart';
 import '../helpers/directions_handler.dart';
 import '../screens/profile_screen.dart';
-//import '../helpers/shared_prefs.dart';
 
 class NavPageTBT extends StatefulWidget {
   final CameraPosition initialCameraPosition;
@@ -41,13 +32,12 @@ class MyHomePageState extends State<NavPageTBT> {
   @override
   LatLng currentLatLng = LatLng(51.51185004458236, -0.11580820118980878);
   int currentDestination = 2; //tower bridge
-  // late CameraPosition _initialCameraPosition;
 
   late MapboxMapController controller;
 
   //carousel related:
-  int pageIndex = 0;
-  bool accessed = false;
+  // int pageIndex = 0;
+  // bool accessed = false;
 
   @override
   void initState() {
@@ -63,7 +53,6 @@ class MyHomePageState extends State<NavPageTBT> {
     // Add a polyLine between source and destination
     // Map routeResponse =
     //     await getDirectionsAPIResponse(currentLatLng, currentDestination);
-
     // Map geometry = routeResponse['geometry'];
 
     final _fills = {
@@ -74,7 +63,7 @@ class MyHomePageState extends State<NavPageTBT> {
           "type": "Feature",
           "id": 0,
           "properties": <String, dynamic>{},
-          "geometry": widget.geometry,
+          "geometry": widget.geometry, //GEOMETRY PASSED IN (FROM PREV PAGE)
         },
       ],
     };
