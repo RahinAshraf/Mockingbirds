@@ -12,7 +12,9 @@ Widget dockingStationCard(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          FavoriteButton(valueChanged: (_isFavorite) {}),
+          FavoriteButton(valueChanged: (_isFavorite) {
+            handleLikedCard();
+          }),
           const SizedBox(width: 10),
           Expanded(
             child: Column(
@@ -28,4 +30,8 @@ Widget dockingStationCard(
       ),
     ),
   );
+}
+
+void handleLikedCard() {
+  print("tapped");
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:veloplan/widget/carousel/station_carousel.dart';
+import 'package:veloplan/widgets/carousel/station_carousel.dart';
 
 class Favourite extends StatefulWidget {
   _FavouriteState createState() => _FavouriteState();

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../screens/schedule_screen.dart';
-import '../screens/favourite_screen.dart';
-import '../screens/setting_screen.dart';
+import 'screens/schedule_screen.dart';
+import 'screens/favourite_screen.dart';
+import 'screens/setting_screen.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
   final padding = EdgeInsets.symmetric(horizontal: 20);

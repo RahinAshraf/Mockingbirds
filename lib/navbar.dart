@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'screens/map_screen.dart';
 import 'screens/profile_screen.dart';
-import '../widget/navigation_drawer_widget.dart';
+import 'sidebar.dart';
 
 class Navbar extends StatelessWidget {
   //We need to override the Build method because StatelessWidget has a build method
