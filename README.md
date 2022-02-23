@@ -6,11 +6,11 @@
 - *Rahin Ashraf - k20034059*
 - *Marija Buivyte - k20082541*
 - *Fariha Choudhury - k20059723*
-- *Elisabeth Halvorsen*
+- *Elisabeth Halvorsen - k20077737*
 - *Nicole Lehchevska - k20041914*
 - *Eduard Ragea - k20067643*
-- *Hristina-Andreea Sararu*
-- *Lilianna Szabo*
+- *Hristina-Andreea Sararu - k20036771*
+- *Lilianna Szabo - k20070238*
 - *Tayyibah Uddin - k20059556*
 
 
