@@ -157,7 +157,7 @@ class MyHomePageState extends State<MapPage> {
             heroTag: "btn3",
             child: Icon(Icons.start, color: Colors.white),
             onPressed: () => Navigator.push(
-                context, MaterialPageRoute(builder: (_) => const TurnByTurn())),
+                context, MaterialPageRoute(builder: (_) => TurnByTurn(points))),
           ),
         ),
         // Padding(
@@ -247,12 +247,25 @@ class MyHomePageState extends State<MapPage> {
   }
 }
 
-// TODO: Getter for total time functionality
 
-// TODO: Getter for total distance
+// TODO: Turn by turn directions
+// TODO: Error box when no internet -> check when future is called
+// TODO: Future to the map
+// TODO: Dispay markers again 
+// TODO: Fix camera zoom
+// TODO: wheather button
+// TODO: get the time
+// TODO: show all markers
+// TODO: show markers for list of points
+// TODO: Update path when button pressed
 
-// TODO: Display total time and distance in padding
 
-// TODO: Code review
 
-// TODO: when user doesn't have internet don't error message + cancle quries
+// TODO: convert LatLng to Waypoint
+// TODO: modify build to add weather
+// TODO: stop auto navigation
+
+// TODO: Duration and distance
+
+// TODO: Markers
+// TODO: Camera zoom

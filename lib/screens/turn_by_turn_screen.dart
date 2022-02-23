@@ -2,22 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mapbox_navigation/library.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/screens/map_screen.dart';
+import 'package:veloplan/helpers/latlng_to_waypoint.dart';
 // import 'package:mapbox_turn_by_turn/helpers/shared_prefs.dart';
 // import 'package:mapbox_turn_by_turn/ui/rate_ride.dart';
 
 class TurnByTurn extends StatefulWidget {
-  const TurnByTurn({Key? key}) : super(key: key);
-
+  late List<LatLng> points;
+  TurnByTurn(List<LatLng> points) {
+    this.points = points;
+  }
+  // const TurnByTurn({Key? key}) : super(key: key);
   @override
-  State<TurnByTurn> createState() => _TurnByTurnState();
+  State<TurnByTurn> createState() => _TurnByTurnState(points);
 }
 
 class _TurnByTurnState extends State<TurnByTurn> {
-  // Waypoints to mark trip start and end
-  LatLng source = LatLng(51.502254, -0.217760);
-  LatLng destination = LatLng(51.506053, -0.130310);
-
-  late WayPoint sourceWaypoint, destinationWaypoint;
+  late List<LatLng> points;
+  _TurnByTurnState(List<LatLng> points) {
+    this.points = points;
+    wayPoints = latLngs2WayPoints(points);
+  }
   var wayPoints = <WayPoint>[];
 
   // Config variables for Mapbox Navigation
@@ -25,7 +29,7 @@ class _TurnByTurnState extends State<TurnByTurn> {
   late MapBoxOptions _options;
   late double distanceRemaining, durationRemaining;
   late MapBoxNavigationViewController _controller;
-  final bool isMultipleStop = false;
+  final bool isMultipleStop = true;
   String instruction = "";
   bool arrived = false;
   bool routeBuilt = false;
@@ -49,18 +53,8 @@ class _TurnByTurnState extends State<TurnByTurn> {
         mode: MapBoxNavigationMode.cycling,
         isOptimized: true,
         units: VoiceUnits.metric,
-        simulateRoute: true,
+        simulateRoute: false,
         language: "en");
-
-    // Configure waypoints
-    sourceWaypoint = WayPoint(
-        name: "Source", latitude: source.latitude, longitude: source.longitude);
-    destinationWaypoint = WayPoint(
-        name: "Destination",
-        latitude: destination.latitude,
-        longitude: destination.longitude);
-    wayPoints.add(sourceWaypoint);
-    wayPoints.add(destinationWaypoint);
 
     // Start the trip
     await directions.startNavigation(wayPoints: wayPoints, options: _options);
