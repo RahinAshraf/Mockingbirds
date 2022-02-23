@@ -3,15 +3,13 @@ import 'package:flutter_mapbox_navigation/library.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/screens/map_screen.dart';
 import 'package:veloplan/helpers/latlng_to_waypoint.dart';
-// import 'package:mapbox_turn_by_turn/helpers/shared_prefs.dart';
-// import 'package:mapbox_turn_by_turn/ui/rate_ride.dart';
 
+//Reference: dormmom.com, Jul 20, 2021, flutter_mapbox_navigation 0.0.26, https://pub.dev/packages/flutter_mapbox_navigation
 class TurnByTurn extends StatefulWidget {
   late List<LatLng> points;
   TurnByTurn(List<LatLng> points) {
     this.points = points;
   }
-  // const TurnByTurn({Key? key}) : super(key: key);
   @override
   State<TurnByTurn> createState() => _TurnByTurnState(points);
 }
@@ -54,6 +52,7 @@ class _TurnByTurnState extends State<TurnByTurn> {
         isOptimized: true,
         units: VoiceUnits.metric,
         simulateRoute: false,
+        // padding: EdgeInsets(arrived:),
         language: "en");
 
     // Start the trip

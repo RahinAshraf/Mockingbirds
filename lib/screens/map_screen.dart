@@ -261,7 +261,6 @@ class MyHomePageState extends State<MapPage> {
 
 
 
-// TODO: convert LatLng to Waypoint
 // TODO: modify build to add weather
 // TODO: stop auto navigation
 
