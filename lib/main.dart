@@ -20,7 +20,7 @@ void main() async {
   initializeLocation(); //Upon opening the app, store the users current location
   runApp(MaterialApp(
     initialRoute: '/',
-    routes: {'/': (context) => Login(), '/map': (context) => Navbar()},
+    routes: {'/': (context) => const MyApp(), '/map': (context) => Navbar()},
   ));
 }
 
