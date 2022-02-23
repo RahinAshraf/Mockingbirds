@@ -52,6 +52,7 @@ dependencies:
   favorite_button: ^0.0.4
   carousel_slider: ^4.0.0
   smooth_page_indicator: ^1.0.0+2
+  flutterfire_ui: ^0.3.4
 
 
 

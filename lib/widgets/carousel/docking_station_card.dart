@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:favorite_button/favorite_button.dart';
+import '/models/favourite.dart';
+import '/services/favourite_service.dart';
 
 ///Creates a card for a docking station, to include its name, number of bikes and empty bikes.
 
@@ -13,7 +15,7 @@ Widget dockingStationCard(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           FavoriteButton(valueChanged: (_isFavorite) {
-            handleLikedCard();
+            handleLikedCard(name);
           }),
           const SizedBox(width: 10),
           Expanded(
@@ -32,6 +34,6 @@ Widget dockingStationCard(
   );
 }
 
-void handleLikedCard() {
-  print("tapped");
+void handleLikedCard(name) {
+  FavouriteDockingStation(name);
 }

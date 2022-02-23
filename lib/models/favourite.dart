@@ -13,98 +13,35 @@ import '../services/user_services.dart';
 ///
 class FavouriteDockingStation {
   late String uid;
-  final String name;
   final String stationId; //id of the station
-  final double lon;
-  final double lat;
 
-  FavouriteDockingStation(this.name, this.stationId, this.lon, this.lat) {
-    // uid = "a";
+  CollectionReference favourites =
+      FirebaseFirestore.instance.collection('favourites');
+
+  FavouriteDockingStation(this.stationId) {
     uid = getUid();
-    //print(uid);
+    addFavourite();
   }
 
-  // void setUid()  {
-  //   uid = getUid();
-  // }
+  Future<void> addFavourite() {
+    // Call the user's CollectionReference to add a new user
+    return favourites
+        .add({
+          'user': getUid(), // John Doe
+          'docking_stations': null, // Stokes and Sons
+          'journeys': null // 42
+        })
+        .then((value) => print("fave Added"))
+        .catchError((error) => print("Failed to add fave: $error"));
+  }
 
-  // CollectionReference favourites =
-  //     FirebaseFirestore.instance.collection('favourites');
-
-  // Future<void> addFavourite() {
-  //   // Call the user's CollectionReference to add a new user
-  //   return favourites
-  //       .add({
-  //         'user': fullName, // John Doe
-  //         'doking_stations': company, // Stokes and Sons
-  //         'journeys': null // 42
-  //       })
-  //       .then((value) => print("fave Added"))
-  //       .catchError((error) => print("Failed to add fave: $error"));
-  // }
+  Future<void> updateFavourite() {
+    return favourites
+        .doc('ABC123')
+        .set({
+          'docking_stations': null,
+        })
+        .then((value) => print("User Added"))
+        .catchError((error) => print("Failed to add user: $error"));
+  }
 }
-
-
-// // class Favorite {
-// //   String? username;name
-// //   String? id;
-// // String? name;
-
-// //   Favorite({this.id, this.username, this.name});
-
-// //   Favorite.map(DocumentSnapshot document) {
-// //     this.id = document.documentID;
-// //     this.username = document.data['username'];
-// // this.name = document.data['name'];
-// //   }
-// // }
-
-// // class FavoriteData {
-// //   List<Favorite> favorites;
-
-// //   FavoriteData({required this.favorites});
-// // }
-
-// // class Favourite {
-// //   String _id;
-// //   String _eventId;
-// //   String _userId;
-// //   Favourite(this._id, this._eventId, this._userId);
-
-// //   Favourite.map(DocumentSnapshot document) {
-// //     this._id = document.documentID;
-// //     this._eventId = document.data['eventId'];
-// //     this._userId = document.data['userId'];
-// //   }
-
-// //   Map<String, dynamic> toMap() {
-// //     Map map = Map<String, dynamic>();
-// //     if (_id != null) {
-// //       map['id'] = _id;
-// //     }
-// //     map['eventId'] = _eventId;
-// //     map['userId'] = _userId;
-// //     return map;
-// //   }
-// // }
-
-// class ApplicationState extends ChangeNotifier {
-//   // Current content of ApplicationState elided ...
-
-//   // Add from here
-//   Future<DocumentReference> addToFavouriteStations(String message) {
-//     if (_loginState != ApplicationLoginState.loggedIn) {
-//       throw Exception('Must be logged in');
-//     }
-
-//     return FirebaseFirestore.instance
-//         .collection('favourites')
-//         .add(<String, dynamic>{
-//       //  'text': message,
-//       'timestamp': DateTime.now().millisecondsSinceEpoch,
-//       'name': FirebaseAuth.instance.currentUser!.displayName,
-//       'userId': FirebaseAuth.instance.currentUser!.uid,
-//     });
-//   }
-//   // To here
-// }

@@ -5,6 +5,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import '../.env.dart';
 import '../models/favourite.dart';
+import '../services/favourite_service.dart';
 
 class MapPage extends StatefulWidget {
   @override
@@ -91,7 +92,11 @@ class MyHomePageState extends State<MapPage> {
         Container(
             alignment: Alignment(0, 0),
             child: FloatingActionButton(onPressed: () {
-              FavouriteDockingStation("a", "aa", 0.0, 0.0);
+              //FavouriteDockingStation("a");
+              print(getFavouriteDocuments("iJvSaaAldugVks8w5gjJb4013c43"));
+              //deleteAllFavouriteCollectionsUser("iJvSaaAldugVks8w5gjJb4013c43");
+              //deleteFavourite("LeFUwGVnWtJXJl6exmj2");
+              //deleteAllFavouriteCollections();
             }))
       ],
     ));
