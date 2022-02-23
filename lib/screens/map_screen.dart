@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_routes/google_maps_routes.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:veloplan/providers/route_manager.dart';
-import 'package:veloplan/screens/turn_by_turn_screen.dart';
 import '../screens/login_screen.dart';
 import '../navbar.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
@@ -14,6 +14,7 @@ import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:veloplan/screens/place_search_screen.dart';
 import '../.env.dart';
 import 'package:veloplan/screens/location_service.dart';
+import '../screens/turn_by_turn_screen.dart';
 
 const double zoom = 16;
 
@@ -30,7 +31,7 @@ class MyHomePageState extends State<MapPage> {
   bool isRouteDisplayed = false;
   Map<String, Object> _fills = {};
   late Map routeResponse;
-  // Set<Marker> _markers = Set<Marker>();
+  Set<Symbol> _markers = Set<Symbol>();
 
   // var zoom = LatLng(51.51185004458236, -0.11580820118980878);
   String googleMapsApi = 'AIzaSyB7YSQkjjqm-YU1LAz91lyYAvCpqFRhFdU';
@@ -71,12 +72,26 @@ class MyHomePageState extends State<MapPage> {
     routeResponse = await manager.getDirections(points[0], points[1]);
   }
 
-  // void fetchDockingStations() {
-  //   final dockingStationManager _stationManager = dockingStationManager();
-  //   _stationManager
-  //       .importStations()
-  //       .then((value) => placeDockMarkers(_stationManager.stations));
-  // }
+  void fetchDockingStations() async {
+    final dockingStationManager _stationManager = dockingStationManager();
+    _stationManager
+        .importStations()
+        .then((value) => placeDockMarkers(_stationManager.stations));
+  }
+
+  void placeDockMarkers(List<DockingStation> docks) async {
+    setState(() {
+      for (var station in docks) {
+        controller.addSymbol(
+          SymbolOptions(
+              geometry: LatLng(station.lat, station.lon),
+              iconSize: 0.5,
+              iconImage: "assets/icon/bicycle.png"),
+          // 'https://www.iconpacks.net/icons/1/free-icon-bicycle-1054.png'),
+        ); //controller.addSymbol(SymbolOptions(geometry: ))
+      }
+    });
+  }
 
   // void placeDockMarkers(List<DockingStation> docks) {
   //   int i = 0;
@@ -158,6 +173,14 @@ class MyHomePageState extends State<MapPage> {
             child: Icon(Icons.start, color: Colors.white),
             onPressed: () => Navigator.push(
                 context, MaterialPageRoute(builder: (_) => TurnByTurn(points))),
+          ),
+        ),
+        Container(
+          alignment: Alignment(-0.5, -0.5),
+          child: FloatingActionButton(
+            heroTag: "btn4",
+            child: Icon(Icons.start, color: Colors.white),
+            onPressed: fetchDockingStations,
           ),
         ),
         // Padding(

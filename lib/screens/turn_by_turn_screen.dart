@@ -5,6 +5,7 @@ import 'package:veloplan/screens/map_screen.dart';
 import 'package:veloplan/helpers/latlng_to_waypoint.dart';
 
 //Reference: dormmom.com, Jul 20, 2021, flutter_mapbox_navigation 0.0.26, https://pub.dev/packages/flutter_mapbox_navigation
+
 class TurnByTurn extends StatefulWidget {
   late List<LatLng> points;
   TurnByTurn(List<LatLng> points) {
@@ -16,11 +17,12 @@ class TurnByTurn extends StatefulWidget {
 
 class _TurnByTurnState extends State<TurnByTurn> {
   late List<LatLng> points;
+  late var wayPoints = <WayPoint>[];
+
   _TurnByTurnState(List<LatLng> points) {
     this.points = points;
     wayPoints = latLngs2WayPoints(points);
   }
-  var wayPoints = <WayPoint>[];
 
   // Config variables for Mapbox Navigation
   late MapBoxNavigation directions;
@@ -52,7 +54,6 @@ class _TurnByTurnState extends State<TurnByTurn> {
         isOptimized: true,
         units: VoiceUnits.metric,
         simulateRoute: false,
-        // padding: EdgeInsets(arrived:),
         language: "en");
 
     // Start the trip
