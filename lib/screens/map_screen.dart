@@ -4,6 +4,7 @@ import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import '../.env.dart';
+import '../models/favourite.dart';
 
 class MapPage extends StatefulWidget {
   @override
@@ -87,6 +88,11 @@ class MyHomePageState extends State<MapPage> {
           width: MediaQuery.of(context).size.width,
           child: _buildMap(),
         ),
+        Container(
+            alignment: Alignment(0, 0),
+            child: FloatingActionButton(onPressed: () {
+              FavouriteDockingStation("a", "aa", 0.0, 0.0);
+            }))
       ],
     ));
   }
