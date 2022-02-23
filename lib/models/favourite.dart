@@ -7,7 +7,10 @@ import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'docking2.dart';
+import '../services/user_services.dart';
 
+///Adds a station to current users favourite
+///
 class FavouriteDockingStation {
   late String uid;
   final String name;
@@ -16,33 +19,34 @@ class FavouriteDockingStation {
   final double lat;
 
   FavouriteDockingStation(this.name, this.stationId, this.lon, this.lat) {
-    getUid();
+    // uid = "a";
+    uid = getUid();
+    //print(uid);
   }
 
-  Future<void> getUid() async {
-    uid = await setUid();
-    // return uid;
-  }
+  // void setUid()  {
+  //   uid = getUid();
+  // }
 
-  Future<String> setUid() async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    String uid = auth.currentUser!.uid.toString();
-    print(uid);
-    return uid;
-  }
+  // CollectionReference favourites =
+  //     FirebaseFirestore.instance.collection('favourites');
+
+  // Future<void> addFavourite() {
+  //   // Call the user's CollectionReference to add a new user
+  //   return favourites
+  //       .add({
+  //         'user': fullName, // John Doe
+  //         'doking_stations': company, // Stokes and Sons
+  //         'journeys': null // 42
+  //       })
+  //       .then((value) => print("fave Added"))
+  //       .catchError((error) => print("Failed to add fave: $error"));
+  // }
 }
 
 
-
-  // Future<void> printUid() async {
-  
-  // }
-
-
-
-  
 // // class Favorite {
-// //   String? username;
+// //   String? username;name
 // //   String? id;
 // // String? name;
 
