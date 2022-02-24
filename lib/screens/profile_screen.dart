@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:intl/intl.dart';
 
 import './splash_screen.dart';
 
-// import '../model/user_preference.dart';
-// import '../model/user.dart';
 import '../widget/profile_widget.dart';
-//import 'package:user_profile_example/widget/button_widget.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -54,7 +50,6 @@ class _ProfileState extends State<Profile> {
             style: const TextStyle(color: Colors.grey),
           ),
           // const SizedBox(height: 24),
-          // Center(child: buildStatisticsButton()),
         ],
       );
 
@@ -95,8 +90,3 @@ class _ProfileState extends State<Profile> {
         });
   }
 }
-
-// Widget buildStatisticsButton() => ButtonWidget(
-//       text: 'Statistics',
-//       onClicked: () {},
-//     );
