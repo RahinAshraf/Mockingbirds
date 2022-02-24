@@ -53,6 +53,58 @@ class _ProfileState extends State<Profile> {
         ],
       );
 
+  Widget buildCyclingHistory(Map<String, dynamic> data) => Padding(
+        padding:
+            const EdgeInsets.only(top: 10, bottom: 20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Text(
+                  '10',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  'Kilometers',
+                  style: TextStyle(
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 20),
+              height: 30,
+              width: 1,
+              color: Colors.grey,
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Text(
+                  '18',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  'Journeys',
+                  style: TextStyle(
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<DocumentSnapshot>(
@@ -82,6 +134,7 @@ class _ProfileState extends State<Profile> {
                   ),
                   const SizedBox(height: 24),
                   buildName(data),
+                  buildCyclingHistory(data),
                 ],
               ),
             );
