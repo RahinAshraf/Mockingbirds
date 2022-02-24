@@ -5,6 +5,8 @@ import '../widget/profile_widget.dart';
 //import 'package:user_profile_example/widget/button_widget.dart';
 
 class Profile extends StatefulWidget {
+  const Profile({Key? key}) : super(key: key);
+
   @override
   _ProfileState createState() => _ProfileState();
 }
@@ -12,13 +14,13 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
-    final user = UserPreferences.myUser;
+    const user = UserPreferences.myUser;
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Profile'),
       ),
       body: ListView(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         children: [
           ProfileWidget(
             imagePath: user.imagePath,
@@ -35,17 +37,17 @@ class _ProfileState extends State<Profile> {
         children: [
           Text(
             user.name,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
           ),
           const SizedBox(height: 4),
           Text(
             user.email,
-            style: TextStyle(color: Colors.grey),
+            style: const TextStyle(color: Colors.grey),
           ),
           Text(
             //AGE WIDGET- SHOULD IT BE TEXT?
             user.age.toString(),
-            style: TextStyle(color: Colors.grey),
+            style: const TextStyle(color: Colors.grey),
           ),
           // const SizedBox(height: 24),
           // Center(child: buildStatisticsButton()),

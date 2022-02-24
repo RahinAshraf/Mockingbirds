@@ -1,5 +1,4 @@
 //import 'dart:html';
-import 'dart:io';
 import 'package:flutter/material.dart';
 
 class ProfileWidget extends StatelessWidget {
@@ -13,28 +12,6 @@ class ProfileWidget extends StatelessWidget {
     required this.onClicked,
     this.isEdit = false,
   }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final color = Theme.of(context).colorScheme.primary;
-    // final color = Colors.green;
-
-    return Center(
-      child: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: buildImage(),
-          ),
-          Positioned(
-            bottom: 0,
-            right: 4,
-            child: buildEditIcon(color),
-          ),
-        ],
-      ),
-    );
-  }
 
   Widget buildImage() {
     final image = NetworkImage(imagePath);
@@ -79,4 +56,26 @@ class ProfileWidget extends StatelessWidget {
           child: child,
         ),
       );
+
+  @override
+  Widget build(BuildContext context) {
+    final color = Theme.of(context).colorScheme.primary;
+    // final color = Colors.green;
+
+    return Center(
+      child: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: buildImage(),
+          ),
+          Positioned(
+            bottom: 0,
+            right: 4,
+            child: buildEditIcon(color),
+          ),
+        ],
+      ),
+    );
+  }
 }
