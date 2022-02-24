@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:veloplan/screens/group_creation_screen.dart';
 import '../screens/schedule_screen.dart';
 import '../screens/favourite_screen.dart';
 import '../screens/setting_screen.dart';
 import '../screens/help_screen.dart';
+import '../screens/join_group_screen.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
   final padding = EdgeInsets.symmetric(horizontal: 20);
@@ -83,7 +85,7 @@ class NavigationDrawerWidget extends StatelessWidget {
         break;
       case 1:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => Placeholder(),
+          builder: (context) => GroupJoinScreen(),
         ));
         break;
       case 2:
@@ -93,14 +95,14 @@ class NavigationDrawerWidget extends StatelessWidget {
         break;
       case 3:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => Placeholder(),
+          builder: (context) => GroupCreationScreen(),
         ));
         break;
-      case 3:
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => Placeholder(),
-        ));
-        break;
+      // case 3:
+      //   Navigator.of(context).push(MaterialPageRoute(
+      //     builder: (context) => Placeholder(),
+      //   ));
+      //   break;
       case 4:
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => HelpPage(),
@@ -114,3 +116,4 @@ class NavigationDrawerWidget extends StatelessWidget {
     }
   }
 }
+

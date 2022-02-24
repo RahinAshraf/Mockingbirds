@@ -3,10 +3,10 @@ import 'package:veloplan/utilities/help_bot_manager.dart';
 
 class HelpPage extends StatefulWidget {
   @override
-  MyHomePageState createState() => MyHomePageState();
+  MyHelpPageState createState() => MyHelpPageState();
 }
 
-class MyHomePageState extends State<HelpPage> {
+class MyHelpPageState extends State<HelpPage> {
   late HelpBotManager helpBot;
   @override
   void initState() {
@@ -17,7 +17,7 @@ class MyHomePageState extends State<HelpPage> {
   List<String> someList = [];
 
   List<Widget> _createChildren() {
-    return new List<Widget>.generate(someList.length, (int index) {
+    return List<Widget>.generate(someList.length, (int index) {
       return Text(someList[index].toString());
     });
   }
