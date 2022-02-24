@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:veloplan/screens/splash_screen.dart';
 import 'package:veloplan/widget/profile_widget.dart';
 
-class Profile extends StatefulWidget {
-  const Profile({Key? key}) : super(key: key);
+class ProfilePageHeader extends StatefulWidget {
+  Map<String, dynamic> data;
+
+  ProfilePageHeader(this.data, {Key? key}) : super(key: key);
 
   @override
-  _ProfileState createState() => _ProfileState();
+  _ProfilePageHeaderState createState() => _ProfilePageHeaderState();
 }
 
-class _ProfileState extends State<Profile> {
+class _ProfilePageHeaderState extends State<ProfilePageHeader> {
   final user = FirebaseAuth.instance.currentUser!.uid;
 
   String calculateAge(Timestamp birthDateTimestamp) {
@@ -105,39 +106,19 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<DocumentSnapshot>(
-        future: FirebaseFirestore.instance.collection('users').doc(user).get(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return const Text("Something went wrong");
-          }
-
-          if (snapshot.hasData && !snapshot.data!.exists) {
-            return const Text("Document does not exist");
-          }
-
-          if (snapshot.connectionState == ConnectionState.done) {
-            Map<String, dynamic> data =
-                snapshot.data!.data() as Map<String, dynamic>;
-            return Scaffold(
-              appBar: AppBar(
-                title: const Text('My Profile'),
-              ),
-              body: ListView(
-                physics: const BouncingScrollPhysics(),
+    return Material(
+      color: Colors.white,
+              child: Column(
                 children: [
                   ProfileWidget(
-                    imagePath: data['image_url'],
+                    imagePath: widget.data['image_url'],
                     onClicked: () async {},
                   ),
                   const SizedBox(height: 24),
-                  buildName(data),
-                  buildCyclingHistory(data),
+                  buildName(widget.data),
+                  buildCyclingHistory(widget.data),
                 ],
               ),
             );
-          }
-          return const SplashScreen();
-        });
   }
 }

@@ -1,145 +1,121 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 
 import './splash_screen.dart';
+import '../widgets/profile/profile_page_header.dart';
+import '../helpers/new_scroll_behavior.dart';
 
-import '../widget/profile_widget.dart';
+class Profile extends StatelessWidget {
+  final String userID;
+  static const routeName = '/user';
 
-class Profile extends StatefulWidget {
-  const Profile({Key? key}) : super(key: key);
+  const Profile(this.userID, {Key? key}) : super(key: key);
 
-  @override
-  _ProfileState createState() => _ProfileState();
-}
-
-class _ProfileState extends State<Profile> {
-  final user = FirebaseAuth.instance.currentUser!.uid;
-
-  String calculateAge(Timestamp birthDateTimestamp) {
-    DateTime currentDate = DateTime.now();
-    DateTime birthDate = birthDateTimestamp.toDate();
-    int age = currentDate.year - birthDate.year;
-    int currentMonth = currentDate.month;
-    int birthMonth = birthDate.month;
-    if (birthMonth > currentMonth) {
-      age--;
-    } else if (currentMonth == birthMonth) {
-      int currentDay = currentDate.day;
-      int birthDay = birthDate.day;
-      if (birthDay > currentDay) {
-        age--;
-      }
-    }
-    return age.toString();
-  }
-
-  Widget buildName(Map<String, dynamic> data) => Column(
-        children: [
-          Text(
-            '${data['firstName']} ${data['lastName']}',
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            data['email'],
-            style: const TextStyle(color: Colors.grey),
-          ),
-          Text(
-            calculateAge(data['birthDate']),
-            style: const TextStyle(color: Colors.grey),
-          ),
-          // const SizedBox(height: 24),
-        ],
-      );
-
-  Widget buildCyclingHistory(Map<String, dynamic> data) => Padding(
-        padding:
-            const EdgeInsets.only(top: 10, bottom: 20),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Text(
-                  '10',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  'Kilometers',
-                  style: TextStyle(
-                    color: Colors.grey,
-                  ),
-                ),
-              ],
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 20),
-              height: 30,
-              width: 1,
-              color: Colors.grey,
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Text(
-                  '18',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  'Journeys',
-                  style: TextStyle(
-                    color: Colors.grey,
-                  ),
-                ),
-              ],
-            ),
-          ],
+  PreferredSizeWidget _buildAppBar(context, data) {
+    return AppBar(
+      centerTitle: true,
+      title: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Text(
+          data['username'],
+          style: const TextStyle(fontSize: 20, color: Colors.black),
         ),
-      );
+      ),
+      elevation: 0,
+      backgroundColor: Colors.white,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    final _currentUser = FirebaseAuth.instance.currentUser!.uid;
+    final mediaQuery = MediaQuery.of(context);
     return FutureBuilder<DocumentSnapshot>(
-        future: FirebaseFirestore.instance.collection('users').doc(user).get(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return const Text("Something went wrong");
-          }
+      future: FirebaseFirestore.instance.collection('users').doc(userID).get(),
+      builder:
+          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        if (snapshot.hasError) {
+          return const Text("Something went wrong");
+        }
 
-          if (snapshot.hasData && !snapshot.data!.exists) {
-            return const Text("Document does not exist");
-          }
+        if (snapshot.hasData && !snapshot.data!.exists) {
+          return const Text("Document does not exist");
+        }
 
-          if (snapshot.connectionState == ConnectionState.done) {
-            Map<String, dynamic> data =
-                snapshot.data!.data() as Map<String, dynamic>;
-            return Scaffold(
-              appBar: AppBar(
-                title: const Text('My Profile'),
-              ),
-              body: ListView(
-                physics: const BouncingScrollPhysics(),
-                children: [
-                  ProfileWidget(
-                    imagePath: data['image_url'],
-                    onClicked: () async {},
+        if (snapshot.connectionState == ConnectionState.done) {
+          Map<String, dynamic> data =
+              snapshot.data!.data() as Map<String, dynamic>;
+          return Scaffold(
+            backgroundColor: Theme.of(context).backgroundColor,
+            appBar: _buildAppBar(context, data),
+            body: DefaultTabController(
+              length: 2,
+              child: ScrollConfiguration(
+                behavior: NewScrollBehavior(),
+                child: ExtendedNestedScrollView(
+                  onlyOneScrollInBody: true,
+                  headerSliverBuilder: (context, _) {
+                    return [
+                      SliverList(
+                        delegate: SliverChildListDelegate([
+                          ProfilePageHeader(data),
+                        ]),
+                      )
+                    ];
+                  },
+                  body: Column(
+                    children: [
+                      Container(
+                        color: Colors.white,
+                        child: ScrollConfiguration(
+                          behavior: NewScrollBehavior(),
+                          child: TabBar(
+                            labelPadding:
+                                const EdgeInsets.symmetric(horizontal: 22.0),
+                            labelColor: Colors.green,
+                            unselectedLabelColor: Colors.grey[400],
+                            indicatorWeight: 2,
+                            indicatorColor: Colors.green,
+                            indicatorSize: TabBarIndicatorSize.label,
+                            tabs: const [
+                              Tab(
+                                text: 'About',
+                              ),
+                              Tab(
+                                text: 'Journeys',
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                          child: ScrollConfiguration(
+                        behavior: NewScrollBehavior(),
+                        child: const TabBarView(children: [
+                          Material(
+                            child: Center(
+                              child: Text('About'),
+                            ),
+                          ),
+                          Material(
+                            child: Center(
+                              child: Text('Journeys'),
+                            ),
+                          ),
+                        ]),
+                      ))
+                    ],
                   ),
-                  const SizedBox(height: 24),
-                  buildName(data),
-                  buildCyclingHistory(data),
-                ],
+                ),
               ),
-            );
-          }
-          return const SplashScreen();
-        });
+            ),
+          );
+        }
+
+        return const SplashScreen();
+      },
+    );
   }
 }

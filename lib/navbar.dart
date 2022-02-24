@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import 'screens/map_screen.dart';
 import 'screens/profile_screen.dart';
 import '../widget/navigation_drawer_widget.dart';
@@ -22,14 +24,17 @@ class _MainPageState extends State<MainPage> {
   int currentIndex = 1; //index of the screens
 
   final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
-  final screens = [
+
+  final _currentUser = FirebaseAuth.instance.currentUser!.uid;
+
+  var screens = [
     Placeholder(), //need to replace this with something?
     MapPage(),
-    Profile(),
   ];
 
   @override
   Widget build(BuildContext context) {
+    screens.add(Profile(_currentUser));
     return Scaffold(
         // body: screens[currentIndex], //looses the progress
         body: IndexedStack(
