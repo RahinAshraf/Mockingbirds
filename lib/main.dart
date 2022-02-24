@@ -1,14 +1,54 @@
 import 'package:flutter/material.dart';
+import 'screens/login_screen.dart';
+import 'navbar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:location/location.dart';
+import 'package:veloplan/main.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-
 
 import './screens/verify_email_screen.dart';
 import './screens/auth_screen.dart';
 import './screens/splash_screen.dart';
 
-void main() {
-  runApp(const MyApp());
+late SharedPreferences sharedPreferences;
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  sharedPreferences = await SharedPreferences.getInstance();
+  initializeLocation(); //Upon opening the app, store the users current location
+  runApp(MaterialApp(
+    initialRoute: '/',
+    routes: {'/': (context) => const MyApp(), '/map': (context) => Navbar()},
+  ));
+}
+
+void initializeLocation() async {
+  Location _location = Location();
+  bool? _serviceEnabled;
+  PermissionStatus? _permissionGranted;
+
+  _serviceEnabled = await _location.serviceEnabled();
+  if (!_serviceEnabled) {
+    _serviceEnabled = await _location.requestService();
+  }
+
+  _permissionGranted = await _location.hasPermission();
+  if (_permissionGranted == PermissionStatus.denied) {
+    _permissionGranted = await _location.requestPermission();
+  }
+
+  LocationData _locationData = await _location.getLocation();
+  LatLng currentLatLng =
+  LatLng(_locationData.latitude!, _locationData.longitude!);
+
+  saveLocation(_locationData);
+}
+
+void saveLocation(LocationData _locationData) {
+  sharedPreferences.setDouble('latitude', _locationData.latitude!);
+  sharedPreferences.setDouble('longitude', _locationData.longitude!);
 }
 
 class MyApp extends StatefulWidget {
@@ -26,8 +66,6 @@ class _MyAppState extends State<MyApp> {
       // Initialize FlutterFire:
         future: Firebase.initializeApp(), // _initialization,
         builder: (context, appSnapshot) {
-
-
           return MaterialApp(
             title: 'Veloplan',
             theme: ThemeData(
@@ -43,211 +81,21 @@ class _MyAppState extends State<MyApp> {
                 ),
               ),
             ),
-            home: appSnapshot.connectionState != ConnectionState.done ? const SplashScreen() : StreamBuilder(stream: FirebaseAuth.instance.authStateChanges(), builder: (ctx, userSnapshot) {
-              if (userSnapshot.connectionState == ConnectionState.waiting) {
-                return const SplashScreen();
-              }
-              if (userSnapshot.hasData) {
-                return const VerifyEmailScreen();
-              }
-              return const AuthScreen();
-            }),
+            home: appSnapshot.connectionState != ConnectionState.done
+                ? const SplashScreen()
+                : StreamBuilder(
+                stream: FirebaseAuth.instance.authStateChanges(),
+                builder: (ctx, userSnapshot) {
+                  if (userSnapshot.connectionState ==
+                      ConnectionState.waiting) {
+                    return const SplashScreen();
+                  }
+                  if (userSnapshot.hasData) {
+                    return const VerifyEmailScreen();
+                  }
+                  return const AuthScreen();
+                }),
           );
-
         });
   }
 }
-
-// import 'package:flutter/material.dart';
-// import 'package:favorite_button/favorite_button.dart';
-
-// // importing dependencies
-// void main() {
-//   runApp(
-
-//       /**Our App Widget Tree Starts Here**/
-//       MaterialApp(
-//     home: Scaffold(
-//       appBar: AppBar(
-//         title: Text('GeeksforGeeks'),
-//         backgroundColor: Colors.greenAccent[400],
-//         centerTitle: true,
-//       ), //AppBar
-//       body: SingleChildScrollView(
-//         padding: EdgeInsets.only(left: 0, right: 0, top: 20, bottom: 20),
-//         child: Center(
-//           /** Card Widget **/
-//           child: Column(
-//             children: [
-//               //Card 1
-//               Card(
-//                 elevation: 50,
-//                 shadowColor: Colors.black,
-//                 color: Colors.greenAccent[100],
-//                 child: SizedBox(
-//                   width: 310,
-//                   height: 510,
-//                   child: Padding(
-//                     padding: const EdgeInsets.all(20.0),
-//                     child: Column(
-//                       children: [
-//                         CircleAvatar(
-//                           backgroundColor: Colors.green[500],
-//                           radius: 108,
-//                           child: CircleAvatar(
-//                             backgroundImage: NetworkImage(
-//                                 "https://pbs.twimg.com/profile_images/1304985167476523008/QNHrwL2q_400x400.jpg"),
-//                             //NetworkImage
-//                             radius: 100,
-//                           ), //CircleAvatar
-//                         ), //CirclAvatar
-//                         SizedBox(
-//                           height: 10,
-//                         ), //SizedBox
-//                         Text(
-//                           'GeeksforGeeks',
-//                           style: TextStyle(
-//                             fontSize: 30,
-//                             color: Colors.green[900],
-//                             fontWeight: FontWeight.w500,
-//                           ), //Textstyle
-//                         ), //Text
-//                         SizedBox(
-//                           height: 10,
-//                         ), //SizedBox
-//                         Text(
-//                           'HI',
-//                           style: TextStyle(
-//                             fontSize: 15,
-//                             color: Colors.green[900],
-//                           ), //Textstyle
-//                         ), //Text
-//                         SizedBox(
-//                           height: 10,
-//                         ), //SizedBox
-//                         Row(
-//                           mainAxisAlignment: MainAxisAlignment.center,
-//                           children: [
-//                             SizedBox(
-//                               width: 100,
-//                               child: RaisedButton(
-//                                 onPressed: () => null,
-//                                 color: Colors.green,
-//                                 child: Padding(
-//                                   padding: const EdgeInsets.all(4.0),
-//                                   child: Row(
-//                                     children: [
-//                                       Icon(Icons.touch_app),
-//                                       Text('Visit'),
-//                                     ],
-//                                   ), //Row
-//                                 ), //Padding
-//                               ), //RaisedButton
-//                             ),
-
-//                             // Favourite Button
-//                             FavoriteButton(
-//                               isFavorite: false,
-//                               valueChanged: (_isFavorite) {
-//                                 print('Is Favorite : $_isFavorite');
-//                               },
-//                             ),
-//                           ],
-//                         ), //SizedBox
-//                       ],
-//                     ), //Column
-//                   ), //Padding
-//                 ), //SizedBox
-//               ),
-//               SizedBox(
-//                 height: 20,
-//               ),
-
-//               // Card 2
-//               Card(
-//                 elevation: 50,
-//                 shadowColor: Colors.black,
-//                 color: Colors.yellowAccent[100],
-//                 child: SizedBox(
-//                   width: 310,
-//                   height: 510,
-//                   child: Padding(
-//                     padding: const EdgeInsets.all(20.0),
-//                     child: Column(
-//                       children: [
-//                         CircleAvatar(
-//                           backgroundColor: Colors.yellow[700],
-//                           radius: 108,
-//                           child: CircleAvatar(
-//                             backgroundImage: NetworkImage(
-//                                 "https://pbs.twimg.com/profile_images/1304985167476523008/QNHrwL2q_400x400.jpg"),
-//                             //NetworkImage
-//                             radius: 100,
-//                           ), //CircleAvatar
-//                         ), //CirclAvatar
-//                         SizedBox(
-//                           height: 10,
-//                         ), //SizedBox
-//                         Text(
-//                           'GeeksforGeeks',
-//                           style: TextStyle(
-//                             fontSize: 30,
-//                             color: Colors.yellow[900],
-//                             fontWeight: FontWeight.w500,
-//                           ), //Textstyle
-//                         ), //Text
-//                         SizedBox(
-//                           height: 10,
-//                         ), //SizedBox
-//                         Text(
-//                           'HI',
-//                           style: TextStyle(
-//                             fontSize: 15,
-//                             color: Colors.yellow[900],
-//                           ), //Textstyle
-//                         ), //Text
-//                         SizedBox(
-//                           height: 10,
-//                         ), //SizedBox
-//                         Row(
-//                           mainAxisAlignment: MainAxisAlignment.center,
-//                           children: [
-//                             SizedBox(
-//                               width: 100,
-//                               child: RaisedButton(
-//                                 onPressed: () => null,
-//                                 color: Colors.yellow[600],
-//                                 child: Padding(
-//                                   padding: const EdgeInsets.all(4.0),
-//                                   child: Row(
-//                                     children: [
-//                                       Icon(Icons.touch_app),
-//                                       Text('Visit'),
-//                                     ],
-//                                   ), //Row
-//                                 ), //Padding
-//                               ), //RaisedButton
-//                             ),
-
-//                             // Favourite Button
-//                             FavoriteButton(
-//                               isFavorite: true,
-//                               valueChanged: (_isFavorite) {
-//                                 print('Is Favorite : $_isFavorite');
-//                               },
-//                             ),
-//                           ],
-//                         ), //SizedBox
-//                       ],
-//                     ), //Column
-//                   ), //Padding
-//                 ), //SizedBox
-//               ),
-//             ],
-//           ), //Card
-//         ),
-//       ), //Center
-//     ), //Scaffold
-//   ) //MaterialApp
-//       );
-// }
