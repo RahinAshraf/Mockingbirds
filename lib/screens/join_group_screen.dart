@@ -50,7 +50,7 @@ class _GroupJoinScreenState extends State<GroupJoinScreen> {
       }
 
 
-      print("this is x : " + x..toString());
+      print("this is x : " + x.toString());
     } on PlatformException catch (err) {
       var message = 'An error occurred, please check your credentials!';
 
