@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -64,6 +65,9 @@ class _JourneyPlanner extends State<JourneyPlanner> {
                   myLocationEnabled: true,
                   myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
                   minMaxZoomPreference: const MinMaxZoomPreference(14, 17),
+                  onMapClick: (Point<double> point, LatLng coordinates) {
+                    print(coordinates);
+                  },
                 ),
               ),
             ],

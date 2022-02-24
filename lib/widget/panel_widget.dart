@@ -1,11 +1,15 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:veloplan/screens/place_search_screen.dart';
-
+import '../main.dart';
 import '../models/destination_choice.dart';
 import '../screens/location_service.dart';
+import 'package:veloplan/helpers/shared_prefs.dart';
+import 'package:mapbox_gl/mapbox_gl.dart';
 
 class PanelWidget extends StatefulWidget {
   final ScrollController controller;
@@ -14,6 +18,7 @@ class PanelWidget extends StatefulWidget {
   final List<DynamicWidget> listDynamic;
   final List<List<double?>?> selectedCords;
   final TextEditingController textEditingController;
+  //final LocationService locationService = LocationService();
 
   const PanelWidget(
       {required this.controller,
@@ -40,6 +45,30 @@ class PanelWidgetState extends State<PanelWidget> {
       selectedCords: widget.selectedCords,
     ));
     widget.dynamicWidgets.sink.add(widget.listDynamic);
+  }
+
+  // //FUNCTION NEEDS TO BE CALLED
+  // void setLiveLocationInListAsFirstByDefault(){
+  //   print("HERE");
+  //   if(widget.textEditingController.text.isEmpty){
+  //     List<double> liveLocCoords =  [];
+  //     liveLocCoords.add(getLatLngFromSharedPrefs().latitude);
+  //     liveLocCoords.add(getLatLngFromSharedPrefs().longitude);
+  //
+  //     widget.selectedCords?.insert(0, liveLocCoords);
+  //   }
+  // }
+
+  _useCurrentLocationButtonHandler() async {
+      LatLng currentLocation = getLatLngFromSharedPrefs();
+
+      // Get the response of reverse geocoding and do 2 things:
+      // 1. Store encoded response in shared preferences
+      // 2. Set the text editing controller to the address
+      // var response = await locationService.reverseGeoCode(currentLocation);
+      // sharedPreferences.setString('source', json.encode(response));
+      // String place = response['place'];
+      // widget.textEditingController.text = place;
   }
 
   Widget _buildStatic() {
@@ -91,10 +120,15 @@ class PanelWidgetState extends State<PanelWidget> {
                     borderSide:
                         const BorderSide(color: Colors.black, width: 1.0),
                   ),
+                    // suffix: IconButton(
+                    //     onPressed: () => _useCurrentLocationButtonHandler(),
+                    //     //padding: const EdgeInsets.all(10),
+                    //     //constraints: const BoxConstraints(),
+                    //     icon: const Icon(Icons.my_location, size: 0.1))
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
           //SizedBox(width: 10),
           TextButton(
             onPressed: () {
@@ -165,6 +199,9 @@ class PanelWidgetState extends State<PanelWidget> {
               primary: Colors.white,
             ),
             onPressed: () {
+              if(widget.listDynamic.isEmpty){
+                showAtLeastOneDestinationSnackBar(context);
+              }
               print("ALL_COORDINATES => ${widget.selectedCords}");
             },
             child: const Text(
@@ -216,6 +253,16 @@ class PanelWidgetState extends State<PanelWidget> {
         //onTap: togglePanel,
       );
 
+  void showAtLeastOneDestinationSnackBar(BuildContext context) {
+    const text = "Choose at least one destination to create your journey";
+    const snackBar = SnackBar(
+      content: Text(text, style: TextStyle(fontSize: 17),),
+      backgroundColor: Colors.red,
+
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
 //void togglePanel() => panelController.isPanelOpen ? panelController.close() : panelController.open();
 }
 
@@ -225,6 +272,7 @@ class DynamicWidget extends StatelessWidget {
 
   DynamicWidget({Key? key, required this.selectedCords}) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -233,13 +281,25 @@ class DynamicWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const SizedBox(width: 95),
+          const SizedBox(width: 35),
+          //Expanded(
+            TextButton(
+              onPressed: () {
+                print("This should remove the location (and its widgets from the list and screen respectively)");
+              },
+              child: const Icon(
+                Icons.close_outlined ,
+                size: 35,
+                color: Colors.red,
+              ),
+            ),
+          //),
           Expanded(
             child: TextField(
               enabled: false,
               controller: textController,
               decoration: InputDecoration(
-                hintText: 'Search',
+                hintText: 'Where to?',
                 focusedBorder: OutlineInputBorder(
                   borderSide: const BorderSide(color: Colors.black, width: 2.0),
                   borderRadius: BorderRadius.circular(10.0),
@@ -267,8 +327,8 @@ class DynamicWidget extends StatelessWidget {
               ),
             ),
           ),
-          Expanded(
-            child: TextButton(
+          //Expanded(
+            TextButton(
               onPressed: () {
                 _handleSearchClick(context);
                 print("Take me to the place search screen");
@@ -279,7 +339,7 @@ class DynamicWidget extends StatelessWidget {
                 color: Colors.green,
               ),
             ),
-          ),
+          //),
         ],
       ),
     );

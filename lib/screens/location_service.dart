@@ -24,6 +24,32 @@ class LocationService {
     _feature.sink.add(listOfPlace);
   }
 
+  /*
+   Given coordinates, it will print the name of the place of those coordinates
+   */
+  Future<Map> reverseGeoCode() async {
+
+    //buckingham palace coords
+    double lng = -0.14193291716574874;
+    double lat = 51.50153762439744;
+
+    String token = 'pk.eyJ1IjoibW9ja2luZ2JpcmRzIiwiYSI6ImNremd3NW9weDM2ZmEybm45dzlhYzN0ZnUifQ.lSzpNOhK2CH9-PODR0ojLg';
+    String url = "https://api.mapbox.com/geocoding/v5/mapbox.places/$lng,$lat.json?access_token=$token";
+
+    var response = await http.get(Uri.parse(url));
+    var json = convert.jsonDecode(response.body);
+
+    Map feature = json['features'][0];
+    Map revGeocode = {
+      'name': feature['text'],
+      'address': feature['place_name'].split('${feature['text']}, ')[1],
+      'place': feature['place_name'],
+    };
+
+    print(revGeocode['place']);
+    return revGeocode;
+  }
+
   void close(){
     _feature.close();
   }
