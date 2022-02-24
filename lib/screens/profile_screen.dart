@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
-import '../model/user_preference.dart';
-import '../model/user.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
+
+import './splash_screen.dart';
+
+// import '../model/user_preference.dart';
+// import '../model/user.dart';
 import '../widget/profile_widget.dart';
 //import 'package:user_profile_example/widget/button_widget.dart';
 
@@ -12,47 +18,82 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  @override
-  Widget build(BuildContext context) {
-    const user = UserPreferences.myUser;
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('My Profile'),
-      ),
-      body: ListView(
-        physics: const BouncingScrollPhysics(),
-        children: [
-          ProfileWidget(
-            imagePath: user.imagePath,
-            onClicked: () async {},
-          ),
-          const SizedBox(height: 24),
-          buildName(user),
-        ],
-      ),
-    );
+  final user = FirebaseAuth.instance.currentUser!.uid;
+
+  String calculateAge(Timestamp birthDateTimestamp) {
+    DateTime currentDate = DateTime.now();
+    DateTime birthDate = birthDateTimestamp.toDate();
+    int age = currentDate.year - birthDate.year;
+    int currentMonth = currentDate.month;
+    int birthMonth = birthDate.month;
+    if (birthMonth > currentMonth) {
+      age--;
+    } else if (currentMonth == birthMonth) {
+      int currentDay = currentDate.day;
+      int birthDay = birthDate.day;
+      if (birthDay > currentDay) {
+        age--;
+      }
+    }
+    return age.toString();
   }
 
-  Widget buildName(User user) => Column(
+  Widget buildName(Map<String, dynamic> data) => Column(
         children: [
           Text(
-            user.name,
+            '${data['firstName']} ${data['lastName']}',
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
           ),
           const SizedBox(height: 4),
           Text(
-            user.email,
+            data['email'],
             style: const TextStyle(color: Colors.grey),
           ),
           Text(
-            //AGE WIDGET- SHOULD IT BE TEXT?
-            user.age.toString(),
+            calculateAge(data['birthDate']),
             style: const TextStyle(color: Colors.grey),
           ),
           // const SizedBox(height: 24),
           // Center(child: buildStatisticsButton()),
         ],
       );
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<DocumentSnapshot>(
+        future: FirebaseFirestore.instance.collection('users').doc(user).get(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return const Text("Something went wrong");
+          }
+
+          if (snapshot.hasData && !snapshot.data!.exists) {
+            return const Text("Document does not exist");
+          }
+
+          if (snapshot.connectionState == ConnectionState.done) {
+            Map<String, dynamic> data =
+                snapshot.data!.data() as Map<String, dynamic>;
+            return Scaffold(
+              appBar: AppBar(
+                title: const Text('My Profile'),
+              ),
+              body: ListView(
+                physics: const BouncingScrollPhysics(),
+                children: [
+                  ProfileWidget(
+                    imagePath: data['image_url'],
+                    onClicked: () async {},
+                  ),
+                  const SizedBox(height: 24),
+                  buildName(data),
+                ],
+              ),
+            );
+          }
+          return const SplashScreen();
+        });
+  }
 }
 
 // Widget buildStatisticsButton() => ButtonWidget(
