@@ -6,12 +6,8 @@ class ProfileWidget extends StatelessWidget {
   final VoidCallback onClicked;
   final bool isEdit;
 
-  const ProfileWidget({
-    Key? key,
-    required this.imagePath,
-    required this.onClicked,
-    this.isEdit = false,
-  }) : super(key: key);
+  const ProfileWidget(this.imagePath, this.onClicked, this.isEdit, {Key? key})
+      : super(key: key);
 
   Widget buildImage() {
     final image = NetworkImage(imagePath);
@@ -63,19 +59,24 @@ class ProfileWidget extends StatelessWidget {
     // final color = Colors.green;
 
     return Center(
-      child: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: buildImage(),
-          ),
-          Positioned(
-            bottom: 0,
-            right: 4,
-            child: buildEditIcon(color),
-          ),
-        ],
-      ),
+      child: isEdit
+          ? Stack(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: buildImage(),
+                ),
+                Positioned(
+                  bottom: 0,
+                  right: 4,
+                  child: buildEditIcon(color),
+                ),
+              ],
+            )
+          : Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: buildImage(),
+            ),
     );
   }
 }

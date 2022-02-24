@@ -4,9 +4,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:veloplan/widget/profile_widget.dart';
 
 class ProfilePageHeader extends StatefulWidget {
-  Map<String, dynamic> data;
+  final Map<String, dynamic> data;
+  final bool isCurrentUser;
 
-  ProfilePageHeader(this.data, {Key? key}) : super(key: key);
+  const ProfilePageHeader(this.data, this.isCurrentUser, {Key? key})
+      : super(key: key);
 
   @override
   _ProfilePageHeaderState createState() => _ProfilePageHeaderState();
@@ -53,8 +55,7 @@ class _ProfilePageHeaderState extends State<ProfilePageHeader> {
       );
 
   Widget buildCyclingHistory(Map<String, dynamic> data) => Padding(
-        padding:
-            const EdgeInsets.only(top: 10, bottom: 20),
+        padding: const EdgeInsets.only(top: 10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -77,7 +78,7 @@ class _ProfilePageHeaderState extends State<ProfilePageHeader> {
               ],
             ),
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 20),
+              margin: const EdgeInsets.symmetric(horizontal: 20),
               height: 30,
               width: 1,
               color: Colors.grey,
@@ -100,25 +101,52 @@ class _ProfilePageHeaderState extends State<ProfilePageHeader> {
                 ),
               ],
             ),
+            Container(
+              width: 11,
+            ),
           ],
         ),
+      );
+
+  Widget buildButtons() => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 20),
+        child: widget.isCurrentUser
+            ? ElevatedButton(
+                onPressed: () {},
+                child: const Text('Edit Profile'),
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {},
+                    child: const Text('Follow'),
+                  ),
+                  OutlinedButton(
+                    onPressed: () {},
+                    child: const Text('Message'),
+                  )
+                ],
+              ),
       );
 
   @override
   Widget build(BuildContext context) {
     return Material(
       color: Colors.white,
-              child: Column(
-                children: [
-                  ProfileWidget(
-                    imagePath: widget.data['image_url'],
-                    onClicked: () async {},
-                  ),
-                  const SizedBox(height: 24),
-                  buildName(widget.data),
-                  buildCyclingHistory(widget.data),
-                ],
-              ),
-            );
+      child: Column(
+        children: [
+          ProfileWidget(
+            widget.data['image_url'],
+            () async {},
+            widget.isCurrentUser,
+          ),
+          const SizedBox(height: 24),
+          buildName(widget.data),
+          buildCyclingHistory(widget.data),
+          buildButtons(),
+        ],
+      ),
+    );
   }
 }

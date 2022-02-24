@@ -31,7 +31,6 @@ class Profile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _currentUser = FirebaseAuth.instance.currentUser!.uid;
-    final mediaQuery = MediaQuery.of(context);
     return FutureBuilder<DocumentSnapshot>(
       future: FirebaseFirestore.instance.collection('users').doc(userID).get(),
       builder:
@@ -60,7 +59,7 @@ class Profile extends StatelessWidget {
                     return [
                       SliverList(
                         delegate: SliverChildListDelegate([
-                          ProfilePageHeader(data),
+                          ProfilePageHeader(data, _currentUser == userID),
                         ]),
                       )
                     ];
