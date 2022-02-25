@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
@@ -25,7 +27,7 @@ class MyHomePageState extends State<MapPage> {
 
   TextEditingController _searchController = TextEditingController();
 
-  late Future<List<DockingStation>> future_docks;
+  late List<DockingStation> docking_stations;
   Set<Marker> _markers = Set<Marker>();
 
   @override
@@ -43,7 +45,26 @@ class MyHomePageState extends State<MapPage> {
     final dockingStationManager _stationManager = dockingStationManager();
     _stationManager
         .importStations()
-        .then((value) => placeDockMarkers(_stationManager.stations));
+        .then((value) => placeDockMarkers(_stationManager.stations))
+        .then((value) => initialiseStations(_stationManager));
+  }
+
+  void initialiseStations(dockingStationManager _stationManager) {
+    docking_stations = _stationManager.stations;
+    List<DockingStation> closest_dock_to_user_location =
+        _stationManager.get5ClosestAvailableDockingStationsToGetBikes(
+            getLatLngFromSharedPrefs(), _stationManager.stations, 21);
+    log("my loc is: " + getLatLngFromSharedPrefs().toString());
+    log("closest dock station is: " +
+        closest_dock_to_user_location[0].name.toString());
+    log("closest dock station is: " +
+        closest_dock_to_user_location[1].name.toString());
+    log("closest dock station is: " +
+        closest_dock_to_user_location[2].name.toString());
+    log("closest dock station is: " +
+        closest_dock_to_user_location[3].name.toString());
+    log("closest dock station is: " +
+        closest_dock_to_user_location[4].name.toString());
   }
 
   void placeDockMarkers(List<DockingStation> docks) {

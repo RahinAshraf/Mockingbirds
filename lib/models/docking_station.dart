@@ -9,15 +9,6 @@ class DockingStation {
   final double lon;
   final double lat;
 
-  DockingStation(
-      this.id,
-      this.name,
-      this.installed,
-      this.locked,
-      this.nb_bikes,
-      this.nb_empty_docks,
-      this.nb_total_docks,
-      this.lon,
-      this.lat
-      );
+  DockingStation(this.id, this.name, this.installed, this.locked, this.nb_bikes,
+      this.nb_empty_docks, this.nb_total_docks, this.lon, this.lat);
 }
