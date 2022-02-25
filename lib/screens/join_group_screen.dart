@@ -22,7 +22,7 @@ class GroupJoinScreen extends StatefulWidget {
 class _GroupJoinScreenState extends State<GroupJoinScreen> {
   final _auth = FirebaseAuth.instance;
   var _isLoading = false;
-  late String groupCode =" ";
+  late List groupCode =[];
 
 
   @override
@@ -39,7 +39,7 @@ class _GroupJoinScreenState extends State<GroupJoinScreen> {
     List<String> res =[];
     x.docs.forEach((element) {
       res.add(element.data()['code']);
-      groupCode = element.data()['code'];
+      groupCode.add(element.data()['code']);
     });
     return res;
   }
@@ -137,7 +137,7 @@ class _GroupJoinScreenState extends State<GroupJoinScreen> {
               future: getGroup(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return Text(groupCode);
+                  return Text(groupCode.toString());
                 } else {
                   return SizedBox(
                     height: MediaQuery.of(context).size.height / 1.3,
