@@ -14,13 +14,40 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
-  // User user = UserPreferences.myUser;
   final user = FirebaseAuth.instance.currentUser!.uid;
+  var _firstName = '';
+  var _lastName = '';
+  var _username = '';
+
+  void _submitChanges() {
+
+  }
+
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.green,
+          elevation: 0,
           title: const Text('Edit profile'),
+          actions: [
+            Padding(
+          padding: const EdgeInsets.only(right: 20.0),
+          child: GestureDetector(
+            onTap: () {
+              _submitChanges();
+              Navigator.of(context).pop();
+            },
+            child: const Icon(
+              Icons.check,
+              size: 26.0,
+              color: Colors.green,
+            ),
+          ),
         ),
+          ],
+        ),
+        backgroundColor: Colors.white,
         body: ListView(
           padding: EdgeInsets.symmetric(horizontal: 32),
           physics: BouncingScrollPhysics(),
@@ -31,19 +58,25 @@ class _EditProfileState extends State<EditProfile> {
             TextFieldWidget(
               label: 'First Name',
               text: widget.data['firstName'],
-              onChanged: (name) {},
+              onChanged: (firstName) {
+                _firstName = firstName;
+              },
             ),
             const SizedBox(height: 24),
             TextFieldWidget(
               label: 'Last Name',
               text: widget.data['lastName'],
-              onChanged: (name) {},
+              onChanged: (lastName) {
+                _lastName = lastName;
+              },
             ),
             const SizedBox(height: 24),
             TextFieldWidget(
               label: 'Username',
               text: widget.data['username'],
-              onChanged: (age) {},
+              onChanged: (username) {
+                _username = username;
+              },
             ),
           ],
         ),
