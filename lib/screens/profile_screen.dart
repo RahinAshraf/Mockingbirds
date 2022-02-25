@@ -8,12 +8,17 @@ import './splash_screen.dart';
 import '../widgets/profile/profile_page_header.dart';
 import '../helpers/new_scroll_behavior.dart';
 
-class Profile extends StatelessWidget {
+class Profile extends StatefulWidget {
   final String userID;
   static const routeName = '/user';
 
   const Profile(this.userID, {Key? key}) : super(key: key);
 
+  @override
+  State<Profile> createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
   PreferredSizeWidget _buildAppBar(context, data) {
     return AppBar(
       centerTitle: true,
@@ -28,8 +33,10 @@ class Profile extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(right: 20.0),
           child: GestureDetector(
-            onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditProfile(data)));
+            onTap: () async {
+              await Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => EditProfile(data)));
+              setState(() {});
             },
             child: const Icon(
               Icons.edit,
@@ -48,7 +55,10 @@ class Profile extends StatelessWidget {
   Widget build(BuildContext context) {
     final _currentUser = FirebaseAuth.instance.currentUser!.uid;
     return FutureBuilder<DocumentSnapshot>(
-      future: FirebaseFirestore.instance.collection('users').doc(userID).get(),
+      future: FirebaseFirestore.instance
+          .collection('users')
+          .doc(widget.userID)
+          .get(),
       builder:
           (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.hasError) {
@@ -75,7 +85,8 @@ class Profile extends StatelessWidget {
                     return [
                       SliverList(
                         delegate: SliverChildListDelegate([
-                          ProfilePageHeader(data, _currentUser == userID),
+                          ProfilePageHeader(
+                              data, _currentUser == widget.userID),
                         ]),
                       )
                     ];

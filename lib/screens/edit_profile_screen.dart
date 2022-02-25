@@ -24,17 +24,17 @@ class _EditProfileState extends State<EditProfile> {
     if (_username == widget.data['username']) {
       return true;
     }
-    print(_username);
     return (await FirebaseFirestore.instance
-                .collection('users')
-                .where('username', isEqualTo: _username)
-                .get())
-            .docs.isEmpty;
+            .collection('users')
+            .where('username', isEqualTo: _username)
+            .get())
+        .docs
+        .isEmpty;
   }
 
   void _submitChanges() {
     try {
-      _checkUsernameIsFree().then((value) {
+      _checkUsernameIsFree().then((value) async {
         if (!value) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -45,6 +45,11 @@ class _EditProfileState extends State<EditProfile> {
           );
           return;
         } else {
+          await FirebaseFirestore.instance.collection('users').doc(userID).set({
+            if(_firstName != '') 'firstName': _firstName,
+            if(_lastName != '') 'lastName': _lastName,
+            if(_username != '') 'username': _username
+          }, SetOptions(merge: true));
           Navigator.of(context).pop();
         }
       });
@@ -59,64 +64,61 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.green,
-          elevation: 0,
-          title: const Text('Edit profile'),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 20.0),
-              child: GestureDetector(
-                onTap: () {
-                  _submitChanges();
-                },
-                child: const Icon(
-                  Icons.check,
-                  size: 26.0,
-                  color: Colors.green,
-                ),
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.green,
+        elevation: 0,
+        title: const Text('Edit profile'),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 20.0),
+            child: GestureDetector(
+              onTap: () {
+                _submitChanges();
+              },
+              child: const Icon(
+                Icons.check,
+                size: 26.0,
+                color: Colors.green,
               ),
             ),
-          ],
-        ),
-        backgroundColor: Colors.white,
-        body: ListView(
-          padding: EdgeInsets.symmetric(horizontal: 32),
-          physics: BouncingScrollPhysics(),
-          children: [
-            ProfileWidget(widget.data['image_url'], () async {}, true),
-            const SizedBox(height: 24),
-            TextFieldWidget(
-              label: 'First Name',
-              text: widget.data['firstName'],
-              onChanged: (firstName) {
-                _firstName = firstName;
-              },
-            ),
-            const SizedBox(height: 24),
-            TextFieldWidget(
-              label: 'Last Name',
-              text: widget.data['lastName'],
-              onChanged: (lastName) {
-                _lastName = lastName;
-              },
-            ),
-            const SizedBox(height: 24),
-            TextFieldWidget(
-              label: 'Username',
-              text: widget.data['username'],
-              onChanged: (username) {
-                _username = username;
-              },
-            ),
-          ],
-        ),
-      );
+          ),
+        ],
+      ),
+      backgroundColor: Colors.white,
+      body: ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 32),
+        physics: const BouncingScrollPhysics(),
+        children: [
+          ProfileWidget(widget.data['image_url'], () async {}, true),
+          const SizedBox(height: 24),
+          TextFieldWidget(
+            label: 'First Name',
+            text: widget.data['firstName'],
+            onChanged: (firstName) {
+              _firstName = firstName;
+            },
+          ),
+          const SizedBox(height: 24),
+          TextFieldWidget(
+            label: 'Last Name',
+            text: widget.data['lastName'],
+            onChanged: (lastName) {
+              _lastName = lastName;
+            },
+          ),
+          const SizedBox(height: 24),
+          TextFieldWidget(
+            label: 'Username',
+            text: widget.data['username'],
+            onChanged: (username) {
+              _username = username;
+            },
+          ),
+        ],
+      ),
+    );
+  }
 }
-
-// Widget buildStatisticsButton() => ButtonWidget(
-//       text: 'Statistics',
-//       onClicked: () {},
-//     );
