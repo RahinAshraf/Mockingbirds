@@ -8,6 +8,7 @@ import 'package:mapbox_gl/mapbox_gl.dart';
 import '../.env.dart';
 import '../widget/panel_widget.dart';
 import 'map_screen.dart';
+import 'location_service.dart';
 
 class JourneyPlanner extends StatefulWidget {
   JourneyPlanner({Key? key}) : super(key: key);
@@ -24,6 +25,7 @@ class _JourneyPlanner extends State<JourneyPlanner> {
   final standAloneSearchController = TextEditingController();
   final StreamController<List<DynamicWidget>> dynamicWidgets =
       StreamController.broadcast();
+  final locService = LocationService();
 
   List<DynamicWidget> dynamicWidgetList = [];
   List<List<double?>> cordsList = [];
@@ -64,8 +66,9 @@ class _JourneyPlanner extends State<JourneyPlanner> {
                   onMapCreated: _onMapCreated,
                   myLocationEnabled: true,
                   myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
-                  minMaxZoomPreference: const MinMaxZoomPreference(14, 17),
-                  onMapClick: (Point<double> point, LatLng coordinates) {
+                  onMapClick: (Point<double> point, LatLng coordinates) async {
+                    Map s = await locService.reverseGeoCode(coordinates.latitude,coordinates.longitude);
+                    print(s['place']);
                     print(coordinates);
                   },
                 ),

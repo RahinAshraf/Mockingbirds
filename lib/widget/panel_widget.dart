@@ -18,9 +18,9 @@ class PanelWidget extends StatefulWidget {
   final List<DynamicWidget> listDynamic;
   final List<List<double?>?> selectedCords;
   final TextEditingController textEditingController;
-  //final LocationService locationService = LocationService();
 
-  const PanelWidget(
+
+   const PanelWidget(
       {required this.controller,
       required this.dynamicWidgets,
       required this.listDynamic,
@@ -39,6 +39,7 @@ class PanelWidget extends StatefulWidget {
 class PanelWidgetState extends State<PanelWidget> {
   Stream<List<DynamicWidget>> get dynamicWidgetsStream =>
       widget.dynamicWidgets.stream;
+  final locService = LocationService();
 
   addDynamic() {
     widget.listDynamic.add(DynamicWidget(
@@ -59,16 +60,14 @@ class PanelWidgetState extends State<PanelWidget> {
   //   }
   // }
 
-  _useCurrentLocationButtonHandler() async {
+   _useCurrentLocationButtonHandler() async {
+    print("HELLO");
       LatLng currentLocation = getLatLngFromSharedPrefs();
 
-      // Get the response of reverse geocoding and do 2 things:
-      // 1. Store encoded response in shared preferences
-      // 2. Set the text editing controller to the address
-      // var response = await locationService.reverseGeoCode(currentLocation);
-      // sharedPreferences.setString('source', json.encode(response));
-      // String place = response['place'];
-      // widget.textEditingController.text = place;
+      var response = await locService.reverseGeoCode(currentLocation.latitude,currentLocation.longitude);
+      sharedPreferences.setString('source', json.encode(response));
+      String place = response['place'];
+      widget.textEditingController.text = place;
   }
 
   Widget _buildStatic() {
@@ -89,7 +88,7 @@ class PanelWidgetState extends State<PanelWidget> {
                 controller: widget.textEditingController,
                 enabled: false,
                 decoration: InputDecoration(
-                  hintText: 'Current Location',
+                  hintText: 'Where from?',
                   focusedBorder: OutlineInputBorder(
                     borderSide:
                         const BorderSide(color: Colors.black, width: 2.0),
@@ -120,11 +119,11 @@ class PanelWidgetState extends State<PanelWidget> {
                     borderSide:
                         const BorderSide(color: Colors.black, width: 1.0),
                   ),
-                    // suffix: IconButton(
-                    //     onPressed: () => _useCurrentLocationButtonHandler(),
-                    //     //padding: const EdgeInsets.all(10),
-                    //     //constraints: const BoxConstraints(),
-                    //     icon: const Icon(Icons.my_location, size: 0.1))
+                    suffixIcon: IconButton(
+                        onPressed: _useCurrentLocationButtonHandler,
+                        //padding: const EdgeInsets.all(10),
+                        //constraints: const BoxConstraints(),
+                        icon: const Icon(Icons.my_location, size: 20, color: Colors.blue,))
                     ),
                   ),
                 ),
@@ -263,6 +262,16 @@ class PanelWidgetState extends State<PanelWidget> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
+  void showWhereToTextFieldsMustNotBeEmptySnackBar(BuildContext context) {
+    const text = "Please specify locations for all destinations of the journey. Otherwise, remove any empty choices";
+    const snackBar = SnackBar(
+      content: Text(text, style: TextStyle(fontSize: 17),),
+      backgroundColor: Colors.red,
+
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
 //void togglePanel() => panelController.isPanelOpen ? panelController.close() : panelController.open();
 }
 
@@ -281,7 +290,7 @@ class DynamicWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const SizedBox(width: 35),
+          const SizedBox(width: 33),
           //Expanded(
             TextButton(
               onPressed: () {

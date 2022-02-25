@@ -89,7 +89,6 @@ class MyHomePageState extends State<MapPage> {
                 onMapCreated: _onMapCreated,
                 myLocationEnabled: true,
                 myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
-                minMaxZoomPreference: const MinMaxZoomPreference(14, 17),
               ),
             ),
 
