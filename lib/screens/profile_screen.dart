@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
+import 'package:veloplan/screens/edit_profile_screen.dart';
 
 import './splash_screen.dart';
 import '../widgets/profile/profile_page_header.dart';
@@ -23,6 +24,21 @@ class Profile extends StatelessWidget {
           style: const TextStyle(fontSize: 20, color: Colors.black),
         ),
       ),
+      actions: <Widget>[
+        Padding(
+          padding: const EdgeInsets.only(right: 20.0),
+          child: GestureDetector(
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditProfile(data)));
+            },
+            child: const Icon(
+              Icons.edit,
+              size: 26.0,
+              color: Colors.green,
+            ),
+          ),
+        ),
+      ],
       elevation: 0,
       backgroundColor: Colors.white,
     );

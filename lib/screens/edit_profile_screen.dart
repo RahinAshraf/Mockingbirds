@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
-import '../model/user_preference.dart';
-import '../model/user.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../widget/profile_widget.dart';
 import '../widget/textfield_widget.dart';
 
 //import 'package:user_profile_example/widget/button_widget.dart';
 
 class EditProfile extends StatefulWidget {
+  final Map<String,dynamic> data;
+  const EditProfile(this.data, {Key? key}) : super(key: key);
+
   @override
   _EditProfileState createState() => _EditProfileState();
 }
 
 class _EditProfileState extends State<EditProfile> {
-  User user = UserPreferences.myUser;
+  // User user = UserPreferences.myUser;
+  final user = FirebaseAuth.instance.currentUser!.uid;
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
@@ -22,27 +25,24 @@ class _EditProfileState extends State<EditProfile> {
           padding: EdgeInsets.symmetric(horizontal: 32),
           physics: BouncingScrollPhysics(),
           children: [
-            ProfileWidget(
-              imagePath: user.imagePath,
-              isEdit: true,
-              onClicked: () async {},
+            ProfileWidget(widget.data['image_url'], () async {}, true 
             ),
             const SizedBox(height: 24),
             TextFieldWidget(
-              label: 'Full Name',
-              text: user.name,
+              label: 'First Name',
+              text: widget.data['firstName'],
               onChanged: (name) {},
             ),
             const SizedBox(height: 24),
             TextFieldWidget(
-              label: 'Email',
-              text: user.email,
-              onChanged: (email) {},
+              label: 'Last Name',
+              text: widget.data['lastName'],
+              onChanged: (name) {},
             ),
             const SizedBox(height: 24),
             TextFieldWidget(
-              label: 'Age',
-              text: user.age.toString(),
+              label: 'Username',
+              text: widget.data['username'],
               onChanged: (age) {},
             ),
           ],
