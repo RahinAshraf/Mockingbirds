@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -41,6 +42,7 @@ class _GroupCreationFormState extends State<GroupCreationForm> {
     super.initState();
     _ownerID =  auth.currentUser?.uid;
   }
+
   void _trySubmit(String codey) {
     final isValid = _formKey.currentState!.validate();
     FocusScope.of(context).unfocus();
@@ -82,9 +84,21 @@ class _GroupCreationFormState extends State<GroupCreationForm> {
                 children: <Widget>[
                     TextButton(
                       child: const Text('Create new group'),
-                      onPressed: () {
+                      onPressed: () async {
                         Random rng = Random();
                         String codee = rng.nextInt(999999).toString();
+                        var x = await FirebaseFirestore.instance
+                            .collection('group')
+                            .where('code',isEqualTo: codee)
+                            .get();
+                        while(x.size!=0){
+                          codee=rng.nextInt(999999).toString();
+                          x = await FirebaseFirestore.instance
+                              .collection('group')
+                              .where('code',isEqualTo: codee)
+                              .get();
+                        }
+
                         print("this is the codeeeee0:   " +codee);
                         _trySubmit(codee);
 
