@@ -54,17 +54,6 @@ class MyHomePageState extends State<MapPage> {
     List<DockingStation> closest_dock_to_user_location =
         _stationManager.get5ClosestAvailableDockingStationsToGetBikes(
             getLatLngFromSharedPrefs(), _stationManager.stations, 21);
-    log("my loc is: " + getLatLngFromSharedPrefs().toString());
-    log("closest dock station is: " +
-        closest_dock_to_user_location[0].name.toString());
-    log("closest dock station is: " +
-        closest_dock_to_user_location[1].name.toString());
-    log("closest dock station is: " +
-        closest_dock_to_user_location[2].name.toString());
-    log("closest dock station is: " +
-        closest_dock_to_user_location[3].name.toString());
-    log("closest dock station is: " +
-        closest_dock_to_user_location[4].name.toString());
   }
 
   void placeDockMarkers(List<DockingStation> docks) {
