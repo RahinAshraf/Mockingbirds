@@ -1,6 +1,6 @@
 class Group {
   String ownerID;
-  List<String> memberList;
+  List memberList;
   String code;
   String destination;
   Group(

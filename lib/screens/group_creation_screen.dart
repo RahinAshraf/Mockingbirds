@@ -38,7 +38,8 @@ class _GroupCreationScreenState extends State<GroupCreationScreen> {
       ) async {
 
     var ownerID = _auth.currentUser?.uid;
-    List<String> list = [];
+    List list = [];
+    list.add(_auth.currentUser?.uid);
 
     try {
       setState(() {
@@ -53,6 +54,11 @@ class _GroupCreationScreenState extends State<GroupCreationScreen> {
         'ownerID': ownerID,
         'memberList': list,
       });
+      await FirebaseFirestore.instance.collection('users')
+          .doc(_auth.currentUser?.uid)
+          .set({
+        'group': code
+      },SetOptions(merge: true));
     } on PlatformException catch (err) {
       var message = 'An error occurred, please check your credentials!';
 
