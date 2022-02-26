@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'package:veloplan/screens/location_service.dart';
+import 'package:veloplan/screens/place_search_screen.dart';
 import 'screens/map_screen.dart';
 import 'screens/profile_screen.dart';
 import '../widget/navigation_drawer_widget.dart';
@@ -36,7 +38,7 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     screens.add(Profile(_currentUser));
     return Scaffold(
-        // body: screens[currentIndex], //looses the progress
+      // body: screens[currentIndex], //looses the progress
         body: IndexedStack(
           index: currentIndex,
           children: screens, //keeps the screens alive
@@ -44,21 +46,22 @@ class _MainPageState extends State<MainPage> {
         drawer: NavigationDrawerWidget(),
         key: scaffoldKey,
         floatingActionButton: Container(
-          height: 80.0,
-          width: 80.0,
-          child: FloatingActionButton(
-            onPressed: () {
-              onTabTapped(1);
-            },
-            child: Icon(
-              Icons.directions_bike,
-              color: Colors.green,
-              size: 50,
-            ),
-            elevation: 8.0,
-            backgroundColor: Colors.white,
-          ),
-        ),
+            height: 80.0,
+            width: 80.0,
+            child: FloatingActionButton(
+              heroTag: "btn2",
+              onPressed: () {
+                onTabTapped(1);
+                print("Link journey_planner screen to this btn");
+              },
+              child: const Icon(
+                Icons.directions_bike,
+                color: Colors.green,
+                size: 50,
+              ),
+              elevation: 8.0,
+              backgroundColor: Colors.white,
+            )),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: createNavBar());
   }

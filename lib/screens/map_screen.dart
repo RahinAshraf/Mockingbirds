@@ -1,37 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:veloplan/helpers/shared_prefs.dart';
+import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:veloplan/screens/place_search_screen.dart';
 import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
+import 'package:latlong2/latlong.dart' as LatLong;
 import '../.env.dart';
+import 'package:veloplan/screens/location_service.dart';
+
+const double zoom = 16;
 
 class MapPage extends StatefulWidget {
+  const MapPage({Key? key}) : super(key: key);
+
   @override
   MyHomePageState createState() => MyHomePageState();
 }
 
 class MyHomePageState extends State<MapPage> {
-  FlutterMap _buildMap() {
-    return FlutterMap(
-      options: MapOptions(
-        center: LatLng(51.512067, -0.039765),
-        zoom: 16.0,
-      ),
-      layers: [
-        TileLayerOptions(
-          urlTemplate:
-              "https://api.mapbox.com/styles/v1/mockingbirds/ckzh4k81i000n16lcev9vknm5/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibW9ja2luZ2JpcmRzIiwiYSI6ImNremd3NW9weDM2ZmEybm45dzlhYzN0ZnUifQ.lSzpNOhK2CH9-PODR0ojLg",
-          additionalOptions: {
-            'accessToken': MAPBOX_ACCESS_TOKEN,
-            'id': 'mapbox.mapbox-streets-v8',
-          },
-        ),
-        MarkerLayerOptions(
-          markers: _markers.toList(),
-        ),
-      ],
-    );
-  }
+  LatLng latLng = getLatLngFromSharedPrefs();
+  late CameraPosition _initialCameraPosition;
+  late MapboxMapController controller;
+
+  TextEditingController _searchController = TextEditingController();
 
   late Future<List<DockingStation>> future_docks;
   Set<Marker> _markers = Set<Marker>();
@@ -39,6 +31,11 @@ class MyHomePageState extends State<MapPage> {
   @override
   void initState() {
     super.initState();
+    _initialCameraPosition = CameraPosition(target: latLng, zoom: zoom);
+  }
+
+  _onMapCreated(MapboxMapController controller) async {
+    this.controller = controller;
     fetchDockingStations();
   }
 
@@ -53,7 +50,7 @@ class MyHomePageState extends State<MapPage> {
     setState(() {
       for (var station in docks) {
         _markers.add(Marker(
-            point: LatLng(station.lat, station.lon),
+            point: LatLong.LatLng(station.lat, station.lon),
             builder: (_) {
               return _buildCustomMarker();
             }));
@@ -80,14 +77,44 @@ class MyHomePageState extends State<MapPage> {
   @override
   Widget build(BuildContext build) {
     return Scaffold(
-        body: Stack(
-      children: [
-        Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          child: _buildMap(),
+      body: SafeArea(
+        child: Stack(
+          children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              child: MapboxMap(
+                accessToken: MAPBOX_ACCESS_TOKEN,
+                initialCameraPosition: _initialCameraPosition,
+                onMapCreated: _onMapCreated,
+                myLocationEnabled: true,
+                myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
+                minMaxZoomPreference: const MinMaxZoomPreference(14, 17),
+              ),
+            ),
+
+            //PLACEHOLDER FAB
+            FloatingActionButton(
+              heroTag: "btn3",
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) =>
+                        PlaceSearchScreen(LocationService())));
+                print(
+                    "This btn is to the search location screen. There is a screen in the design that comes before the search location screen so it is accessible from here for now");
+              },
+            ),
+          ],
         ),
-      ],
-    ));
+      ),
+      floatingActionButton: FloatingActionButton(
+        heroTag: "btn1",
+        onPressed: () {
+          controller.animateCamera(
+              CameraUpdate.newCameraPosition(_initialCameraPosition));
+        },
+        child: const Icon(Icons.my_location),
+      ),
+    );
   }
 }
