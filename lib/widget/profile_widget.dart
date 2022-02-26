@@ -1,16 +1,27 @@
 //import 'dart:html';
-import 'package:flutter/material.dart';
+import 'dart:io';
 
-class ProfileWidget extends StatelessWidget {
-  final String imagePath;
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+class ProfileWidget extends StatefulWidget {
+  String imagePath;
   final VoidCallback onClicked;
   final bool isEdit;
 
-  const ProfileWidget(this.imagePath, this.onClicked, this.isEdit, {Key? key})
+  ProfileWidget(this.imagePath, this.onClicked, this.isEdit, {Key? key})
       : super(key: key);
 
+  @override
+  State<ProfileWidget> createState() => _ProfileWidgetState();
+}
+
+class _ProfileWidgetState extends State<ProfileWidget> {
   Widget buildImage() {
-    final image = NetworkImage(imagePath);
+    final image = NetworkImage(widget.imagePath);
 
     return ClipOval(
       child: Material(
@@ -20,7 +31,7 @@ class ProfileWidget extends StatelessWidget {
           fit: BoxFit.cover,
           width: 128,
           height: 128,
-          child: InkWell(onTap: onClicked),
+          child: InkWell(onTap: widget.onClicked),
         ),
       ),
     );
@@ -33,7 +44,7 @@ class ProfileWidget extends StatelessWidget {
           color: color,
           all: 8,
           child: Icon(
-            isEdit ? Icons.add_a_photo : Icons.edit,
+            widget.isEdit ? Icons.add_a_photo : Icons.edit,
             color: Colors.white,
             size: 20,
           ),
@@ -53,13 +64,36 @@ class ProfileWidget extends StatelessWidget {
         ),
       );
 
+  Future setPicture() async {
+    final _userID = FirebaseAuth.instance.currentUser!.uid;
+    final _pickedImageFile = await ImagePicker().pickImage(
+      source: ImageSource
+          .camera, // isCamera ? ImageSource.camera : ImageSource.gallery,
+      imageQuality: 50,
+      maxWidth: 150,
+    );
+    if (_pickedImageFile != null) {
+      final ref = FirebaseStorage.instance
+          .ref()
+          .child('user_image')
+          .child(_userID + '.jpg');
+      await ref.putFile(File(_pickedImageFile.path));
+      widget.imagePath = await ref.getDownloadURL();
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(_userID)
+          .set({'image_url': widget.imagePath}, SetOptions(merge: true));
+      setState(() {});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final color = Theme.of(context).colorScheme.primary;
     // final color = Colors.green;
 
     return Center(
-      child: isEdit
+      child: widget.isEdit
           ? Stack(
               children: [
                 Padding(
@@ -69,7 +103,10 @@ class ProfileWidget extends StatelessWidget {
                 Positioned(
                   bottom: 0,
                   right: 4,
-                  child: buildEditIcon(color),
+                  child: GestureDetector(
+                    onTap: setPicture,
+                    child: buildEditIcon(color),
+                  ),
                 ),
               ],
             )
