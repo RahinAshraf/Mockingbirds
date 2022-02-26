@@ -10,6 +10,13 @@ import '../widget/panel_widget.dart';
 import 'map_screen.dart';
 import 'location_service.dart';
 
+
+class MapPlace{
+  String? address;
+  LatLng? cords;
+  MapPlace(this.address, this.cords);
+}
+
 class JourneyPlanner extends StatefulWidget {
   JourneyPlanner({Key? key}) : super(key: key);
 
@@ -23,6 +30,7 @@ class _JourneyPlanner extends State<JourneyPlanner> {
   late MapboxMapController controller;
   final panelController = PanelController();
   final standAloneSearchController = TextEditingController();
+  final StreamController<MapPlace> address = StreamController.broadcast();
   final StreamController<List<DynamicWidget>> dynamicWidgets =
       StreamController.broadcast();
   final locService = LocationService();
@@ -44,7 +52,7 @@ class _JourneyPlanner extends State<JourneyPlanner> {
   Widget build(BuildContext context) {
     final panelHeightClosed = MediaQuery.of(context).size.height * 0.1;
     final panelHeightOpen = MediaQuery.of(context).size.height * 0.6;
-
+    List<MapPlace> mapList = [];
     return Scaffold(
       body: SlidingUpPanel(
         padding: const EdgeInsets.only(left: 10, right: 10),
@@ -68,7 +76,11 @@ class _JourneyPlanner extends State<JourneyPlanner> {
                   myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
                   onMapClick: (Point<double> point, LatLng coordinates) async {
                     Map s = await locService.reverseGeoCode(coordinates.latitude,coordinates.longitude);
+                    address.sink.add(MapPlace(s['place'], s['location']));
                     print(s['place']);
+                    print("Latitdue");
+                    print(s['location'].latitude);
+                    print("TEST");
                     print(coordinates);
                   },
                 ),
@@ -78,6 +90,8 @@ class _JourneyPlanner extends State<JourneyPlanner> {
         ),
         panelBuilder: (controller) => PanelWidget(
           controller: controller,
+          selectionMap: Map(),
+          address: address.stream,
           listDynamic: dynamicWidgetList,
           textEditingController: standAloneSearchController,
           dynamicWidgets: dynamicWidgets,

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
+import 'package:mapbox_gl/mapbox_gl.dart';
 
 /*
 *LocationService class to retrieve results from Mapbox API
@@ -40,6 +41,7 @@ class LocationService {
       'name': feature['text'],
       'address': feature['place_name'].split('${feature['text']}, ')[1],
       'place': feature['place_name'],
+      'location': LatLng(lat,lng),
     };
     return revGeocode;
   }
@@ -93,7 +95,8 @@ class Geometry{
 
   Geometry.fromJson(Map<String, dynamic> json){
     if(json['coordinates'] != null){
-      coordinates = List.from(json['coordinates']).map((e) => double.tryParse(e.toString())).toList();
+      final reversedIterable = List.from(json['coordinates']).map((e) =>  double.tryParse(e.toString())).toList().reversed;
+      coordinates = reversedIterable.toList();
     }
   }
 
