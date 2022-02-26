@@ -66,23 +66,24 @@ class dockingStationManager {
 
   /** Calculate the distance between two docking stations,
    *  an unprecise formula that doesnt take the curve of Earth */
-  double calculateDistanceBtw2Points(DockingStation doc1, DockingStation doc2) {
+  double distance_btw_2_points(DockingStation doc1, DockingStation doc2) {
     return sqrt(pow((doc1.lon - doc2.lon), 2) + pow((doc1.lat - doc2.lat), 2));
   }
 
   /** Calculate the distance between two docking stations */
-  double distanceBtw2Stations(DockingStation doc1, DockingStation doc2) {
-    return distanceBtwLocationsHandler(doc1.lon, doc1.lat, doc2.lon, doc2.lat);
+  double distance_btw_2_stations(DockingStation doc1, DockingStation doc2) {
+    return distance_btw_locations_handler(
+        doc1.lon, doc1.lat, doc2.lon, doc2.lat);
   }
 
   /** Calculate the distance between given location and docking stations */
-  double distanceBtwLocAndStation(LatLng loc, DockingStation doc) {
-    return distanceBtwLocationsHandler(
+  double distance_btw_loc_and_station(LatLng loc, DockingStation doc) {
+    return distance_btw_locations_handler(
         loc.longitude, loc.latitude, doc.lon, doc.lat);
   }
 
   /** Calculate the distance between two given locations*/
-  double distanceBtwLocationsHandler(
+  double distance_btw_locations_handler(
       double lon1, double lat1, double lon2, double lat2) {
     double R = 6371e3;
     double phi1 = (lat1 * pi / 180);
@@ -104,34 +105,31 @@ class dockingStationManager {
   }
 
   /* Filter the given docking stations by distance from the given docking station*/
-  List<DockingStation> filterAllDockingStationsByDistance(
-      DockingStation doc, List<DockingStation> stations) {
-    stations.sort((a, b) => distanceBtw2Stations(doc, a)
-        .compareTo(distanceBtw2Stations(doc, b).toDouble()));
+  List<DockingStation> filterAllDockingStationsByDistance(DockingStation doc) {
+    stations.sort((a, b) => distance_btw_2_stations(doc, a)
+        .compareTo(distance_btw_2_stations(doc, b).toDouble()));
     return stations;
   }
 
   /* Filter the given docking stations by distance from the given location*/
-  List<DockingStation> filterAllStationsByDistanceFromGivenLoc(
+  List<DockingStation> sort_docs_by_distance_from_loc(
       LatLng loc, List<DockingStation> stations) {
-    stations.sort((a, b) => distanceBtwLocAndStation(loc, a)
-        .compareTo(distanceBtwLocAndStation(loc, b).toDouble()));
+    stations.sort((a, b) => distance_btw_loc_and_station(loc, a)
+        .compareTo(distance_btw_loc_and_station(loc, b).toDouble()));
     return stations;
   }
 
   /* Get the closest docking station by given docking station and stations*/
-  DockingStation getClosestDockingStations(
-      LatLng user_location, List<DockingStation> stations) {
+  DockingStation get_closest_dock(LatLng user_location) {
     List<DockingStation> filtered_stations =
-        filterAllStationsByDistanceFromGivenLoc(user_location, stations);
+        sort_docs_by_distance_from_loc(user_location, stations);
     return filtered_stations[0];
   }
 
   /* Get the 5 closest docking stations by given location and stations*/
-  List<DockingStation> get5ClosestDockingStations(
-      LatLng user_location, List<DockingStation> stations) {
+  List<DockingStation> get_5_closest_docks(LatLng user_locationd) {
     List<DockingStation> filtered_stations =
-        filterAllStationsByDistanceFromGivenLoc(user_location, stations);
+        sort_docs_by_distance_from_loc(user_locationd, stations);
     if (filtered_stations.isNotEmpty && filtered_stations.length > 4) {
       return filtered_stations.take(5).toList();
     } else {
@@ -140,35 +138,29 @@ class dockingStationManager {
   }
 
   /* Get the closest available docking stations by given docking station and stations, minimum of available bikes to get */
-  DockingStation getClosestAvailableDockingStationsToGetBikes(
-      LatLng user_location,
-      List<DockingStation> stations,
-      int number_of_bike_spaces) {
-    List<DockingStation> filtered_stations =
-        filterAllStationsByDistanceFromGivenLoc(user_location,
-            get_all_stations_with_number_of_bikes(number_of_bike_spaces));
+  DockingStation get_closest_dock_to_get_bikes(
+      LatLng user_location, int number_of_bike_spaces) {
+    List<DockingStation> filtered_stations = sort_docs_by_distance_from_loc(
+        user_location,
+        get_all_stations_with_number_of_bikes(number_of_bike_spaces));
     return filtered_stations[0];
   }
 
   /* Get the closest available docking stations by given docking station and stations, minimum of available bikes to leave */
-  DockingStation getClosestAvailableDockingStationsToLeaveBikes(
-      LatLng user_location,
-      List<DockingStation> stations,
-      int number_of_empty_spaces) {
-    List<DockingStation> filtered_stations =
-        filterAllStationsByDistanceFromGivenLoc(user_location,
-            get_all_stations_with_number_empty_docks(number_of_empty_spaces));
+  DockingStation get_closest_dock_to_leave_bikes(
+      LatLng user_location, int number_of_empty_spaces) {
+    List<DockingStation> filtered_stations = sort_docs_by_distance_from_loc(
+        user_location,
+        get_all_stations_with_number_empty_docks(number_of_empty_spaces));
     return filtered_stations[0];
   }
 
   /* Get the 5 closest available docking stations by given location and stations, number of available bikes to get*/
-  List<DockingStation> get5ClosestAvailableDockingStationsToGetBikes(
-      LatLng user_location,
-      List<DockingStation> stations,
-      int number_of_bike_spaces) {
-    List<DockingStation> filtered_stations =
-        filterAllStationsByDistanceFromGivenLoc(user_location,
-            get_all_stations_with_number_of_bikes(number_of_bike_spaces));
+  List<DockingStation> get_5_closest_docks_to_get_bikes(
+      LatLng user_location, int number_of_bike_spaces) {
+    List<DockingStation> filtered_stations = sort_docs_by_distance_from_loc(
+        user_location,
+        get_all_stations_with_number_of_bikes(number_of_bike_spaces));
     if (filtered_stations.isNotEmpty && filtered_stations.length > 4) {
       return filtered_stations.take(5).toList();
     } else {
@@ -177,13 +169,11 @@ class dockingStationManager {
   }
 
   /* Get the 5 closest available docking stations by given location and stations, number of available bikes to leave*/
-  List<DockingStation> get5ClosestAvailableDockingStationsToLeaveBikes(
-      LatLng user_location,
-      List<DockingStation> stations,
-      int number_of_empty_spaces) {
-    List<DockingStation> filtered_stations =
-        filterAllStationsByDistanceFromGivenLoc(user_location,
-            get_all_stations_with_number_empty_docks(number_of_empty_spaces));
+  List<DockingStation> get_5_closest_docks_to_leave_bikes(
+      LatLng user_location, int number_of_empty_spaces) {
+    List<DockingStation> filtered_stations = sort_docs_by_distance_from_loc(
+        user_location,
+        get_all_stations_with_number_empty_docks(number_of_empty_spaces));
     if (filtered_stations.isNotEmpty && filtered_stations.length > 4) {
       return filtered_stations.take(5).toList();
     } else {

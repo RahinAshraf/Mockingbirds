@@ -51,9 +51,8 @@ class MyHomePageState extends State<MapPage> {
 
   void initialiseStations(dockingStationManager _stationManager) {
     docking_stations = _stationManager.stations;
-    List<DockingStation> closest_dock_to_user_location =
-        _stationManager.get5ClosestAvailableDockingStationsToGetBikes(
-            getLatLngFromSharedPrefs(), _stationManager.stations, 21);
+    List<DockingStation> closest_dock_to_user_location = _stationManager
+        .get_5_closest_docks_to_get_bikes(getLatLngFromSharedPrefs(), 21);
   }
 
   void placeDockMarkers(List<DockingStation> docks) {
