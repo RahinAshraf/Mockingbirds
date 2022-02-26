@@ -64,11 +64,39 @@ class _ProfileWidgetState extends State<ProfileWidget> {
         ),
       );
 
-  Future setPicture() async {
+  void showPicker() {
+  showModalBottomSheet(
+      context: context,
+      builder: (BuildContext bc) {
+        return SafeArea(
+          child: Wrap(
+            children: <Widget>[
+              ListTile(
+                  leading: const Icon(Icons.photo_library),
+                  title: const Text('Photo Library'),
+                  onTap: () {
+                    setPicture(false);
+                    Navigator.of(context).pop();
+                  }),
+              ListTile(
+                leading: const Icon(Icons.photo_camera),
+                title: const Text('Camera'),
+                onTap: () {
+                  setPicture(true);
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        );
+      }
+    );
+}
+
+  Future setPicture(bool isCamera) async {
     final _userID = FirebaseAuth.instance.currentUser!.uid;
     final _pickedImageFile = await ImagePicker().pickImage(
-      source: ImageSource
-          .camera, // isCamera ? ImageSource.camera : ImageSource.gallery,
+      source: isCamera ? ImageSource.camera : ImageSource.gallery,
       imageQuality: 50,
       maxWidth: 150,
     );
@@ -77,12 +105,21 @@ class _ProfileWidgetState extends State<ProfileWidget> {
           .ref()
           .child('user_image')
           .child(_userID + '.jpg');
-      await ref.putFile(File(_pickedImageFile.path));
-      widget.imagePath = await ref.getDownloadURL();
-      FirebaseFirestore.instance
-          .collection('users')
-          .doc(_userID)
-          .set({'image_url': widget.imagePath}, SetOptions(merge: true));
+      try {
+        await ref.putFile(File(_pickedImageFile.path));
+        widget.imagePath = await ref.getDownloadURL();
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(_userID)
+            .set({'image_url': widget.imagePath}, SetOptions(merge: true));
+      } catch (error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(error.toString()),
+            backgroundColor: Theme.of(context).errorColor,
+          ),
+        );
+      }
       setState(() {});
     }
   }
@@ -104,7 +141,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                   bottom: 0,
                   right: 4,
                   child: GestureDetector(
-                    onTap: setPicture,
+                    onTap: showPicker,
                     child: buildEditIcon(color),
                   ),
                 ),
