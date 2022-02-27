@@ -12,7 +12,6 @@ class _FavouriteState extends State<Favourite> {
   var _dockingStationCarousel =
       dockingStationCarousel(); //retrieves all of the docking station cards
 
-  List<DockingStation> details = [];
   late List<FavouriteDockingStation> favourites;
 
   @override

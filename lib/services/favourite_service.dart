@@ -12,6 +12,7 @@ import 'package:flutterfire_ui/firestore.dart';
 import 'package:veloplan/services/user_services.dart';
 
 class FirestoreHelper {
+  //change these to var?
   FirebaseFirestore db = FirebaseFirestore.instance;
   CollectionReference favourites =
       FirebaseFirestore.instance.collection('favourites');
@@ -27,6 +28,7 @@ class FirestoreHelper {
         .catchError((error) => print("Failed to add fave: $error"));
   }
 
+//THIS NEEDS TO BE FIXED:
   void toggleFavourite(DockingStation station) {
     addFavourite(station.id);
   }
@@ -58,6 +60,7 @@ class FirestoreHelper {
     //print(favs[0].stationId);
   }
 
+//Deletes every single favourite documentS
   Future deleteAllFavouriteCollections() async {
     var snapshots = await favourites.get();
     for (var doc in snapshots.docs) {
@@ -65,6 +68,7 @@ class FirestoreHelper {
     }
   }
 
+//Deletes a specifc document for a given user.
   Future deleteFavouriteDocument(String documentReference, String uid) async {
     await db.collection('favourites').doc(documentReference).delete();
 
@@ -72,6 +76,7 @@ class FirestoreHelper {
         await db.collection('favourites').where('userId', isEqualTo: uid).get();
   }
 
+//this needs to be fixed:
   Future<void> updateFavourite() {
     return favourites
         .doc('ABC123')
@@ -82,8 +87,9 @@ class FirestoreHelper {
         .catchError((error) => print("Failed to add user: $error"));
   }
 
+//checks if a given station has been favourited.
   bool isFavouriteStation(String stationId, List faveList) {
-    //FavouriteDockingStation f;
+    //checks if the station id is in the list of faves.
     FavouriteDockingStation fave = faveList
         .firstWhere((f) => (f.stationId == stationId), orElse: () => null);
 
@@ -122,8 +128,6 @@ class FirestoreHelper {
 //     return favs;
 //   }
 
-
-
 // Future deleteAllFavouriteCollectionsUser(String uid) async {
 //   // print("hello");
 //   var snapshots =
@@ -134,8 +138,6 @@ class FirestoreHelper {
 //     await doc.reference.delete();
 //   }
 // }
-
-
 
 // var getFavouriteDocumentToUser(String uid) async{
 //   return await db.collection('favourites').where('userId', isEqualTo: uid).get();
@@ -155,8 +157,7 @@ class FirestoreHelper {
 //   print(userFavourite.length);
 //   return userFavourite;
 
-  //print(userFavourite.length);
-  // return userFavourite;
-
+//print(userFavourite.length);
+// return userFavourite;
 
 // TOOD: fetch the current users favourites

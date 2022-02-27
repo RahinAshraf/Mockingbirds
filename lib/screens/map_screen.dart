@@ -94,7 +94,7 @@ class MyHomePageState extends State<MapPage> {
               alignment: Alignment(0, 0),
               child: FloatingActionButton(onPressed: () {
                 //FavouriteDockingStation("a", "b");
-                //helper.addFavourite("hello");
+                //helper.addFavourite("test");
                 //FirestoreHelper.getUserFavourites();
                 // getUserFavourites();
                 //deleteAllFavouriteCollections();

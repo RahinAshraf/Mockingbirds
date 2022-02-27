@@ -106,16 +106,18 @@ import 'docking_station_detail.dart';
 import '../services/user_services.dart';
 
 ///Adds a station to current users favourite
+///
+///
 class FavouriteDockingStation {
   late String id;
   late String uid;
-  late String stationId;
+  late String _stationId;
   //List<FavouriteDockingStation> favs = []; //just testing
 
   CollectionReference favourites =
       FirebaseFirestore.instance.collection('favourites');
 
-  FavouriteDockingStation(this.id, this.stationId) {
+  FavouriteDockingStation(this.id, this._stationId) {
     uid = getUid();
     // addFavourite();
     // getUserFavourites();
@@ -125,7 +127,7 @@ class FavouriteDockingStation {
   FavouriteDockingStation.map(DocumentSnapshot document) {
     this.id = document.id;
     this.uid = document.get('user_id');
-    this.stationId = document.get('station_id');
+    this._stationId = document.get('station_id');
   }
 
   Map toMap() {
@@ -137,6 +139,8 @@ class FavouriteDockingStation {
     map['user_id'] = uid;
     return map;
   }
+
+  String get stationId => _stationId;
 }
 
   // Future<void> addFavourite() {
