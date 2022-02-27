@@ -8,16 +8,11 @@ class DockingStation {
   final int nb_total_docks;
   final double lon;
   final double lat;
+  bool _isFavourite;
 
-  DockingStation(
-      this.id,
-      this.name,
-      this.installed,
-      this.locked,
-      this.nb_bikes,
-      this.nb_empty_docks,
-      this.nb_total_docks,
-      this.lon,
-      this.lat
-      );
+  DockingStation(this.id, this.name, this.installed, this.locked, this.nb_bikes,
+      this.nb_empty_docks, this.nb_total_docks, this.lon, this.lat,
+      [this._isFavourite = false]);
+
+  bool get isFavourite => _isFavourite;
 }

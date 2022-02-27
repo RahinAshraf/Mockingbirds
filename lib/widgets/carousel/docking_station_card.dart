@@ -11,11 +11,13 @@ import 'package:flutter/services.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutterfire_ui/firestore.dart';
+import 'package:veloplan/models/docking_station.dart';
 
 ///Creates a card for a docking station, to include its name, number of bikes and empty bikes.
+FirestoreHelper helper = FirestoreHelper();
 
-Widget dockingStationCard(
-    int index, String id, String name, String nb_bikes, String nb_empty_docks) {
+Widget dockingStationCard(int index, DockingStation station, String id,
+    String name, String nb_bikes, String nb_empty_docks) {
   return Card(
     clipBehavior: Clip.antiAlias,
     child: Padding(
@@ -24,7 +26,8 @@ Widget dockingStationCard(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           FavoriteButton(valueChanged: (_isFavorite) {
-            handleLikedCard(id);
+            //handleLikedCard(id);
+            helper.toggleFavourite(station);
           }),
           const SizedBox(width: 10),
           Expanded(
@@ -43,7 +46,13 @@ Widget dockingStationCard(
   );
 }
 
-void handleLikedCard(id) {
-  // FavouriteDockingStation(id);
-  //print(id);
-}
+// void handleLikedCard(id) {
+//   // FavouriteDockingStation(id);
+//   //print(id);
+// }
+
+// FirestoreHelper helper = FirestoreHelper();
+
+// void toggleFavourite(DockingStation station) {
+//   helper.addFavourite(station.id);
+// }

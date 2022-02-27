@@ -27,6 +27,7 @@ class dockingStationCarousel {
         carouselData.add(
           {
             'index': index,
+            'station': station,
             'id': station.id,
             'name': station.name,
             'nb_bikes': station.nb_bikes.toString(),
@@ -40,6 +41,7 @@ class dockingStationCarousel {
         docks.length,
         (index) => dockingStationCard(
               carouselData[index]['index'],
+              carouselData[index]['station'],
               carouselData[index]['id'],
               carouselData[index]['name'],
               carouselData[index]['nb_bikes'],

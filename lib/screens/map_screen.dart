@@ -92,13 +92,11 @@ class MyHomePageState extends State<MapPage> {
           Container(
               alignment: Alignment(0, 0),
               child: FloatingActionButton(onPressed: () {
-                FavouriteDockingStation("a", "b");
+                //FavouriteDockingStation("a", "b");
+                //addFavourite("hello");
+                // getUserFavourites();
                 //deleteAllFavouriteCollections();
-                //FavouriteDockingStation("9wWo6RH8HOxbnG3FdxP4");
-                // print(getFavouriteDocuments("iJvSaaAldugVks8w5gjJb4013c43"));
-                //deleteAllFavouriteCollectionsUser("iJvSaaAldugVks8w5gjJb4013c43");
-                //deleteFavourite("LeFUwGVnWtJXJl6exmj2");
-                //deleteAllFavouriteCollections();
+                //deleteFavourite("thBik3xyKhC1QZMdZrG3");
               }))
         ],
       ),
