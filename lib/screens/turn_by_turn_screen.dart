@@ -53,7 +53,7 @@ class _TurnByTurnState extends State<TurnByTurn> {
         mode: MapBoxNavigationMode.cycling,
         isOptimized: true,
         units: VoiceUnits.metric,
-        simulateRoute: false,
+        simulateRoute: true, //false to use live movement
         language: "en");
 
     // Start the trip
