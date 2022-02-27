@@ -50,7 +50,7 @@ class MyHomePageState extends State<MapPage> {
     LatLng(51.502254, -0.217760),
   ];
 
-  late MapboxMapController? controller;
+  late MapboxMapController controller;
   late CameraPosition _cameraPosition;
 
   LatLng currentLatLng = const LatLng(51.51185004458236, -0.11580820118980878);
@@ -82,8 +82,6 @@ class MyHomePageState extends State<MapPage> {
   }
 
   void placeDockMarkers(List<DockingStation> docks) {
-    print(
-        "PRINTPRINTPRINT------------------------------------------------------------");
     for (var station in docks) {
       // print(station.lat);
       //print(docks.length);
@@ -280,13 +278,13 @@ class MyHomePageState extends State<MapPage> {
     LatLng center = getCentroid(journey);
     _cameraPosition = CameraPosition(
         target: center, zoom: getZoom(getRadius(journey, center)), tilt: 5);
-    controller!.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
+    controller.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
   }
 
   void addFills() async {
-    await controller!.addSource(
+    await controller.addSource(
         "fills", GeojsonSourceProperties(data: _fills)); //creates the line
-    await controller!.addLineLayer(
+    await controller.addLineLayer(
       "fills",
       "lines",
       LineLayerProperties(
@@ -300,8 +298,8 @@ class MyHomePageState extends State<MapPage> {
   }
 
   void removeFills() async {
-    await controller!.removeLayer("lines");
-    await controller!.removeSource("fills");
+    await controller.removeLayer("lines");
+    await controller.removeSource("fills");
   }
 
   void setJourney(List<LatLng> journey) async {
@@ -326,7 +324,7 @@ class MyHomePageState extends State<MapPage> {
         target: _cameraPosition.target,
         zoom: _cameraPosition.zoom + 0.5,
         tilt: 5);
-    controller!.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
+    controller.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
     print("lol");
   }
 
@@ -335,7 +333,7 @@ class MyHomePageState extends State<MapPage> {
         target: _cameraPosition.target,
         zoom: _cameraPosition.zoom - 0.5,
         tilt: 5);
-    controller!.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
+    controller.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
   }
 }
 
