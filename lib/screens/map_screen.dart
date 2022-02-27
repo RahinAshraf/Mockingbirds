@@ -34,7 +34,6 @@ class MyHomePageState extends State<MapPage> {
   bool showMarkers = false;
   //Set<Symbol> _markers = Set<Symbol>();
 
-
   // var zoom = LatLng(51.51185004458236, -0.11580820118980878);
   String googleMapsApi = 'AIzaSyB7YSQkjjqm-YU1LAz91lyYAvCpqFRhFdU';
   String accessToken =
@@ -51,7 +50,7 @@ class MyHomePageState extends State<MapPage> {
     LatLng(51.502254, -0.217760),
   ];
 
-  late MapboxMapController controller;
+  late MapboxMapController? controller;
   late CameraPosition _cameraPosition;
 
   LatLng currentLatLng = const LatLng(51.51185004458236, -0.11580820118980878);
@@ -68,85 +67,66 @@ class MyHomePageState extends State<MapPage> {
     _cameraPosition = CameraPosition(target: currentLatLng, zoom: 12);
     // _initialCameraPosition = CameraPosition(target: latLng, zoom: zoom);
     getRouteResponse();
+    fetchDockingStations();
   }
 
   void getRouteResponse() async {
     routeResponse = await manager.getDirections(points[0], points[1]);
   }
 
-
-  void fetchDockingStations() async {
+  void fetchDockingStations() {
+    // print("here2");
     final dockingStationManager _stationManager = dockingStationManager();
     _stationManager
         .importStations()
         .then((value) => placeDockMarkers(_stationManager.stations));
   }
 
+  void placeDockMarkers(List<DockingStation> docks) {
+    print(
+        "PRINTPRINTPRINT------------------------------------------------------------");
+    for (var station in docks) {
+      // print(station.lat);
+      //print(docks.length);
+      controller!.addSymbol(
+        SymbolOptions(
+            geometry: LatLng(station.lat, station.lon),
+            iconSize: 0.5,
+            iconImage: "assets/icon/bicycle.png"),
+      );
+      if (controller == null) {
+        print("ITS NULLLLLLLLLLLLLLL");
+      } else {
+        print("ITS NOT NULL!!!");
+      }
+    }
+    // print("symbols here:" + controller.symbols.toString());
+  }
 
-  // void placeDockMarkers(List<DockingStation> docks) {
-  //   int i = 0;
-  //   setState(() {
-  //     for (var station in docks) {
-  //       _markers.add(Marker(
-  //           point: LatLng(station.lat, station.lon),
-  //           builder: (_) {
-  //             return Container(
-  //               height: 30,
-  //               width: 30,
-  //               decoration: BoxDecoration(
-  //                 color: Colors.red[100],
-  //                 shape: BoxShape.circle,
-  //                 image: const DecorationImage(
-  //                   image: NetworkImage(
-  //                       'https://www.iconpacks.net/icons/1/free-icon-bicycle-1054.png'),
-  //                   fit: BoxFit.cover,
-  //                 ),
-  //               ),
-  //             );
-  //           }));
-  //     }
+  // //Currently attempting to display two markers
+  // placeMarkers() async {
+  //   await controller.addSymbol(const SymbolOptions(
+  //     iconSize: 0.1,
+  //     iconImage: "assets/icon/red.png",
+  //     geometry: LatLng(-0.1145, 51.5176),
+  //   ));
+
+  //   await controller.addSymbol(const SymbolOptions(
+  //     iconSize: 0.1,
+  //     iconImage: "assets/icon/red.png",
+  //     geometry: LatLng(-0.1135, 51.5158),
+  //   ));
+
+  //   controller.symbols.forEach((element) {
+  //     print("created symbol");
   //   });
   // }
-
-
-  void placeDockMarkers(List<DockingStation> docks) async{ 
-      for (var station in docks) {
-        print(station.lat);
-        await controller.addSymbol(SymbolOptions(
-              geometry: LatLng(station.lon, station.lat),
-              iconSize: 0.5,
-              iconImage: "assets/icon/bicycle.png"),
-        ); 
-      }
-      print("symbols here:" + controller.symbols.toString()); 
-  }
-
-
-  //Currently attempting to display two markers 
-  placeMarkers() async { 
-      await controller.addSymbol(const SymbolOptions(
-          iconSize: 0.1,
-          iconImage: "assets/icon/red.png",
-          geometry: LatLng(-0.1145,51.5176),));
-      
-      await controller.addSymbol(const SymbolOptions(
-          iconSize: 0.1,
-          iconImage: "assets/icon/red.png",
-          geometry: LatLng(-0.1135,51.5158),));
-
-      controller.symbols.forEach((element){
-        print("created symbol");
-      });
-
-  }
-
-
 
   void _onMapCreated(MapboxMapController controller) async {
     this.controller = controller;
   }
 
-//Simplified build for development 
+//Simplified build for development
   @override
   Widget build(BuildContext build) {
     return Scaffold(
@@ -156,7 +136,7 @@ class MyHomePageState extends State<MapPage> {
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           child: MapboxMap(
-            accessToken: accessToken, 
+            accessToken: accessToken,
             initialCameraPosition: _cameraPosition,
             onMapCreated: _onMapCreated,
             onStyleLoadedCallback: _onStyleLoadedCallback,
@@ -166,28 +146,32 @@ class MyHomePageState extends State<MapPage> {
             // minMaxZoomPreference: const MinMaxZoomPreference(14, 17),
           ),
         ),
-        Container(
-          alignment: Alignment(-0.5, -0.5),
-          child: (showMarkers)? FloatingActionButton(
-            heroTag: "Show markers",
-            child: Icon(Icons.start, color: Colors.white),
-            onPressed: placeMarkers,
-          ): Container(),
-        ),
+        // Container(
+        //   alignment: Alignment(-0.5, -0.5),
+        //   child: (showMarkers)
+        //       ? FloatingActionButton(
+        //           heroTag: "Show markers",
+        //           child: Icon(Icons.wallet_giftcard, color: Colors.white),
+        //           onPressed: placeMarkers,
+        //         )
+        //       : Container(),
+        // ),
         Container(
           alignment: Alignment(-0.5, -0.7),
           child: FloatingActionButton(
             heroTag: "+",
             child: Icon(Icons.add, color: Colors.white),
-            onPressed: zoomIn,),
+            onPressed: zoomIn,
+          ),
         ),
-          Container(
+        Container(
           alignment: Alignment(-0.9, -0.7),
           child: FloatingActionButton(
             heroTag: "-",
             child: Icon(Icons.horizontal_rule, color: Colors.white),
-            onPressed: zoomOut, 
-          ),),
+            onPressed: zoomOut,
+          ),
+        ),
       ],
     ));
   }
@@ -201,7 +185,7 @@ class MyHomePageState extends State<MapPage> {
   //         height: MediaQuery.of(context).size.height,
   //         width: MediaQuery.of(context).size.width,
   //         child: MapboxMap(
-  //           accessToken: accessToken, 
+  //           accessToken: accessToken,
   //           initialCameraPosition: _cameraPosition,
   //           onMapCreated: _onMapCreated,
   //           onStyleLoadedCallback: _onStyleLoadedCallback,//() => fetchDockingStations(), //_onStyleLoadedCallback,
@@ -269,7 +253,7 @@ class MyHomePageState extends State<MapPage> {
   //       //           child: Text(totalDistance, style: TextStyle(fontSize: 25.0)),
   //       //         )),
   //       //   ),
-  //       // ),  
+  //       // ),
   //     ],
   //   ));
   // }
@@ -292,7 +276,6 @@ class MyHomePageState extends State<MapPage> {
     };
   }
 
-
   void displayJurneyAndRefocus(List<LatLng> journey) {
     setJourney(journey);
     refocusCamera(journey);
@@ -302,13 +285,13 @@ class MyHomePageState extends State<MapPage> {
     LatLng center = getCentroid(journey);
     _cameraPosition = CameraPosition(
         target: center, zoom: getZoom(getRadius(journey, center)), tilt: 5);
-    controller.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
+    controller!.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
   }
 
   void addFills() async {
-    await controller.addSource(
+    await controller!.addSource(
         "fills", GeojsonSourceProperties(data: _fills)); //creates the line
-    await controller.addLineLayer(
+    await controller!.addLineLayer(
       "fills",
       "lines",
       LineLayerProperties(
@@ -322,8 +305,8 @@ class MyHomePageState extends State<MapPage> {
   }
 
   void removeFills() async {
-    await controller.removeLayer("lines");
-    await controller.removeSource("fills");
+    await controller!.removeLayer("lines");
+    await controller!.removeSource("fills");
   }
 
   void setJourney(List<LatLng> journey) async {
@@ -343,25 +326,23 @@ class MyHomePageState extends State<MapPage> {
     }
   }
 
-
-
-  void zoomIn()async{
+  void zoomIn() async {
     _cameraPosition = CameraPosition(
-          target: _cameraPosition.target, zoom: _cameraPosition.zoom +0.5 , tilt: 5);
-      controller.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
-      print("lol");
+        target: _cameraPosition.target,
+        zoom: _cameraPosition.zoom + 0.5,
+        tilt: 5);
+    controller!.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
+    print("lol");
   }
-    
-  void zoomOut()async{
-   _cameraPosition = CameraPosition(
-        target: _cameraPosition.target, zoom: _cameraPosition.zoom -0.5 , tilt: 5);
-    controller.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
-  } 
 
+  void zoomOut() async {
+    _cameraPosition = CameraPosition(
+        target: _cameraPosition.target,
+        zoom: _cameraPosition.zoom - 0.5,
+        tilt: 5);
+    controller!.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
+  }
 }
-
-
-
 
 // TODO: Error box when no internet -> check when future is called
 // TODO: Future to the map
@@ -374,14 +355,11 @@ class MyHomePageState extends State<MapPage> {
 // TODO: Update path when button pressed
 // TODO: Add walking route
 
-
-
-// TODO: modify build to add weather - cant do 
+// TODO: modify build to add weather - cant do
 // TODO: Duration and distance
 // TODO: Markers
 // TODO: Camera zoom
 
-
-// DONE: Turn by turn directions 
-// DONE: Zoom in and zoom out buttons 
-// DONE: stop auto navigation - simulateRoute: false in turb_by_turn_screen.dart 
+// DONE: Turn by turn directions
+// DONE: Zoom in and zoom out buttons
+// DONE: stop auto navigation - simulateRoute: false in turb_by_turn_screen.dart
