@@ -43,14 +43,18 @@ class _FavouriteState extends State<Favourite> {
       FavouriteDockingStation fave = favourites.firstWhere(
           (FavouriteDockingStation f) => (f.stationId == stationId));
       String favId = fave.id;
+
       await helper.deleteFavourite(favId);
+      print("deleted");
     } else {
       await helper.addFavourite(stationId);
+      print("added");
     }
     List<FavouriteDockingStation> updatedFavourites =
         await FirestoreHelper.getUserFavourites();
     setState(() {
       favourites = updatedFavourites;
+      print("updated");
     });
   }
 
@@ -66,6 +70,11 @@ class _FavouriteState extends State<Favourite> {
       body: Stack(
         children: [
           _dockingStationCarousel.buildCarousel(),
+          Container(
+              alignment: Alignment(0, 0),
+              child: FloatingActionButton(onPressed: () {
+                toggleFavourite("BikePoints_86");
+              }))
         ],
       ),
       appBar: AppBar(
