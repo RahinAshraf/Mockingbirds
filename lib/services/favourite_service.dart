@@ -39,17 +39,22 @@ class FirestoreHelper {
         .catchError((error) => print("Failed to delete fave: $error"));
   }
 
-  Future<void> getUserFavourites() async {
+//refactor this method it does way too much
+  static Future<List<FavouriteDockingStation>> getUserFavourites() async {
     List<FavouriteDockingStation> favs = [];
+    FirebaseFirestore db = FirebaseFirestore.instance;
 
-    QuerySnapshot<Object?> docs =
-        await favourites.where('user_id', isEqualTo: getUid()).get();
+    QuerySnapshot<Object?> docs = await db
+        .collection('favourites')
+        .where('user_id', isEqualTo: getUid())
+        .get();
     if (docs != null) {
       for (DocumentSnapshot doc in docs.docs) {
         favs.add(FavouriteDockingStation.map(doc));
       }
     }
-
+    print(favs.length);
+    return favs;
     //print(favs[0].stationId);
   }
 
@@ -77,10 +82,10 @@ class FirestoreHelper {
         .catchError((error) => print("Failed to add user: $error"));
   }
 
-  bool isUserFavourite(String stationId, List faveList) {
-    FavouriteDockingStation c;
+  bool isFavouriteStation(String stationId, List faveList) {
+    //FavouriteDockingStation f;
     FavouriteDockingStation fave = faveList
-        .firstWhere((c) => (c.stationId == stationId), orElse: () => null);
+        .firstWhere((f) => (f.stationId == stationId), orElse: () => null);
 
     if (fave == null)
       return false;

@@ -13,6 +13,7 @@ class MapPage extends StatefulWidget {
 }
 
 class MyHomePageState extends State<MapPage> {
+  FirestoreHelper helper = FirestoreHelper();
   FlutterMap _buildMap() {
     return FlutterMap(
       options: MapOptions(
@@ -93,7 +94,8 @@ class MyHomePageState extends State<MapPage> {
               alignment: Alignment(0, 0),
               child: FloatingActionButton(onPressed: () {
                 //FavouriteDockingStation("a", "b");
-                //addFavourite("hello");
+                //helper.addFavourite("hello");
+                //FirestoreHelper.getUserFavourites();
                 // getUserFavourites();
                 //deleteAllFavouriteCollections();
                 //deleteFavourite("thBik3xyKhC1QZMdZrG3");
