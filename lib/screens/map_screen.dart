@@ -67,7 +67,6 @@ class MyHomePageState extends State<MapPage> {
     _cameraPosition = CameraPosition(target: currentLatLng, zoom: 12);
     // _initialCameraPosition = CameraPosition(target: latLng, zoom: zoom);
     getRouteResponse();
-    fetchDockingStations();
   }
 
   void getRouteResponse() async {
@@ -94,11 +93,6 @@ class MyHomePageState extends State<MapPage> {
             iconSize: 0.5,
             iconImage: "assets/icon/bicycle.png"),
       );
-      if (controller == null) {
-        print("ITS NULLLLLLLLLLLLLLL");
-      } else {
-        print("ITS NOT NULL!!!");
-      }
     }
     // print("symbols here:" + controller.symbols.toString());
   }
@@ -124,6 +118,7 @@ class MyHomePageState extends State<MapPage> {
 
   void _onMapCreated(MapboxMapController controller) async {
     this.controller = controller;
+    fetchDockingStations();
   }
 
 //Simplified build for development
@@ -326,7 +321,7 @@ class MyHomePageState extends State<MapPage> {
     }
   }
 
-  void zoomIn() async {
+  void zoomIn() {
     _cameraPosition = CameraPosition(
         target: _cameraPosition.target,
         zoom: _cameraPosition.zoom + 0.5,
@@ -335,7 +330,7 @@ class MyHomePageState extends State<MapPage> {
     print("lol");
   }
 
-  void zoomOut() async {
+  void zoomOut() {
     _cameraPosition = CameraPosition(
         target: _cameraPosition.target,
         zoom: _cameraPosition.zoom - 0.5,
