@@ -23,12 +23,10 @@ class PanelWidget extends StatefulWidget {
 
   final Map<String, List<double?>> selectionMap;
 
-
-    const PanelWidget(
-      {
-        required this.selectionMap,
-        required this.address,
-        required this.controller,
+  const PanelWidget(
+      {required this.selectionMap,
+      required this.address,
+      required this.controller,
       required this.dynamicWidgets,
       required this.listDynamic,
       required this.selectedCords,
@@ -48,38 +46,35 @@ class PanelWidgetState extends State<PanelWidget> {
       widget.dynamicWidgets.stream;
   final locService = LocationService();
   late Map<String, List<double?>> selectionMap;
+  late TextEditingController firstTextEditingController =
+      TextEditingController();
+  List<double?>? staticList;
 
   addDynamic() {
     widget.listDynamic.add(DynamicWidget(
       selectedCords: widget.selectedCords,
     ));
 
-
     widget.dynamicWidgets.sink.add(widget.listDynamic);
   }
 
-  @override void initState(){
-    position = -1;
-    final selectedCords =  widget.selectedCords;
 
+  @override
+  void initState() {
+   // position = -1;
+    final selectedCords = widget.selectedCords;
     selectionMap = widget.selectionMap;
     widget.address.listen((event) {
-
-      final dynamicWidget = DynamicWidget(
-          selectedCords:selectedCords
-      );
-
-      dynamicWidget.textController.text = event.address ??"";
+      final dynamicWidget = DynamicWidget(selectedCords: selectedCords);
+      dynamicWidget.textController.text = event.address ?? "";
+      dynamicWidget.position =  widget.listDynamic.length;
       widget.listDynamic.add(dynamicWidget);
-      print("pos: $position");
-
-
-      selectedCords.insert(position,  [event.cords?.latitude,  event.cords?.longitude]);
-
+      print("pos: ${dynamicWidget.position}");
+      selectedCords
+          .insert(dynamicWidget.position, [event.cords?.latitude, event.cords?.longitude]);
       widget.dynamicWidgets.sink.add(widget.listDynamic);
     });
     super.initState();
-
   }
 
   // //FUNCTION NEEDS TO BE CALLED
@@ -94,21 +89,20 @@ class PanelWidgetState extends State<PanelWidget> {
   //   }
   // }
 
-
   _useCurrentLocationButtonHandler() async {
     print("HELLO");
     LatLng currentLocation = getLatLngFromSharedPrefs();
-    var response = await locService.reverseGeoCode(currentLocation.latitude,currentLocation.longitude);
+    var response = await locService.reverseGeoCode(
+        currentLocation.latitude, currentLocation.longitude);
     sharedPreferences.setString('source', json.encode(response));
     String place = response['place'];
     double LatitudeOfPlace = response['location'].latitude;
     double LongitudeOfPlace = response['location'].longitude;
-    List<double?> currentLocationCoords = [LatitudeOfPlace,LongitudeOfPlace];
+    List<double?> currentLocationCoords = [LatitudeOfPlace, LongitudeOfPlace];
     widget.selectedCords.insert(0, currentLocationCoords);
     widget.textEditingController.text = place;
     print(widget.selectedCords);
   }
-
 
   Widget _buildStatic() {
     return Padding(
@@ -117,7 +111,6 @@ class PanelWidgetState extends State<PanelWidget> {
         children: [
           const Text("From: ",
               style: TextStyle(
-
                 fontWeight: FontWeight.normal,
                 fontSize: 20,
               )),
@@ -159,18 +152,24 @@ class PanelWidgetState extends State<PanelWidget> {
                     borderSide:
                         const BorderSide(color: Colors.black, width: 1.0),
                   ),
-                    suffixIcon: TextButton(
-                        onPressed: _useCurrentLocationButtonHandler,
-                        //padding: const EdgeInsets.all(10),
-                        //constraints: const BoxConstraints(),
-                        child:const Icon(Icons.my_location, size: 20, color: Colors.blue,),) ,
+                  suffix: TextButton(
+                    onPressed: _useCurrentLocationButtonHandler,
+                    //padding: const EdgeInsets.all(10),
+                    //constraints: const BoxConstraints(),
+                    child: const Icon(
+                      Icons.my_location,
+                      size: 10,
+                      color: Colors.blue,
                     ),
                   ),
                 ),
               ),
+            ),
+          ),
           //SizedBox(width: 10),
           TextButton(
             onPressed: () {
+              //BUG IS HERE
               _handleSearchClick(context);
               print("Take me to the place search screen");
             },
@@ -209,9 +208,25 @@ class PanelWidgetState extends State<PanelWidget> {
               builder: (_, snapshot) {
                 List<DynamicWidget> listOfDynamics = snapshot.data ?? [];
 
+                /*
+
+    widget.listDynamic.removeAt(index);
+    widget.selectedCords.removeAt(index);
+    widget.dynamicWidgets.sink.add(widget.listDynamic);
+                 */
+
                 return ListView.builder(
                   shrinkWrap: true,
-                  itemBuilder: (_, index) => listOfDynamics[index],
+                  itemBuilder: (_, index){
+                    final dynamicWidget = listOfDynamics[index];
+                    dynamicWidget.position = index;
+                    dynamicWidget.removeDynamic((p0) {
+                      widget.listDynamic.removeAt(index);
+                    //  widget.selectedCords.removeAt(index);
+                      widget.dynamicWidgets.sink.add(widget.listDynamic);
+                    });
+                    return dynamicWidget;
+                  },
                   itemCount: listOfDynamics.length,
                   physics: const NeverScrollableScrollPhysics(),
                 );
@@ -237,11 +252,40 @@ class PanelWidgetState extends State<PanelWidget> {
               primary: Colors.white,
             ),
             onPressed: () {
-              if(widget.listDynamic.isEmpty){
+              if (widget.listDynamic.isEmpty) {
                 showAtLeastOneDestinationSnackBar(context);
               }
-              print("ALL_COORDINATES => ${widget.selectedCords}");
-              getCoordinatesForJourney();
+              // for(int i =0; i<=widget.selectedCords.length;i++){
+              //   if(widget.selectedCords[i] == []){
+              //     showWhereToTextFieldsMustNotBeEmptySnackBar(context);
+              //   }
+              // }
+
+              // if(widget.selectedCords.isNotEmpty) {
+              //   widget.selectedCords.removeAt(0);
+              //   widget.selectedCords.insert(0, staticList);
+              // }
+              print("WE");
+              print(widget.listDynamic.length);
+              print("OUR");
+              print(widget.selectedCords.length);
+              
+              List<List<double?>?> tempList = [];
+
+              if(staticList != null){
+                tempList.add(staticList);
+                tempList.addAll(widget.selectedCords);
+
+                print("ALL_COORDINATES => $tempList");
+
+
+
+                getCoordinatesForJourney();
+                aSearchBarCannotBeEmpty();
+                startLocationMustBeSpecified();
+              }else{
+
+              }
             },
             child: const Text(
               "START",
@@ -256,30 +300,18 @@ class PanelWidgetState extends State<PanelWidget> {
   //Returns all the coordinates for the locations the user specifies
   List<List<double?>?> getCoordinatesForJourney() {
     return widget.selectedCords;
-}
+  }
 
-  void _handleSearchClick(BuildContext context) async {
-    final result = await Navigator.of(context).push(MaterialPageRoute(
-        builder: (settings) => PlaceSearchScreen(LocationService())));
-    final feature = result as Feature?;
-    if (feature != null) {
-      widget.textEditingController.text = feature.placeName ?? "N/A";
-
-      //swap (lng,lat) to (lat,lng)
-      List<double?> latlngs = [];
-      double? lat = feature.geometry?.coordinates.last;
-      double? lng = feature.geometry?.coordinates.first;
-      latlngs.add(lat);
-      latlngs.add(lng);
-      print("HERE:");
-      print(latlngs);
-      widget.selectedCords.add(latlngs);
-
-      //print("MapOfList => ${feature.geometry?.coordinates}");
-      print("MapOfList => ${latlngs}");
-      print("MapOfListss => ${widget.selectedCords}");
+  void aSearchBarCannotBeEmpty(){
+    if(widget.listDynamic.length > widget.selectedCords.length){
+      showWhereToTextFieldsMustNotBeEmptySnackBar(context);
     }
-    print("RESULT => $result");
+  }
+
+  void startLocationMustBeSpecified(){
+    if(widget.textEditingController.text.isEmpty){
+      showStartLocationMustNotBeEmptySnackBar(context);
+    }
   }
 
   Widget buildDragHandle() => GestureDetector(
@@ -299,9 +331,11 @@ class PanelWidgetState extends State<PanelWidget> {
   void showAtLeastOneDestinationSnackBar(BuildContext context) {
     const text = "Choose at least one destination to create your journey";
     const snackBar = SnackBar(
-      content: Text(text, style: TextStyle(fontSize: 17),),
+      content: Text(
+        text,
+        style: TextStyle(fontSize: 17),
+      ),
       backgroundColor: Colors.red,
-
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
@@ -309,36 +343,68 @@ class PanelWidgetState extends State<PanelWidget> {
   @override
   void dispose() {
     // TODO: implement dispose
-    position = -1;
+    //position = -1;
     super.dispose();
   }
 
   void showWhereToTextFieldsMustNotBeEmptySnackBar(BuildContext context) {
-    const text = "Please specify locations for all destinations of the journey. Otherwise, remove any empty choices";
+    const text =
+        "Please specify locations for all destinations of the journey. Otherwise, remove any empty choices";
     const snackBar = SnackBar(
-      content: Text(text, style: TextStyle(fontSize: 17),),
+      content: Text(
+        text,
+        style: TextStyle(fontSize: 17),
+      ),
       backgroundColor: Colors.red,
-
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
+  void showStartLocationMustNotBeEmptySnackBar(BuildContext context) {
+    const text =
+        "Please specify the starting location of the journey";
+    const snackBar = SnackBar(
+      content: Text(
+        text,
+        style: TextStyle(fontSize: 17),
+      ),
+      backgroundColor: Colors.red,
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
 
+  void _handleSearchClick(BuildContext context) async {
+    final selectedCords = widget.selectedCords;
+    final tempPosition = selectedCords.length;
+    final result = await Navigator.of(context).push(MaterialPageRoute(
+        builder: (settings) => PlaceSearchScreen(LocationService())));
+    print("Navigator_Navigator_Navigator => $tempPosition");
+    final feature = result as Feature?;
+    if (feature != null) {
+      widget.textEditingController.text = feature.placeName ?? "N/A";
+
+      staticList = feature.geometry?.coordinates;
+    }
+  }
 
 //void togglePanel() => panelController.isPanelOpen ? panelController.close() : panelController.open();
 }
 
-int position = -1;
+
 class DynamicWidget extends StatelessWidget {
   late TextEditingController textController = TextEditingController();
-  List< List<double?>?>? selectedCords;
+  List<List<double?>?>? selectedCords;
+
+  Function(int)? onDelete;
 
 
+  int position = -1;
 
-  DynamicWidget({Key? key , required this.selectedCords}) : super(key: key){
-    position++;
+  void setIndex(index){
+    position = index;
   }
 
+  DynamicWidget({Key? key, required this.selectedCords}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -350,16 +416,17 @@ class DynamicWidget extends StatelessWidget {
         children: [
           const SizedBox(width: 33),
           //Expanded(
-            TextButton(
-              onPressed: () {
-                print("This should remove the location (and its widgets from the list and screen respectively)");
-              },
-              child: const Icon(
-                Icons.close_outlined ,
-                size: 35,
-                color: Colors.red,
-              ),
+          TextButton(
+            onPressed: () {
+              selectedCords?.removeAt(position);
+              onDelete?.call(position);
+            },
+            child: const Icon(
+              Icons.close_outlined,
+              size: 35,
+              color: Colors.red,
             ),
+          ),
           //),
           Expanded(
             child: TextField(
@@ -395,17 +462,16 @@ class DynamicWidget extends StatelessWidget {
             ),
           ),
           //Expanded(
-            TextButton(
-              onPressed: () {
-                _handleSearchClick(context, position);
-                print("TakeMYPOSITION => me to the place search screen $position");
-              },
-              child: const Icon(
-                Icons.keyboard_arrow_right_rounded,
-                size: 50,
-                color: Colors.green,
-              ),
+          TextButton(
+            onPressed: () {
+              _handleSearchClick(context, position);
+            },
+            child: const Icon(
+              Icons.keyboard_arrow_right_rounded,
+              size: 50,
+              color: Colors.green,
             ),
+          ),
           //),
         ],
       ),
@@ -415,14 +481,32 @@ class DynamicWidget extends StatelessWidget {
   void _handleSearchClick(BuildContext context, int position) async {
     final result = await Navigator.of(context).push(MaterialPageRoute(
         builder: (settings) => PlaceSearchScreen(LocationService())));
+    print("Navigator_Navigator_Navigator => $position");
     final feature = result as Feature?;
     if (feature != null) {
+      final len = selectedCords?.length ?? 0;
       textController.text = feature.placeName ?? "N/A";
 
-      selectedCords?[position] = feature.geometry?.coordinates;
-
-      print("MapOfList => $position");
+      if (position > ((selectedCords?.length) ?? 0) - 1 ||
+          (selectedCords?.isEmpty ?? true)) {
+        selectedCords?.add(feature.geometry?.coordinates);
+      } else {
+        selectedCords?[position] = feature.geometry?.coordinates;
+      }
     }
     print("RESULT => $result");
+
   }
+
+
+  void removeDynamic(Function(int) onDelete) {
+    this.onDelete = onDelete;
+  }
+
+  /*
+
+    widget.listDynamic.removeAt(index);
+    widget.selectedCords.removeAt(index);
+    widget.dynamicWidgets.sink.add(widget.listDynamic);
+   */
 }
