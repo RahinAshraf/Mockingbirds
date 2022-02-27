@@ -19,9 +19,17 @@ class _FavouriteState extends State<Favourite> {
     FirestoreHelper.getUserFavourites().then((data) {
       setState(() {
         favourites = data;
+        print(checkDis());
       });
     });
+    // print(checkDis());
     super.initState();
+  }
+
+  bool checkDis() {
+    print("here");
+    FirestoreHelper helper = FirestoreHelper();
+    return helper.isFavouriteStation("BikePoints_86", favourites);
   }
 
   @override

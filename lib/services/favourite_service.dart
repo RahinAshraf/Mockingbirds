@@ -10,6 +10,7 @@ import 'package:firebase_core/firebase_core.dart';
 // import 'firebase_options.dart';
 import 'package:flutterfire_ui/firestore.dart';
 import 'package:veloplan/services/user_services.dart';
+import 'package:collection/collection.dart';
 
 class FirestoreHelper {
   //change these to var?
@@ -88,11 +89,11 @@ class FirestoreHelper {
   }
 
 //checks if a given station has been favourited.
-  bool isFavouriteStation(String stationId, List faveList) {
+  bool isFavouriteStation(
+      String stationId, List<FavouriteDockingStation> faveList) {
     //checks if the station id is in the list of faves.
-    FavouriteDockingStation fave = faveList
-        .firstWhere((f) => (f.stationId == stationId), orElse: () => null);
-
+    FavouriteDockingStation? fave = faveList.firstWhereOrNull(
+        (FavouriteDockingStation f) => (f.stationId == stationId));
     if (fave == null)
       return false;
     else

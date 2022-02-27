@@ -105,7 +105,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'docking_station_detail.dart';
 import '../services/user_services.dart';
 
-///Adds a station to current users favourite
+///Represents a station that has been favourited by the user
 ///
 ///
 class FavouriteDockingStation {
@@ -143,62 +143,61 @@ class FavouriteDockingStation {
   String get stationId => _stationId;
 }
 
-  // Future<void> addFavourite() {
-  //   // Call the user's CollectionReference to add a new user
-  //   return favourites
-  //       .add({
-  //         'user_id': uid, // John Doe
-  //         'station_id': stationId, // Stokes and Sons
-  //         'journeys': null // 42
-  //       })
-  //       .then((value) => print("fave Added"))
-  //       .catchError((error) => print("Failed to add fave: $error"));
-  // }
+// Future<void> addFavourite() {
+//   // Call the user's CollectionReference to add a new user
+//   return favourites
+//       .add({
+//         'user_id': uid, // John Doe
+//         'station_id': stationId, // Stokes and Sons
+//         'journeys': null // 42
+//       })
+//       .then((value) => print("fave Added"))
+//       .catchError((error) => print("Failed to add fave: $error"));
+// }
 
-  // Future<void> deleteFavourite(favid) {
-  //   return favourites
-  //       .doc(favid)
-  //       .delete()
-  //       .then((value) => print(" Deleted"))
-  //       .catchError((error) => print("Failed to delete fave: $error"));
-  // }
+// Future<void> deleteFavourite(favid) {
+//   return favourites
+//       .doc(favid)
+//       .delete()
+//       .then((value) => print(" Deleted"))
+//       .catchError((error) => print("Failed to delete fave: $error"));
+// }
 
-  // Future<void> getUserFavourites() async {
-  //   List<FavouriteDockingStation> favs = [];
+// Future<void> getUserFavourites() async {
+//   List<FavouriteDockingStation> favs = [];
 
-  //   QuerySnapshot<Object?> docs =
-  //       await favourites.where('user_id', isEqualTo: uid).get();
-  //   if (docs != null) {
-  //     for (DocumentSnapshot doc in docs.docs) {
-  //       favs.add(FavouriteDockingStation.map(doc));
-  //     }
-  //   }
+//   QuerySnapshot<Object?> docs =
+//       await favourites.where('user_id', isEqualTo: uid).get();
+//   if (docs != null) {
+//     for (DocumentSnapshot doc in docs.docs) {
+//       favs.add(FavouriteDockingStation.map(doc));
+//     }
+//   }
 
-  //   //print(favs[0].stationId);
-  // }
+//   //print(favs[0].stationId);
+// }
 
-  // Future<void> getUserFavourites() async {
-  //   var docs = favourites
-  //       .where('user_id', isEqualTo: uid)
-  //       .get()
-  //       .then((value) => print("got here"))
-  //       .catchError((error) => print("Failed to add user: $error"));
-  //   print(docs);
+// Future<void> getUserFavourites() async {
+//   var docs = favourites
+//       .where('user_id', isEqualTo: uid)
+//       .get()
+//       .then((value) => print("got here"))
+//       .catchError((error) => print("Failed to add user: $error"));
+//   print(docs);
 
-  //   if (docs != null){
-  //     for (DocumentSnapshot doc in docs.documents){
+//   if (docs != null){
+//     for (DocumentSnapshot doc in docs.documents){
 
-  //     }
-  //   }
-  // }
+//     }
+//   }
+// }
 
-  // Future<void> updateFavourite() {
-  //   return favourites
-  //       .doc('ABC123')
-  //       .set({
-  //         'docking_stations': null,
-  //       })
-  //       .then((value) => print("User Added"))
-  //       .catchError((error) => print("Failed to add user: $error"));
-  // }
-
+// Future<void> updateFavourite() {
+//   return favourites
+//       .doc('ABC123')
+//       .set({
+//         'docking_stations': null,
+//       })
+//       .then((value) => print("User Added"))
+//       .catchError((error) => print("Failed to add user: $error"));
+// }

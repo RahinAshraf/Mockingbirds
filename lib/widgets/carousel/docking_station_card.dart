@@ -26,8 +26,8 @@ Widget dockingStationCard(int index, DockingStation station, String id,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           FavoriteButton(valueChanged: (_isFavorite) {
-            //handleLikedCard(id);
-            helper.toggleFavourite(station);
+            //  / handleLikedCard(id);
+            // helper.toggleFavourite(station);
           }),
           const SizedBox(width: 10),
           Expanded(
@@ -46,9 +46,20 @@ Widget dockingStationCard(int index, DockingStation station, String id,
   );
 }
 
-// void handleLikedCard(id) {
-//   // FavouriteDockingStation(id);
-//   //print(id);
+// toggleFavourite(String stationId) async {
+//   if (isUserFavourite(stationId)) {
+//     Favourite favourite =
+//         favourites.firstWhere((Favourite f) => (f.eventId == ed.id));
+//     String favId = favourite.id;
+//     await FirestoreHelper.deleteFavourite(favId);
+//   } else {
+//     await FirestoreHelper.addFavourite(ed, uid);
+//   }
+//   List<Favourite> updatedFavourites =
+//       await FirestoreHelper.getUserFavourites(uid);
+//   setState(() {
+//     favourites = updatedFavourites;
+//   });
 // }
 
 // FirestoreHelper helper = FirestoreHelper();
