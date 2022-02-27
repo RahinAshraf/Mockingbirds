@@ -320,6 +320,7 @@ class MyHomePageState extends State<MapPage> {
   }
 
   void zoomIn() {
+    print("hi fariha");
     _cameraPosition = CameraPosition(
         target: _cameraPosition.target,
         zoom: _cameraPosition.zoom + 0.5,
