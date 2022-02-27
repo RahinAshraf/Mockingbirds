@@ -10,29 +10,84 @@ import 'docking2.dart';
 import '../services/user_services.dart';
 
 ///Adds a station to current users favourite
-///
+
 class FavouriteDockingStation {
+  late String id;
   late String uid;
-  final String stationId; //id of the station
+  late String stationId;
+  List<FavouriteDockingStation> favs = []; //just testing
 
   CollectionReference favourites =
       FirebaseFirestore.instance.collection('favourites');
 
-  FavouriteDockingStation(this.stationId) {
+  FavouriteDockingStation(this.id, this.stationId) {
     uid = getUid();
-    addFavourite();
+    //addFavourite();
+    getUserFavourites();
+    //print(_getFavoriteIDs);
+  }
+
+  FavouriteDockingStation.map(DocumentSnapshot document) {
+    this.id = document.id;
+    this.uid = document.get('user_id');
+    this.stationId = document.get('station_id');
   }
 
   Future<void> addFavourite() {
     // Call the user's CollectionReference to add a new user
     return favourites
         .add({
-          'user': getUid(), // John Doe
-          'docking_stations': null, // Stokes and Sons
+          'user_id': uid, // John Doe
+          'station_id': stationId, // Stokes and Sons
           'journeys': null // 42
         })
         .then((value) => print("fave Added"))
         .catchError((error) => print("Failed to add fave: $error"));
+  }
+
+  Future<void> deleteFavourite(favid) {
+    return favourites
+        .doc(favid)
+        .delete()
+        .then((value) => print(" Deleted"))
+        .catchError((error) => print("Failed to delete fave: $error"));
+  }
+
+  Future<void> getUserFavourites() async {
+    List<FavouriteDockingStation> favs = [];
+
+    QuerySnapshot<Object?> docs =
+        await favourites.where('user_id', isEqualTo: uid).get();
+    if (docs != null) {
+      for (DocumentSnapshot doc in docs.docs) {
+        favs.add(FavouriteDockingStation.map(doc));
+      }
+    }
+
+    //print(favs[0].stationId);
+  }
+
+  // Future<void> getUserFavourites() async {
+  //   var docs = favourites
+  //       .where('user_id', isEqualTo: uid)
+  //       .get()
+  //       .then((value) => print("got here"))
+  //       .catchError((error) => print("Failed to add user: $error"));
+  //   print(docs);
+
+  //   if (docs != null){
+  //     for (DocumentSnapshot doc in docs.documents){
+
+  //     }
+  //   }
+  // }
+
+  void addToList(FavouriteDockingStation station) {
+    favs.add(station);
+  }
+
+  List<FavouriteDockingStation> getFaveList() {
+    return favs;
   }
 
   Future<void> updateFavourite() {

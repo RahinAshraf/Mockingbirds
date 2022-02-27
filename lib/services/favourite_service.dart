@@ -88,8 +88,5 @@ Future<List<String>> test(String uid) async {
   // return userFavourite;
 }
 
-void ll(String id) {
-  favs.add(id);
-}
 
 // TOOD: fetch the current users favourites

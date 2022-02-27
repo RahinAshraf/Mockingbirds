@@ -82,23 +82,26 @@ class MyHomePageState extends State<MapPage> {
   @override
   Widget build(BuildContext build) {
     return Scaffold(
-        body: Stack(
-      children: [
-        Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          child: _buildMap(),
-        ),
-        Container(
-            alignment: Alignment(0, 0),
-            child: FloatingActionButton(onPressed: () {
-              //FavouriteDockingStation("a");
-              print(getFavouriteDocuments("iJvSaaAldugVks8w5gjJb4013c43"));
-              //deleteAllFavouriteCollectionsUser("iJvSaaAldugVks8w5gjJb4013c43");
-              //deleteFavourite("LeFUwGVnWtJXJl6exmj2");
-              //deleteAllFavouriteCollections();
-            }))
-      ],
-    ));
+      body: Stack(
+        children: [
+          Container(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            child: _buildMap(),
+          ),
+          Container(
+              alignment: Alignment(0, 0),
+              child: FloatingActionButton(onPressed: () {
+                FavouriteDockingStation("a", "b");
+                //deleteAllFavouriteCollections();
+                //FavouriteDockingStation("9wWo6RH8HOxbnG3FdxP4");
+                // print(getFavouriteDocuments("iJvSaaAldugVks8w5gjJb4013c43"));
+                //deleteAllFavouriteCollectionsUser("iJvSaaAldugVks8w5gjJb4013c43");
+                //deleteFavourite("LeFUwGVnWtJXJl6exmj2");
+                //deleteAllFavouriteCollections();
+              }))
+        ],
+      ),
+    );
   }
 }
