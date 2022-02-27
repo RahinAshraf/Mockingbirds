@@ -3,6 +3,7 @@ import 'package:veloplan/models/docking_station_detail.dart';
 import 'package:veloplan/services/favourite_service.dart';
 import 'package:veloplan/widgets/carousel/station_carousel.dart';
 import 'package:veloplan/models/favourite.dart';
+import 'package:collection/collection.dart';
 
 class Favourite extends StatefulWidget {
   _FavouriteState createState() => _FavouriteState();
@@ -19,23 +20,54 @@ class _FavouriteState extends State<Favourite> {
     FirestoreHelper.getUserFavourites().then((data) {
       setState(() {
         favourites = data;
-        print(checkDis());
+        //print(checkDis());
       });
     });
-    // print(checkDis());
     super.initState();
   }
 
-  bool checkDis() {
-    print("here");
-    FirestoreHelper helper = FirestoreHelper();
-    return helper.isFavouriteStation("BikePoints_86", favourites);
+  bool isFavouriteStation(String stationId) {
+    //checks if the station id is in the list of faves.
+    FavouriteDockingStation? fave = favourites.firstWhereOrNull(
+        (FavouriteDockingStation f) => (f.stationId == stationId));
+    if (fave == null)
+      return false;
+    else
+      return true;
   }
+
+  toggleFavourite(String stationId) async {
+    FirestoreHelper helper = FirestoreHelper();
+    if (isFavouriteStation(stationId)) {
+      //refactor this:
+      FavouriteDockingStation fave = favourites.firstWhere(
+          (FavouriteDockingStation f) => (f.stationId == stationId));
+      String favId = fave.id;
+      await helper.deleteFavourite(favId);
+    } else {
+      await helper.addFavourite(stationId);
+    }
+    List<FavouriteDockingStation> updatedFavourites =
+        await FirestoreHelper.getUserFavourites();
+    setState(() {
+      favourites = updatedFavourites;
+    });
+  }
+
+  // bool checkDis() {
+  //   print("here");
+  //   FirestoreHelper helper = FirestoreHelper();
+  //   return helper.isFavouriteStation("BikePoints_86", favourites);
+  // }
 
   @override
   Widget build(BuildContext build) {
     return Scaffold(
-      body: _dockingStationCarousel.buildCarousel(),
+      body: Stack(
+        children: [
+          _dockingStationCarousel.buildCarousel(),
+        ],
+      ),
       appBar: AppBar(
         title: const Text('My favourites'),
       ),
