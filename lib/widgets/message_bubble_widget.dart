@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 // CONSTANTS
 const String botName = 'HelpBot';
 const String userName = 'You';
+const Color userMessageBubbleColor = Color(0xFF99D2A9);
+const Color botMessageBubbleColor = Colors.white;
 const TextStyle messageAuthorTextStyle =
     TextStyle(fontSize: 13.0, color: Colors.black54);
 const TextStyle botMessageTextStyle =
@@ -34,6 +36,7 @@ class MessageBubble extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Column(
+        key: const Key('alignmentKey'),
         crossAxisAlignment:
             isSentByBot ? CrossAxisAlignment.start : CrossAxisAlignment.end,
         children: <Widget>[
@@ -54,7 +57,7 @@ class MessageBubble extends StatelessWidget {
                     bottomRight: Radius.circular(30.0),
                   ),
             elevation: 5.0,
-            color: isSentByBot ? Colors.white : const Color(0xFF99D2A9),
+            color: isSentByBot ? botMessageBubbleColor : userMessageBubbleColor,
             child: Padding(
               padding:
                   const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
