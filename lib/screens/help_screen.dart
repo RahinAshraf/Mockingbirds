@@ -1,79 +1,88 @@
+import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:veloplan/utilities/help_bot_manager.dart';
+import 'package:veloplan/widgets/message_bubble_widget.dart';
+
+HelpBotManager questions = HelpBotManager();
+
+// CONSTANTS
+const Color appBarColor = Color(0xFF99D2A9);
 
 class HelpPage extends StatefulWidget {
   @override
-  MyHomePageState createState() => MyHomePageState();
+  _HelpPageState createState() => _HelpPageState();
 }
 
-class MyHomePageState extends State<HelpPage> {
-  late HelpBotManager helpBot;
-  @override
-  void initState() {
-    helpBot = HelpBotManager();
-    super.initState();
-  }
-
-  List<String> someList = [];
-
-  List<Widget> _createChildren() {
-    return new List<Widget>.generate(someList.length, (int index) {
-      return Text(someList[index].toString());
-    });
-  }
+class _HelpPageState extends State<HelpPage> {
+  List<MessageBubble> _conversation = [
+    MessageBubble(text: 'Hello. How can I help you?')
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(),
+      appBar: AppBar(
+        title: const Text('HelpBot'),
+        backgroundColor: appBarColor,
+      ),
       body: SafeArea(
         child: Column(
           children: [
-            Column(
-              children: _createChildren(),
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 10.0, vertical: 20.0),
+                children: UnmodifiableListView(_conversation),
+              ),
             ),
-            Spacer(),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisSize: MainAxisSize.max,
-                //mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  // for (String item in helpBot.getAllMessageTopics())
-                  //   TextButton(
-                  //     onPressed: () {
-                  //       setState(() {
-                  //         // someList.add(helpBot.getMessageTextsbyTopic(item));
-                  //         // someList.add(helpBot.getAnswerToQuestion(item));
-                  //       });
-                  //     },
-                  //     // child: Text(item),
-                  //   ),
-                ],
+            Container(
+              decoration: const BoxDecoration(
+                border: Border(
+                  top: BorderSide(
+                    color: Color(0x4D99D2A9),
+                  ),
+                ),
+              ),
+              padding: const EdgeInsets.only(bottom: 10.0, top: 10.0),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: <Widget>[
+                    for (var topic in questions.getAllTopics())
+                      Padding(
+                        padding: const EdgeInsets.only(right: 5.0),
+                        child: OutlinedButton(
+                            style: ButtonStyle(
+                              overlayColor: MaterialStateProperty.all<Color>(
+                                  const Color(0x1A99D2A9)),
+                              shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30.0),
+                                ),
+                              ),
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _conversation.add(MessageBubble(
+                                    text: questions.getQuestionText(topic),
+                                    isSentByBot: false));
+                                _conversation.add(MessageBubble(
+                                    text: questions.getQuestionAnswer(topic)));
+                              });
+                            },
+                            child: Text(
+                              topic,
+                              style: const TextStyle(
+                                color: Color(0xFF99D2A9),
+                              ),
+                            )),
+                      ),
+                  ],
+                ),
               ),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  AppBar buildAppBar() {
-    return AppBar(
-      title: Row(
-        children: [
-          CircleAvatar(
-            backgroundImage: NetworkImage(
-                'https://cdn.vox-cdn.com/thumbor/qCfHPH_9Mw78vivDlVDMu7xYc78=/715x248:1689x721/920x613/filters:focal(972x299:1278x605):format(webp)/cdn.vox-cdn.com/uploads/chorus_image/image/69305239/shrek4_disneyscreencaps.com_675.0.jpg'),
-          ),
-          SizedBox(width: 30),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [Text("HelpBot")],
-          )
-        ],
       ),
     );
   }
