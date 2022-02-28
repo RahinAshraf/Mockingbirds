@@ -8,7 +8,7 @@ Widget dockingStationCard(
   return Card(
     elevation: 1.0,
     shadowColor: Colors.green[200],
-    shape: BeveledRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
     clipBehavior: Clip.antiAlias,
     child: Padding(
       padding: const EdgeInsets.all(10.0),
