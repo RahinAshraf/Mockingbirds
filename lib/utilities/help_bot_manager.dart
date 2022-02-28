@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:veloplan/models/message.dart';
 
 class HelpBotManager {
+  @visibleForTesting
   List<Message> _questionBank = [
     Message('How do I sign up?', 'Sign up on the main page.', 'Signup'),
     Message('How do I login?', 'Login on the main page.', 'Login'),
