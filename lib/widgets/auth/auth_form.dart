@@ -93,8 +93,7 @@ class _AuthFormState extends State<AuthForm> {
                         height: 120.0,
                         width: 120.0,
                         child: Center(
-                            child: Image.asset(
-                                'assets/images/woman_cycling.png'))),
+                            child: Image.asset('assets/images/logo.png'))),
                   if (_isLogin)
                     Container(
                         alignment: Alignment.center,
