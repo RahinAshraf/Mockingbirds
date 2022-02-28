@@ -13,17 +13,30 @@ import 'package:veloplan/services/user_services.dart';
 import 'package:collection/collection.dart';
 
 class FirestoreHelper {
+  late CollectionReference favourites;
+  late final userID;
+  late FirebaseFirestore db;
   //change these to var?
-  FirebaseFirestore db = FirebaseFirestore.instance;
-  CollectionReference favourites =
-      FirebaseFirestore.instance.collection('favourites');
+
+  FirestoreHelper() {
+    db = FirebaseFirestore.instance;
+    userID = FirebaseAuth.instance.currentUser!.uid;
+
+    favourites = FirebaseFirestore.instance
+        .collection('users')
+        .doc(userID)
+        .collection('favourites');
+  }
 
   Future<void> addFavourite(String stationId) {
-    return favourites
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(userID)
+        .collection('favourites')
         .add({
           'user_id': getUid(),
           'station_id': stationId,
-          'journeys': null,
+          //'journeys': null,
         })
         .then((value) => print("fave Added"))
         .catchError((error) => print("Failed to add fave: $error"));

@@ -26,8 +26,8 @@ Widget dockingStationCard(int index, DockingStation station, String id,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           FavoriteButton(valueChanged: (_isFavorite) {
-            //  / handleLikedCard(id);
-            // helper.toggleFavourite(station);
+            // handleLikedCard(id);
+            helper.toggleFavourite(station);
           }),
           const SizedBox(width: 10),
           Expanded(
@@ -64,6 +64,7 @@ Widget dockingStationCard(int index, DockingStation station, String id,
 
 // FirestoreHelper helper = FirestoreHelper();
 
-// void toggleFavourite(DockingStation station) {
-//   helper.addFavourite(station.id);
-// }
+void toggleFavourite(DockingStation station) {
+  print("clicked");
+  helper.addFavourite(station.id);
+}
