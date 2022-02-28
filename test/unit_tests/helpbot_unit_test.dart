@@ -2,12 +2,12 @@ import 'package:test/test.dart'; // unit tests
 import 'package:veloplan/utilities/help_bot_manager.dart';
 
 void main() {
-  group("Should not throw an exception if nonexistent topic is passed to", () {
+  group("Should not throw an exception if nonexistent topic is passed", () {
     final helpBotManager = HelpBotManager();
-    test('getQuestionText method', () {
+    test('to getQuestionText method', () {
       helpBotManager.getQuestionText("sometopicthatdoesntexist");
     });
-    test('getQuestionAnswer method', () {
+    test('to getQuestionAnswer method', () {
       helpBotManager.getQuestionAnswer("somenonexistenttopic");
     });
   });
