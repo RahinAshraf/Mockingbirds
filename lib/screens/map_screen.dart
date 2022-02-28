@@ -32,7 +32,6 @@ class MyHomePageState extends State<MapPage> {
   Map<String, Object> _fills = {};
   late Map routeResponse;
   bool showMarkers = false;
-  //Set<Symbol> _markers = Set<Symbol>();
 
   // var zoom = LatLng(51.51185004458236, -0.11580820118980878);
   String googleMapsApi = 'AIzaSyB7YSQkjjqm-YU1LAz91lyYAvCpqFRhFdU';
@@ -50,7 +49,7 @@ class MyHomePageState extends State<MapPage> {
     LatLng(51.502254, -0.217760),
   ];
 
-  late MapboxMapController controller;
+  late MapboxMapController? controller;
   late CameraPosition _cameraPosition;
 
   LatLng currentLatLng = const LatLng(51.51185004458236, -0.11580820118980878);
@@ -74,7 +73,6 @@ class MyHomePageState extends State<MapPage> {
   }
 
   void fetchDockingStations() {
-    // print("here2");
     final dockingStationManager _stationManager = dockingStationManager();
     _stationManager
         .importStations()
@@ -83,8 +81,6 @@ class MyHomePageState extends State<MapPage> {
 
   void placeDockMarkers(List<DockingStation> docks) {
     for (var station in docks) {
-      // print(station.lat);
-      //print(docks.length);
       controller!.addSymbol(
         SymbolOptions(
             geometry: LatLng(station.lat, station.lon),
@@ -92,7 +88,6 @@ class MyHomePageState extends State<MapPage> {
             iconImage: "assets/icon/bicycle.png"),
       );
     }
-    // print("symbols here:" + controller.symbols.toString());
   }
 
   // //Currently attempting to display two markers
@@ -116,7 +111,6 @@ class MyHomePageState extends State<MapPage> {
 
   void _onMapCreated(MapboxMapController controller) async {
     this.controller = controller;
-    fetchDockingStations();
   }
 
 //Simplified build for development
@@ -139,16 +133,16 @@ class MyHomePageState extends State<MapPage> {
             // minMaxZoomPreference: const MinMaxZoomPreference(14, 17),
           ),
         ),
-        // Container(
-        //   alignment: Alignment(-0.5, -0.5),
-        //   child: (showMarkers)
-        //       ? FloatingActionButton(
-        //           heroTag: "Show markers",
-        //           child: Icon(Icons.wallet_giftcard, color: Colors.white),
-        //           onPressed: placeMarkers,
-        //         )
-        //       : Container(),
-        // ),
+        Container(
+          alignment: Alignment(-0.5, -0.5),
+          child: (showMarkers)
+              ? FloatingActionButton(
+                  heroTag: "Show markers",
+                  child: Icon(Icons.start, color: Colors.white),
+                  onPressed: fetchDockingStations, //placeMarkers,
+                )
+              : Container(),
+        ),
         Container(
           alignment: Alignment(-0.5, -0.7),
           child: FloatingActionButton(
@@ -278,13 +272,13 @@ class MyHomePageState extends State<MapPage> {
     LatLng center = getCentroid(journey);
     _cameraPosition = CameraPosition(
         target: center, zoom: getZoom(getRadius(journey, center)), tilt: 5);
-    controller.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
+    controller!.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
   }
 
   void addFills() async {
-    await controller.addSource(
+    await controller!.addSource(
         "fills", GeojsonSourceProperties(data: _fills)); //creates the line
-    await controller.addLineLayer(
+    await controller!.addLineLayer(
       "fills",
       "lines",
       LineLayerProperties(
@@ -298,8 +292,8 @@ class MyHomePageState extends State<MapPage> {
   }
 
   void removeFills() async {
-    await controller.removeLayer("lines");
-    await controller.removeSource("fills");
+    await controller!.removeLayer("lines");
+    await controller!.removeSource("fills");
   }
 
   void setJourney(List<LatLng> journey) async {
@@ -324,7 +318,7 @@ class MyHomePageState extends State<MapPage> {
         target: _cameraPosition.target,
         zoom: _cameraPosition.zoom + 0.5,
         tilt: 5);
-    controller.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
+    controller!.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
     print("lol");
   }
 
@@ -333,7 +327,7 @@ class MyHomePageState extends State<MapPage> {
         target: _cameraPosition.target,
         zoom: _cameraPosition.zoom - 0.5,
         tilt: 5);
-    controller.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
+    controller!.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
   }
 }
 
