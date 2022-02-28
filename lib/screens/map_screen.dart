@@ -90,30 +90,11 @@ class MyHomePageState extends State<MapPage> {
     }
   }
 
-  // //Currently attempting to display two markers
-  // placeMarkers() async {
-  //   await controller.addSymbol(const SymbolOptions(
-  //     iconSize: 0.1,
-  //     iconImage: "assets/icon/red.png",
-  //     geometry: LatLng(-0.1145, 51.5176),
-  //   ));
-
-  //   await controller.addSymbol(const SymbolOptions(
-  //     iconSize: 0.1,
-  //     iconImage: "assets/icon/red.png",
-  //     geometry: LatLng(-0.1135, 51.5158),
-  //   ));
-
-  //   controller.symbols.forEach((element) {
-  //     print("created symbol");
-  //   });
-  // }
-
   void _onMapCreated(MapboxMapController controller) async {
     this.controller = controller;
   }
 
-//Simplified build for development
+
   @override
   Widget build(BuildContext build) {
     return Scaffold(
@@ -138,7 +119,7 @@ class MyHomePageState extends State<MapPage> {
           child: (showMarkers)
               ? FloatingActionButton(
                   heroTag: "Show markers",
-                  child: Icon(Icons.start, color: Colors.white),
+                  child: Icon(Icons.wallet_giftcard, color: Colors.white),
                   onPressed: fetchDockingStations, //placeMarkers,
                 )
               : Container(),
@@ -159,95 +140,64 @@ class MyHomePageState extends State<MapPage> {
             onPressed: zoomOut,
           ),
         ),
+        Container(
+          alignment: Alignment(-0.9, 0),
+          child: FloatingActionButton(
+            heroTag: "Show polylines",
+            child: Icon(Icons.arrow_upward, color: Colors.white),
+            onPressed: () async {
+              if (!isRouteDisplayed) {
+                displayJourneyAndRefocus(points);
+                isRouteDisplayed = true;
+              }
+            },
+          ),
+        ),
+        Container(
+          alignment: Alignment(-0.5, 0),
+          child: FloatingActionButton(
+            heroTag: "Remove Polylines",
+            child: Icon(Icons.remove, color: Colors.white),
+            onPressed: () async {
+              if (isRouteDisplayed) {
+                removeFills();
+                isRouteDisplayed = false;
+              }
+            },
+          ),
+        ),
+        Container(
+          alignment: Alignment(-0.9, -0.5),
+          child: FloatingActionButton(
+            heroTag: "TBT",
+            child: Icon(Icons.start, color: Colors.white),
+            onPressed: () => Navigator.push(
+                context, MaterialPageRoute(builder: (_) => TurnByTurn(points))),
+          ),
+        ),
+        // Padding(
+        //   padding: const EdgeInsets.all(8.0),
+        //   child: Align(
+        //     alignment: Alignment(0, 0.9),
+        //     child: Container(
+        //         width: 200,
+        //         height: 50,
+        //         decoration: BoxDecoration(
+        //             color: Colors.white,
+        //             borderRadius: BorderRadius.circular(15.0)),
+        //         child: Align(
+        //           alignment: Alignment.center,
+        //           child: Text(totalDistance, style: TextStyle(fontSize: 25.0)),
+        //         )),
+        //   ),
+        // ),
       ],
     ));
   }
 
-  // @override
-  // Widget build(BuildContext build) {
-  //   return Scaffold(
-  //       body: Stack(
-  //     children: [
-  //       Container(
-  //         height: MediaQuery.of(context).size.height,
-  //         width: MediaQuery.of(context).size.width,
-  //         child: MapboxMap(
-  //           accessToken: accessToken,
-  //           initialCameraPosition: _cameraPosition,
-  //           onMapCreated: _onMapCreated,
-  //           onStyleLoadedCallback: _onStyleLoadedCallback,//() => fetchDockingStations(), //_onStyleLoadedCallback,
-  //           myLocationEnabled: true,
-  //           myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
-  //           annotationOrder: [AnnotationType.symbol],
-  //           // minMaxZoomPreference: const MinMaxZoomPreference(14, 17),
-  //         ),
-  //       ),
-  //       Container(
-  //         alignment: Alignment(-0.9, 0),
-  //         child: FloatingActionButton(
-  //           heroTag: "btn1",
-  //           child: Icon(Icons.arrow_upward, color: Colors.white),
-  //           onPressed: () async {
-  //             if (!isRouteDisplayed) {
-  //               displayJurneyAndRefocus(points);
-  //               isRouteDisplayed = true;
-  //             }
-  //           },
-  //         ),
-  //       ),
-  //       Container(
-  //         alignment: Alignment(-0.5, 0),
-  //         child: FloatingActionButton(
-  //           heroTag: "no",
-  //           child: Icon(Icons.remove, color: Colors.white),
-  //           onPressed: () async {
-  //             if (isRouteDisplayed) {
-  //               removeFills();
-  //               isRouteDisplayed = false;
-  //             }
-  //           },
-  //         ),
-  //       ),
-  //       Container(
-  //         alignment: Alignment(-0.9, -0.5),
-  //         child: FloatingActionButton(
-  //           heroTag: "TBT",
-  //           child: Icon(Icons.start, color: Colors.white),
-  //           onPressed: () => Navigator.push(
-  //               context, MaterialPageRoute(builder: (_) => TurnByTurn(points))),
-  //         ),
-  //       ),
-  //       Container(
-  //         alignment: Alignment(-0.5, -0.5),
-  //         child: FloatingActionButton(
-  //           heroTag: "Show docking stations",
-  //           child: Icon(Icons.pedal_bike_sharp, color: Colors.white),
-  //           onPressed: placeMarkers
-  //         ),
-  //       ),
-  //       // Padding(
-  //       //   padding: const EdgeInsets.all(8.0),
-  //       //   child: Align(
-  //       //     alignment: Alignment(0, 0.9),
-  //       //     child: Container(
-  //       //         width: 200,
-  //       //         height: 50,
-  //       //         decoration: BoxDecoration(
-  //       //             color: Colors.white,
-  //       //             borderRadius: BorderRadius.circular(15.0)),
-  //       //         child: Align(
-  //       //           alignment: Alignment.center,
-  //       //           child: Text(totalDistance, style: TextStyle(fontSize: 25.0)),
-  //       //         )),
-  //       //   ),
-  //       // ),
-  //     ],
-  //   ));
-  // }
-
   _onStyleLoadedCallback() async {
     setState(() => showMarkers = true);
-    print(showMarkers);
+    //print(showMarkers);
   }
 
   Future<void> setFills(dynamic routeResponse) async {
@@ -263,7 +213,7 @@ class MyHomePageState extends State<MapPage> {
     };
   }
 
-  void displayJurneyAndRefocus(List<LatLng> journey) {
+  void displayJourneyAndRefocus(List<LatLng> journey) {
     setJourney(journey);
     refocusCamera(journey);
   }
@@ -297,16 +247,16 @@ class MyHomePageState extends State<MapPage> {
   }
 
   void setJourney(List<LatLng> journey) async {
-    List<dynamic> jurneyPoints = [];
+    List<dynamic> journeyPoints = [];
     if (journey.length > 1) {
       routeResponse = await manager.getDirections(points[0], points[1]);
       for (int i = 0; i < journey.length - 1; ++i) {
         var directions = await manager.getDirections(points[i], points[i + 1]);
         for (dynamic a in directions['geometry']['coordinates']) {
-          jurneyPoints.add(a);
+          journeyPoints.add(a);
         }
         routeResponse['geometry']
-            .update("coordinates", (value) => jurneyPoints);
+            .update("coordinates", (value) => journeyPoints);
       }
       setFills(routeResponse['geometry']);
       addFills();
