@@ -99,8 +99,8 @@ class PanelWidgetState extends State<PanelWidget> {
     double LatitudeOfPlace = response['location'].latitude;
     double LongitudeOfPlace = response['location'].longitude;
     List<double?> currentLocationCoords = [LatitudeOfPlace, LongitudeOfPlace];
-    widget.selectedCords.insert(0, currentLocationCoords);
     widget.textEditingController.text = place;
+    widget.selectedCords.insert(0, currentLocationCoords);
     print(widget.selectedCords);
   }
 
@@ -118,8 +118,12 @@ class PanelWidgetState extends State<PanelWidget> {
           Expanded(
             child: SizedBox(
               child: TextField(
+                readOnly: true,
+                onTap: (){
+                  _handleSearchClick(context);
+                },
                 controller: widget.textEditingController,
-                enabled: false,
+                //enabled: true,
                 decoration: InputDecoration(
                   hintText: 'Where from?',
                   focusedBorder: OutlineInputBorder(
@@ -152,13 +156,28 @@ class PanelWidgetState extends State<PanelWidget> {
                     borderSide:
                         const BorderSide(color: Colors.black, width: 1.0),
                   ),
-                  suffix: TextButton(
-                    onPressed: _useCurrentLocationButtonHandler,
-                    //padding: const EdgeInsets.all(10),
-                    //constraints: const BoxConstraints(),
-                    child: const Icon(
+                  // suffixIcon: IconButton(
+                  //   padding: EdgeInsets.zero,
+                  //   //onPressed: _useCurrentLocationButtonHandler,
+                  //   onPressed: () {
+                  //     print("LIL Mosey");
+                  //     //_useCurrentLocationButtonHandler();
+                  //   },
+                  //   icon: const Icon(
+                  //     Icons.search,
+                  //     size: 25,
+                  //     color: Colors.grey,
+                  //   ),
+                  // ),
+                  suffixIcon: IconButton(
+                    //onPressed: _useCurrentLocationButtonHandler,
+                    onPressed: () {
+                      print("SUFFIX ICON");
+                      _useCurrentLocationButtonHandler();
+                    },
+                    icon: const Icon(
                       Icons.my_location,
-                      size: 10,
+                      size: 20,
                       color: Colors.blue,
                     ),
                   ),
@@ -169,9 +188,7 @@ class PanelWidgetState extends State<PanelWidget> {
           //SizedBox(width: 10),
           TextButton(
             onPressed: () {
-              //BUG IS HERE
-              _handleSearchClick(context);
-              print("Take me to the place search screen");
+              print("Link carasoul stuff here");
             },
             child: const Icon(
               Icons.keyboard_arrow_right_rounded,
@@ -192,7 +209,7 @@ class PanelWidgetState extends State<PanelWidget> {
       controller: widget.controller,
       //padding: EdgeInsets.only(left:20, bottom: 20, right: 20),
       children: <Widget>[
-        const SizedBox(height: 12),
+        //const SizedBox(height: 12),
         buildDragHandle(),
         const SizedBox(height: 6),
         const Center(
@@ -232,7 +249,8 @@ class PanelWidgetState extends State<PanelWidget> {
                 );
               },
               stream: dynamicWidgetsStream,
-            )
+            ),
+            const SizedBox(height: 50,),
           ],
         ),
         FloatingActionButton(
@@ -284,7 +302,7 @@ class PanelWidgetState extends State<PanelWidget> {
                 aSearchBarCannotBeEmpty();
                 startLocationMustBeSpecified();
               }else{
-
+                print("ALL_COORDINATES => $tempList");
               }
             },
             child: const Text(
@@ -430,7 +448,11 @@ class DynamicWidget extends StatelessWidget {
           //),
           Expanded(
             child: TextField(
-              enabled: false,
+              readOnly: true,
+              onTap: () {
+                _handleSearchClick(context, position);
+                print("SUIIIIII");
+              },
               controller: textController,
               decoration: InputDecoration(
                 hintText: 'Where to?',
@@ -464,7 +486,7 @@ class DynamicWidget extends StatelessWidget {
           //Expanded(
           TextButton(
             onPressed: () {
-              _handleSearchClick(context, position);
+              print("Link carasoul stuff here");
             },
             child: const Icon(
               Icons.keyboard_arrow_right_rounded,
