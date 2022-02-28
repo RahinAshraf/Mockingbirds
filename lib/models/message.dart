@@ -1,11 +1,7 @@
 class Message {
-  final String text;
+  final String questionText;
+  final String questionAnswer;
   final String topic;
-  final bool isSentByBot;
 
-  Message(
-      this.text,
-      this.topic,
-      this.isSentByBot
-      );
+  Message(this.questionText, this.questionAnswer, this.topic);
 }
