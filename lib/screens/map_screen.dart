@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -37,8 +38,10 @@ class MyHomePageState extends State<MapPage> {
   }
 
   _onMapCreated(MapboxMapController controller) async {
+    Timer timer;
     this.controller = controller;
-    fetchDockingStations();
+    timer = Timer.periodic(
+        Duration(seconds: 300), (Timer t) => fetchDockingStations());
   }
 
   void fetchDockingStations() {
@@ -53,6 +56,17 @@ class MyHomePageState extends State<MapPage> {
     docking_stations = _stationManager.stations;
     List<DockingStation> closest_dock_to_user_location = _stationManager
         .get_5_closest_docks_to_get_bikes(getLatLngFromSharedPrefs(), 21);
+    log("my loc is: " + getLatLngFromSharedPrefs().toString());
+    log("closest dock station is: " +
+        closest_dock_to_user_location[0].name.toString());
+    log("closest dock station is: " +
+        closest_dock_to_user_location[1].name.toString());
+    log("closest dock station is: " +
+        closest_dock_to_user_location[2].name.toString());
+    log("closest dock station is: " +
+        closest_dock_to_user_location[3].name.toString());
+    log("closest dock station is: " +
+        closest_dock_to_user_location[4].name.toString());
   }
 
   void placeDockMarkers(List<DockingStation> docks) {
