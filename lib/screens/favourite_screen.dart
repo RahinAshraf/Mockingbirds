@@ -1,14 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:veloplan/widget/carousel/station_carousel.dart';
 
-class Favourite extends StatelessWidget {
+class Favourite extends StatefulWidget {
+  _FavouriteState createState() => _FavouriteState();
+}
+
+class _FavouriteState extends State<Favourite> {
+  var _dockingStationCarousel =
+      dockingStationCarousel(); //retrieves all of the docking station cards
+
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext build) {
     return Scaffold(
+      body: _dockingStationCarousel.buildCarousel(),
       appBar: AppBar(
-        title: const Text('Favourites'),
-      ),
-      body: Center(
-        child: Text("Favourite page!"),
+        title: const Text('My favourites'),
       ),
     );
   }
