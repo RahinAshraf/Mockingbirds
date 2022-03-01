@@ -1,36 +1,48 @@
+import 'package:flutter/cupertino.dart';
 import 'package:veloplan/models/message.dart';
 
 class HelpBotManager {
-  Map<Message, Message> questionAnswers = {};
+  @visibleForTesting
+  List<Message> _questionBank = [
+    Message('How do I sign up?', 'Sign up on the main page.', 'Signup'),
+    Message('How do I login?', 'Login on the main page.', 'Login'),
+    Message('How do I plan a new journey?', 'Click the bike button.',
+        'Planning Journey'),
+    Message('I have another question that is not listed here.',
+        'Please contact k20082541@kcl.ac.uk.', 'Other Question')
+  ];
 
-  HelpBotManager() {
-    questionAnswers.putIfAbsent(Message("test", "is this working?", false),
-        () => Message("test", "yes", true));
-  }
-
-  Set<Message> getAllMessageTexts() {
-    Set<Message> ret = {};
-    for (Message question in questionAnswers.keys) {
-      ret.add(question);
+  List<String> getAllQuestions() {
+    List<String> allQuestions = [];
+    for (Message message in _questionBank) {
+      allQuestions.add(message.questionText);
     }
-    return ret;
+    return allQuestions;
   }
 
-  Message getMessageTextsbyTopic(String questionTopic) {
-    for (Message question in questionAnswers.keys) {
-      if (question.topic == questionTopic) {
-        return question;
+  List<String> getAllTopics() {
+    List<String> allTopics = [];
+    for (Message message in _questionBank) {
+      allTopics.add(message.topic);
+    }
+    return allTopics;
+  }
+
+  String getQuestionText(String topic) {
+    for (Message message in _questionBank) {
+      if (message.topic == topic) {
+        return message.questionText;
       }
     }
-    return Message("error", "Internal error. Please reload", true);
+    return 'Internal error.';
   }
 
-  Message? getAnswerToQuestion(String questionTopic) {
-    for (Message question in questionAnswers.keys) {
-      if (question.topic == questionTopic) {
-        return questionAnswers[question];
+  String getQuestionAnswer(String topic) {
+    for (Message message in _questionBank) {
+      if (message.topic == topic) {
+        return message.questionAnswer;
       }
     }
-    return Message("error", "Internal error. Please reload", true);
+    return 'Internal error.';
   }
 }

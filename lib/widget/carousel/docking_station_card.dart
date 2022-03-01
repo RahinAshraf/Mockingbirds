@@ -6,11 +6,14 @@ import 'package:favorite_button/favorite_button.dart';
 Widget dockingStationCard(
     int index, String name, String nb_bikes, String nb_empty_docks) {
   return Card(
+    elevation: 1.0,
+    shadowColor: Colors.green[200],
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
     clipBehavior: Clip.antiAlias,
     child: Padding(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10.0),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           FavoriteButton(valueChanged: (_isFavorite) {}),
           const SizedBox(width: 10),
@@ -18,9 +21,17 @@ Widget dockingStationCard(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(name),
-                Text('Bike no: $nb_bikes'),
-                Text('Empty: $nb_empty_docks'),
+                Text(
+                  name,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const Divider(
+                  color: Colors.black,
+                ),
+                Text('Total number of bikes: $nb_bikes'),
+                Text('Available bikes: $nb_empty_docks'),
               ],
             ),
           ),
