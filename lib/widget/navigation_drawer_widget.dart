@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../screens/schedule_screen.dart';
 import '../screens/favourite_screen.dart';
 import '../screens/setting_screen.dart';
+import '../screens/help_screen.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
   final padding = EdgeInsets.symmetric(horizontal: 20);
@@ -102,7 +103,7 @@ class NavigationDrawerWidget extends StatelessWidget {
         break;
       case 4:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => Placeholder(),
+          builder: (context) => HelpPage(),
         ));
         break;
       case 5:
@@ -113,10 +114,3 @@ class NavigationDrawerWidget extends StatelessWidget {
     }
   }
 }
-
-//things to go on the side bar:
-//history
-//stats
-//settings ?
-//calander
-//chatbox

@@ -40,7 +40,9 @@ void initializeLocation() async {
 
   LocationData _locationData = await _location.getLocation();
   LatLng currentLatLng =
-      LatLng(_locationData.latitude!, _locationData.longitude!);
+
+  LatLng(_locationData.latitude!, _locationData.longitude!);
+
 
   saveLocation(_locationData);
 }
@@ -62,7 +64,9 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     //final Future<FirebaseApp> _initialization = Firebase.initializeApp();
     return FutureBuilder(
-        // Initialize FlutterFire:
+
+      // Initialize FlutterFire:
+
         future: Firebase.initializeApp(), // _initialization,
         builder: (context, appSnapshot) {
           return MaterialApp(
@@ -95,17 +99,18 @@ class _MyAppState extends State<MyApp> {
             home: appSnapshot.connectionState != ConnectionState.done
                 ? const SplashScreen()
                 : StreamBuilder(
-                    stream: FirebaseAuth.instance.authStateChanges(),
-                    builder: (ctx, userSnapshot) {
-                      if (userSnapshot.connectionState ==
-                          ConnectionState.waiting) {
-                        return const SplashScreen();
-                      }
-                      if (userSnapshot.hasData) {
-                        return const VerifyEmailScreen();
-                      }
-                      return const AuthScreen();
-                    }),
+
+                stream: FirebaseAuth.instance.authStateChanges(),
+                builder: (ctx, userSnapshot) {
+                  if (userSnapshot.connectionState ==
+                      ConnectionState.waiting) {
+                    return const SplashScreen();
+                  }
+                  if (userSnapshot.hasData) {
+                    return const VerifyEmailScreen();
+                  }
+                  return const AuthScreen();
+                }),
           );
         });
   }

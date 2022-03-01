@@ -84,7 +84,7 @@ class _MyHomePageState extends State<MapPage> {
     var location = await _currentLocation.getLocation();
     _currentLocation.onLocationChanged.listen((LocationData loc) {
       _googleController
-          ?.animateCamera(CameraUpdate.newCameraPosition(new CameraPosition(
+          ?.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
         target: LatLng(loc.latitude ?? 0.0, loc.longitude ?? 0.0),
         zoom: cameraZoom,
       )));
@@ -102,16 +102,14 @@ class _MyHomePageState extends State<MapPage> {
   }
 
   void placeDockMarkers(List<DockingStation> docks){
-    int i =0;
+    int i = 0;
     setState(() {
       for (var station in docks) {
         _markers.add(Marker(markerId: MarkerId("dockingStation" + i.toString()),
             position: LatLng(station.lat, station.lon)));
         i++;
       }
-
     });
-
   }
 
   @override
@@ -188,7 +186,7 @@ class _MyHomePageState extends State<MapPage> {
                 decoration:
                 const InputDecoration(hintText: "Search for a location"),
                 onChanged: (value) {
-                  LocationService().findPlace(value);
+                  //LocationService().findPlace(value);
                 },
               )),
           Container(
@@ -197,7 +195,7 @@ class _MyHomePageState extends State<MapPage> {
                 iconSize: 40,
                 color: Colors.red, //red for developement - change this!
                 onPressed: () {
-                  LocationService().getPlace(_searchController.text);
+                  //LocationService().getPlace(_searchController.text);
                 },
                 icon: const Icon(Icons.search)),
           ),
