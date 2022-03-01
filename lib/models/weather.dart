@@ -27,6 +27,15 @@ class Weather {
         current_description = "",
         current_icon = "";
 
+  Weather.defaultvalue()
+      : current_temp = 281.26,
+        current_feels_like = 278.77,
+        current_clouds = 100,
+        current_visibility = 4300,
+        current_wind_speed = 4.12,
+        current_description = "light intensity drizzle",
+        current_icon = "04d";
+
   String getCurrentWeatherIcon() {
     return current_icon;
   }

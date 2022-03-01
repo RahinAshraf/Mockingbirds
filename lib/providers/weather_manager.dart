@@ -4,9 +4,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 class WeatherManager {
-  //double lat = 51.4707884;
-//  double lon = -0.1263955;
-  Weather all_weather_data = Weather.empty();
+  Weather all_weather_data = Weather.defaultvalue();
 
   Future<void> importWeatherForecast(double lat, double lon) async {
     var data = await http.get(Uri.parse(
