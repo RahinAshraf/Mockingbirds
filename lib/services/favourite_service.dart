@@ -16,6 +16,7 @@ class FirestoreHelper {
   late CollectionReference favourites;
   late final userID;
   late FirebaseFirestore db;
+
   //change these to var?
 
   FirestoreHelper() {
@@ -98,10 +99,38 @@ class FirestoreHelper {
     //checks if the station id is in the list of faves.
     FavouriteDockingStation? fave = faveList.firstWhereOrNull(
         (FavouriteDockingStation f) => (f.stationId == stationId));
-    if (fave == null)
+    if (fave == null) {
+      print("NOOOOOOOOOOOO");
       return false;
-    else
+    } else {
+      print("YEEEEEEEEEEEES");
       return true;
+    }
+  }
+
+  toggleFavourite(
+    String stationId,
+  ) async {
+    FirestoreHelper helper = FirestoreHelper();
+    var faveList = await getUserFavourites();
+    if (isFavouriteStation(stationId, faveList)) {
+      //refactor this:
+      FavouriteDockingStation fave = faveList.firstWhere(
+          (FavouriteDockingStation f) => (f.stationId == stationId));
+      String favId = fave.id;
+      await helper.deleteFavourite(favId);
+      print("deleted");
+    } else {
+      await helper.addFavourite(stationId);
+      print("added");
+    }
+    //faveList = await getUpdatedList();
+  }
+
+  Future<List<FavouriteDockingStation>> getUpdatedList() async {
+    List<FavouriteDockingStation> updatedFavourites =
+        await FirestoreHelper.getUserFavourites();
+    return updatedFavourites;
   }
 }
 

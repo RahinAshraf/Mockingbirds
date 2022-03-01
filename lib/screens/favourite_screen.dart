@@ -15,47 +15,48 @@ class _FavouriteState extends State<Favourite> {
 
   late List<FavouriteDockingStation> favourites;
 
+  var helper = FirestoreHelper();
+
   @override
   void initState() {
     FirestoreHelper.getUserFavourites().then((data) {
       setState(() {
         favourites = data;
         //print(checkDis());
-        // print("HEREHEREHERE");
-        //  print(favourites[0].stationId);
+        //helper.toggleFavourite("pls?");
       });
     });
     super.initState();
   }
 
-  bool isFavouriteStation(String stationId) {
-    //checks if the station id is in the list of faves.
-    FavouriteDockingStation? fave = favourites.firstWhereOrNull(
-        (FavouriteDockingStation f) => (f.stationId == stationId));
-    if (fave == null) {
-      return false;
-    } else {
-      return true;
-    }
-  }
+  // bool isFavouriteStation(String stationId) {
+  //   //checks if the station id is in the list of faves.
+  //   FavouriteDockingStation? fave = favourites.firstWhereOrNull(
+  //       (FavouriteDockingStation f) => (f.stationId == stationId));
+  //   if (fave == null) {
+  //     return false;
+  //   } else {
+  //     return true;
+  //   }
+  // }
 
-  toggleFavourite(String stationId) async {
-    FirestoreHelper helper = FirestoreHelper();
-    if (isFavouriteStation(stationId)) {
-      //refactor this:
-      FavouriteDockingStation fave = favourites.firstWhere(
-          (FavouriteDockingStation f) => (f.stationId == stationId));
-      String favId = fave.id;
-      await helper.deleteFavourite(favId);
-    } else {
-      await helper.addFavourite(stationId);
-    }
-    List<FavouriteDockingStation> updatedFavourites =
-        await FirestoreHelper.getUserFavourites();
-    setState(() {
-      favourites = updatedFavourites;
-    });
-  }
+  // toggleFavourite(String stationId) async {
+  //   FirestoreHelper helper = FirestoreHelper();
+  //   if (isFavouriteStation(stationId)) {
+  //     //refactor this:
+  //     FavouriteDockingStation fave = favourites.firstWhere(
+  //         (FavouriteDockingStation f) => (f.stationId == stationId));
+  //     String favId = fave.id;
+  //     await helper.deleteFavourite(favId);
+  //   } else {
+  //     await helper.addFavourite(stationId);
+  //   }
+  //   List<FavouriteDockingStation> updatedFavourites =
+  //       await FirestoreHelper.getUserFavourites();
+  //   setState(() {
+  //     favourites = updatedFavourites;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext build) {
@@ -66,7 +67,11 @@ class _FavouriteState extends State<Favourite> {
           Container(
               alignment: Alignment(0, 0),
               child: FloatingActionButton(onPressed: () {
-                toggleFavourite("BikePoints_86");
+                if (favourites.isEmpty) {
+                  print("no faves");
+                } else {
+                  print("yes!");
+                }
               }))
         ],
       ),
