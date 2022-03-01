@@ -60,22 +60,32 @@ class FirestoreHelper {
     List<FavouriteDockingStation> favs = [];
     FirebaseFirestore db = FirebaseFirestore.instance;
 
+    // QuerySnapshot<Object?> docs = await db
+    //     .collection('favourites')
+    //     .where('user_id', isEqualTo: getUid())
+    //     .get();
+    // if (docs != null) {
+    //   for (DocumentSnapshot doc in docs.docs) {
+    //     favs.add(FavouriteDockingStation.map(doc));
+    //   }
+    // }
+
     QuerySnapshot<Object?> docs = await db
+        .collection('users')
+        .doc(getUid())
         .collection('favourites')
-        .where('user_id', isEqualTo: getUid())
         .get();
     if (docs != null) {
       for (DocumentSnapshot doc in docs.docs) {
         favs.add(FavouriteDockingStation.map(doc));
       }
     }
-    print(favs.length);
     return favs;
     //print(favs[0].stationId);
   }
 
 //Deletes every single favourite documentS
-  Future deleteAllFavouriteCollections() async {
+  Future deleteUsersFavourites() async {
     var snapshots = await favourites.get();
     for (var doc in snapshots.docs) {
       await doc.reference.delete();

@@ -30,10 +30,13 @@ class _FavouriteState extends State<Favourite> {
     //checks if the station id is in the list of faves.
     FavouriteDockingStation? fave = favourites.firstWhereOrNull(
         (FavouriteDockingStation f) => (f.stationId == stationId));
-    if (fave == null)
+    if (fave == null) {
+      print("no");
       return false;
-    else
+    } else {
+      print("yes");
       return true;
+    }
   }
 
   toggleFavourite(String stationId) async {
@@ -73,7 +76,7 @@ class _FavouriteState extends State<Favourite> {
           Container(
               alignment: Alignment(0, 0),
               child: FloatingActionButton(onPressed: () {
-                toggleFavourite("BikePoints_86");
+                isFavouriteStation("BikePoints_86");
               }))
         ],
       ),
