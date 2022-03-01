@@ -116,7 +116,6 @@ class PanelWidgetState extends State<PanelWidget> {
                   _handleSearchClick(context);
                 },
                 controller: widget.textEditingController,
-                //enabled: true,
                 decoration: InputDecoration(
                   hintText: 'Where from?',
                   focusedBorder: OutlineInputBorder(
@@ -150,9 +149,7 @@ class PanelWidgetState extends State<PanelWidget> {
                         const BorderSide(color: Colors.black, width: 1.0),
                   ),
                   suffixIcon: IconButton(
-                    //onPressed: _useCurrentLocationButtonHandler,
                     onPressed: () {
-                      print("SUFFIX ICON");
                       _useCurrentLocationButtonHandler();
                     },
                     icon: const Icon(
@@ -311,11 +308,8 @@ class PanelWidgetState extends State<PanelWidget> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
-    //position = -1;
     super.dispose();
   }
-
 
   //When triggered, redirects the user to the place_search_Screen in order for them to specify a location to visit
   //for the journey
