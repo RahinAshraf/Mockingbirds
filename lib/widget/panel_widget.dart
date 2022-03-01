@@ -79,7 +79,6 @@ class PanelWidgetState extends State<PanelWidget> {
 
   //When called, this function sets the first location of the journey to the users current location
   _useCurrentLocationButtonHandler() async {
-    print("HELLO");
     LatLng currentLocation = getLatLngFromSharedPrefs();
     var response = await locService.reverseGeoCode(
         currentLocation.latitude, currentLocation.longitude);
@@ -89,15 +88,7 @@ class PanelWidgetState extends State<PanelWidget> {
     double longitudeOfPlace = response['location'].longitude;
     List<double?> currentLocationCoords = [latitudeOfPlace, longitudeOfPlace];
     widget.textEditingController.text = place;
-
     staticList = currentLocationCoords;
-
-    /*if (widget.selectedCords.isEmpty) {
-      widget.selectedCords.add(currentLocationCoords);
-    } else {
-      widget.selectedCords.insert(0, currentLocationCoords);
-    }*/
-    print("Helllo 1");
     print(widget.selectedCords);
   }
 
@@ -296,20 +287,15 @@ class PanelWidgetState extends State<PanelWidget> {
       return;
     }
     for (var element in list) {
-      print('aSearchBarCannotBeEmpty => ${element.textController.text.isEmpty}');
       if(element.textController.text.isEmpty){
         isFieldNotEmpty = false;
         break;
       }
     }
-
-    print('aSearchBarCannotBeEmpty ==> $aSearchBarCannotBeEmpty');
-
     if(!isFieldNotEmpty){
       //Show error message
       showWhereToTextFieldsMustNotBeEmptySnackBar(context);
     }
-
   }
 
   //The logic to restrict the user from being able to start a journey without a starting point
@@ -412,7 +398,7 @@ class PanelWidgetState extends State<PanelWidget> {
  Each dynamic widget is a row which comes with a row of children:
     - red cross, to delete a location from the journey planner list
     - TextField , to insert a location to the journey planner list
-    - green > icon, to allow users to specify specific docks of the locations user specifies in the TextField
+    - green > icon, to allow users to specify specific docks (if they wish) of the locations user specifies in the TextField
  */
 class DynamicWidget extends StatelessWidget {
   late TextEditingController textController = TextEditingController();
