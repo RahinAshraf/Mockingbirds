@@ -37,6 +37,7 @@ class MyHomePageState extends State<MapPage> {
   late Map routeResponse;
   bool showMarkers = false; //for displaying markers with button 
   late Symbol? _selectedSymbol; //may remove
+  Set<Symbol> polylineSymbols={}; 
 
   // var zoom = LatLng(51.51185004458236, -0.11580820118980878);
   String googleMapsApi = 'AIzaSyB7YSQkjjqm-YU1LAz91lyYAvCpqFRhFdU';
@@ -259,6 +260,7 @@ class MyHomePageState extends State<MapPage> {
   void displayJourneyAndRefocus(List<LatLng> journey) {
     setJourney(journey);
     refocusCamera(journey);
+    setPolylineMarkers(journey);
   }
 
   void refocusCamera(List<LatLng> journey) {
@@ -287,6 +289,8 @@ class MyHomePageState extends State<MapPage> {
   void removeFills() async {
     await controller!.removeLayer("lines");
     await controller!.removeSource("fills");
+    controller!.removeSymbols(polylineSymbols);
+    //removePolylineMarkers();
   }
 
   void setJourney(List<LatLng> journey) async {
@@ -305,6 +309,21 @@ class MyHomePageState extends State<MapPage> {
       addFills();
     }
   }
+
+
+  void setPolylineMarkers(List<LatLng> journey) async{
+    for (var stop in journey) {
+      polylineSymbols.add( await
+        controller!.addSymbol(
+          SymbolOptions(
+              geometry: stop,
+              iconSize: 0.1,
+              iconImage: "assets/icon/yellow_marker.png"),
+        )
+      );
+    }
+  }
+
 
   void zoomIn() {
     _cameraPosition = CameraPosition(
@@ -365,20 +384,17 @@ class _DockPopupCard extends StatelessWidget {
 
 // TODO: Error box when no internet -> check when future is called
 // TODO: Future to the map
-// TODO: Dispay markers again for bikes
 // TODO: Fix camera zoom
 // TODO: wheather button
 // TODO: get the time
-// TODO: show all markers
-// TODO: show markers for list of points
 // TODO: Update path when button pressed
-// TODO: Add walking route
+// TODO: Add walking route  (DONE: Create walking route manager)
 
-// TODO: modify build to add weather - cant do
 // TODO: Duration and distance
-// TODO: Markers
 // TODO: Camera zoom
 
 // DONE: Turn by turn directions
 // DONE: Zoom in and zoom out buttons
 // DONE: stop auto navigation - simulateRoute: false in turb_by_turn_screen.dart
+// DONE: show markers for list of points
+// DONE: show all markers for docking stations 
