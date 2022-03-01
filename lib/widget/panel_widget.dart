@@ -89,12 +89,14 @@ class PanelWidgetState extends State<PanelWidget> {
     double longitudeOfPlace = response['location'].longitude;
     List<double?> currentLocationCoords = [latitudeOfPlace, longitudeOfPlace];
     widget.textEditingController.text = place;
-    if (widget.selectedCords.isEmpty) {
+
+    staticList = currentLocationCoords;
+
+    /*if (widget.selectedCords.isEmpty) {
       widget.selectedCords.add(currentLocationCoords);
     } else {
       widget.selectedCords.insert(0, currentLocationCoords);
-    }
-
+    }*/
     print("Helllo 1");
     print(widget.selectedCords);
   }
@@ -250,6 +252,9 @@ class PanelWidgetState extends State<PanelWidget> {
               startLocationMustBeSpecified();
 
               oneDestinationMustBeSpecified();
+
+              aSearchBarCannotBeEmpty(widget.listDynamic);
+
               print("Dynamic list length:");
               print(widget.listDynamic.length);
               print("selected coords length:");
@@ -263,8 +268,7 @@ class PanelWidgetState extends State<PanelWidget> {
 
                 print("ALL_COORDINATES => $tempList");
 
-                getCoordinatesForJourney();
-                aSearchBarCannotBeEmpty();
+               // getCoordinatesForJourney();
               } else {
                 print("ALL_COORDINATES => $tempList");
               }
@@ -285,8 +289,27 @@ class PanelWidgetState extends State<PanelWidget> {
   }
 
   //The logic to restrict the user from being able to start a journey, with blank location fields
-  void aSearchBarCannotBeEmpty() {
-    print("Add logic");
+  void aSearchBarCannotBeEmpty(List<DynamicWidget>? list) {
+    bool isFieldNotEmpty = true;
+    if(list == null){
+      showWhereToTextFieldsMustNotBeEmptySnackBar(context);
+      return;
+    }
+    for (var element in list) {
+      print('aSearchBarCannotBeEmpty => ${element.textController.text.isEmpty}');
+      if(element.textController.text.isEmpty){
+        isFieldNotEmpty = false;
+        break;
+      }
+    }
+
+    print('aSearchBarCannotBeEmpty ==> $aSearchBarCannotBeEmpty');
+
+    if(!isFieldNotEmpty){
+      //Show error message
+      showWhereToTextFieldsMustNotBeEmptySnackBar(context);
+    }
+
   }
 
   //The logic to restrict the user from being able to start a journey without a starting point
@@ -416,7 +439,10 @@ class DynamicWidget extends StatelessWidget {
           //Expanded(
           TextButton(
             onPressed: () {
-              selectedCords?.removeAt(position);
+              int len = selectedCords?.length ?? 0;
+              if(position < len){
+                selectedCords?.removeAt(position);
+              }
               onDelete?.call(position);
             },
             child: const Icon(
