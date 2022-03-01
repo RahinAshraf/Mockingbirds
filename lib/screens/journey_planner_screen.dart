@@ -8,7 +8,7 @@ import 'package:mapbox_gl/mapbox_gl.dart';
 import '../.env.dart';
 import '../widget/panel_widget.dart';
 import 'map_screen.dart';
-import 'location_service.dart';
+import '../providers/location_service.dart';
 
 
 class MapPlace{

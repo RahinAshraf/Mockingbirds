@@ -7,7 +7,7 @@ import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart' as LatLong;
 import '../.env.dart';
-import 'package:veloplan/screens/location_service.dart';
+import 'package:veloplan/providers/location_service.dart';
 
 const double zoom = 16;
 
