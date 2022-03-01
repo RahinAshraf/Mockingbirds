@@ -8,6 +8,7 @@ import '../main.dart';
 import '../providers/location_service.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:veloplan/alerts.dart';
 
 /*
 When rendered, the journey_planner_screen will have this panel_widget at the bottom. It is an interactive panel the user can
@@ -50,6 +51,7 @@ class PanelWidgetState extends State<PanelWidget> {
   late TextEditingController firstTextEditingController =
       TextEditingController();
   List<double?>? staticList;
+  final Alerts alert = Alerts();
 
   //creates a new dynamic widget and adds this to the list of destinations for the journey
   addDynamic() {
@@ -89,7 +91,6 @@ class PanelWidgetState extends State<PanelWidget> {
     List<double?> currentLocationCoords = [latitudeOfPlace, longitudeOfPlace];
     widget.textEditingController.text = place;
     staticList = currentLocationCoords;
-    print(widget.selectedCords);
   }
 
   /*
@@ -241,25 +242,14 @@ class PanelWidgetState extends State<PanelWidget> {
             ),
             onPressed: () {
               startLocationMustBeSpecified();
-
               oneDestinationMustBeSpecified();
-
               aSearchBarCannotBeEmpty(widget.listDynamic);
 
-              print("Dynamic list length:");
-              print(widget.listDynamic.length);
-              print("selected coords length:");
-              print(widget.selectedCords.length);
-
               List<List<double?>?> tempList = [];
-
               if (staticList != null) {
                 tempList.add(staticList);
                 tempList.addAll(widget.selectedCords);
-
                 print("ALL_COORDINATES => $tempList");
-
-               // getCoordinatesForJourney();
               } else {
                 print("ALL_COORDINATES => $tempList");
               }
@@ -283,7 +273,7 @@ class PanelWidgetState extends State<PanelWidget> {
   void aSearchBarCannotBeEmpty(List<DynamicWidget>? list) {
     bool isFieldNotEmpty = true;
     if(list == null){
-      showWhereToTextFieldsMustNotBeEmptySnackBar(context);
+      alert.showWhereToTextFieldsMustNotBeEmptySnackBar(context);
       return;
     }
     for (var element in list) {
@@ -293,15 +283,14 @@ class PanelWidgetState extends State<PanelWidget> {
       }
     }
     if(!isFieldNotEmpty){
-      //Show error message
-      showWhereToTextFieldsMustNotBeEmptySnackBar(context);
+      alert.showWhereToTextFieldsMustNotBeEmptySnackBar(context);
     }
   }
 
   //The logic to restrict the user from being able to start a journey without a starting point
   void startLocationMustBeSpecified() {
     if (widget.textEditingController.text.isEmpty) {
-      showStartLocationMustNotBeEmptySnackBar(context);
+      alert.showStartLocationMustNotBeEmptySnackBar(context);
     }
   }
 
@@ -320,19 +309,6 @@ class PanelWidgetState extends State<PanelWidget> {
         //onTap: togglePanel,
       );
 
-  //Show error message to user for having no destinations specified for the journey
-  void showAtLeastOneDestinationSnackBar(BuildContext context) {
-    const text = "Choose at least one destination to create your journey";
-    const snackBar = SnackBar(
-      content: Text(
-        text,
-        style: TextStyle(fontSize: 17),
-      ),
-      backgroundColor: Colors.red,
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-
   @override
   void dispose() {
     // TODO: implement dispose
@@ -340,32 +316,6 @@ class PanelWidgetState extends State<PanelWidget> {
     super.dispose();
   }
 
-  //Show error message to user for having blank destination fields
-  void showWhereToTextFieldsMustNotBeEmptySnackBar(BuildContext context) {
-    const text =
-        "Please specify locations for all destinations of the journey. Otherwise, remove any empty choices";
-    const snackBar = SnackBar(
-      content: Text(
-        text,
-        style: TextStyle(fontSize: 17),
-      ),
-      backgroundColor: Colors.red,
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-
-  //Show error message to user for not specifying the starting point of the journey
-  void showStartLocationMustNotBeEmptySnackBar(BuildContext context) {
-    const text = "Please specify the starting location of the journey";
-    const snackBar = SnackBar(
-      content: Text(
-        text,
-        style: TextStyle(fontSize: 17),
-      ),
-      backgroundColor: Colors.red,
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
 
   //When triggered, redirects the user to the place_search_Screen in order for them to specify a location to visit
   //for the journey
@@ -385,8 +335,8 @@ class PanelWidgetState extends State<PanelWidget> {
 
   //The logic to restrict the user from being able to start a journey without defining at least one destination for the journey
   void oneDestinationMustBeSpecified() {
-    if (widget.listDynamic.isEmpty && widget.selectedCords.length == 1) {
-      showAtLeastOneDestinationSnackBar(context);
+    if (widget.listDynamic.isEmpty) {
+      alert.showAtLeastOneDestinationSnackBar(context);
     }
   }
 
@@ -443,7 +393,6 @@ class DynamicWidget extends StatelessWidget {
               readOnly: true,
               onTap: () {
                 _handleSearchClick(context, position);
-                print("SUIIIIII");
               },
               controller: textController,
               decoration: InputDecoration(
@@ -492,6 +441,7 @@ class DynamicWidget extends StatelessWidget {
     );
   }
 
+  //Executed when the user presses on a search TextField
   void _handleSearchClick(BuildContext context, int position) async {
     final result = await Navigator.of(context).push(MaterialPageRoute(
         builder: (settings) => PlaceSearchScreen(LocationService())));
