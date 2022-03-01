@@ -4,11 +4,11 @@ import 'dart:convert';
 import 'dart:developer';
 
 class WeatherManager {
-  double lat = 51.4707884;
-  double lon = -0.1263955;
-  late Weather all_weather_data;
+  //double lat = 51.4707884;
+//  double lon = -0.1263955;
+  Weather all_weather_data = Weather.empty();
 
-  Future<void> importWeatherForecast() async {
+  Future<void> importWeatherForecast(double lat, double lon) async {
     var data = await http.get(Uri.parse(
         "https://api.openweathermap.org/data/2.5/onecall?lat=$lat&lon=$lon&exclude=&appid=edc1b9c88e6614d17f879f55bf392a00"));
     var jsonData = json.decode(data.body);

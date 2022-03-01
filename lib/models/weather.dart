@@ -18,6 +18,15 @@ class Weather {
       this.current_description,
       this.current_icon);
 
+  Weather.empty()
+      : current_temp = 0.0,
+        current_feels_like = 0.0,
+        current_clouds = 0,
+        current_visibility = 0,
+        current_wind_speed = 0.0,
+        current_description = "",
+        current_icon = "";
+
   String getCurrentWeatherIcon() {
     return current_icon;
   }
