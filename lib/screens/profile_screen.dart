@@ -110,7 +110,7 @@ class _ProfileState extends State<Profile> {
                                 text: 'About',
                               ),
                               Tab(
-                                text: 'Journeys',
+                                text: 'Groups',
                               ),
                             ],
                           ),
@@ -127,7 +127,7 @@ class _ProfileState extends State<Profile> {
                           ),
                           Material(
                             child: Center(
-                              child: Text('Journeys'),
+                              child: Text('Groups'),
                             ),
                           ),
                         ]),

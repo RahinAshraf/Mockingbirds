@@ -144,7 +144,7 @@ class _ProfilePageHeaderState extends State<ProfilePageHeader> {
           const SizedBox(height: 24),
           buildName(widget.data),
           buildCyclingHistory(widget.data),
-          buildButtons(),
+          // buildButtons(),
         ],
       ),
     );
