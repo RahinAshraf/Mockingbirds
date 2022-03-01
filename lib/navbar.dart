@@ -64,7 +64,7 @@ class _MainPageState extends State<MainPage> {
   BottomNavigationBar createNavBar() {
     return BottomNavigationBar(
       type: BottomNavigationBarType
-          .fixed, //looks past the backround colors specified
+          .fixed, //looks past the background colors specified
       backgroundColor: Colors.green[200],
       selectedItemColor: Colors.black,
       unselectedItemColor: Colors.grey[10],

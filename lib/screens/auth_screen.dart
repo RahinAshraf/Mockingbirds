@@ -109,11 +109,19 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
-      body: AuthForm(
+        body: Stack(children: <Widget>[
+      AuthForm(
         _submitAuthForm,
         _isLoading,
       ),
-    );
+      Align(
+        alignment: Alignment.topRight,
+        child: Container(
+            height: 170.0,
+            width: 170.0,
+            alignment: Alignment.topRight,
+            child: Image.asset('assets/images/right_bubbles_shapes.png')),
+      ),
+    ]));
   }
 }
