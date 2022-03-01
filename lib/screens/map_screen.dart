@@ -16,6 +16,10 @@ import '../.env.dart';
 import 'package:veloplan/screens/location_service.dart';
 import '../screens/turn_by_turn_screen.dart';
 
+
+//import 'package:veloplan/widget/carousel/station_carousel.dart';
+
+
 const double zoom = 16;
 
 class MapPage extends StatefulWidget {
@@ -31,7 +35,8 @@ class MyHomePageState extends State<MapPage> {
   bool isRouteDisplayed = false;
   Map<String, Object> _fills = {};
   late Map routeResponse;
-  bool showMarkers = false;
+  bool showMarkers = false; //for displaying markers with button 
+  late Symbol? _selectedSymbol; //may remove
 
   // var zoom = LatLng(51.51185004458236, -0.11580820118980878);
   String googleMapsApi = 'AIzaSyB7YSQkjjqm-YU1LAz91lyYAvCpqFRhFdU';
@@ -84,14 +89,52 @@ class MyHomePageState extends State<MapPage> {
       controller!.addSymbol(
         SymbolOptions(
             geometry: LatLng(station.lat, station.lon),
-            iconSize: 0.5,
+            iconSize: 0.7,
             iconImage: "assets/icon/bicycle.png"),
       );
     }
   }
 
+
+  Future<void> _onSymbolTapped(Symbol symbol) async {
+    print("Symbol has been tapped");
+    _selectedSymbol = symbol;
+    Future<LatLng> variable = controller!.getSymbolLatLng(symbol); 
+    // _DockPopupCard(latlng: await variable,);
+    if (_selectedSymbol != null) {
+      //Future<LatLng> variable = controller!.getSymbolLatLng(symbol); 
+      // print("This is:   " + variable.toString());
+      LatLng current = await variable;
+      print(await variable);
+      print("CURRENT: "+ current.toString());
+
+      displayDockCard(current);
+    } 
+  }
+
+
+  Widget displayDockCard(LatLng current){
+    print("Will call widget next");
+    return _DockPopupCard(latlng: current,);
+  }
+
+
+  // void _onSymbolTapped(Symbol symbol) async {
+  //   //This does not work
+  //   if (_selectedSymbol != null) {
+  //     print("tapped symbol");
+  //     Future<LatLng> variable = controller!.getSymbolLatLng(symbol); 
+  //     print(await variable);
+  //   } 
+  //   setState(() {
+  //     _selectedSymbol = symbol;
+  //   });
+  // }
+
   void _onMapCreated(MapboxMapController controller) async {
     this.controller = controller;
+    fetchDockingStations();
+    controller.onSymbolTapped.add(_onSymbolTapped);
   }
 
 
@@ -269,7 +312,6 @@ class MyHomePageState extends State<MapPage> {
         zoom: _cameraPosition.zoom + 0.5,
         tilt: 5);
     controller!.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
-    print("lol");
   }
 
   void zoomOut() {
@@ -280,6 +322,46 @@ class MyHomePageState extends State<MapPage> {
     controller!.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
   }
 }
+
+//PLACEHOLDER WIDGET FOR DOCKING STATION CARD ------- 
+class _DockPopupCard extends StatelessWidget {
+  const _DockPopupCard({Key? key, required this.latlng}) : super(key: key);
+  final LatLng latlng;
+
+  @override
+  Widget build(BuildContext context) {
+    print ("hi");
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32.0),
+        child: Hero(
+          tag: "_pop up",
+          child: Material(
+            color: Color.fromARGB(255, 176, 142, 192),
+            elevation: 2,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Image.network(
+                    //   'https://cdn3.iconfinder.com/data/icons/travel-flat-colorful/2048/5463_-_Cycling_Location-512.png',
+                    // ),
+                    Text("current: " + latlng.toString()),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
 
 // TODO: Error box when no internet -> check when future is called
 // TODO: Future to the map

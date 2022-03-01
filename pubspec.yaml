@@ -79,7 +79,6 @@ flutter:
   assets:
     - assets/config/
     - assets/icon/
-    - assets/icon/red.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
