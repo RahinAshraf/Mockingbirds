@@ -1,16 +1,18 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:location/location.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:veloplan/screens/journey_planner_screen.dart';
 import 'package:veloplan/screens/place_search_screen.dart';
 import '../main.dart';
-import '../models/destination_choice.dart';
 import '../screens/location_service.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+
+/*
+When rendered, the journey_planner_screen will have this panel_widget at the bottom. It is an interactive panel the user can
+slide up or down, when wanting to input their desired locations for the journey.
+ */
 
 class PanelWidget extends StatefulWidget {
   final ScrollController controller;
@@ -20,7 +22,6 @@ class PanelWidget extends StatefulWidget {
   final List<List<double?>?> selectedCords;
   final TextEditingController textEditingController;
   final Stream<MapPlace> address;
-
   final Map<String, List<double?>> selectionMap;
 
   const PanelWidget(
@@ -50,45 +51,33 @@ class PanelWidgetState extends State<PanelWidget> {
       TextEditingController();
   List<double?>? staticList;
 
+  //creates a new dynamic widget and adds this to the list of destinations for the journey
   addDynamic() {
     widget.listDynamic.add(DynamicWidget(
       selectedCords: widget.selectedCords,
     ));
-
     widget.dynamicWidgets.sink.add(widget.listDynamic);
   }
 
-
+  //Initialises variables and listens for user interaction to act on
   @override
   void initState() {
-   // position = -1;
     final selectedCords = widget.selectedCords;
     selectionMap = widget.selectionMap;
     widget.address.listen((event) {
       final dynamicWidget = DynamicWidget(selectedCords: selectedCords);
       dynamicWidget.textController.text = event.address ?? "";
-      dynamicWidget.position =  widget.listDynamic.length;
+      dynamicWidget.position = widget.listDynamic.length;
       widget.listDynamic.add(dynamicWidget);
       print("pos: ${dynamicWidget.position}");
-      selectedCords
-          .insert(dynamicWidget.position, [event.cords?.latitude, event.cords?.longitude]);
+      selectedCords.insert(dynamicWidget.position,
+          [event.cords?.latitude, event.cords?.longitude]);
       widget.dynamicWidgets.sink.add(widget.listDynamic);
     });
     super.initState();
   }
 
-  // //FUNCTION NEEDS TO BE CALLED
-  // void setLiveLocationInListAsFirstByDefault(){
-  //   print("HERE");
-  //   if(widget.textEditingController.text.isEmpty){
-  //     List<double> liveLocCoords =  [];
-  //     liveLocCoords.add(getLatLngFromSharedPrefs().latitude);
-  //     liveLocCoords.add(getLatLngFromSharedPrefs().longitude);
-  //
-  //     widget.selectedCords?.insert(0, liveLocCoords);
-  //   }
-  // }
-
+  //When called, this function sets the first location of the journey to the users current location
   _useCurrentLocationButtonHandler() async {
     print("HELLO");
     LatLng currentLocation = getLatLngFromSharedPrefs();
@@ -96,14 +85,24 @@ class PanelWidgetState extends State<PanelWidget> {
         currentLocation.latitude, currentLocation.longitude);
     sharedPreferences.setString('source', json.encode(response));
     String place = response['place'];
-    double LatitudeOfPlace = response['location'].latitude;
-    double LongitudeOfPlace = response['location'].longitude;
-    List<double?> currentLocationCoords = [LatitudeOfPlace, LongitudeOfPlace];
+    double latitudeOfPlace = response['location'].latitude;
+    double longitudeOfPlace = response['location'].longitude;
+    List<double?> currentLocationCoords = [latitudeOfPlace, longitudeOfPlace];
     widget.textEditingController.text = place;
-    widget.selectedCords.insert(0, currentLocationCoords);
+    if (widget.selectedCords.isEmpty) {
+      widget.selectedCords.add(currentLocationCoords);
+    } else {
+      widget.selectedCords.insert(0, currentLocationCoords);
+    }
+
+    print("Helllo 1");
     print(widget.selectedCords);
   }
 
+  /*
+  Function which builds the static row of components which are displayed permanently. Statically built, as every journey
+  needs to specify a starting point
+  */
   Widget _buildStatic() {
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
@@ -119,7 +118,7 @@ class PanelWidgetState extends State<PanelWidget> {
             child: SizedBox(
               child: TextField(
                 readOnly: true,
-                onTap: (){
+                onTap: () {
                   _handleSearchClick(context);
                 },
                 controller: widget.textEditingController,
@@ -156,19 +155,6 @@ class PanelWidgetState extends State<PanelWidget> {
                     borderSide:
                         const BorderSide(color: Colors.black, width: 1.0),
                   ),
-                  // suffixIcon: IconButton(
-                  //   padding: EdgeInsets.zero,
-                  //   //onPressed: _useCurrentLocationButtonHandler,
-                  //   onPressed: () {
-                  //     print("LIL Mosey");
-                  //     //_useCurrentLocationButtonHandler();
-                  //   },
-                  //   icon: const Icon(
-                  //     Icons.search,
-                  //     size: 25,
-                  //     color: Colors.grey,
-                  //   ),
-                  // ),
                   suffixIcon: IconButton(
                     //onPressed: _useCurrentLocationButtonHandler,
                     onPressed: () {
@@ -201,15 +187,12 @@ class PanelWidgetState extends State<PanelWidget> {
     );
   }
 
+
   @override
   Widget build(BuildContext context) {
-    //widget. listDynamic.add(DynamicWidget(selectedCords: widget.selectedCords,));
-
     return ListView(
       controller: widget.controller,
-      //padding: EdgeInsets.only(left:20, bottom: 20, right: 20),
       children: <Widget>[
-        //const SizedBox(height: 12),
         buildDragHandle(),
         const SizedBox(height: 6),
         const Center(
@@ -225,21 +208,13 @@ class PanelWidgetState extends State<PanelWidget> {
               builder: (_, snapshot) {
                 List<DynamicWidget> listOfDynamics = snapshot.data ?? [];
 
-                /*
-
-    widget.listDynamic.removeAt(index);
-    widget.selectedCords.removeAt(index);
-    widget.dynamicWidgets.sink.add(widget.listDynamic);
-                 */
-
                 return ListView.builder(
                   shrinkWrap: true,
-                  itemBuilder: (_, index){
+                  itemBuilder: (_, index) {
                     final dynamicWidget = listOfDynamics[index];
                     dynamicWidget.position = index;
                     dynamicWidget.removeDynamic((p0) {
                       widget.listDynamic.removeAt(index);
-                    //  widget.selectedCords.removeAt(index);
                       widget.dynamicWidgets.sink.add(widget.listDynamic);
                     });
                     return dynamicWidget;
@@ -250,7 +225,9 @@ class PanelWidgetState extends State<PanelWidget> {
               },
               stream: dynamicWidgetsStream,
             ),
-            const SizedBox(height: 50,),
+            const SizedBox(
+              height: 50,
+            ),
           ],
         ),
         FloatingActionButton(
@@ -270,38 +247,25 @@ class PanelWidgetState extends State<PanelWidget> {
               primary: Colors.white,
             ),
             onPressed: () {
-              if (widget.listDynamic.isEmpty) {
-                showAtLeastOneDestinationSnackBar(context);
-              }
-              // for(int i =0; i<=widget.selectedCords.length;i++){
-              //   if(widget.selectedCords[i] == []){
-              //     showWhereToTextFieldsMustNotBeEmptySnackBar(context);
-              //   }
-              // }
+              startLocationMustBeSpecified();
 
-              // if(widget.selectedCords.isNotEmpty) {
-              //   widget.selectedCords.removeAt(0);
-              //   widget.selectedCords.insert(0, staticList);
-              // }
-              print("WE");
+              oneDestinationMustBeSpecified();
+              print("Dynamic list length:");
               print(widget.listDynamic.length);
-              print("OUR");
+              print("selected coords length:");
               print(widget.selectedCords.length);
-              
+
               List<List<double?>?> tempList = [];
 
-              if(staticList != null){
+              if (staticList != null) {
                 tempList.add(staticList);
                 tempList.addAll(widget.selectedCords);
 
                 print("ALL_COORDINATES => $tempList");
 
-
-
                 getCoordinatesForJourney();
                 aSearchBarCannotBeEmpty();
-                startLocationMustBeSpecified();
-              }else{
+              } else {
                 print("ALL_COORDINATES => $tempList");
               }
             },
@@ -320,18 +284,19 @@ class PanelWidgetState extends State<PanelWidget> {
     return widget.selectedCords;
   }
 
-  void aSearchBarCannotBeEmpty(){
-    if(widget.listDynamic.length > widget.selectedCords.length){
-      showWhereToTextFieldsMustNotBeEmptySnackBar(context);
-    }
+  //The logic to restrict the user from being able to start a journey, with blank location fields
+  void aSearchBarCannotBeEmpty() {
+    print("Add logic");
   }
 
-  void startLocationMustBeSpecified(){
-    if(widget.textEditingController.text.isEmpty){
+  //The logic to restrict the user from being able to start a journey without a starting point
+  void startLocationMustBeSpecified() {
+    if (widget.textEditingController.text.isEmpty) {
       showStartLocationMustNotBeEmptySnackBar(context);
     }
   }
 
+  //The grey handle bar, displayed at the very top of the panel_widget, to display to the user to swipe up on the panel
   Widget buildDragHandle() => GestureDetector(
         child: Center(
           child: Container(
@@ -346,6 +311,7 @@ class PanelWidgetState extends State<PanelWidget> {
         //onTap: togglePanel,
       );
 
+  //Show error message to user for having no destinations specified for the journey
   void showAtLeastOneDestinationSnackBar(BuildContext context) {
     const text = "Choose at least one destination to create your journey";
     const snackBar = SnackBar(
@@ -365,6 +331,7 @@ class PanelWidgetState extends State<PanelWidget> {
     super.dispose();
   }
 
+  //Show error message to user for having blank destination fields
   void showWhereToTextFieldsMustNotBeEmptySnackBar(BuildContext context) {
     const text =
         "Please specify locations for all destinations of the journey. Otherwise, remove any empty choices";
@@ -378,9 +345,9 @@ class PanelWidgetState extends State<PanelWidget> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
+  //Show error message to user for not specifying the starting point of the journey
   void showStartLocationMustNotBeEmptySnackBar(BuildContext context) {
-    const text =
-        "Please specify the starting location of the journey";
+    const text = "Please specify the starting location of the journey";
     const snackBar = SnackBar(
       content: Text(
         text,
@@ -391,6 +358,8 @@ class PanelWidgetState extends State<PanelWidget> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
+  //When triggered, redirects the user to the place_search_Screen in order for them to specify a location to visit
+  //for the journey
   void _handleSearchClick(BuildContext context) async {
     final selectedCords = widget.selectedCords;
     final tempPosition = selectedCords.length;
@@ -405,20 +374,31 @@ class PanelWidgetState extends State<PanelWidget> {
     }
   }
 
+  //The logic to restrict the user from being able to start a journey without defining at least one destination for the journey
+  void oneDestinationMustBeSpecified() {
+    if (widget.listDynamic.isEmpty && widget.selectedCords.length == 1) {
+      showAtLeastOneDestinationSnackBar(context);
+    }
+  }
+
 //void togglePanel() => panelController.isPanelOpen ? panelController.close() : panelController.open();
 }
 
-
+/*
+ The widgets the user dynamically creates during runtime, for them to specify the locations of the journey.
+ Each dynamic widget is a row which comes with a row of children:
+    - red cross, to delete a location from the journey planner list
+    - TextField , to insert a location to the journey planner list
+    - green > icon, to allow users to specify specific docks of the locations user specifies in the TextField
+ */
 class DynamicWidget extends StatelessWidget {
   late TextEditingController textController = TextEditingController();
   List<List<double?>?>? selectedCords;
-
   Function(int)? onDelete;
-
-
   int position = -1;
 
-  void setIndex(index){
+  //setter for the position index
+  void setIndex(index) {
     position = index;
   }
 
@@ -517,18 +497,10 @@ class DynamicWidget extends StatelessWidget {
       }
     }
     print("RESULT => $result");
-
   }
-
 
   void removeDynamic(Function(int) onDelete) {
     this.onDelete = onDelete;
   }
 
-  /*
-
-    widget.listDynamic.removeAt(index);
-    widget.selectedCords.removeAt(index);
-    widget.dynamicWidgets.sink.add(widget.listDynamic);
-   */
 }
