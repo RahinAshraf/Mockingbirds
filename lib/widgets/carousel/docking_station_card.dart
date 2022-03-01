@@ -27,7 +27,7 @@ Widget dockingStationCard(int index, DockingStation station, String id,
         children: [
           FavoriteButton(valueChanged: (_isFavorite) {
             // handleLikedCard(id);
-            helper.toggleFavourite(station);
+            toggleFavourite(station);
           }),
           const SizedBox(width: 10),
           Expanded(

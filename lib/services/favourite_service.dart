@@ -29,10 +29,7 @@ class FirestoreHelper {
   }
 
   Future<void> addFavourite(String stationId) {
-    return FirebaseFirestore.instance
-        .collection('users')
-        .doc(userID)
-        .collection('favourites')
+    return favourites
         .add({
           'user_id': getUid(),
           'station_id': stationId,
@@ -40,11 +37,6 @@ class FirestoreHelper {
         })
         .then((value) => print("fave Added"))
         .catchError((error) => print("Failed to add fave: $error"));
-  }
-
-//THIS NEEDS TO BE FIXED:
-  void toggleFavourite(DockingStation station) {
-    addFavourite(station.id);
   }
 
   Future<void> deleteFavourite(favid) {
@@ -60,16 +52,6 @@ class FirestoreHelper {
     List<FavouriteDockingStation> favs = [];
     FirebaseFirestore db = FirebaseFirestore.instance;
 
-    // QuerySnapshot<Object?> docs = await db
-    //     .collection('favourites')
-    //     .where('user_id', isEqualTo: getUid())
-    //     .get();
-    // if (docs != null) {
-    //   for (DocumentSnapshot doc in docs.docs) {
-    //     favs.add(FavouriteDockingStation.map(doc));
-    //   }
-    // }
-
     QuerySnapshot<Object?> docs = await db
         .collection('users')
         .doc(getUid())
@@ -81,10 +63,9 @@ class FirestoreHelper {
       }
     }
     return favs;
-    //print(favs[0].stationId);
   }
 
-//Deletes every single favourite documentS
+//Deletes every single favourite documents, maybe move this to settings?
   Future deleteUsersFavourites() async {
     var snapshots = await favourites.get();
     for (var doc in snapshots.docs) {

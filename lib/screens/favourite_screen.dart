@@ -21,6 +21,8 @@ class _FavouriteState extends State<Favourite> {
       setState(() {
         favourites = data;
         //print(checkDis());
+        // print("HEREHEREHERE");
+        //  print(favourites[0].stationId);
       });
     });
     super.initState();
@@ -31,10 +33,8 @@ class _FavouriteState extends State<Favourite> {
     FavouriteDockingStation? fave = favourites.firstWhereOrNull(
         (FavouriteDockingStation f) => (f.stationId == stationId));
     if (fave == null) {
-      print("no");
       return false;
     } else {
-      print("yes");
       return true;
     }
   }
@@ -46,26 +46,16 @@ class _FavouriteState extends State<Favourite> {
       FavouriteDockingStation fave = favourites.firstWhere(
           (FavouriteDockingStation f) => (f.stationId == stationId));
       String favId = fave.id;
-
       await helper.deleteFavourite(favId);
-      print("deleted");
     } else {
       await helper.addFavourite(stationId);
-      print("added");
     }
     List<FavouriteDockingStation> updatedFavourites =
         await FirestoreHelper.getUserFavourites();
     setState(() {
       favourites = updatedFavourites;
-      print("updated");
     });
   }
-
-  // bool checkDis() {
-  //   print("here");
-  //   FirestoreHelper helper = FirestoreHelper();
-  //   return helper.isFavouriteStation("BikePoints_86", favourites);
-  // }
 
   @override
   Widget build(BuildContext build) {
@@ -76,7 +66,7 @@ class _FavouriteState extends State<Favourite> {
           Container(
               alignment: Alignment(0, 0),
               child: FloatingActionButton(onPressed: () {
-                isFavouriteStation("BikePoints_86");
+                toggleFavourite("BikePoints_86");
               }))
         ],
       ),
