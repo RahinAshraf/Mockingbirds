@@ -39,6 +39,19 @@ class RouteManager {
     }
   }
 
+  Future getWalkingRoute(LatLng source, LatLng destination) async {
+    String url =
+        '$baseUrl/${'walking'}/${source.longitude},${source.latitude};${destination.longitude},${destination.latitude}?alternatives=true&continue_straight=true&geometries=geojson&language=en&overview=full&steps=true&access_token=$accessToken';
+    try {
+      _dio.options.contentType = Headers.jsonContentType;
+      final responseData = await _dio.get(url);
+      return responseData.data;
+    } catch (e) {
+      final errorMessage = e.toString();
+      debugPrint(errorMessage);
+    }
+  }
+
   // Future<dynamic> getGeometry() async {
   //   print("I got here!!!!!!!!!!!!!!!!!!!");
   //   print(routeResponse['geometry']);
@@ -58,4 +71,5 @@ class RouteManager {
   //TODO: get distance
 
   //TODO: get geometry
+  //TODO: refactor cycling and walking route methods 
 }

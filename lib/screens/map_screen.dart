@@ -16,6 +16,8 @@ import '../.env.dart';
 import 'package:veloplan/screens/location_service.dart';
 import '../screens/turn_by_turn_screen.dart';
 
+//import 'package:veloplan/widget/carousel/station_carousel.dart';
+
 const double zoom = 16;
 
 class MapPage extends StatefulWidget {
@@ -31,7 +33,9 @@ class MyHomePageState extends State<MapPage> {
   bool isRouteDisplayed = false;
   Map<String, Object> _fills = {};
   late Map routeResponse;
-  bool showMarkers = false;
+  bool showMarkers = false; //for displaying markers with button
+  late Symbol? _selectedSymbol; //may remove
+  Set<Symbol> polylineSymbols = {};
 
   // var zoom = LatLng(51.51185004458236, -0.11580820118980878);
   String googleMapsApi = 'AIzaSyB7YSQkjjqm-YU1LAz91lyYAvCpqFRhFdU';
@@ -86,14 +90,50 @@ class MyHomePageState extends State<MapPage> {
       controller!.addSymbol(
         SymbolOptions(
             geometry: LatLng(station.lat, station.lon),
-            iconSize: 0.5,
+            iconSize: 0.7,
             iconImage: "assets/icon/bicycle.png"),
       );
     }
   }
 
+  Future<void> _onSymbolTapped(Symbol symbol) async {
+    print("Symbol has been tapped");
+    _selectedSymbol = symbol;
+    Future<LatLng> variable = controller!.getSymbolLatLng(symbol);
+    // _DockPopupCard(latlng: await variable,);
+    if (_selectedSymbol != null) {
+      //Future<LatLng> variable = controller!.getSymbolLatLng(symbol);
+      // print("This is:   " + variable.toString());
+      LatLng current = await variable;
+      print(await variable);
+      print("CURRENT: " + current.toString());
+
+      displayDockCard(current);
+    }
+  }
+
+  void displayDockCard(LatLng current) {
+    //CHANGE THIS TO CREATE CARD
+    print("Will call widget next");
+    // return _DockPopupCard(latlng: current,);
+  }
+
+  // void _onSymbolTapped(Symbol symbol) async {
+  //   //This does not work
+  //   if (_selectedSymbol != null) {
+  //     print("tapped symbol");
+  //     Future<LatLng> variable = controller!.getSymbolLatLng(symbol);
+  //     print(await variable);
+  //   }
+  //   setState(() {
+  //     _selectedSymbol = symbol;
+  //   });
+  // }
+
   void _onMapCreated(MapboxMapController controller) async {
     this.controller = controller;
+    fetchDockingStations();
+    controller.onSymbolTapped.add(_onSymbolTapped);
   }
 
   @override
@@ -220,6 +260,7 @@ class MyHomePageState extends State<MapPage> {
   void displayJourneyAndRefocus(List<LatLng> journey) {
     setJourney(journey);
     refocusCamera(journey);
+    setPolylineMarkers(journey);
   }
 
   void refocusCamera(List<LatLng> journey) {
@@ -259,6 +300,8 @@ class MyHomePageState extends State<MapPage> {
   void removeFills() async {
     await controller!.removeLayer("lines");
     await controller!.removeSource("fills");
+    controller!.removeSymbols(polylineSymbols);
+    //removePolylineMarkers();
   }
 
   void setJourney(List<LatLng> journey) async {
@@ -278,13 +321,23 @@ class MyHomePageState extends State<MapPage> {
     }
   }
 
+  void setPolylineMarkers(List<LatLng> journey) async {
+    for (var stop in journey) {
+      polylineSymbols.add(await controller!.addSymbol(
+        SymbolOptions(
+            geometry: stop,
+            iconSize: 0.1,
+            iconImage: "assets/icon/yellow_marker.png"),
+      ));
+    }
+  }
+
   void zoomIn() {
     _cameraPosition = CameraPosition(
         target: _cameraPosition.target,
         zoom: _cameraPosition.zoom + 0.5,
         tilt: 5);
     controller!.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
-    print("lol");
   }
 
   void zoomOut() {
@@ -305,12 +358,20 @@ class MyHomePageState extends State<MapPage> {
 // TODO: Get closest docking station
 
 // TODO: Fix camera zoom
+// TODO: Future to the map
+// TODO: Fix camera zoom
+// TODO: wheather button
+// TODO: get the time
+// TODO: Update path when button pressed
+// TODO: Add walking route  (DONE: Create walking route manager)
+
 // TODO: Duration and distance
-// TODO: Markers
 // TODO: Camera zoom
 
 //TODO globals: zoom, bearing
 
-// TODO: Turn by turn directions
-// TODO: Zoom in and zoom out buttons
-// TODO: stop auto navigation - simulateRoute: false in turb_by_turn_screen.dart
+// DONE: Turn by turn directions
+// DONE: Zoom in and zoom out buttons
+// DONE: stop auto navigation - simulateRoute: false in turb_by_turn_screen.dart
+// DONE: show markers for list of points
+// DONE: show all markers for docking stations
