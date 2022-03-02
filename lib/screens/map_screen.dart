@@ -9,19 +9,23 @@ import 'package:veloplan/providers/route_manager.dart';
 import '../screens/login_screen.dart';
 import '../navbar.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-import '../helpers/navigation_helpers.dart';
+// import '../helpers/navigation_helpers.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:veloplan/screens/place_search_screen.dart';
 import '../.env.dart';
 import 'package:veloplan/screens/location_service.dart';
 import '../screens/turn_by_turn_screen.dart';
+import '../helpers/zoom_helper.dart';
+
 //import 'package:veloplan/widget/carousel/station_carousel.dart';
 const double zoom = 16;
+
 class MapPage extends StatefulWidget {
   const MapPage({Key? key}) : super(key: key);
   @override
   MyHomePageState createState() => MyHomePageState();
 }
+
 class MyHomePageState extends State<MapPage> {
   RouteManager manager = RouteManager();
   late Future<List<DockingStation>> future_docks;
@@ -30,7 +34,7 @@ class MyHomePageState extends State<MapPage> {
   late Map routeResponse;
   bool showMarkers = false; //for displaying markers with button
   late Symbol? _selectedSymbol; //may remove
-  Set<Symbol> polylineSymbols={};
+  Set<Symbol> polylineSymbols = {};
   // var zoom = LatLng(51.51185004458236, -0.11580820118980878);
   String googleMapsApi = 'AIzaSyB7YSQkjjqm-YU1LAz91lyYAvCpqFRhFdU';
   String accessToken =
@@ -58,15 +62,18 @@ class MyHomePageState extends State<MapPage> {
     // _initialCameraPosition = CameraPosition(target: latLng, zoom: zoom);
     getRouteResponse();
   }
+
   void getRouteResponse() async {
     routeResponse = await manager.getDirections(points[0], points[1]);
   }
+
   void fetchDockingStations() {
     final dockingStationManager _stationManager = dockingStationManager();
     _stationManager
         .importStations()
         .then((value) => placeDockMarkers(_stationManager.stations));
   }
+
   void placeDockMarkers(List<DockingStation> docks) {
     for (var station in docks) {
       controller!.addSymbol(
@@ -77,6 +84,7 @@ class MyHomePageState extends State<MapPage> {
       );
     }
   }
+
   Future<void> _onSymbolTapped(Symbol symbol) async {
     print("Symbol has been tapped");
     _selectedSymbol = symbol;
@@ -87,14 +95,17 @@ class MyHomePageState extends State<MapPage> {
       // print("This is:   " + variable.toString());
       LatLng current = await variable;
       print(await variable);
-      print("CURRENT: "+ current.toString());
+      print("CURRENT: " + current.toString());
       displayDockCard(current);
     }
   }
-  void displayDockCard(LatLng current){  //CHANGE THIS TO CREATE CARD
+
+  void displayDockCard(LatLng current) {
+    //CHANGE THIS TO CREATE CARD
     print("Will call widget next");
-   // return _DockPopupCard(latlng: current,);
+    // return _DockPopupCard(latlng: current,);
   }
+
   // void _onSymbolTapped(Symbol symbol) async {
   //   //This does not work
   //   if (_selectedSymbol != null) {
@@ -111,6 +122,7 @@ class MyHomePageState extends State<MapPage> {
     fetchDockingStations();
     controller.onSymbolTapped.add(_onSymbolTapped);
   }
+
   @override
   Widget build(BuildContext build) {
     return Scaffold(
@@ -210,10 +222,12 @@ class MyHomePageState extends State<MapPage> {
       ],
     ));
   }
+
   _onStyleLoadedCallback() async {
     setState(() => showMarkers = true);
     //print(showMarkers);
   }
+
   Future<void> setFills(dynamic routeResponse) async {
     _fills = {
       "type": "FeatureCollection",
@@ -226,17 +240,30 @@ class MyHomePageState extends State<MapPage> {
       ],
     };
   }
+
   void displayJourneyAndRefocus(List<LatLng> journey) {
     setJourney(journey);
     refocusCamera(journey);
     setPolylineMarkers(journey);
   }
+
   void refocusCamera(List<LatLng> journey) {
     LatLng center = getCentroid(journey);
+    LatLng furthestPoint = getFurthestPointFromCenter(journey, center);
+    var top = getTopBound(journey);
+    var bounds = LatLngBounds(northeast: furthestPoint, southwest: top);
+    var target = LatLng(
+        (bounds.northeast.latitude + bounds.southwest.latitude) / 2,
+        (bounds.northeast.longitude + bounds.southwest.longitude) / 2);
+
+    print(target.toString());
     _cameraPosition = CameraPosition(
-        target: center, zoom: getZoom(getRadius(journey, center)), tilt: 5);
+        target: target, //center,
+        // zoom: getZoom(getRadius(journey, center)),
+        tilt: 5);
     controller!.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
   }
+
   void addFills() async {
     await controller!.addSource(
         "fills", GeojsonSourceProperties(data: _fills)); //creates the line
@@ -252,12 +279,14 @@ class MyHomePageState extends State<MapPage> {
     );
     // await controller.addSymbolLayer(sourceId, layerId, properties)
   }
+
   void removeFills() async {
     await controller!.removeLayer("lines");
     await controller!.removeSource("fills");
     controller!.removeSymbols(polylineSymbols);
     //removePolylineMarkers();
   }
+
   void setJourney(List<LatLng> journey) async {
     List<dynamic> journeyPoints = [];
     if (journey.length > 1) {
@@ -274,18 +303,18 @@ class MyHomePageState extends State<MapPage> {
       addFills();
     }
   }
-  void setPolylineMarkers(List<LatLng> journey) async{
+
+  void setPolylineMarkers(List<LatLng> journey) async {
     for (var stop in journey) {
-      polylineSymbols.add( await
-        controller!.addSymbol(
-          SymbolOptions(
-              geometry: stop,
-              iconSize: 0.1,
-              iconImage: "assets/icon/yellow_marker.png"),
-        )
-      );
+      polylineSymbols.add(await controller!.addSymbol(
+        SymbolOptions(
+            geometry: stop,
+            iconSize: 0.1,
+            iconImage: "assets/icon/yellow_marker.png"),
+      ));
     }
   }
+
   void zoomIn() {
     _cameraPosition = CameraPosition(
         target: _cameraPosition.target,
@@ -293,6 +322,7 @@ class MyHomePageState extends State<MapPage> {
         tilt: 5);
     controller!.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
   }
+
   void zoomOut() {
     _cameraPosition = CameraPosition(
         target: _cameraPosition.target,
@@ -301,15 +331,19 @@ class MyHomePageState extends State<MapPage> {
     controller!.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
   }
 }
-// TODO: Error box when no internet -> check when future is called
-// TODO: Future to the map
+
 // TODO: Fix camera zoom
 // TODO: wheather button
 // TODO: get the time
 // TODO: Update path when button pressed
 // TODO: Add walking route  (DONE: Create walking route manager)
 // TODO: Duration and distance
+
 // TODO: Camera zoom
+
+// TODO: Error box when no internet -> check when future is called
+// TODO: Future to the map
+
 // DONE: Turn by turn directions
 // DONE: Zoom in and zoom out buttons
 // DONE: stop auto navigation - simulateRoute: false in turb_by_turn_screen.dart

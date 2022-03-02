@@ -65,6 +65,8 @@ dependencies:
   dio: ^4.0.4
   flutter_dotenv: ^5.0.2
   mockito: ^5.1.0
+  dartleaf: ^1.1.4
+  tuple: ^2.0.0
 
 dev_dependencies:
   flutter_test:
