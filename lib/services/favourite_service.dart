@@ -100,29 +100,24 @@ class FirestoreHelper {
     FavouriteDockingStation? fave = faveList.firstWhereOrNull(
         (FavouriteDockingStation f) => (f.stationId == stationId));
     if (fave == null) {
-      print("NOOOOOOOOOOOO");
+      // print("NOOOOOOOOOOOO");
       return false;
     } else {
-      print("YEEEEEEEEEEEES");
+      // print("YEEEEEEEEEEEES");
       return true;
     }
   }
 
-  toggleFavourite(
-    String stationId,
-  ) async {
-    FirestoreHelper helper = FirestoreHelper();
+  toggleFavourite(String stationId) async {
     var faveList = await getUserFavourites();
     if (isFavouriteStation(stationId, faveList)) {
       //refactor this:
       FavouriteDockingStation fave = faveList.firstWhere(
           (FavouriteDockingStation f) => (f.stationId == stationId));
       String favId = fave.id;
-      await helper.deleteFavourite(favId);
-      print("deleted");
+      await deleteFavourite(favId);
     } else {
-      await helper.addFavourite(stationId);
-      print("added");
+      await addFavourite(stationId);
     }
     //faveList = await getUpdatedList();
   }

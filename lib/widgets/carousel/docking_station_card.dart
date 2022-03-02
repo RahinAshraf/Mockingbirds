@@ -12,29 +12,16 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutterfire_ui/firestore.dart';
 import 'package:veloplan/models/docking_station.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 ///Creates a card for a docking station, to include its name, number of bikes and empty bikes.
 
 FirestoreHelper helper = FirestoreHelper();
 
 class dockingStationCard extends StatelessWidget {
-  late int index;
-  late DockingStation station;
-  late String id;
-  late String name;
-  late String nb_bikes;
-  late String nb_empty_docks;
-
-  // dockingStationCard(int index, DockingStation station, String id, String name,
-  //     String nb_bikes, String nb_empty_docks) {
-  //   this.index = index;
-  //   this.station = station;
-  //   this.id = id;
-  //   this.name = name;
-  //   this.nb_bikes = nb_bikes;
-  //   this.nb_empty_docks = nb_empty_docks;
-  //   //print("made it");
-  // }
+  final int index;
+  final DockingStation station;
+  final String id, name, nb_bikes, nb_empty_docks;
 
   dockingStationCard(
     this.index,
@@ -44,7 +31,6 @@ class dockingStationCard extends StatelessWidget {
     this.nb_bikes,
     this.nb_empty_docks,
   );
-  //print("made it");
 
   @override
   Widget build(BuildContext context) {
@@ -56,8 +42,6 @@ class dockingStationCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             FavoriteButton(valueChanged: (_isFavorite) {
-              // handleLikedCard(id);
-
               helper.toggleFavourite(id);
             }),
             const SizedBox(width: 10),
@@ -76,26 +60,4 @@ class dockingStationCard extends StatelessWidget {
       ),
     );
   }
-}
-// toggleFavourite(String stationId) async {
-//   if (isUserFavourite(stationId)) {
-//     Favourite favourite =
-//         favourites.firstWhere((Favourite f) => (f.eventId == ed.id));
-//     String favId = favourite.id;
-//     await FirestoreHelper.deleteFavourite(favId);
-//   } else {
-//     await FirestoreHelper.addFavourite(ed, uid);
-//   }
-//   List<Favourite> updatedFavourites =
-//       await FirestoreHelper.getUserFavourites(uid);
-//   setState(() {
-//     favourites = updatedFavourites;
-//   });
-// }
-
-// FirestoreHelper helper = FirestoreHelper();
-
-void toggleFavourite(DockingStation station) {
-  print("clicked");
-  helper.addFavourite(station.id);
 }
