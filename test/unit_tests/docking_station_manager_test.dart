@@ -9,16 +9,16 @@ import '../unit_tests/docking_stations_values.dart';
 
 void main() {
   final dockingStationManager stationManager = dockingStationManager();
-  dockingStationManager stationManager_5_docks = dockingStationManager();
-  dockingStationManager stationManager_2_docks = dockingStationManager();
-  LatLng user_location = LatLng(51.472509, -0.122831);
+  dockingStationManager stationManager5Docks = dockingStationManager();
+  dockingStationManager stationManager2Docks = dockingStationManager();
+  LatLng userLocation = LatLng(51.472509, -0.122831);
 
   setUp(() {
     stationManager.stations.clear();
-    stationManager_2_docks.stations.clear();
-    stationManager_5_docks.stations.clear();
-    stationManager_5_docks = get_5_dummy_docks();
-    stationManager_2_docks = get_2_dummy_docks();
+    stationManager2Docks.stations.clear();
+    stationManager5Docks.stations.clear();
+    stationManager5Docks = get5DummyDocks();
+    stationManager2Docks = get2DummyDocks();
   });
 
   test('Calling method on empty list works', () {
@@ -76,20 +76,20 @@ void main() {
   });
 
   test('Filter the stations by distance by given doc', () {
-    expect(stationManager_2_docks.getClosestDock(user_location).name,
+    expect(stationManager2Docks.getClosestDock(userLocation).name,
         "Binfield Road, Stockwell");
   });
   test('Get closest dock to get bikes', () {
     expect(
-        stationManager_2_docks
-            .getClosestDockWithAvailableBikes(user_location, 2)
+        stationManager2Docks
+            .getClosestDockWithAvailableBikes(userLocation, 2)
             .name,
         "Binfield Road, Stockwell");
   });
   test('Get closest dock to leave bikes', () {
     expect(
-        stationManager_2_docks
-            .getClosestDockWithAvailableSpace(user_location, 1)
+        stationManager2Docks
+            .getClosestDockWithAvailableSpace(userLocation, 1)
             .name,
         "Binfield Road, Stockwell");
   });
@@ -97,29 +97,29 @@ void main() {
   test('Sort docs by distance from given location', () {
     expect(
         stationManager
-            .sortDocsByDistanceFromGivenLocation(
-                user_location, stationManager_5_docks.getStations())[1]
+            .sortDocksByDistanceFromGivenLocation(
+                userLocation, stationManager5Docks.getStations())[1]
             .name,
         "Tallis Street, Temple");
   });
   test('Get 5 Closest docks with available bikes', () {
     expect(
-        stationManager_5_docks
-            .get5ClosestDocksWithAvailableBikes(user_location, 4)
+        stationManager2Docks
+            .get5ClosestDocksWithAvailableBikes(userLocation, 4)
             .length,
         4);
   });
 
   test('Get 5 Closest docks with available SPACES', () {
     expect(
-        stationManager_5_docks
-            .get5ClosestDocksWithAvailableSpace(user_location, 30)
+        stationManager2Docks
+            .get5ClosestDocksWithAvailableSpace(userLocation, 30)
             .length,
         1);
   });
 
   test('Sort docks from 6 given', () {
-    stationManager_5_docks.stations.add(DockingStation(
+    stationManager2Docks.stations.add(DockingStation(
         "452",
         "Limburg Road, Clapham Junction",
         true,
@@ -130,14 +130,14 @@ void main() {
         51.461923,
         -0.165297));
     expect(
-        stationManager_5_docks
-            .sortDocsByDistanceFromGivenLocation(
-                user_location, stationManager_5_docks.getStations())[4]
+        stationManager2Docks
+            .sortDocksByDistanceFromGivenLocation(
+                userLocation, stationManager2Docks.getStations())[4]
             .name,
         'Hurlingham Park, Parsons Green');
   });
   test('Get 5 Closest docks', () {
-    expect(stationManager_5_docks.get5ClosestDocks(user_location)[4].name,
+    expect(stationManager2Docks.get5ClosestDocks(userLocation)[4].name,
         'Little Brook Green, Brook Green');
   });
 }
