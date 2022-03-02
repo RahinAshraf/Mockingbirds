@@ -8,6 +8,7 @@ class RouteManager {
       'pk.eyJ1IjoibW9ja2luZ2JpcmRzIiwiYSI6ImNrempyNnZtajNkbmkybm8xb3lybWE3MTIifQ.AsZJbQPNRb2N3unNdA98nQ';
   String navType = 'cycling';
   Dio _dio = Dio();
+  Map<String, Object> directions = {};
 
   Future<Map> getDirections(
       LatLng currentLatLng, LatLng location_placeholder) async {
@@ -19,6 +20,11 @@ class RouteManager {
     //     '-------------------${location_placeholder['name']}-------------------');
     print(distance);
     print(duration);
+    directions = {
+      "geometry": geometry,
+      "duration": duration,
+      "distance": distance,
+    };
     return {
       "geometry": geometry,
       "duration": duration,
@@ -52,24 +58,28 @@ class RouteManager {
     }
   }
 
-  // Future<dynamic> getGeometry() async {
-  //   print("I got here!!!!!!!!!!!!!!!!!!!");
-  //   print(routeResponse['geometry']);
-  //   return routeResponse['geometry'];
-  // }
+  Object? getGeometry() {
+    if (directions.isNotEmpty)
+      return directions['geometry'];
+    else {}
+  }
 
-  // dynamic getDuration() async {
-  //   return routeResponse['duration'];
-  // }
+  Object? getDuration() async {
+    if (directions.isNotEmpty)
+      return directions['duration'];
+    else {}
+  }
 
-  // dynamic getDistance() async {
-  //   return routeResponse['distance'];
-  // }
+  Object? getDistance() async {
+    if (directions.isNotEmpty)
+      return directions['distance'];
+    else {}
+  }
 
   //TODO: get geometry
   //TODO: get duration
   //TODO: get distance
 
   //TODO: get geometry
-  //TODO: refactor cycling and walking route methods 
+  //TODO: refactor cycling and walking route methods
 }

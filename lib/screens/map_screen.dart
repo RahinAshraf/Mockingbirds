@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_routes/google_maps_routes.dart';
+// import 'package:latlong2/latlong.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
@@ -129,8 +130,9 @@ class MyHomePageState extends State<MapPage> {
         body: Stack(
       children: [
         Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
+          alignment: Alignment(0, 0),
+          // height: MediaQuery.of(context).size.height,
+          // width: MediaQuery.of(context).size.width,
           child: MapboxMap(
             accessToken: accessToken,
             initialCameraPosition: _cameraPosition,
@@ -177,6 +179,8 @@ class MyHomePageState extends State<MapPage> {
               if (!isRouteDisplayed) {
                 displayJourneyAndRefocus(points);
                 isRouteDisplayed = true;
+              } else {
+                null;
               }
             },
           ),
@@ -189,6 +193,7 @@ class MyHomePageState extends State<MapPage> {
             onPressed: () async {
               if (isRouteDisplayed) {
                 removeFills();
+                removeTimeAndDuration();
                 isRouteDisplayed = false;
               }
             },
@@ -203,22 +208,22 @@ class MyHomePageState extends State<MapPage> {
                 context, MaterialPageRoute(builder: (_) => TurnByTurn(points))),
           ),
         ),
-        // Padding(
-        //   padding: const EdgeInsets.all(8.0),
-        //   child: Align(
-        //     alignment: Alignment(0, 0.9),
-        //     child: Container(
-        //         width: 200,
-        //         height: 50,
-        //         decoration: BoxDecoration(
-        //             color: Colors.white,
-        //             borderRadius: BorderRadius.circular(15.0)),
-        //         child: Align(
-        //           alignment: Alignment.center,
-        //           child: Text(totalDistance, style: TextStyle(fontSize: 25.0)),
-        //         )),
-        //   ),
-        // ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Align(
+            alignment: Alignment(0, 0.9),
+            child: Container(
+                width: 200,
+                height: 50,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15.0)),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text(totalDistance, style: TextStyle(fontSize: 25.0)),
+                )),
+          ),
+        ),
       ],
     ));
   }
@@ -249,17 +254,17 @@ class MyHomePageState extends State<MapPage> {
 
   void refocusCamera(List<LatLng> journey) {
     LatLng center = getCentroid(journey);
-    LatLng furthestPoint = getFurthestPointFromCenter(journey, center);
-    var top = getTopBound(journey);
-    var bounds = LatLngBounds(northeast: furthestPoint, southwest: top);
-    var target = LatLng(
-        (bounds.northeast.latitude + bounds.southwest.latitude) / 2,
-        (bounds.northeast.longitude + bounds.southwest.longitude) / 2);
+    // LatLng furthestPoint = getFurthestPointFromCenter(journey, center);
+    // var top = getTopBound(journey);
+    // var bounds = LatLngBounds(northeast: furthestPoint, southwest: top);
+    // var target = LatLng(
+    //     (bounds.northeast.latitude + bounds.southwest.latitude) / 2,
+    //     (bounds.northeast.longitude + bounds.southwest.longitude) / 2);
 
-    print(target.toString());
+    // print(target.toString());
     _cameraPosition = CameraPosition(
-        target: target, //center,
-        // zoom: getZoom(getRadius(journey, center)),
+        target: center, //target, //center,
+        zoom: 15, //getZoom(getRadius(journey, center)),
         tilt: 5);
     controller!.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
   }
@@ -284,7 +289,15 @@ class MyHomePageState extends State<MapPage> {
     await controller!.removeLayer("lines");
     await controller!.removeSource("fills");
     controller!.removeSymbols(polylineSymbols);
+    // _fills.clear();
+    // polylineSymbols.clear();
     //removePolylineMarkers();
+  }
+
+  void removeTimeAndDuration() {
+    setState(() {
+      totalDistance = "No route";
+    });
   }
 
   void setJourney(List<LatLng> journey) async {
@@ -301,7 +314,23 @@ class MyHomePageState extends State<MapPage> {
       }
       setFills(routeResponse['geometry']);
       addFills();
+      setDistanceAndTime();
+
+      // print("manager distance: " + a.toString());
     }
+  }
+
+  void setDistanceAndTime() async {
+    var duration = await manager.getDistance() as double; //meters
+    var distance = await manager.getDuration() as double; //sec
+    print(duration.truncate());
+    setState(() {
+      totalDistance = "distance: " +
+          (distance / 1000).toString() +
+          ", duration: " +
+          (duration / 60).truncate().toString();
+      print(totalDistance);
+    });
   }
 
   void setPolylineMarkers(List<LatLng> journey) async {
@@ -333,7 +362,6 @@ class MyHomePageState extends State<MapPage> {
 }
 
 // TODO: Fix camera zoom
-// TODO: wheather button
 // TODO: get the time
 // TODO: Update path when button pressed
 // TODO: Add walking route  (DONE: Create walking route manager)
