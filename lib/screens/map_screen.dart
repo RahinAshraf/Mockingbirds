@@ -56,14 +56,16 @@ class MyHomePageState extends State<MapPage> {
 
   String totalDistance = 'No route';
   LatLng latLng = getLatLngFromSharedPrefs();
-  // late CameraPosition _initialCameraPosition;
 
   TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _cameraPosition = CameraPosition(target: currentLatLng, zoom: 12);
+    _cameraPosition = CameraPosition(
+      target: currentLatLng,
+      zoom: 12,
+    );
     // _initialCameraPosition = CameraPosition(target: latLng, zoom: zoom);
     getRouteResponse();
   }
@@ -94,15 +96,17 @@ class MyHomePageState extends State<MapPage> {
     this.controller = controller;
   }
 
-
   @override
   Widget build(BuildContext build) {
+    // print("height: " + MediaQuery.of(context).size.height.toString());
+    // print("width: " + MediaQuery.of(context).size.width.toString());
     return Scaffold(
         body: Stack(
       children: [
         Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
+          alignment: Alignment(0, 0),
+          // height: MediaQuery.of(context).size.height,
+          // width: MediaQuery.of(context).size.width,
           child: MapboxMap(
             accessToken: accessToken,
             initialCameraPosition: _cameraPosition,
@@ -219,9 +223,20 @@ class MyHomePageState extends State<MapPage> {
   }
 
   void refocusCamera(List<LatLng> journey) {
-    LatLng center = getCentroid(journey);
+    var end = getFurthestPointFromCenter(journey, journey[0]);
+    print("bearing: " + getBearing(journey[0], end).toString());
+    LatLng center = getCenter(points[0], points[3]);
+    print("lat: " +
+        center.latitude.toString() +
+        "   lng: " +
+        center.longitude.toString());
+    // LatLng center = getCentroid(journey);
     _cameraPosition = CameraPosition(
-        target: center, zoom: getZoom(getRadius(journey, center)), tilt: 5);
+        target: center,
+        zoom: 14,
+        // zoom: getZoom(getRadius(journey, center)),
+        tilt: 5,
+        bearing: 90.0);
     controller!.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
   }
 
@@ -282,21 +297,20 @@ class MyHomePageState extends State<MapPage> {
 }
 
 // TODO: Error box when no internet -> check when future is called
-// TODO: Future to the map
-// TODO: Dispay markers again for bikes
 // TODO: Fix camera zoom
-// TODO: wheather button
-// TODO: get the time
 // TODO: show all markers
 // TODO: show markers for list of points
 // TODO: Update path when button pressed
 // TODO: Add walking route
+// TODO: Get closest docking station
 
-// TODO: modify build to add weather - cant do
+// TODO: Fix camera zoom
 // TODO: Duration and distance
 // TODO: Markers
 // TODO: Camera zoom
 
-// DONE: Turn by turn directions
-// DONE: Zoom in and zoom out buttons
-// DONE: stop auto navigation - simulateRoute: false in turb_by_turn_screen.dart
+//TODO globals: zoom, bearing
+
+// TODO: Turn by turn directions
+// TODO: Zoom in and zoom out buttons
+// TODO: stop auto navigation - simulateRoute: false in turb_by_turn_screen.dart

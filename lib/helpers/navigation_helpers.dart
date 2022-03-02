@@ -1,5 +1,9 @@
 import 'dart:math';
+// import 'package:latlong2/latlong.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:vector_math/vector_math.dart';
+
+const double earthRadius = 6371000;
 
 double calculateDistance(LatLng pos1, LatLng pos2) {
   var p = 0.017453292519943295;
@@ -39,19 +43,61 @@ LatLng getCentroid(List<LatLng> points) {
   return LatLng(lat / n, lng / n);
 }
 
+LatLng getFurthestPointFromCenter(List<LatLng> points, LatLng center) {
+  double max = 0;
+  LatLng maxPoint = LatLng(0, 0);
+
+  for (LatLng point in points) {
+    double dist = calculateDistance(center, point);
+    if (dist > max) {
+      maxPoint = point;
+    }
+  }
+  return maxPoint;
+}
+
 double getRadius(List<LatLng> points, LatLng center) {
   double max = 0;
   for (LatLng point in points) {
     double dist = calculateDistance(center, point);
     if (dist > max) {
-      print(point);
+      // print(point);
+      // print("max lat: " +
+      //     point.latitude.toString() +
+      //     "     max lng: " +
+      //     point.longitude.toString());
       max = dist;
     }
   }
-  print(max);
+  // print("max latlng: " + max.toString());
   return max;
 }
 
 double getZoom(double radius) {
   return log(2048 / radius * 350);
+}
+
+LatLng getCenter(LatLng a, LatLng b) {
+  // var t1 = radians(a.latitude);
+  // var t2 = radians(b.latitude);
+  // var l1 = radians(a.longitude);
+  // var l2 = radians(b.longitude);
+  // var bx = cos(t2) * cos(l2 - l1);
+  // var by = cos(t2) * sin(l2 - l1);
+  // var theta =
+  //     atan2(sin(t1) + sin(t2), sqrt(cos(t1 + bx) * cos(t1 + bx) + by * by));
+  // var lambda = l1 + atan2(by, cos(t1) + bx);
+  // return LatLng(degrees(theta), degrees(lambda));
+  return LatLng((a.latitude + b.latitude) / 2, (a.longitude + b.longitude) / 2);
+}
+
+// λ = longitude
+// ϕ = latitude
+double getBearing(LatLng a, LatLng b) {
+  var y = sin(b.longitude - a.longitude) * cos(b.latitude);
+  var x = cos(a.latitude) * sin(b.latitude) -
+      sin(a.latitude) * cos(b.latitude) * cos(b.longitude - a.longitude);
+  var theta = atan2(y, x);
+  // return 14;
+  return (theta * 180 / pi) % 360;
 }
