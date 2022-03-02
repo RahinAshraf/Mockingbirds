@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:veloplan/screens/location_service.dart';
+import 'journey_planner_screen.dart';
 
 class PlaceSearchScreen extends StatefulWidget {
   late LocationService locService;
@@ -21,13 +22,14 @@ class PlaceSearchState extends State<PlaceSearchScreen> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 20,right: 20),
+              padding: const EdgeInsets.only(left: 20,top:30,right: 20),
               child: TextField(
                 decoration:  InputDecoration(
                     prefixIcon:  IconButton(
                       icon: const Icon(Icons.arrow_back_rounded, color: Colors.green),
                       onPressed: () {
                           print("PREFIX");
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => JourneyPlanner()));
                         },
                     ),
                     hintText: "Search for a London location",
@@ -35,27 +37,27 @@ class PlaceSearchState extends State<PlaceSearchScreen> {
                     //Textfield front-end customization
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30.0),
-                        borderSide: const BorderSide(color: Colors.green, width: 1.0),
+                        borderSide: const BorderSide(color: Colors.green, width: 2.0),
                     ),
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30.0),
-                        borderSide: const BorderSide(color: Colors.green, width: 1.0),
+                        borderSide: const BorderSide(color: Colors.green, width: 2.0),
                     ),
                     disabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30.0),
-                      borderSide: const BorderSide(color: Colors.green, width: 1.0),
+                      borderSide: const BorderSide(color: Colors.green, width: 2.0),
                     ),
                     errorBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30.0),
-                      borderSide: const BorderSide(color: Colors.green, width: 1.0),
+                      borderSide: const BorderSide(color: Colors.green, width: 2.0),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30.0),
-                      borderSide: const BorderSide(color: Colors.green, width: 1.0),
+                      borderSide: const BorderSide(color: Colors.green, width: 2.0),
                     ),
                     focusedErrorBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30.0),
-                      borderSide: const BorderSide(color: Colors.green, width: 1.0),
+                      borderSide: const BorderSide(color: Colors.green, width: 2.0),
                     ),
                 ),
                 onChanged: (value) {
@@ -75,17 +77,20 @@ class PlaceSearchState extends State<PlaceSearchScreen> {
                   return ListView.builder(
                     itemBuilder: (context, index) {
                       final place = placeModels?[index];
-                      String? address = place?.placeName;
+                      String? address = place?.placeName ;
                       return address == null
                           ? const SizedBox(
                               height: 0,
                               width: 0,
                             )
                           : ListTile(
+                          leading: const SizedBox(
+                          height: double.infinity,
+                          child: CircleAvatar(backgroundColor: Colors.green,child: Icon(Icons.location_pin, color: Colors.white,))),
                         onTap: (){
-                          print("Delcare your action here!!");
+                          Navigator.of(context).pop(place);
                         },
-                              title: Text(address),
+                              title: Text(address, style: const TextStyle(fontWeight: FontWeight.bold)),
                             );
                     },
                     itemCount: placeModels == null ? 0 : placeModels.length,

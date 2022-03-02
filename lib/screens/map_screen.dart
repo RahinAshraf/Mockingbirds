@@ -15,18 +15,13 @@ import 'package:veloplan/screens/place_search_screen.dart';
 import '../.env.dart';
 import 'package:veloplan/screens/location_service.dart';
 import '../screens/turn_by_turn_screen.dart';
-
 //import 'package:veloplan/widget/carousel/station_carousel.dart';
-
 const double zoom = 16;
-
 class MapPage extends StatefulWidget {
   const MapPage({Key? key}) : super(key: key);
-
   @override
   MyHomePageState createState() => MyHomePageState();
 }
-
 class MyHomePageState extends State<MapPage> {
   RouteManager manager = RouteManager();
   late Future<List<DockingStation>> future_docks;
@@ -35,16 +30,13 @@ class MyHomePageState extends State<MapPage> {
   late Map routeResponse;
   bool showMarkers = false; //for displaying markers with button
   late Symbol? _selectedSymbol; //may remove
-  Set<Symbol> polylineSymbols = {};
-
+  Set<Symbol> polylineSymbols={};
   // var zoom = LatLng(51.51185004458236, -0.11580820118980878);
   String googleMapsApi = 'AIzaSyB7YSQkjjqm-YU1LAz91lyYAvCpqFRhFdU';
   String accessToken =
       'pk.eyJ1IjoibW9ja2luZ2JpcmRzIiwiYSI6ImNrempyNnZtajNkbmkybm8xb3lybWE3MTIifQ.AsZJbQPNRb2N3unNdA98nQ';
-
   PolylinePoints polylinePoints = PolylinePoints();
   List<LatLng> polylineCoordinates = [];
-
   List<LatLng> points = [
     LatLng(51.514951, -0.112762),
     LatLng(51.513146, -0.115256),
@@ -52,39 +44,29 @@ class MyHomePageState extends State<MapPage> {
     LatLng(51.506053, -0.130310),
     LatLng(51.502254, -0.217760),
   ];
-
   late MapboxMapController? controller;
   late CameraPosition _cameraPosition;
-
   LatLng currentLatLng = const LatLng(51.51185004458236, -0.11580820118980878);
-
   String totalDistance = 'No route';
   LatLng latLng = getLatLngFromSharedPrefs();
-
+  // late CameraPosition _initialCameraPosition;
   TextEditingController _searchController = TextEditingController();
-
   @override
   void initState() {
     super.initState();
-    _cameraPosition = CameraPosition(
-      target: currentLatLng,
-      zoom: 12,
-    );
+    _cameraPosition = CameraPosition(target: currentLatLng, zoom: 12);
     // _initialCameraPosition = CameraPosition(target: latLng, zoom: zoom);
     getRouteResponse();
   }
-
   void getRouteResponse() async {
     routeResponse = await manager.getDirections(points[0], points[1]);
   }
-
   void fetchDockingStations() {
     final dockingStationManager _stationManager = dockingStationManager();
     _stationManager
         .importStations()
         .then((value) => placeDockMarkers(_stationManager.stations));
   }
-
   void placeDockMarkers(List<DockingStation> docks) {
     for (var station in docks) {
       controller!.addSymbol(
@@ -95,7 +77,6 @@ class MyHomePageState extends State<MapPage> {
       );
     }
   }
-
   Future<void> _onSymbolTapped(Symbol symbol) async {
     print("Symbol has been tapped");
     _selectedSymbol = symbol;
@@ -106,18 +87,14 @@ class MyHomePageState extends State<MapPage> {
       // print("This is:   " + variable.toString());
       LatLng current = await variable;
       print(await variable);
-      print("CURRENT: " + current.toString());
-
+      print("CURRENT: "+ current.toString());
       displayDockCard(current);
     }
   }
-
-  void displayDockCard(LatLng current) {
-    //CHANGE THIS TO CREATE CARD
+  void displayDockCard(LatLng current){  //CHANGE THIS TO CREATE CARD
     print("Will call widget next");
-    // return _DockPopupCard(latlng: current,);
+   // return _DockPopupCard(latlng: current,);
   }
-
   // void _onSymbolTapped(Symbol symbol) async {
   //   //This does not work
   //   if (_selectedSymbol != null) {
@@ -129,24 +106,19 @@ class MyHomePageState extends State<MapPage> {
   //     _selectedSymbol = symbol;
   //   });
   // }
-
   void _onMapCreated(MapboxMapController controller) async {
     this.controller = controller;
     fetchDockingStations();
     controller.onSymbolTapped.add(_onSymbolTapped);
   }
-
   @override
   Widget build(BuildContext build) {
-    // print("height: " + MediaQuery.of(context).size.height.toString());
-    // print("width: " + MediaQuery.of(context).size.width.toString());
     return Scaffold(
         body: Stack(
       children: [
         Container(
-          alignment: Alignment(0, 0),
-          // height: MediaQuery.of(context).size.height,
-          // width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
           child: MapboxMap(
             accessToken: accessToken,
             initialCameraPosition: _cameraPosition,
@@ -238,12 +210,10 @@ class MyHomePageState extends State<MapPage> {
       ],
     ));
   }
-
   _onStyleLoadedCallback() async {
     setState(() => showMarkers = true);
     //print(showMarkers);
   }
-
   Future<void> setFills(dynamic routeResponse) async {
     _fills = {
       "type": "FeatureCollection",
@@ -256,31 +226,17 @@ class MyHomePageState extends State<MapPage> {
       ],
     };
   }
-
   void displayJourneyAndRefocus(List<LatLng> journey) {
     setJourney(journey);
     refocusCamera(journey);
     setPolylineMarkers(journey);
   }
-
   void refocusCamera(List<LatLng> journey) {
-    var end = getFurthestPointFromCenter(journey, journey[0]);
-    print("bearing: " + getBearing(journey[0], end).toString());
-    LatLng center = getCenter(points[0], points[3]);
-    print("lat: " +
-        center.latitude.toString() +
-        "   lng: " +
-        center.longitude.toString());
-    // LatLng center = getCentroid(journey);
+    LatLng center = getCentroid(journey);
     _cameraPosition = CameraPosition(
-        target: center,
-        zoom: 14,
-        // zoom: getZoom(getRadius(journey, center)),
-        tilt: 5,
-        bearing: 90.0);
+        target: center, zoom: getZoom(getRadius(journey, center)), tilt: 5);
     controller!.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
   }
-
   void addFills() async {
     await controller!.addSource(
         "fills", GeojsonSourceProperties(data: _fills)); //creates the line
@@ -296,14 +252,12 @@ class MyHomePageState extends State<MapPage> {
     );
     // await controller.addSymbolLayer(sourceId, layerId, properties)
   }
-
   void removeFills() async {
     await controller!.removeLayer("lines");
     await controller!.removeSource("fills");
     controller!.removeSymbols(polylineSymbols);
     //removePolylineMarkers();
   }
-
   void setJourney(List<LatLng> journey) async {
     List<dynamic> journeyPoints = [];
     if (journey.length > 1) {
@@ -320,18 +274,18 @@ class MyHomePageState extends State<MapPage> {
       addFills();
     }
   }
-
-  void setPolylineMarkers(List<LatLng> journey) async {
+  void setPolylineMarkers(List<LatLng> journey) async{
     for (var stop in journey) {
-      polylineSymbols.add(await controller!.addSymbol(
-        SymbolOptions(
-            geometry: stop,
-            iconSize: 0.1,
-            iconImage: "assets/icon/yellow_marker.png"),
-      ));
+      polylineSymbols.add( await
+        controller!.addSymbol(
+          SymbolOptions(
+              geometry: stop,
+              iconSize: 0.1,
+              iconImage: "assets/icon/yellow_marker.png"),
+        )
+      );
     }
   }
-
   void zoomIn() {
     _cameraPosition = CameraPosition(
         target: _cameraPosition.target,
@@ -339,7 +293,6 @@ class MyHomePageState extends State<MapPage> {
         tilt: 5);
     controller!.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
   }
-
   void zoomOut() {
     _cameraPosition = CameraPosition(
         target: _cameraPosition.target,
@@ -348,28 +301,15 @@ class MyHomePageState extends State<MapPage> {
     controller!.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
   }
 }
-
 // TODO: Error box when no internet -> check when future is called
-// TODO: Fix camera zoom
-// TODO: show all markers
-// TODO: show markers for list of points
-// TODO: Update path when button pressed
-// TODO: Add walking route
-// TODO: Get closest docking station
-
-// TODO: Fix camera zoom
 // TODO: Future to the map
 // TODO: Fix camera zoom
 // TODO: wheather button
 // TODO: get the time
 // TODO: Update path when button pressed
 // TODO: Add walking route  (DONE: Create walking route manager)
-
 // TODO: Duration and distance
 // TODO: Camera zoom
-
-//TODO globals: zoom, bearing
-
 // DONE: Turn by turn directions
 // DONE: Zoom in and zoom out buttons
 // DONE: stop auto navigation - simulateRoute: false in turb_by_turn_screen.dart
