@@ -90,17 +90,6 @@ class MyHomePageState extends State<MapPage> {
             width: MediaQuery.of(context).size.width,
             child: _buildMap(),
           ),
-          Container(
-              alignment: Alignment(0, 0),
-              child: FloatingActionButton(onPressed: () {
-                helper.addFavourite("test");
-                //FavouriteDockingStation("a", "b");
-                //helper.addFavourite("test");
-                //FirestoreHelper.getUserFavourites();
-                // getUserFavourites();
-                //deleteAllFavouriteCollections();
-                //deleteFavourite("thBik3xyKhC1QZMdZrG3");
-              }))
         ],
       ),
     );

@@ -16,21 +16,25 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 ///Creates a card for a docking station, to include its name, number of bikes and empty bikes.
 
-FirestoreHelper helper = FirestoreHelper();
-
-class dockingStationCard extends StatelessWidget {
+class dockingStationCard extends StatefulWidget {
   final int index;
   final DockingStation station;
-  final String id, name, nb_bikes, nb_empty_docks;
 
   dockingStationCard(
     this.index,
     this.station,
-    this.id,
-    this.name,
-    this.nb_bikes,
-    this.nb_empty_docks,
   );
+
+  _dockingStationCardState createState() => _dockingStationCardState();
+}
+
+class _dockingStationCardState extends State<dockingStationCard> {
+  var helper = FirestoreHelper(); //change name
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,16 +46,16 @@ class dockingStationCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             FavoriteButton(valueChanged: (_isFavorite) {
-              helper.toggleFavourite(id);
+              helper.toggleFavourite(widget.station.id);
             }),
             const SizedBox(width: 10),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(name),
-                  Text('Bike no: $nb_bikes'),
-                  Text('Empty: $nb_empty_docks'),
+                  Text(widget.station.name),
+                  Text('Bike no: ${widget.station.nb_bikes}'),
+                  Text('Empty: ${widget.station.nb_empty_docks}'),
                 ],
               ),
             ),

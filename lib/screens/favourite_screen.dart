@@ -61,20 +61,13 @@ class _FavouriteState extends State<Favourite> {
   @override
   Widget build(BuildContext build) {
     return Scaffold(
-      body: Stack(
-        children: [
-          _dockingStationCarousel.buildCarousel(),
-          Container(
-              alignment: Alignment(0, 0),
-              child: FloatingActionButton(onPressed: () {
-                if (favourites.isEmpty) {
-                  print("no faves");
-                } else {
-                  print("yes!");
-                }
-              }))
-        ],
-      ),
+      body: favourites.isEmpty
+          ? Text("You haven't added any favourites.")
+          : Stack(
+              children: [
+                _dockingStationCarousel.buildCarousel(),
+              ],
+            ),
       appBar: AppBar(
         title: const Text('My favourites'),
       ),
