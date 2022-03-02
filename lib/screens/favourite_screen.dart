@@ -3,6 +3,7 @@ import 'package:veloplan/services/favourite_service.dart';
 import 'package:veloplan/widgets/docking_station_card.dart';
 import 'package:veloplan/models/favourite.dart';
 
+//Loads cards of all of the users favourited docking station
 class Favourite extends StatefulWidget {
   _FavouriteState createState() => _FavouriteState();
 }

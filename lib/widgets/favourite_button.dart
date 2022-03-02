@@ -1,6 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+//Represents a favourite button, this isn't currently used anywhere.
 class FavoriteButton extends StatefulWidget {
   FavoriteButton({
     double? iconSize,
