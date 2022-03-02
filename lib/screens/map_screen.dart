@@ -96,7 +96,7 @@ class MyHomePageState extends State<MapPage> {
                 iconSize: 40,
                 color: Colors.red, //red for developement - change this!
                 onPressed: () {
-                  helper.addFavourite("hello");
+                  //  helper.addFavourite("hello");
                 },
                 icon: const Icon(Icons.search)),
           ),

@@ -17,8 +17,6 @@ class FirestoreHelper {
   late final userID;
   late FirebaseFirestore db;
 
-  //change these to var?
-
   FirestoreHelper() {
     db = FirebaseFirestore.instance;
     userID = FirebaseAuth.instance.currentUser!.uid;
@@ -29,11 +27,19 @@ class FirestoreHelper {
         .collection('favourites');
   }
 
-  Future<void> addFavourite(String stationId) {
+  Future<void> addFavourite(
+    String stationId,
+    String name,
+    String nb_bikes,
+    String nb_empty_docks,
+  ) {
     return favourites
         .add({
           //'user_id': getUid(),
           'station_id': stationId,
+          'name': name,
+          'nb_bikes': nb_bikes,
+          'nb_empty_docks': nb_empty_docks,
           //'journeys': null,
         })
         .then((value) => print("fave Added"))
@@ -96,32 +102,21 @@ class FirestoreHelper {
 //checks if a given station has been favourited.
   bool isFavouriteStation(
       String stationId, List<FavouriteDockingStation> faveList) {
-    //checks if the station id is in the list of faves.
     FavouriteDockingStation? fave = faveList.firstWhereOrNull(
         (FavouriteDockingStation f) => (f.stationId == stationId));
     if (fave == null) {
-      // print("NOOOOOOOOOOOO");
       return false;
     } else {
-      // print("YEEEEEEEEEEEES");
       return true;
     }
   }
 
-  bool isFavourite(String stationId, List<FavouriteDockingStation> faveList) {
-    //checks if the station id is in the list of faves.
-    FavouriteDockingStation? fave = faveList.firstWhereOrNull(
-        (FavouriteDockingStation f) => (f.stationId == stationId));
-    if (fave == null) {
-      // print("NOOOOOOOOOOOO");
-      return false;
-    } else {
-      // print("YEEEEEEEEEEEES");
-      return true;
-    }
-  }
-
-  void toggleFavourite(String stationId) async {
+  void toggleFavourite(
+    String stationId,
+    String name,
+    String nb_bikes,
+    String nb_empty_docks,
+  ) async {
     var faveList = await getUserFavourites();
     if (isFavouriteStation(stationId, faveList)) {
       //refactor this:
@@ -130,76 +125,13 @@ class FirestoreHelper {
       String favId = fave.id;
       await deleteFavourite(favId);
     } else {
-      await addFavourite(stationId);
+      await addFavourite(
+        stationId,
+        name,
+        nb_bikes,
+        nb_empty_docks,
+      );
     }
     //faveList = await getUpdatedList();
   }
-
-  Future<List<FavouriteDockingStation>> getUpdatedList() async {
-    List<FavouriteDockingStation> updatedFavourites =
-        await FirestoreHelper.getUserFavourites();
-    return updatedFavourites;
-  }
 }
-
-// List<String> favs = [];
-
-// Future<QuerySnapshot<Object?>> getFavouriteDocuments(String uid) async {
-//   QuerySnapshot docs =
-//       await db.collection('favourites').where('userId', isEqualTo: uid).get();
-//   return docs;
-// }
-
-// Future<void> deleteFav()async{
-//   favourites.getDocuments().then((snapshot) {
-//   for (DocumentSnapshot ds in snapshot.documents){
-//     ds.reference.delete();
-//   };
-// });
-// }
-
-//  Future<List<FavouriteDockingStation>> getUserFavourites(String uid) async {
-//     List<FavouriteDockingStation> favs = [];
-//     QuerySnapshot docs = await db.collection('favourites')
-//       .where('userId', isEqualTo: uid).get();
-//     if (docs != null) {
-//       for (DocumentSnapshot doc in docs.documents) {
-//         favs.add(Favourite.map(doc));
-//       }
-//     }
-//     return favs;
-//   }
-
-// Future deleteAllFavouriteCollectionsUser(String uid) async {
-//   // print("hello");
-//   var snapshots =
-//       await db.collection('favourites').where('userId', isEqualTo: uid).get();
-//   print(snapshots.size);
-//   for (var doc in snapshots.docs) {
-//     print(doc);
-//     await doc.reference.delete();
-//   }
-// }
-
-// var getFavouriteDocumentToUser(String uid) async{
-//   return await db.collection('favourites').where('userId', isEqualTo: uid).get();
-// }
-
-// Future<QuerySnapshot<Map<String, dynamic>>> test(String uid) async {
-// Future<List<String>> test(String uid) async {
-//   List<String> userFavourite = [];
-//   FirebaseFirestore.instance
-//       .collection('favourites')
-//       .where('user', isEqualTo: uid)
-//       .get()
-//       .then((QuerySnapshot querySnapshot) {
-//     return querySnapshot.docs.map((doc) => doc.id).toList();
-//     // querySnapshot.docs.forEach((doc) => userFavourite.add(doc.id));
-//   });
-//   print(userFavourite.length);
-//   return userFavourite;
-
-//print(userFavourite.length);
-// return userFavourite;
-
-// TOOD: fetch the current users favourites

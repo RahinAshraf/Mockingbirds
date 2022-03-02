@@ -27,11 +27,11 @@ class dockingStationCarousel {
         carouselData.add(
           {
             'index': index,
-            'station': station,
-            // 'id': station.id,
-            // 'name': station.name,
-            // 'nb_bikes': station.nb_bikes.toString(),
-            // 'nb_empty_docks': station.nb_empty_docks.toString()
+            //  'station': station,
+            'id': station.id,
+            'name': station.name,
+            'nb_bikes': station.nb_bikes.toString(),
+            'nb_empty_docks': station.nb_empty_docks.toString(),
           },
         );
       }
@@ -40,12 +40,12 @@ class dockingStationCarousel {
     dockingStationCards = List<Widget>.generate(
         docks.length,
         (index) => dockingStationCard(
-              carouselData[index]['index'],
-              carouselData[index]['station'],
-              // carouselData[index]['id'],
-              // carouselData[index]['name'],
-              // carouselData[index]['nb_bikes'],
-              // carouselData[index]['nb_empty_docks'],
+              //carouselData[index]['index'],
+              // carouselData[index]['station'],
+              carouselData[index]['id'],
+              carouselData[index]['name'],
+              carouselData[index]['nb_bikes'],
+              carouselData[index]['nb_empty_docks'],
             ));
 
     return dockingStationCards;

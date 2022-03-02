@@ -17,13 +17,28 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 ///Creates a card for a docking station, to include its name, number of bikes and empty bikes.
 
 class dockingStationCard extends StatefulWidget {
-  final int index;
-  final DockingStation station;
+  // final int index;
+  // final DockingStation station;
+  late String id;
+  late String name;
+  late String nb_bikes;
+  late String nb_empty_docks;
 
   dockingStationCard(
-    this.index,
-    this.station,
+    // this.index,
+    // this.station,
+    this.id,
+    this.name,
+    this.nb_bikes,
+    this.nb_empty_docks,
   );
+
+  // dockingStationCard.station(DockingStation station) {
+  //   this.id = station.id;
+  //   this.name = station.name;
+  //   this.nb_bikes = station.nb_bikes.toString();
+  //   this.nb_empty_docks = station.nb_empty_docks.toString();
+  // }
 
   _dockingStationCardState createState() => _dockingStationCardState();
 }
@@ -46,19 +61,6 @@ class _dockingStationCardState extends State<dockingStationCard> {
 
   @override
   Widget build(BuildContext context) {
-    if (helper.isFavouriteStation(widget.station.id, favourites)) {
-      favIcon = Icon(
-        FontAwesomeIcons.solidBookmark,
-        size: 20,
-        color: Colors.orange,
-      );
-    } else {
-      favIcon = Icon(
-        FontAwesomeIcons.bookmark,
-        size: 20,
-        color: Colors.orange,
-      );
-    }
     return Card(
       clipBehavior: Clip.antiAlias,
       child: Padding(
@@ -67,7 +69,7 @@ class _dockingStationCardState extends State<dockingStationCard> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             IconButton(
-              icon: helper.isFavouriteStation(widget.station.id, favourites)
+              icon: helper.isFavouriteStation(widget.id, favourites)
                   ? Icon(
                       Icons.favorite,
                       color: Colors.red,
@@ -77,49 +79,28 @@ class _dockingStationCardState extends State<dockingStationCard> {
                       color: Colors.grey,
                     ),
               onPressed: () async {
-                print("clicked");
                 List<FavouriteDockingStation> updatedFavourites =
                     await FirestoreHelper.getUserFavourites();
-                helper.toggleFavourite(widget.station.id);
+                helper.toggleFavourite(
+                  widget.id,
+                  widget.name,
+                  widget.nb_bikes,
+                  widget.nb_empty_docks,
+                );
 
                 setState(() {
                   favourites = updatedFavourites;
                 });
               },
             ),
-
-            // FavoriteButton(valueChanged: (_isFavorite) {
-            //   Color: _isFavorite? Colors.pink : Colors.yellow,
-            //   onPressed:
-            //   helper.toggleFavourite(widget.station.id);
-            //   setState(() {
-
-            //   });
-            // }),
-            // helper.isFavouriteStation(widget.station.id, favourites)
-            //     ? IconButton(
-            //         onPressed: () async {
-            //           helper.toggleFavourite(widget.station.id);
-            //         },
-            //         icon: Icon(
-            //           FontAwesomeIcons.solidBookmark,
-            //           size: 20,
-            //           color: Colors.orange,
-            //         ))
-            //     : IconButton(
-            //         onPressed: () async {
-            //           helper.toggleFavourite(widget.station.id);
-            //         },
-            //         icon: favIcon),
-
             const SizedBox(width: 10),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(widget.station.name),
-                  Text('Bike no: ${widget.station.nb_bikes}'),
-                  Text('Empty: ${widget.station.nb_empty_docks}'),
+                  Text(widget.name),
+                  Text('Bike no: ${widget.nb_bikes}'),
+                  Text('Empty: ${widget.nb_empty_docks}'),
                 ],
               ),
             ),
