@@ -1,4 +1,4 @@
-import 'docking_station_card.dart';
+import '../docking_station_card.dart';
 import 'package:flutter/material.dart';
 import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';

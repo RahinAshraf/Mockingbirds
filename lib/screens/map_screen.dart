@@ -4,8 +4,7 @@ import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import '../.env.dart';
-import '../models/favourite.dart';
-import '../services/favourite_service.dart';
+import 'package:veloplan/widgets/carousel/station_carousel.dart';
 
 class MapPage extends StatefulWidget {
   @override
@@ -13,7 +12,6 @@ class MapPage extends StatefulWidget {
 }
 
 class MyHomePageState extends State<MapPage> {
-  FirestoreHelper helper = FirestoreHelper();
   FlutterMap _buildMap() {
     return FlutterMap(
       options: MapOptions(
@@ -80,6 +78,8 @@ class MyHomePageState extends State<MapPage> {
     );
   }
 
+  var _dockingStationCarousel = dockingStationCarousel();
+
   @override
   Widget build(BuildContext build) {
     return Scaffold(
@@ -90,16 +90,7 @@ class MyHomePageState extends State<MapPage> {
             width: MediaQuery.of(context).size.width,
             child: _buildMap(),
           ),
-          Container(
-            alignment: Alignment(0.8, -0.95),
-            child: IconButton(
-                iconSize: 40,
-                color: Colors.red, //red for developement - change this!
-                onPressed: () {
-                  //  helper.addFavourite("hello");
-                },
-                icon: const Icon(Icons.search)),
-          ),
+          Container(child: _dockingStationCarousel.buildCarousel())
         ],
       ),
     );

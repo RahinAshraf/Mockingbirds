@@ -1,60 +1,49 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/models/favourite.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:firebase_core/firebase_core.dart';
-// import 'firebase_options.dart';
-import 'package:flutterfire_ui/firestore.dart';
 import 'package:veloplan/services/user_services.dart';
 import 'package:collection/collection.dart';
 
-class FirestoreHelper {
-  late CollectionReference favourites;
-  late final userID;
+class FavouriteHelper {
+  late CollectionReference _favourites;
+  late final user_id;
   late FirebaseFirestore db;
 
-  FirestoreHelper() {
+  FavouriteHelper() {
     db = FirebaseFirestore.instance;
-    userID = FirebaseAuth.instance.currentUser!.uid;
+    user_id = FirebaseAuth.instance.currentUser!.uid;
 
-    favourites = FirebaseFirestore.instance
+    _favourites = FirebaseFirestore.instance
         .collection('users')
-        .doc(userID)
+        .doc(user_id)
         .collection('favourites');
   }
 
   Future<void> addFavourite(
-    String stationId,
+    String station_id,
     String name,
     String nb_bikes,
     String nb_empty_docks,
   ) {
-    return favourites
+    return _favourites
         .add({
-          //'user_id': getUid(),
-          'station_id': stationId,
+          'station_id': station_id,
           'name': name,
           'nb_bikes': nb_bikes,
           'nb_empty_docks': nb_empty_docks,
-          //'journeys': null,
         })
         .then((value) => print("fave Added"))
         .catchError((error) => print("Failed to add fave: $error"));
   }
 
   Future<void> deleteFavourite(favid) {
-    return favourites
+    return _favourites
         .doc(favid)
         .delete()
         .then((value) => print(" Deleted"))
         .catchError((error) => print("Failed to delete fave: $error"));
   }
 
-//refactor this method it does way too much
   static Future<List<FavouriteDockingStation>> getUserFavourites() async {
     List<FavouriteDockingStation> favs = [];
     FirebaseFirestore db = FirebaseFirestore.instance;
@@ -74,36 +63,16 @@ class FirestoreHelper {
 
 //Deletes every single favourite documents, maybe move this to settings?
   Future deleteUsersFavourites() async {
-    var snapshots = await favourites.get();
+    var snapshots = await _favourites.get();
     for (var doc in snapshots.docs) {
       await doc.reference.delete();
     }
   }
 
-//Deletes a specifc document for a given user.
-  Future deleteFavouriteDocument(String documentReference, String uid) async {
-    await db.collection('favourites').doc(documentReference).delete();
-
-    QuerySnapshot docs =
-        await db.collection('favourites').where('userId', isEqualTo: uid).get();
-  }
-
-//this needs to be fixed:
-  Future<void> updateFavourite() {
-    return favourites
-        .doc('ABC123')
-        .set({
-          'docking_stations': null,
-        })
-        .then((value) => print("User Added"))
-        .catchError((error) => print("Failed to add user: $error"));
-  }
-
-//checks if a given station has been favourited.
   bool isFavouriteStation(
-      String stationId, List<FavouriteDockingStation> faveList) {
+      String station_id, List<FavouriteDockingStation> faveList) {
     FavouriteDockingStation? fave = faveList.firstWhereOrNull(
-        (FavouriteDockingStation f) => (f.stationId == stationId));
+        (FavouriteDockingStation f) => (f.station_id == station_id));
     if (fave == null) {
       return false;
     } else {
@@ -111,27 +80,16 @@ class FirestoreHelper {
     }
   }
 
-  void toggleFavourite(
-    String stationId,
-    String name,
-    String nb_bikes,
-    String nb_empty_docks,
-  ) async {
+  void toggleFavourite(String station_id, String name, String nb_bikes,
+      String nb_empty_docks) async {
     var faveList = await getUserFavourites();
-    if (isFavouriteStation(stationId, faveList)) {
-      //refactor this:
+    if (isFavouriteStation(station_id, faveList)) {
       FavouriteDockingStation fave = faveList.firstWhere(
-          (FavouriteDockingStation f) => (f.stationId == stationId));
+          (FavouriteDockingStation f) => (f.station_id == station_id));
       String favId = fave.id;
       await deleteFavourite(favId);
     } else {
-      await addFavourite(
-        stationId,
-        name,
-        nb_bikes,
-        nb_empty_docks,
-      );
+      await addFavourite(station_id, name, nb_bikes, nb_empty_docks);
     }
-    //faveList = await getUpdatedList();
   }
 }

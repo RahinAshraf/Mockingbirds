@@ -1,38 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:favorite_button/favorite_button.dart';
 import '/models/favourite.dart';
 import '/services/favourite_service.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:veloplan/models/favourite.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutterfire_ui/firestore.dart';
-import 'package:veloplan/models/docking_station.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'favourite_button.dart';
 
 ///Creates a card for a docking station, to include its name, number of bikes and empty bikes.
 
 class dockingStationCard extends StatefulWidget {
-  // final int index;
-  // final DockingStation station;
   late String id;
   late String name;
   late String nb_bikes;
   late String nb_empty_docks;
 
   dockingStationCard(
-    // this.index,
-    // this.station,
     this.id,
     this.name,
     this.nb_bikes,
     this.nb_empty_docks,
   );
 
+//I have commented this for now but if you want to make a card by just passing a station:
   // dockingStationCard.station(DockingStation station) {
   //   this.id = station.id;
   //   this.name = station.name;
@@ -44,14 +30,14 @@ class dockingStationCard extends StatefulWidget {
 }
 
 class _dockingStationCardState extends State<dockingStationCard> {
-  var helper = FirestoreHelper(); //change name
+  var helper = FavouriteHelper(); //change name
   List<FavouriteDockingStation> favourites = [];
 
   late Icon favIcon;
 
   @override
   void initState() {
-    FirestoreHelper.getUserFavourites().then((data) {
+    FavouriteHelper.getUserFavourites().then((data) {
       setState(() {
         favourites = data;
       });
@@ -80,7 +66,7 @@ class _dockingStationCardState extends State<dockingStationCard> {
                     ),
               onPressed: () async {
                 List<FavouriteDockingStation> updatedFavourites =
-                    await FirestoreHelper.getUserFavourites();
+                    await FavouriteHelper.getUserFavourites();
                 helper.toggleFavourite(
                   widget.id,
                   widget.name,

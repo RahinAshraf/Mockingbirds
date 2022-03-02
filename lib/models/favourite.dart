@@ -2,31 +2,21 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 ///Represents a station that has been favourited by the user
 class FavouriteDockingStation {
-  late String id;
-  late String _stationId, name, nb_bikes, nb_empty_docks;
+  late String id, _station_id, _name, _nb_bikes, _nb_empty_docks;
 
-  CollectionReference favourites =
-      FirebaseFirestore.instance.collection('favourites');
-
-  FavouriteDockingStation(this.id, this._stationId, this.name, this.nb_bikes,
-      this.nb_empty_docks) {}
+  FavouriteDockingStation(this.id, this._station_id, this._name, this._nb_bikes,
+      this._nb_empty_docks);
 
   FavouriteDockingStation.map(DocumentSnapshot document) {
     this.id = document.id;
-    this._stationId = document.get('station_id');
-    this.name = document.get('name');
-    this.nb_bikes = document.get('nb_bikes');
-    this.nb_empty_docks = document.get('nb_empty_docks');
+    this._station_id = document.get('station_id');
+    this._name = document.get('name');
+    this._nb_bikes = document.get('nb_bikes');
+    this._nb_empty_docks = document.get('nb_empty_docks');
   }
 
-  Map toMap() {
-    Map map = Map<String, dynamic>();
-    if (id != null) {
-      map['id'] = id;
-    }
-    map['station_id'] = stationId;
-    return map;
-  }
-
-  String get stationId => _stationId;
+  String get station_id => _station_id;
+  String get name => _name;
+  String get nb_bikes => _nb_bikes;
+  String get nb_empty_docks => _nb_empty_docks;
 }
