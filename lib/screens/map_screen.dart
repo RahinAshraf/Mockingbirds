@@ -114,9 +114,9 @@ class MyHomePageState extends State<MapPage> {
   }
 
 
-  Widget displayDockCard(LatLng current){
+  void displayDockCard(LatLng current){  //CHANGE THIS TO CREATE CARD 
     print("Will call widget next");
-    return _DockPopupCard(latlng: current,);
+   // return _DockPopupCard(latlng: current,);
   }
 
 
@@ -341,45 +341,6 @@ class MyHomePageState extends State<MapPage> {
     controller!.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
   }
 }
-
-//PLACEHOLDER WIDGET FOR DOCKING STATION CARD ------- 
-class _DockPopupCard extends StatelessWidget {
-  const _DockPopupCard({Key? key, required this.latlng}) : super(key: key);
-  final LatLng latlng;
-
-  @override
-  Widget build(BuildContext context) {
-    print ("hi");
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32.0),
-        child: Hero(
-          tag: "_pop up",
-          child: Material(
-            color: Color.fromARGB(255, 176, 142, 192),
-            elevation: 2,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // Image.network(
-                    //   'https://cdn3.iconfinder.com/data/icons/travel-flat-colorful/2048/5463_-_Cycling_Location-512.png',
-                    // ),
-                    Text("current: " + latlng.toString()),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 
 
 // TODO: Error box when no internet -> check when future is called
