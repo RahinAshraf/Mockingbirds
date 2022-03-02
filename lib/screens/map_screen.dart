@@ -1,6 +1,3 @@
-import 'dart:async';
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
@@ -28,7 +25,7 @@ class MyHomePageState extends State<MapPage> {
 
   TextEditingController _searchController = TextEditingController();
 
-  late List<DockingStation> docking_stations;
+  late Future<List<DockingStation>> future_docks;
   Set<Marker> _markers = Set<Marker>();
 
   @override
@@ -38,26 +35,15 @@ class MyHomePageState extends State<MapPage> {
   }
 
   _onMapCreated(MapboxMapController controller) async {
-    Timer timer;
     this.controller = controller;
-
-    // calls the api every 5 minutes
-    timer = Timer.periodic(
-        Duration(seconds: 300), (Timer t) => fetchDockingStations());
+    fetchDockingStations();
   }
 
   void fetchDockingStations() {
     final dockingStationManager _stationManager = dockingStationManager();
     _stationManager
         .importStations()
-        .then((value) => placeDockMarkers(_stationManager.stations))
-        .then((value) => initialiseStations(_stationManager));
-  }
-
-  void initialiseStations(dockingStationManager _stationManager) {
-    docking_stations = _stationManager.stations;
-    List<DockingStation> closest_docks_to_user_location = _stationManager
-        .get_5_closest_docks_to_get_bikes(getLatLngFromSharedPrefs(), 21);
+        .then((value) => placeDockMarkers(_stationManager.stations));
   }
 
   void placeDockMarkers(List<DockingStation> docks) {
