@@ -90,6 +90,16 @@ class MyHomePageState extends State<MapPage> {
             width: MediaQuery.of(context).size.width,
             child: _buildMap(),
           ),
+          Container(
+            alignment: Alignment(0.8, -0.95),
+            child: IconButton(
+                iconSize: 40,
+                color: Colors.red, //red for developement - change this!
+                onPressed: () {
+                  helper.addFavourite("hello");
+                },
+                icon: const Icon(Icons.search)),
+          ),
         ],
       ),
     );

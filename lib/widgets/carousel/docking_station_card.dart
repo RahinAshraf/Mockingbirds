@@ -77,6 +77,7 @@ class _dockingStationCardState extends State<dockingStationCard> {
                       color: Colors.grey,
                     ),
               onPressed: () async {
+                print("clicked");
                 List<FavouriteDockingStation> updatedFavourites =
                     await FirestoreHelper.getUserFavourites();
                 helper.toggleFavourite(widget.station.id);

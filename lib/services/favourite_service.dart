@@ -32,7 +32,7 @@ class FirestoreHelper {
   Future<void> addFavourite(String stationId) {
     return favourites
         .add({
-          'user_id': getUid(),
+          //'user_id': getUid(),
           'station_id': stationId,
           //'journeys': null,
         })
