@@ -321,16 +321,20 @@ class MyHomePageState extends State<MapPage> {
   }
 
   void setDistanceAndTime() async {
-    var duration = await manager.getDistance() as double; //meters
-    var distance = await manager.getDuration() as double; //sec
-    print(duration.truncate());
-    setState(() {
-      totalDistance = "distance: " +
-          (distance / 1000).toString() +
-          ", duration: " +
-          (duration / 60).truncate().toString();
-      print(totalDistance);
-    });
+    try {
+      var duration = await manager.getDistance() as double; //meters
+      var distance = await manager.getDuration() as double; //sec
+      print(duration.truncate());
+      setState(() {
+        totalDistance = "distance: " +
+            (distance / 1000).toString() +
+            ", duration: " +
+            (duration / 60).truncate().toString();
+        print(totalDistance);
+      });
+    } catch (e) {
+      totalDistance = "Route not avalible";
+    }
   }
 
   void setPolylineMarkers(List<LatLng> journey) async {
