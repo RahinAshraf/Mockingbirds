@@ -47,7 +47,7 @@ class _AuthScreenState extends State<AuthScreen> {
           password: password,
         );
 
-        var url = "";
+        var url = "https://firebasestorage.googleapis.com/v0/b/veloplan-b41d0.appspot.com/o/user_image%2Fdefault_profile_picture.jpg?alt=media&token=edc6abb8-3655-448c-84a0-7d34b02f0c73";
 
         if (image != null) {
           final ref = FirebaseStorage.instance

@@ -40,6 +40,8 @@ class MyHomePageState extends State<MapPage> {
   _onMapCreated(MapboxMapController controller) async {
     Timer timer;
     this.controller = controller;
+
+    // calls the api every 5 minutes
     timer = Timer.periodic(
         Duration(seconds: 300), (Timer t) => fetchDockingStations());
   }
@@ -54,19 +56,8 @@ class MyHomePageState extends State<MapPage> {
 
   void initialiseStations(dockingStationManager _stationManager) {
     docking_stations = _stationManager.stations;
-    List<DockingStation> closest_dock_to_user_location = _stationManager
+    List<DockingStation> closest_docks_to_user_location = _stationManager
         .get_5_closest_docks_to_get_bikes(getLatLngFromSharedPrefs(), 21);
-    log("my loc is: " + getLatLngFromSharedPrefs().toString());
-    log("closest dock station is: " +
-        closest_dock_to_user_location[0].name.toString());
-    log("closest dock station is: " +
-        closest_dock_to_user_location[1].name.toString());
-    log("closest dock station is: " +
-        closest_dock_to_user_location[2].name.toString());
-    log("closest dock station is: " +
-        closest_dock_to_user_location[3].name.toString());
-    log("closest dock station is: " +
-        closest_dock_to_user_location[4].name.toString());
   }
 
   void placeDockMarkers(List<DockingStation> docks) {
