@@ -13,7 +13,7 @@ class _FavouriteState extends State<Favourite> {
   var _dockingStationCarousel =
       dockingStationCarousel(); //retrieves all of the docking station cards
 
-  late List<FavouriteDockingStation> favourites;
+  List<FavouriteDockingStation> favourites = [];
 
   var helper = FirestoreHelper();
 
@@ -61,13 +61,20 @@ class _FavouriteState extends State<Favourite> {
   @override
   Widget build(BuildContext build) {
     return Scaffold(
-      body: favourites.isEmpty
-          ? Text("You haven't added any favourites.")
-          : Stack(
-              children: [
-                _dockingStationCarousel.buildCarousel(),
-              ],
-            ),
+      body:
+          // favourites.isEmpty
+          // ? SizedBox(
+          //     height: MediaQuery.of(context).size.height / 1.3,
+          //     child: Center(
+          //       child: Text("You haven't added any favourites."),
+          //     ),
+          //   )
+          // :
+          Stack(
+        children: [
+          _dockingStationCarousel.buildCarousel(),
+        ],
+      ),
       appBar: AppBar(
         title: const Text('My favourites'),
       ),

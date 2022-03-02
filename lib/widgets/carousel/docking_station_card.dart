@@ -30,14 +30,35 @@ class dockingStationCard extends StatefulWidget {
 
 class _dockingStationCardState extends State<dockingStationCard> {
   var helper = FirestoreHelper(); //change name
+  List<FavouriteDockingStation> favourites = [];
+
+  late Icon favIcon;
 
   @override
   void initState() {
+    FirestoreHelper.getUserFavourites().then((data) {
+      setState(() {
+        favourites = data;
+      });
+    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    if (helper.isFavouriteStation(widget.station.id, favourites)) {
+      favIcon = Icon(
+        FontAwesomeIcons.solidBookmark,
+        size: 20,
+        color: Colors.orange,
+      );
+    } else {
+      favIcon = Icon(
+        FontAwesomeIcons.bookmark,
+        size: 20,
+        color: Colors.orange,
+      );
+    }
     return Card(
       clipBehavior: Clip.antiAlias,
       child: Padding(
@@ -45,9 +66,51 @@ class _dockingStationCardState extends State<dockingStationCard> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            FavoriteButton(valueChanged: (_isFavorite) {
-              helper.toggleFavourite(widget.station.id);
-            }),
+            IconButton(
+              icon: helper.isFavouriteStation(widget.station.id, favourites)
+                  ? Icon(
+                      Icons.favorite,
+                      color: Colors.red,
+                    )
+                  : Icon(
+                      Icons.favorite,
+                      color: Colors.grey,
+                    ),
+              onPressed: () async {
+                List<FavouriteDockingStation> updatedFavourites =
+                    await FirestoreHelper.getUserFavourites();
+                helper.toggleFavourite(widget.station.id);
+
+                setState(() {
+                  favourites = updatedFavourites;
+                });
+              },
+            ),
+
+            // FavoriteButton(valueChanged: (_isFavorite) {
+            //   Color: _isFavorite? Colors.pink : Colors.yellow,
+            //   onPressed:
+            //   helper.toggleFavourite(widget.station.id);
+            //   setState(() {
+
+            //   });
+            // }),
+            // helper.isFavouriteStation(widget.station.id, favourites)
+            //     ? IconButton(
+            //         onPressed: () async {
+            //           helper.toggleFavourite(widget.station.id);
+            //         },
+            //         icon: Icon(
+            //           FontAwesomeIcons.solidBookmark,
+            //           size: 20,
+            //           color: Colors.orange,
+            //         ))
+            //     : IconButton(
+            //         onPressed: () async {
+            //           helper.toggleFavourite(widget.station.id);
+            //         },
+            //         icon: favIcon),
+
             const SizedBox(width: 10),
             Expanded(
               child: Column(

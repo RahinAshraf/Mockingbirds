@@ -108,7 +108,20 @@ class FirestoreHelper {
     }
   }
 
-  toggleFavourite(String stationId) async {
+  bool isFavourite(String stationId, List<FavouriteDockingStation> faveList) {
+    //checks if the station id is in the list of faves.
+    FavouriteDockingStation? fave = faveList.firstWhereOrNull(
+        (FavouriteDockingStation f) => (f.stationId == stationId));
+    if (fave == null) {
+      // print("NOOOOOOOOOOOO");
+      return false;
+    } else {
+      // print("YEEEEEEEEEEEES");
+      return true;
+    }
+  }
+
+  void toggleFavourite(String stationId) async {
     var faveList = await getUserFavourites();
     if (isFavouriteStation(stationId, faveList)) {
       //refactor this:
