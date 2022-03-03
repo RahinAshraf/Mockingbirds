@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../utilities/styling.dart';
+import '../styles/styling.dart';
 
 class Settings extends StatelessWidget {
   @override

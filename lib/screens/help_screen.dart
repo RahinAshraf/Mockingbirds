@@ -2,7 +2,7 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:veloplan/utilities/help_bot_manager.dart';
 import 'package:veloplan/widgets/message_bubble_widget.dart';
-import '../utilities/styling.dart';
+import '../styles/styling.dart';
 
 HelpBotManager questions = HelpBotManager();
 
