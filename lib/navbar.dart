@@ -5,7 +5,7 @@ import 'package:veloplan/screens/location_service.dart';
 import 'package:veloplan/screens/place_search_screen.dart';
 import 'screens/map_screen.dart';
 import 'screens/profile_screen.dart';
-import '../widget/navigation_drawer_widget.dart';
+import 'sidebar.dart';
 
 class Navbar extends StatelessWidget {
   //We need to override the Build method because StatelessWidget has a build method

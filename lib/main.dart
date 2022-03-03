@@ -50,6 +50,10 @@ void saveLocation(LocationData _locationData) {
   sharedPreferences.setDouble('longitude', _locationData.longitude!);
 }
 
+// void main() {
+//   runApp(MultiProvider(providers: [], child: const MyApp()));
+// }
+
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
