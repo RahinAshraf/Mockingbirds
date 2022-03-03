@@ -9,11 +9,7 @@ import '../pickers/image_picker.dart';
 import '../pickers/bottom_date_picker.dart';
 
 class AuthForm extends StatefulWidget {
-  const AuthForm(
-    this.submitFn,
-    this.isLoading,
-    {Key? key}
-  ) : super(key: key);
+  const AuthForm(this.submitFn, this.isLoading, {Key? key}) : super(key: key);
 
   final bool isLoading;
   final void Function(
@@ -84,7 +80,6 @@ class _AuthFormState extends State<AuthForm> {
   Widget build(BuildContext context) {
     return Center(
       child: Card(
-        margin: const EdgeInsets.all(20),
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(16),
@@ -93,6 +88,24 @@ class _AuthFormState extends State<AuthForm> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
+                  if (_isLogin)
+                    Container(
+                        height: 120.0,
+                        width: 120.0,
+                        child: Center(
+                            child: Image.asset('assets/images/logo.png'))),
+                  if (_isLogin)
+                    Container(
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.all(10),
+                        child: const Text(
+                          'Welcome back!',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 25),
+                        )),
+                  if (!_isLogin) SizedBox(height: 50),
                   if (!_isLogin) UserImagePicker(_pickedImage),
                   if (!_isLogin)
                     TextFormField(
@@ -106,11 +119,14 @@ class _AuthFormState extends State<AuthForm> {
                         }
                         return null;
                       },
-                      decoration: const InputDecoration(labelText: 'First Name'),
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'First Name'),
                       onSaved: (value) {
                         _firstName = value!;
                       },
                     ),
+                  if (!_isLogin || _isLogin) SizedBox(height: 15),
                   if (!_isLogin)
                     TextFormField(
                       key: const ValueKey('lastName'),
@@ -123,11 +139,13 @@ class _AuthFormState extends State<AuthForm> {
                         }
                         return null;
                       },
-                      decoration: const InputDecoration(labelText: 'Last Name'),
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(), labelText: 'Last Name'),
                       onSaved: (value) {
                         _lastName = value!;
                       },
                     ),
+                  if (!_isLogin || _isLogin) SizedBox(height: 15),
                   TextFormField(
                     key: const ValueKey('email'),
                     autocorrect: false,
@@ -138,12 +156,14 @@ class _AuthFormState extends State<AuthForm> {
                         : "Please enter a valid email",
                     keyboardType: TextInputType.emailAddress,
                     decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
                       labelText: 'Email address',
                     ),
                     onSaved: (value) {
                       _userEmail = value!;
                     },
                   ),
+                  if (!_isLogin || _isLogin) SizedBox(height: 15),
                   if (!_isLogin)
                     TextFormField(
                       key: const ValueKey('username'),
@@ -156,11 +176,13 @@ class _AuthFormState extends State<AuthForm> {
                         }
                         return null;
                       },
-                      decoration: const InputDecoration(labelText: 'Username'),
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(), labelText: 'Username'),
                       onSaved: (value) {
                         _userName = value!;
                       },
                     ),
+                  if (!_isLogin || _isLogin) SizedBox(height: 15),
                   TextFormField(
                     key: const ValueKey('password'),
                     validator: (value) {
@@ -173,12 +195,14 @@ class _AuthFormState extends State<AuthForm> {
                       }
                       return null;
                     },
-                    decoration: const InputDecoration(labelText: 'Password'),
+                    decoration: const InputDecoration(
+                        border: OutlineInputBorder(), labelText: 'Password'),
                     obscureText: true,
                     onSaved: (value) {
                       _userPassword = value!;
                     },
                   ),
+                  if (!_isLogin || _isLogin) SizedBox(height: 15),
                   if (!_isLogin)
                     TextFormField(
                       key: const ValueKey('passwordConfirmation'),
@@ -191,10 +215,12 @@ class _AuthFormState extends State<AuthForm> {
                         }
                         return null;
                       },
-                      decoration:
-                          const InputDecoration(labelText: 'Confirm Password'),
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Confirm Password'),
                       obscureText: true,
                     ),
+                  if (!_isLogin || _isLogin) SizedBox(height: 15),
                   if (!_isLogin)
                     TextFormField(
                       controller: _dateController,
@@ -224,28 +250,54 @@ class _AuthFormState extends State<AuthForm> {
                           },
                         );
                       },
-                      decoration:
-                          const InputDecoration(labelText: 'Date of birth'),
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Date of birth'),
                     ),
                   const SizedBox(height: 12),
                   if (widget.isLoading) const CircularProgressIndicator(),
                   if (!widget.isLoading)
-                    RaisedButton(
-                      child: Text(_isLogin ? 'Login' : 'Signup'),
+                    ElevatedButton(
+                      child: Text(_isLogin ? 'Log In' : 'Sign Up'),
                       onPressed: _trySubmit,
                     ),
                   if (!widget.isLoading)
-                    FlatButton(
-                      textColor: Theme.of(context).primaryColor,
-                      child: Text(_isLogin
-                          ? 'Create new account'
-                          : 'I already have an account'),
-                      onPressed: () {
-                        setState(() {
-                          _isLogin = !_isLogin;
-                        });
-                      },
-                    )
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        if (_isLogin)
+                          Container(
+                              alignment: Alignment.center,
+                              padding: const EdgeInsets.all(10),
+                              child: const Text(
+                                'Don' 't have an account?',
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 15),
+                              )),
+                        if (!_isLogin)
+                          Container(
+                              alignment: Alignment.center,
+                              padding: const EdgeInsets.all(10),
+                              child: const Text(
+                                'Already have an account?',
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 15),
+                              )),
+                        FlatButton(
+                          textColor: Theme.of(context).primaryColor,
+                          child: Text(_isLogin ? 'Sign up' : 'Log in'),
+                          onPressed: () {
+                            setState(() {
+                              _isLogin = !_isLogin;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
                 ],
               ),
             ),

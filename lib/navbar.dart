@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import 'package:veloplan/screens/location_service.dart';
+import 'package:veloplan/screens/place_search_screen.dart';
 import 'screens/map_screen.dart';
 import 'screens/profile_screen.dart';
 import 'sidebar.dart';
@@ -22,14 +26,17 @@ class _MainPageState extends State<MainPage> {
   int currentIndex = 1; //index of the screens
 
   final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
-  final screens = [
+
+  final _currentUser = FirebaseAuth.instance.currentUser!.uid;
+
+  var screens = [
     Placeholder(), //need to replace this with something?
     MapPage(),
-    Profile(),
   ];
 
   @override
   Widget build(BuildContext context) {
+    screens.add(Profile(_currentUser));
     return Scaffold(
         // body: screens[currentIndex], //looses the progress
         body: IndexedStack(
@@ -39,21 +46,22 @@ class _MainPageState extends State<MainPage> {
         drawer: NavigationDrawerWidget(),
         key: scaffoldKey,
         floatingActionButton: Container(
-          height: 80.0,
-          width: 80.0,
-          child: FloatingActionButton(
-            onPressed: () {
-              onTabTapped(1);
-            },
-            child: Icon(
-              Icons.directions_bike,
-              color: Colors.green,
-              size: 50,
-            ),
-            elevation: 8.0,
-            backgroundColor: Colors.white,
-          ),
-        ),
+            height: 80.0,
+            width: 80.0,
+            child: FloatingActionButton(
+              heroTag: "btn2",
+              onPressed: () {
+                onTabTapped(1);
+                print("Link journey_planner screen to this btn");
+              },
+              child: const Icon(
+                Icons.directions_bike,
+                color: Colors.green,
+                size: 50,
+              ),
+              elevation: 8.0,
+              backgroundColor: Colors.white,
+            )),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: createNavBar());
   }
@@ -61,7 +69,7 @@ class _MainPageState extends State<MainPage> {
   BottomNavigationBar createNavBar() {
     return BottomNavigationBar(
       type: BottomNavigationBarType
-          .fixed, //looks past the backround colors specified
+          .fixed, //looks past the background colors specified
       backgroundColor: Colors.green[200],
       selectedItemColor: Colors.black,
       unselectedItemColor: Colors.grey[10],
