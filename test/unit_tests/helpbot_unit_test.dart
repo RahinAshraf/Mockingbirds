@@ -1,4 +1,4 @@
-import 'package:test/test.dart'; // unit tests
+import 'package:flutter_test/flutter_test.dart';
 import 'package:veloplan/utilities/help_bot_manager.dart';
 
 void main() {

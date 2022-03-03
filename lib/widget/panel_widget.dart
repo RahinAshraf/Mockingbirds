@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:veloplan/providers/trip_manager.dart';
 import 'package:veloplan/screens/place_search_screen.dart';
 
 import '../models/destination_choice.dart';
@@ -166,6 +167,7 @@ class PanelWidgetState extends State<PanelWidget> {
             ),
             onPressed: () {
               print("ALL_COORDINATES => ${widget.selectedCords}");
+              TripManager(${widget.selectedCords);
             },
             child: const Text(
               "START",
