@@ -14,7 +14,12 @@ import 'package:veloplan/alerts.dart';
 When rendered, the journey_planner_screen will have this panel_widget at the bottom. It is an interactive panel the user can
 slide up or down, when wanting to input their desired locations for the journey.
  */
-
+extension BuildContextExt on BuildContext {
+  Future<dynamic> openSearch(){
+    return Navigator.of(this).push(MaterialPageRoute(
+        builder: (settings) => PlaceSearchScreen(LocationService(), isPop: true)));
+  }
+}
 class PanelWidget extends StatefulWidget {
   final ScrollController controller;
   final PanelController panelController;
@@ -313,11 +318,11 @@ class PanelWidgetState extends State<PanelWidget> {
 
   //When triggered, redirects the user to the place_search_Screen in order for them to specify a location to visit
   //for the journey
+
   void _handleSearchClick(BuildContext context) async {
     final selectedCords = widget.selectedCords;
     final tempPosition = selectedCords.length;
-    final result = await Navigator.of(context).push(MaterialPageRoute(
-        builder: (settings) => PlaceSearchScreen(LocationService())));
+    final result = await context.openSearch();
     print("Navigator_Navigator_Navigator => $tempPosition");
     final feature = result as Feature?;
     if (feature != null) {
@@ -437,8 +442,7 @@ class DynamicWidget extends StatelessWidget {
 
   //Executed when the user presses on a search TextField
   void _handleSearchClick(BuildContext context, int position) async {
-    final result = await Navigator.of(context).push(MaterialPageRoute(
-        builder: (settings) => PlaceSearchScreen(LocationService())));
+    final result = await context.openSearch();
     print("Navigator_Navigator_Navigator => $position");
     final feature = result as Feature?;
     if (feature != null) {
