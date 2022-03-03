@@ -38,7 +38,7 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     screens.add(Profile(_currentUser));
     return Scaffold(
-      // body: screens[currentIndex], //looses the progress
+        // body: screens[currentIndex], //looses the progress
         body: IndexedStack(
           index: currentIndex,
           children: screens, //keeps the screens alive
