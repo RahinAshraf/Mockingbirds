@@ -9,8 +9,7 @@ import '../widget/panel_widget.dart';
 import 'map_screen.dart';
 import '../providers/location_service.dart';
 
-
-class MapPlace{
+class MapPlace {
   String? address;
   LatLng? cords;
   MapPlace(this.address, this.cords);
@@ -74,7 +73,8 @@ class _JourneyPlanner extends State<JourneyPlanner> {
                   myLocationEnabled: true,
                   myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
                   onMapClick: (Point<double> point, LatLng coordinates) async {
-                    Map s = await locService.reverseGeoCode(coordinates.latitude,coordinates.longitude);
+                    Map s = await locService.reverseGeoCode(
+                        coordinates.latitude, coordinates.longitude);
                     address.sink.add(MapPlace(s['place'], s['location']));
                     print(s['place']);
                     print("Latitdue");

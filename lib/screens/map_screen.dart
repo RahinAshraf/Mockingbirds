@@ -17,6 +17,7 @@ import '../.env.dart';
 import 'package:veloplan/providers/location_service.dart';
 import '../screens/turn_by_turn_screen.dart';
 import '../helpers/zoom_helper.dart';
+import 'package:veloplan/widgets/carousel/station_carousel.dart';
 
 //import 'package:veloplan/widget/carousel/station_carousel.dart';
 const double zoom = 16;
@@ -124,41 +125,79 @@ class MyHomePageState extends State<MapPage> {
     controller.onSymbolTapped.add(_onSymbolTapped);
   }
 
+  MapboxMap buildMap() {
+    return MapboxMap(
+      accessToken: MAPBOX_ACCESS_TOKEN,
+      initialCameraPosition: _cameraPosition,
+      onMapCreated: _onMapCreated,
+      myLocationEnabled: true,
+      myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
+      minMaxZoomPreference: const MinMaxZoomPreference(14, 17),
+    );
+  }
+
+//This is just for testing purposes to see the docking station carousel:
+  var _dockingStationCarousel = dockingStationCarousel();
+
   @override
   Widget build(BuildContext build) {
-    return Scaffold(      
-      floatingActionButton: FloatingActionButton(
-        heroTag: "btn1",
-        onPressed: () {
-          controller?.animateCamera(
-              CameraUpdate.newCameraPosition(_cameraPosition));
-        },
-        child: const Icon(Icons.my_location),
-      ),
-      body: SafeArea(
-        child: Stack(
-          children: [
+    return Scaffold(
+        /*
+        body: SafeArea(
+          child: Stack(
+            children: [
+              SizedBox(
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  child: buildMap()),
+
+              //Container(child: _dockingStationCarousel.buildCarousel()),
+
+              //PLACEHOLDER FAB
+              FloatingActionButton(
+                heroTag: "btn3",
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          PlaceSearchScreen(LocationService())));
+                  print(
+                      "This btn is to the search location screen. There is a screen in the design that comes before the search location screen so it is accessible from here for now");
+                },
+              ),
+            ],
+          ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          heroTag: "btn1",
+          onPressed: () {
+            controller?.animateCamera(
+                CameraUpdate.newCameraPosition(_cameraPosition));
+          },
+          child: const Icon(Icons.my_location),
+        ),*/
+        body: SafeArea(
+            child: Stack(
+      children: [
         Container(
-          alignment: Alignment(0, 0),
-          // height: MediaQuery.of(context).size.height,
-          // width: MediaQuery.of(context).size.width,
-          child: MapboxMap(
-            accessToken: accessToken,
-            initialCameraPosition: _cameraPosition,
-            onMapCreated: _onMapCreated,
-            onStyleLoadedCallback: _onStyleLoadedCallback,
-            myLocationEnabled: true,
-            myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
-            annotationOrder: [AnnotationType.symbol],
-            // minMaxZoomPreference: const MinMaxZoomPreference(14, 17),
-          )),// 
+            alignment: Alignment(0, 0),
+            // height: MediaQuery.of(context).size.height,
+            // width: MediaQuery.of(context).size.width,
+            child: MapboxMap(
+              accessToken: accessToken,
+              initialCameraPosition: _cameraPosition,
+              onMapCreated: _onMapCreated,
+              onStyleLoadedCallback: _onStyleLoadedCallback,
+              myLocationEnabled: true,
+              myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
+              annotationOrder: [AnnotationType.symbol],
+              // minMaxZoomPreference: const MinMaxZoomPreference(14, 17),
+            )), //
         //PLACEHOLDER FAB
         FloatingActionButton(
           heroTag: "btn3",
           onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) =>
-                    PlaceSearchScreen(LocationService())));
+                builder: (context) => PlaceSearchScreen(LocationService())));
             print(
                 "This btn is to the search location screen. There is a screen in the design that comes before the search location screen so it is accessible from here for now");
           },

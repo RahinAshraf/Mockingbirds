@@ -15,11 +15,13 @@ When rendered, the journey_planner_screen will have this panel_widget at the bot
 slide up or down, when wanting to input their desired locations for the journey.
  */
 extension BuildContextExt on BuildContext {
-  Future<dynamic> openSearch(){
+  Future<dynamic> openSearch() {
     return Navigator.of(this).push(MaterialPageRoute(
-        builder: (settings) => PlaceSearchScreen(LocationService(), isPop: true)));
+        builder: (settings) =>
+            PlaceSearchScreen(LocationService(), isPop: true)));
   }
 }
+
 class PanelWidget extends StatefulWidget {
   final ScrollController controller;
   final PanelController panelController;
@@ -183,7 +185,6 @@ class PanelWidgetState extends State<PanelWidget> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -274,17 +275,17 @@ class PanelWidgetState extends State<PanelWidget> {
   //The logic to restrict the user from being able to start a journey, with blank location fields
   void aSearchBarCannotBeEmpty(List<DynamicWidget>? list) {
     bool isFieldNotEmpty = true;
-    if(list == null){
+    if (list == null) {
       alert.showWhereToTextFieldsMustNotBeEmptySnackBar(context);
       return;
     }
     for (var element in list) {
-      if(element.textController.text.isEmpty){
+      if (element.textController.text.isEmpty) {
         isFieldNotEmpty = false;
         break;
       }
     }
-    if(!isFieldNotEmpty){
+    if (!isFieldNotEmpty) {
       alert.showWhereToTextFieldsMustNotBeEmptySnackBar(context);
     }
   }
@@ -375,7 +376,7 @@ class DynamicWidget extends StatelessWidget {
           TextButton(
             onPressed: () {
               int len = selectedCords?.length ?? 0;
-              if(position < len){
+              if (position < len) {
                 selectedCords?.removeAt(position);
               }
               onDelete?.call(position);
@@ -462,5 +463,4 @@ class DynamicWidget extends StatelessWidget {
   void removeDynamic(Function(int) onDelete) {
     this.onDelete = onDelete;
   }
-
 }

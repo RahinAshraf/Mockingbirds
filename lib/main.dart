@@ -40,9 +40,7 @@ void initializeLocation() async {
 
   LocationData _locationData = await _location.getLocation();
   LatLng currentLatLng =
-
-  LatLng(_locationData.latitude!, _locationData.longitude!);
-
+      LatLng(_locationData.latitude!, _locationData.longitude!);
 
   saveLocation(_locationData);
 }
@@ -51,6 +49,10 @@ void saveLocation(LocationData _locationData) {
   sharedPreferences.setDouble('latitude', _locationData.latitude!);
   sharedPreferences.setDouble('longitude', _locationData.longitude!);
 }
+
+// void main() {
+//   runApp(MultiProvider(providers: [], child: const MyApp()));
+// }
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -65,7 +67,7 @@ class _MyAppState extends State<MyApp> {
     //final Future<FirebaseApp> _initialization = Firebase.initializeApp();
     return FutureBuilder(
 
-      // Initialize FlutterFire:
+        // Initialize FlutterFire:
 
         future: Firebase.initializeApp(), // _initialization,
         builder: (context, appSnapshot) {
@@ -99,18 +101,17 @@ class _MyAppState extends State<MyApp> {
             home: appSnapshot.connectionState != ConnectionState.done
                 ? const SplashScreen()
                 : StreamBuilder(
-
-                stream: FirebaseAuth.instance.authStateChanges(),
-                builder: (ctx, userSnapshot) {
-                  if (userSnapshot.connectionState ==
-                      ConnectionState.waiting) {
-                    return const SplashScreen();
-                  }
-                  if (userSnapshot.hasData) {
-                    return const VerifyEmailScreen();
-                  }
-                  return const AuthScreen();
-                }),
+                    stream: FirebaseAuth.instance.authStateChanges(),
+                    builder: (ctx, userSnapshot) {
+                      if (userSnapshot.connectionState ==
+                          ConnectionState.waiting) {
+                        return const SplashScreen();
+                      }
+                      if (userSnapshot.hasData) {
+                        return const VerifyEmailScreen();
+                      }
+                      return const AuthScreen();
+                    }),
           );
         });
   }
