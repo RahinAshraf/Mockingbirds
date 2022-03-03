@@ -27,6 +27,7 @@ class PlaceSearchState extends State<PlaceSearchScreen> {
                     prefixIcon:  IconButton(
                       icon: const Icon(Icons.arrow_back_rounded, color: Colors.green),
                       onPressed: () {
+                        //FIX THIS - STOP IT FROM LOSING STATE OF THE JOURNEY PLANNER
                           print("PREFIX");
                           Navigator.push(context, MaterialPageRoute(builder: (context) => JourneyPlanner()));
                         },
