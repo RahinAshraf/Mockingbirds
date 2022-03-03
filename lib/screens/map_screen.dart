@@ -14,7 +14,7 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:veloplan/screens/place_search_screen.dart';
 import '../.env.dart';
-import 'package:veloplan/screens/location_service.dart';
+import 'package:veloplan/providers/location_service.dart';
 import '../screens/turn_by_turn_screen.dart';
 import '../helpers/zoom_helper.dart';
 
@@ -126,9 +126,18 @@ class MyHomePageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext build) {
-    return Scaffold(
-        body: Stack(
-      children: [
+    return Scaffold(      
+      floatingActionButton: FloatingActionButton(
+        heroTag: "btn1",
+        onPressed: () {
+          controller?.animateCamera(
+              CameraUpdate.newCameraPosition(_cameraPosition));
+        },
+        child: const Icon(Icons.my_location),
+      ),
+      body: SafeArea(
+        child: Stack(
+          children: [
         Container(
           alignment: Alignment(0, 0),
           // height: MediaQuery.of(context).size.height,
@@ -142,7 +151,17 @@ class MyHomePageState extends State<MapPage> {
             myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
             annotationOrder: [AnnotationType.symbol],
             // minMaxZoomPreference: const MinMaxZoomPreference(14, 17),
-          ),
+          )),// 
+        //PLACEHOLDER FAB
+        FloatingActionButton(
+          heroTag: "btn3",
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) =>
+                    PlaceSearchScreen(LocationService())));
+            print(
+                "This btn is to the search location screen. There is a screen in the design that comes before the search location screen so it is accessible from here for now");
+          },
         ),
         Container(
           alignment: Alignment(-0.5, -0.5),
@@ -225,7 +244,7 @@ class MyHomePageState extends State<MapPage> {
           ),
         ),
       ],
-    ));
+    )));
   }
 
   _onStyleLoadedCallback() async {

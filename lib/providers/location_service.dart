@@ -1,35 +1,49 @@
 import 'dart:async';
-
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
+import 'package:mapbox_gl/mapbox_gl.dart';
 
 /*
-*LocationService class to retrieve results from Mapbox API
-* */
+ LocationService class to retrieve results from Mapbox API
+*/
 class LocationService {
   final String key = 'pk.eyJ1IjoibW9ja2luZ2JpcmRzIiwiYSI6ImNremd3NW9weDM2ZmEybm45dzlhYzN0ZnUifQ.lSzpNOhK2CH9-PODR0ojLg'; //Mapbox api key
-
   final StreamController<List<Feature>?> _feature = StreamController.broadcast();
   Stream<List<Feature>?> get feature => _feature.stream;
 
-  
-  //Adds the retrived json data to a list
+  //Adds the retrieved json data to a list
   void getPlaceFeatures(String input) async {
     final String url = "https://api.mapbox.com/geocoding/v5/mapbox.places/$input.json?limit=10&proximity=-0.12542189962264239,51.50218910230291&bbox=-0.591614,51.265980,0.279053,51.707474&access_token=$key"; //geocoding Api url request for data based on the users input, only showing retrieving matching results that are in London
     var response = await http.get(Uri.parse(url));
     var json = convert.jsonDecode(response.body);
-
     final listOfPlace = (PlaceModel.fromJson(Map.from(json)).featureList);
-
     listOfPlace?.removeWhere((element) => element.placeName == null);
     _feature.sink.add(listOfPlace);
+  }
+
+  //Given coordinates, it will return the name of the place of those coordinates
+  Future<Map> reverseGeoCode(double lat, double lng) async {
+    String token = 'pk.eyJ1IjoibW9ja2luZ2JpcmRzIiwiYSI6ImNremd3NW9weDM2ZmEybm45dzlhYzN0ZnUifQ.lSzpNOhK2CH9-PODR0ojLg';
+    String url = "https://api.mapbox.com/geocoding/v5/mapbox.places/$lng,$lat.json?access_token=$token";
+    var response = await http.get(Uri.parse(url));
+    var json = convert.jsonDecode(response.body);
+    Map feature = json['features'][0];
+    Map revGeocode = {
+      'name': feature['text'],
+      'address': feature['place_name'].split('${feature['text']}, ')[1],
+      'place': feature['place_name'],
+      'location': LatLng(lat,lng),
+    };
+    return revGeocode;
   }
 
   void close(){
     _feature.close();
   }
+
 }
 
+//Stores the data to do with the places we are interested in
 class PlaceModel {
 
   List<Feature>? featureList;
@@ -48,6 +62,7 @@ class PlaceModel {
 
 }
 
+//Stores information about locations retrieved from the server
 class Feature {
   String? placeName;
   String? matchingPlaceName;
@@ -69,12 +84,14 @@ class Feature {
   }
 }
 
+//Stores the geometric coordinates of a location
 class Geometry{
   List<double?> coordinates = [];
 
   Geometry.fromJson(Map<String, dynamic> json){
     if(json['coordinates'] != null){
-      coordinates = List.from(json['coordinates']).map((e) => double.tryParse(e.toString())).toList();
+      final reversedIterable = List.from(json['coordinates']).map((e) =>  double.tryParse(e.toString())).toList().reversed;
+      coordinates = reversedIterable.toList();
     }
   }
 
@@ -85,29 +102,4 @@ class Geometry{
   }
 }
 
-
-
-/*
-* Given a url, it performs requests for us.
-*/
-class RequestAssistance{
-
-  //If request valid, returns the object that was requested
-  static Future<dynamic> getRequest(String url) async {
-    http.Response response = await http.get(Uri.parse(url));
-
-    try{
-      if(response.statusCode == 200){
-        String jsonData = response.body;
-        var decodeData = convert.jsonDecode(jsonData);
-        return decodeData;
-      }
-      else{
-        return "Failed, No response!";
-      }
-    }
-    catch(exp){ return "Failed"; }
-  }
-
-}
 
