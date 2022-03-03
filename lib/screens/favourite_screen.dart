@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:veloplan/services/favourite_service.dart';
 import 'package:veloplan/widgets/docking_station_card.dart';
 import 'package:veloplan/models/favourite.dart';
+import '../utilities/styling.dart';
 
 //Loads cards of all of the users favourited docking station
 class Favourite extends StatefulWidget {
@@ -48,6 +49,7 @@ class _FavouriteState extends State<Favourite> {
             ),
       appBar: AppBar(
         title: const Text('My favourites'),
+        backgroundColor: appBarColor,
       ),
     );
   }
