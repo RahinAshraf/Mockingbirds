@@ -100,7 +100,7 @@ class MyHomePageState extends State<MapPage> {
                 width: MediaQuery.of(context).size.width,
                 child: buildMap()),
 
-            //  Container(child: _dockingStationCarousel.buildCarousel()),
+            Container(child: _dockingStationCarousel.buildCarousel()),
 
             //PLACEHOLDER FAB
             FloatingActionButton(

@@ -48,6 +48,9 @@ class _dockingStationCardState extends State<dockingStationCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
+      elevation: 1.0,
+      shadowColor: Colors.green[200],
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       clipBehavior: Clip.antiAlias,
       child: Padding(
         padding: const EdgeInsets.all(10),
@@ -84,9 +87,17 @@ class _dockingStationCardState extends State<dockingStationCard> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(widget.name),
-                  Text('Bike no: ${widget.nb_bikes}'),
-                  Text('Empty: ${widget.nb_empty_docks}'),
+                  Text(
+                    widget.name,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const Divider(
+                    color: Colors.black,
+                  ),
+                  Text('Total bikes: ${widget.nb_bikes}'),
+                  Text('Available bikes: ${widget.nb_empty_docks}'),
                 ],
               ),
             ),
