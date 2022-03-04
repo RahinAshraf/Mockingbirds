@@ -53,40 +53,42 @@ class PanelWidgetState extends State<PanelWidget> {
           const SizedBox(width: 20),
           Expanded(
             child: SizedBox(
+              width: 15,
+              height: 15,
               child: TextField(
                 controller: widget.textEditingController,
                 enabled: false,
                 decoration: InputDecoration(
-                  hintText: 'Current Location',
+                  hintText: 'Current ',
                   focusedBorder: OutlineInputBorder(
-                    borderSide:
-                        const BorderSide(color: Colors.black, width: 2.0),
+                    borderSide: const BorderSide(
+                        color: Color.fromARGB(255, 153, 210, 169), width: 2.0),
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
-                    borderSide:
-                        const BorderSide(color: Colors.black, width: 1.0),
+                    borderSide: const BorderSide(
+                        color: Color.fromARGB(255, 153, 210, 169), width: 1.0),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
-                    borderSide:
-                        const BorderSide(color: Colors.black, width: 1.0),
+                    borderSide: const BorderSide(
+                        color: Color.fromARGB(255, 153, 210, 169), width: 1.0),
                   ),
                   disabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
-                    borderSide:
-                        const BorderSide(color: Colors.black, width: 1.0),
+                    borderSide: const BorderSide(
+                        color: Color.fromARGB(255, 153, 210, 169), width: 1.0),
                   ),
                   errorBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
-                    borderSide:
-                        const BorderSide(color: Colors.black, width: 1.0),
+                    borderSide: const BorderSide(
+                        color: Color.fromARGB(255, 153, 210, 169), width: 1.0),
                   ),
                   focusedErrorBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
-                    borderSide:
-                        const BorderSide(color: Colors.black, width: 1.0),
+                    borderSide: const BorderSide(
+                        color: Color.fromARGB(255, 153, 210, 169), width: 1.0),
                   ),
                 ),
               ),
@@ -238,43 +240,47 @@ class DynamicWidget extends StatelessWidget {
               decoration: InputDecoration(
                 hintText: 'Search',
                 focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.black, width: 2.0),
+                  borderSide: const BorderSide(
+                      color: Color.fromARGB(255, 153, 210, 169), width: 2.0),
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
-                  borderSide: const BorderSide(color: Colors.black, width: 1.0),
+                  borderSide: const BorderSide(
+                      color: Color.fromARGB(255, 153, 210, 169), width: 1.0),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
-                  borderSide: const BorderSide(color: Colors.black, width: 1.0),
+                  borderSide: const BorderSide(
+                      color: Color.fromARGB(255, 153, 210, 169), width: 1.0),
                 ),
                 disabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
-                  borderSide: const BorderSide(color: Colors.black, width: 1.0),
+                  borderSide: const BorderSide(
+                      color: Color.fromARGB(255, 153, 210, 169), width: 1.0),
                 ),
                 errorBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
-                  borderSide: const BorderSide(color: Colors.black, width: 1.0),
+                  borderSide: const BorderSide(
+                      color: Color.fromARGB(255, 153, 210, 169), width: 1.0),
                 ),
                 focusedErrorBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
-                  borderSide: const BorderSide(color: Colors.black, width: 1.0),
+                  borderSide: const BorderSide(
+                      color: Color.fromARGB(255, 153, 210, 169), width: 1.0),
                 ),
               ),
             ),
           ),
-          Expanded(
-            child: TextButton(
-              onPressed: () {
-                _handleSearchClick(context);
-                print("Take me to the place search screen");
-              },
-              child: const Icon(
-                Icons.keyboard_arrow_right_rounded,
-                size: 50,
-                color: Colors.green,
-              ),
+          TextButton(
+            onPressed: () {
+              _handleSearchClick(context);
+              print("Take me to the place search screen");
+            },
+            child: const Icon(
+              Icons.keyboard_arrow_right_rounded,
+              size: 50,
+              color: Colors.green,
             ),
           ),
         ],

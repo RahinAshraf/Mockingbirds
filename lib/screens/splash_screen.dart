@@ -5,10 +5,21 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text('Loading...'),
-      ),
-    );
+    return Scaffold(
+        body: Center(
+      child: Column(children: [
+        Container(
+            height: 190.0,
+            width: 190.0,
+            alignment: Alignment.topRight,
+            child: Image.asset('assets/images/right_bubbles_shapes.png')),
+        Text(
+          'Loading...',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontSize: 30, color: Color.fromARGB(255, 153, 210, 169)),
+        ),
+      ]),
+    ));
   }
 }

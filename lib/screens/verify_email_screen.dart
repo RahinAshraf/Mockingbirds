@@ -81,10 +81,15 @@ class _VerifyEmailSCreenState extends State<VerifyEmailScreen> {
         ? Navbar()
         : Scaffold(
             body: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+              padding: const EdgeInsets.all(0),
+              child: ListView(
                 children: [
+                  Container(
+                      height: 190.0,
+                      width: 190.0,
+                      alignment: Alignment.topRight,
+                      child: Image.asset(
+                          'assets/images/right_bubbles_shapes.png')),
                   const Text(
                     'A verification email has been sent to your address.',
                     style: TextStyle(fontSize: 20),
