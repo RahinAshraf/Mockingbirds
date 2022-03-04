@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -6,57 +7,49 @@ import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:veloplan/widgets/group/group_creation_form.dart';
-import 'package:veloplan/widgets/group/join_group_form.dart';
+import 'package:veloplan/widgets/group/leave_group_form.dart';
 import 'dart:math';
 
 import '../widgets/auth/auth_form.dart';
 
-class GroupJoinScreen extends StatefulWidget {
-
-  const GroupJoinScreen({Key? key}) : super(key: key);
+class GroupCreationScreen extends StatefulWidget {
+  const GroupCreationScreen({Key? key}) : super(key: key);
 
   @override
-  _GroupJoinScreenState createState() => _GroupJoinScreenState();
+  _GroupCreationScreenState createState() => _GroupCreationScreenState();
 }
 
-class _GroupJoinScreenState extends State<GroupJoinScreen> {
+class _GroupCreationScreenState extends State<GroupCreationScreen> {
   final _auth = FirebaseAuth.instance;
   var _isLoading = false;
-  late List groupCode =[];
+  late String code;
 
 
   @override
   void initState() {
     super.initState();
+
   }
 
-  Future<List<String>> getGroup() async {
-    var x = await FirebaseFirestore.instance
-        .collection('group')
-        .where('memberList',arrayContains: _auth.currentUser?.uid)
-        .get();
-
-    List<String> res =[];
-    x.docs.forEach((element) {
-      res.add(element.data()['code']);
-      groupCode.add(element.data()['code']);
-    });
-    return res;
-  }
-
-  void _submitGroupJoinForm(
-      String ID,
-      String code,
+  void _submitLeaveGroupForm(
+      String ownerID,
       BuildContext ctx,
       ) async {
-    var ID = _auth.currentUser?.uid;
 
+    var ownerID = _auth.currentUser?.uid;
     try {
       setState(() {
         _isLoading = true;
       });
-      var id;
-      var list;
+      List list = [];
+
+      var user = await  FirebaseFirestore.instance
+        .collection('users')
+        .doc(ownerID)
+        .get();
+
+     var code = user.data()!['group'];
+var id;
       var x = await FirebaseFirestore.instance
           .collection('group')
           .where('code',isEqualTo: code)
@@ -64,28 +57,19 @@ class _GroupJoinScreenState extends State<GroupJoinScreen> {
       x.docs.forEach((element) {
         id = element.id;
         list = element.data()['memberList'];
-        list.add(_auth.currentUser?.uid);
-        FirebaseFirestore.instance.collection('users')
-            .doc(_auth.currentUser?.uid)
-            .set({
-          'group': element.data()['code']
-        },SetOptions(merge: true));
-      });
+        list.removeWhere((element) => element.id == ownerID);
+    });
       await FirebaseFirestore.instance
           .collection('group')
           .doc(id)
           .update({'memberList': list});
-      ;
-
-
-
-
-
-
-
-    } on PlatformException catch (err) {
+      FirebaseFirestore.instance.collection('users')
+          .doc(_auth.currentUser?.uid)
+          .set({
+        'group': null
+      },SetOptions(merge: true));
+          }on PlatformException catch (err) {
       var message = 'An error occurred, please check your credentials!';
-
 
       if (err.message != null) {
         message = err.message!;
@@ -119,34 +103,15 @@ class _GroupJoinScreenState extends State<GroupJoinScreen> {
       setState(() {
         _isLoading = false;
       });
-    }}
-
-
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
-      body: Column(
-        children: [
-          GroupJoinForm(
-            _submitGroupJoinForm,
-            _isLoading,
-          ),
-          FutureBuilder<List<String>>(
-              future: getGroup(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return Text(groupCode.toString());
-                } else {
-                  return SizedBox(
-                    height: MediaQuery.of(context).size.height / 1.3,
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  );
-                }
-              })
-        ],
+      body: LeaveGroupForm(
+        _submitLeaveGroupForm,
+        _isLoading,
       ),
     );
   }
