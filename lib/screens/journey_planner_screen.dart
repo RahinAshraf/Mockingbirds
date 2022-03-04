@@ -9,6 +9,9 @@ import '../widget/panel_widget.dart';
 import 'map_screen.dart';
 import '../providers/location_service.dart';
 
+/*
+  @author - Rahin Ashraf
+ */
 class MapPlace {
   String? address;
   LatLng? cords;

@@ -13,6 +13,8 @@ import 'package:veloplan/alerts.dart';
 /*
 When rendered, the journey_planner_screen will have this panel_widget at the bottom. It is an interactive panel the user can
 slide up or down, when wanting to input their desired locations for the journey.
+
+@author - Rahin Ashraf
  */
 extension BuildContextExt on BuildContext {
   Future<dynamic> openSearch() {
@@ -244,9 +246,7 @@ class PanelWidgetState extends State<PanelWidget> {
               primary: Colors.white,
             ),
             onPressed: () {
-              startLocationMustBeSpecified();
-              oneDestinationMustBeSpecified();
-              aSearchBarCannotBeEmpty(widget.listDynamic);
+              applyConstraints();
 
               if(areAdjacentCoods(widget.selectedCords)){
                 alert.showCantHaveAdajcentSnackBar(context);
@@ -271,6 +271,20 @@ class PanelWidgetState extends State<PanelWidget> {
     );
   }
 
+  void applyConstraints(){
+    if(startLocationMustBeSpecified()){
+      return;
+    }
+
+    if(oneDestinationMustBeSpecified()){
+      return;
+    }
+
+    if(aSearchBarCannotBeEmpty(widget.listDynamic)){
+      return;
+    }
+  }
+
   //Returns all the coordinates for the locations the user specifies
   List<List<double?>?> getCoordinatesForJourney() {
     return widget.selectedCords;
@@ -288,28 +302,32 @@ class PanelWidgetState extends State<PanelWidget> {
   }
 
   //The logic to restrict the user from being able to start a journey, with blank location fields
-  void aSearchBarCannotBeEmpty(List<DynamicWidget>? list) {
+  bool aSearchBarCannotBeEmpty(List<DynamicWidget>? list) {
     bool isFieldNotEmpty = true;
     if (list == null) {
       alert.showWhereToTextFieldsMustNotBeEmptySnackBar(context);
-      return;
+      return false;
     }
     for (var element in list) {
       if (element.textController.text.isEmpty) {
         isFieldNotEmpty = false;
-        break;
+        return true; //true if there is a textfield that is empty
       }
     }
     if (!isFieldNotEmpty) {
       alert.showWhereToTextFieldsMustNotBeEmptySnackBar(context);
+      return false;
     }
+    return false;
   }
 
   //The logic to restrict the user from being able to start a journey without a starting point
-  void startLocationMustBeSpecified() {
+  bool startLocationMustBeSpecified() {
     if (widget.textEditingController.text.isEmpty) {
       alert.showStartLocationMustNotBeEmptySnackBar(context);
+      return true;
     }
+    return false;
   }
 
   //The grey handle bar, displayed at the very top of the panel_widget, to display to the user to swipe up on the panel
@@ -349,10 +367,12 @@ class PanelWidgetState extends State<PanelWidget> {
   }
 
   //The logic to restrict the user from being able to start a journey without defining at least one destination for the journey
-  void oneDestinationMustBeSpecified() {
+  bool oneDestinationMustBeSpecified() {
     if (widget.listDynamic.isEmpty) {
       alert.showAtLeastOneDestinationSnackBar(context);
+      return true;
     }
+    return false;
   }
 
 //void togglePanel() => panelController.isPanelOpen ? panelController.close() : panelController.open();
