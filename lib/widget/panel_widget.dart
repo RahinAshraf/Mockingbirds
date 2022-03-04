@@ -248,6 +248,10 @@ class PanelWidgetState extends State<PanelWidget> {
               oneDestinationMustBeSpecified();
               aSearchBarCannotBeEmpty(widget.listDynamic);
 
+              if(areAdjacentCoods(widget.selectedCords)){
+                alert.showCantHaveAdajcentSnackBar(context);
+              }
+
               List<List<double?>?> tempList = [];
               if (staticList != null) {
                 tempList.add(staticList);
@@ -270,6 +274,17 @@ class PanelWidgetState extends State<PanelWidget> {
   //Returns all the coordinates for the locations the user specifies
   List<List<double?>?> getCoordinatesForJourney() {
     return widget.selectedCords;
+  }
+
+  bool areAdjacentCoods(List<List<double?>?> myList){
+    for(int i = 0; i < myList.length - 1 ; i++){
+      if(myList[i]?.first == myList[i+1]?.first && myList[i]?.last == myList[i+1]?.last){
+        print("Adjacents exist");
+        return true;
+      }
+    }
+    print("Adjacents do not exist");
+    return false;
   }
 
   //The logic to restrict the user from being able to start a journey, with blank location fields
