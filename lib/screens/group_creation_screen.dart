@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
@@ -53,6 +55,7 @@ class _GroupCreationScreenState extends State<GroupCreationScreen> {
         'destination': destination,
         'ownerID': ownerID,
         'memberList': list,
+        'createdAt' : Timestamp.fromDate(DateTime.now())
       });
       await FirebaseFirestore.instance.collection('users')
           .doc(_auth.currentUser?.uid)
@@ -100,7 +103,7 @@ class _GroupCreationScreenState extends State<GroupCreationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
-      body: GroupCreationForm(
+      body:CreateGroupForm(
         _submitGroupCreationForm,
         _isLoading,
       ),
