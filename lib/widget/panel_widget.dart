@@ -25,23 +25,27 @@ extension BuildContextExt on BuildContext {
 }
 
 class PanelWidget extends StatefulWidget {
-  final ScrollController controller;
+  final ScrollController scrollController;
   final PanelController panelController;
   final StreamController<List<DynamicWidget>> dynamicWidgets;
   final List<DynamicWidget> listDynamic;
   final List<List<double?>?> selectedCords;
-  final TextEditingController textEditingController;
+  final TextEditingController fromTextEditController;
+  final TextEditingController toTextEditController;
   final Stream<MapPlace> address;
   final Map<String, List<double?>> selectionMap;
+  final Map<String, List<double?>> staticListMap;
 
   const PanelWidget(
       {required this.selectionMap,
       required this.address,
-      required this.controller,
+      required this.scrollController,
       required this.dynamicWidgets,
       required this.listDynamic,
       required this.selectedCords,
-      required this.textEditingController,
+        required this.staticListMap,
+      required this.toTextEditController,
+      required this.fromTextEditController,
       required this.panelController,
       Key? key})
       : super(key: key);
@@ -59,7 +63,11 @@ class PanelWidgetState extends State<PanelWidget> {
   late Map<String, List<double?>> selectionMap;
   late TextEditingController firstTextEditingController =
       TextEditingController();
-  List<double?>? staticList;
+  late Map<String, List<double?>> staticListMap;
+
+  static const String fromLabelKey ="From";
+  static const String toLabelKey = "To";
+
   final Alerts alert = Alerts();
 
   //creates a new dynamic widget and adds this to the list of destinations for the journey
@@ -73,6 +81,7 @@ class PanelWidgetState extends State<PanelWidget> {
   //Initialises variables and listens for user interaction to act on
   @override
   void initState() {
+    staticListMap = widget.staticListMap;
     final selectedCords = widget.selectedCords;
     selectionMap = widget.selectionMap;
     widget.address.listen((event) {
@@ -80,7 +89,7 @@ class PanelWidgetState extends State<PanelWidget> {
       dynamicWidget.textController.text = event.address ?? "";
       dynamicWidget.position = widget.listDynamic.length;
       widget.listDynamic.add(dynamicWidget);
-      print("pos: ${dynamicWidget.position}");
+      //print("pos: ${dynamicWidget.position}");
       selectedCords.insert(dynamicWidget.position,
           [event.cords?.latitude, event.cords?.longitude]);
       widget.dynamicWidgets.sink.add(widget.listDynamic);
@@ -89,7 +98,7 @@ class PanelWidgetState extends State<PanelWidget> {
   }
 
   //When called, this function sets the first location of the journey to the users current location
-  _useCurrentLocationButtonHandler() async {
+  _useCurrentLocationButtonHandler(TextEditingController controller, String key) async {
     LatLng currentLocation = getLatLngFromSharedPrefs();
     var response = await locService.reverseGeoCode(
         currentLocation.latitude, currentLocation.longitude);
@@ -98,21 +107,22 @@ class PanelWidgetState extends State<PanelWidget> {
     double latitudeOfPlace = response['location'].latitude;
     double longitudeOfPlace = response['location'].longitude;
     List<double?> currentLocationCoords = [latitudeOfPlace, longitudeOfPlace];
-    widget.textEditingController.text = place;
-    staticList = currentLocationCoords;
+    controller.text = place;
+    staticListMap[key] = currentLocationCoords;
+    // TODO: W
   }
 
   /*
   Function which builds the static row of components which are displayed permanently. Statically built, as every journey
   needs to specify a starting point
   */
-  Widget _buildStatic() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
-      child: Row(
+  Widget _buildStatic(TextEditingController controller, {String? hintText, required String label,
+    required Function(List<double?>) onAddressAdded}) {
+    // widget.textEditingController
+    return Row(
         children: [
-          const Text("From: ",
-              style: TextStyle(
+           Text(label,
+              style: const TextStyle(
                 fontWeight: FontWeight.normal,
                 fontSize: 20,
               )),
@@ -122,11 +132,11 @@ class PanelWidgetState extends State<PanelWidget> {
               child: TextField(
                 readOnly: true,
                 onTap: () {
-                  _handleSearchClick(context);
+                  _handleSearchClick(context, controller, onAddressAdded);
                 },
-                controller: widget.textEditingController,
+                controller: controller,
                 decoration: InputDecoration(
-                  hintText: 'Where from?',
+                  hintText: hintText,
                   focusedBorder: OutlineInputBorder(
                     borderSide:
                         const BorderSide(color: Colors.black, width: 2.0),
@@ -159,7 +169,7 @@ class PanelWidgetState extends State<PanelWidget> {
                   ),
                   suffixIcon: IconButton(
                     onPressed: () {
-                      _useCurrentLocationButtonHandler();
+                      _useCurrentLocationButtonHandler(controller, label);
                     },
                     icon: const Icon(
                       Icons.my_location,
@@ -183,96 +193,112 @@ class PanelWidgetState extends State<PanelWidget> {
             ),
           ),
         ],
-      ),
-    );
+      );
+  }
+
+  void addCordFrom(List<double?> newCord){
+    staticListMap[fromLabelKey] = newCord;
+  }
+  void addCordTo(List<double?> newCord){
+    staticListMap[toLabelKey] = newCord;
   }
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      controller: widget.controller,
-      children: <Widget>[
-        buildDragHandle(),
-        const SizedBox(height: 6),
-        const Center(
-          child: Text(
-            "Explore London",
-            style: TextStyle(fontWeight: FontWeight.normal, fontSize: 35),
+    return SingleChildScrollView(
+      controller: widget.scrollController,
+      child: Column(
+        children: [
+          const SizedBox(height: 20,),
+          buildDragHandle(),
+          const SizedBox(height: 6),
+          const Center(
+            child: Text(
+              "Explore London",
+              style: TextStyle(fontWeight: FontWeight.normal, fontSize: 35),
+            ),
           ),
-        ),
-        _buildStatic(),
-        Column(
+          const SizedBox(height: 6),
+
+          _buildStatic(widget.fromTextEditController, hintText: "Where from?",
+              label: "From", onAddressAdded: addCordFrom),
+          _buildStatic(widget.toTextEditController, hintText: "Where to?", label: "To", onAddressAdded: addCordTo),
+
+          /*   ListView(
+          shrinkWrap: true,
           children: [
-            StreamBuilder<List<DynamicWidget>>(
-              builder: (_, snapshot) {
-                List<DynamicWidget> listOfDynamics = snapshot.data ?? [];
-
-                return ListView.builder(
-                  shrinkWrap: true,
-                  itemBuilder: (_, index) {
-                    final dynamicWidget = listOfDynamics[index];
-                    dynamicWidget.position = index;
-                    dynamicWidget.removeDynamic((p0) {
-                      widget.listDynamic.removeAt(index);
-                      widget.dynamicWidgets.sink.add(widget.listDynamic);
-                    });
-                    return dynamicWidget;
-                  },
-                  itemCount: listOfDynamics.length,
-                  physics: const NeverScrollableScrollPhysics(),
-                );
-              },
-              stream: dynamicWidgetsStream,
-            ),
-            const SizedBox(
-              height: 50,
-            ),
+            _buildStatic(widget.toTextEditController),
           ],
-        ),
-        FloatingActionButton(
-          onPressed: addDynamic,
-          backgroundColor: Colors.white,
-          child: const Icon(
-            Icons.add,
-            color: Colors.black,
+        ),*/
+          Column(
+            children: [
+              StreamBuilder<List<DynamicWidget>>(
+                builder: (_, snapshot) {
+                  List<DynamicWidget> listOfDynamics = snapshot.data ?? [];
+
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    itemBuilder: (_, index) {
+                      final dynamicWidget = listOfDynamics[index];
+                      dynamicWidget.position = index;
+                      dynamicWidget.removeDynamic((p0) {
+                        widget.listDynamic.removeAt(index);
+                        widget.dynamicWidgets.sink.add(widget.listDynamic);
+                      });
+                      return dynamicWidget;
+                    },
+                    itemCount: listOfDynamics.length,
+                    physics: const NeverScrollableScrollPhysics(),
+                  );
+                },
+                stream: dynamicWidgetsStream,
+              ),
+              const SizedBox(
+                height: 50,
+              ),
+            ],
           ),
-        ),
-        Padding(
-          padding:
-              const EdgeInsets.only(top: 20, bottom: 20, left: 30, right: 30),
-          child: TextButton(
-            style: TextButton.styleFrom(
-              backgroundColor: Colors.green,
-              primary: Colors.white,
+          FloatingActionButton(
+            onPressed: addDynamic,
+            backgroundColor: Colors.white,
+            child: const Icon(
+              Icons.add,
+              color: Colors.black,
             ),
-            onPressed: () {
-              applyConstraints();
+          ),
+          Padding(
+            padding:
+            const EdgeInsets.only(top: 20, bottom: 20, left: 10, right: 10),
+            child: TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.green,
+                primary: Colors.white,
+              ),
+              onPressed: () {
+                applyConstraints(widget.fromTextEditController, widget.toTextEditController);
 
-              if(areAdjacentCoods(widget.selectedCords)){
-                alert.showCantHaveAdajcentSnackBar(context);
-              }
+                if(areAdjacentCoods(widget.selectedCords)){
+                  alert.showCantHaveAdajcentSnackBar(context);
+                }
 
-              List<List<double?>?> tempList = [];
-              if (staticList != null) {
-                tempList.add(staticList);
+                List<List<double?>?> tempList = [];
+                tempList.addAll(staticListMap.values);
                 tempList.addAll(widget.selectedCords);
                 print("ALL_COORDINATES => $tempList");
-              } else {
-                print("ALL_COORDINATES => $tempList");
-              }
-            },
-            child: const Text(
-              "START",
-              style: TextStyle(fontWeight: FontWeight.normal, fontSize: 20),
+              },
+              child: const Text(
+                "START",
+                style: TextStyle(fontWeight: FontWeight.normal, fontSize: 20),
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
-  void applyConstraints(){
-    if(startLocationMustBeSpecified()){
+  void applyConstraints(TextEditingController fromEditingController, TextEditingController toEditingController){
+    if(startLocationMustBeSpecified(fromEditingController) || startLocationMustBeSpecified(toEditingController)){
       return;
     }
 
@@ -322,8 +348,8 @@ class PanelWidgetState extends State<PanelWidget> {
   }
 
   //The logic to restrict the user from being able to start a journey without a starting point
-  bool startLocationMustBeSpecified() {
-    if (widget.textEditingController.text.isEmpty) {
+  bool startLocationMustBeSpecified(TextEditingController textEditingController) {
+    if (textEditingController.text.isEmpty) {
       alert.showStartLocationMustNotBeEmptySnackBar(context);
       return true;
     }
@@ -353,16 +379,20 @@ class PanelWidgetState extends State<PanelWidget> {
   //When triggered, redirects the user to the place_search_Screen in order for them to specify a location to visit
   //for the journey
 
-  void _handleSearchClick(BuildContext context) async {
+  void _handleSearchClick(BuildContext context,
+      TextEditingController textEditingController, Function(List<double?>) onAddressAdded) async {
     final selectedCords = widget.selectedCords;
     final tempPosition = selectedCords.length;
     final result = await context.openSearch();
     print("Navigator_Navigator_Navigator => $tempPosition");
     final feature = result as Feature?;
     if (feature != null) {
-      widget.textEditingController.text = feature.placeName ?? "N/A";
-
-      staticList = feature.geometry?.coordinates;
+      textEditingController.text = feature.placeName ?? "N/A";
+      final featureCord = feature.geometry?.coordinates;
+      if(featureCord != null) {
+        onAddressAdded.call(featureCord);
+      }
+     // staticList = feature.geometry?.coordinates;
     }
   }
 
@@ -400,13 +430,10 @@ class DynamicWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      //width: double.maxFinite,
-      //height: 60,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Row(
+        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const SizedBox(width: 33),
+          const SizedBox(width: 23),
           //Expanded(
           TextButton(
             onPressed: () {
@@ -431,6 +458,16 @@ class DynamicWidget extends StatelessWidget {
               },
               controller: textController,
               decoration: InputDecoration(
+                suffix:  IconButton(
+                  onPressed: () {
+                   // _useCurrentLocationButtonHandler(controller, label);
+                  },
+                  icon: const Icon(
+                    Icons.my_location,
+                    size: 20,
+                    color: Colors.blue,
+                  ),
+                ),
                 hintText: 'Where to?',
                 focusedBorder: OutlineInputBorder(
                   borderSide: const BorderSide(color: Colors.black, width: 2.0),
@@ -472,8 +509,7 @@ class DynamicWidget extends StatelessWidget {
           ),
           //),
         ],
-      ),
-    );
+      );
   }
 
   //Executed when the user presses on a search TextField
@@ -497,5 +533,11 @@ class DynamicWidget extends StatelessWidget {
 
   void removeDynamic(Function(int) onDelete) {
     this.onDelete = onDelete;
+  }
+
+  //When called, this function sets the first location of the journey to the users current location
+  _useCurrentLocationButtonHandler(TextEditingController controller, String key) async {
+
+    // TODO: W
   }
 }

@@ -30,7 +30,8 @@ class _JourneyPlanner extends State<JourneyPlanner> {
   late CameraPosition _initialCameraPosition;
   late MapboxMapController controller;
   final panelController = PanelController();
-  final standAloneSearchController = TextEditingController();
+  final fromTextEditingController = TextEditingController(),
+      toTextEditingController = TextEditingController();
   final StreamController<MapPlace> address = StreamController.broadcast();
   final StreamController<List<DynamicWidget>> dynamicWidgets =
       StreamController.broadcast();
@@ -54,6 +55,7 @@ class _JourneyPlanner extends State<JourneyPlanner> {
     final panelHeightClosed = MediaQuery.of(context).size.height * 0.1;
     final panelHeightOpen = MediaQuery.of(context).size.height * 0.6;
     List<MapPlace> mapList = [];
+    Map<String, List<double?>> staticCordMap = {};
     return Scaffold(
       body: SlidingUpPanel(
         padding: const EdgeInsets.only(left: 10, right: 10),
@@ -90,14 +92,15 @@ class _JourneyPlanner extends State<JourneyPlanner> {
           ),
         ),
         panelBuilder: (controller) => PanelWidget(
-          controller: controller,
+          scrollController: controller,
           selectionMap: Map(),
           address: address.stream,
           listDynamic: dynamicWidgetList,
-          textEditingController: standAloneSearchController,
+          fromTextEditController: fromTextEditingController,
+          toTextEditController: toTextEditingController,
           dynamicWidgets: dynamicWidgets,
           panelController: panelController,
-          selectedCords: cordsList,
+          selectedCords: cordsList, staticListMap : staticCordMap,
         ),
       ),
     );
