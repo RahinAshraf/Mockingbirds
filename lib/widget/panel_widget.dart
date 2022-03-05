@@ -121,11 +121,14 @@ class PanelWidgetState extends State<PanelWidget> {
     // widget.textEditingController
     return Row(
         children: [
-           Text(label,
-              style: const TextStyle(
-                fontWeight: FontWeight.normal,
-                fontSize: 20,
-              )),
+          const SizedBox(width: 10,),
+           Container(width: 50,
+           child: Text(label,
+               style: const TextStyle(
+                 fontWeight: FontWeight.normal,
+                 fontSize: 20,
+               )),),
+
           const SizedBox(width: 20),
           Expanded(
             child: SizedBox(
@@ -220,18 +223,12 @@ class PanelWidgetState extends State<PanelWidget> {
               style: TextStyle(fontWeight: FontWeight.normal, fontSize: 35),
             ),
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 8),
 
           _buildStatic(widget.fromTextEditController, hintText: "Where from?",
               label: "From", onAddressAdded: addCordFrom),
           _buildStatic(widget.toTextEditController, hintText: "Where to?", label: "To", onAddressAdded: addCordTo),
 
-          /*   ListView(
-          shrinkWrap: true,
-          children: [
-            _buildStatic(widget.toTextEditController),
-          ],
-        ),*/
           Column(
             children: [
               StreamBuilder<List<DynamicWidget>>(
@@ -256,7 +253,7 @@ class PanelWidgetState extends State<PanelWidget> {
                 stream: dynamicWidgetsStream,
               ),
               const SizedBox(
-                height: 50,
+                height: 10,
               ),
             ],
           ),

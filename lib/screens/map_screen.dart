@@ -60,7 +60,7 @@ class MyHomePageState extends State<MapPage> {
   @override
   void initState() {
     super.initState();
-    _cameraPosition = CameraPosition(target: currentLatLng, zoom: 12);
+    _cameraPosition = CameraPosition(target: latLng, zoom: 12);
     // _initialCameraPosition = CameraPosition(target: latLng, zoom: zoom);
     getRouteResponse();
   }
@@ -142,6 +142,15 @@ class MyHomePageState extends State<MapPage> {
   @override
   Widget build(BuildContext build) {
     return Scaffold(
+        floatingActionButton: FloatingActionButton(
+          heroTag: "refcous on live location",
+          onPressed: () {
+            controller?.animateCamera(
+                CameraUpdate.newCameraPosition(_cameraPosition));
+          },
+          child: const Icon(Icons.my_location),
+        ),
+
         /*
         body: SafeArea(
           child: Stack(
