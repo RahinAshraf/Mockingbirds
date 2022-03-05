@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import '../screens/journey_planner_screen.dart';
 
 class PanelWidgetTripScheduler extends StatefulWidget {

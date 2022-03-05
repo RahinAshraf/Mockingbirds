@@ -183,8 +183,10 @@ class PanelWidgetState extends State<PanelWidget> {
           ),
           //SizedBox(width: 10),
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               print("Link carasoul stuff here");
+              List temp = await locService.getPlaceCoords(controller.text);
+              print(temp);
             },
             child: const Icon(
               Icons.keyboard_arrow_right_rounded,
@@ -420,6 +422,7 @@ class DynamicWidget extends StatelessWidget {
   List<List<double?>?>? selectedCords;
   Function(int)? onDelete;
   int position = -1;
+  final locationService = LocationService();
 
   //setter for the position index
   void setIndex(index) {
@@ -498,8 +501,10 @@ class DynamicWidget extends StatelessWidget {
           ),
           //Expanded(
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               print("Link carasoul stuff here");
+              List temp = await locationService.getPlaceCoords(textController.text);
+              print(temp);
             },
             child: const Icon(
               Icons.keyboard_arrow_right_rounded,
