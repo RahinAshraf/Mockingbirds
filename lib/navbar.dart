@@ -5,6 +5,7 @@ import 'package:veloplan/screens/place_search_screen.dart';
 import 'screens/map_screen.dart';
 import 'screens/profile_screen.dart';
 import 'sidebar.dart';
+import 'package:veloplan/screens/trips_scheduler_screen.dart';
 
 class Navbar extends StatelessWidget {
   //We need to override the Build method because StatelessWidget has a build method
@@ -51,6 +52,7 @@ class _MainPageState extends State<MainPage> {
               heroTag: "btn2",
               onPressed: () {
                 onTabTapped(1);
+                Navigator.push(context, MaterialPageRoute(builder: (context) => TripScheduler()));
                 print("Link journey_planner screen to this btn");
               },
               child: const Icon(
