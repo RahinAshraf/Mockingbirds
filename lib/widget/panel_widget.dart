@@ -9,6 +9,7 @@ import '../providers/location_service.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/alerts.dart';
+import 'package:veloplan/helpers/live_location_helper.dart';
 
 /*
 When rendered, the journey_planner_screen will have this panel_widget at the bottom. It is an interactive panel the user can
