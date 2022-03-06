@@ -1,4 +1,8 @@
+// import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:veloplan/providers/connectivity_provider.dart';
 import 'screens/login_screen.dart';
 import 'navbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,11 +15,17 @@ import './screens/verify_email_screen.dart';
 import './screens/auth_screen.dart';
 import './screens/splash_screen.dart';
 
+
 late SharedPreferences sharedPreferences;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   sharedPreferences = await SharedPreferences.getInstance();
+
+  //ConnectionStatusSingleton connectionStatus = ConnectionStatusSingleton.getInstance();
+  //connectionStatus.initialize();
+
+
   initializeLocation(); //Upon opening the app, store the users current location
   runApp(MaterialApp(
     initialRoute: '/',
@@ -50,9 +60,6 @@ void saveLocation(LocationData _locationData) {
   sharedPreferences.setDouble('longitude', _locationData.longitude!);
 }
 
-// void main() {
-//   runApp(MultiProvider(providers: [], child: const MyApp()));
-// }
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -65,12 +72,18 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     //final Future<FirebaseApp> _initialization = Firebase.initializeApp();
-    return FutureBuilder(
-
+      //Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ConnectivityProvider()),
+      ],
+      child: FutureBuilder(
+    //return FutureBuilder(
         // Initialize FlutterFire:
 
         future: Firebase.initializeApp(), // _initialization,
         builder: (context, appSnapshot) {
+          //return OverlaySupport.global(child: MaterialApp(
           return MaterialApp(
             title: 'Veloplan',
             theme: ThemeData(
@@ -112,7 +125,9 @@ class _MyAppState extends State<MyApp> {
                       }
                       return const AuthScreen();
                     }),
-          );
-        });
+          );//);
+        }));
   }
-}
+
+
+ }
