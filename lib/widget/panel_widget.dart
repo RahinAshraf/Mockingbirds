@@ -9,6 +9,7 @@ import '../providers/location_service.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/alerts.dart';
+import 'package:veloplan/helpers/live_location_helper.dart';
 
 /*
 When rendered, the journey_planner_screen will have this panel_widget at the bottom. It is an interactive panel the user can
@@ -64,6 +65,7 @@ class PanelWidgetState extends State<PanelWidget> {
   late TextEditingController firstTextEditingController =
       TextEditingController();
   late Map<String, List<double?>> staticListMap;
+  late Map response;
 
   static const String fromLabelKey ="From";
   static const String toLabelKey = "To";
@@ -74,6 +76,7 @@ class PanelWidgetState extends State<PanelWidget> {
   addDynamic() {
     widget.listDynamic.add(DynamicWidget(
       selectedCords: widget.selectedCords,
+      cordDataMap: response,
     ));
     widget.dynamicWidgets.sink.add(widget.listDynamic);
   }
@@ -84,24 +87,41 @@ class PanelWidgetState extends State<PanelWidget> {
     staticListMap = widget.staticListMap;
     final selectedCords = widget.selectedCords;
     selectionMap = widget.selectionMap;
+
+    LatLng currentLocation = getLatLngFromSharedPrefs();
+    locService.reverseGeoCode(
+        currentLocation.latitude, currentLocation.longitude).then((value){
+          setState(() {
+            if(mounted){
+              response = value;
+            }
+          });
+    });
+
     widget.address.listen((event) {
-      final dynamicWidget = DynamicWidget(selectedCords: selectedCords);
+      final dynamicWidget = DynamicWidget(selectedCords: selectedCords, cordDataMap: response,);
       dynamicWidget.textController.text = event.address ?? "";
       dynamicWidget.position = widget.listDynamic.length;
       widget.listDynamic.add(dynamicWidget);
-      //print("pos: ${dynamicWidget.position}");
-      selectedCords.insert(dynamicWidget.position,
-          [event.cords?.latitude, event.cords?.longitude]);
+      print("DynamicWidget_pos: ${dynamicWidget.position} ${selectedCords.length} _${widget.listDynamic.length}");
+
+      if(dynamicWidget.position > selectedCords.length){
+
+        selectedCords.add( [event.cords?.latitude, event.cords?.longitude]);
+      }else{
+
+        selectedCords.insert(dynamicWidget.position,
+            [event.cords?.latitude, event.cords?.longitude]);
+      }
       widget.dynamicWidgets.sink.add(widget.listDynamic);
+
     });
+
     super.initState();
   }
 
   //When called, this function sets the first location of the journey to the users current location
   _useCurrentLocationButtonHandler(TextEditingController controller, String key) async {
-    LatLng currentLocation = getLatLngFromSharedPrefs();
-    var response = await locService.reverseGeoCode(
-        currentLocation.latitude, currentLocation.longitude);
     sharedPreferences.setString('source', json.encode(response));
     String place = response['place'];
     double latitudeOfPlace = response['location'].latitude;
@@ -121,11 +141,14 @@ class PanelWidgetState extends State<PanelWidget> {
     // widget.textEditingController
     return Row(
         children: [
-           Text(label,
-              style: const TextStyle(
-                fontWeight: FontWeight.normal,
-                fontSize: 20,
-              )),
+          const SizedBox(width: 10,),
+           Container(width: 50,
+           child: Text(label,
+               style: const TextStyle(
+                 fontWeight: FontWeight.normal,
+                 fontSize: 20,
+               )),),
+
           const SizedBox(width: 20),
           Expanded(
             child: SizedBox(
@@ -183,8 +206,10 @@ class PanelWidgetState extends State<PanelWidget> {
           ),
           //SizedBox(width: 10),
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               print("Link carasoul stuff here");
+              List temp = await locService.getPlaceCoords(controller.text);
+              print(temp);
             },
             child: const Icon(
               Icons.keyboard_arrow_right_rounded,
@@ -218,25 +243,21 @@ class PanelWidgetState extends State<PanelWidget> {
               style: TextStyle(fontWeight: FontWeight.normal, fontSize: 35),
             ),
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 8),
 
           _buildStatic(widget.fromTextEditController, hintText: "Where from?",
               label: "From", onAddressAdded: addCordFrom),
           _buildStatic(widget.toTextEditController, hintText: "Where to?", label: "To", onAddressAdded: addCordTo),
 
-          /*   ListView(
-          shrinkWrap: true,
-          children: [
-            _buildStatic(widget.toTextEditController),
-          ],
-        ),*/
-          Column(
+          Expanded(child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               StreamBuilder<List<DynamicWidget>>(
                 builder: (_, snapshot) {
                   List<DynamicWidget> listOfDynamics = snapshot.data ?? [];
 
                   return ListView.builder(
+                    padding: EdgeInsets.zero,
                     shrinkWrap: true,
                     itemBuilder: (_, index) {
                       final dynamicWidget = listOfDynamics[index];
@@ -254,10 +275,10 @@ class PanelWidgetState extends State<PanelWidget> {
                 stream: dynamicWidgetsStream,
               ),
               const SizedBox(
-                height: 50,
+                height: 10,
               ),
             ],
-          ),
+          ), flex: 0,),
           FloatingActionButton(
             onPressed: addDynamic,
             backgroundColor: Colors.white,
@@ -420,20 +441,22 @@ class DynamicWidget extends StatelessWidget {
   List<List<double?>?>? selectedCords;
   Function(int)? onDelete;
   int position = -1;
+  final locationService = LocationService();
+  final Map? cordDataMap;
 
   //setter for the position index
   void setIndex(index) {
     position = index;
   }
 
-  DynamicWidget({Key? key, required this.selectedCords}) : super(key: key);
+  DynamicWidget({Key? key, required this.selectedCords, this.cordDataMap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Row(
         //mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const SizedBox(width: 23),
+          const SizedBox(width: 17),
           //Expanded(
           TextButton(
             onPressed: () {
@@ -458,9 +481,10 @@ class DynamicWidget extends StatelessWidget {
               },
               controller: textController,
               decoration: InputDecoration(
-                suffix:  IconButton(
+                suffixIcon:  IconButton(
                   onPressed: () {
-                   // _useCurrentLocationButtonHandler(controller, label);
+                    if(cordDataMap == null)return;
+                    _useCurrentLocationButtonHandler(cordDataMap!, textController);
                   },
                   icon: const Icon(
                     Icons.my_location,
@@ -468,6 +492,7 @@ class DynamicWidget extends StatelessWidget {
                     color: Colors.blue,
                   ),
                 ),
+                suffixIconColor: Colors.blue,
                 hintText: 'Where to?',
                 focusedBorder: OutlineInputBorder(
                   borderSide: const BorderSide(color: Colors.black, width: 2.0),
@@ -498,8 +523,10 @@ class DynamicWidget extends StatelessWidget {
           ),
           //Expanded(
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               print("Link carasoul stuff here");
+              List temp = await locationService.getPlaceCoords(textController.text);
+              print(temp);
             },
             child: const Icon(
               Icons.keyboard_arrow_right_rounded,
@@ -536,8 +563,20 @@ class DynamicWidget extends StatelessWidget {
   }
 
   //When called, this function sets the first location of the journey to the users current location
-  _useCurrentLocationButtonHandler(TextEditingController controller, String key) async {
+  _useCurrentLocationButtonHandler(Map response, TextEditingController controller) async {
+    sharedPreferences.setString('source', json.encode(response));
+    String place = response['place'];
+    double latitudeOfPlace = response['location'].latitude;
+    double longitudeOfPlace = response['location'].longitude;
+    List<double?> currentLocationCoords = [latitudeOfPlace, longitudeOfPlace];
+    controller.text = place;
 
-    // TODO: W
+    if (position > ((selectedCords?.length) ?? 0) - 1 ||
+        (selectedCords?.isEmpty ?? true)) {
+      selectedCords?.add(currentLocationCoords);
+    } else {
+      selectedCords?[position] = currentLocationCoords;
+    }
   }
+
 }

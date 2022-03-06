@@ -60,7 +60,7 @@ class MyHomePageState extends State<MapPage> {
   @override
   void initState() {
     super.initState();
-    _cameraPosition = CameraPosition(target: currentLatLng, zoom: 12);
+    _cameraPosition = CameraPosition(target: latLng, zoom: 12);
     // _initialCameraPosition = CameraPosition(target: latLng, zoom: zoom);
     getRouteResponse();
   }
@@ -142,6 +142,15 @@ class MyHomePageState extends State<MapPage> {
   @override
   Widget build(BuildContext build) {
     return Scaffold(
+        floatingActionButton: FloatingActionButton(
+          heroTag: "refcous on live location",
+          onPressed: () {
+            controller?.animateCamera(
+                CameraUpdate.newCameraPosition(_cameraPosition));
+          },
+          child: const Icon(Icons.my_location),
+        ),
+
         /*
         body: SafeArea(
           child: Stack(
@@ -192,16 +201,6 @@ class MyHomePageState extends State<MapPage> {
               annotationOrder: [AnnotationType.symbol],
               // minMaxZoomPreference: const MinMaxZoomPreference(14, 17),
             )), //
-        //PLACEHOLDER FAB
-        FloatingActionButton(
-          heroTag: "btn3",
-          onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => PlaceSearchScreen(LocationService())));
-            print(
-                "This btn is to the search location screen. There is a screen in the design that comes before the search location screen so it is accessible from here for now");
-          },
-        ),
         Container(
           alignment: Alignment(-0.5, -0.5),
           child: (showMarkers)
