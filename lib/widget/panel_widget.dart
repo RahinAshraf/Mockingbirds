@@ -50,7 +50,6 @@ class PanelWidgetState extends State<PanelWidget> {
         children: [
           const Text("From: ",
               style: TextStyle(
-
                 fontWeight: FontWeight.normal,
                 fontSize: 20,
               )),
@@ -167,7 +166,7 @@ class PanelWidgetState extends State<PanelWidget> {
             ),
             onPressed: () {
               print("ALL_COORDINATES => ${widget.selectedCords}");
-              TripManager(${widget.selectedCords);
+              //TripManager(${widget.selectedCords);
             },
             child: const Text(
               "START",
