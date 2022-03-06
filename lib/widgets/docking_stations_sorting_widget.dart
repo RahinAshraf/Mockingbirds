@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import '../widgets/docks/docking_stations_list.dart';
+import 'package:flutter/material.dart';
 
 class DockSorter extends StatefulWidget {
   const DockSorter({required ScrollController controller});
@@ -16,44 +16,47 @@ class _DockSorter extends State<DockSorter> {
 
   List<DropdownMenuItem<String>> get dropdownItems {
     List<DropdownMenuItem<String>> menuItems = [
-      DropdownMenuItem(child: Text("Distance"), value: "Distance"),
-      DropdownMenuItem(child: Text("Favourites"), value: "Favourites"),
-      DropdownMenuItem(child: Text("Most Popular"), value: "Most Popular"),
-      DropdownMenuItem(child: Text("Suggestions"), value: "Suggestions"),
+      const DropdownMenuItem(child: Text("Distance"), value: "Distance"),
+      const DropdownMenuItem(child: Text("Favourites"), value: "Favourites"),
+      const DropdownMenuItem(
+          child: Text("Most Popular"), value: "Most Popular"),
+      const DropdownMenuItem(child: Text("Suggestions"), value: "Suggestions"),
     ];
     return menuItems;
   }
 
-  String selectedValue = "Distance";
+  String selectedFilter = "Distance";
 
   @override
   Widget build(BuildContext context) => ListView(
         children: [
           Row(
             children: [
-              Text("Sort by"),
-              SizedBox(width: 10.0),
+              const Text("Sort by: "),
+              const SizedBox(width: 10.0),
               DropdownButton(
-                value: selectedValue,
+                value: selectedFilter,
                 items: dropdownItems,
-                onChanged: (String? value) {
-                  // setState(() {
-                  // });
+                onChanged: (String? newFilter) {
+                  setState(() {
+                    selectedFilter = newFilter!;
+                    // TODO: reload sorted docks based on selected filter
+                  });
                 },
               ),
+              const SizedBox(width: 160.0),
               Tooltip(
                 message:
                     'Here, you can sort your docking stations based on some filter.',
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(25),
-                  gradient: const LinearGradient(
-                      colors: <Color>[Color(0x80b6e59e), Colors.white]),
+                  color: const Color(0xFFb6e59e),
                 ),
                 height: 50,
                 padding: const EdgeInsets.all(8.0),
                 preferBelow: false,
                 textStyle: const TextStyle(
-                  fontSize: 24,
+                  fontSize: 12,
                 ),
                 showDuration: const Duration(seconds: 2),
                 waitDuration: const Duration(seconds: 1),
@@ -64,7 +67,7 @@ class _DockSorter extends State<DockSorter> {
               ),
             ],
           ),
-          Divider(),
+          const Divider(),
           _dockingStationCarousel.build(),
         ],
       );
