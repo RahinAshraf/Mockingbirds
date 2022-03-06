@@ -16,11 +16,8 @@ import './screens/auth_screen.dart';
 import './screens/splash_screen.dart';
 
 import 'dart:io';
-import 'package:connectivity_plus/connectivity_plus.dart';
-import '../providers/connectivity_provider.dart';
 import '../utilities/connectivityStatusEnum.dart';
 import '../widgets/connection_error_widget.dart';
-//import '../utilities/connectivityStatusEnum.dart';
 
 
 
@@ -30,9 +27,6 @@ late SharedPreferences sharedPreferences;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   sharedPreferences = await SharedPreferences.getInstance();
-
-  //ConnectionStatusSingleton connectionStatus = ConnectionStatusSingleton.getInstance();
-  //connectionStatus.initialize();
 
 
   initializeLocation(); //Upon opening the app, store the users current location
@@ -80,29 +74,6 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    //final Future<FirebaseApp> _initialization = Firebase.initializeApp();
-      //Widget build(BuildContext context) {
-
-
-    // return Consumer<ConnectivityProvider>(
-    //     builder: (context, connectivityProvider, child) {
-    //   return Scaffold(
-    //   body:  connectivityProvider.connectionStatus != ConnectivityStatus.Offline 
-    //   ? 
-
-
-    // //     //works for now::::::
-    // // return MultiProvider(
-    // //   providers: [
-    // //     ChangeNotifierProvider(create: (context) => ConnectivityProvider()),
-    // //   ],
-    // //   child: FutureBuilder(
-    //   FutureBuilder(
-    //   //return FutureBuilder(
-    //     // Initialize FlutterFire:
-      
-
-
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => ConnectivityProvider()),
@@ -112,34 +83,10 @@ class _MyAppState extends State<MyApp> {
       return Scaffold(
       body:  connectivityProvider.connectionStatus != ConnectivityStatus.Offline 
       ? 
-
-
-    //     //works for now::::::
-    // return MultiProvider(
-    //   providers: [
-    //     ChangeNotifierProvider(create: (context) => ConnectivityProvider()),
-    //   ],
-    //   child: FutureBuilder(
       FutureBuilder(
-
-
-
         future: Firebase.initializeApp(), // _initialization,
         builder: (context, appSnapshot) {
-          //return OverlaySupport.global(child: MaterialApp(
           return MaterialApp(
-        //     //new stuff:"
-        //     builder:(context, child) {
-        //       return StreamBuilder<ConnectivityResult>(
-        //         stream: InternetConnectionService().connectionStatusController.stream,
-        //         builder: (context, snapshot) {
-        //         final conenctivityResult = snapshot.data;
-        //         if (connectivityResult == ConnectivityResult.none || connectivityResult == null) return ConnectionError();
-
-        //         return child;
-        //     }
-        // );
-        //     },  //new stuff ends here
             title: 'Veloplan',
             theme: ThemeData(
               scaffoldBackgroundColor: Color(0xffffffff),
@@ -180,9 +127,9 @@ class _MyAppState extends State<MyApp> {
                       }
                       return const AuthScreen();
                     }),
-          ); } //); 
+          );}
       ): ConnectionError(),
-      );}));   //));
+      );}));
   }
 
 
