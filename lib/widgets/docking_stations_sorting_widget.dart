@@ -14,17 +14,6 @@ class _DockSorter extends State<DockSorter> {
   var _dockingStationCarousel =
       DockingStationList(); //retrieves all of the docking station cards
 
-  List<DropdownMenuItem<String>> get dropdownItems {
-    List<DropdownMenuItem<String>> menuItems = [
-      const DropdownMenuItem(child: Text("Distance"), value: "Distance"),
-      const DropdownMenuItem(child: Text("Favourites"), value: "Favourites"),
-      const DropdownMenuItem(
-          child: Text("Most Popular"), value: "Most Popular"),
-      const DropdownMenuItem(child: Text("Suggestions"), value: "Suggestions"),
-    ];
-    return menuItems;
-  }
-
   String selectedFilter = "Distance";
 
   @override
@@ -35,8 +24,25 @@ class _DockSorter extends State<DockSorter> {
               const Text("Sort by: "),
               const SizedBox(width: 10.0),
               DropdownButton(
+                enableFeedback: true,
+                underline: Container(
+                  height: 1,
+                  color: Colors.green,
+                ),
+                elevation: 16,
+                iconDisabledColor: Colors.black,
+                style: const TextStyle(
+                  color: Colors.green,
+                  fontWeight: FontWeight.w500,
+                ),
                 value: selectedFilter,
-                items: dropdownItems,
+                items: ['Distance', 'Favourites', 'Most Popular', 'Suggestions']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
                 onChanged: (String? newFilter) {
                   setState(() {
                     selectedFilter = newFilter!;
