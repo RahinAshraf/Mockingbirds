@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:veloplan/screens/location_service.dart';
 import 'package:veloplan/screens/place_search_screen.dart';
+import 'package:veloplan/styles/styling.dart';
 import 'screens/map_screen.dart';
 import 'screens/profile_screen.dart';
 import 'sidebar.dart';
@@ -13,7 +14,36 @@ class Navbar extends StatelessWidget {
   Widget build(BuildContext context) {
     //every build method has a BuildContext method passed into it
     return MaterialApp(
-        theme: ThemeData(primaryColor: Colors.purple[900]), home: MainPage());
+        theme: ThemeData(
+          appBarTheme: const AppBarTheme(
+            backgroundColor: appBarColor,
+            foregroundColor: appBarTextColor,
+          ),
+          scaffoldBackgroundColor: const Color(0xffffffff),
+          primarySwatch: const MaterialColor(
+            0xff99d2a9, // 0%
+            const <int, Color>{
+              50: const Color(0xffa3d7b2), //10%
+              100: const Color(0xffaddbba), //20%
+              200: const Color(0xffb8e0c3), //30%
+              300: const Color(0xffc2e4cb), //40%
+              400: const Color(0xffcce9d4), //50%
+              500: const Color(0xffd6eddd), //60%
+              600: const Color(0xffe0f2e5), //70%
+              700: const Color(0xffebf6ee), //80%
+              800: const Color(0xfff5fbf6), //90%
+              900: const Color(0xffffff), //100%
+            },
+          ),
+          buttonTheme: ButtonTheme.of(context).copyWith(
+            // buttonColor: Colors.green,
+            //textTheme: ButtonTextTheme.primary,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+          ),
+        ),
+        home: MainPage());
   }
 }
 

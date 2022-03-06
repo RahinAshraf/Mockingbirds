@@ -10,51 +10,49 @@ class NavigationDrawerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: Container(
-        child: ListView(
-          children: <Widget>[
-            const SizedBox(height: 48),
-            buildMenuItem(
-              text: 'Schedule',
-              icon: Icons.date_range,
-              onClicked: () => selectedItem(context, 0),
-            ),
-            buildMenuItem(
-              text: 'My Journeys',
-              icon: Icons.history,
-              onClicked: () => selectedItem(context, 1),
-            ),
-            buildMenuItem(
-              text: 'Favourites',
-              icon: Icons.favorite,
-              onClicked: () => selectedItem(context, 2),
-            ),
-            buildMenuItem(
-              text: 'Statistics',
-              icon: Icons.assessment_outlined,
-              onClicked: () => selectedItem(context, 3),
-            ),
-            //decided to remove this, not sure if it looks nice
-            const SizedBox(height: 24),
-            Divider(color: Colors.grey),
-            const SizedBox(height: 24),
-            buildMenuItem(
-              text: 'Help',
-              icon: Icons.chat_bubble_outlined,
-              onClicked: () => selectedItem(context, 4),
-            ),
-            buildMenuItem(
-              text: 'Settings',
-              icon: Icons.settings,
-              onClicked: () => selectedItem(context, 5),
-            ),
-            buildMenuItem(
-              text: 'Log Out',
-              icon: Icons.logout,
-              onClicked: () => FirebaseAuth.instance.signOut(),
-            ),
-          ],
-        ),
+      child: ListView(
+        children: <Widget>[
+          const SizedBox(height: 48),
+          buildMenuItem(
+            text: 'Schedule',
+            icon: Icons.date_range,
+            onClicked: () => selectedItem(context, 0),
+          ),
+          buildMenuItem(
+            text: 'My Journeys',
+            icon: Icons.history,
+            onClicked: () => selectedItem(context, 1),
+          ),
+          buildMenuItem(
+            text: 'Favourites',
+            icon: Icons.favorite,
+            onClicked: () => selectedItem(context, 2),
+          ),
+          buildMenuItem(
+            text: 'Statistics',
+            icon: Icons.assessment_outlined,
+            onClicked: () => selectedItem(context, 3),
+          ),
+          //decided to remove this, not sure if it looks nice
+          const SizedBox(height: 24),
+          const Divider(color: Colors.grey),
+          const SizedBox(height: 24),
+          buildMenuItem(
+            text: 'Help',
+            icon: Icons.chat_bubble_outlined,
+            onClicked: () => selectedItem(context, 4),
+          ),
+          buildMenuItem(
+            text: 'Settings',
+            icon: Icons.settings,
+            onClicked: () => selectedItem(context, 5),
+          ),
+          buildMenuItem(
+            text: 'Log Out',
+            icon: Icons.logout,
+            onClicked: () => FirebaseAuth.instance.signOut(),
+          ),
+        ],
       ),
     );
   }
@@ -64,7 +62,7 @@ class NavigationDrawerWidget extends StatelessWidget {
     required IconData icon,
     VoidCallback? onClicked,
   }) {
-    final color = Colors.green;
+    const color = Colors.green;
 
     return ListTile(
       leading: Icon(icon),
@@ -78,7 +76,7 @@ class NavigationDrawerWidget extends StatelessWidget {
     switch (i) {
       case 0:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => Schedule(),
+          builder: (context) => SchedulePage(),
         ));
         break;
       case 1:
