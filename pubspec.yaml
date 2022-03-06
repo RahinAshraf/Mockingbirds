@@ -57,8 +57,6 @@ dependencies:
   extended_nested_scroll_view: ^5.0.0
 
 
-
-
   shared_preferences: ^2.0.13
   mapbox_gl: ^0.15.0
   sliding_up_panel: ^2.0.0+1
