@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../widget/profile_widget.dart';
-import '../widget/textfield_widget.dart';
+import '../widgets/profile_widget.dart';
+import '../widgets/textfield_widget.dart';
 
 //import 'package:user_profile_example/widget/button_widget.dart';
 
@@ -46,9 +46,9 @@ class _EditProfileState extends State<EditProfile> {
           return;
         } else {
           await FirebaseFirestore.instance.collection('users').doc(userID).set({
-            if(_firstName != '') 'firstName': _firstName,
-            if(_lastName != '') 'lastName': _lastName,
-            if(_username != '') 'username': _username
+            if (_firstName != '') 'firstName': _firstName,
+            if (_lastName != '') 'lastName': _lastName,
+            if (_username != '') 'username': _username
           }, SetOptions(merge: true));
           Navigator.of(context).pop();
         }

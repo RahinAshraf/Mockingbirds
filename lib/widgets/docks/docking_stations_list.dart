@@ -2,16 +2,11 @@ import 'docking_station_card.dart';
 import 'package:flutter/material.dart';
 import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
-import 'custom_carousel.dart';
 
-///Class that loads information of docking stations into cards and builds a carousel
-class dockingStationCarousel {
+/// Class that loads information of docking stations onto cards
+class DockingStationList {
   late List<Widget> dockingStationCards;
-  List<Map> carouselData = [];
-
-  AllDocksCard() {
-    retrieveAllCards();
-  }
+  List<Map> cardData = [];
 
   Future<List<Widget>> retrieveAllCards() {
     final dockingStationManager _stationManager = dockingStationManager();
@@ -24,7 +19,7 @@ class dockingStationCarousel {
   List<Widget> createDockingCards(List<DockingStation> docks) {
     for (int index = 0; index < docks.length; index++) {
       for (var station in docks) {
-        carouselData.add(
+        cardData.add(
           {
             'index': index,
             'name': station.name,
@@ -34,37 +29,33 @@ class dockingStationCarousel {
         );
       }
     }
-
     dockingStationCards = List<Widget>.generate(
         docks.length,
         (index) => dockingStationCard(
-              carouselData[index]['index'],
-              carouselData[index]['name'],
-              carouselData[index]['nb_bikes'],
-              carouselData[index]['nb_empty_docks'],
+              cardData[index]['index'],
+              cardData[index]['name'],
+              cardData[index]['nb_bikes'],
+              cardData[index]['nb_empty_docks'],
             ));
 
     return dockingStationCards;
   }
 
-  FutureBuilder<List<Widget>> buildCarousel() {
+  FutureBuilder<List<Widget>> build() {
     return FutureBuilder<List<Widget>>(
         future: retrieveAllCards(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return Stack(
-              children: [
-                Container(
-                  height: 200,
-                  width: MediaQuery.of(context).size.width,
-                  child: CustomCarousel(cards: dockingStationCards),
-                )
-              ],
+            return SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: dockingStationCards,
+              ),
             );
           } else {
             return SizedBox(
               height: MediaQuery.of(context).size.height / 1.3,
-              child: Center(
+              child: const Center(
                 child: CircularProgressIndicator(),
               ),
             );

@@ -5,7 +5,8 @@ import 'package:veloplan/screens/location_service.dart';
 import 'package:veloplan/screens/place_search_screen.dart';
 import 'screens/map_screen.dart';
 import 'screens/profile_screen.dart';
-import '../widget/navigation_drawer_widget.dart';
+import 'widgets/navigation_drawer_widget.dart';
+import '../screens/dock_sorter_screen.dart';
 
 class Navbar extends StatelessWidget {
   //We need to override the Build method because StatelessWidget has a build method
@@ -52,6 +53,10 @@ class _MainPageState extends State<MainPage> {
               heroTag: "btn2",
               onPressed: () {
                 onTabTapped(1);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => DockSorterScreen()));
                 print("Link journey_planner screen to this btn");
               },
               child: const Icon(
