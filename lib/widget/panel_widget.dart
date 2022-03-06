@@ -456,7 +456,7 @@ class DynamicWidget extends StatelessWidget {
     return Row(
         //mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const SizedBox(width: 23),
+          const SizedBox(width: 17),
           //Expanded(
           TextButton(
             onPressed: () {
