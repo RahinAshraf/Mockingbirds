@@ -13,7 +13,31 @@ class Navbar extends StatelessWidget {
   Widget build(BuildContext context) {
     //every build method has a BuildContext method passed into it
     return MaterialApp(
-        theme: ThemeData(primaryColor: Colors.purple[900]), home: MainPage());
+        theme: ThemeData(
+          scaffoldBackgroundColor: const Color(0xffffffff),
+          primarySwatch: const MaterialColor(
+            0xff99d2a9, // 0%
+            <int, Color>{
+              50: Color(0xffa3d7b2), //10%
+              100: Color(0xffaddbba), //20%
+              200: Color(0xffb8e0c3), //30%
+              300: Color(0xffc2e4cb), //40%
+              400: Color(0xffcce9d4), //50%
+              500: Color(0xffd6eddd), //60%
+              600: Color(0xffe0f2e5), //70%
+              700: Color(0xffebf6ee), //80%
+              800: Color(0xfff5fbf6), //90%
+              900: Color(0xffffffff), //100%
+            },
+          ),
+          buttonTheme: ButtonTheme.of(context).copyWith(
+            //textTheme: ButtonTextTheme.primary,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+          ),
+        ),
+        home: MainPage());
   }
 }
 
@@ -52,7 +76,8 @@ class _MainPageState extends State<MainPage> {
               heroTag: "btn2",
               onPressed: () {
                 onTabTapped(1);
-                Navigator.push(context, MaterialPageRoute(builder: (context) => TripScheduler()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => TripScheduler()));
                 print("Link journey_planner screen to this btn");
               },
               child: const Icon(
@@ -80,7 +105,6 @@ class _MainPageState extends State<MainPage> {
       showUnselectedLabels: true,
       currentIndex: currentIndex,
       onTap: onTabTapped, //(index) => setState(() => currentIndex = index),
-
       items: retrieveNavItems(),
     );
   }
