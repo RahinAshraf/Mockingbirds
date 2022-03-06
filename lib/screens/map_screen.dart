@@ -138,35 +138,39 @@ class MyHomePageState extends State<MapPage> {
         ));
   }
 
-  SizedBox _buildWeatherIcon() {
-    return SizedBox(
-        height: MediaQuery.of(context).size.height / 9,
-        width: MediaQuery.of(context).size.width / 9,
-        child: GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          onTap: () {
-            Navigator.of(context).push(HeroDialogRoute(builder: (context) {
-              return _WeatherPopupCard(
-                weather: weather,
-              );
-            }));
-          },
-          child: Hero(
-            tag: "_heroWeather",
-            child: Material(
-              color: Colors.green,
-              elevation: 2,
+  Align _buildWeatherIcon() {
+    return Align(
+      //EdgeInsets.only(left: 300, top: 150, right: 40, bottom: 550),
+      alignment: Alignment(0.9, -0.75),
+      child: SizedBox(
+          height: MediaQuery.of(context).size.height / 15,
+          width: MediaQuery.of(context).size.width / 7,
+          child: GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onTap: () {
+              Navigator.of(context).push(HeroDialogRoute(builder: (context) {
+                return _WeatherPopupCard(
+                  weather: weather,
+                );
+              }));
+            },
+            child: Hero(
+              tag: "_heroWeather",
+              child: Material(
+                color: Colors.green[300],
+                elevation: 2,
 
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(32)),
-              //shape: CircleBorder(side: BorderSide(color: Colors.green)),
-              child: Image.network(
-                //late problem sort it
-                'http://openweathermap.org/img/w/$weatherIcon.png',
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(32)),
+                //shape: CircleBorder(side: BorderSide(color: Colors.green)),
+                child: Image.network(
+                  //late problem sort it
+                  'http://openweathermap.org/img/w/$weatherIcon.png',
+                ),
               ),
             ),
-          ),
-        ));
+          )),
+    );
   }
 }
 
@@ -182,7 +186,7 @@ class _WeatherPopupCard extends StatelessWidget {
         child: Hero(
           tag: "_heroWeather",
           child: Material(
-            color: Colors.green,
+            color: Colors.green[300],
             elevation: 2,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
