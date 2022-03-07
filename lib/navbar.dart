@@ -76,9 +76,13 @@ class _MainPageState extends State<MainPage> {
               heroTag: "btn2",
               onPressed: () {
                 onTabTapped(1);
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => TripScheduler()));
-                print("Link journey_planner screen to this btn");
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) => _buildPopupDialog(context),
+                );
+                // Navigator.push(context,
+                //     MaterialPageRoute(builder: (context) => TripScheduler()));
+                // print("Link journey_planner screen to this btn");
               },
               child: const Icon(
                 Icons.directions_bike,
@@ -134,5 +138,106 @@ class _MainPageState extends State<MainPage> {
         currentIndex = index;
       }
     });
+  }
+
+  // MARIJA
+  Widget _buildPopupDialog(BuildContext context) {
+    return Stack(
+      alignment: Alignment(0, -0.28),
+      children: [
+        AlertDialog(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10.0))),
+          contentPadding: const EdgeInsets.fromLTRB(0, 10.0, 0, 0.0),
+          titlePadding: EdgeInsets.fromLTRB(24.0, 40.0, 24.0, 0.0),
+          title: Center(
+            child: const Text(
+              'Choose how to proceed with your trip!',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 24.0,
+                color: Color(0xFF7C8691),
+              ),
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10.0),
+                child: const Text(
+                  "Only one way to find out.",
+                  style: TextStyle(
+                    color: Color(0xffD3DAE0),
+                    fontWeight: FontWeight.w600,
+                    fontSize: 18.0,
+                  ),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
+                decoration: const BoxDecoration(
+                  color: Color(0XFFF1F5F8),
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(10.0),
+                      bottomRight: Radius.circular(10.0)),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    TextButton(
+                      style: ButtonStyle(
+                        overlayColor: MaterialStateProperty.all<Color>(
+                            Colors.green.shade200),
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            const Color(0XFFFBAB4B)),
+                      ),
+                      onPressed: () {
+                        // TODO: redirect to group ID
+                      },
+                      child: const Text(
+                        "Join journey",
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10.0),
+                    TextButton(
+                      style: ButtonStyle(
+                        overlayColor: MaterialStateProperty.all<Color>(
+                            Colors.green.shade200),
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            const Color(0XFFFBAB4B)),
+                      ),
+                      onPressed: () {
+                        // TODO: redirect to new journey planner
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => TripScheduler()));
+                      },
+                      child: const Text(
+                        "Plan journey",
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        Image(
+            image: NetworkImage(
+                "https://icons.iconarchive.com/icons/custom-icon-design/flatastic-1/72/alert-icon.png")),
+      ],
+    );
   }
 }
