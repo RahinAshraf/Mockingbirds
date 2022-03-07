@@ -5,7 +5,7 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import '../.env.dart';
-import '../widget/panel_widget.dart';
+import '../widgets/panel_widget.dart';
 import 'map_screen.dart';
 
 class JourneyPlanner extends StatefulWidget {

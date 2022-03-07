@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:veloplan/screens/location_service.dart';
 import 'package:veloplan/screens/place_search_screen.dart';
 import 'screens/map_screen.dart';
 import 'screens/profile_screen.dart';
-import '../widget/navigation_drawer_widget.dart';
+import 'sidebar.dart';
 
 class Navbar extends StatelessWidget {
   //We need to override the Build method because StatelessWidget has a build method
@@ -24,16 +26,19 @@ class _MainPageState extends State<MainPage> {
   int currentIndex = 1; //index of the screens
 
   final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
-  final screens = [
+
+  final _currentUser = FirebaseAuth.instance.currentUser!.uid;
+
+  var screens = [
     Placeholder(), //need to replace this with something?
     MapPage(),
-    Profile(),
   ];
 
   @override
   Widget build(BuildContext context) {
+    screens.add(Profile(_currentUser));
     return Scaffold(
-      // body: screens[currentIndex], //looses the progress
+        // body: screens[currentIndex], //looses the progress
         body: IndexedStack(
           index: currentIndex,
           children: screens, //keeps the screens alive

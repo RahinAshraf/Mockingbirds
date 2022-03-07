@@ -7,6 +7,7 @@ import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart' as LatLong;
 import '../.env.dart';
+import 'package:veloplan/widgets/carousel/station_carousel.dart';
 import 'package:veloplan/screens/location_service.dart';
 
 const double zoom = 16;
@@ -74,6 +75,20 @@ class MyHomePageState extends State<MapPage> {
     );
   }
 
+  MapboxMap buildMap() {
+    return MapboxMap(
+      accessToken: MAPBOX_ACCESS_TOKEN,
+      initialCameraPosition: _initialCameraPosition,
+      onMapCreated: _onMapCreated,
+      myLocationEnabled: true,
+      myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
+      minMaxZoomPreference: const MinMaxZoomPreference(14, 17),
+    );
+  }
+
+//This is just for testing purposes to see the docking station carousel:
+  var _dockingStationCarousel = dockingStationCarousel();
+
   @override
   Widget build(BuildContext build) {
     return Scaffold(
@@ -81,17 +96,11 @@ class MyHomePageState extends State<MapPage> {
         child: Stack(
           children: [
             SizedBox(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              child: MapboxMap(
-                accessToken: MAPBOX_ACCESS_TOKEN,
-                initialCameraPosition: _initialCameraPosition,
-                onMapCreated: _onMapCreated,
-                myLocationEnabled: true,
-                myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
-                minMaxZoomPreference: const MinMaxZoomPreference(14, 17),
-              ),
-            ),
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                child: buildMap()),
+
+            //Container(child: _dockingStationCarousel.buildCarousel()),
 
             //PLACEHOLDER FAB
             FloatingActionButton(

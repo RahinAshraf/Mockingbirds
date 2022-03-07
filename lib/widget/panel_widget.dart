@@ -1,9 +1,7 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:veloplan/screens/place_search_screen.dart';
-
 import '../models/destination_choice.dart';
 import '../screens/location_service.dart';
 
@@ -49,7 +47,6 @@ class PanelWidgetState extends State<PanelWidget> {
         children: [
           const Text("From: ",
               style: TextStyle(
-
                 fontWeight: FontWeight.normal,
                 fontSize: 20,
               )),
