@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:drag_and_drop_lists/drag_and_drop_list.dart';
+import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:veloplan/screens/journey_planner_screen.dart';
@@ -29,7 +31,7 @@ class PanelWidget extends StatefulWidget {
   final ScrollController scrollController;
   final PanelController panelController;
   final StreamController<List<DynamicWidget>> dynamicWidgets;
-  final List<DynamicWidget> listDynamic;
+  final Dra<DynamicWidget> listDynamic;
   final List<List<double?>?> selectedCords;
   final TextEditingController fromTextEditController;
   final TextEditingController toTextEditController;
@@ -66,6 +68,8 @@ class PanelWidgetState extends State<PanelWidget> {
       TextEditingController();
   late Map<String, List<double?>> staticListMap;
   late Map response;
+  late List<DragAndDropList> lists;
+
 
   static const String fromLabelKey ="From";
   static const String toLabelKey = "To";
@@ -116,6 +120,11 @@ class PanelWidgetState extends State<PanelWidget> {
       widget.dynamicWidgets.sink.add(widget.listDynamic);
 
     });
+
+    lists = allLists.map().toList();
+
+
+
 
     super.initState();
   }
@@ -252,6 +261,15 @@ class PanelWidgetState extends State<PanelWidget> {
           Expanded(child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              DragAndDropLists(
+                  onItemReorder: (int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {
+
+                  },
+                  onListReorder: (int oldListIndex, int newListIndex) {
+
+                  },
+                  children: children
+              ),
               StreamBuilder<List<DynamicWidget>>(
                 builder: (_, snapshot) {
                   List<DynamicWidget> listOfDynamics = snapshot.data ?? [];
@@ -529,7 +547,7 @@ class DynamicWidget extends StatelessWidget {
               print(temp);
             },
             child: const Icon(
-              Icons.keyboard_arrow_right_rounded,
+              Icons.info_outline,
               size: 50,
               color: Colors.green,
             ),

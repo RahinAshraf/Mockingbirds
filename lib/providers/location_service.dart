@@ -13,7 +13,7 @@ class LocationService {
 
   //Adds the retrieved json data to a list
   void getPlaceFeatures(String input) async {
-    final String url = "https://api.mapbox.com/geocoding/v5/mapbox.places/$input.json?limit=10&proximity=-0.12542189962264239,51.50218910230291&bbox=-0.591614,51.265980,0.279053,51.707474&access_token=$key"; //geocoding Api url request for data based on the users input, only showing retrieving matching results that are in London
+    final String url = "https://api.mapbox.com/geocoding/v5/mapbox.places/$input.json?limit=10&bbox=-0.591614,51.265980,0.279053,51.707474&access_token=$key"; //geocoding Api url request for data based on the users input, only showing retrieving matching results that are in London
     var response = await http.get(Uri.parse(url));
     var json = convert.jsonDecode(response.body);
     final listOfPlace = (PlaceModel.fromJson(Map.from(json)).featureList);

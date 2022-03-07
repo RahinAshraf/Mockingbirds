@@ -58,6 +58,7 @@ dependencies:
   shared_preferences: ^2.0.13
   mapbox_gl: ^0.15.0
   sliding_up_panel: ^2.0.0+1
+  drag_and_drop_lists: ^0.3.2+2
 
 
   # The following adds the Cupertino Icons font to your application.
