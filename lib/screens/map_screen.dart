@@ -16,7 +16,7 @@ import 'package:veloplan/screens/place_search_screen.dart';
 import '../.env.dart';
 import 'package:veloplan/providers/location_service.dart';
 import '../screens/turn_by_turn_screen.dart';
-import '../helpers/zoom_helper.dart';
+import '../helpers/navigation_helpers/zoom_helper.dart';
 import 'package:scoped_model/scoped_model.dart';
 import '../scoped_models/main.dart';
 
