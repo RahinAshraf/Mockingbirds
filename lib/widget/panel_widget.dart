@@ -143,11 +143,14 @@ class PanelWidgetState extends State<PanelWidget> {
         children: [
           const SizedBox(width: 10,),
            Container(width: 50,
-           child: Text(label,
-               style: const TextStyle(
-                 fontWeight: FontWeight.normal,
-                 fontSize: 20,
-               )),),
+           child: FittedBox(
+             fit: BoxFit.scaleDown,
+             child: Text(label,
+                 style: const TextStyle(
+                   fontWeight: FontWeight.normal,
+                   fontSize: 20,
+                 )),
+           ),),
 
           const SizedBox(width: 20),
           Expanded(
