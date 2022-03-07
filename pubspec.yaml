@@ -67,6 +67,7 @@ dependencies:
   mockito: ^5.1.0
   dartleaf: ^1.1.4
   tuple: ^2.0.0
+  scoped_model: ^2.0.0-nullsafety.0
 
 dev_dependencies:
   flutter_test:
