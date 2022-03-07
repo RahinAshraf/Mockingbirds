@@ -186,7 +186,9 @@ class MyHomePageState extends State<MapPage> {
                 child: FloatingActionButton(
                   heroTag: "+",
                   child: Icon(Icons.add, color: Colors.white),
-                  onPressed: zoomIn,
+                  onPressed: () {
+                    _cameraPosition = zoomIn(_cameraPosition, controller);
+                  },
                 ),
               ),
               Container(
@@ -194,7 +196,9 @@ class MyHomePageState extends State<MapPage> {
                 child: FloatingActionButton(
                   heroTag: "-",
                   child: Icon(Icons.horizontal_rule, color: Colors.white),
-                  onPressed: zoomOut,
+                  onPressed: () {
+                    _cameraPosition = zoomOut(_cameraPosition, controller);
+                  },
                 ),
               ),
               Container(
@@ -282,18 +286,11 @@ class MyHomePageState extends State<MapPage> {
   }
 
   void refocusCamera(List<LatLng> journey) {
-    LatLng center = getCentroid(journey);
-    // LatLng furthestPoint = getFurthestPointFromCenter(journey, center);
-    // var top = getTopBound(journey);
-    // var bounds = LatLngBounds(northeast: furthestPoint, southwest: top);
-    // var target = LatLng(
-    //     (bounds.northeast.latitude + bounds.southwest.latitude) / 2,
-    //     (bounds.northeast.longitude + bounds.southwest.longitude) / 2);
-
-    // print(target.toString());
+    LatLng center = getCenter(journey);
+    print(center);
     _cameraPosition = CameraPosition(
         target: center, //target, //center,
-        zoom: 15, //getZoom(getRadius(journey, center)),
+        zoom: 14, //getZoom(getRadius(journey, center)),
         tilt: 5);
     controller!.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
   }
@@ -377,21 +374,21 @@ class MyHomePageState extends State<MapPage> {
     }
   }
 
-  void zoomIn() {
-    _cameraPosition = CameraPosition(
-        target: _cameraPosition.target,
-        zoom: _cameraPosition.zoom + 0.5,
-        tilt: 5);
-    controller!.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
-  }
+  // void zoomIn() {
+  //   _cameraPosition = CameraPosition(
+  //       target: _cameraPosition.target,
+  //       zoom: _cameraPosition.zoom + 0.5,
+  //       tilt: 5);
+  //   controller!.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
+  // }
 
-  void zoomOut() {
-    _cameraPosition = CameraPosition(
-        target: _cameraPosition.target,
-        zoom: _cameraPosition.zoom - 0.5,
-        tilt: 5);
-    controller!.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
-  }
+  // void zoomOut() {
+  //   _cameraPosition = CameraPosition(
+  //       target: _cameraPosition.target,
+  //       zoom: _cameraPosition.zoom - 0.5,
+  //       tilt: 5);
+  //   controller!.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
+  // }
 }
 
 // TODO: Fix camera zoom

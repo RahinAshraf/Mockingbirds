@@ -4,162 +4,54 @@ import 'package:tuple/tuple.dart';
 import 'package:vector_math/vector_math.dart';
 import 'package:vector_math/vector_math.dart';
 
-// import 'package:flutter_map/flutter_map.dart' as fm;
-// import 'package:latlong/latlong.dart' as fm;
-// import 'package:latlong2/latlong.dart' as fm;
-// import 'package:dartleaf/dartleaf.dart' as fm;
-// import 'package:dartleaf/dartleaf/src/latlng' as fm;
-// import 'package:dartleaf/src/latlng.dart' as fm;
+/// Helper methods related to map zooming
+/// Author(s): Elisabeth Koren Halvorsen k20077737
 
-// as fm;
+/// Gets the midpoint between point [a] and [b], Will only work for close distances
+LatLng getMidpoint(LatLng a, LatLng b) {
+  return LatLng((a.latitude + b.latitude) / 2, (a.longitude + b.longitude) / 2);
+}
 
-const double earthRadius = 6371000;
-// fm.LatLng aa = fm.LatLng(51.514951, -0.112762);
-
-// var bound = fm.LatLngBounds.fromArray([
-//   fm.LatLng(51.514951, -0.112762),
-//   fm.LatLng(51.513146, -0.115256),
-//   fm.LatLng(51.511407, -0.125497),
-//   fm.LatLng(51.506053, -0.130310),
-//   fm.LatLng(51.502254, -0.217760),
-// ]
-// fm.LatLng(51.514951, -0.112762),
-// fm.LatLng(51.513146, -0.115256),
-// fm.LatLng(51.511407, -0.125497),
-// fm.LatLng(51.506053, -0.130310),
-// fm.LatLng(51.502254, -0.217760),
-// );
-
-LatLng getFurthestPointFromCenter(List<LatLng> points, LatLng center) {
-  double max = 0;
-  LatLng maxPoint = LatLng(0, 0);
-
-  for (LatLng point in points) {
-    double dist = calculateDistance(center, point);
-    if (dist > max) {
-      maxPoint = point;
-    }
+/// gets the bottom left corner and the top right corner from a list of [points].
+/// returns in order [bottomLeft, topRight]
+Tuple2<LatLng, LatLng> getCornerCoordinates(List<LatLng> points) {
+  double smallestLat = points[0].latitude;
+  double greatestLat = points[0].latitude;
+  double smallestLng = points[0].longitude;
+  double greatestLng = points[0].longitude;
+  for (int i = 1; i < points.length; ++i) {
+    var current = points[i];
+    if (smallestLat > current.latitude) smallestLat = current.latitude;
+    if (greatestLng < current.latitude) greatestLat = current.latitude;
+    if (smallestLng > current.longitude) smallestLng = current.longitude;
+    if (greatestLng < current.longitude) greatestLng = current.longitude;
   }
-  return maxPoint;
+  return Tuple2(
+      LatLng(smallestLat, greatestLng), LatLng(greatestLat, smallestLng));
 }
 
-double calculateDistance(LatLng pos1, LatLng pos2) {
-  var p = 0.017453292519943295;
-  var a = 0.5 -
-      cos((pos2.latitude - pos1.latitude) * p) / 2 +
-      cos(pos1.latitude * p) *
-          cos(pos2.latitude * p) *
-          (1 - cos((pos2.longitude - pos1.longitude) * p)) /
-          2;
-  return 12742 * asin(sqrt(a));
+/// gets the center from [points]
+LatLng getCenter(List<LatLng> points) {
+  var corners = getCornerCoordinates(points);
+  return getMidpoint(corners.item1, corners.item2);
 }
 
-LatLng getCentroid(List<LatLng> points) {
-  double lat = 0;
-  double lng = 0;
-  int n = points.length;
-
-  for (LatLng point in points) {
-    lat += point.latitude;
-    lng += point.longitude;
-  }
-
-  return LatLng(lat / n, lng / n);
+/// zoom [cameraPosition] in via the [controller]
+CameraPosition zoomIn(
+    CameraPosition _cameraPosition, MapboxMapController? controller) {
+  _cameraPosition = CameraPosition(
+      target: _cameraPosition.target,
+      zoom: _cameraPosition.zoom + 0.5,
+      tilt: 5);
+  controller!.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
+  return _cameraPosition;
 }
 
-Tuple2<double, double> getDeltaLatLng(LatLng a, LatLng b) {
-  return Tuple2<double, double>(
-      b.latitude - a.latitude, b.longitude - a.longitude);
+/// zoom [cameraPosition] out via the [controller]
+CameraPosition zoomOut(
+    CameraPosition cameraPosition, MapboxMapController? controller) {
+  cameraPosition = CameraPosition(
+      target: cameraPosition.target, zoom: cameraPosition.zoom - 0.5, tilt: 5);
+  controller!.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+  return cameraPosition;
 }
-
-LatLng getTopBound(List<LatLng> points) {
-  var center = getCentroid(points);
-  var furthest = getFurthestPointFromCenter(points, center);
-  var delta = getDeltaLatLng(furthest, center);
-  return LatLng(center.latitude + delta.item1, center.longitude + delta.item2);
-}
-
-List<LatLng> points = [
-  LatLng(51.514951, -0.112762),
-  LatLng(51.513146, -0.115256),
-  LatLng(51.511407, -0.125497),
-  LatLng(51.506053, -0.130310),
-  LatLng(51.502254, -0.217760),
-];
-List<double> latLng2Cartesian3DVector(LatLng point) {
-  var theta = radians(90 - point.latitude);
-  // print("theta 1: " + theta.toString());
-  var phi = radians(point.longitude);
-  return [
-    earthRadius * sin(theta) * cos(phi),
-    earthRadius * sin(theta) * sin(phi),
-    earthRadius * cos(theta)
-  ];
-}
-
-LatLng cartesian3DVector2LatLng(List<double> vector) {
-  var phi = degrees(atan(vector[1] / vector[0]));
-  var theta = 90 -
-      degrees(atan(sqrt(pow(vector[0], 2) + pow(vector[1], 2)) / vector[2]));
-  var radius = sqrt(pow(vector[0], 2) + pow(vector[1], 2) + pow(vector[2], 2));
-  return LatLng(theta, phi);
-}
-
-List<List<double>> latLngs2Sperical3DVectors(List<LatLng> points) {
-  List<List<double>> latlongs = [[]];
-  for (var p in points) {
-    latlongs.add(latLng2Cartesian3DVector(p));
-  }
-  return latlongs;
-}
-
-List<double> getMidpointBetween2Coordinates(List<double> a, List<double> b) {
-  if (a.length == 3 && b.length == 3) {
-    var C = [
-      (a[0] + b[0]) / 2,
-      (a[1] + b[1]) / 2,
-      (a[2] + b[2]) / 2,
-    ];
-    var L = sqrt(pow(C[0], 2) + pow(C[1], 2) + pow(C[2], 2));
-    return [C[0] / L, C[1] / L, C[2] / L];
-  }
-  return [];
-}
-
-List<double> getMidpointsBetweenCoordinates(List<List<double>> points) {
-  List<double> mid = [];
-  if (points.length > 1) {
-    mid = getMidpointBetween2Coordinates(points[0], points[1]);
-    for (int i = 2; i < points.length - 1; i++) {
-      mid = getMidpointBetween2Coordinates(mid, points[i]);
-    }
-  }
-  return mid;
-}
-
-// main() {
-// //   var a = getMidpointBetween2Coordinates(
-// //       latLng2Cartesian3DVector(points[0]), latLng2Cartesian3DVector(points[3]));
-// //   // print("x: " +
-// //   //     a[0].toString() +
-// //   //     "   y: " +
-// //   //     a[1].toString() +
-// //   //     "   z: " +
-// //   //     a[2].toString());
-// //   var b = cartesian3DVector2LatLng(a);
-// //   print(b.toString());
-
-//   // var centroid = getCentroid(points);
-//   // var furthest = getFurthestPointFromCenter(points, centroid);
-//   // var delta = getDeltaLatLng(furthest, centroid);
-//   var deltaLatLng = getTopBound(points);
-//   print(deltaLatLng.toString());
-
-// //   // var b = latLng2Cartesian3DVector(points[0]);
-// //   // var c = cartesian3DVector2LatLng(b);
-// //   // // print(b.toString());
-// //   // print("before: " + points[0].toString());
-// //   // print("after: " + c.toString());
-// //   // var b = getMidpointsBetweenCoordinates(latLngs2Sperical3DVectors(points));
-// //   // print("b: " + b.toString());
-// }
