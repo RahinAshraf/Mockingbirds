@@ -31,7 +31,7 @@ class PanelWidget extends StatefulWidget {
   final ScrollController scrollController;
   final PanelController panelController;
   final StreamController<List<DynamicWidget>> dynamicWidgets;
-  final Dra<DynamicWidget> listDynamic;
+  final List<DynamicWidget> listDynamic;
   final List<List<double?>?> selectedCords;
   final TextEditingController fromTextEditController;
   final TextEditingController toTextEditController;
@@ -120,12 +120,6 @@ class PanelWidgetState extends State<PanelWidget> {
       widget.dynamicWidgets.sink.add(widget.listDynamic);
 
     });
-
-    lists = allLists.map().toList();
-
-
-
-
     super.initState();
   }
 
@@ -261,15 +255,6 @@ class PanelWidgetState extends State<PanelWidget> {
           Expanded(child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              DragAndDropLists(
-                  onItemReorder: (int oldItemIndex, int oldListIndex, int newItemIndex, int newListIndex) {
-
-                  },
-                  onListReorder: (int oldListIndex, int newListIndex) {
-
-                  },
-                  children: children
-              ),
               StreamBuilder<List<DynamicWidget>>(
                 builder: (_, snapshot) {
                   List<DynamicWidget> listOfDynamics = snapshot.data ?? [];
