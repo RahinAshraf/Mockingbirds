@@ -24,6 +24,20 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>MGLMapboxAccessToken</key>
+	<string>pk.eyJ1IjoibW9ja2luZ2JpcmRzZWxpdGUiLCJhIjoiY2wwaTJ2em4wMDA0ZzNrcGtremZuM3czZyJ9.PDaTlZiPjDa7sGjF-aKnJQ</string>
+	<key>NSCameraUsageDescription</key>
+	<string>We need access to your camera to let you take an image</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Helps improve Open Street Maps</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Helps improve Open Street Maps</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Helps improve Open Street Maps</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>We need access to your microphone</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need access to your gallery to let you pick an image</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
