@@ -573,21 +573,6 @@ class DynamicWidget extends StatelessWidget {
             ),
           ),
         ),
-        //Expanded(
-        TextButton(
-          onPressed: () async {
-            print("Link carasoul stuff here");
-            List temp =
-                await locationService.getPlaceCoords(textController.text);
-            print(temp);
-          },
-          child: const Icon(
-            Icons.keyboard_arrow_right_rounded,
-            size: 50,
-            color: Colors.green,
-          ),
-        ),
-        //),
       ],
     );
   }
