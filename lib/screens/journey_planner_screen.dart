@@ -52,7 +52,7 @@ class _JourneyPlanner extends State<JourneyPlanner> {
 
   @override
   Widget build(BuildContext context) {
-    final panelHeightClosed = MediaQuery.of(context).size.height * 0.1;
+    final panelHeightClosed = MediaQuery.of(context).size.height * 0.6;
     final panelHeightOpen = MediaQuery.of(context).size.height * 0.6;
     List<MapPlace> mapList = [];
     Map<String, List<double?>> staticCordMap = {};

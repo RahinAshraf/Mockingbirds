@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:veloplan/screens/journey_planner_screen.dart';
@@ -267,8 +268,8 @@ class PanelWidgetState extends State<PanelWidget> {
               hintText: "Where from?",
               label: "From",
               onAddressAdded: addCordFrom),
-          _buildStatic(widget.toTextEditController,
-              hintText: "Where to?", label: "To", onAddressAdded: addCordTo),
+          // _buildStatic(widget.toTextEditController,
+          //     hintText: "Where to?", label: "To", onAddressAdded: addCordTo),
           Expanded(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -293,6 +294,7 @@ class PanelWidgetState extends State<PanelWidget> {
                     //   physics: const NeverScrollableScrollPhysics(),
                     // );
                     return ReorderableListView.builder(
+                      itemExtent: 74,
                       padding: EdgeInsets.zero,
                       shrinkWrap: true,
                       itemBuilder: (_, index) {
@@ -302,7 +304,8 @@ class PanelWidgetState extends State<PanelWidget> {
                           widget.listDynamic.removeAt(index);
                           widget.dynamicWidgets.sink.add(widget.listDynamic);
                         });
-                        return ListTile(key: ValueKey(index), leading: Container(width: 359, child: dynamicWidget), trailing: Icon(Icons.menu),);
+                        return //ListTile(key: ValueKey(index), leading: 
+                        Container(key: ValueKey(index), child: dynamicWidget);//, trailing: Icon(Icons.menu),);
                       },
                       itemCount: listOfDynamics.length,
                       physics: const NeverScrollableScrollPhysics(),
@@ -504,76 +507,99 @@ class DynamicWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        const SizedBox(width: 17),
-        //Expanded(
-        TextButton(
-          onPressed: () {
-            int len = selectedCords?.length ?? 0;
-            if (position < len) {
-              selectedCords?.removeAt(position);
-            }
-            onDelete?.call(position);
-          },
-          child: const Icon(
-            Icons.close_outlined,
-            size: 35,
-            color: Colors.red,
-          ),
-        ),
-        //),
-        Expanded(
-          child: TextField(
-            readOnly: true,
-            onTap: () {
-              _handleSearchClick(context, position);
-            },
-            controller: textController,
-            decoration: InputDecoration(
-              suffixIcon: IconButton(
-                onPressed: () {
-                  if (cordDataMap == null) return;
-                  _useCurrentLocationButtonHandler(
-                      cordDataMap!, textController);
-                },
-                icon: const Icon(
-                  Icons.my_location,
-                  size: 20,
-                  color: Colors.blue,
+    return Expanded(
+      child: Column(
+        children: [
+          Expanded(
+            child: Row(
+              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // const SizedBox(width: 17),
+                //Expanded(
+                TextButton(
+                  onPressed: () {
+                    int len = selectedCords?.length ?? 0;
+                    if (position < len) {
+                      selectedCords?.removeAt(position);
+                    }
+                    onDelete?.call(position);
+                  },
+                  child: const Icon(
+                    Icons.close_outlined,
+                    size: 35,
+                    color: Colors.red,
+                  ),
                 ),
-              ),
-              suffixIconColor: Colors.blue,
-              hintText: 'Where to?',
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: Colors.black, width: 2.0),
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: const BorderSide(color: Colors.black, width: 1.0),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: const BorderSide(color: Colors.black, width: 1.0),
-              ),
-              disabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: const BorderSide(color: Colors.black, width: 1.0),
-              ),
-              errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: const BorderSide(color: Colors.black, width: 1.0),
-              ),
-              focusedErrorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: const BorderSide(color: Colors.black, width: 1.0),
-              ),
+                //),
+                Expanded(
+                  child: SizedBox(
+                    height: 35,
+                    child: TextField(
+                      readOnly: true,
+                      onTap: () {
+                        _handleSearchClick(context, position);
+                      },
+                      controller: textController,
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(vertical: 0),
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            if (cordDataMap == null) return;
+                            _useCurrentLocationButtonHandler(
+                                cordDataMap!, textController);
+                          },
+                          icon: const Icon(
+                            Icons.my_location,
+                            size: 20,
+                            color: Colors.blue,
+                          ),
+                        ),
+                        suffixIconColor: Colors.blue,
+                        hintText: 'Where to?',
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.black, width: 2.0),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(color: Colors.black, width: 1.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(color: Colors.black, width: 1.0),
+                        ),
+                        disabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(color: Colors.black, width: 1.0),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(color: Colors.black, width: 1.0),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: const BorderSide(color: Colors.black, width: 1.0),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Icon(Icons.menu),
+              ],
             ),
           ),
-        ),
-      ],
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.subdirectory_arrow_right),
+              Container(
+                decoration: BoxDecoration(border: Border.all(), borderRadius: BorderRadius.circular(20)),
+                child: Text("Default closest dock"),
+              )
+            ],
+          ),
+        ],
+      ),
     );
   }
 
