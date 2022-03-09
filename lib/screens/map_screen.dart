@@ -7,6 +7,7 @@ import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:veloplan/providers/route_manager.dart';
+import '../helpers/live_location_helper.dart';
 import '../screens/login_screen.dart';
 import '../navbar.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
@@ -145,8 +146,11 @@ class MyHomePageState extends State<MapPage> {
         floatingActionButton: FloatingActionButton(
           heroTag: "refcous on live location",
           onPressed: () {
+            LiveLocationHelper liveLocationHelper = LiveLocationHelper();
+            liveLocationHelper.initializeLocation();
+            LatLng latlng = getLatLngFromSharedPrefs();
             controller?.animateCamera(
-                CameraUpdate.newCameraPosition(_cameraPosition));
+                CameraUpdate.newCameraPosition(CameraPosition(target: latlng, zoom: 12)));
           },
           child: const Icon(Icons.my_location),
         ),
