@@ -6,6 +6,7 @@ import '../navbar.dart';
 import '../screens/auth_screen.dart';
 import '../screens/splash_screen.dart';
 import '../screens/verify_email_screen.dart';
+import '../styles/styling.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,6 +42,40 @@ class _MyAppState extends State<MyApp> {
         builder: (context, appSnapshot) {
           return MaterialApp(
             title: 'Veloplan',
+            theme: ThemeData(
+              appBarTheme: const AppBarTheme(
+                backgroundColor: appBarColor,
+                foregroundColor: appBarTextColor,
+              ),
+              bottomNavigationBarTheme: BottomNavigationBarThemeData(
+                type: BottomNavigationBarType.fixed,
+                backgroundColor: Colors.green[200],
+                selectedItemColor: Colors.black,
+                unselectedItemColor: Colors.grey[10],
+              ),
+              dialogTheme: const DialogTheme(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                titleTextStyle: popupDialogTitleTextStyle,
+                contentTextStyle: popupDialogTextStyle,
+              ),
+              scaffoldBackgroundColor: const Color(0xffffffff),
+              primarySwatch: const MaterialColor(
+                0xff99d2a9, // 0%
+                <int, Color>{
+                  50: Color(0xffa3d7b2), //10%
+                  100: Color(0xffaddbba), //20%
+                  200: Color(0xffb8e0c3), //30%
+                  300: Color(0xffc2e4cb), //40%
+                  400: Color(0xffcce9d4), //50%
+                  500: Color(0xffd6eddd), //60%
+                  600: Color(0xffe0f2e5), //70%
+                  700: Color(0xffebf6ee), //80%
+                  800: Color(0xfff5fbf6), //90%
+                  900: Color(0xffffffff), //100%
+                },
+              ),
+            ),
             home: appSnapshot.connectionState != ConnectionState.done
                 ? const SplashScreen()
                 : StreamBuilder(

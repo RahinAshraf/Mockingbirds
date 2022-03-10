@@ -51,10 +51,25 @@ const TextStyle popupDialogTextStyle = TextStyle(
   fontSize: 18.0,
 );
 ButtonStyle popupDialogButtonStyle = ButtonStyle(
-  overlayColor: MaterialStateProperty.all<Color>(Colors.green.shade200),
-  backgroundColor: MaterialStateProperty.all<Color>(const Color(0XFFFBAB4B)),
+  overlayColor: MaterialStateProperty.all(Colors.green.shade200),
+  backgroundColor: MaterialStateProperty.all(const Color(0XFFFBAB4B)),
 );
 const TextStyle popupDialogButtonTextStyle = TextStyle(
   fontSize: 20.0,
   color: Colors.white,
 );
+
+// Authorisation
+ButtonStyle authButtonStyle = ButtonStyle(
+  minimumSize: MaterialStateProperty.all(const Size(251, 46)),
+  overlayColor: MaterialStateProperty.all(Colors.green),
+  backgroundColor: MaterialStateProperty.all(const Color(0xFF99D2A9)),
+  shape: MaterialStateProperty.all(
+    RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(20.0),
+    ),
+  ),
+);
+
+const authButtonTextStyle =
+    TextStyle(fontSize: 16.0, color: Colors.white, fontWeight: FontWeight.w700);

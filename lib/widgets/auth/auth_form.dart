@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:intl/intl.dart';
 
+import '../../styles/styling.dart';
 import '../pickers/image_picker.dart';
 import '../pickers/bottom_date_picker.dart';
 
@@ -89,7 +90,7 @@ class _AuthFormState extends State<AuthForm> {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   if (_isLogin)
-                    Container(
+                    SizedBox(
                         height: 120.0,
                         width: 120.0,
                         child: Center(
@@ -105,7 +106,7 @@ class _AuthFormState extends State<AuthForm> {
                               fontWeight: FontWeight.w500,
                               fontSize: 25),
                         )),
-                  if (!_isLogin) SizedBox(height: 50),
+                  if (!_isLogin) const SizedBox(height: 50),
                   if (!_isLogin) UserImagePicker(_pickedImage),
                   if (!_isLogin)
                     TextFormField(
@@ -126,7 +127,7 @@ class _AuthFormState extends State<AuthForm> {
                         _firstName = value!;
                       },
                     ),
-                  if (!_isLogin || _isLogin) SizedBox(height: 15),
+                  if (!_isLogin || _isLogin) const SizedBox(height: 15),
                   if (!_isLogin)
                     TextFormField(
                       key: const ValueKey('lastName'),
@@ -145,7 +146,7 @@ class _AuthFormState extends State<AuthForm> {
                         _lastName = value!;
                       },
                     ),
-                  if (!_isLogin || _isLogin) SizedBox(height: 15),
+                  if (!_isLogin || _isLogin) const SizedBox(height: 15),
                   TextFormField(
                     key: const ValueKey('email'),
                     autocorrect: false,
@@ -163,7 +164,7 @@ class _AuthFormState extends State<AuthForm> {
                       _userEmail = value!;
                     },
                   ),
-                  if (!_isLogin || _isLogin) SizedBox(height: 15),
+                  if (!_isLogin || _isLogin) const SizedBox(height: 15),
                   if (!_isLogin)
                     TextFormField(
                       key: const ValueKey('username'),
@@ -182,7 +183,7 @@ class _AuthFormState extends State<AuthForm> {
                         _userName = value!;
                       },
                     ),
-                  if (!_isLogin || _isLogin) SizedBox(height: 15),
+                  if (!_isLogin || _isLogin) const SizedBox(height: 15),
                   TextFormField(
                     key: const ValueKey('password'),
                     validator: (value) {
@@ -202,7 +203,7 @@ class _AuthFormState extends State<AuthForm> {
                       _userPassword = value!;
                     },
                   ),
-                  if (!_isLogin || _isLogin) SizedBox(height: 15),
+                  if (!_isLogin || _isLogin) const SizedBox(height: 15),
                   if (!_isLogin)
                     TextFormField(
                       key: const ValueKey('passwordConfirmation'),
@@ -220,7 +221,7 @@ class _AuthFormState extends State<AuthForm> {
                           labelText: 'Confirm Password'),
                       obscureText: true,
                     ),
-                  if (!_isLogin || _isLogin) SizedBox(height: 15),
+                  if (!_isLogin || _isLogin) const SizedBox(height: 15),
                   if (!_isLogin)
                     TextFormField(
                       controller: _dateController,
@@ -258,7 +259,9 @@ class _AuthFormState extends State<AuthForm> {
                   if (widget.isLoading) const CircularProgressIndicator(),
                   if (!widget.isLoading)
                     ElevatedButton(
-                      child: Text(_isLogin ? 'Log In' : 'Sign Up'),
+                      style: authButtonStyle,
+                      child: Text(_isLogin ? 'Log In' : 'Sign Up',
+                          style: authButtonTextStyle),
                       onPressed: _trySubmit,
                     ),
                   if (!widget.isLoading)
@@ -270,7 +273,7 @@ class _AuthFormState extends State<AuthForm> {
                               alignment: Alignment.center,
                               padding: const EdgeInsets.all(10),
                               child: const Text(
-                                'Don' 't have an account?',
+                                'Don\'t have an account?',
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.w500,
@@ -287,8 +290,7 @@ class _AuthFormState extends State<AuthForm> {
                                     fontWeight: FontWeight.w500,
                                     fontSize: 15),
                               )),
-                        FlatButton(
-                          textColor: Theme.of(context).primaryColor,
+                        TextButton(
                           child: Text(_isLogin ? 'Sign up' : 'Log in'),
                           onPressed: () {
                             setState(() {
