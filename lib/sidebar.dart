@@ -35,9 +35,9 @@ class NavigationDrawerWidget extends StatelessWidget {
               onClicked: () => selectedItem(context, 3),
             ),
             //decided to remove this, not sure if it looks nice
-            //const SizedBox(height: 24),
-            //Divider(color: Colors.green),
-            //const SizedBox(height: 24),
+            const SizedBox(height: 24),
+            Divider(color: Colors.grey),
+            const SizedBox(height: 24),
             buildMenuItem(
               text: 'Help',
               icon: Icons.chat_bubble_outlined,

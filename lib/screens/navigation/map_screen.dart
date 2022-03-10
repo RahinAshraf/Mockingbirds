@@ -20,6 +20,7 @@ import 'turn_by_turn_screen.dart';
 import '../../helpers/navigation_helpers/zoom_helper.dart';
 import 'package:scoped_model/scoped_model.dart';
 import '../../scoped_models/main.dart';
+import 'package:veloplan/.env.dart';
 
 //import 'package:veloplan/widget/carousel/station_carousel.dart';
 const double zoom = 16;
@@ -41,9 +42,7 @@ class MyHomePageState extends State<MapPage> {
   Set<Symbol> polylineSymbols = {};
   // var zoom = LatLng(51.51185004458236, -0.11580820118980878);
   String googleMapsApi = 'AIzaSyB7YSQkjjqm-YU1LAz91lyYAvCpqFRhFdU';
-  String accessToken =
-      'pk.eyJ1IjoibW9ja2luZ2JpcmRzIiwiYSI6ImNrempyNnZtajNkbmkybm8xb3lybWE3MTIifQ.AsZJbQPNRb2N3unNdA98nQ';
-  PolylinePoints polylinePoints = PolylinePoints();
+  String accessToken = MAPBOX_ACCESS_TOKEN;
   List<LatLng> polylineCoordinates = [];
   List<LatLng> points = [
     LatLng(51.514951, -0.112762),

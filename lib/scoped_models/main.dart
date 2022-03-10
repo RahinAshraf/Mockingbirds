@@ -1,12 +1,14 @@
 import 'package:scoped_model/scoped_model.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:veloplan/.env.dart';
 
 import '../models/docking_station.dart';
 import '../providers/docking_station_manager.dart';
 
 class NavigationModel extends Model {
-  String accessToken =
-      'pk.eyJ1IjoibW9ja2luZ2JpcmRzIiwiYSI6ImNrempyNnZtajNkbmkybm8xb3lybWE3MTIifQ.AsZJbQPNRb2N3unNdA98nQ';
+  String accessToken = MAPBOX_ACCESS_TOKEN;
+
+  // 'pk.eyJ1IjoibW9ja2luZ2JpcmRzIiwiYSI6ImNrempyNnZtajNkbmkybm8xb3lybWE3MTIifQ.AsZJbQPNRb2N3unNdA98nQ';
 
   late MapboxMapController? controller;
   late CameraPosition _cameraPosition;
