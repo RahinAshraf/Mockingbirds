@@ -1,17 +1,10 @@
 import 'package:flutter/material.dart';
-import '../styles/styling.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'dart:async';
-import 'dart:math';
-import 'package:flutter/material.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import '../.env.dart';
-import '../widget/panel_widget.dart';
-import '../widgets/trips_scheduler_panel_widget.dart';
 import 'map_screen.dart';
-import '../providers/location_service.dart';
+import '../helpers/shared_prefs.dart';
+import '../widgets/trips_scheduler_panel_widget.dart';
 
 class TripScheduler extends StatefulWidget {
   const TripScheduler({Key? key}) : super(key: key);
@@ -20,7 +13,7 @@ class TripScheduler extends StatefulWidget {
   _TripScheduler createState() => _TripScheduler();
 }
 
-class _TripScheduler extends State<TripScheduler>  {
+class _TripScheduler extends State<TripScheduler> {
   late CameraPosition _initialCameraPosition;
   LatLng latLng = getLatLngFromSharedPrefs();
   late MapboxMapController controller;
@@ -68,7 +61,6 @@ class _TripScheduler extends State<TripScheduler>  {
         ),
         panelBuilder: (controller) => PanelWidgetTripScheduler(
           controller: controller,
-
         ),
       ),
     );

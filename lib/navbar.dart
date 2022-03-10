@@ -87,12 +87,10 @@ class _MainPageState extends State<MainPage> {
               onPressed: () {
                 _onTabTapped(1);
                 showDialog(
+                  useRootNavigator: false,
                   context: context,
                   builder: (BuildContext context) => _buildPopupDialog(context),
                 );
-                // Navigator.push(context,
-                //     MaterialPageRoute(builder: (context) => TripScheduler()));
-                // print("Link journey_planner screen to this btn");
               },
               child: const Icon(
                 Icons.directions_bike,
