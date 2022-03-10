@@ -41,7 +41,7 @@ class MyHomePageState extends State<MapPage> {
   late Symbol? _selectedSymbol; //may remove
   Set<Symbol> polylineSymbols = {};
   // var zoom = LatLng(51.51185004458236, -0.11580820118980878);
-  String googleMapsApi = 'AIzaSyB7YSQkjjqm-YU1LAz91lyYAvCpqFRhFdU';
+  // String googleMapsApi = 'AIzaSyB7YSQkjjqm-YU1LAz91lyYAvCpqFRhFdU';
   String accessToken = MAPBOX_ACCESS_TOKEN;
   List<LatLng> polylineCoordinates = [];
   List<LatLng> points = [
@@ -158,20 +158,6 @@ class MyHomePageState extends State<MapPage> {
               print(
                   "This btn is to the search location screen. There is a screen in the design that comes before the search location screen so it is accessible from here for now");
             },
-          ),
-          Container(
-            alignment: Alignment(-0.5, -0.5),
-            child: (showMarkers)
-                ? FloatingActionButton(
-                    heroTag: "Show markers",
-                    child: Icon(Icons.wallet_giftcard, color: Colors.white),
-                    onPressed: () {
-                      setState(() {
-                        model.incrementCount();
-                      });
-                    }, //placeMarkers,
-                  )
-                : Container(),
           ),
           Container(
             alignment: Alignment(-0.5, -0.7),
@@ -311,6 +297,7 @@ class MyHomePageState extends State<MapPage> {
         lineWidth: 5,
       ),
     );
+    _model.setController(controller!);
     // await controller.addSymbolLayer(sourceId, layerId, properties)
   }
 
@@ -376,22 +363,6 @@ class MyHomePageState extends State<MapPage> {
       ));
     }
   }
-
-  // void zoomIn() {
-  //   _cameraPosition = CameraPosition(
-  //       target: _cameraPosition.target,
-  //       zoom: _cameraPosition.zoom + 0.5,
-  //       tilt: 5);
-  //   controller!.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
-  // }
-
-  // void zoomOut() {
-  //   _cameraPosition = CameraPosition(
-  //       target: _cameraPosition.target,
-  //       zoom: _cameraPosition.zoom - 0.5,
-  //       tilt: 5);
-  //   controller!.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
-  // }
 }
 
 // TODO: Fix camera zoom
@@ -404,6 +375,8 @@ class MyHomePageState extends State<MapPage> {
 
 // TODO: Error box when no internet -> check when future is called
 // TODO: Future to the map
+
+// TODO: set drawing related stuff into another class
 
 // DONE: Turn by turn directions
 // DONE: Zoom in and zoom out buttons

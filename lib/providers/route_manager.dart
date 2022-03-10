@@ -1,11 +1,11 @@
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:veloplan/.env.dart';
 
 class RouteManager {
   String baseUrl = 'https://api.mapbox.com/directions/v5/mapbox';
-  String accessToken =
-      'pk.eyJ1IjoibW9ja2luZ2JpcmRzIiwiYSI6ImNrempyNnZtajNkbmkybm8xb3lybWE3MTIifQ.AsZJbQPNRb2N3unNdA98nQ';
+  String accessToken = MAPBOX_ACCESS_TOKEN;
   String navType = 'cycling';
   Dio _dio = Dio();
   Map<String, Object> directions = {};

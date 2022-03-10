@@ -4,6 +4,7 @@ import 'package:veloplan/.env.dart';
 
 import '../models/docking_station.dart';
 import '../providers/docking_station_manager.dart';
+import 'package:flutter/material.dart';
 
 class NavigationModel extends Model {
   String accessToken = MAPBOX_ACCESS_TOKEN;
@@ -11,13 +12,12 @@ class NavigationModel extends Model {
   // 'pk.eyJ1IjoibW9ja2luZ2JpcmRzIiwiYSI6ImNrempyNnZtajNkbmkybm8xb3lybWE3MTIifQ.AsZJbQPNRb2N3unNdA98nQ';
 
   late MapboxMapController? controller;
-  late CameraPosition _cameraPosition;
+  late CameraPosition cameraPosition;
   late MapboxMap map;
-  LatLng currentLatLng = const LatLng(51.51185004458236, -0.11580820118980878);
-  bool showMarkers = false; //for displaying markers with button
-
+  LatLng currentLatLng =
+      const LatLng(51, -0); //LatLng(51.51185004458236, -0.11580820118980878);
   NavigationModel() {
-    _cameraPosition = CameraPosition(target: currentLatLng, zoom: 12);
+    cameraPosition = CameraPosition(target: currentLatLng, zoom: 12);
     createMap();
   }
 
@@ -37,7 +37,7 @@ class NavigationModel extends Model {
   void createMap() {
     map = MapboxMap(
       accessToken: accessToken,
-      initialCameraPosition: _cameraPosition,
+      initialCameraPosition: cameraPosition,
       onMapCreated: _onMapCreated,
       myLocationEnabled: true,
       annotationOrder: [AnnotationType.symbol],
@@ -71,23 +71,11 @@ class NavigationModel extends Model {
     this.map = map;
   }
 
-  String _name = "";
-  int _count = 0;
-
-  String get name {
-    return _name;
+  CameraPosition getCameraPosition() {
+    return cameraPosition;
   }
 
-  int get count {
-    return _count;
-  }
-
-  void updateName(String name) {
-    _name = name;
-  }
-
-  void incrementCount() {
-    _count += 1;
-    notifyListeners();
+  void setCameraPosition(CameraPosition cameraPosition) {
+    this.cameraPosition = cameraPosition;
   }
 }
