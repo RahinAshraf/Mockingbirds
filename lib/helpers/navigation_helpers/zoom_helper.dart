@@ -12,8 +12,6 @@ double getZoom(double radius) {
   return log(2048 / radius * 350);
 }
 
-
-
 /// zoom [cameraPosition] in via the [controller]
 CameraPosition zoomIn(
     CameraPosition _cameraPosition, MapboxMapController? controller) {

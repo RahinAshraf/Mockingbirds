@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_routes/google_maps_routes.dart';
 // import 'package:latlong2/latlong.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:tuple/tuple.dart';
 import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:veloplan/providers/route_manager.dart';
@@ -276,10 +277,12 @@ class MyHomePageState extends State<MapPage> {
 
   void refocusCamera(List<LatLng> journey) {
     LatLng center = getCenter(journey);
-    print(center);
+    // print(center);
+    Tuple2<LatLng, LatLng> corners = getCornerCoordinates(journey);
+
     _cameraPosition = CameraPosition(
         target: center, //target, //center,
-        zoom: 14, //getZoom(getRadius(journey, center)),
+        zoom: getZoom(calculateDistance(center, corners.item1)),
         tilt: 5);
     controller!.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
   }
@@ -343,7 +346,7 @@ class MyHomePageState extends State<MapPage> {
       print(duration.truncate());
       setState(() {
         totalDistance = "distance: " +
-            (distance / 1000).toString() +
+            (distance / 1000).truncate().toString() +
             ", duration: " +
             (duration / 60).truncate().toString();
         print(totalDistance);
