@@ -19,9 +19,8 @@ class NavigationModel extends Model {
     createMap();
   }
 
-  // @override
   void _onMapCreated(MapboxMapController controller) async {
-    this.controller = controller;
+    setController(controller);
     fetchDockingStations();
     // controller.onSymbolTapped.add(_onSymbolTapped);
   }
@@ -38,9 +37,7 @@ class NavigationModel extends Model {
       accessToken: accessToken,
       initialCameraPosition: _cameraPosition,
       onMapCreated: _onMapCreated,
-      // onStyleLoadedCallback: _onStyleLoadedCallback,
       myLocationEnabled: true,
-      // myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
       annotationOrder: [AnnotationType.symbol],
     );
   }
@@ -54,6 +51,14 @@ class NavigationModel extends Model {
             iconImage: "assets/icon/bicycle.png"),
       );
     }
+  }
+
+  MapboxMapController? getController() {
+    return controller;
+  }
+
+  void setController(MapboxMapController controller) {
+    this.controller = controller;
   }
 
   MapboxMap getMap() {

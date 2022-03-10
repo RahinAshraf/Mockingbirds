@@ -57,6 +57,9 @@ class MyHomePageState extends State<MapPage> {
   LatLng currentLatLng = const LatLng(51.51185004458236, -0.11580820118980878);
   String totalDistance = 'No route';
   LatLng latLng = getLatLngFromSharedPrefs();
+
+  late NavigationModel _model;
+
   // late CameraPosition _initialCameraPosition;
   TextEditingController _searchController = TextEditingController();
   @override
@@ -127,139 +130,139 @@ class MyHomePageState extends State<MapPage> {
     controller.onSymbolTapped.add(_onSymbolTapped);
   }
 
+  void initMap() {
+    _model.setMap(MapboxMap(
+      accessToken: accessToken,
+      initialCameraPosition: _cameraPosition,
+      onMapCreated: _onMapCreated,
+      myLocationEnabled: true,
+      myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
+      annotationOrder: const [AnnotationType.symbol],
+    ));
+  }
+
   @override
   Widget build(BuildContext build) {
-    return Scaffold(
-        floatingActionButton: FloatingActionButton(
-          heroTag: "btn1",
-          onPressed: () {
-            controller?.animateCamera(
-                CameraUpdate.newCameraPosition(_cameraPosition));
-          },
-          child: const Icon(Icons.my_location),
-        ),
-        body: ScopedModelDescendant<NavigationModel>(builder:
-            (BuildContext context, Widget? child, NavigationModel model) {
-          return SafeArea(
-              child: Stack(
-            children: [
-              Container(
-                  alignment: Alignment(0, 0),
-                  // height: MediaQuery.of(context).size.height,
-                  // width: MediaQuery.of(context).size.width,
-                  child: MapboxMap(
-                    accessToken: accessToken,
-                    initialCameraPosition: _cameraPosition,
-                    onMapCreated: _onMapCreated,
-                    onStyleLoadedCallback: _onStyleLoadedCallback,
-                    myLocationEnabled: true,
-                    myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
-                    annotationOrder: [AnnotationType.symbol],
-                    // minMaxZoomPreference: const MinMaxZoomPreference(14, 17),
-                  )), //
-              //PLACEHOLDER FAB
-              FloatingActionButton(
-                heroTag: "btn3",
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>
-                          PlaceSearchScreen(LocationService())));
-                  print(
-                      "This btn is to the search location screen. There is a screen in the design that comes before the search location screen so it is accessible from here for now");
-                },
-              ),
-              Container(
-                alignment: Alignment(-0.5, -0.5),
-                child: (showMarkers)
-                    ? FloatingActionButton(
-                        heroTag: "Show markers",
-                        child: Icon(Icons.wallet_giftcard, color: Colors.white),
-                        onPressed: () {
-                          setState(() {
-                            model.incrementCount();
-                          });
-                        }, //placeMarkers,
-                      )
-                    : Container(),
-              ),
-              Container(
-                alignment: Alignment(-0.5, -0.7),
-                child: FloatingActionButton(
-                  heroTag: "+",
-                  child: Icon(Icons.add, color: Colors.white),
-                  onPressed: () {
-                    _cameraPosition = zoomIn(_cameraPosition, controller);
-                  },
-                ),
-              ),
-              Container(
-                alignment: Alignment(-0.9, -0.7),
-                child: FloatingActionButton(
-                  heroTag: "-",
-                  child: Icon(Icons.horizontal_rule, color: Colors.white),
-                  onPressed: () {
-                    _cameraPosition = zoomOut(_cameraPosition, controller);
-                  },
-                ),
-              ),
-              Container(
-                alignment: Alignment(-0.9, 0),
-                child: FloatingActionButton(
-                  heroTag: "Show polylines",
-                  child: Icon(Icons.arrow_upward, color: Colors.white),
-                  onPressed: () async {
-                    if (!isRouteDisplayed) {
-                      displayJourneyAndRefocus(points);
-                      isRouteDisplayed = true;
-                    } else {
-                      null;
-                    }
-                  },
-                ),
-              ),
-              Container(
-                alignment: Alignment(-0.5, 0),
-                child: FloatingActionButton(
-                  heroTag: "Remove Polylines",
-                  child: Icon(Icons.remove, color: Colors.white),
-                  onPressed: () async {
-                    if (isRouteDisplayed) {
-                      removeFills();
-                      removeTimeAndDuration();
-                      isRouteDisplayed = false;
-                    }
-                  },
-                ),
-              ),
-              Container(
-                alignment: Alignment(-0.9, -0.5),
-                child: FloatingActionButton(
-                  heroTag: "TBT",
-                  child: Icon(Icons.start, color: Colors.white),
-                  onPressed: () => Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => TurnByTurn(points))),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Align(
-                  alignment: Alignment(0, 0.9),
-                  child: Container(
-                      width: 200,
-                      height: 50,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(15.0)),
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: Text(totalDistance,
-                            style: TextStyle(fontSize: 25.0)),
-                      )),
-                ),
-              ),
-            ],
-          ));
-        }));
+    return Scaffold(body: ScopedModelDescendant<NavigationModel>(
+        builder: (BuildContext context, Widget? child, NavigationModel model) {
+      _model = model;
+      initMap();
+      return SafeArea(
+          child: Stack(
+        children: [
+          Container(alignment: Alignment(0, 0), child: _model.getMap()),
+          FloatingActionButton(
+            heroTag: "btn3",
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => PlaceSearchScreen(LocationService())));
+              print(
+                  "This btn is to the search location screen. There is a screen in the design that comes before the search location screen so it is accessible from here for now");
+            },
+          ),
+          Container(
+            alignment: Alignment(-0.5, -0.5),
+            child: (showMarkers)
+                ? FloatingActionButton(
+                    heroTag: "Show markers",
+                    child: Icon(Icons.wallet_giftcard, color: Colors.white),
+                    onPressed: () {
+                      setState(() {
+                        model.incrementCount();
+                      });
+                    }, //placeMarkers,
+                  )
+                : Container(),
+          ),
+          Container(
+            alignment: Alignment(-0.5, -0.7),
+            child: FloatingActionButton(
+              heroTag: "+",
+              child: Icon(Icons.add, color: Colors.white),
+              onPressed: () {
+                _cameraPosition = zoomIn(_cameraPosition, controller);
+              },
+            ),
+          ),
+          Container(
+            alignment: Alignment(-0.9, -0.7),
+            child: FloatingActionButton(
+              heroTag: "-",
+              child: Icon(Icons.horizontal_rule, color: Colors.white),
+              onPressed: () {
+                _cameraPosition = zoomOut(_cameraPosition, controller);
+              },
+            ),
+          ),
+          Container(
+            alignment: Alignment(-0.9, 0),
+            child: FloatingActionButton(
+              heroTag: "Show polylines",
+              child: Icon(Icons.arrow_upward, color: Colors.white),
+              onPressed: () async {
+                if (!isRouteDisplayed) {
+                  displayJourneyAndRefocus(points);
+                  isRouteDisplayed = true;
+                } else {
+                  null;
+                }
+              },
+            ),
+          ),
+          Container(
+            alignment: Alignment(-0.5, 0),
+            child: FloatingActionButton(
+              heroTag: "Remove Polylines",
+              child: Icon(Icons.remove, color: Colors.white),
+              onPressed: () async {
+                if (isRouteDisplayed) {
+                  removeFills();
+                  removeTimeAndDuration();
+                  isRouteDisplayed = false;
+                }
+              },
+            ),
+          ),
+          Container(
+            alignment: Alignment(-0.9, -0.5),
+            child: FloatingActionButton(
+              heroTag: "TBT",
+              child: Icon(Icons.start, color: Colors.white),
+              onPressed: () => Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => TurnByTurn(points))),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Align(
+              alignment: Alignment(0, 0.9),
+              child: Container(
+                  width: 200,
+                  height: 50,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15.0)),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child:
+                        Text(totalDistance, style: TextStyle(fontSize: 25.0)),
+                  )),
+            ),
+          ),
+          Container(
+            alignment: Alignment(0.9, 0.90),
+            child: FloatingActionButton(
+              heroTag: "center_to_current_loaction",
+              onPressed: () {
+                controller?.animateCamera(
+                    CameraUpdate.newCameraPosition(_cameraPosition));
+              },
+              child: const Icon(Icons.my_location),
+            ),
+          )
+        ],
+      ));
+    }));
   }
 
   _onStyleLoadedCallback() async {
