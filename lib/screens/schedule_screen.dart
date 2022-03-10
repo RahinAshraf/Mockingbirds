@@ -27,9 +27,9 @@ class _SchedulePageState extends State<SchedulePage> {
             Padding(
               padding: const EdgeInsets.all(15.0),
               child: TableCalendar(
-                calendarFormat: CalendarFormat.month,
+                calendarFormat: CalendarFormat.week,
                 firstDay: DateTime.utc(2022, 01, 01),
-                lastDay: DateTime.utc(2032, 01, 01),
+                lastDay: DateTime.utc(2023, 01, 01),
                 focusedDay: DateTime.now(),
                 calendarStyle: const CalendarStyle(
                   todayDecoration: BoxDecoration(
@@ -52,12 +52,12 @@ class _SchedulePageState extends State<SchedulePage> {
             ),
             TimelineTile(
               isFirst: true,
-              beforeLineStyle: LineStyle(
+              beforeLineStyle: const LineStyle(
                 thickness: 1.0,
                 color: Color(0XFFe1e1e1),
               ),
               indicatorStyle: const IndicatorStyle(
-                padding: const EdgeInsets.all(5),
+                padding: EdgeInsets.all(5),
                 width: 10,
                 indicatorXY: 0.0,
                 color: Colors.green,
@@ -65,7 +65,7 @@ class _SchedulePageState extends State<SchedulePage> {
               alignment: TimelineAlign.start,
               endChild: Card(
                 elevation: 1,
-                margin: EdgeInsets.fromLTRB(10.0, 0.0, 20.0, 15.0),
+                margin: EdgeInsets.fromLTRB(10.0, 15.0, 20.0, 15.0),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(15.0),
@@ -135,7 +135,7 @@ class _SchedulePageState extends State<SchedulePage> {
               ),
               endChild: Card(
                 elevation: 1,
-                margin: EdgeInsets.fromLTRB(10.0, 0.0, 20.0, 15.0),
+                margin: EdgeInsets.fromLTRB(10.0, 15.0, 20.0, 15.0),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(15.0),
@@ -205,7 +205,7 @@ class _SchedulePageState extends State<SchedulePage> {
               ),
               endChild: Card(
                 elevation: 1,
-                margin: EdgeInsets.fromLTRB(10.0, 0.0, 20.0, 15.0),
+                margin: EdgeInsets.fromLTRB(10.0, 15.0, 20.0, 15.0),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(15.0),
@@ -262,13 +262,13 @@ class _SchedulePageState extends State<SchedulePage> {
               ),
             ),
             TimelineTile(
-              beforeLineStyle: LineStyle(
+              beforeLineStyle: const LineStyle(
                 thickness: 1.0,
                 color: Color(0XFFe1e1e1),
               ),
               alignment: TimelineAlign.start,
               indicatorStyle: const IndicatorStyle(
-                padding: const EdgeInsets.all(5),
+                padding: EdgeInsets.all(5),
                 indicatorXY: 0.0,
                 width: 10,
                 color: Colors.green,
@@ -277,7 +277,7 @@ class _SchedulePageState extends State<SchedulePage> {
                 children: [
                   Card(
                     elevation: 1,
-                    margin: EdgeInsets.fromLTRB(10.0, 0.0, 20.0, 15.0),
+                    margin: EdgeInsets.fromLTRB(10.0, 15.0, 20.0, 15.0),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(15.0),
@@ -393,22 +393,21 @@ class _SchedulePageState extends State<SchedulePage> {
               ),
             ),
             TimelineTile(
-              beforeLineStyle: LineStyle(
+              beforeLineStyle: const LineStyle(
                 thickness: 1.0,
                 color: Color(0XFFe1e1e1),
               ),
               indicatorStyle: const IndicatorStyle(
-                padding: const EdgeInsets.all(5),
+                padding: EdgeInsets.all(5),
                 indicatorXY: 0.0,
                 width: 10,
                 color: Colors.green,
               ),
-              isLast: true,
               alignment: TimelineAlign.start,
               endChild: Card(
                 elevation: 1,
-                margin: EdgeInsets.fromLTRB(10.0, 0.0, 20.0, 15.0),
-                shape: RoundedRectangleBorder(
+                margin: const EdgeInsets.fromLTRB(10.0, 15.0, 20.0, 15.0),
+                shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(15.0),
                   bottomRight: Radius.circular(15.0),
