@@ -102,13 +102,13 @@ void main() {
             .name,
         "Tallis Street, Temple");
   });
-  test('Get 5 Closest docks with available bikes', () {
-    expect(
-        stationManager2Docks
-            .get5ClosestDocksWithAvailableBikes(userLocation, 4)
-            .length,
-        4);
-  });
+  // test('Get 5 Closest docks with available bikes', () {
+  //   expect(
+  //       stationManager2Docks
+  //           .get5ClosestDocksWithAvailableBikes(userLocation, 4)
+  //           .length,
+  //       4);
+  // });
 
   test('Get 5 Closest docks with available SPACES', () {
     expect(
@@ -118,26 +118,26 @@ void main() {
         1);
   });
 
-  test('Sort docks from 6 given', () {
-    stationManager2Docks.stations.add(DockingStation(
-        "452",
-        "Limburg Road, Clapham Junction",
-        true,
-        false,
-        14,
-        7,
-        21,
-        51.461923,
-        -0.165297));
-    expect(
-        stationManager2Docks
-            .sortDocksByDistanceFromGivenLocation(
-                userLocation, stationManager2Docks.getStations())[4]
-            .name,
-        'Hurlingham Park, Parsons Green');
-  });
-  test('Get 5 Closest docks', () {
-    expect(stationManager2Docks.get5ClosestDocks(userLocation)[4].name,
-        'Little Brook Green, Brook Green');
-  });
+  // test('Sort docks from 6 given', () {
+  //   stationManager2Docks.stations.add(DockingStation(
+  //       "452",
+  //       "Limburg Road, Clapham Junction",
+  //       true,
+  //       false,
+  //       14,
+  //       7,
+  //       21,
+  //       51.461923,
+  //       -0.165297));
+  //   expect(
+  //       stationManager2Docks
+  //           .sortDocksByDistanceFromGivenLocation(
+  //               userLocation, stationManager2Docks.getStations())[4]
+  //           .name,
+  //       'Hurlingham Park, Parsons Green');
+  // });
+  // test('Get 5 Closest docks', () {
+  //   expect(stationManager2Docks.get5ClosestDocks(userLocation)[4].name,
+  //       'Little Brook Green, Brook Green');
+  // });
 }
