@@ -44,7 +44,7 @@ class PanelWidget extends StatefulWidget {
       required this.dynamicWidgets,
       required this.listDynamic,
       required this.selectedCords,
-        required this.staticListMap,
+      required this.staticListMap,
       required this.toTextEditController,
       required this.fromTextEditController,
       required this.panelController,
@@ -67,7 +67,7 @@ class PanelWidgetState extends State<PanelWidget> {
   late Map<String, List<double?>> staticListMap;
   late Map response;
 
-  static const String fromLabelKey ="From";
+  static const String fromLabelKey = "From";
   static const String toLabelKey = "To";
 
   final Alerts alert = Alerts();
@@ -89,39 +89,42 @@ class PanelWidgetState extends State<PanelWidget> {
     selectionMap = widget.selectionMap;
 
     LatLng currentLocation = getLatLngFromSharedPrefs();
-    locService.reverseGeoCode(
-        currentLocation.latitude, currentLocation.longitude).then((value){
-          setState(() {
-            if(mounted){
-              response = value;
-            }
-          });
+    locService
+        .reverseGeoCode(currentLocation.latitude, currentLocation.longitude)
+        .then((value) {
+      setState(() {
+        if (mounted) {
+          response = value;
+        }
+      });
     });
 
     widget.address.listen((event) {
-      final dynamicWidget = DynamicWidget(selectedCords: selectedCords, cordDataMap: response,);
+      final dynamicWidget = DynamicWidget(
+        selectedCords: selectedCords,
+        cordDataMap: response,
+      );
       dynamicWidget.textController.text = event.address ?? "";
       dynamicWidget.position = widget.listDynamic.length;
       widget.listDynamic.add(dynamicWidget);
-      print("DynamicWidget_pos: ${dynamicWidget.position} ${selectedCords.length} _${widget.listDynamic.length}");
+      print(
+          "DynamicWidget_pos: ${dynamicWidget.position} ${selectedCords.length} _${widget.listDynamic.length}");
 
-      if(dynamicWidget.position > selectedCords.length){
-
-        selectedCords.add( [event.cords?.latitude, event.cords?.longitude]);
-      }else{
-
+      if (dynamicWidget.position > selectedCords.length) {
+        selectedCords.add([event.cords?.latitude, event.cords?.longitude]);
+      } else {
         selectedCords.insert(dynamicWidget.position,
             [event.cords?.latitude, event.cords?.longitude]);
       }
       widget.dynamicWidgets.sink.add(widget.listDynamic);
-
     });
 
     super.initState();
   }
 
   //When called, this function sets the first location of the journey to the users current location
-  _useCurrentLocationButtonHandler(TextEditingController controller, String key) async {
+  _useCurrentLocationButtonHandler(
+      TextEditingController controller, String key) async {
     sharedPreferences.setString('source', json.encode(response));
     String place = response['place'];
     double latitudeOfPlace = response['location'].latitude;
@@ -136,95 +139,96 @@ class PanelWidgetState extends State<PanelWidget> {
   Function which builds the static row of components which are displayed permanently. Statically built, as every journey
   needs to specify a starting point
   */
-  Widget _buildStatic(TextEditingController controller, {String? hintText, required String label,
-    required Function(List<double?>) onAddressAdded}) {
+  Widget _buildStatic(TextEditingController controller,
+      {String? hintText,
+      required String label,
+      required Function(List<double?>) onAddressAdded}) {
     // widget.textEditingController
     return Row(
-        children: [
-          const SizedBox(width: 10,),
-           Container(width: 50,
-           child: Text(label,
-               style: const TextStyle(
-                 fontWeight: FontWeight.normal,
-                 fontSize: 20,
-               )),),
+      children: [
+        const SizedBox(
+          width: 10,
+        ),
+        Container(
+          width: 50,
+          child: Text(label,
+              style: const TextStyle(
+                fontWeight: FontWeight.normal,
+                fontSize: 20,
+              )),
+        ),
 
-          const SizedBox(width: 20),
-          Expanded(
-            child: SizedBox(
-              child: TextField(
-                readOnly: true,
-                onTap: () {
-                  _handleSearchClick(context, controller, onAddressAdded);
-                },
-                controller: controller,
-                decoration: InputDecoration(
-                  hintText: hintText,
-                  focusedBorder: OutlineInputBorder(
-                    borderSide:
-                        const BorderSide(color: Colors.black, width: 2.0),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide:
-                        const BorderSide(color: Colors.black, width: 1.0),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide:
-                        const BorderSide(color: Colors.black, width: 1.0),
-                  ),
-                  disabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide:
-                        const BorderSide(color: Colors.black, width: 1.0),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide:
-                        const BorderSide(color: Colors.black, width: 1.0),
-                  ),
-                  focusedErrorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide:
-                        const BorderSide(color: Colors.black, width: 1.0),
-                  ),
-                  suffixIcon: IconButton(
-                    onPressed: () {
-                      _useCurrentLocationButtonHandler(controller, label);
-                    },
-                    icon: const Icon(
-                      Icons.my_location,
-                      size: 20,
-                      color: Colors.blue,
-                    ),
+        const SizedBox(width: 20),
+        Expanded(
+          child: SizedBox(
+            child: TextField(
+              readOnly: true,
+              onTap: () {
+                _handleSearchClick(context, controller, onAddressAdded);
+              },
+              controller: controller,
+              decoration: InputDecoration(
+                hintText: hintText,
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.black, width: 2.0),
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: const BorderSide(color: Colors.black, width: 1.0),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: const BorderSide(color: Colors.black, width: 1.0),
+                ),
+                disabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: const BorderSide(color: Colors.black, width: 1.0),
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: const BorderSide(color: Colors.black, width: 1.0),
+                ),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: const BorderSide(color: Colors.black, width: 1.0),
+                ),
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    _useCurrentLocationButtonHandler(controller, label);
+                  },
+                  icon: const Icon(
+                    Icons.my_location,
+                    size: 20,
+                    color: Colors.blue,
                   ),
                 ),
               ),
             ),
           ),
-          //SizedBox(width: 10),
-          TextButton(
-            onPressed: () async {
-              print("Link carasoul stuff here");
-              List temp = await locService.getPlaceCoords(controller.text);
-              print(temp);
-            },
-            child: const Icon(
-              Icons.keyboard_arrow_right_rounded,
-              size: 50,
-              color: Colors.green,
-            ),
+        ),
+        //SizedBox(width: 10),
+        TextButton(
+          onPressed: () async {
+            print("Link carasoul stuff here");
+            List temp = await locService.getPlaceCoords(controller.text);
+            print(temp);
+          },
+          child: const Icon(
+            Icons.keyboard_arrow_right_rounded,
+            size: 50,
+            color: Colors.green,
           ),
-        ],
-      );
+        ),
+      ],
+    );
   }
 
-  void addCordFrom(List<double?> newCord){
+  void addCordFrom(List<double?> newCord) {
     staticListMap[fromLabelKey] = newCord;
   }
-  void addCordTo(List<double?> newCord){
+
+  void addCordTo(List<double?> newCord) {
     staticListMap[toLabelKey] = newCord;
   }
 
@@ -234,7 +238,9 @@ class PanelWidgetState extends State<PanelWidget> {
       controller: widget.scrollController,
       child: Column(
         children: [
-          const SizedBox(height: 20,),
+          const SizedBox(
+            height: 20,
+          ),
           buildDragHandle(),
           const SizedBox(height: 6),
           const Center(
@@ -244,41 +250,45 @@ class PanelWidgetState extends State<PanelWidget> {
             ),
           ),
           const SizedBox(height: 8),
+          _buildStatic(widget.fromTextEditController,
+              hintText: "Where from?",
+              label: "From",
+              onAddressAdded: addCordFrom),
+          _buildStatic(widget.toTextEditController,
+              hintText: "Where to?", label: "To", onAddressAdded: addCordTo),
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                StreamBuilder<List<DynamicWidget>>(
+                  builder: (_, snapshot) {
+                    List<DynamicWidget> listOfDynamics = snapshot.data ?? [];
 
-          _buildStatic(widget.fromTextEditController, hintText: "Where from?",
-              label: "From", onAddressAdded: addCordFrom),
-          _buildStatic(widget.toTextEditController, hintText: "Where to?", label: "To", onAddressAdded: addCordTo),
-
-          Expanded(child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              StreamBuilder<List<DynamicWidget>>(
-                builder: (_, snapshot) {
-                  List<DynamicWidget> listOfDynamics = snapshot.data ?? [];
-
-                  return ListView.builder(
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    itemBuilder: (_, index) {
-                      final dynamicWidget = listOfDynamics[index];
-                      dynamicWidget.position = index;
-                      dynamicWidget.removeDynamic((p0) {
-                        widget.listDynamic.removeAt(index);
-                        widget.dynamicWidgets.sink.add(widget.listDynamic);
-                      });
-                      return dynamicWidget;
-                    },
-                    itemCount: listOfDynamics.length,
-                    physics: const NeverScrollableScrollPhysics(),
-                  );
-                },
-                stream: dynamicWidgetsStream,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-            ],
-          ), flex: 0,),
+                    return ListView.builder(
+                      padding: EdgeInsets.zero,
+                      shrinkWrap: true,
+                      itemBuilder: (_, index) {
+                        final dynamicWidget = listOfDynamics[index];
+                        dynamicWidget.position = index;
+                        dynamicWidget.removeDynamic((p0) {
+                          widget.listDynamic.removeAt(index);
+                          widget.dynamicWidgets.sink.add(widget.listDynamic);
+                        });
+                        return dynamicWidget;
+                      },
+                      itemCount: listOfDynamics.length,
+                      physics: const NeverScrollableScrollPhysics(),
+                    );
+                  },
+                  stream: dynamicWidgetsStream,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+              ],
+            ),
+            flex: 0,
+          ),
           FloatingActionButton(
             onPressed: addDynamic,
             backgroundColor: Colors.white,
@@ -289,17 +299,18 @@ class PanelWidgetState extends State<PanelWidget> {
           ),
           Padding(
             padding:
-            const EdgeInsets.only(top: 20, bottom: 20, left: 10, right: 10),
+                const EdgeInsets.only(top: 20, bottom: 20, left: 10, right: 10),
             child: TextButton(
               style: TextButton.styleFrom(
                 backgroundColor: Colors.green,
                 primary: Colors.white,
               ),
               onPressed: () {
-                applyConstraints(widget.fromTextEditController, widget.toTextEditController);
+                applyConstraints(
+                    widget.fromTextEditController, widget.toTextEditController);
 
-                if(areAdjacentCoods(widget.selectedCords)){
-                  alert.showCantHaveAdajcentSnackBar(context);
+                if (areAdjacentCoods(widget.selectedCords)) {
+                  alert.showCantHaveAdjacentSnackBar(context);
                 }
 
                 List<List<double?>?> tempList = [];
@@ -318,16 +329,18 @@ class PanelWidgetState extends State<PanelWidget> {
     );
   }
 
-  void applyConstraints(TextEditingController fromEditingController, TextEditingController toEditingController){
-    if(startLocationMustBeSpecified(fromEditingController) || startLocationMustBeSpecified(toEditingController)){
+  void applyConstraints(TextEditingController fromEditingController,
+      TextEditingController toEditingController) {
+    if (startLocationMustBeSpecified(fromEditingController) ||
+        startLocationMustBeSpecified(toEditingController)) {
       return;
     }
 
-    if(oneDestinationMustBeSpecified()){
+    if (oneDestinationMustBeSpecified()) {
       return;
     }
 
-    if(aSearchBarCannotBeEmpty(widget.listDynamic)){
+    if (aSearchBarCannotBeEmpty(widget.listDynamic)) {
       return;
     }
   }
@@ -337,9 +350,10 @@ class PanelWidgetState extends State<PanelWidget> {
     return widget.selectedCords;
   }
 
-  bool areAdjacentCoods(List<List<double?>?> myList){
-    for(int i = 0; i < myList.length - 1 ; i++){
-      if(myList[i]?.first == myList[i+1]?.first && myList[i]?.last == myList[i+1]?.last){
+  bool areAdjacentCoods(List<List<double?>?> myList) {
+    for (int i = 0; i < myList.length - 1; i++) {
+      if (myList[i]?.first == myList[i + 1]?.first &&
+          myList[i]?.last == myList[i + 1]?.last) {
         print("Adjacents exist");
         return true;
       }
@@ -369,7 +383,8 @@ class PanelWidgetState extends State<PanelWidget> {
   }
 
   //The logic to restrict the user from being able to start a journey without a starting point
-  bool startLocationMustBeSpecified(TextEditingController textEditingController) {
+  bool startLocationMustBeSpecified(
+      TextEditingController textEditingController) {
     if (textEditingController.text.isEmpty) {
       alert.showStartLocationMustNotBeEmptySnackBar(context);
       return true;
@@ -400,8 +415,10 @@ class PanelWidgetState extends State<PanelWidget> {
   //When triggered, redirects the user to the place_search_Screen in order for them to specify a location to visit
   //for the journey
 
-  void _handleSearchClick(BuildContext context,
-      TextEditingController textEditingController, Function(List<double?>) onAddressAdded) async {
+  void _handleSearchClick(
+      BuildContext context,
+      TextEditingController textEditingController,
+      Function(List<double?>) onAddressAdded) async {
     final selectedCords = widget.selectedCords;
     final tempPosition = selectedCords.length;
     final result = await context.openSearch();
@@ -410,10 +427,10 @@ class PanelWidgetState extends State<PanelWidget> {
     if (feature != null) {
       textEditingController.text = feature.placeName ?? "N/A";
       final featureCord = feature.geometry?.coordinates;
-      if(featureCord != null) {
+      if (featureCord != null) {
         onAddressAdded.call(featureCord);
       }
-     // staticList = feature.geometry?.coordinates;
+      // staticList = feature.geometry?.coordinates;
     }
   }
 
@@ -449,94 +466,97 @@ class DynamicWidget extends StatelessWidget {
     position = index;
   }
 
-  DynamicWidget({Key? key, required this.selectedCords, this.cordDataMap}) : super(key: key);
+  DynamicWidget({Key? key, required this.selectedCords, this.cordDataMap})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Row(
-        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const SizedBox(width: 17),
-          //Expanded(
-          TextButton(
-            onPressed: () {
-              int len = selectedCords?.length ?? 0;
-              if (position < len) {
-                selectedCords?.removeAt(position);
-              }
-              onDelete?.call(position);
-            },
-            child: const Icon(
-              Icons.close_outlined,
-              size: 35,
-              color: Colors.red,
-            ),
+      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        const SizedBox(width: 17),
+        //Expanded(
+        TextButton(
+          onPressed: () {
+            int len = selectedCords?.length ?? 0;
+            if (position < len) {
+              selectedCords?.removeAt(position);
+            }
+            onDelete?.call(position);
+          },
+          child: const Icon(
+            Icons.close_outlined,
+            size: 35,
+            color: Colors.red,
           ),
-          //),
-          Expanded(
-            child: TextField(
-              readOnly: true,
-              onTap: () {
-                _handleSearchClick(context, position);
-              },
-              controller: textController,
-              decoration: InputDecoration(
-                suffixIcon:  IconButton(
-                  onPressed: () {
-                    if(cordDataMap == null)return;
-                    _useCurrentLocationButtonHandler(cordDataMap!, textController);
-                  },
-                  icon: const Icon(
-                    Icons.my_location,
-                    size: 20,
-                    color: Colors.blue,
-                  ),
+        ),
+        //),
+        Expanded(
+          child: TextField(
+            readOnly: true,
+            onTap: () {
+              _handleSearchClick(context, position);
+            },
+            controller: textController,
+            decoration: InputDecoration(
+              suffixIcon: IconButton(
+                onPressed: () {
+                  if (cordDataMap == null) return;
+                  _useCurrentLocationButtonHandler(
+                      cordDataMap!, textController);
+                },
+                icon: const Icon(
+                  Icons.my_location,
+                  size: 20,
+                  color: Colors.blue,
                 ),
-                suffixIconColor: Colors.blue,
-                hintText: 'Where to?',
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(color: Colors.black, width: 2.0),
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: const BorderSide(color: Colors.black, width: 1.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: const BorderSide(color: Colors.black, width: 1.0),
-                ),
-                disabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: const BorderSide(color: Colors.black, width: 1.0),
-                ),
-                errorBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: const BorderSide(color: Colors.black, width: 1.0),
-                ),
-                focusedErrorBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: const BorderSide(color: Colors.black, width: 1.0),
-                ),
+              ),
+              suffixIconColor: Colors.blue,
+              hintText: 'Where to?',
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: Colors.black, width: 2.0),
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: const BorderSide(color: Colors.black, width: 1.0),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: const BorderSide(color: Colors.black, width: 1.0),
+              ),
+              disabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: const BorderSide(color: Colors.black, width: 1.0),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: const BorderSide(color: Colors.black, width: 1.0),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: const BorderSide(color: Colors.black, width: 1.0),
               ),
             ),
           ),
-          //Expanded(
-          TextButton(
-            onPressed: () async {
-              print("Link carasoul stuff here");
-              List temp = await locationService.getPlaceCoords(textController.text);
-              print(temp);
-            },
-            child: const Icon(
-              Icons.keyboard_arrow_right_rounded,
-              size: 50,
-              color: Colors.green,
-            ),
+        ),
+        //Expanded(
+        TextButton(
+          onPressed: () async {
+            print("Link carasoul stuff here");
+            List temp =
+                await locationService.getPlaceCoords(textController.text);
+            print(temp);
+          },
+          child: const Icon(
+            Icons.keyboard_arrow_right_rounded,
+            size: 50,
+            color: Colors.green,
           ),
-          //),
-        ],
-      );
+        ),
+        //),
+      ],
+    );
   }
 
   //Executed when the user presses on a search TextField
@@ -563,7 +583,8 @@ class DynamicWidget extends StatelessWidget {
   }
 
   //When called, this function sets the first location of the journey to the users current location
-  _useCurrentLocationButtonHandler(Map response, TextEditingController controller) async {
+  _useCurrentLocationButtonHandler(
+      Map response, TextEditingController controller) async {
     sharedPreferences.setString('source', json.encode(response));
     String place = response['place'];
     double latitudeOfPlace = response['location'].latitude;
@@ -578,5 +599,4 @@ class DynamicWidget extends StatelessWidget {
       selectedCords?[position] = currentLocationCoords;
     }
   }
-
 }

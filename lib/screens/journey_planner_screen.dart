@@ -82,7 +82,7 @@ class _JourneyPlanner extends State<JourneyPlanner> {
                         coordinates.latitude, coordinates.longitude);
                     address.sink.add(MapPlace(s['place'], s['location']));
                     print(s['place']);
-                    print("Latitdue");
+                    print("Latitude");
                     print(s['location'].latitude);
                     print(coordinates);
                   },
@@ -100,7 +100,8 @@ class _JourneyPlanner extends State<JourneyPlanner> {
           toTextEditController: toTextEditingController,
           dynamicWidgets: dynamicWidgets,
           panelController: panelController,
-          selectedCords: cordsList, staticListMap : staticCordMap,
+          selectedCords: cordsList,
+          staticListMap: staticCordMap,
         ),
       ),
     );

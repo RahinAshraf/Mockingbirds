@@ -49,7 +49,6 @@ class _FavouriteState extends State<Favourite> {
             ),
       appBar: AppBar(
         title: const Text('My favourites'),
-        backgroundColor: appBarColor,
       ),
     );
   }

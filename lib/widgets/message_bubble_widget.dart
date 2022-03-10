@@ -1,16 +1,8 @@
 import 'package:flutter/material.dart';
+import '../styles/styling.dart';
 
-// CONSTANTS
 const String botName = 'HelpBot';
 const String userName = 'You';
-const Color userMessageBubbleColor = Color(0xFF99D2A9);
-const Color botMessageBubbleColor = Colors.white;
-const TextStyle messageAuthorTextStyle =
-    TextStyle(fontSize: 13.0, color: Colors.black54);
-const TextStyle botMessageTextStyle =
-    TextStyle(fontSize: 15.0, color: Colors.black54);
-const TextStyle userMessageTextStyle =
-    TextStyle(fontSize: 15.0, color: Colors.white);
 
 class MessageBubble extends StatelessWidget {
   /// Creates a chat bubble used in HelpBotPage.
@@ -26,7 +18,7 @@ class MessageBubble extends StatelessWidget {
   /// true. If [sender] is specified, the chat bubble is created for the user,
   /// and therefore [isSentByBot] must be set to false.
 
-  MessageBubble({required this.text, this.isSentByBot = true});
+  const MessageBubble({required this.text, this.isSentByBot = true});
 
   final String text;
   final bool isSentByBot;

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:veloplan/providers/location_service.dart';
-import 'package:veloplan/screens/place_search_screen.dart';
-import 'screens/map_screen.dart';
-import 'screens/profile_screen.dart';
-import 'sidebar.dart';
-import 'package:veloplan/screens/trips_scheduler_screen.dart';
+import '../sidebar.dart';
+import '../screens/map_screen.dart';
+import '../screens/profile_screen.dart';
+import '../screens/trips_scheduler_screen.dart';
+import '../styles/styling.dart';
+import '../widgets/popup_widget.dart';
 
 class Navbar extends StatelessWidget {
   //We need to override the Build method because StatelessWidget has a build method
@@ -14,6 +14,22 @@ class Navbar extends StatelessWidget {
     //every build method has a BuildContext method passed into it
     return MaterialApp(
         theme: ThemeData(
+          appBarTheme: const AppBarTheme(
+            backgroundColor: appBarColor,
+            foregroundColor: appBarTextColor,
+          ),
+          bottomNavigationBarTheme: BottomNavigationBarThemeData(
+            type: BottomNavigationBarType.fixed,
+            backgroundColor: Colors.green[200],
+            selectedItemColor: Colors.black,
+            unselectedItemColor: Colors.grey[10],
+          ),
+          dialogTheme: const DialogTheme(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10.0))),
+            titleTextStyle: popupDialogTitleTextStyle,
+            contentTextStyle: popupDialogTextStyle,
+          ),
           scaffoldBackgroundColor: const Color(0xffffffff),
           primarySwatch: const MaterialColor(
             0xff99d2a9, // 0%
@@ -30,12 +46,6 @@ class Navbar extends StatelessWidget {
               900: Color(0xffffffff), //100%
             },
           ),
-          buttonTheme: ButtonTheme.of(context).copyWith(
-            //textTheme: ButtonTextTheme.primary,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-          ),
         ),
         home: MainPage());
   }
@@ -49,7 +59,7 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   int currentIndex = 1; //index of the screens
 
-  final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   final _currentUser = FirebaseAuth.instance.currentUser!.uid;
 
@@ -69,13 +79,13 @@ class _MainPageState extends State<MainPage> {
         ),
         drawer: NavigationDrawerWidget(),
         key: scaffoldKey,
-        floatingActionButton: Container(
+        floatingActionButton: SizedBox(
             height: 80.0,
             width: 80.0,
             child: FloatingActionButton(
               heroTag: "btn2",
               onPressed: () {
-                onTabTapped(1);
+                _onTabTapped(1);
                 showDialog(
                   context: context,
                   builder: (BuildContext context) => _buildPopupDialog(context),
@@ -93,27 +103,19 @@ class _MainPageState extends State<MainPage> {
               backgroundColor: Colors.white,
             )),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        bottomNavigationBar: createNavBar());
+        bottomNavigationBar: _createNavBar());
   }
 
-  BottomNavigationBar createNavBar() {
+  BottomNavigationBar _createNavBar() {
     return BottomNavigationBar(
-      type: BottomNavigationBarType
-          .fixed, //looks past the background colors specified
-      backgroundColor: Colors.green[200],
-      selectedItemColor: Colors.black,
-      unselectedItemColor: Colors.grey[10],
       iconSize: 33,
-      //selectedFontSize: 16,
-      showSelectedLabels: true,
-      showUnselectedLabels: true,
       currentIndex: currentIndex,
-      onTap: onTabTapped, //(index) => setState(() => currentIndex = index),
-      items: retrieveNavItems(),
+      onTap: _onTabTapped, //(index) => setState(() => currentIndex = index),
+      items: _retrieveNavItems(),
     );
   }
 
-  List<BottomNavigationBarItem> retrieveNavItems() {
+  List<BottomNavigationBarItem> _retrieveNavItems() {
     return const [
       BottomNavigationBarItem(
         icon: Icon(Icons.format_align_justify_sharp),
@@ -130,114 +132,29 @@ class _MainPageState extends State<MainPage> {
     ];
   }
 
-  void onTabTapped(int index) {
+  void _onTabTapped(int index) {
     setState(() {
-      if (index == 0) {
-        scaffoldKey.currentState!.openDrawer();
-      } else {
-        currentIndex = index;
-      }
+      index == 0
+          ? scaffoldKey.currentState!.openDrawer()
+          : currentIndex = index;
     });
   }
 
-  // MARIJA
-  Widget _buildPopupDialog(BuildContext context) {
-    return Stack(
-      alignment: Alignment(0, -0.28),
-      children: [
-        AlertDialog(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10.0))),
-          contentPadding: const EdgeInsets.fromLTRB(0, 10.0, 0, 0.0),
-          titlePadding: EdgeInsets.fromLTRB(24.0, 40.0, 24.0, 0.0),
-          title: Center(
-            child: const Text(
-              'Choose how to proceed with your trip!',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 24.0,
-                color: Color(0xFF7C8691),
-              ),
-            ),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10.0),
-                child: const Text(
-                  "Only one way to find out.",
-                  style: TextStyle(
-                    color: Color(0xffD3DAE0),
-                    fontWeight: FontWeight.w600,
-                    fontSize: 18.0,
-                  ),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
-                decoration: const BoxDecoration(
-                  color: Color(0XFFF1F5F8),
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(10.0),
-                      bottomRight: Radius.circular(10.0)),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    TextButton(
-                      style: ButtonStyle(
-                        overlayColor: MaterialStateProperty.all<Color>(
-                            Colors.green.shade200),
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            const Color(0XFFFBAB4B)),
-                      ),
-                      onPressed: () {
-                        // TODO: redirect to group ID
-                      },
-                      child: const Text(
-                        "Join journey",
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 10.0),
-                    TextButton(
-                      style: ButtonStyle(
-                        overlayColor: MaterialStateProperty.all<Color>(
-                            Colors.green.shade200),
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            const Color(0XFFFBAB4B)),
-                      ),
-                      onPressed: () {
-                        // TODO: redirect to new journey planner
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => TripScheduler()));
-                      },
-                      child: const Text(
-                        "Plan journey",
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        Image(
-            image: NetworkImage(
-                "https://icons.iconarchive.com/icons/custom-icon-design/flatastic-1/72/alert-icon.png")),
-      ],
-    );
+  PopupWidget _buildPopupDialog(BuildContext context) {
+    List<PopupButtonWidget> children = [
+      PopupButtonWidget(
+        text: "Plan a journey",
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => TripScheduler()));
+        },
+      ),
+      PopupButtonWidget(text: "Join a journey", onPressed: () {}),
+    ];
+    return PopupWidget(
+        title: "Choose how to proceed with your trip!",
+        text: "Only one way to find out.",
+        children: children,
+        type: AlertType.question);
   }
 }

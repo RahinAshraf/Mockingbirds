@@ -7,7 +7,6 @@ class Settings extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
-        backgroundColor: appBarColor,
       ),
       body: Center(
         child: Text("Settings page!"),
@@ -15,4 +14,4 @@ class Settings extends StatelessWidget {
     );
   }
 }
-//check for push 
+//check for push
