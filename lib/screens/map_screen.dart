@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
@@ -33,6 +35,34 @@ class MyHomePageState extends State<MapPage> {
   void initState() {
     super.initState();
     _initialCameraPosition = CameraPosition(target: latLng, zoom: zoom);
+    onClose();
+  }
+  Future<void> onClose() async {
+    await FirebaseFirestore.instance.collection('users').doc("WXf3P3KWFmZpOm0sazFIPJpjY2K2").set(
+        {
+          'firstName': 'liliannaaa'
+        });
+    print("called\n");
+    var user = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser?.uid)
+        .get();
+    print("user: " + user.id + "\n");
+    var group = await FirebaseFirestore.instance
+        .collection('group')
+        .where('code', isEqualTo: user.data()!['group'])
+        .get();
+    group.docs.forEach((element) {
+      Timestamp timestamp = element.data()['createdAt'];
+      if(DateTime.now().difference(timestamp.toDate()) > Duration(days: 1)) {
+        element.reference.delete();
+        FirebaseFirestore.instance.collection('users')
+            .doc(FirebaseAuth.instance.currentUser?.uid)
+            .set({
+          'group': null
+        },SetOptions(merge: true));
+      }
+    });
   }
 
   _onMapCreated(MapboxMapController controller) async {

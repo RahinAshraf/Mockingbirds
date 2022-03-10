@@ -21,11 +21,7 @@ packages:
       name: archive
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
     version: "3.2.1"
-=======
-    version: "3.2.0"
->>>>>>> com
   args:
     dependency: transitive
     description:
@@ -47,7 +43,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
-<<<<<<< HEAD
   build:
     dependency: transitive
     description:
@@ -69,8 +64,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "8.1.4"
-=======
->>>>>>> com
   carousel_slider:
     dependency: "direct main"
     description:
@@ -127,7 +120,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.6.8"
-<<<<<<< HEAD
   code_builder:
     dependency: transitive
     description:
@@ -135,8 +127,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.1.0"
-=======
->>>>>>> com
   collection:
     dependency: transitive
     description:
@@ -179,7 +169,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.4"
-<<<<<<< HEAD
   dart_style:
     dependency: transitive
     description:
@@ -194,8 +183,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.0.5"
-=======
->>>>>>> com
   email_validator:
     dependency: "direct main"
     description:
@@ -203,7 +190,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
-<<<<<<< HEAD
   extended_nested_scroll_view:
     dependency: "direct main"
     description:
@@ -211,8 +197,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.0.0"
-=======
->>>>>>> com
   fake_async:
     dependency: transitive
     description:
@@ -283,7 +267,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.5.4"
-<<<<<<< HEAD
   firebase_database:
     dependency: transitive
     description:
@@ -319,8 +302,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.0+5"
-=======
->>>>>>> com
   firebase_storage:
     dependency: "direct main"
     description:
@@ -342,7 +323,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.2.8"
-<<<<<<< HEAD
   fixnum:
     dependency: transitive
     description:
@@ -350,14 +330,11 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
-=======
->>>>>>> com
   flutter:
     dependency: "direct main"
     description: flutter
     source: sdk
     version: "0.0.0"
-<<<<<<< HEAD
   flutter_facebook_auth:
     dependency: transitive
     description:
@@ -379,8 +356,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.0+1"
-=======
->>>>>>> com
   flutter_google_places:
     dependency: "direct main"
     description:
@@ -395,14 +370,11 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.4"
-<<<<<<< HEAD
   flutter_localizations:
     dependency: transitive
     description: flutter
     source: sdk
     version: "0.0.0"
-=======
->>>>>>> com
   flutter_map:
     dependency: "direct main"
     description:
@@ -424,7 +396,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
-<<<<<<< HEAD
   flutter_svg:
     dependency: transitive
     description:
@@ -432,8 +403,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.3"
-=======
->>>>>>> com
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -444,7 +413,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-<<<<<<< HEAD
   flutterfire_ui:
     dependency: "direct main"
     description:
@@ -459,8 +427,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "9.2.0"
-=======
->>>>>>> com
   frontend_server_client:
     dependency: transitive
     description:
@@ -559,7 +525,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.0.20-nullsafety.5"
-<<<<<<< HEAD
   google_sign_in:
     dependency: transitive
     description:
@@ -581,8 +546,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.10.0+5"
-=======
->>>>>>> com
   http:
     dependency: "direct main"
     description:
@@ -610,11 +573,7 @@ packages:
       name: image
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
     version: "3.1.3"
-=======
-    version: "3.1.1"
->>>>>>> com
   image_picker:
     dependency: "direct main"
     description:
@@ -748,6 +707,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.12.11"
+  material_color_utilities:
+    dependency: transitive
+    description:
+      name: material_color_utilities
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.3"
   meta:
     dependency: transitive
     description:
@@ -769,7 +735,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1"
-<<<<<<< HEAD
   mockito:
     dependency: "direct main"
     description:
@@ -777,8 +742,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.1.0"
-=======
->>>>>>> com
   nested:
     dependency: transitive
     description:
@@ -849,7 +812,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.0"
-<<<<<<< HEAD
   path_drawing:
     dependency: transitive
     description:
@@ -864,8 +826,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
-=======
->>>>>>> com
   path_provider_linux:
     dependency: transitive
     description:
@@ -1062,7 +1022,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1"
-<<<<<<< HEAD
   sign_in_with_apple:
     dependency: transitive
     description:
@@ -1084,8 +1043,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1"
-=======
->>>>>>> com
   sky_engine:
     dependency: transitive
     description: flutter
@@ -1105,7 +1062,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0+2"
-<<<<<<< HEAD
   source_gen:
     dependency: transitive
     description:
@@ -1113,8 +1069,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.1"
-=======
->>>>>>> com
   source_map_stack_trace:
     dependency: transitive
     description:
@@ -1177,45 +1131,21 @@ packages:
       name: test
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
-<<<<<<< HEAD
     version: "1.19.5"
-=======
-    version: "1.17.12"
->>>>>>> com
-=======
-    version: "1.17.12"
->>>>>>> Pressing other question launches mail app in helpbot
   test_api:
     dependency: transitive
     description:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
-<<<<<<< HEAD
     version: "0.4.8"
-=======
-    version: "0.4.3"
->>>>>>> com
-=======
-    version: "0.4.3"
->>>>>>> Pressing other question launches mail app in helpbot
   test_core:
     dependency: transitive
     description:
       name: test_core
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
-<<<<<<< HEAD
     version: "0.4.9"
-=======
-    version: "0.4.2"
->>>>>>> com
-=======
-    version: "0.4.2"
->>>>>>> Pressing other question launches mail app in helpbot
   transparent_image:
     dependency: transitive
     description:
@@ -1230,7 +1160,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
-<<<<<<< HEAD
   twitter_login:
     dependency: transitive
     description:
@@ -1238,8 +1167,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.1"
-=======
->>>>>>> com
   typed_data:
     dependency: transitive
     description:

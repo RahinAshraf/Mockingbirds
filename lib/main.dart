@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'screens/login_screen.dart';
 import 'navbar.dart';
@@ -21,6 +24,7 @@ void main() async {
     initialRoute: '/',
     routes: {'/': (context) => const MyApp(), '/map': (context) => Navbar()},
   ));
+  // onClose();
 }
 
 void initializeLocation() async {
@@ -50,6 +54,12 @@ void saveLocation(LocationData _locationData) {
   sharedPreferences.setDouble('longitude', _locationData.longitude!);
 }
 
+
+
+// void removeEmptyGroup(QueryDocumentSnapshot snapshot) {
+//   print(snapshot.data()!['code']);
+// }
+
 // void main() {
 //   runApp(MultiProvider(providers: [], child: const MyApp()));
 // }
@@ -62,6 +72,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+
+
   @override
   Widget build(BuildContext context) {
     //final Future<FirebaseApp> _initialization = Firebase.initializeApp();
