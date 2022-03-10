@@ -75,4 +75,14 @@ class HelpBotManager {
     return lst;
   }
 
+
+  bool getLaunch(String id){
+    for (Message message in data) {
+      if (message.id == id) {
+        return message.launch;
+      }
+    }
+    return false;
+  }
+
 }
