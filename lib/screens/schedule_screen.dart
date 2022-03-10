@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:timeline_tile/timeline_tile.dart';
+import '../styles/styling.dart';
 
 class SchedulePage extends StatefulWidget {
   @override
@@ -9,16 +9,10 @@ class SchedulePage extends StatefulWidget {
 }
 
 class _SchedulePageState extends State<SchedulePage> {
-  // final Map<DateTime, List> _scheduledEvents = {
-  //   DateTime(2019, 4, 3): ['Selected Day in the calendar!'],
-  //   DateTime(2019, 4, 5): ['Selected Day in the calendar!'],
-  // };
-  CalendarFormat format = CalendarFormat.month;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFf5f5f5),
+      backgroundColor: whiteReplacement,
       appBar: AppBar(
         title: const Text('Schedule'),
       ),
@@ -32,535 +26,166 @@ class _SchedulePageState extends State<SchedulePage> {
                 firstDay: DateTime.utc(2022, 01, 01),
                 lastDay: DateTime.utc(2023, 01, 01),
                 focusedDay: DateTime.now(),
-                calendarStyle: const CalendarStyle(
-                  todayDecoration: BoxDecoration(
-                    color: Color(0xFF99D2A9),
-                    shape: BoxShape.circle,
-                  ),
-                ),
+                calendarStyle: scheduleScreenCalendarStyle,
               ),
             ),
             const Padding(
               padding: EdgeInsets.only(left: 15.0, bottom: 15.0),
-              child: Text(
-                'Upcoming journeys',
-                style: TextStyle(
-                  fontSize: 30.0,
-                  color: Color(0xFF393939),
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
+              child:
+                  Text('Upcoming journeys', style: upcomingJourneysTextStyle),
             ),
-            TimelineTile(
+            // TODO: instead of manually generating timeline items, pass a list (map?) of upcoming journeys
+            const TimelineItem(
+              month: "March",
+              day: "2",
               isFirst: true,
-              beforeLineStyle: const LineStyle(
-                thickness: 1.0,
-                color: Color(0XFFe1e1e1),
-              ),
-              indicatorStyle: const IndicatorStyle(
-                padding: EdgeInsets.all(5),
-                width: 10,
-                indicatorXY: 0.0,
-                color: Colors.green,
-              ),
-              alignment: TimelineAlign.manual,
-              lineXY: 0.10,
-              startChild: Container(
-                padding: EdgeInsets.only(top: 5.0),
-                alignment: Alignment.topCenter,
-                child: Column(
-                  children: [
-                    Text(
-                      "23",
-                      style: TextStyle(
-                          fontWeight: FontWeight.w300, fontSize: 16.0),
-                    ),
-                    Text(
-                      "Feb",
-                      style: TextStyle(
-                          fontWeight: FontWeight.w300, fontSize: 10.0),
-                    ),
-                  ],
-                ),
-              ),
-              endChild: Card(
-                elevation: 1,
-                margin: const EdgeInsets.fromLTRB(10.0, 15.0, 20.0, 15.0),
-                shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(15.0),
-                  bottomRight: Radius.circular(15.0),
-                  topRight: Radius.circular(15.0),
-                )),
-                child: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Column(
-                    children: <Widget>[
-                      const ListTile(
-                        title: Text(
-                          'Trip to Buckingham Palace',
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            color: Color(0xFF393939),
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
-                      Row(
-                        children: const [
-                          SizedBox(width: 15.0),
-                          Icon(
-                            Icons.person_outline_outlined,
-                            color: Colors.black54,
-                            size: 15.0,
-                          ),
-                          Text(
-                            " 5 members",
-                            style: TextStyle(
-                              fontSize: 15.0,
-                              color: Colors.black54,
-                            ),
-                          ),
-                          SizedBox(width: 15.0),
-                          Icon(
-                            Icons.fmd_good_outlined,
-                            color: Colors.black54,
-                            size: 15.0,
-                          ),
-                          Text(
-                            " Buckingham Palace",
-                            style: TextStyle(
-                              fontSize: 15.0,
-                              color: Colors.black54,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              upcomingEventCards: [
+                UpcomingEventCard(
+                    title: "Trip to Westminster Abbey",
+                    number: 3,
+                    time: "21:00")
+              ],
             ),
-            TimelineTile(
-              isFirst: false,
-              beforeLineStyle: const LineStyle(
-                thickness: 1.0,
-                color: Color(0XFFe1e1e1),
-              ),
-              indicatorStyle: const IndicatorStyle(
-                padding: EdgeInsets.all(5),
-                width: 10,
-                indicatorXY: 0.0,
-                color: Colors.green,
-              ),
-              alignment: TimelineAlign.manual,
-              lineXY: 0.10,
-              startChild: Container(
-                padding: EdgeInsets.only(top: 5.0),
-                alignment: Alignment.topCenter,
-                child: Column(
-                  children: [
-                    Text(
-                      "02",
-                      style: TextStyle(
-                          fontWeight: FontWeight.w300, fontSize: 16.0),
-                    ),
-                    Text(
-                      "April",
-                      style: TextStyle(
-                          fontWeight: FontWeight.w300, fontSize: 10.0),
-                    ),
-                  ],
-                ),
-              ),
-              endChild: Card(
-                elevation: 1,
-                margin: const EdgeInsets.fromLTRB(10.0, 15.0, 20.0, 15.0),
-                shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(15.0),
-                  bottomRight: Radius.circular(15.0),
-                  topRight: Radius.circular(15.0),
-                )),
-                child: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Column(
-                    children: <Widget>[
-                      const ListTile(
-                        title: Text(
-                          'Trip to London Eye',
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            color: Color(0xFF393939),
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
-                      Row(
-                        children: const [
-                          SizedBox(width: 15.0),
-                          Icon(
-                            Icons.person_outline_outlined,
-                            color: Colors.black54,
-                            size: 15.0,
-                          ),
-                          Text(
-                            " 4 members",
-                            style: TextStyle(
-                              fontSize: 15.0,
-                              color: Colors.black54,
-                            ),
-                          ),
-                          SizedBox(width: 15.0),
-                          Icon(
-                            Icons.fmd_good_outlined,
-                            color: Colors.black54,
-                            size: 15.0,
-                          ),
-                          Text(
-                            " London Eye",
-                            style: TextStyle(
-                              fontSize: 15.0,
-                              color: Colors.black54,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+            const TimelineItem(month: "March", day: "3", upcomingEventCards: [
+              UpcomingEventCard(
+                  title: "Trip to London Bridge", number: 1, time: "12:00")
+            ]),
+            const TimelineItem(month: "May", day: "1", upcomingEventCards: [
+              UpcomingEventCard(
+                  title: "Cycle around Stratford", number: 5, time: "13:00")
+            ]),
+            const TimelineItem(
+              day: "16",
+              month: "Aug",
+              upcomingEventCards: [
+                UpcomingEventCard(
+                    title: "Biking society's trip to Regent's Park",
+                    number: 5,
+                    time: "16:00")
+              ],
             ),
-            TimelineTile(
-              isFirst: false,
-              beforeLineStyle: const LineStyle(
-                thickness: 1.0,
-                color: Color(0XFFe1e1e1),
-              ),
-              indicatorStyle: const IndicatorStyle(
-                padding: EdgeInsets.all(5),
-                width: 10,
-                indicatorXY: 0.0,
-                color: Colors.green,
-              ),
-              alignment: TimelineAlign.manual,
-              lineXY: 0.10,
-              startChild: Container(
-                padding: EdgeInsets.only(top: 5.0),
-                alignment: Alignment.topCenter,
-                child: Column(
-                  children: [
-                    Text(
-                      "02",
-                      style: TextStyle(
-                          fontWeight: FontWeight.w300, fontSize: 16.0),
-                    ),
-                    Text(
-                      "May",
-                      style: TextStyle(
-                          fontWeight: FontWeight.w300, fontSize: 10.0),
-                    ),
-                  ],
-                ),
-              ),
-              endChild: Card(
-                elevation: 1,
-                margin: const EdgeInsets.fromLTRB(10.0, 15.0, 20.0, 15.0),
-                shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(15.0),
-                  bottomRight: Radius.circular(15.0),
-                  topRight: Radius.circular(15.0),
-                )),
-                child: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Column(
-                    children: <Widget>[
-                      const ListTile(
-                        title: Text(
-                          'Trip to London Bridge',
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            color: Color(0xFF393939),
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
-                      Row(
-                        children: const [
-                          SizedBox(width: 15.0),
-                          Icon(
-                            Icons.person_outline_outlined,
-                            color: Colors.black54,
-                            size: 15.0,
-                          ),
-                          Text(
-                            " 3 members",
-                            style: TextStyle(
-                              fontSize: 15.0,
-                              color: Colors.black54,
-                            ),
-                          ),
-                          SizedBox(width: 15.0),
-                          Icon(
-                            Icons.fmd_good_outlined,
-                            color: Colors.black54,
-                            size: 15.0,
-                          ),
-                          Text(
-                            " London Bridge",
-                            style: TextStyle(
-                              fontSize: 15.0,
-                              color: Colors.black54,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+            const TimelineItem(
+              day: "31",
+              month: "Sept",
+              upcomingEventCards: [
+                UpcomingEventCard(
+                    title: "Trip to London Bridge", number: 1, time: "15:30"),
+                UpcomingEventCard(
+                    title: "Trip to Science Museum", number: 2, time: "23:00"),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Creates a timeline tile.
+///
+/// This widget generates a timeline tile used in [SchedulePage].
+/// It is used along with [UpcomingEventCard]. The [day] and the
+/// [month] properties are used together and correspond to [startChild]
+/// property of [TimelineTile], and [upcomingEventCards] correspond to
+/// [endChild] property of [TimelineTile].
+///
+/// The [day] property must be a valid day number 0-31 and the [month] property
+/// should be a shortened month name, no more than 5 characters long to avoid
+/// distorted widget.
+///
+/// The list [upcomingEventCards] should already contain all the events
+/// of a user on the same date, sorted from earliest to latest.
+class TimelineItem extends StatelessWidget {
+  const TimelineItem(
+      {required this.month,
+      required this.day,
+      this.isFirst = false,
+      required this.upcomingEventCards});
+
+  final String day;
+  final String month;
+  final bool isFirst;
+  final List<UpcomingEventCard> upcomingEventCards;
+
+  @override
+  Widget build(BuildContext context) {
+    return TimelineTile(
+      isFirst: isFirst,
+      beforeLineStyle: timelineTileBeforeLineStyle,
+      indicatorStyle: timelineTileIndicatorStyle,
+      alignment: TimelineAlign.manual,
+      lineXY: 0.10,
+      startChild: Container(
+        padding: const EdgeInsets.only(top: 5.0),
+        alignment: Alignment.topCenter,
+        child: Column(
+          children: [
+            Text(day, style: timelineTileDayTextStyle),
+            Text(month, style: timelineTileMonthTextStyle),
+          ],
+        ),
+      ),
+      endChild: Column(
+        children: upcomingEventCards,
+      ),
+    );
+  }
+}
+
+/// Generates an event card for schedule screen.
+///
+/// This widget generates a card of an event displayed in
+/// schedule screen, under upcoming journeys. It takes [title],
+/// [number] of people in the trip, and the [time] when the trip
+/// takes place. At this stage, it is not concerned with the date
+/// of the trip. These cards were designed to be used with [TimelineItem].
+class UpcomingEventCard extends StatelessWidget {
+  const UpcomingEventCard(
+      {required this.title, required this.number, required this.time});
+
+  final String title;
+  final int number;
+  final String time;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 1,
+      margin: const EdgeInsets.fromLTRB(10.0, 10.0, 20.0, 5.0),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+        bottomLeft: Radius.circular(15.0),
+        bottomRight: Radius.circular(15.0),
+        topRight: Radius.circular(15.0),
+      )),
+      child: Padding(
+        padding: const EdgeInsets.only(
+            bottom: 15.0, left: 15.0, right: 15.0, top: 15.0),
+        child: Column(
+          children: <Widget>[
+            ListTile(
+              title: Text(title, style: eventCardTitleTextStyle),
             ),
-            TimelineTile(
-              isFirst: false,
-              beforeLineStyle: const LineStyle(
-                thickness: 1.0,
-                color: Color(0XFFe1e1e1),
-              ),
-              indicatorStyle: const IndicatorStyle(
-                padding: EdgeInsets.all(5),
-                width: 10,
-                indicatorXY: 0.0,
-                color: Colors.green,
-              ),
-              alignment: TimelineAlign.manual,
-              lineXY: 0.10,
-              startChild: Container(
-                padding: EdgeInsets.only(top: 5.0),
-                alignment: Alignment.topCenter,
-                child: Column(
-                  children: [
-                    Text(
-                      "05",
-                      style: TextStyle(
-                          fontWeight: FontWeight.w300, fontSize: 16.0),
-                    ),
-                    Text(
-                      "May",
-                      style: TextStyle(
-                          fontWeight: FontWeight.w300, fontSize: 10.0),
-                    ),
-                  ],
+            Row(
+              children: [
+                const SizedBox(width: 15.0),
+                const Icon(
+                  Icons.person_outline_outlined,
+                  color: Colors.black54,
+                  size: 15.0,
                 ),
-              ),
-              endChild: Column(
-                children: [
-                  Card(
-                    elevation: 1,
-                    margin: const EdgeInsets.fromLTRB(10.0, 15.0, 20.0, 15.0),
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(15.0),
-                      bottomRight: Radius.circular(15.0),
-                      topRight: Radius.circular(15.0),
-                    )),
-                    child: Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Column(
-                        children: <Widget>[
-                          const ListTile(
-                            title: Text(
-                              'Trip to Regent’s Canal',
-                              style: TextStyle(
-                                fontSize: 20.0,
-                                color: Color(0xFF393939),
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ),
-                          Row(
-                            children: const [
-                              SizedBox(width: 15.0),
-                              Icon(
-                                Icons.person_outline_outlined,
-                                color: Colors.black54,
-                                size: 15.0,
-                              ),
-                              Text(
-                                " 1 member",
-                                style: TextStyle(
-                                  fontSize: 15.0,
-                                  color: Colors.black54,
-                                ),
-                              ),
-                              SizedBox(width: 15.0),
-                              Icon(
-                                Icons.fmd_good_outlined,
-                                color: Colors.black54,
-                                size: 15.0,
-                              ),
-                              Text(
-                                " Regent’s Canal",
-                                style: TextStyle(
-                                  fontSize: 15.0,
-                                  color: Colors.black54,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Card(
-                    elevation: 1,
-                    margin: EdgeInsets.fromLTRB(10.0, 15.0, 20.0, 15.0),
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(15.0),
-                      bottomRight: Radius.circular(15.0),
-                      topRight: Radius.circular(15.0),
-                    )),
-                    child: Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Column(
-                        children: <Widget>[
-                          const ListTile(
-                            title: Text(
-                              'Long trip to Westminster Abbey and Notting Hill',
-                              style: TextStyle(
-                                fontSize: 20.0,
-                                color: Color(0xFF393939),
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ),
-                          Row(
-                            children: const [
-                              SizedBox(width: 15.0),
-                              Icon(
-                                Icons.person_outline_outlined,
-                                color: Colors.black54,
-                                size: 15.0,
-                              ),
-                              Text(
-                                " 6 members",
-                                style: TextStyle(
-                                  fontSize: 15.0,
-                                  color: Colors.black54,
-                                ),
-                              ),
-                              SizedBox(width: 15.0),
-                              Icon(
-                                Icons.fmd_good_outlined,
-                                color: Colors.black54,
-                                size: 15.0,
-                              ),
-                              Text(
-                                " Westminster Abbey",
-                                style: TextStyle(
-                                  fontSize: 15.0,
-                                  color: Colors.black54,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            TimelineTile(
-              isFirst: false,
-              beforeLineStyle: const LineStyle(
-                thickness: 1.0,
-                color: Color(0XFFe1e1e1),
-              ),
-              indicatorStyle: const IndicatorStyle(
-                padding: EdgeInsets.all(5),
-                width: 10,
-                indicatorXY: 0.0,
-                color: Colors.green,
-              ),
-              alignment: TimelineAlign.manual,
-              lineXY: 0.10,
-              startChild: Container(
-                padding: EdgeInsets.only(top: 5.0),
-                alignment: Alignment.topCenter,
-                child: Column(
-                  children: [
-                    Text(
-                      "15",
-                      style: TextStyle(
-                          fontWeight: FontWeight.w300, fontSize: 16.0),
-                    ),
-                    Text(
-                      "Sept",
-                      style: TextStyle(
-                          fontWeight: FontWeight.w300, fontSize: 10.0),
-                    ),
-                  ],
+                Text(
+                  number <= 1 ? " $number person" : " $number people",
+                  style: eventCardDetailsTextStyle,
                 ),
-              ),
-              endChild: Card(
-                elevation: 1,
-                margin: EdgeInsets.fromLTRB(10.0, 15.0, 20.0, 15.0),
-                shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(15.0),
-                  bottomRight: Radius.circular(15.0),
-                  topRight: Radius.circular(15.0),
-                )),
-                child: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Column(
-                    children: <Widget>[
-                      const ListTile(
-                        title: Text(
-                          'Cycle around Stratford Olympic Park',
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            color: Color(0xFF393939),
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
-                      Row(
-                        children: const [
-                          SizedBox(width: 15.0),
-                          Icon(
-                            Icons.person_outline_outlined,
-                            color: Colors.black54,
-                            size: 15.0,
-                          ),
-                          Text(
-                            " 2 members",
-                            style: TextStyle(
-                              fontSize: 15.0,
-                              color: Colors.black54,
-                            ),
-                          ),
-                          SizedBox(width: 15.0),
-                          Icon(
-                            Icons.fmd_good_outlined,
-                            color: Colors.black54,
-                            size: 15.0,
-                          ),
-                          Text(
-                            " Stratford",
-                            style: TextStyle(
-                              fontSize: 15.0,
-                              color: Colors.black54,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                const SizedBox(width: 15.0),
+                const Icon(
+                  Icons.watch_later_outlined,
+                  color: Colors.black54,
+                  size: 15.0,
                 ),
-              ),
+                Text(" $time", style: eventCardDetailsTextStyle),
+              ],
             ),
           ],
         ),
