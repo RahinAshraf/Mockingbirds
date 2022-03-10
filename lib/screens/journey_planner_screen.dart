@@ -6,7 +6,7 @@ import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import '../.env.dart';
 import '../widget/panel_widget.dart';
-import 'map_screen.dart';
+import 'navigation/map_screen.dart';
 import '../providers/location_service.dart';
 
 

@@ -10,7 +10,7 @@ import 'package:location/location.dart';
 // import 'package:latlong/latlong.dart' as ll;
 import 'package:veloplan/providers/location_service.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
-import '../models/docking_station.dart';
+import '../../models/docking_station.dart';
 
 
 // ! remove
