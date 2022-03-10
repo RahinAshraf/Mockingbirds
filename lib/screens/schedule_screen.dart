@@ -50,6 +50,8 @@ class _SchedulePageState extends State<SchedulePage> {
                 ),
               ),
             ),
+            Text("02"),
+            Text("Sun"),
             TimelineTile(
               isFirst: true,
               beforeLineStyle: const LineStyle(
