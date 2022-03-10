@@ -6,10 +6,12 @@ import 'package:flutter/material.dart';
 const Color appBarColor = Color(0xFF99D2A9);
 const Color appBarTextColor = Colors.white;
 
-// Navbar
-
 // Sidebar
 const TextStyle sidebarItemTextStyle = TextStyle(color: Colors.green);
+
+// Alerts
+const Color alertSnackBarBackgroundColor = Colors.red;
+const TextStyle alertTextStyle = TextStyle(fontSize: 17);
 
 // Helpbot and message bubbles
 const helpPageTopicButtonTextStyle = TextStyle(
@@ -23,15 +25,8 @@ const TextStyle botMessageTextStyle =
     TextStyle(fontSize: 15.0, color: Colors.black54);
 const TextStyle userMessageTextStyle =
     TextStyle(fontSize: 15.0, color: Colors.white);
-
-// Alerts
-const Color alertSnackBarBackgroundColor = Colors.red;
-const TextStyle alertTextStyle = TextStyle(fontSize: 17);
-
-// Generic reusable button styles; this is from helpbot
-// TODO MARIJA: make this work
 ButtonStyle outlinedButtonStyle = ButtonStyle(
-  overlayColor: MaterialStateProperty.all<Color>(const Color(0x1A99D2A9)),
+  overlayColor: MaterialStateProperty.all(const Color(0x1A99D2A9)),
   shape: MaterialStateProperty.all(
     RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(30.0),
@@ -78,7 +73,6 @@ ButtonStyle journeyTimeButtonStyle = TextButton.styleFrom(
     textStyle: const TextStyle(fontSize: 20),
     backgroundColor: Colors.green[500],
     primary: Colors.white);
-
 const TextStyle infoTextStyle =
     TextStyle(fontStyle: FontStyle.italic, fontSize: 18);
 const TextStyle tripSchedulerTextStyle =
