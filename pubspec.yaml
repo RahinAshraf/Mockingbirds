@@ -54,6 +54,8 @@ dependencies:
   flutterfire_ui: ^0.3.4
   font_awesome_flutter: ^9.2.0
   extended_nested_scroll_view: ^5.0.0
+  table_calendar: ^3.0.4
+  timeline_tile: ^2.0.0
 
 
 

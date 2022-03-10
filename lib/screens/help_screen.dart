@@ -2,12 +2,8 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:veloplan/utilities/help_bot_manager.dart';
 import 'package:veloplan/widgets/message_bubble_widget.dart';
-import '../styles/styling.dart';
 
 HelpBotManager questions = HelpBotManager();
-
-// CONSTANTS
-//const Color appBarColor = Color(0xFF99D2A9);
 
 class HelpPage extends StatefulWidget {
   @override
@@ -24,7 +20,6 @@ class _HelpPageState extends State<HelpPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('HelpBot'),
-        backgroundColor: appBarColor,
       ),
       body: SafeArea(
         child: Column(
