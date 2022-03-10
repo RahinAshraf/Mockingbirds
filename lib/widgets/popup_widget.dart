@@ -3,8 +3,29 @@ import '../styles/styling.dart';
 
 enum AlertType { warning, question }
 
+extension AlertTypeString on AlertType {
+  String get imagePath {
+    switch (this) {
+      case AlertType.warning:
+        return "assets/images/popup_warning.png";
+      case AlertType.question:
+        return "assets/images/popup_question.png";
+    }
+  }
+}
+
+/// Creates a generic popup widget.
+///
+/// To avoid distorting the widget, there should be no more than
+/// two [PopupButtonWidget]s passed in [children] property.
+///
+/// This widget has [type] property of [AlertType]. It determines the
+/// image that should be rendered for the widget.
+///
+/// Some of the styling of this widget is specified in [Navbar]s [ThemeData]
+/// property.
 class PopupWidget extends StatelessWidget {
-  PopupWidget(
+  const PopupWidget(
       {required this.title,
       required this.text,
       required this.children,
@@ -14,9 +35,6 @@ class PopupWidget extends StatelessWidget {
   final String text;
   final List<PopupButtonWidget> children;
   final AlertType type;
-
-  String questionImage = "assets/images/popup_question.png";
-  String warningImage = "assets/images/popup_warning.png";
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +72,7 @@ class PopupWidget extends StatelessWidget {
           ),
         ),
         Image.asset(
-          type == AlertType.question ? questionImage : warningImage,
+          type.imagePath,
           height: 72,
         ),
       ],
@@ -62,6 +80,7 @@ class PopupWidget extends StatelessWidget {
   }
 }
 
+/// Generates a button for [PopupWidget].
 class PopupButtonWidget extends StatelessWidget {
   const PopupButtonWidget({required this.text, required this.onPressed});
 

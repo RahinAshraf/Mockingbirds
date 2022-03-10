@@ -1,23 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:veloplan/screens/help_screen.dart';
 import '../styles/styling.dart';
 
 const String botName = 'HelpBot';
 const String userName = 'You';
 
+/// Creates a message bubble used in [HelpPage].
+///
+/// This widget differentiates between a bot message bubble
+/// and user chat bubble (uses different styling for different parties).
+///
+/// By default, the chat bubble is created for bots' messages, therefore
+/// [isSentByBot] equals to true. If [isSentByBot] is set to false,
+/// the message bubble is created for the user.
 class MessageBubble extends StatelessWidget {
-  /// Creates a chat bubble used in HelpBotPage.
-  ///
-  /// This widget differentiates between a bot chat bubble
-  /// and user chat bubble (uses different styling for different parties).
-  ///
-  /// The [text] argument is required. It corresponds to the content
-  /// of a chat bubble.
-  ///
-  /// By default, the chat bubble is created for bots' messages, therefore
-  /// [sender] is the name of the bot and [isSentByBot] equals to
-  /// true. If [sender] is specified, the chat bubble is created for the user,
-  /// and therefore [isSentByBot] must be set to false.
-
   const MessageBubble({required this.text, this.isSentByBot = true});
 
   final String text;
