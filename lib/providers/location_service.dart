@@ -3,12 +3,13 @@ import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import 'package:mapbox_gl/mapbox_gl.dart';
 
+import '../.env.dart';
+
 /*
  LocationService class to retrieve results from Mapbox API
 */
 class LocationService {
-  final String key =
-      'pk.eyJ1IjoibW9ja2luZ2JpcmRzZWxpdGUiLCJhIjoiY2wwaTJ2em4wMDA0ZzNrcGtremZuM3czZyJ9.PDaTlZiPjDa7sGjF-aKnJQ'; //Mapbox api key
+  final String key = MAPBOX_ACCESS_TOKEN; //Mapbox api key
 
   final StreamController<List<Feature>?> _feature =
       StreamController.broadcast();
@@ -27,8 +28,7 @@ class LocationService {
 
   //Given coordinates, it will return the name of the place of those coordinates
   Future<Map> reverseGeoCode(double lat, double lng) async {
-    String token =
-        'pk.eyJ1IjoibW9ja2luZ2JpcmRzIiwiYSI6ImNremd3NW9weDM2ZmEybm45dzlhYzN0ZnUifQ.lSzpNOhK2CH9-PODR0ojLg';
+    String token = MAPBOX_ACCESS_TOKEN;
     String url =
         "https://api.mapbox.com/geocoding/v5/mapbox.places/$lng,$lat.json?access_token=$token";
     var response = await http.get(Uri.parse(url));
