@@ -109,9 +109,9 @@ class _MyAppState extends State<MyApp> {
                         return const SplashScreen();
                       }
                       if (userSnapshot.hasData) {
-                        return const SummaryJourneyScreen();
+                        return const VerifyEmailScreen();
                       }
-                      return const SummaryJourneyScreen(); // auth
+                      return const AuthScreen();
                     }),
           );
         });

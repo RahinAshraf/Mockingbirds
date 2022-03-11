@@ -23,7 +23,8 @@ class SummaryJourneyScreen extends StatelessWidget {
         Container(
             height: 120.0,
             width: 120.0,
-            child: Center(child: Image.asset('assets/images/logo.png'))),
+            child: Center(
+                child: Image.asset('assets/images/summary_journey.png'))),
         const SizedBox(height: 30),
         Container(
             height: 30,
