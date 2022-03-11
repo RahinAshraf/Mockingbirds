@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -7,6 +9,7 @@ import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:veloplan/providers/route_manager.dart';
+import '../helpers/live_location_helper.dart';
 import '../screens/login_screen.dart';
 import '../navbar.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
@@ -18,6 +21,7 @@ import 'package:veloplan/providers/location_service.dart';
 import '../screens/turn_by_turn_screen.dart';
 import '../helpers/zoom_helper.dart';
 import 'package:veloplan/widgets/carousel/station_carousel.dart';
+import 'package:location/location.dart';
 
 //import 'package:veloplan/widget/carousel/station_carousel.dart';
 const double zoom = 16;
@@ -40,7 +44,7 @@ class MyHomePageState extends State<MapPage> {
   // var zoom = LatLng(51.51185004458236, -0.11580820118980878);
   String googleMapsApi = 'AIzaSyB7YSQkjjqm-YU1LAz91lyYAvCpqFRhFdU';
   String accessToken =
-      'pk.eyJ1IjoibW9ja2luZ2JpcmRzIiwiYSI6ImNrempyNnZtajNkbmkybm8xb3lybWE3MTIifQ.AsZJbQPNRb2N3unNdA98nQ';
+      'pk.eyJ1IjoibW9ja2luZ2JpcmRzZWxpdGUiLCJhIjoiY2wwaTJ2em4wMDA0ZzNrcGtremZuM3czZyJ9.PDaTlZiPjDa7sGjF-aKnJQ';
   PolylinePoints polylinePoints = PolylinePoints();
   List<LatLng> polylineCoordinates = [];
   List<LatLng> points = [
@@ -57,12 +61,32 @@ class MyHomePageState extends State<MapPage> {
   LatLng latLng = getLatLngFromSharedPrefs();
   // late CameraPosition _initialCameraPosition;
   TextEditingController _searchController = TextEditingController();
+  Timer? timer;
+  LiveLocationHelper liveLocationHelper = LiveLocationHelper();
+
+
+  void updateCurrentLocation() async {
+    Location newCurrentLocation = Location();
+    LocationData _newLocationData = await newCurrentLocation.getLocation();
+    sharedPreferences.clear();
+    sharedPreferences.setDouble('latitude', _newLocationData.latitude!);
+    sharedPreferences.setDouble('longitude', _newLocationData.longitude!);
+    //sharedPreferences.apply();
+    print("UPDATED");
+    print(_newLocationData.latitude!);
+    print(_newLocationData.longitude!);
+  }
+
   @override
   void initState() {
     super.initState();
-    _cameraPosition = CameraPosition(target: latLng, zoom: 12);
+    print("HEY");
+    print(latLng.latitude);
+    print(latLng.longitude);
+    _cameraPosition =  CameraPosition(target: latLng, zoom: 12);
     // _initialCameraPosition = CameraPosition(target: latLng, zoom: zoom);
     getRouteResponse();
+    timer = Timer.periodic(Duration(seconds: 2), (Timer t) => updateCurrentLocation()); ///////////////////////////////
   }
 
   void getRouteResponse() async {
@@ -144,9 +168,9 @@ class MyHomePageState extends State<MapPage> {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
           heroTag: "refcous on live location",
-          onPressed: () {
+          onPressed: () {   ////////////////////////////////////////////////////////////////////////////////////////////////
             controller?.animateCamera(
-                CameraUpdate.newCameraPosition(_cameraPosition));
+                CameraUpdate.newCameraPosition(CameraPosition(target: getLatLngFromSharedPrefs(), zoom: 12)));
           },
           child: const Icon(Icons.my_location),
         ),

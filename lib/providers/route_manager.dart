@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 class RouteManager {
   String baseUrl = 'https://api.mapbox.com/directions/v5/mapbox';
   String accessToken =
-      'pk.eyJ1IjoibW9ja2luZ2JpcmRzIiwiYSI6ImNrempyNnZtajNkbmkybm8xb3lybWE3MTIifQ.AsZJbQPNRb2N3unNdA98nQ';
+      'pk.eyJ1IjoibW9ja2luZ2JpcmRzZWxpdGUiLCJhIjoiY2wwaTJ2em4wMDA0ZzNrcGtremZuM3czZyJ9.PDaTlZiPjDa7sGjF-aKnJQ';
   String navType = 'cycling';
   Dio _dio = Dio();
   Map<String, Object> directions = {};
