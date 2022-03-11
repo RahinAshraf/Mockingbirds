@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:veloplan/screens/summary_journey_screen.dart';
 import 'screens/login_screen.dart';
 import 'navbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
