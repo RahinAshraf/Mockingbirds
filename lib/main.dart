@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:veloplan/screens/map_item_details_screen.dart';
 import 'screens/login_screen.dart';
 import 'navbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -110,7 +111,7 @@ class _MyAppState extends State<MyApp> {
                       if (userSnapshot.hasData) {
                         return const VerifyEmailScreen();
                       }
-                      return const AuthScreen();
+                      return const AuthScreen(); 
                     }),
           );
         });

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:veloplan/screens/summary_journey_screen.dart';
 import '../screens/schedule_screen.dart';
 import '../screens/favourite_screen.dart';
 import '../screens/setting_screen.dart';
@@ -47,6 +48,11 @@ class NavigationDrawerWidget extends StatelessWidget {
               text: 'Settings',
               icon: Icons.settings,
               onClicked: () => selectedItem(context, 5),
+            ),
+            buildMenuItem(
+              text: 'Summary of Journey',
+              icon: Icons.map_outlined,
+              onClicked: () => selectedItem(context, 6),
             ),
             buildMenuItem(
               text: 'Log Out',
@@ -109,6 +115,11 @@ class NavigationDrawerWidget extends StatelessWidget {
       case 5:
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => Settings(),
+        ));
+        break;
+      case 6:
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => SummaryJourneyScreen(),
         ));
         break;
     }
