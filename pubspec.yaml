@@ -54,10 +54,7 @@ dependencies:
   flutterfire_ui: ^0.3.4
   font_awesome_flutter: ^9.2.0
   extended_nested_scroll_view: ^5.0.0
-
-
-
-
+  settings_ui: ^2.0.2
   shared_preferences: ^2.0.13
   mapbox_gl: ^0.15.0
   sliding_up_panel: ^2.0.0+1
