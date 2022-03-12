@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'navbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:location/location.dart';
+//import 'package:location/location.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -12,10 +12,10 @@ import 'package:veloplan/helpers/live_location_helper.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 void main() async {
+  checkPermissions();
   WidgetsFlutterBinding.ensureInitialized();
   LiveLocationHelper liveLocationHelper = LiveLocationHelper();
   liveLocationHelper.initializeLocation();
-  //checkPermissions();
 
   runApp(MaterialApp(
     initialRoute: '/',
@@ -23,23 +23,26 @@ void main() async {
   ));
 }
 
-// void checkPermissions() async {
-//   var locationStatus = await Permission.location.status;
-//
-//   if(locationStatus.isGranted){
-//     print("GRANTED");
-//   }
-//   else if(locationStatus.isDenied){
-//     await Permission.location.request();
-//     print("ISDENIED HAPPENED");
-//   }
-//   else if(locationStatus.isPermanentlyDenied){
-//     print("TELL USERS TO GO TO SETTINGS TO ALLOW LOCATION");
-//   }
-//   else if(locationStatus.isLimited){
-//     print("ISLIMITED WAS SELECTED");
-//   }
-// }
+
+//APP IS ONLY WORKING WHEN "GRANTED" IS PRINTED OUT, FIX IT TO NOT CRASH AND REASK IN OTHER CASES
+void checkPermissions() async {
+  var locationStatus = await Permission.location.status;
+
+  if(locationStatus.isGranted){
+    print("GRANTED");
+  }
+  else if(locationStatus.isDenied){
+    await Permission.location.request();
+    print("ISDENIED HAPPENED");
+  }
+  else if(locationStatus.isPermanentlyDenied){
+    print("TELL USERS TO GO TO SETTINGS TO ALLOW LOCATION");
+  }
+  else if(locationStatus.isLimited){
+    print("ISLIMITED WAS SELECTED");
+  }
+}
+
 
 // void main() {
 //   runApp(MultiProvider(providers: [], child: const MyApp()));
@@ -53,6 +56,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+
   @override
   Widget build(BuildContext context) {
     //final Future<FirebaseApp> _initialization = Firebase.initializeApp();

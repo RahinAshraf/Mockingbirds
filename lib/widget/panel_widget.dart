@@ -270,8 +270,7 @@ class PanelWidgetState extends State<PanelWidget> {
               onAddressAdded: addCordFrom),
           // _buildStatic(widget.toTextEditController,
           //     hintText: "Where to?", label: "To", onAddressAdded: addCordTo),
-          Expanded(
-            child: Column(
+           Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 StreamBuilder<List<DynamicWidget>>(
@@ -323,8 +322,6 @@ class PanelWidgetState extends State<PanelWidget> {
                 ),
               ],
             ),
-            flex: 0,
-          ),
           FloatingActionButton(
             onPressed: addDynamic,
             backgroundColor: Colors.white,
@@ -507,8 +504,7 @@ class DynamicWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Column(
+    return Column(
         children: [
           Expanded(
             child: Row(
@@ -599,8 +595,8 @@ class DynamicWidget extends StatelessWidget {
             ],
           ),
         ],
-      ),
-    );
+      );
+
   }
 
   //Executed when the user presses on a search TextField

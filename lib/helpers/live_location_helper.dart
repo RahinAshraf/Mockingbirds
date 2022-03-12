@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:location/location.dart';
 import 'package:latlong2/latlong.dart';
@@ -9,8 +8,8 @@ class LiveLocationHelper {
 
   void initializeLocation() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    Location _location = Location();
     bool? _serviceEnabled;
+    Location _location = Location();
     PermissionStatus? _permissionGranted;
 
     _serviceEnabled = await _location.serviceEnabled();
@@ -23,6 +22,11 @@ class LiveLocationHelper {
       _permissionGranted = await _location.requestPermission();
     }
 
+    // do{
+    //   await _location.requestPermission();
+    // }
+    // while(_permissionGranted != PermissionStatus.granted);
+
     LocationData _locationData = await _location.getLocation();
     LatLng currentLatLng =
     LatLng(_locationData.latitude!, _locationData.longitude!);
@@ -34,11 +38,5 @@ class LiveLocationHelper {
     sharedPreferences.setDouble('latitude', _locationData.latitude!);
     sharedPreferences.setDouble('longitude', _locationData.longitude!);
   }
-
-//   initPlatformState() async {
-//     await _locationService.changeSettings(
-//         accuracy: LocationAccuracy.high, interval: 1000);
-//
-// }
 
 }
