@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '/models/favourite.dart';
-import '/services/favourite_service.dart';
+import '/helpers/favourite_helper.dart';
 import 'favourite_button.dart';
 
 ///Creates a card for a docking station, to include its name, number of bikes and empty bikes.
