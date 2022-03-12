@@ -34,7 +34,7 @@ class MapPage extends StatefulWidget {
 
 class MyHomePageState extends State<MapPage> {
   RouteManager manager = RouteManager();
-  late Future<List<DockingStation>> future_docks;
+  // late Future<List<DockingStation>> future_docks;
   bool isRouteDisplayed = false;
   Map<String, Object> _fills = {};
   late Map routeResponse;
@@ -44,7 +44,7 @@ class MyHomePageState extends State<MapPage> {
   // var zoom = LatLng(51.51185004458236, -0.11580820118980878);
   // String googleMapsApi = 'AIzaSyB7YSQkjjqm-YU1LAz91lyYAvCpqFRhFdU';
   String accessToken = MAPBOX_ACCESS_TOKEN;
-  List<LatLng> polylineCoordinates = [];
+  // List<LatLng> polylineCoordinates = [];
   List<LatLng> points = [
     LatLng(51.514951, -0.112762),
     LatLng(51.513146, -0.115256),
@@ -113,17 +113,6 @@ class MyHomePageState extends State<MapPage> {
     // return _DockPopupCard(latlng: current,);
   }
 
-  // void _onSymbolTapped(Symbol symbol) async {
-  //   //This does not work
-  //   if (_selectedSymbol != null) {
-  //     print("tapped symbol");
-  //     Future<LatLng> variable = controller!.getSymbolLatLng(symbol);
-  //     print(await variable);
-  //   }
-  //   setState(() {
-  //     _selectedSymbol = symbol;
-  //   });
-  // }
   void _onMapCreated(MapboxMapController controller) async {
     this.controller = controller;
     fetchDockingStations();
