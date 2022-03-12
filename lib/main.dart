@@ -9,17 +9,37 @@ import './screens/verify_email_screen.dart';
 import './screens/auth_screen.dart';
 import './screens/splash_screen.dart';
 import 'package:veloplan/helpers/live_location_helper.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   LiveLocationHelper liveLocationHelper = LiveLocationHelper();
   liveLocationHelper.initializeLocation();
+  //checkPermissions();
 
   runApp(MaterialApp(
     initialRoute: '/',
     routes: {'/': (context) => const MyApp(), '/map': (context) => Navbar()},
   ));
 }
+
+// void checkPermissions() async {
+//   var locationStatus = await Permission.location.status;
+//
+//   if(locationStatus.isGranted){
+//     print("GRANTED");
+//   }
+//   else if(locationStatus.isDenied){
+//     await Permission.location.request();
+//     print("ISDENIED HAPPENED");
+//   }
+//   else if(locationStatus.isPermanentlyDenied){
+//     print("TELL USERS TO GO TO SETTINGS TO ALLOW LOCATION");
+//   }
+//   else if(locationStatus.isLimited){
+//     print("ISLIMITED WAS SELECTED");
+//   }
+// }
 
 // void main() {
 //   runApp(MultiProvider(providers: [], child: const MyApp()));

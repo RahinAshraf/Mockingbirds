@@ -72,8 +72,7 @@ class _MainPageState extends State<MainPage> {
         floatingActionButton: Container(
             height: 80.0,
             width: 80.0,
-            child: FloatingActionButton(
-              heroTag: "btn2",
+            child: TextButton(
               onPressed: () {
                 onTabTapped(1);
                 Navigator.push(context,
@@ -85,8 +84,13 @@ class _MainPageState extends State<MainPage> {
                 color: Colors.green,
                 size: 50,
               ),
-              elevation: 8.0,
-              backgroundColor: Colors.white,
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(90.0),
+                ),
+                maximumSize: Size.fromRadius(33),
+              ),
             )),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: createNavBar());
@@ -94,8 +98,8 @@ class _MainPageState extends State<MainPage> {
 
   BottomNavigationBar createNavBar() {
     return BottomNavigationBar(
-      type: BottomNavigationBarType
-          .fixed, //looks past the background colors specified
+      type: BottomNavigationBarType.fixed,
+      //looks past the background colors specified
       backgroundColor: Colors.green[200],
       selectedItemColor: Colors.black,
       unselectedItemColor: Colors.grey[10],
@@ -104,7 +108,8 @@ class _MainPageState extends State<MainPage> {
       showSelectedLabels: true,
       showUnselectedLabels: true,
       currentIndex: currentIndex,
-      onTap: onTabTapped, //(index) => setState(() => currentIndex = index),
+      onTap: onTabTapped,
+      //(index) => setState(() => currentIndex = index),
       items: retrieveNavItems(),
     );
   }

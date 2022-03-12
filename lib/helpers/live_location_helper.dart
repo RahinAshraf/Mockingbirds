@@ -5,7 +5,7 @@ import 'package:latlong2/latlong.dart';
 
 late SharedPreferences sharedPreferences;
 
-class LiveLocationHelper{
+class LiveLocationHelper {
 
   void initializeLocation() async {
     sharedPreferences = await SharedPreferences.getInstance();
@@ -34,5 +34,11 @@ class LiveLocationHelper{
     sharedPreferences.setDouble('latitude', _locationData.latitude!);
     sharedPreferences.setDouble('longitude', _locationData.longitude!);
   }
+
+//   initPlatformState() async {
+//     await _locationService.changeSettings(
+//         accuracy: LocationAccuracy.high, interval: 1000);
+//
+// }
 
 }

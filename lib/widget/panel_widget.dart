@@ -255,7 +255,7 @@ class PanelWidgetState extends State<PanelWidget> {
           const SizedBox(
             height: 20,
           ),
-          buildDragHandle(),
+          //buildDragHandle(),
           const SizedBox(height: 6),
           const Center(
             child: Text(
