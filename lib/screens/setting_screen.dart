@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
-import '../styles/theme.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+import '../styles/config.dart';
 
 class Settings extends StatelessWidget {
+  const Settings({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Settings'),
-      ),
+      appBar: AppBar(title: const Text('Settings')),
       body: buildSettings(),
     );
   }
@@ -19,14 +17,16 @@ class Settings extends StatelessWidget {
     return SettingsList(
       sections: [
         SettingsSection(
-          title: Text('Account'),
+          title: const Text('Account'),
           tiles: <SettingsTile>[
             buildLogout(),
             SettingsTile.switchTile(
-              onToggle: (value) {},
-              initialValue: true,
-              leading: Icon(Icons.format_paint),
-              title: Text('Switch mode'),
+              onToggle: (bool value) {
+                currentTheme.toggleTheme();
+              },
+              initialValue: false,
+              leading: const Icon(Icons.dark_mode),
+              title: const Text('Dark mode'),
             ),
           ],
         ),
@@ -35,8 +35,8 @@ class Settings extends StatelessWidget {
   }
 
   SettingsTile buildLogout() => SettingsTile(
-        leading: Icon(Icons.logout),
-        title: Text('Logout'),
+        leading: const Icon(Icons.logout),
+        title: const Text('Logout'),
         onPressed: (BuildContext context) {
           FirebaseAuth.instance.signOut();
         },

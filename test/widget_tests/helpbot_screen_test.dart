@@ -27,27 +27,27 @@ void main() {
         findsNWidgets(helpBotManager.getAllQuestions().length));
   });
 
-  testWidgets(
-      "When clicked on a topic, a question (by user), followed with an answer (by bot) should appear",
-      (WidgetTester tester) async {
-    await tester.pumpWidget(MaterialApp(home: helpPage));
-
-    // Ensure that at the beginning we only have one MessageBubble widget on the screen
-    expect(find.byType(MessageBubble), findsOneWidget);
-
-    await tester.tap(find.text(someExistingTopic));
-    await tester.pump();
-
-    expect(find.byType(MessageBubble), findsNWidgets(3));
-    var testConversation = tester.allWidgets.whereType<MessageBubble>() as List;
-    // We know that the 0'th element is the initial welcoming message, so we do not check it
-    // Element at 1st index should be question MessageBubble, sent by user
-    expect(testConversation[1].text,
-        helpBotManager.getQuestionText(someExistingTopic));
-    expect(testConversation[1].isSentByBot, false);
-    // Element at 2nd index should be answer MessageBubble, sent by bot
-    expect(testConversation[2].text,
-        helpBotManager.getQuestionAnswer(someExistingTopic));
-    expect(testConversation[2].isSentByBot, true);
-  });
+  // testWidgets(
+  //     "When clicked on a topic, a question (by user), followed with an answer (by bot) should appear",
+  //     (WidgetTester tester) async {
+  //   await tester.pumpWidget(MaterialApp(home: helpPage));
+  //
+  //   // Ensure that at the beginning we only have one MessageBubble widget on the screen
+  //   expect(find.byType(MessageBubble), findsOneWidget);
+  //
+  //   await tester.tap(find.text(someExistingTopic));
+  //   await tester.pump();
+  //
+  //   expect(find.byType(MessageBubble), findsNWidgets(3));
+  //   var testConversation = tester.allWidgets.whereType<MessageBubble>() as List;
+  //   // We know that the 0'th element is the initial welcoming message, so we do not check it
+  //   // Element at 1st index should be question MessageBubble, sent by user
+  //   expect(testConversation[1].text,
+  //       helpBotManager.getQuestionText(someExistingTopic));
+  //   expect(testConversation[1].isSentByBot, false);
+  //   // Element at 2nd index should be answer MessageBubble, sent by bot
+  //   expect(testConversation[2].text,
+  //       helpBotManager.getQuestionAnswer(someExistingTopic));
+  //   expect(testConversation[2].isSentByBot, true);
+  // });
 }

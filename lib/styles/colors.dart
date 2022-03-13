@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 
 class CustomColors {
   static Color green = Color(0xFF99D2A9);
+  static Color appBarTextColor = Color(0xffffffff);
   static Color lightModeScaffoldColour = Color(0xffffffff);
+  static Color darkModeScaffoldColour = Color.fromARGB(255, 36, 35, 35);
+
   static MaterialColor lightGreen = MaterialColor(
     0xff99d2a9, // 0%
     const <int, Color>{

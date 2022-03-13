@@ -5,7 +5,7 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:veloplan/screens/place_search_screen.dart';
 
 import '../models/destination_choice.dart';
-import '../screens/location_service.dart';
+import '../providers/location_service.dart';
 
 class PanelWidget extends StatefulWidget {
   final ScrollController controller;
@@ -49,7 +49,6 @@ class PanelWidgetState extends State<PanelWidget> {
         children: [
           const Text("From: ",
               style: TextStyle(
-
                 fontWeight: FontWeight.normal,
                 fontSize: 20,
               )),

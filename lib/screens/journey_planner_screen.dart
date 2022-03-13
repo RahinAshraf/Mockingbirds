@@ -1,12 +1,22 @@
 import 'dart:async';
-
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import '../.env.dart';
-import '../widgets/panel_widget.dart';
+import '../widget/panel_widget.dart';
 import 'map_screen.dart';
+import '../providers/location_service.dart';
+
+/*
+  @author - Rahin Ashraf
+ */
+class MapPlace {
+  String? address;
+  LatLng? cords;
+  MapPlace(this.address, this.cords);
+}
 
 class JourneyPlanner extends StatefulWidget {
   JourneyPlanner({Key? key}) : super(key: key);
@@ -20,9 +30,12 @@ class _JourneyPlanner extends State<JourneyPlanner> {
   late CameraPosition _initialCameraPosition;
   late MapboxMapController controller;
   final panelController = PanelController();
-  final standAloneSearchController = TextEditingController();
+  final fromTextEditingController = TextEditingController(),
+      toTextEditingController = TextEditingController();
+  final StreamController<MapPlace> address = StreamController.broadcast();
   final StreamController<List<DynamicWidget>> dynamicWidgets =
       StreamController.broadcast();
+  final locService = LocationService();
 
   List<DynamicWidget> dynamicWidgetList = [];
   List<List<double?>> cordsList = [];
@@ -41,7 +54,8 @@ class _JourneyPlanner extends State<JourneyPlanner> {
   Widget build(BuildContext context) {
     final panelHeightClosed = MediaQuery.of(context).size.height * 0.1;
     final panelHeightOpen = MediaQuery.of(context).size.height * 0.6;
-
+    List<MapPlace> mapList = [];
+    Map<String, List<double?>> staticCordMap = {};
     return Scaffold(
       body: SlidingUpPanel(
         padding: const EdgeInsets.only(left: 10, right: 10),
@@ -63,19 +77,31 @@ class _JourneyPlanner extends State<JourneyPlanner> {
                   onMapCreated: _onMapCreated,
                   myLocationEnabled: true,
                   myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
-                  minMaxZoomPreference: const MinMaxZoomPreference(14, 17),
+                  onMapClick: (Point<double> point, LatLng coordinates) async {
+                    Map s = await locService.reverseGeoCode(
+                        coordinates.latitude, coordinates.longitude);
+                    address.sink.add(MapPlace(s['place'], s['location']));
+                    print(s['place']);
+                    print("Latitude");
+                    print(s['location'].latitude);
+                    print(coordinates);
+                  },
                 ),
               ),
             ],
           ),
         ),
         panelBuilder: (controller) => PanelWidget(
-          controller: controller,
+          scrollController: controller,
+          selectionMap: Map(),
+          address: address.stream,
           listDynamic: dynamicWidgetList,
-          textEditingController: standAloneSearchController,
+          fromTextEditController: fromTextEditingController,
+          toTextEditController: toTextEditingController,
           dynamicWidgets: dynamicWidgets,
           panelController: panelController,
           selectedCords: cordsList,
+          staticListMap: staticCordMap,
         ),
       ),
     );

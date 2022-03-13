@@ -1,12 +1,10 @@
 import 'dart:collection';
 import 'package:flutter/material.dart';
-import 'package:veloplan/utilities/help_bot_manager.dart';
-import 'package:veloplan/widgets/message_bubble_widget.dart';
+import '../styles/styling.dart';
+import '../utilities/help_bot_manager.dart';
+import '../widgets/message_bubble_widget.dart';
 
 HelpBotManager questions = HelpBotManager();
-
-// CONSTANTS
-//const Color appBarColor = Color(0xFF99D2A9);
 
 class HelpPage extends StatefulWidget {
   @override
@@ -51,15 +49,7 @@ class _HelpPageState extends State<HelpPage> {
                       Padding(
                         padding: const EdgeInsets.only(right: 5.0),
                         child: OutlinedButton(
-                            style: ButtonStyle(
-                              overlayColor: MaterialStateProperty.all<Color>(
-                                  const Color(0x1A99D2A9)),
-                              shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30.0),
-                                ),
-                              ),
-                            ),
+                            style: outlinedButtonStyle,
                             onPressed: () {
                               setState(() {
                                 _conversation.add(MessageBubble(
@@ -69,12 +59,8 @@ class _HelpPageState extends State<HelpPage> {
                                     text: questions.getQuestionAnswer(topic)));
                               });
                             },
-                            child: Text(
-                              topic,
-                              style: const TextStyle(
-                                color: Color(0xFF99D2A9),
-                              ),
-                            )),
+                            child: Text(topic,
+                                style: helpPageTopicButtonTextStyle)),
                       ),
                   ],
                 ),
