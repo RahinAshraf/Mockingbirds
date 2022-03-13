@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:veloplan/screens/summary_journey_screen.dart';
+import 'package:veloplan/widgets/dock_station.dart';
+import 'package:veloplan/widgets/carousel/dockings_station_card.dart';
+import 'package:veloplan/widgets/docking_station_card.dart';
 import '../screens/schedule_screen.dart';
 import '../screens/favourite_screen.dart';
 import '../screens/setting_screen.dart';
@@ -8,6 +11,11 @@ import '../screens/help_screen.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
   final padding = EdgeInsets.symmetric(horizontal: 20);
+  int index = 0;
+  late String name = 'Place holder';
+  late String nb_bikes = '0';
+  late String nb_empty_docks = '0';
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -50,7 +58,7 @@ class NavigationDrawerWidget extends StatelessWidget {
               onClicked: () => selectedItem(context, 5),
             ),
             buildMenuItem(
-              text: 'Summary of Journey',
+              text: 'Docking station',
               icon: Icons.map_outlined,
               onClicked: () => selectedItem(context, 6),
             ),
@@ -119,7 +127,8 @@ class NavigationDrawerWidget extends StatelessWidget {
         break;
       case 6:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => SummaryJourneyScreen(),
+          builder: (context) =>
+              dockingsStationCard(index, name, nb_bikes, nb_empty_docks),
         ));
         break;
     }
