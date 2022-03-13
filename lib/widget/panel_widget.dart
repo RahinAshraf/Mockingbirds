@@ -244,6 +244,10 @@ class PanelWidgetState extends State<PanelWidget> {
       final item = widget.listDynamic.removeAt(oldIndex);
       widget.listDynamic.insert(newIndex, item);
 
+      final itemCords = widget.selectedCords[oldIndex];
+      widget.selectedCords.removeAt(oldIndex);
+      widget.selectedCords.insert(newIndex, itemCords);
+
   }
 
   @override
