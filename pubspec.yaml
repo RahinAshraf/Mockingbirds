@@ -97,7 +97,7 @@ flutter:
     - assets/config/
     - assets/icon/
 
-    - assets/images/default_profile_picture.jpg
+    - assets/images/
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
