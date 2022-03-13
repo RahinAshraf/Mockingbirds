@@ -1,3 +1,4 @@
+/// @author Elisabeth Halvorsen, Fariha Choudhury
 import 'package:flutter_mapbox_navigation/library.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 

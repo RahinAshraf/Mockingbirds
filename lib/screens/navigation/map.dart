@@ -4,7 +4,7 @@ import 'package:veloplan/scoped_models/main.dart';
 
 class NavigationMap {
   late MapboxMap _map;
-  late List<Widget> _widgets;
+  List<Widget> _widgets = [];
   late NavigationModel _model;
 
   NavigationMap(this._map, this._model) {

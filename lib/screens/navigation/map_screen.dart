@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:google_maps_routes/google_maps_routes.dart';
+// import 'package:flutter/services.dart';
+// import 'package:flutter_dotenv/flutter_dotenv.dart';
+// import 'package:google_maps_routes/google_maps_routes.dart';
 // import 'package:latlong2/latlong.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:tuple/tuple.dart';
-import 'package:veloplan/models/docking_station.dart';
+// import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:veloplan/providers/route_manager.dart';
 import '../../helpers/navigation_helpers/navigation_helpers.dart';
-import '../login_screen.dart';
-import '../../navbar.dart';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import '../../helpers/navigation_helpers/map_drawings.dart';
+// import '../login_screen.dart';
+// import '../../navbar.dart';
+// import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 // import '../helpers/navigation_helpers.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:veloplan/screens/place_search_screen.dart';
@@ -22,6 +23,10 @@ import '../../helpers/navigation_helpers/zoom_helper.dart';
 import 'package:scoped_model/scoped_model.dart';
 import '../../scoped_models/main.dart';
 import 'package:veloplan/.env.dart';
+import 'map.dart';
+
+/// A Map screen focused on a user's live location
+/// Author(s): Fariha Choudhury k20059723, Elisabeth Halvorsen k20077737,
 
 //import 'package:veloplan/widget/carousel/station_carousel.dart';
 const double zoom = 16;
@@ -34,17 +39,17 @@ class MapPage extends StatefulWidget {
 
 class MyHomePageState extends State<MapPage> {
   RouteManager manager = RouteManager();
-  // late Future<List<DockingStation>> future_docks;
   bool isRouteDisplayed = false;
-  Map<String, Object> _fills = {};
   late Map routeResponse;
   bool showMarkers = false; //for displaying markers with button
-  late Symbol? _selectedSymbol; //may remove
+
+  Map<String, Object> _fills = {};
   Set<Symbol> polylineSymbols = {};
+  late Symbol? _selectedSymbol; //may remove
+
   // var zoom = LatLng(51.51185004458236, -0.11580820118980878);
   // String googleMapsApi = 'AIzaSyB7YSQkjjqm-YU1LAz91lyYAvCpqFRhFdU';
   String accessToken = MAPBOX_ACCESS_TOKEN;
-  // List<LatLng> polylineCoordinates = [];
   List<LatLng> points = [
     LatLng(51.514951, -0.112762),
     LatLng(51.513146, -0.115256),
@@ -59,6 +64,8 @@ class MyHomePageState extends State<MapPage> {
   LatLng latLng = getLatLngFromSharedPrefs();
 
   late NavigationModel _model;
+  late NavigationMap _navigationMap;
+  late MapboxMap map;
 
   // late CameraPosition _initialCameraPosition;
   TextEditingController _searchController = TextEditingController();
@@ -76,20 +83,8 @@ class MyHomePageState extends State<MapPage> {
 
   void fetchDockingStations() {
     final dockingStationManager _stationManager = dockingStationManager();
-    _stationManager
-        .importStations()
-        .then((value) => placeDockMarkers(_stationManager.stations));
-  }
-
-  void placeDockMarkers(List<DockingStation> docks) {
-    for (var station in docks) {
-      controller!.addSymbol(
-        SymbolOptions(
-            geometry: LatLng(station.lat, station.lon),
-            iconSize: 0.7,
-            iconImage: "assets/icon/bicycle.png"),
-      );
-    }
+    _stationManager.importStations().then(
+        (value) => placeDockMarkers(controller!, _stationManager.stations));
   }
 
   Future<void> _onSymbolTapped(Symbol symbol) async {
@@ -109,8 +104,8 @@ class MyHomePageState extends State<MapPage> {
 
   void displayDockCard(LatLng current) {
     //CHANGE THIS TO CREATE CARD
+    //! CAN BE MOVED TO HELPER ONCE HRISTINA IS FINISHED WITH IT
     print("Will call widget next");
-    // return _DockPopupCard(latlng: current,);
   }
 
   void _onMapCreated(MapboxMapController controller) async {
@@ -128,6 +123,16 @@ class MyHomePageState extends State<MapPage> {
       myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
       annotationOrder: const [AnnotationType.symbol],
     ));
+    // _navigationMap = NavigationMap(
+    //     MapboxMap(
+    //       accessToken: accessToken,
+    //       initialCameraPosition: _cameraPosition,
+    //       onMapCreated: _onMapCreated,
+    //       myLocationEnabled: true,
+    //       myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
+    //       annotationOrder: const [AnnotationType.symbol],
+    //     ),
+    //     _model);
   }
 
   @override
@@ -136,6 +141,7 @@ class MyHomePageState extends State<MapPage> {
         builder: (BuildContext context, Widget? child, NavigationModel model) {
       _model = model;
       initMap();
+      //_navigationMap = NavigationMap(model.getMap(), model);
       return SafeArea(
           child: Stack(
         children: [
@@ -191,7 +197,7 @@ class MyHomePageState extends State<MapPage> {
               child: Icon(Icons.remove, color: Colors.white),
               onPressed: () async {
                 if (isRouteDisplayed) {
-                  removeFills();
+                  removeFills(controller!, polylineSymbols, _fills);
                   removeTimeAndDuration();
                   isRouteDisplayed = false;
                 }
@@ -245,23 +251,10 @@ class MyHomePageState extends State<MapPage> {
     //print(showMarkers);
   }
 
-  Future<void> setFills(dynamic routeResponse) async {
-    _fills = {
-      "type": "FeatureCollection",
-      "features": [
-        {
-          "type": "Feature",
-          "id": 0,
-          "geometry": routeResponse,
-        },
-      ],
-    };
-  }
-
   void displayJourneyAndRefocus(List<LatLng> journey) {
     setJourney(journey);
     refocusCamera(journey);
-    setPolylineMarkers(journey);
+    setPolylineMarkers(controller!, journey, polylineSymbols);
   }
 
   void refocusCamera(List<LatLng> journey) {
@@ -274,32 +267,6 @@ class MyHomePageState extends State<MapPage> {
         zoom: getZoom(calculateDistance(center, corners.item1)),
         tilt: 5);
     controller!.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
-  }
-
-  void addFills() async {
-    await controller!.addSource(
-        "fills", GeojsonSourceProperties(data: _fills)); //creates the line
-    await controller!.addLineLayer(
-      "fills",
-      "lines",
-      LineLayerProperties(
-        lineColor: Color.fromARGB(255, 197, 23, 23).toHexStringRGB(),
-        lineCap: "round",
-        lineJoin: "round",
-        lineWidth: 5,
-      ),
-    );
-    _model.setController(controller!);
-    // await controller.addSymbolLayer(sourceId, layerId, properties)
-  }
-
-  void removeFills() async {
-    await controller!.removeLayer("lines");
-    await controller!.removeSource("fills");
-    controller!.removeSymbols(polylineSymbols);
-    // _fills.clear();
-    // polylineSymbols.clear();
-    //removePolylineMarkers();
   }
 
   void removeTimeAndDuration() {
@@ -320,8 +287,8 @@ class MyHomePageState extends State<MapPage> {
         routeResponse['geometry']
             .update("coordinates", (value) => journeyPoints);
       }
-      setFills(routeResponse['geometry']);
-      addFills();
+      _fills = await setFills(_fills, routeResponse['geometry']);
+      addFills(controller!, _fills, _model);
       setDistanceAndTime();
 
       // print("manager distance: " + a.toString());
@@ -344,22 +311,13 @@ class MyHomePageState extends State<MapPage> {
       totalDistance = "Route not avalible";
     }
   }
-
-  void setPolylineMarkers(List<LatLng> journey) async {
-    for (var stop in journey) {
-      polylineSymbols.add(await controller!.addSymbol(
-        SymbolOptions(
-            geometry: stop,
-            iconSize: 0.1,
-            iconImage: "assets/icon/yellow_marker.png"),
-      ));
-    }
-  }
 }
 
 // TODO: Fix camera zoom
 // TODO: get the time
-// TODO: Update path when button pressed
+// TODO: Update path when button pressed- DONE?
+//      ^^cancelling and reshowing polyline works, going back to map screen after pressing polyline also works
+
 // TODO: Add walking route  (DONE: Create walking route manager)
 // TODO: Duration and distance
 
@@ -368,10 +326,9 @@ class MyHomePageState extends State<MapPage> {
 // TODO: Error box when no internet -> check when future is called
 // TODO: Future to the map
 
-// TODO: set drawing related stuff into another class
-
 // DONE: Turn by turn directions
 // DONE: Zoom in and zoom out buttons
 // DONE: stop auto navigation - simulateRoute: false in turb_by_turn_screen.dart
 // DONE: show markers for list of points
 // DONE: show all markers for docking stations
+// DONE: set drawing related stuff into another class

@@ -4,7 +4,9 @@ import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/screens/navigation/map_screen.dart';
 import 'package:veloplan/helpers/navigation_helpers/latlng_to_waypoint.dart';
 
-//Reference: dormmom.com, Jul 20, 2021, flutter_mapbox_navigation 0.0.26, https://pub.dev/packages/flutter_mapbox_navigation
+/// A splash screen displaying turn by turn navigation for a journey.
+/// Author(s): Fariha Choudhury k20059723, Elisabeth Halvorsen k20077737,
+/// Reference: dormmom.com, Jul 20, 2021, flutter_mapbox_navigation 0.0.26, https://pub.dev/packages/flutter_mapbox_navigation
 
 class TurnByTurn extends StatefulWidget {
   late List<LatLng> points;

@@ -3,6 +3,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:veloplan/.env.dart';
 
+/// Route provider for fetching journey details from the  Mapbox directions API
+/// Author(s): Fariha Choudhury k20059723, Elisabeth Halvorsen k20077737
+
 class RouteManager {
   String baseUrl = 'https://api.mapbox.com/directions/v5/mapbox';
   String accessToken = MAPBOX_ACCESS_TOKEN;

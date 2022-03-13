@@ -5,7 +5,7 @@ import 'package:vector_math/vector_math.dart';
 import 'package:vector_math/vector_math.dart';
 
 /// Helper methods related to map zooming
-/// Author(s): Elisabeth Koren Halvorsen k20077737
+/// Author(s): Elisabeth Koren Halvorsen k20077737, Fariha Choudhury k20059723
 
 /// gets the zoom factor from [radius]
 double getZoom(double radius) {
