@@ -7,6 +7,9 @@ import 'screens/map_screen.dart';
 import 'screens/profile_screen.dart';
 import 'sidebar.dart';
 
+///Defines the navigation bar, allows you to move between the map screen, profile page and view the sidebar.
+/// @author  Elisabeth, Rahin, Tayyibah
+
 class NavBar extends StatefulWidget {
   @override
   _NavBarState createState() => _NavBarState();
@@ -20,7 +23,7 @@ class _NavBarState extends State<NavBar> {
   final _currentUser = FirebaseAuth.instance.currentUser!.uid;
 
   var screens = [
-    Placeholder(), //need to replace this with something?
+    Placeholder(), //is this bad practise?
     MapPage(),
   ];
 
@@ -28,7 +31,6 @@ class _NavBarState extends State<NavBar> {
   Widget build(BuildContext context) {
     screens.add(Profile(_currentUser));
     return Scaffold(
-        // body: screens[currentIndex], //looses the progress
         body: IndexedStack(
           index: currentIndex,
           children: screens, //keeps the screens alive
@@ -46,7 +48,7 @@ class _NavBarState extends State<NavBar> {
               },
               child: const Icon(
                 Icons.directions_bike,
-                color: Colors.green,
+                // color: Colors.green,
                 size: 50,
               ),
               elevation: 8.0,
@@ -60,16 +62,13 @@ class _NavBarState extends State<NavBar> {
     return BottomNavigationBar(
       type: BottomNavigationBarType
           .fixed, //looks past the background colors specified
-      backgroundColor: Colors.green[200],
-      selectedItemColor: Colors.black,
-      unselectedItemColor: Colors.grey[10],
+
       iconSize: 33,
       //selectedFontSize: 16,
       showSelectedLabels: true,
       showUnselectedLabels: true,
       currentIndex: currentIndex,
       onTap: onTabTapped, //(index) => setState(() => currentIndex = index),
-
       items: retrieveNavItems(),
     );
   }
