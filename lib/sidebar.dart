@@ -4,6 +4,7 @@ import '../screens/schedule_screen.dart';
 import '../screens/favourite_screen.dart';
 import '../screens/setting_screen.dart';
 import '../screens/help_screen.dart';
+import 'styles/config.dart';
 
 class NavigationDrawerWidget extends StatelessWidget {
   final padding = EdgeInsets.symmetric(horizontal: 20);
@@ -47,6 +48,11 @@ class NavigationDrawerWidget extends StatelessWidget {
               text: 'Settings',
               icon: Icons.settings,
               onClicked: () => selectedItem(context, 5),
+            ),
+
+            IconButton(
+              icon: const Icon(Icons.brightness_4),
+              onPressed: () => currentTheme.toggleTheme(),
             ),
             // buildMenuItem(
             //   text: 'Log Out',

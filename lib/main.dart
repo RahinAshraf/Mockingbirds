@@ -8,7 +8,8 @@ import 'package:firebase_core/firebase_core.dart';
 import './screens/verify_email_screen.dart';
 import './screens/auth_screen.dart';
 import './screens/splash_screen.dart';
-import 'styles/styling.dart';
+import 'styles/theme.dart';
+import 'styles/config.dart';
 
 late SharedPreferences sharedPreferences;
 
@@ -58,6 +59,14 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
+  void initState() {
+    super.initState();
+    currentTheme.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     //final Future<FirebaseApp> _initialization = Firebase.initializeApp();
     return FutureBuilder(
@@ -66,6 +75,8 @@ class _MyAppState extends State<MyApp> {
           return MaterialApp(
             title: 'Veloplan',
             theme: CustomTheme.defaultTheme,
+            darkTheme: CustomTheme.darkTheme, //4
+            themeMode: currentTheme.currentTheme,
             home: appSnapshot.connectionState != ConnectionState.done
                 ? const SplashScreen()
                 : StreamBuilder(

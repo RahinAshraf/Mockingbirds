@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../styles/styling.dart';
+import '../styles/theme.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
