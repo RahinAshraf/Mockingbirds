@@ -20,14 +20,7 @@ class Settings extends StatelessWidget {
           title: const Text('Account'),
           tiles: <SettingsTile>[
             buildLogout(),
-            SettingsTile.switchTile(
-              onToggle: (bool value) {
-                currentTheme.toggleTheme();
-              },
-              initialValue: false,
-              leading: const Icon(Icons.dark_mode),
-              title: const Text('Dark mode'),
-            ),
+            buildDarkMode(),
           ],
         ),
       ],
@@ -40,5 +33,14 @@ class Settings extends StatelessWidget {
         onPressed: (BuildContext context) {
           FirebaseAuth.instance.signOut();
         },
+      );
+
+  SettingsTile buildDarkMode() => SettingsTile.switchTile(
+        onToggle: (bool value) {
+          currentTheme.toggleTheme();
+        },
+        initialValue: false,
+        leading: const Icon(Icons.dark_mode),
+        title: const Text('Dark mode'),
       );
 }
