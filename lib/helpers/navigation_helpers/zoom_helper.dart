@@ -7,9 +7,13 @@ import 'package:vector_math/vector_math.dart';
 /// Helper methods related to map zooming
 /// Author(s): Elisabeth Koren Halvorsen k20077737
 
+const double earthRadius = 6371; //000;
+
 /// gets the zoom factor from [radius]
 double getZoom(double radius) {
-  return log(2048 / radius * 350);
+  double x = (2 * pi * earthRadius) / (2 * radius);
+  double log2 = log(x) / log(2);
+  return log2 / 1.125;
 }
 
 /// zoom [cameraPosition] in via the [controller]

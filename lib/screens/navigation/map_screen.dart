@@ -46,10 +46,10 @@ class MyHomePageState extends State<MapPage> {
   String accessToken = MAPBOX_ACCESS_TOKEN;
   // List<LatLng> polylineCoordinates = [];
   List<LatLng> points = [
-    LatLng(51.514951, -0.112762),
+    // LatLng(51.514951, -0.112762),
     LatLng(51.513146, -0.115256),
     LatLng(51.511407, -0.125497),
-    LatLng(51.506053, -0.130310),
+    // LatLng(51.506053, -0.130310),
     LatLng(51.502254, -0.217760),
   ];
   late MapboxMapController? controller;
@@ -268,10 +268,12 @@ class MyHomePageState extends State<MapPage> {
     LatLng center = getCenter(journey);
     // print(center);
     Tuple2<LatLng, LatLng> corners = getCornerCoordinates(journey);
+    print("radius: " + calculateDistance(center, corners.item1).toString());
+    double zoom = getZoom(calculateDistance(center, corners.item1));
 
     _cameraPosition = CameraPosition(
         target: center, //target, //center,
-        zoom: getZoom(calculateDistance(center, corners.item1)),
+        zoom: zoom,
         tilt: 5);
     controller!.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
   }
