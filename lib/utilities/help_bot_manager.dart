@@ -8,7 +8,8 @@ class HelpBotManager {
 
   HelpBotManager(){
     data =[
-      Message('How do I login?', 'Login on the main page.', 'Login',"1"),
+      Message('How do I login?', 'Login on the main page.', 'Login',"0"),
+      Message('How do I log out?', 'CLick on log out.', 'Log out',"1"),
       Message('How do I plan a new journey?', 'Click the bike button.',"2",
           'Planning Journey'),
       Message('How do I sign up?', 'Sign up on the main page.', 'Signup',"3"),

@@ -24,7 +24,7 @@ void main() {
       (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(home: helpPage));
     expect(find.byType(OutlinedButton),
-        findsNWidgets(helpBotManager.getAllQuestions().length));
+        findsNWidgets(helpBotManager.getAllTopics().length));
   });
 
   testWidgets(
