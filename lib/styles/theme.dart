@@ -7,8 +7,8 @@ class CustomTheme with ChangeNotifier {
   ThemeMode get currentTheme => _isDarkTheme ? ThemeMode.dark : ThemeMode.light;
 
   static String get mapStyle => _isDarkTheme
-      ? "mapbox://styles/mapbox/streets-v11"
-      : "mapbox://styles/mapbox/navigation-night-v1";
+      ? "mapbox://styles/mapbox/navigation-night-v1"
+      : "mapbox://styles/mapbox/streets-v11";
 
   void toggleTheme() {
     _isDarkTheme = !_isDarkTheme;
