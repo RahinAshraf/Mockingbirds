@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'screens/login_screen.dart';
 import 'navbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:location/location.dart';
-import 'package:veloplan/main.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import './screens/verify_email_screen.dart';
 import './screens/auth_screen.dart';
 import './screens/splash_screen.dart';
+import 'styles/styling.dart';
 
 late SharedPreferences sharedPreferences;
 
@@ -19,7 +18,7 @@ void main() async {
   initializeLocation(); //Upon opening the app, store the users current location
   runApp(MaterialApp(
     initialRoute: '/',
-    routes: {'/': (context) => const MyApp(), '/map': (context) => Navbar()},
+    routes: {'/': (context) => const MyApp(), '/map': (context) => NavBar()},
   ));
 }
 
@@ -50,10 +49,6 @@ void saveLocation(LocationData _locationData) {
   sharedPreferences.setDouble('longitude', _locationData.longitude!);
 }
 
-// void main() {
-//   runApp(MultiProvider(providers: [], child: const MyApp()));
-// }
-
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -66,15 +61,13 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     //final Future<FirebaseApp> _initialization = Firebase.initializeApp();
     return FutureBuilder(
-
-        // Initialize FlutterFire:
-
         future: Firebase.initializeApp(), // _initialization,
         builder: (context, appSnapshot) {
           return MaterialApp(
             title: 'Veloplan',
             theme: ThemeData(
               scaffoldBackgroundColor: Color(0xffffffff),
+              appBarTheme: AppBarTheme(color: appBarColor),
               primarySwatch: const MaterialColor(
                 0xff99d2a9, // 0%
                 const <int, Color>{

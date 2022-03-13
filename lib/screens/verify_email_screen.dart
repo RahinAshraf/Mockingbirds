@@ -78,7 +78,7 @@ class _VerifyEmailSCreenState extends State<VerifyEmailScreen> {
   @override
   Widget build(BuildContext context) {
     return isVerified
-        ? Navbar()
+        ? NavBar()
         : Scaffold(
             body: Padding(
               padding: const EdgeInsets.all(16),

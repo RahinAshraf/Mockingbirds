@@ -7,22 +7,12 @@ import 'screens/map_screen.dart';
 import 'screens/profile_screen.dart';
 import 'sidebar.dart';
 
-class Navbar extends StatelessWidget {
-  //We need to override the Build method because StatelessWidget has a build method
+class NavBar extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    //every build method has a BuildContext method passed into it
-    return MaterialApp(
-        theme: ThemeData(primaryColor: Colors.purple[900]), home: MainPage());
-  }
+  _NavBarState createState() => _NavBarState();
 }
 
-class MainPage extends StatefulWidget {
-  @override
-  _MainPageState createState() => _MainPageState();
-}
-
-class _MainPageState extends State<MainPage> {
+class _NavBarState extends State<NavBar> {
   int currentIndex = 1; //index of the screens
 
   final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();

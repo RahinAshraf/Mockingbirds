@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../styles/styling.dart';
 
 class Schedule extends StatelessWidget {
   @override
@@ -7,7 +6,6 @@ class Schedule extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Schedule'),
-        backgroundColor: appBarColor,
       ),
       body: Center(
         child: Text("schedule page!"),
