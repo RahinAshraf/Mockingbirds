@@ -11,7 +11,7 @@ class TripManager {
   final List<DockingStation> docksTrip = [];
   late List<Path> trip;
   final String YOUR_MAPBOX_ACCESS_TOKEN =
-      'sk.eyJ1IjoibW9ja2luZ2JpcmRzIiwiYSI6ImNrempzdHIwaDAwemYyb21ubDF3d3ZpN3YifQ.mNTj5Qi2pyIeBzrFJllxiA';
+      'pk.eyJ1IjoibW9ja2luZ2JpcmRzZWxpdGUiLCJhIjoiY2wwaTJ2em4wMDA0ZzNrcGtremZuM3czZyJ9.PDaTlZiPjDa7sGjF-aKnJQ'; //Mapbox api key
 
   //[[51.523851, -0.031914], [-0.0962, 51.3532], [-0.1398817, 51.4889993]]
 
