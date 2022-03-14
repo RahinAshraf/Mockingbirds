@@ -19,10 +19,10 @@ class RouteManager {
     Map geometry = response['routes'][0]['geometry'];
     num duration = response['routes'][0]['duration'];
     num distance = response['routes'][0]['distance'];
-    // print(
-    //     '-------------------${location_placeholder['name']}-------------------');
-    print(distance);
-    print(duration);
+    // // print(
+    // //     '-------------------${location_placeholder['name']}-------------------');
+    // print(distance);
+    // print(duration);
     directions = {
       "geometry": geometry,
       "duration": duration,
@@ -62,21 +62,27 @@ class RouteManager {
   }
 
   Object? getGeometry() {
-    if (directions.isNotEmpty)
+    if (directions.isNotEmpty) {
       return directions['geometry'];
-    else {}
+    } else {
+      return null;
+    }
   }
 
   Object? getDuration() async {
-    if (directions.isNotEmpty)
+    if (directions.isNotEmpty) {
       return directions['duration'];
-    else {}
+    } else {
+      return null;
+    }
   }
 
   Object? getDistance() async {
-    if (directions.isNotEmpty)
+    if (directions.isNotEmpty) {
       return directions['distance'];
-    else {}
+    } else {
+      return null;
+    }
   }
 
   //TODO: get geometry
