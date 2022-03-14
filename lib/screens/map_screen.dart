@@ -19,8 +19,6 @@ import '../screens/turn_by_turn_screen.dart';
 import '../helpers/zoom_helper.dart';
 import 'package:veloplan/widgets/carousel/station_carousel.dart';
 
-import '../styles/theme.dart';
-
 const double zoom = 16;
 
 class MapPage extends StatefulWidget {
@@ -193,7 +191,6 @@ class MyHomePageState extends State<MapPage> {
                 // height: MediaQuery.of(context).size.height,
                 // width: MediaQuery.of(context).size.width,
                 child: MapboxMap(
-                  styleString: CustomTheme.mapStyle,
                   accessToken: accessToken,
                   initialCameraPosition: _cameraPosition,
                   onMapCreated: _onMapCreated,

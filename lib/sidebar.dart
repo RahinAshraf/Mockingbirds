@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:veloplan/styles/styling.dart';
+import 'package:veloplan/styles/theme.dart';
 import '../screens/schedule_screen.dart';
 import '../screens/favourite_screen.dart';
 import '../screens/setting_screen.dart';
@@ -63,7 +64,8 @@ class NavigationDrawerWidget extends StatelessWidget {
       {required String text, required IconData icon, VoidCallback? onClicked}) {
     return ListTile(
       leading: Icon(icon),
-      //title: Text(text, style: sidebarItemTextStyle),
+      //  textColor: CustomTheme.sideBarTextColor,
+      title: Text(text, style: CustomTheme.sideBarTextColor),
       onTap: onClicked,
     );
   }

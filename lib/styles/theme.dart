@@ -6,9 +6,9 @@ class CustomTheme with ChangeNotifier {
 
   ThemeMode get currentTheme => _isDarkTheme ? ThemeMode.dark : ThemeMode.light;
 
-  static String get mapStyle => _isDarkTheme
-      ? "mapbox://styles/mapbox/navigation-night-v1"
-      : "mapbox://styles/mapbox/streets-v11";
+  static TextStyle get sideBarTextColor => _isDarkTheme
+      ? TextStyle(color: Colors.white)
+      : TextStyle(color: Colors.green);
 
   void toggleTheme() {
     _isDarkTheme = !_isDarkTheme;
@@ -23,13 +23,7 @@ class CustomTheme with ChangeNotifier {
         color: CustomColors.green,
         foregroundColor: CustomColors.appBarTextColor,
       ),
-      textTheme: TextTheme(
-        bodyText1: TextStyle(),
-        bodyText2: TextStyle(),
-      ).apply(
-        bodyColor: Colors.orange,
-        displayColor: Colors.blue,
-      ),
+      listTileTheme: ListTileThemeData(textColor: Colors.red),
       primarySwatch: CustomColors.lightGreen,
       backgroundColor: CustomColors.green,
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
