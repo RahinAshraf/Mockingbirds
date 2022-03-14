@@ -1,11 +1,11 @@
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:tuple/tuple.dart';
 import 'package:veloplan/helpers/navigation_helpers/navigation_helpers.dart';
-import 'package:veloplan/helpers/navigation_helpers/zoom_helper.dart';
 import 'package:veloplan/providers/route_manager.dart';
 import 'package:veloplan/scoped_models/main.dart';
-import 'package:veloplan/screens/navigation/base_map.dart';
-import '../../helpers/navigation_helpers/map_drawings.dart';
+import 'package:veloplan/models/navigation_models/base_map_model.dart';
+import 'package:veloplan/helpers/navigation_helpers/map_drawings.dart';
+import 'package:veloplan/utilities/travel_type.dart';
 
 /// Class to display a mapbox map with a route and other possible widgets
 /// Author(s): Fariha Choudhury k20059723, Elisabeth Koren Halvorsen k20077737
@@ -43,7 +43,6 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
   void refocusCamera(List<LatLng> journey) {
     LatLng center = getCenter(journey);
     Tuple2<LatLng, LatLng> corners = getCornerCoordinates(journey);
-    print("radius: " + calculateDistance(center, corners.item1).toString());
     double zoom = getZoom(calculateDistance(center, corners.item1));
 
     cameraPosition = CameraPosition(
@@ -57,11 +56,12 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
   void setJourney(List<LatLng> journey) async {
     List<dynamic> journeyPoints = [];
     if (journey.length > 1) {
-      routeResponse = await _manager.getDirections(journey[0], journey[1]);
+      routeResponse = await _manager.getDirections(
+          journey[0], journey[1], NavigationType.walking);
       for (int i = 0; i < journey.length - 1; ++i) {
-        var directions =
-            await _manager.getDirections(journey[i], journey[i + 1]);
-        for (dynamic a in directions['geometry']['coordinates']) {
+        var directions = await _manager.getDirections(
+            journey[i], journey[i + 1], NavigationType.cycling);
+        for (dynamic a in directions['geometry']!['coordinates']) {
           journeyPoints.add(a);
         }
         routeResponse['geometry']

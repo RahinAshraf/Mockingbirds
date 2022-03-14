@@ -1,22 +1,9 @@
 import 'package:flutter/material.dart';
-
 import 'package:mapbox_gl/mapbox_gl.dart';
-import 'package:tuple/tuple.dart';
-import 'package:veloplan/providers/docking_station_manager.dart';
-import 'package:veloplan/providers/route_manager.dart';
-import '../../helpers/navigation_helpers/navigation_helpers.dart';
-import '../../helpers/navigation_helpers/map_drawings.dart';
-
-import 'package:veloplan/helpers/shared_prefs.dart';
-import 'package:veloplan/screens/place_search_screen.dart';
-import '../../.env.dart';
-import 'package:veloplan/providers/location_service.dart';
-import 'turn_by_turn_screen.dart';
-import '../../helpers/navigation_helpers/zoom_helper.dart';
+import 'package:veloplan/models/navigation_models/base_map_model.dart';
+import '../../models/navigation_models/base_map_with_route_model.dart';
 import 'package:scoped_model/scoped_model.dart';
-import '../../scoped_models/main.dart';
-import 'package:veloplan/.env.dart';
-import 'base_map.dart';
+import 'package:veloplan/scoped_models/main.dart';
 
 /// Map screen focused on a user's live location
 /// Author(s): Fariha Choudhury k20059723, Elisabeth Halvorsen k20077737,
@@ -31,32 +18,66 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   LatLng currentLatLng = const LatLng(51.51185004458236, -0.11580820118980878);
-  late BaseMapboxMap _map;
+  late BaseMapboxMap _baseMap;
+  late BaseMapboxRouteMap _baseMapWithRoute;
+  List<LatLng> points = [
+    LatLng(51.514951, -0.112762),
+    LatLng(51.513146, -0.115256),
+    LatLng(51.511407, -0.125497),
+    LatLng(51.506053, -0.130310),
+    LatLng(51.502254, -0.217760),
+  ];
+
+  // /// ! show usage of BaseMapboxRouteMap
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Scaffold(body: ScopedModelDescendant<NavigationModel>(
+  //       builder: (BuildContext context, Widget? child, NavigationModel model) {
+  //     _baseMapWithRoute =
+  //         BaseMapboxRouteMap(points, false, currentLatLng, model);
+  //     addPositionZoom();
+  //     return SafeArea(child: Stack(children: _baseMapWithRoute.getWidgets()));
+  //   }));
+  // }
+
+  // /// add positional zoom to our widgets
+  // void addPositionZoom() {
+  //   _baseMapWithRoute.addWidget(Container(
+  //     alignment: Alignment(0.9, 0.90),
+  //     child: FloatingActionButton(
+  //       heroTag: "center_to_current_loaction",
+  //       onPressed: () {
+  //         _baseMapWithRoute.controller?.animateCamera(
+  //             CameraUpdate.newCameraPosition(_baseMapWithRoute.cameraPosition));
+  //       },
+  //       child: const Icon(Icons.my_location),
+  //     ),
+  //   ));
+  // }
+
+  // ! show usage of BaseMapboxMap
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: ScopedModelDescendant<NavigationModel>(
         builder: (BuildContext context, Widget? child, NavigationModel model) {
-      _map = BaseMapboxMap(false, currentLatLng, model);
+      _baseMap = BaseMapboxMap(false, currentLatLng, model);
       addPositionZoom();
-      return SafeArea(child: Stack(children: _map.getWidgets()));
+      return SafeArea(child: Stack(children: _baseMap.getWidgets()));
     }));
   }
 
   void addPositionZoom() {
-    _map.addWidget(Container(
+    _baseMap.addWidget(Container(
       alignment: Alignment(0.9, 0.90),
       child: FloatingActionButton(
         heroTag: "center_to_current_loaction",
         onPressed: () {
-          _map.controller?.animateCamera(
-              CameraUpdate.newCameraPosition(_map.cameraPosition));
+          _baseMap.controller?.animateCamera(
+              CameraUpdate.newCameraPosition(_baseMap.cameraPosition));
         },
         child: const Icon(Icons.my_location),
       ),
     ));
   }
 }
-
-// TODO: Add walking route  (DONE: Create walking route manager)
-// TODO: Duration and distance
