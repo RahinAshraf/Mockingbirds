@@ -5,14 +5,16 @@ import 'package:veloplan/.env.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:veloplan/models/docking_station.dart';
 
-/// Class to display a mapbox map with widgets on top
-/// Author(s): Elisabeth Halvorsen k20077737
+import '../../helpers/navigation_helpers/map_drawings.dart';
+
+/// Class to display a mapbox map with widgets other widgets on top
+/// Author(s): Fariha Choudhury k20059723, Elisabeth Koren Halvorsen k20077737
 class NavigationMap {
   final String _accessToken = MAPBOX_ACCESS_TOKEN;
   late final LatLng _target;
   late MapboxMap _map;
-  late List<Widget> _widgets;
-  late final NavigationModel _model;
+  final List<Widget> _widgets = [];
+  final NavigationModel _model;
   late CameraPosition _cameraPosition;
   late MapboxMapController? _controller;
   late Symbol? _selectedSymbol;
@@ -36,6 +38,34 @@ class NavigationMap {
     return _widgets;
   }
 
+  void _onMapCreated(MapboxMapController controller) async {
+    _controller = controller;
+    _model.setController(_controller!);
+    _model.fetchDockingStations();
+    controller.onSymbolTapped.add(_onSymbolTapped);
+  }
+
+  void fetchDockingStations() {
+    final dockingStationManager _stationManager = dockingStationManager();
+    _stationManager.importStations().then(
+        (value) => placeDockMarkers(_controller!, _stationManager.stations));
+  }
+
+  Future<void> _onSymbolTapped(Symbol symbol) async {
+    _selectedSymbol = symbol;
+    Future<LatLng> variable = _controller!.getSymbolLatLng(symbol);
+    if (_selectedSymbol != null) {
+      LatLng current = await variable;
+      displayDockCard(current);
+    }
+  }
+
+  void displayDockCard(LatLng current) {
+    //CHANGE THIS TO CREATE CARD
+    //! CAN BE MOVED TO HELPER ONCE HRISTINA IS FINISHED WITH IT
+    print("Will call widget next");
+  }
+
   void setMapWithoutLiveLocation() {
     _map = MapboxMap(
       accessToken: _accessToken,
@@ -56,49 +86,4 @@ class NavigationMap {
       annotationOrder: const [AnnotationType.symbol],
     );
   }
-
-  void _onMapCreated(MapboxMapController controller) async {
-    _controller = controller;
-    _model.getStattionManager();
-    controller.onSymbolTapped.add(_onSymbolTapped);
-  }
-
-  Future<void> _onSymbolTapped(Symbol symbol) async {
-    _selectedSymbol = symbol;
-    Future<LatLng> variable = _controller!.getSymbolLatLng(symbol);
-    if (_selectedSymbol != null) {
-      LatLng current = await variable;
-      displayDockCard(current);
-    }
-  }
-
-  void displayDockCard(LatLng current) {
-    //CHANGE THIS TO CREATE CARD
-    //! CAN BE MOVED TO HELPER ONCE HRISTINA IS FINISHED WITH IT
-    print("Will call widget next");
-  }
-
-  void placeDockMarkers(List<DockingStation> docks) {
-    for (var station in docks) {
-      _controller!.addSymbol(
-        SymbolOptions(
-            geometry: LatLng(station.lat, station.lon),
-            iconSize: 0.7,
-            iconImage: "assets/icon/bicycle.png"),
-      );
-    }
-  }
 }
-
-
-//  void updateMap(MapboxMap map) {
-//     _model.setMap(map);
-//   }
-
-//   void updateCameraPosition(CameraPosition cameraposition) {
-//     _model.setCameraPosition(cameraposition);
-//   }
-
-//   void updateController(MapboxMapController controller) {
-//     _model.setController(controller);
-//   }
