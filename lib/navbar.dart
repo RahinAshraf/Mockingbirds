@@ -53,10 +53,6 @@ class _MainPageState extends State<MainPage> {
               heroTag: "btn2",
               onPressed: () {
                 onTabTapped(1);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => DockSorterScreen()));
                 print("Link journey_planner screen to this btn");
               },
               child: const Icon(

@@ -17,6 +17,9 @@ class DockingStationList {
     return list;
   }
 
+/**
+ * Retrieve the filtered cards for edit dock. Get 10 cards that are the closest to the given location
+ */
   Future<List<Widget>> retrieveFilteredCards() {
     final dockingStationManager _stationManager = dockingStationManager();
     var list = _stationManager.importStations().then((value) =>
