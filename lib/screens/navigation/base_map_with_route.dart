@@ -1,38 +1,28 @@
-import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:tuple/tuple.dart';
 import 'package:veloplan/helpers/navigation_helpers/navigation_helpers.dart';
 import 'package:veloplan/helpers/navigation_helpers/zoom_helper.dart';
 import 'package:veloplan/providers/route_manager.dart';
 import 'package:veloplan/scoped_models/main.dart';
-import 'package:veloplan/.env.dart';
-import 'package:veloplan/providers/docking_station_manager.dart';
-import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/screens/navigation/base_map.dart';
-
 import '../../helpers/navigation_helpers/map_drawings.dart';
 
 /// Class to display a mapbox map with a route and other possible widgets
 /// Author(s): Fariha Choudhury k20059723, Elisabeth Koren Halvorsen k20077737
 
 class BaseMapboxRouteMap extends BaseMapboxMap {
-  late List<LatLng> _journey;
+  late final List<LatLng> _journey;
   Map<String, Object> _fills = {};
-  Set<Symbol> _polylineSymbols = {};
-  String totalDistance = 'No route';
-  RouteManager _manager = RouteManager();
+  final Set<Symbol> _polylineSymbols = {};
+  String _totalDistanceAndTime = 'No route';
+  final RouteManager _manager = RouteManager();
   late Map routeResponse;
 
   BaseMapboxRouteMap(
       this._journey, bool useLiveLocation, LatLng target, NavigationModel model)
-      : super(useLiveLocation, target, model) {}
+      : super(useLiveLocation, target, model);
 
-  void displayJourneyAndRefocus(List<LatLng> journey) {
-    setJourney(journey);
-    refocusCamera(journey);
-    setPolylineMarkers(controller!, journey, _polylineSymbols);
-  }
-
+  /// Initialise map features
   @override
   void onMapCreated(MapboxMapController controller) async {
     this.controller = controller;
@@ -42,6 +32,14 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
     controller.onSymbolTapped.add(onSymbolTapped);
   }
 
+  /// Display journey and refocus camera position
+  void displayJourneyAndRefocus(List<LatLng> journey) {
+    setJourney(journey);
+    refocusCamera(journey);
+    setPolylineMarkers(controller!, journey, _polylineSymbols);
+  }
+
+  /// Refocus camera positioning to focus on the [journey] polyline
   void refocusCamera(List<LatLng> journey) {
     LatLng center = getCenter(journey);
     Tuple2<LatLng, LatLng> corners = getCornerCoordinates(journey);
@@ -55,6 +53,7 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
     controller!.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
   }
 
+  /// Sets the [journey] geometry
   void setJourney(List<LatLng> journey) async {
     List<dynamic> journeyPoints = [];
     if (journey.length > 1) {
@@ -68,26 +67,33 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
         routeResponse['geometry']
             .update("coordinates", (value) => journeyPoints);
       }
-      _fills = await setFills(_fills, routeResponse['geometry']);
-      addFills(controller!, _fills, model);
-      setDistanceAndTime();
+      displayJourney();
     }
   }
 
+  /// Draws out the journey
+  void displayJourney() async {
+    _fills = await setFills(_fills, routeResponse['geometry']);
+    addFills(controller!, _fills, model);
+    setDistanceAndTime();
+  }
+
+  /// Set distance and time
   void setDistanceAndTime() async {
     try {
       var duration = await _manager.getDistance() as double; //meters
       var distance = await _manager.getDuration() as double; //sec
-      totalDistance = "distance: " +
+      _totalDistanceAndTime = "distance: " +
           (distance / 1000).truncate().toString() +
           ", duration: " +
           (duration / 60).truncate().toString();
     } catch (e) {
-      totalDistance = "Route not avalible";
+      _totalDistanceAndTime = "Route not avalible";
     }
   }
 
+  /// Gets the [_totalDistanceAndTime] of a journey
   String getTotalDistance() {
-    return totalDistance;
+    return _totalDistanceAndTime;
   }
 }
