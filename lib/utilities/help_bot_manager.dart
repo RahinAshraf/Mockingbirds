@@ -11,15 +11,10 @@ class HelpBotManager {
           'Planning Journey'),
       Message('How do I sign up?', 'Sign up on the main page.', 'Signup'),
       Message('How do I up?', 'Sign up.', 'Signup'),
+      Message('I have another question that is not listed here.',
+          'Please contact k20082541@kcl.ac.uk.', 'Other Question', true),
       // add messages here
     ];
-    Message otherQuestion = Message(
-        'I have another question that is not listed here.',
-        'Please contact k20082541@kcl.ac.uk.',
-        'Other Question');
-    otherQuestion.setLaunch(true);
-    data.add(otherQuestion);
-
     questions = _groupByTopic(data);
   }
 
@@ -39,6 +34,10 @@ class HelpBotManager {
     return message.questionAnswer;
   }
 
+  bool getLaunch(Message message) {
+    return message.launch;
+  }
+
   Map<String, List<Message>> _groupByTopic(List<Message> list) {
     Map<String, List<Message>> resultMap = {};
     for (Message message in list) {
@@ -56,14 +55,5 @@ class HelpBotManager {
       }
     }
     return questions;
-  }
-
-  bool getLaunch(String question) {
-    for (Message message in data) {
-      if (message.questionText == question) {
-        return message.launch;
-      }
-    }
-    return false;
   }
 }

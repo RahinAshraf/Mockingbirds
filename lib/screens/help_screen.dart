@@ -14,6 +14,11 @@ class HelpPage extends StatefulWidget {
 }
 
 class _HelpPageState extends State<HelpPage> {
+  void initState() {
+    choices = _displayChoices();
+    super.initState();
+  }
+
   List<MessageBubble> _conversation = [
     MessageBubble(text: 'Hello. How can I help you?')
   ];
@@ -43,18 +48,10 @@ class _HelpPageState extends State<HelpPage> {
             choices = [];
             _displayQuestions();
           });
-          if (questions.getLaunch(topic)) {
-            _sendMail();
-          }
         },
       ));
     }
     return tpcs;
-  }
-
-  void initState() {
-    choices = _displayChoices();
-    super.initState();
   }
 
   List<TopicsList> _displayQuestions() {
@@ -70,10 +67,11 @@ class _HelpPageState extends State<HelpPage> {
                 .add(MessageBubble(text: questions.getQuestionAnswer(message)));
             displayingTopics == true;
             choices = _displayChoices();
+
+            if (questions.getLaunch(message)) {
+              _sendMail();
+            }
           });
-          if (questions.getLaunch(message.questionText)) {
-            _sendMail();
-          }
         },
       ));
     }

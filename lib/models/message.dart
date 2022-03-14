@@ -2,11 +2,8 @@ class Message {
   final String questionText;
   final String questionAnswer;
   final String topic;
-  bool launch = false;
+  final bool launch;
 
-  Message(this.questionText, this.questionAnswer, this.topic);
-
-  void setLaunch(bool launch) {
-    this.launch = launch;
-  }
+  Message(this.questionText, this.questionAnswer, this.topic,
+      [this.launch = false]);
 }
