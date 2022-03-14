@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:veloplan/styles/theme.dart';
+import 'package:veloplan/helpers/theme_provider.dart';
 
 class Settings extends StatelessWidget {
   const Settings({Key? key}) : super(key: key);

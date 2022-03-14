@@ -13,6 +13,7 @@ import 'styles/theme.dart';
 import 'styles/config.dart';
 import '../helpers/live_location_helper.dart';
 import '../navbar.dart';
+import 'package:veloplan/helpers/theme_provider.dart';
 
 late SharedPreferences sharedPreferences;
 
@@ -42,9 +43,9 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    currentTheme.addListener(() {
-      setState(() {});
-    });
+    // currentTheme.addListener(() {
+    //   setState(() {});
+    // });
   }
 
   @override
