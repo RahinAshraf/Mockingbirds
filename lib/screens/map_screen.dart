@@ -1,6 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:veloplan/providers/path_provider.dart';
+import 'package:veloplan/providers/trip_manager.dart';
 import 'package:veloplan/screens/place_search_screen.dart';
 import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
@@ -36,7 +40,17 @@ class MyHomePageState extends State<MapPage> {
 
   _onMapCreated(MapboxMapController controller) async {
     this.controller = controller;
-    fetchDockingStations();
+    //fetchDockingStations();
+    final dockingStationManager _stationManager = dockingStationManager();
+    await _stationManager.importStations();
+    print("here it is" +
+        await _stationManager
+            .get5ClosestDocks(getLatLngFromSharedPrefs())[0]
+            .name);
+    printPaths(
+        await _stationManager.get10ClosestDocks(getLatLngFromSharedPrefs()));
+
+    fetchPaths(_stationManager.get10ClosestDocks(getLatLngFromSharedPrefs()));
   }
 
   void fetchDockingStations() {
@@ -44,6 +58,22 @@ class MyHomePageState extends State<MapPage> {
     _stationManager
         .importStations()
         .then((value) => placeDockMarkers(_stationManager.stations));
+  }
+
+  void fetchPaths(List<DockingStation> docks) async {
+    final PathProvider dir = new PathProvider();
+    await dir.importPathsForDockSorter(getLatLngFromSharedPrefs(), docks);
+
+    print('---------------------');
+    printPaths(dir.convertPathToSortedDocks(
+        dir.sortPathsByDistanceFromGivenLocation(
+            getLatLngFromSharedPrefs(), dir.paths)));
+  }
+
+  void printPaths(List<DockingStation> sortedDocks) {
+    for (var dock in sortedDocks) {
+      print(dock.name);
+    }
   }
 
   void placeDockMarkers(List<DockingStation> docks) {

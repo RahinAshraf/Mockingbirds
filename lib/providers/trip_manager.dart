@@ -2,7 +2,8 @@ import 'dart:convert';
 import 'dart:developer';
 import '../models/docking_station.dart';
 import '../models/path.dart';
-import 'package:latlong2/latlong.dart' as LatLong;
+import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart'
+    as LatLong;
 import "package:http/http.dart" as http;
 import 'package:mapbox_gl/mapbox_gl.dart';
 
@@ -27,11 +28,11 @@ class TripManager {
     log("https://api.mapbox.com/directions/v5/mapbox/cycling/${coordString.join()}?alternatives=true&continue_straight=true&geometries=geojson&language=en&overview=simplified&steps=true&access_token=$YOUR_MAPBOX_ACCESS_TOKEN");
     //var jsonData = json.decode(data.body);
   }
-
+/*
   void createTrips() {
     for (var i = 0; i < coordList.length - 1; i++) {
       trip.add(Path(LatLong.LatLng(coordList[i][0]!, coordList[i][1]!),
           LatLong.LatLng(coordList[i + 1][0]!, coordList[i + 1][1]!)));
     }
-  }
+  }*/
 }
