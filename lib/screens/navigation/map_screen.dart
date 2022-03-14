@@ -1,19 +1,12 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter/services.dart';
-// import 'package:flutter_dotenv/flutter_dotenv.dart';
-// import 'package:google_maps_routes/google_maps_routes.dart';
-// import 'package:latlong2/latlong.dart';
+
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:tuple/tuple.dart';
-// import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:veloplan/providers/route_manager.dart';
 import '../../helpers/navigation_helpers/navigation_helpers.dart';
 import '../../helpers/navigation_helpers/map_drawings.dart';
-// import '../login_screen.dart';
-// import '../../navbar.dart';
-// import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-// import '../helpers/navigation_helpers.dart';
+
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:veloplan/screens/place_search_screen.dart';
 import '../../.env.dart';
@@ -28,7 +21,6 @@ import 'map.dart';
 /// A Map screen focused on a user's live location
 /// Author(s): Fariha Choudhury k20059723, Elisabeth Halvorsen k20077737,
 
-//import 'package:veloplan/widget/carousel/station_carousel.dart';
 const double zoom = 16;
 
 class MapPage extends StatefulWidget {
@@ -46,15 +38,12 @@ class MyHomePageState extends State<MapPage> {
   Map<String, Object> _fills = {};
   Set<Symbol> polylineSymbols = {};
   late Symbol? _selectedSymbol; //may remove
-
-  // var zoom = LatLng(51.51185004458236, -0.11580820118980878);
-  // String googleMapsApi = 'AIzaSyB7YSQkjjqm-YU1LAz91lyYAvCpqFRhFdU';
   String accessToken = MAPBOX_ACCESS_TOKEN;
   List<LatLng> points = [
-    // LatLng(51.514951, -0.112762),
+    LatLng(51.514951, -0.112762),
     LatLng(51.513146, -0.115256),
     LatLng(51.511407, -0.125497),
-    // LatLng(51.506053, -0.130310),
+    LatLng(51.506053, -0.130310),
     LatLng(51.502254, -0.217760),
   ];
   late MapboxMapController? controller;
@@ -67,7 +56,6 @@ class MyHomePageState extends State<MapPage> {
   late NavigationMap _navigationMap;
   late MapboxMap map;
 
-  // late CameraPosition _initialCameraPosition;
   TextEditingController _searchController = TextEditingController();
   @override
   void initState() {
@@ -91,10 +79,7 @@ class MyHomePageState extends State<MapPage> {
     print("Symbol has been tapped");
     _selectedSymbol = symbol;
     Future<LatLng> variable = controller!.getSymbolLatLng(symbol);
-    // _DockPopupCard(latlng: await variable,);
     if (_selectedSymbol != null) {
-      //Future<LatLng> variable = controller!.getSymbolLatLng(symbol);
-      // print("This is:   " + variable.toString());
       LatLng current = await variable;
       print(await variable);
       print("CURRENT: " + current.toString());
@@ -123,16 +108,6 @@ class MyHomePageState extends State<MapPage> {
       myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
       annotationOrder: const [AnnotationType.symbol],
     ));
-    // _navigationMap = NavigationMap(
-    //     MapboxMap(
-    //       accessToken: accessToken,
-    //       initialCameraPosition: _cameraPosition,
-    //       onMapCreated: _onMapCreated,
-    //       myLocationEnabled: true,
-    //       myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
-    //       annotationOrder: const [AnnotationType.symbol],
-    //     ),
-    //     _model);
   }
 
   @override
@@ -141,7 +116,6 @@ class MyHomePageState extends State<MapPage> {
         builder: (BuildContext context, Widget? child, NavigationModel model) {
       _model = model;
       initMap();
-      //_navigationMap = NavigationMap(model.getMap(), model);
       return SafeArea(
           child: Stack(
         children: [
@@ -248,7 +222,6 @@ class MyHomePageState extends State<MapPage> {
 
   _onStyleLoadedCallback() async {
     setState(() => showMarkers = true);
-    //print(showMarkers);
   }
 
   void displayJourneyAndRefocus(List<LatLng> journey) {
@@ -259,7 +232,6 @@ class MyHomePageState extends State<MapPage> {
 
   void refocusCamera(List<LatLng> journey) {
     LatLng center = getCenter(journey);
-    // print(center);
     Tuple2<LatLng, LatLng> corners = getCornerCoordinates(journey);
     print("radius: " + calculateDistance(center, corners.item1).toString());
     double zoom = getZoom(calculateDistance(center, corners.item1));
@@ -292,8 +264,6 @@ class MyHomePageState extends State<MapPage> {
       _fills = await setFills(_fills, routeResponse['geometry']);
       addFills(controller!, _fills, _model);
       setDistanceAndTime();
-
-      // print("manager distance: " + a.toString());
     }
   }
 
@@ -317,20 +287,8 @@ class MyHomePageState extends State<MapPage> {
 
 // TODO: Fix camera zoom
 // TODO: get the time
-// TODO: Update path when button pressed- DONE?
-//      ^^cancelling and reshowing polyline works, going back to map screen after pressing polyline also works
 
 // TODO: Add walking route  (DONE: Create walking route manager)
 // TODO: Duration and distance
 
-// TODO: Camera zoom
-
-// TODO: Error box when no internet -> check when future is called
 // TODO: Future to the map
-
-// DONE: Turn by turn directions
-// DONE: Zoom in and zoom out buttons
-// DONE: stop auto navigation - simulateRoute: false in turb_by_turn_screen.dart
-// DONE: show markers for list of points
-// DONE: show all markers for docking stations
-// DONE: set drawing related stuff into another class
