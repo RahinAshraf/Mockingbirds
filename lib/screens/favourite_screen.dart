@@ -29,9 +29,9 @@ class _FavouriteState extends State<Favourite> {
   Widget build(BuildContext build) {
     return Scaffold(
       body: favourites.isEmpty
-          ? SizedBox(
-              height: MediaQuery.of(context).size.height * 0.3,
-              child: const Center(
+          ? const SafeArea(
+              //height: MediaQuery.of(context).size.height * 0.3,
+              child: Center(
                 //add constants
                 child: Text("You haven't added any favourites."),
               ),
