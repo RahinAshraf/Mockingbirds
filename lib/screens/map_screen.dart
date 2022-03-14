@@ -71,10 +71,9 @@ class MyHomePageState extends State<MapPage> {
     sharedPreferences.clear();
     sharedPreferences.setDouble('latitude', _newLocationData.latitude!);
     sharedPreferences.setDouble('longitude', _newLocationData.longitude!);
-    //sharedPreferences.apply();
-    print("UPDATED");
-    print(_newLocationData.latitude!);
-    print(_newLocationData.longitude!);
+    // print("UPDATED");
+    // print(_newLocationData.latitude!);
+    // print(_newLocationData.longitude!);
   }
 
   @override

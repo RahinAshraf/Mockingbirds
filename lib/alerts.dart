@@ -18,7 +18,7 @@ class Alerts{
   //Show error message to user for having blank destination fields
   void showWhereToTextFieldsMustNotBeEmptySnackBar(BuildContext context) {
     const text =
-        "Please specify locations for all destinations of the journey. Otherwise, remove any empty choices";
+        "Please remove any empty destination choices before proceeding";
     const snackBar = SnackBar(
       content: Text(
         text,

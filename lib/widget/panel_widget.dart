@@ -86,7 +86,6 @@ class PanelWidgetState extends State<PanelWidget> {
   @override
   void initState() {
     staticListMap = widget.staticListMap;
-    final selectedCords = widget.selectedCords;
     selectionMap = widget.selectionMap;
 
     LatLng currentLocation = getLatLngFromSharedPrefs();
@@ -100,11 +99,27 @@ class PanelWidgetState extends State<PanelWidget> {
       });
     });
 
+    _listToMapClick();
+
+    super.initState();
+  }
+
+  void _listToMapClick(){
+
+    final selectedCords = widget.selectedCords;
+
     widget.address.listen((event) {
       final dynamicWidget = DynamicWidget(
         selectedCords: selectedCords,
         cordDataMap: response,
       );
+
+      final list = widget.listDynamic ;
+      if(list.any((element) => element.textController.text.isEmpty)){
+        alert.showWhereToTextFieldsMustNotBeEmptySnackBar(context);
+        return;
+      }
+
       dynamicWidget.textController.text = event.address ?? "";
       dynamicWidget.position = widget.listDynamic.length;
       widget.listDynamic.add(dynamicWidget);
@@ -119,9 +134,8 @@ class PanelWidgetState extends State<PanelWidget> {
       }
       widget.dynamicWidgets.sink.add(widget.listDynamic);
     });
-
-    super.initState();
   }
+
 
   //When called, this function sets the first location of the journey to the users current location
   _useCurrentLocationButtonHandler(
@@ -215,8 +229,8 @@ class PanelWidgetState extends State<PanelWidget> {
         TextButton(
           onPressed: () async {
             print("Link carasoul stuff here");
-            List temp = await locService.getPlaceCoords(controller.text);
-            print(temp);
+            // List temp = await locService.getPlaceCoords(controller.text);
+            // print(temp);
           },
           child: const Icon(
             Icons.keyboard_arrow_right_rounded,
@@ -237,16 +251,19 @@ class PanelWidgetState extends State<PanelWidget> {
   }
 
   void _updateItems(int oldIndex, int newIndex) {
-      if(newIndex > oldIndex){
-        newIndex -= 1;
-      }
 
-      final item = widget.listDynamic.removeAt(oldIndex);
-      widget.listDynamic.insert(newIndex, item);
+    if(newIndex > oldIndex){
+      newIndex -= 1;
+    }
 
+    final item = widget.listDynamic.removeAt(oldIndex);
+    widget.listDynamic.insert(newIndex, item);
+
+    if(oldIndex < widget.selectedCords.length) {
       final itemCords = widget.selectedCords[oldIndex];
       widget.selectedCords.removeAt(oldIndex);
       widget.selectedCords.insert(newIndex, itemCords);
+    }
 
   }
 
@@ -281,21 +298,6 @@ class PanelWidgetState extends State<PanelWidget> {
                   builder: (_, snapshot) {
                     List<DynamicWidget> listOfDynamics = snapshot.data ?? [];
 
-                    // return ListView.builder(
-                    //   padding: EdgeInsets.zero,
-                    //   shrinkWrap: true,
-                    //   itemBuilder: (_, index) {
-                    //     final dynamicWidget = listOfDynamics[index];
-                    //     dynamicWidget.position = index;
-                    //     dynamicWidget.removeDynamic((p0) {
-                    //       widget.listDynamic.removeAt(index);
-                    //       widget.dynamicWidgets.sink.add(widget.listDynamic);
-                    //     });
-                    //     return dynamicWidget;
-                    //   },
-                    //   itemCount: listOfDynamics.length,
-                    //   physics: const NeverScrollableScrollPhysics(),
-                    // );
                     return ReorderableListView.builder(
                       itemExtent: 74,
                       padding: EdgeInsets.zero,
@@ -307,7 +309,7 @@ class PanelWidgetState extends State<PanelWidget> {
                           widget.listDynamic.removeAt(index);
                           widget.dynamicWidgets.sink.add(widget.listDynamic);
                         });
-                        return //ListTile(key: ValueKey(index), leading: 
+                        return //ListTile(key: ValueKey(index), leading:
                         Container(key: ValueKey(index), child: dynamicWidget);//, trailing: Icon(Icons.menu),);
                       },
                       itemCount: listOfDynamics.length,
@@ -343,17 +345,26 @@ class PanelWidgetState extends State<PanelWidget> {
                 primary: Colors.white,
               ),
               onPressed: () {
+                final hasEmptyField = widget.listDynamic.any((element) => element.textController.text.isEmpty);
+
                 applyConstraints(
                     widget.fromTextEditController, widget.toTextEditController);
 
-                if (areAdjacentCoods(widget.selectedCords)) {
+                if(hasEmptyField){
+                  alert.showWhereToTextFieldsMustNotBeEmptySnackBar(context);
+                  //return;
+                }
+
+                if (areAdjacentCords(widget.selectedCords)) {
                   alert.showCantHaveAdajcentSnackBar(context);
+                  //return;
                 }
 
                 List<List<double?>?> tempList = [];
                 tempList.addAll(staticListMap.values);
                 tempList.addAll(widget.selectedCords);
                 print("ALL_COORDINATES => $tempList");
+
               },
               child: const Text(
                 "START",
@@ -387,13 +398,16 @@ class PanelWidgetState extends State<PanelWidget> {
     return widget.selectedCords;
   }
 
-  bool areAdjacentCoods(List<List<double?>?> myList) {
+  bool areAdjacentCords(List<List<double?>?> myList)  {
     for (int i = 0; i < myList.length - 1; i++) {
-      if (myList[i]?.first == myList[i + 1]?.first &&
-          myList[i]?.last == myList[i + 1]?.last) {
+      if (myList[i]?.first == myList[i + 1]?.first && myList[i]?.last == myList[i + 1]?.last) {
         print("Adjacents exist");
         return true;
       }
+    }
+    if(myList[0]?.first == staticListMap[fromLabelKey]?.first && myList[0]?.last == staticListMap[fromLabelKey]?.last){
+      print("Adjacents exist2");
+      return true;
     }
     print("Adjacents do not exist");
     return false;
@@ -422,7 +436,7 @@ class PanelWidgetState extends State<PanelWidget> {
   //The logic to restrict the user from being able to start a journey without a starting point
   bool startLocationMustBeSpecified(
       TextEditingController textEditingController) {
-    if (textEditingController.text.isEmpty) {
+    if (widget.fromTextEditController.text.isEmpty) {
       alert.showStartLocationMustNotBeEmptySnackBar(context);
       return true;
     }
@@ -514,7 +528,7 @@ class DynamicWidget extends StatelessWidget {
             child: Row(
               //mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // const SizedBox(width: 17),
+                //const SizedBox(height: 17),
                 //Expanded(
                 TextButton(
                   onPressed: () {
@@ -595,7 +609,17 @@ class DynamicWidget extends StatelessWidget {
               Container(
                 decoration: BoxDecoration(border: Border.all(), borderRadius: BorderRadius.circular(20)),
                 child: Text("Default closest dock"),
-              )
+              ),
+              IconButton(
+                  onPressed: () async {
+                    List temp = await locationService.getPlaceCoords(textController.text);
+                    print(temp);
+                  } ,
+                  padding: const EdgeInsets.all(0),
+                  icon: const Icon(Icons.navigate_next_outlined,
+
+                  )
+              ),
             ],
           ),
         ],
