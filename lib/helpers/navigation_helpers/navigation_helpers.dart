@@ -7,7 +7,8 @@ import 'package:vector_math/vector_math.dart';
 /// Helper methods related to map navigation
 /// Author(s): Elisabeth Koren Halvorsen k20077737
 
-const double earthRadius = 6371000;
+const double earthRadiusInMeters = 6371000;
+const double earthRadiusInKm = 6371;
 
 double calculateDistance(LatLng pos1, LatLng pos2) {
   var p = 0.017453292519943295;
@@ -18,17 +19,6 @@ double calculateDistance(LatLng pos1, LatLng pos2) {
           (1 - cos((pos2.longitude - pos1.longitude) * p)) /
           2;
   return 12742 * asin(sqrt(a));
-}
-
-// λ = longitude
-// ϕ = latitude
-double getBearing(LatLng a, LatLng b) {
-  var y = sin(b.longitude - a.longitude) * cos(b.latitude);
-  var x = cos(a.latitude) * sin(b.latitude) -
-      sin(a.latitude) * cos(b.latitude) * cos(b.longitude - a.longitude);
-  var theta = atan2(y, x);
-  // return 14;
-  return (theta * 180 / pi) % 360;
 }
 
 /// Gets the midpoint between point [a] and [b], Will only work for close distances
@@ -58,4 +48,11 @@ Tuple2<LatLng, LatLng> getCornerCoordinates(List<LatLng> points) {
 LatLng getCenter(List<LatLng> points) {
   var corners = getCornerCoordinates(points);
   return getMidpoint(corners.item1, corners.item2);
+}
+
+/// gets the zoom factor from [radius]
+double getZoom(double radius) {
+  double x = (2 * pi * earthRadiusInKm) / (2 * radius);
+  double log2 = log(x) / log(2);
+  return log2 / 1.125;
 }
