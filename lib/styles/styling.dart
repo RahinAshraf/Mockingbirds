@@ -7,7 +7,7 @@ const Color appBarColor = Color(0xFF99D2A9);
 const Color appBarTextColor = Colors.white;
 
 // Sidebar
-//const TextStyle sidebarItemTextStyle = TextStyle(color: Colors.green);
+const TextStyle sidebarItemTextStyle = TextStyle(color: Colors.green);
 
 // Alerts
 const Color alertSnackBarBackgroundColor = Colors.red;

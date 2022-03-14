@@ -6,7 +6,7 @@ import '../screens/schedule_screen.dart';
 import '../screens/favourite_screen.dart';
 import '../screens/setting_screen.dart';
 import '../screens/help_screen.dart';
-import 'styles/config.dart';
+import 'styles/styling.dart';
 
 ///@author Tayyibah
 //NOTE CHANGE NAME TO SIDEBAR
