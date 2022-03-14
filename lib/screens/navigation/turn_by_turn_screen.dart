@@ -26,7 +26,7 @@ class _TurnByTurnState extends State<TurnByTurn> {
     wayPoints = latLngs2WayPoints(points);
   }
 
-  // Config variables for Mapbox Navigation
+  /// Configuration variables for Mapbox Navigation
   late MapBoxNavigation directions;
   late MapBoxOptions _options;
   late double distanceRemaining, durationRemaining;
@@ -43,10 +43,11 @@ class _TurnByTurnState extends State<TurnByTurn> {
     initialize();
   }
 
+  /// Initialises the navigation
   Future<void> initialize() async {
     if (!mounted) return;
 
-    // Setup directions and options
+    /// Setup directions and options
     directions = MapBoxNavigation(onRouteEvent: _onRouteEvent);
     _options = MapBoxOptions(
         zoom: 18.0,
@@ -55,10 +56,12 @@ class _TurnByTurnState extends State<TurnByTurn> {
         mode: MapBoxNavigationMode.cycling,
         isOptimized: true,
         units: VoiceUnits.metric,
-        simulateRoute: true, //false to use live movement
+        simulateRoute: true,
+
+        ///false to use live movement
         language: "en");
 
-    // Start the trip
+    /// Start the trip
     await directions.startNavigation(wayPoints: wayPoints, options: _options);
   }
 
@@ -67,6 +70,7 @@ class _TurnByTurnState extends State<TurnByTurn> {
     return const MapPage();
   }
 
+  /// Turn by turn navigation
   Future<void> _onRouteEvent(e) async {
     distanceRemaining = await directions.distanceRemaining;
     durationRemaining = await directions.durationRemaining;
@@ -104,7 +108,8 @@ class _TurnByTurnState extends State<TurnByTurn> {
       default:
         break;
     }
-    //refresh UI
+
+    /// refresh UI
     setState(() {});
   }
 }

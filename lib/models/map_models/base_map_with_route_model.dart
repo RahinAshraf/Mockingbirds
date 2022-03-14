@@ -2,8 +2,8 @@ import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:tuple/tuple.dart';
 import 'package:veloplan/helpers/navigation_helpers/navigation_helpers.dart';
 import 'package:veloplan/providers/route_manager.dart';
-import 'package:veloplan/scoped_models/main.dart';
-import 'package:veloplan/models/navigation_models/base_map_model.dart';
+import 'package:veloplan/scoped_models/map_model.dart';
+import 'package:veloplan/models/map_models/base_map_model.dart';
 import 'package:veloplan/helpers/navigation_helpers/map_drawings.dart';
 import 'package:veloplan/utilities/travel_type.dart';
 
@@ -16,10 +16,10 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
   final Set<Symbol> _polylineSymbols = {};
   String _totalDistanceAndTime = 'No route';
   final RouteManager _manager = RouteManager();
-  late Map routeResponse;
+  late Map _routeResponse;
 
   BaseMapboxRouteMap(
-      this._journey, bool useLiveLocation, LatLng target, NavigationModel model)
+      this._journey, bool useLiveLocation, LatLng target, MapModel model)
       : super(useLiveLocation, target, model);
 
   /// Initialise map features
@@ -28,19 +28,19 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
     this.controller = controller;
     model.setController(controller);
     model.fetchDockingStations();
-    displayJourneyAndRefocus(_journey);
+    _displayJourneyAndRefocus(_journey);
     controller.onSymbolTapped.add(onSymbolTapped);
   }
 
   /// Display journey and refocus camera position
-  void displayJourneyAndRefocus(List<LatLng> journey) {
-    setJourney(journey);
-    refocusCamera(journey);
+  void _displayJourneyAndRefocus(List<LatLng> journey) {
+    _setJourney(journey);
+    _refocusCamera(journey);
     setPolylineMarkers(controller!, journey, _polylineSymbols);
   }
 
   /// Refocus camera positioning to focus on the [journey] polyline
-  void refocusCamera(List<LatLng> journey) {
+  void _refocusCamera(List<LatLng> journey) {
     LatLng center = getCenter(journey);
     Tuple2<LatLng, LatLng> corners = getCornerCoordinates(journey);
     double zoom = getZoom(calculateDistance(center, corners.item1));
@@ -53,10 +53,10 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
   }
 
   /// Sets the [journey] geometry
-  void setJourney(List<LatLng> journey) async {
+  void _setJourney(List<LatLng> journey) async {
     List<dynamic> journeyPoints = [];
     if (journey.length > 1) {
-      routeResponse = await _manager.getDirections(
+      _routeResponse = await _manager.getDirections(
           journey[0], journey[1], NavigationType.walking);
       for (int i = 0; i < journey.length - 1; ++i) {
         var directions = await _manager.getDirections(
@@ -64,22 +64,22 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
         for (dynamic a in directions['geometry']!['coordinates']) {
           journeyPoints.add(a);
         }
-        routeResponse['geometry']
+        _routeResponse['geometry']
             .update("coordinates", (value) => journeyPoints);
       }
-      displayJourney();
+      _displayJourney();
     }
   }
 
-  /// Draws out the journey
-  void displayJourney() async {
-    _fills = await setFills(_fills, routeResponse['geometry']);
+  /// Draws out the journey onto map
+  void _displayJourney() async {
+    _fills = await setFills(_fills, _routeResponse['geometry']);
     addFills(controller!, _fills, model);
-    setDistanceAndTime();
+    _setDistanceAndTime();
   }
 
-  /// Set distance and time
-  void setDistanceAndTime() async {
+  /// Sets distance and time
+  void _setDistanceAndTime() async {
     try {
       var duration = await _manager.getDistance() as double; //meters
       var distance = await _manager.getDuration() as double; //sec
@@ -93,7 +93,7 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
   }
 
   /// Gets the [_totalDistanceAndTime] of a journey
-  String getTotalDistance() {
+  String _getTotalDistance() {
     return _totalDistanceAndTime;
   }
 }

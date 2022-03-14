@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
-import 'package:veloplan/scoped_models/main.dart';
+import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:veloplan/.env.dart';
 
-/// Class to display a mapbox map with widgets other widgets on top
+/// Class to display a mapbox map with other possible widgets on top
 /// Author(s): Fariha Choudhury k20059723, Elisabeth Koren Halvorsen k20077737
 class BaseMapboxMap {
   final String _accessToken = MAPBOX_ACCESS_TOKEN;
   late final LatLng _target;
   late MapboxMap _map;
   final List<Widget> _widgets = [];
-  final NavigationModel model;
+  final MapModel model;
   late CameraPosition cameraPosition;
   late MapboxMapController? controller;
   late Symbol? _selectedSymbol;
@@ -19,24 +19,24 @@ class BaseMapboxMap {
   BaseMapboxMap(this._useLiveLocation, this._target, this.model) {
     cameraPosition = CameraPosition(target: _target, zoom: 15);
     if (_useLiveLocation) {
-      setMapWithLiveLocation();
+      _setMapWithLiveLocation();
     } else {
-      setMapWithoutLiveLocation();
+      _setMapWithoutLiveLocation();
     }
     addWidget(_map);
   }
 
-  /// adds a [widget] to [widgets]
+  /// Adds a [widget] to [_widgets]
   void addWidget(Widget widget) {
     _widgets.add(widget);
   }
 
-  /// get all [widgets]
+  /// Gets all [_widgets]
   List<Widget> getWidgets() {
     return _widgets;
   }
 
-  /// initialize map features
+  /// Initialize map features
   void onMapCreated(MapboxMapController controller) async {
     this.controller = controller;
     model.setController(controller);
@@ -44,7 +44,7 @@ class BaseMapboxMap {
     controller.onSymbolTapped.add(onSymbolTapped);
   }
 
-  /// shows the on tapped dockingstation information
+  /// Shows the on tapped docking station information
   Future<void> onSymbolTapped(Symbol symbol) async {
     _selectedSymbol = symbol;
     Future<LatLng> variable = controller!.getSymbolLatLng(symbol);
@@ -54,15 +54,15 @@ class BaseMapboxMap {
     }
   }
 
-  /// shows the information about the pressed dockingstattion
+  /// Shows the information about the pressed docking station
   void displayDockCard(LatLng current) {
     //CHANGE THIS TO CREATE CARD
     //! CAN BE MOVED TO HELPER ONCE HRISTINA IS FINISHED WITH IT
     print("Will call widget next");
   }
 
-  /// initialises map without live location
-  void setMapWithoutLiveLocation() {
+  /// Initialises map without live location
+  void _setMapWithoutLiveLocation() {
     _map = MapboxMap(
       accessToken: _accessToken,
       initialCameraPosition: cameraPosition,
@@ -72,8 +72,8 @@ class BaseMapboxMap {
     );
   }
 
-  /// initialises map with live location
-  void setMapWithLiveLocation() {
+  /// Initialises map with live location
+  void _setMapWithLiveLocation() {
     _map = MapboxMap(
       accessToken: _accessToken,
       initialCameraPosition: cameraPosition,

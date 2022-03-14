@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
-import 'package:veloplan/models/navigation_models/base_map_model.dart';
-import '../../models/navigation_models/base_map_with_route_model.dart';
+import 'package:veloplan/models/map_models/base_map_model.dart';
+import '../../models/map_models/base_map_with_route_model.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:veloplan/scoped_models/main.dart';
+import 'package:veloplan/scoped_models/map_model.dart';
 
 /// Map screen focused on a user's live location
 /// Author(s): Fariha Choudhury k20059723, Elisabeth Halvorsen k20077737,
@@ -29,55 +29,56 @@ class _MapPageState extends State<MapPage> {
   ];
 
   // /// ! show usage of BaseMapboxRouteMap
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(body: ScopedModelDescendant<NavigationModel>(
-  //       builder: (BuildContext context, Widget? child, NavigationModel model) {
-  //     _baseMapWithRoute =
-  //         BaseMapboxRouteMap(points, false, currentLatLng, model);
-  //     addPositionZoom();
-  //     return SafeArea(child: Stack(children: _baseMapWithRoute.getWidgets()));
-  //   }));
-  // }
-
-  // /// add positional zoom to our widgets
-  // void addPositionZoom() {
-  //   _baseMapWithRoute.addWidget(Container(
-  //     alignment: Alignment(0.9, 0.90),
-  //     child: FloatingActionButton(
-  //       heroTag: "center_to_current_loaction",
-  //       onPressed: () {
-  //         _baseMapWithRoute.controller?.animateCamera(
-  //             CameraUpdate.newCameraPosition(_baseMapWithRoute.cameraPosition));
-  //       },
-  //       child: const Icon(Icons.my_location),
-  //     ),
-  //   ));
-  // }
-
-  // ! show usage of BaseMapboxMap
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: ScopedModelDescendant<NavigationModel>(
-        builder: (BuildContext context, Widget? child, NavigationModel model) {
-      _baseMap = BaseMapboxMap(false, currentLatLng, model);
+    return Scaffold(body: ScopedModelDescendant<MapModel>(
+        builder: (BuildContext context, Widget? child, MapModel model) {
+      _baseMapWithRoute =
+          BaseMapboxRouteMap(points, false, currentLatLng, model);
       addPositionZoom();
-      return SafeArea(child: Stack(children: _baseMap.getWidgets()));
+      return SafeArea(child: Stack(children: _baseMapWithRoute.getWidgets()));
     }));
   }
 
+  /// add positional zoom to our widgets
   void addPositionZoom() {
-    _baseMap.addWidget(Container(
+    _baseMapWithRoute.addWidget(Container(
       alignment: Alignment(0.9, 0.90),
       child: FloatingActionButton(
         heroTag: "center_to_current_loaction",
         onPressed: () {
-          _baseMap.controller?.animateCamera(
-              CameraUpdate.newCameraPosition(_baseMap.cameraPosition));
+          _baseMapWithRoute.controller?.animateCamera(
+              CameraUpdate.newCameraPosition(_baseMapWithRoute.cameraPosition));
         },
         child: const Icon(Icons.my_location),
       ),
     ));
   }
+
+  // /// ! show usage of BaseMapboxMap
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Scaffold(body: ScopedModelDescendant<MapModel>(
+  //       builder: (BuildContext context, Widget? child, MapModel model) {
+  //     _baseMap = BaseMapboxMap(false, currentLatLng, model);
+  //     addPositionZoom();
+  //     return SafeArea(child: Stack(children: _baseMap.getWidgets()));
+  //   }));
+  // }
+
+  // void addPositionZoom() {
+  //   _baseMap.addWidget(Container(
+  //     alignment: Alignment(0.9, 0.90),
+  //     child: FloatingActionButton(
+  //       heroTag: "center_to_current_loaction",
+  //       onPressed: () {
+  //         _baseMap.controller?.animateCamera(
+  //             CameraUpdate.newCameraPosition(_baseMap.cameraPosition));
+  //       },
+  //       child: const Icon(Icons.my_location),
+  //     ),
+  //   ));
+  // }
 }
