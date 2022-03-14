@@ -545,6 +545,8 @@ PODS:
   - nanopb/encode (2.30908.0)
   - package_info_plus (0.4.5):
     - Flutter
+  - permission_handler_apple (9.0.2):
+    - Flutter
   - Polyline (5.0.2)
   - PromisesObjC (2.0.0)
   - shared_preferences_ios (0.0.1):
@@ -573,6 +575,7 @@ DEPENDENCIES:
   - location (from `.symlinks/plugins/location/ios`)
   - mapbox_gl (from `.symlinks/plugins/mapbox_gl/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
+  - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
   - sign_in_with_apple (from `.symlinks/plugins/sign_in_with_apple/ios`)
   - twitter_login (from `.symlinks/plugins/twitter_login/ios`)
@@ -652,6 +655,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/mapbox_gl/ios"
   package_info_plus:
     :path: ".symlinks/plugins/package_info_plus/ios"
+  permission_handler_apple:
+    :path: ".symlinks/plugins/permission_handler_apple/ios"
   shared_preferences_ios:
     :path: ".symlinks/plugins/shared_preferences_ios/ios"
   sign_in_with_apple:
@@ -711,6 +716,7 @@ SPEC CHECKSUMS:
   MapboxSpeech: 4b3aea42e35d056fae1d7ad847a9fc0f412d911e
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
+  permission_handler_apple: d21b38e1a4b2e041c63af9568f9165e114e507a6
   Polyline: fce41d72e1146c41c6d081f7656827226f643dff
   PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
   shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
@@ -719,6 +725,6 @@ SPEC CHECKSUMS:
   Turf: aaa060138b11a8e979a19e6d81091d156a31bc58
   twitter_login: 2794db69b7640681171b17b3c2c84ad9dfb4a57f
 
-PODFILE CHECKSUM: 1e255825b38db520598e4f96de280f66196c04f1
+PODFILE CHECKSUM: 1b13820de9c31642fad37b7d1e512f8cc6d5bba9
 
 COCOAPODS: 1.11.2
