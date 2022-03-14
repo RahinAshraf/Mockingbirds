@@ -89,22 +89,22 @@ class _AuthFormState extends State<AuthForm> {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   if (_isLogin)
-                    Container(
+                    /*Container(
                         height: 120.0,
                         width: 120.0,
                         child: Center(
-                            child: Image.asset('assets/images/logo.png'))),
-                  if (_isLogin)
-                    Container(
-                        alignment: Alignment.center,
-                        padding: const EdgeInsets.all(10),
-                        child: const Text(
-                          'Welcome back!',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 25),
-                        )),
+                            child: Image.asset('assets/images/logo.png'))),*/
+                    if (_isLogin)
+                      Container(
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.all(10),
+                          child: const Text(
+                            'Welcome back!',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 25),
+                          )),
                   if (!_isLogin) SizedBox(height: 50),
                   if (!_isLogin) UserImagePicker(_pickedImage),
                   if (!_isLogin)
@@ -225,6 +225,20 @@ class _AuthFormState extends State<AuthForm> {
                     TextFormField(
                       controller: _dateController,
                       key: const ValueKey('date'),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'This field can not be empty';
+                        }
+                        DateTime _eligibleDate = DateTime(
+                          _dateTime.year + 16,
+                          _dateTime.month,
+                          _dateTime.day,
+                        );
+                        if (_eligibleDate.isAfter(DateTime.now())) {
+                          return 'The minimum age for creating an account is 16';
+                        }
+                        return null;
+                      },
                       onTap: () {
                         FocusScope.of(context).requestFocus(FocusNode());
                         //_selectDate();
@@ -235,6 +249,7 @@ class _AuthFormState extends State<AuthForm> {
                               CupertinoDatePicker(
                                 mode: CupertinoDatePickerMode.date,
                                 initialDateTime: _dateTime,
+                                maximumDate: DateTime.now(),
                                 onDateTimeChanged: (DateTime newDateTime) {
                                   if (mounted) {
                                     setState(() {

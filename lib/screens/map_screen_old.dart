@@ -8,7 +8,7 @@ import 'package:google_maps_routes/google_maps_routes.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:location/location.dart';
 // import 'package:latlong/latlong.dart' as ll;
-import 'package:veloplan/screens/location_service.dart';
+import 'package:veloplan/providers/location_service.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
 import '../models/docking_station.dart';
 

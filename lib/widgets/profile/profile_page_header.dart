@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:veloplan/widgets/profile_widget.dart';
+import 'package:veloplan/widgets/profile/profile_widget.dart';
 
 class ProfilePageHeader extends StatefulWidget {
   final Map<String, dynamic> data;
