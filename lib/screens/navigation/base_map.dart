@@ -17,7 +17,7 @@ class BaseMapboxMap {
   late final bool _useLiveLocation;
 
   BaseMapboxMap(this._useLiveLocation, this._target, this.model) {
-    cameraPosition = CameraPosition(target: _target, zoom: 12);
+    cameraPosition = CameraPosition(target: _target, zoom: 15);
     if (_useLiveLocation) {
       setMapWithLiveLocation();
     } else {
