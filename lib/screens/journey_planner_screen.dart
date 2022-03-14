@@ -57,51 +57,103 @@ class _JourneyPlanner extends State<JourneyPlanner> {
     List<MapPlace> mapList = [];
     Map<String, List<double?>> staticCordMap = {};
     return Scaffold(
-      body: SlidingUpPanel(
-        padding: const EdgeInsets.only(left: 10, right: 10),
-        minHeight: panelHeightClosed,
-        maxHeight: panelHeightOpen,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-        parallaxEnabled: true,
-        parallaxOffset: .5,
-        controller: panelController,
-        body: SafeArea(
-          child: Stack(
-            children: [
-              SizedBox(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
-                child: MapboxMap(
-                  accessToken: MAPBOX_ACCESS_TOKEN,
-                  initialCameraPosition: _initialCameraPosition,
-                  onMapCreated: _onMapCreated,
-                  myLocationEnabled: true,
-                  myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
-                  onMapClick: (Point<double> point, LatLng coordinates) async {
-                    Map s = await locService.reverseGeoCode(
-                        coordinates.latitude, coordinates.longitude);
-                    address.sink.add(MapPlace(s['place'], s['location']));
-                    print(s['place']);
-                    print("Latitdue");
-                    print(s['location'].latitude);
-                    print(coordinates);
-                  },
-                ),
-              ),
-            ],
+      // body: SlidingUpPanel(
+      //   padding: const EdgeInsets.only(left: 10, right: 10),
+      //   minHeight: panelHeightClosed,
+      //   maxHeight: panelHeightOpen,
+      //   borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+      //   parallaxEnabled: true,
+      //   parallaxOffset: .5,
+      //   controller: panelController,
+      //   body: SafeArea(
+      //     child: Stack(
+      //       children: [
+      //         SizedBox(
+      //           height: MediaQuery.of(context).size.height,
+      //           width: MediaQuery.of(context).size.width,
+      //           child: MapboxMap(
+      //             accessToken: MAPBOX_ACCESS_TOKEN,
+      //             initialCameraPosition: _initialCameraPosition,
+      //             onMapCreated: _onMapCreated,
+      //             myLocationEnabled: true,
+      //             myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
+      //             onMapClick: (Point<double> point, LatLng coordinates) async {
+      //               Map s = await locService.reverseGeoCode(
+      //                   coordinates.latitude, coordinates.longitude);
+      //               address.sink.add(MapPlace(s['place'], s['location']));
+      //               print(s['place']);
+      //               print("Latitdue");
+      //               print(s['location'].latitude);
+      //               print(coordinates);
+      //             },
+      //           ),
+      //         ),
+      //       ],
+      //     ),
+      //   ),
+      //   panelBuilder: (controller) => PanelWidget(
+      //     scrollController: controller,
+      //     selectionMap: Map(),
+      //     address: address.stream,
+      //     listDynamic: dynamicWidgetList,
+      //     fromTextEditController: fromTextEditingController,
+      //     toTextEditController: toTextEditingController,
+      //     dynamicWidgets: dynamicWidgets,
+      //     panelController: panelController,
+      //     selectedCords: cordsList, staticListMap : staticCordMap,
+      //   ),
+      // ),
+      body: Stack(
+        children: [
+          SizedBox(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
           ),
-        ),
-        panelBuilder: (controller) => PanelWidget(
-          scrollController: controller,
-          selectionMap: Map(),
-          address: address.stream,
-          listDynamic: dynamicWidgetList,
-          fromTextEditController: fromTextEditingController,
-          toTextEditController: toTextEditingController,
-          dynamicWidgets: dynamicWidgets,
-          panelController: panelController,
-          selectedCords: cordsList, staticListMap : staticCordMap,
-        ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.45,
+            width: MediaQuery.of(context).size.width,
+            child: MapboxMap(
+              accessToken: MAPBOX_ACCESS_TOKEN,
+              initialCameraPosition: _initialCameraPosition,
+              onMapCreated: _onMapCreated,
+              myLocationEnabled: true,
+              myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
+              onMapClick: (Point<double> point, LatLng coordinates) async {
+                Map s = await locService.reverseGeoCode(
+                    coordinates.latitude, coordinates.longitude);
+                address.sink.add(MapPlace(s['place'], s['location']));
+                print(s['place']);
+                print("Latitdue");
+                print(s['location'].latitude);
+                print(coordinates);
+              },
+            ),
+          ),
+          Positioned.fill(
+            top: MediaQuery.of(context).size.height * 0.40,
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              //height: MediaQuery.of(context).size.height * 0.7,
+              padding: const EdgeInsets.only(left: 10, right: 10),
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                color: Colors.white,
+              ),
+              child: PanelWidget(
+                scrollController: ScrollController(),
+                selectionMap: Map(),
+                address: address.stream,
+                listDynamic: dynamicWidgetList,
+                fromTextEditController: fromTextEditingController,
+                toTextEditController: toTextEditingController,
+                dynamicWidgets: dynamicWidgets,
+                panelController: panelController,
+                selectedCords: cordsList,
+                staticListMap: staticCordMap,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
