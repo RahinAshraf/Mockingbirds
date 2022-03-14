@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../styles/config.dart';
+import 'package:veloplan/styles/theme.dart';
 
 class Settings extends StatelessWidget {
   const Settings({Key? key}) : super(key: key);
@@ -13,15 +14,30 @@ class Settings extends StatelessWidget {
     );
   }
 
+  // Widget buildSettings() {
+  //   return SettingsList(
+  //     sections: [
+  //       SettingsSection(
+  //         title: const Text('Account'),
+  //         tiles: <SettingsTile>[
+  //           buildLogout(),
+  //         ],
+  //       ),
+  //     ],
+  //   );
+  // }
+
   Widget buildSettings() {
-    return SettingsList(
-      sections: [
-        SettingsSection(
-          title: const Text('Account'),
-          tiles: <SettingsTile>[
-            buildLogout(),
-            buildDarkMode(),
-          ],
+    return ListView(
+      children: [
+        buildLogout(),
+        Consumer<ThemeNotifier>(
+          builder: (context, notifier, child) => SwitchListTile(
+            onChanged: (val) {
+              notifier.toggleTheme();
+            },
+            value: notifier.isDarkTheme,
+          ),
         ),
       ],
     );
@@ -35,12 +51,13 @@ class Settings extends StatelessWidget {
         },
       );
 
-  SettingsTile buildDarkMode() => SettingsTile.switchTile(
-        onToggle: (bool value) {
-          currentTheme.toggleTheme();
-        },
-        initialValue: false,
-        leading: const Icon(Icons.dark_mode),
-        title: const Text('Dark mode'),
-      );
+  // SwitchListTile buildDarkMode() => SwitchListTile(
+  //       onToggle: (bool value) {
+  //         currentTheme.toggleTheme();
+  //       },
+  //       initialValue: false,
+  //       leading: const Icon(Icons.dark_mode),
+  //       title: const Text('Dark mode'),
+  //     );
+
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_routes/google_maps_routes.dart';
 // import 'package:latlong2/latlong.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
@@ -259,7 +258,7 @@ class MyHomePageState extends State<MapPage> {
               alignment: Alignment(-0.9, -0.5),
               child: FloatingActionButton(
                 heroTag: "TBT",
-                child: Icon(Icons.start, color: Colors.white),
+                child: Icon(Icons.wallet_giftcard, color: Colors.white),
                 onPressed: () => Navigator.push(context,
                     MaterialPageRoute(builder: (_) => TurnByTurn(points))),
               ),

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../screens/splash_screen.dart';
 import 'navbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -52,26 +53,33 @@ class _MyAppState extends State<MyApp> {
     return FutureBuilder(
         future: Firebase.initializeApp(), // _initialization,
         builder: (context, appSnapshot) {
-          return MaterialApp(
-            title: 'Veloplan',
-            theme: CustomTheme.defaultTheme,
-            darkTheme: CustomTheme.darkTheme, //4
-            themeMode: currentTheme.currentTheme,
-            home: appSnapshot.connectionState != ConnectionState.done
-                ? const SplashScreen()
-                : StreamBuilder(
-                    stream: FirebaseAuth.instance.authStateChanges(),
-                    builder: (ctx, userSnapshot) {
-                      if (userSnapshot.connectionState ==
-                          ConnectionState.waiting) {
-                        return const SplashScreen();
-                      }
-                      if (userSnapshot.hasData) {
-                        return const VerifyEmailScreen();
-                      }
-                      return const AuthScreen();
-                    }),
-          );
+          return ChangeNotifierProvider(
+              create: (_) => ThemeNotifier(),
+              child: Consumer<ThemeNotifier>(
+                builder: (context, ThemeNotifier notifier, child) {
+                  return MaterialApp(
+                    title: 'Veloplan',
+                    theme: notifier.isDarkTheme
+                        ? CustomTheme.darkTheme
+                        : CustomTheme.defaultTheme,
+                    home: appSnapshot.connectionState != ConnectionState.done
+                        ? const SplashScreen()
+                        : StreamBuilder(
+                            stream: FirebaseAuth.instance.authStateChanges(),
+                            builder: (ctx, userSnapshot) {
+                              if (userSnapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const SplashScreen();
+                              }
+                              if (userSnapshot.hasData) {
+                                return const VerifyEmailScreen();
+                              }
+                              return const AuthScreen();
+                            },
+                          ),
+                  );
+                },
+              ));
         });
   }
 }
