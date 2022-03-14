@@ -7,13 +7,13 @@ import 'package:collection/collection.dart';
 class FavouriteHelper {
   late CollectionReference _favourites;
   late final user_id;
-  late FirebaseFirestore db;
+  late FirebaseFirestore db; //make it private, or get rid of it
 
   FavouriteHelper() {
     db = FirebaseFirestore.instance;
     user_id = FirebaseAuth.instance.currentUser!.uid;
 
-    _favourites = FirebaseFirestore.instance
+    _favourites = FirebaseFirestore.instance //change to db
         .collection('users')
         .doc(user_id)
         .collection('favourites');
@@ -33,7 +33,8 @@ class FavouriteHelper {
           'nb_empty_docks': nb_empty_docks,
         })
         .then((value) => print("fave Added"))
-        .catchError((error) => print("Failed to add fave: $error"));
+        .catchError((error) =>
+            print("Failed to add fave: $error")); //add snackbar instead
   }
 
   Future<void> deleteFavourite(favid) {
@@ -54,6 +55,7 @@ class FavouriteHelper {
         .collection('favourites')
         .get();
     if (docs != null) {
+      //get rid of this if statement
       for (DocumentSnapshot doc in docs.docs) {
         favs.add(FavouriteDockingStation.map(doc));
       }

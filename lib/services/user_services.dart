@@ -5,3 +5,4 @@ String getUid() {
   String uid = auth.currentUser!.uid.toString();
   return uid;
 }
+//delete this
