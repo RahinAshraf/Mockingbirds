@@ -4,7 +4,9 @@ import 'package:veloplan/widgets/docking_station_card.dart';
 import 'package:veloplan/models/favourite.dart';
 import '../styles/styling.dart';
 
-//Loads cards of all of the users favourited docking station
+///Loads users favourited docking stations and displays them in a list view.
+///@author Tayyibah Uddin
+
 class Favourite extends StatefulWidget {
   _FavouriteState createState() => _FavouriteState();
 }
@@ -28,8 +30,7 @@ class _FavouriteState extends State<Favourite> {
     return Scaffold(
       body: favourites.isEmpty
           ? SizedBox(
-              height: MediaQuery.of(context).size.height /
-                  1.3, //shouldmnt divide when uisng media query intead multiple by 0.3
+              height: MediaQuery.of(context).size.height * 0.3,
               child: const Center(
                 //add constants
                 child: Text("You haven't added any favourites."),

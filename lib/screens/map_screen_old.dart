@@ -12,7 +12,6 @@ import 'package:veloplan/screens/location_service.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
 import '../models/docking_station.dart';
 
-
 // ! remove
 const LatLng SOURCE_LOCATION = LatLng(51.51185004458236,
     -0.11580820118980878); //points to bush house - CHANGE this to users current live location
@@ -71,9 +70,6 @@ class _MyHomePageState extends State<MapPage> {
 
   TextEditingController _searchController = TextEditingController();
 
-
-
-
   @override
   void initState() {
     super.initState();
@@ -96,16 +92,19 @@ class _MyHomePageState extends State<MapPage> {
     });
   }
 
-  void fetchDockingStations(){
+  void fetchDockingStations() {
     final dockingStationManager _stationManager = dockingStationManager();
-    _stationManager.importStations().then((value) => placeDockMarkers(_stationManager.stations));
+    _stationManager
+        .importStations()
+        .then((value) => placeDockMarkers(_stationManager.stations));
   }
 
-  void placeDockMarkers(List<DockingStation> docks){
+  void placeDockMarkers(List<DockingStation> docks) {
     int i = 0;
     setState(() {
       for (var station in docks) {
-        _markers.add(Marker(markerId: MarkerId("dockingStation" + i.toString()),
+        _markers.add(Marker(
+            markerId: MarkerId("dockingStation" + i.toString()),
             position: LatLng(station.lat, station.lon)));
         i++;
       }
@@ -174,7 +173,7 @@ class _MyHomePageState extends State<MapPage> {
                   child: Align(
                     alignment: Alignment.center,
                     child:
-                    Text(totalDistance, style: TextStyle(fontSize: 25.0)),
+                        Text(totalDistance, style: TextStyle(fontSize: 25.0)),
                   )),
             ),
           ),
@@ -184,7 +183,7 @@ class _MyHomePageState extends State<MapPage> {
                 controller: _searchController,
                 textCapitalization: TextCapitalization.words,
                 decoration:
-                const InputDecoration(hintText: "Search for a location"),
+                    const InputDecoration(hintText: "Search for a location"),
                 onChanged: (value) {
                   //LocationService().findPlace(value);
                 },
