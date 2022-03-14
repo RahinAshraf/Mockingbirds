@@ -252,7 +252,8 @@ class MyHomePageState extends State<MapPage> {
             ),
             Align(
               alignment: Alignment.bottomCenter,
-              child: Container(child: DockStation(key: dockingStationKey)),
+              child: Container(
+                  height: 200, child: DockStation(key: dockingStationKey)),
             )
           ],
         )));
