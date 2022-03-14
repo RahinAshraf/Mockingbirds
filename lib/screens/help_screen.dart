@@ -29,9 +29,9 @@ class _HelpPageState extends State<HelpPage> {
   _sendMail() async {
     // Android and iOS
     const url = 'mailto:k20070238@kc.ac.uk?subject=Help%20with%20app&body=Test';
-    if (await canLaunch(url)) {
+    try {
       await launch(url);
-    } else {
+    } catch (e) {
       throw 'Could not launch $url';
     }
   }
