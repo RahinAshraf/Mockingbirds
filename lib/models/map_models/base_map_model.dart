@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
@@ -44,6 +46,11 @@ class BaseMapboxMap {
     controller.onSymbolTapped.add(onSymbolTapped);
   }
 
+  /// Adds click functionality to map
+  void onMapClick(Point<double> point, LatLng coordinates) async {
+    //print(coordinates);
+  }
+
   /// Shows the on tapped docking station information
   Future<void> onSymbolTapped(Symbol symbol) async {
     _selectedSymbol = symbol;
@@ -69,6 +76,7 @@ class BaseMapboxMap {
       onMapCreated: onMapCreated,
       myLocationEnabled: true,
       annotationOrder: [AnnotationType.symbol],
+      onMapClick: onMapClick,
     );
   }
 
@@ -81,6 +89,7 @@ class BaseMapboxMap {
       myLocationEnabled: true,
       myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
       annotationOrder: const [AnnotationType.symbol],
+      onMapClick: onMapClick,
     );
   }
 }
