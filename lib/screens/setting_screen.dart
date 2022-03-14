@@ -30,9 +30,12 @@ class Settings extends StatelessWidget {
   Widget buildSettings() {
     return ListView(
       children: [
+        // buildLogout(),
         buildLogout(),
         Consumer<ThemeNotifier>(
           builder: (context, notifier, child) => SwitchListTile(
+            secondary: const Icon(Icons.dark_mode),
+            title: const Text('Dark mode'),
             onChanged: (val) {
               notifier.toggleTheme();
             },
@@ -43,10 +46,10 @@ class Settings extends StatelessWidget {
     );
   }
 
-  SettingsTile buildLogout() => SettingsTile(
+  ListTile buildLogout() => ListTile(
         leading: const Icon(Icons.logout),
         title: const Text('Logout'),
-        onPressed: (BuildContext context) {
+        onTap: () {
           FirebaseAuth.instance.signOut();
         },
       );

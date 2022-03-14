@@ -24,7 +24,7 @@ class CustomTheme with ChangeNotifier {
         color: CustomColors.green,
         foregroundColor: CustomColors.appBarTextColor,
       ),
-      listTileTheme: ListTileThemeData(textColor: Colors.red),
+      listTileTheme: ListTileThemeData(textColor: CustomColors.green),
       primarySwatch: CustomColors.lightGreen,
       backgroundColor: CustomColors.green,
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
@@ -61,7 +61,7 @@ class ThemeNotifier extends ChangeNotifier {
   late bool _isDarkTheme;
 
   ThemeNotifier() {
-    _isDarkTheme = true;
+    _isDarkTheme = false;
     _loadFromPrefs();
   }
   bool get isDarkTheme => _isDarkTheme;
@@ -75,12 +75,12 @@ class ThemeNotifier extends ChangeNotifier {
   ThemeMode get currentTheme => _isDarkTheme ? ThemeMode.dark : ThemeMode.light;
 
   _initPrefs() async {
-    if (_prefs == null) _prefs = await SharedPreferences.getInstance();
+    SharedPreferences.getInstance();
   }
 
   _loadFromPrefs() async {
     await _initPrefs();
-    _isDarkTheme = _prefs.getBool(key) ?? true;
+    _isDarkTheme = _prefs.getBool(key) ?? false;
     notifyListeners();
   }
 
