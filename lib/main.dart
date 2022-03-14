@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:veloplan/screens/journey_screen.dart';
 import 'package:veloplan/widgets/dock_station.dart';
 import 'screens/login_screen.dart';
 import 'navbar.dart';

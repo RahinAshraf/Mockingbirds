@@ -57,11 +57,17 @@ class NavigationDrawerWidget extends StatelessWidget {
               icon: Icons.settings,
               onClicked: () => selectedItem(context, 5),
             ),
+
             buildMenuItem(
-              text: 'Docking station',
+              text: 'Summary Journey',
               icon: Icons.map_outlined,
               onClicked: () => selectedItem(context, 6),
             ),
+            // buildMenuItem(
+            //   text: 'Docking station',
+            //   icon: Icons.map_outlined,
+            //   onClicked: () => selectedItem(context, 7),
+            // ),
             buildMenuItem(
               text: 'Log Out',
               icon: Icons.logout,
@@ -127,10 +133,15 @@ class NavigationDrawerWidget extends StatelessWidget {
         break;
       case 6:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) =>
-              dockingsStationCard(index, name, nb_bikes, nb_empty_docks),
+          builder: (context) => SummaryJourneyScreen(),
         ));
         break;
+      // case 7:
+      //   Navigator.of(context).push(MaterialPageRoute(
+      //     builder: (context) =>
+      //         dockingsStationCard(index, name, nb_bikes, nb_empty_docks),
+      //   ));
+      //   break;
     }
   }
 }
