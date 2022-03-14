@@ -6,14 +6,16 @@ class HelpBotManager {
 
   HelpBotManager() {
     data = [
-      Message('How do I login?', 'Login on the main page.', 'Authorisation'),
-      Message('How do I plan a new journey?', 'Click the bike button.',
+      Message('How do I login?', 'Log in on the main page.', 'Authorisation'),
+      Message(
+          'How do I sign up?', 'Sign up on the main page.', 'Authorisation'),
+      Message(
+          'How do I plan a new journey?',
+          'Go back to the main screen and click the green bike button in the middle.',
           'Planning Journey'),
-      Message('How do I sign up?', 'Sign up on the main page.', 'Signup'),
-      Message('How do I up?', 'Sign up.', 'Signup'),
       Message('I have another question that is not listed here.',
-          'Please contact k20082541@kcl.ac.uk.', 'Other Question', true),
-      // add messages here
+          'Please contact k20082541@kcl.ac.uk.', 'Other Questions', true),
+      // add new messages here
     ];
     questions = _groupByTopic(data);
   }

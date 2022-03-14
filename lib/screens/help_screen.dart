@@ -67,7 +67,6 @@ class _HelpPageState extends State<HelpPage> {
                 .add(MessageBubble(text: questions.getQuestionAnswer(message)));
             displayingTopics == true;
             choices = _displayChoices();
-
             if (questions.getLaunch(message)) {
               _sendMail();
             }
