@@ -1,15 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
-import 'package:tuple/tuple.dart';
-import 'package:veloplan/helpers/navigation_helpers/navigation_helpers.dart';
-import 'package:veloplan/helpers/navigation_helpers/zoom_helper.dart';
-import 'package:veloplan/providers/route_manager.dart';
 import 'package:veloplan/scoped_models/main.dart';
 import 'package:veloplan/.env.dart';
-import 'package:veloplan/providers/docking_station_manager.dart';
-import 'package:veloplan/models/docking_station.dart';
-
-import '../../helpers/navigation_helpers/map_drawings.dart';
 
 /// Class to display a mapbox map with widgets other widgets on top
 /// Author(s): Fariha Choudhury k20059723, Elisabeth Koren Halvorsen k20077737
@@ -34,14 +26,17 @@ class BaseMapboxMap {
     addWidget(_map);
   }
 
+  /// adds a [widget] to [widgets]
   void addWidget(Widget widget) {
     _widgets.add(widget);
   }
 
+  /// get all [widgets]
   List<Widget> getWidgets() {
     return _widgets;
   }
 
+  /// initialize map features
   void onMapCreated(MapboxMapController controller) async {
     this.controller = controller;
     model.setController(controller);
@@ -49,6 +44,7 @@ class BaseMapboxMap {
     controller.onSymbolTapped.add(onSymbolTapped);
   }
 
+  /// shows the on tapped dockingstation information
   Future<void> onSymbolTapped(Symbol symbol) async {
     _selectedSymbol = symbol;
     Future<LatLng> variable = controller!.getSymbolLatLng(symbol);
@@ -58,12 +54,14 @@ class BaseMapboxMap {
     }
   }
 
+  /// shows the information about the pressed dockingstattion
   void displayDockCard(LatLng current) {
     //CHANGE THIS TO CREATE CARD
     //! CAN BE MOVED TO HELPER ONCE HRISTINA IS FINISHED WITH IT
     print("Will call widget next");
   }
 
+  /// initialises map without live location
   void setMapWithoutLiveLocation() {
     _map = MapboxMap(
       accessToken: _accessToken,
@@ -74,6 +72,7 @@ class BaseMapboxMap {
     );
   }
 
+  /// initialises map with live location
   void setMapWithLiveLocation() {
     _map = MapboxMap(
       accessToken: _accessToken,
