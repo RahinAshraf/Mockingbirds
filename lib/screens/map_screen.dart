@@ -50,7 +50,7 @@ class MyHomePageState extends State<MapPage> {
     printPaths(
         await _stationManager.get10ClosestDocks(getLatLngFromSharedPrefs()));
 
-    fetchPaths(_stationManager.get10ClosestDocks(getLatLngFromSharedPrefs()));
+    //fetchPaths(_stationManager.get10ClosestDocks(getLatLngFromSharedPrefs()));
   }
 
   void fetchDockingStations() {

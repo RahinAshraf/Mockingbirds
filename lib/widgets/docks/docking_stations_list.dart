@@ -1,3 +1,4 @@
+import '../../helpers/shared_prefs.dart';
 import 'docking_station_card.dart';
 import 'package:flutter/material.dart';
 import 'package:veloplan/models/docking_station.dart';
@@ -13,6 +14,14 @@ class DockingStationList {
     var list = _stationManager
         .importStations()
         .then((value) => createDockingCards(_stationManager.stations));
+    return list;
+  }
+
+  Future<List<Widget>> retrieveFilteredCards() {
+    final dockingStationManager _stationManager = dockingStationManager();
+    var list = _stationManager.importStations().then((value) =>
+        createDockingCards(
+            _stationManager.get10ClosestDocks(getLatLngFromSharedPrefs())));
     return list;
   }
 
@@ -43,7 +52,8 @@ class DockingStationList {
 
   FutureBuilder<List<Widget>> build() {
     return FutureBuilder<List<Widget>>(
-        future: retrieveAllCards(),
+        future: retrieveFilteredCards(),
+        //future: retrieveAllCards(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return SingleChildScrollView(

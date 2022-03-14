@@ -36,7 +36,7 @@ class _DockSorter extends State<DockSorter> {
                   fontWeight: FontWeight.w500,
                 ),
                 value: selectedFilter,
-                items: ['Distance', 'Favourites', 'Most Popular', 'Suggestions']
+                items: ['Distance', 'Favourites', 'Most Popular']
                     .map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
