@@ -8,8 +8,7 @@ import 'package:flutter/material.dart';
 
 class NavigationModel extends Model {
   String accessToken = MAPBOX_ACCESS_TOKEN;
-
-  // 'pk.eyJ1IjoibW9ja2luZ2JpcmRzIiwiYSI6ImNrempyNnZtajNkbmkybm8xb3lybWE3MTIifQ.AsZJbQPNRb2N3unNdA98nQ';
+  // late dockingStationManager _stationManager;
 
   late MapboxMapController? controller;
   late CameraPosition cameraPosition;
@@ -19,20 +18,24 @@ class NavigationModel extends Model {
   NavigationModel() {
     cameraPosition = CameraPosition(target: currentLatLng, zoom: 12);
     createMap();
+    // fetchDockingStations();
   }
 
   void _onMapCreated(MapboxMapController controller) async {
     setController(controller);
-    fetchDockingStations();
+    // fetchDockingStations();
     // controller.onSymbolTapped.add(_onSymbolTapped);
   }
 
   void fetchDockingStations() {
     final dockingStationManager _stationManager = dockingStationManager();
-    _stationManager
-        .importStations()
-        .then((value) => placeDockMarkers(_stationManager.stations));
+    _stationManager.importStations().then(
+        (value) => placeDockMarkers(controller!, _stationManager.stations));
   }
+
+  // dockingStationManager getStattionManager() {
+  //   return _stationManager;
+  // }
 
   void createMap() {
     map = MapboxMap(
@@ -44,9 +47,10 @@ class NavigationModel extends Model {
     );
   }
 
-  void placeDockMarkers(List<DockingStation> docks) {
+  void placeDockMarkers(
+      MapboxMapController controller, List<DockingStation> docks) {
     for (var station in docks) {
-      controller!.addSymbol(
+      controller.addSymbol(
         SymbolOptions(
             geometry: LatLng(station.lat, station.lon),
             iconSize: 0.7,
