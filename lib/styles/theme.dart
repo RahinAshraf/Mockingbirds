@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'colors.dart';
+import 'styling.dart';
 
 class CustomTheme {
-  static bool _isDarkTheme = true;
+  // static bool _isDarkTheme = true;
 
-  ThemeMode get currentTheme => _isDarkTheme ? ThemeMode.dark : ThemeMode.light;
+  // ThemeMode get currentTheme => _isDarkTheme ? ThemeMode.dark : ThemeMode.light;
 
-  static TextStyle get sideBarTextColor => _isDarkTheme
-      ? TextStyle(color: Colors.white)
-      : TextStyle(color: Colors.green);
+  // static TextStyle get sideBarTextColor => _isDarkTheme
+  //     ? TextStyle(color: Colors.white)
+  //     : TextStyle(color: Colors.green);
 
   // void toggleTheme() {
   //   _isDarkTheme = !_isDarkTheme;
@@ -22,6 +23,12 @@ class CustomTheme {
       appBarTheme: AppBarTheme(
         color: CustomColors.green,
         foregroundColor: CustomColors.appBarTextColor,
+      ),
+      dialogTheme: const DialogTheme(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10.0))),
+        titleTextStyle: popupDialogTitleTextStyle,
+        contentTextStyle: popupDialogTextStyle,
       ),
       listTileTheme: ListTileThemeData(textColor: CustomColors.green),
       primarySwatch: CustomColors.lightGreen,

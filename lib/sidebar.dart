@@ -65,7 +65,7 @@ class NavigationDrawerWidget extends StatelessWidget {
     return ListTile(
       leading: Icon(icon),
       //  textColor: CustomTheme.sideBarTextColor,
-      title: Text(text, style: CustomTheme.sideBarTextColor),
+      title: Text(text, style: sidebarItemTextStyle),
       onTap: onClicked,
     );
   }
