@@ -5,7 +5,7 @@ import '../screens/favourite_screen.dart';
 import '../screens/setting_screen.dart';
 import '../screens/help_screen.dart';
 
-///@author Tayyibah
+///Author: Tayyibah
 class NavigationDrawerWidget extends StatelessWidget {
   final padding = EdgeInsets.symmetric(horizontal: 20);
   @override

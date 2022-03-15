@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+///Represents a docking station
+///Authors: Liliana, Nicole, Tayyibah
 class DockingStation {
   late String _stationId;
   late String _name;

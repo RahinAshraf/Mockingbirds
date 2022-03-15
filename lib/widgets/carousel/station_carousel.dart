@@ -5,7 +5,7 @@ import 'package:veloplan/providers/docking_station_manager.dart';
 import 'custom_carousel.dart';
 
 ///Class that loads information of docking stations into cards and builds a carousel
-///@author Tayyibah Uddin
+///Author: Tayyibah
 class dockingStationCarousel {
   late List<Widget> dockingStationCards;
   List<Map> carouselData = [];

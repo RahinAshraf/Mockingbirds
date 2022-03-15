@@ -6,7 +6,7 @@ import 'screens/navigation/map_screen.dart';
 import 'screens/profile_screen.dart';
 import 'sidebar.dart';
 
-///@author Elisabeth, Rahin, Tayyibah
+///Authors: Elisabeth, Rahin, Tayyibah
 class Navbar extends StatelessWidget {
   //We need to override the Build method because StatelessWidget has a build method
   @override
