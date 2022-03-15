@@ -54,18 +54,21 @@ class BaseMapboxMap {
   /// Shows the on tapped docking station information
   Future<void> onSymbolTapped(Symbol symbol) async {
     _selectedSymbol = symbol;
-    Future<LatLng> variable = controller!.getSymbolLatLng(symbol);
     if (_selectedSymbol != null) {
-      LatLng current = await variable;
-      displayDockCard(current);
+      Map<dynamic, dynamic>? stationData = symbol.data;
+      displayDockCard(stationData);
     }
   }
 
   /// Shows the information about the pressed docking station
-  void displayDockCard(LatLng current) {
+  void displayDockCard(Map<dynamic, dynamic>? stationData) {
     //CHANGE THIS TO CREATE CARD
     //! CAN BE MOVED TO HELPER ONCE HRISTINA IS FINISHED WITH IT
     print("Will call widget next");
+    print(stationData);
+    //     dockingStationKey.currentState?.setState(() {
+    //   dockingStationKey.currentState?.setVisible(true);
+    // });
   }
 
   /// Initialises map without live location
