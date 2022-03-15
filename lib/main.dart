@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
+import 'package:veloplan/scoped_models/map_model.dart';
 import 'screens/login_screen.dart';
 import 'navbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:location/location.dart';
-import 'package:veloplan/main.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -17,10 +18,16 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   sharedPreferences = await SharedPreferences.getInstance();
   initializeLocation(); //Upon opening the app, store the users current location
-  runApp(MaterialApp(
-    initialRoute: '/',
-    routes: {'/': (context) => const MyApp(), '/map': (context) => Navbar()},
-  ));
+  MapModel _model = MapModel();
+  runApp(ScopedModel<MapModel>(
+      model: _model,
+      child: MaterialApp(
+        initialRoute: '/',
+        routes: {
+          '/': (context) => const MyApp(),
+          '/map': (context) => Navbar()
+        },
+      )));
 }
 
 void initializeLocation() async {

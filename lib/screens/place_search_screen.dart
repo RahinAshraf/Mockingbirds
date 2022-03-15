@@ -1,12 +1,13 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:veloplan/screens/location_service.dart';
+import 'package:veloplan/providers/location_service.dart';
 import 'journey_planner_screen.dart';
 
 class PlaceSearchScreen extends StatefulWidget {
   late LocationService locService;
 
-  PlaceSearchScreen(this.locService, {Key? key}) : super(key: key);
+  bool? isPop;
+
+  PlaceSearchScreen(this.locService, {Key? key, this.isPop = false}) : super(key: key);
 
   @override
   PlaceSearchState createState() {
@@ -29,7 +30,11 @@ class PlaceSearchState extends State<PlaceSearchScreen> {
                       icon: const Icon(Icons.arrow_back_rounded, color: Colors.green),
                       onPressed: () {
                           print("PREFIX");
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => JourneyPlanner()));
+                          if(widget.isPop ?? false){
+                            Navigator.pop(context);
+                          }else{
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => JourneyPlanner()));
+                          }
                         },
                     ),
                     hintText: "Search for a London location",

@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:veloplan/screens/navigation/map_screen.dart';
 import '../.env.dart';
 import '../widgets/panel_widget.dart';
-import 'map_screen.dart';
+// import 'map_screen.dart';
 
 class JourneyPlanner extends StatefulWidget {
   JourneyPlanner({Key? key}) : super(key: key);
