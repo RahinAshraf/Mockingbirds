@@ -3,16 +3,18 @@ import 'package:veloplan/services/favourite_service.dart';
 import 'package:veloplan/widgets/docking_station_card.dart';
 import 'package:veloplan/models/favourite.dart';
 import '../styles/styling.dart';
+import 'package:veloplan/models/docking_station.dart';
 
 ///Loads users favourited docking stations and displays them in a list view.
 ///@author Tayyibah Uddin
 
 class Favourite extends StatefulWidget {
+  @override
   _FavouriteState createState() => _FavouriteState();
 }
 
 class _FavouriteState extends State<Favourite> {
-  List<FavouriteDockingStation> favourites = [];
+  List<DockingStation> favourites = [];
   var helper = FavouriteHelper();
 
   @override
@@ -30,24 +32,21 @@ class _FavouriteState extends State<Favourite> {
     return Scaffold(
       body: favourites.isEmpty
           ? const SafeArea(
-              //height: MediaQuery.of(context).size.height * 0.3,
-              child: Center(
-                //add constants
-                child: Text("You haven't added any favourites."),
-              ),
+              child: Center(child: Text("You haven't added any favourites.")),
             )
           : Stack(
               children: [
                 ListView.builder(
-                    itemCount: favourites.length,
-                    itemBuilder: (context, index) {
-                      return dockingStationCard(
-                        favourites[index].station_id,
-                        favourites[index].name,
-                        favourites[index].nb_bikes,
-                        favourites[index].nb_empty_docks,
-                      );
-                    }),
+                  itemCount: favourites.length,
+                  itemBuilder: (context, index) {
+                    return DockingStationCard(
+                      favourites[index].stationId,
+                      favourites[index].name,
+                      favourites[index].numberOfBikes,
+                      favourites[index].numberOfEmptyDocks,
+                    );
+                  },
+                ),
               ],
             ),
       appBar: AppBar(

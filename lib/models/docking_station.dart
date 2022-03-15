@@ -1,43 +1,44 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DockingStation {
-  late String _id;
+  late String _stationId;
   late String _name;
-  late int _nb_bikes;
-  late int _nb_empty_docks;
-  late bool _installed;
-  late bool _locked;
-  late int _nb_total_docks;
+  late int _numberOfBikes;
+  late int _numberOfEmptyDocks;
+  late int _numberOfAllDocks;
+  late bool _isInstalled;
+  late bool _isLocked;
   late double _lon;
   late double _lat;
-  String? documentId;
+  String? _documentId;
 
   DockingStation(
-      this._id,
+      this._stationId,
       this._name,
-      this._installed,
-      this._locked,
-      this._nb_bikes,
-      this._nb_empty_docks,
-      this._nb_total_docks,
+      this._isInstalled,
+      this._isLocked,
+      this._numberOfBikes,
+      this._numberOfEmptyDocks,
+      this._numberOfAllDocks,
       this._lon,
       this._lat);
 
-  String get id => _id;
+  String get stationId => _stationId;
   String get name => _name;
-  bool get installed => _installed;
-  bool get locked => _locked;
-  int get nb_bikes => _nb_bikes;
-  int get nb_empty_docks => _nb_empty_docks;
-  int get nb_total_docks => _nb_total_docks;
+  bool get isInstalled => _isInstalled;
+  bool get isLocked => _isLocked;
+  int get numberOfBikes => _numberOfBikes;
+  int get numberOfEmptyDocks => _numberOfEmptyDocks;
+  int get numberOfAllDocks => _numberOfAllDocks;
   double get lon => _lon;
-  double get lat => _lon;
+  double get lat => _lat;
+  String? get documentId => _documentId;
 
   DockingStation.map(DocumentSnapshot document) {
-    documentId = document.id;
-    _id = document.get('station_id');
+    _documentId = document.id;
+    _stationId = document.get('stationId');
     _name = document.get('name');
-    _nb_bikes = document.get('nb_bikes');
-    _nb_empty_docks = document.get('nb_empty_docks');
+    _numberOfBikes = document.get('numberOfBikes');
+    _numberOfEmptyDocks = document.get('numberOfEmptyDocks');
   }
 }

@@ -5,6 +5,7 @@ import 'package:veloplan/providers/docking_station_manager.dart';
 import 'custom_carousel.dart';
 
 ///Class that loads information of docking stations into cards and builds a carousel
+///@author Tayyibah Uddin
 class dockingStationCarousel {
   late List<Widget> dockingStationCards;
   List<Map> carouselData = [];
@@ -28,10 +29,10 @@ class dockingStationCarousel {
           {
             'index': index,
             //  'station': station,
-            'id': station.id,
+            'stationId': station.stationId,
             'name': station.name,
-            'nb_bikes': station.nb_bikes.toString(),
-            'nb_empty_docks': station.nb_empty_docks.toString(),
+            'numberOfBikes': station.numberOfBikes,
+            'numberOfEmptyDocks': station.numberOfEmptyDocks,
           },
         );
       }
@@ -39,13 +40,13 @@ class dockingStationCarousel {
 
     dockingStationCards = List<Widget>.generate(
         docks.length,
-        (index) => dockingStationCard(
+        (index) => DockingStationCard(
               //carouselData[index]['index'],
               // carouselData[index]['station'],
-              carouselData[index]['id'],
+              carouselData[index]['stationId'],
               carouselData[index]['name'],
-              carouselData[index]['nb_bikes'],
-              carouselData[index]['nb_empty_docks'],
+              carouselData[index]['numberOfBikes'],
+              carouselData[index]['numberOfEmptyDocks'],
             ));
 
     return dockingStationCards;
@@ -68,7 +69,7 @@ class dockingStationCarousel {
           } else {
             return SizedBox(
               height: MediaQuery.of(context).size.height / 1.3,
-              child: Center(
+              child: const Center(
                 child: CircularProgressIndicator(),
               ),
             );
