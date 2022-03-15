@@ -4,12 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:veloplan/screens/journey_planner_screen.dart';
 import 'package:veloplan/screens/place_search_screen.dart';
+import '../models/docking_station.dart';
 import '../providers/location_service.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/alerts.dart';
 import 'package:veloplan/helpers/live_location_helper.dart';
-
+import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart'
+as LatLong;
+import 'package:veloplan/providers/docking_station_manager.dart';
 /*
 When rendered, the journey_planner_screen will have this panel_widget at the bottom. It is an interactive panel the user can
 slide up or down, when wanting to input their desired locations for the journey.
@@ -38,16 +41,16 @@ class PanelWidget extends StatefulWidget {
 
   const PanelWidget(
       {required this.selectionMap,
-      required this.address,
-      required this.scrollController,
-      required this.dynamicWidgets,
-      required this.listDynamic,
-      required this.selectedCords,
-      required this.staticListMap,
-      required this.toTextEditController,
-      required this.fromTextEditController,
-      required this.panelController,
-      Key? key})
+        required this.address,
+        required this.scrollController,
+        required this.dynamicWidgets,
+        required this.listDynamic,
+        required this.selectedCords,
+        required this.staticListMap,
+        required this.toTextEditController,
+        required this.fromTextEditController,
+        required this.panelController,
+        Key? key})
       : super(key: key);
 
   @override
@@ -56,15 +59,18 @@ class PanelWidget extends StatefulWidget {
   }
 }
 
-class PanelWidgetState extends State<PanelWidget> {
+class PanelWidgetState extends State<PanelWidget>  {
   Stream<List<DynamicWidget>> get dynamicWidgetsStream =>
       widget.dynamicWidgets.stream;
   final locService = LocationService();
   late Map<String, List<double?>> selectionMap;
   late TextEditingController firstTextEditingController =
-      TextEditingController();
+  TextEditingController();
   late Map<String, List<double?>> staticListMap;
   late Map response;
+  late List<DockingStation> dockingStationList;
+  final dockingStationManager _stationManager = dockingStationManager();
+
 
   static const String fromLabelKey = "From";
   static const String toLabelKey = "To";
@@ -78,6 +84,16 @@ class PanelWidgetState extends State<PanelWidget> {
       cordDataMap: response,
     ));
     widget.dynamicWidgets.sink.add(widget.listDynamic);
+  }
+
+
+  // void importDockStation() async {
+  //   await _stationManager.importStations();
+  // }
+
+  void importDockStation() async {
+    await _stationManager.importStations();
+    print(_stationManager.stations.length.toString() + "this is the length of the stationManager");
   }
 
   //Initialises variables and listens for user interaction to act on
@@ -99,6 +115,8 @@ class PanelWidgetState extends State<PanelWidget> {
 
     _listToMapClick();
 
+    importDockStation();
+
     super.initState();
   }
 
@@ -112,12 +130,13 @@ class PanelWidgetState extends State<PanelWidget> {
       );
 
       final list = widget.listDynamic;
-      if (list.any((element) => element.textController.text.isEmpty)) {
+      if (list.any((element) => element.placeTextController.text.isEmpty)) {
         alert.showWhereToTextFieldsMustNotBeEmptySnackBar(context);
         return;
       }
 
-      dynamicWidget.textController.text = event.address ?? "";
+      dynamicWidget.placeTextController.text = event.address ?? "";
+      dynamicWidget.checkInputLocation();
       dynamicWidget.position = widget.listDynamic.length;
       widget.listDynamic.add(dynamicWidget);
       print(
@@ -152,8 +171,8 @@ class PanelWidgetState extends State<PanelWidget> {
   */
   Widget _buildStatic(TextEditingController controller,
       {String? hintText,
-      required String label,
-      required Function(List<double?>) onAddressAdded}) {
+        required String label,
+        required Function(List<double?>) onAddressAdded}) {
     // widget.textEditingController
     return Row(
       children: [
@@ -304,10 +323,10 @@ class PanelWidgetState extends State<PanelWidget> {
                         widget.dynamicWidgets.sink.add(widget.listDynamic);
                       });
                       return //ListTile(key: ValueKey(index), leading:
-                          Container(
-                              key: ValueKey(index),
-                              child:
-                                  dynamicWidget); //, trailing: Icon(Icons.menu),);
+                        Container(
+                            key: ValueKey(index),
+                            child:
+                            dynamicWidget); //, trailing: Icon(Icons.menu),);
                     },
                     itemCount: listOfDynamics.length,
                     physics: const NeverScrollableScrollPhysics(),
@@ -335,7 +354,7 @@ class PanelWidgetState extends State<PanelWidget> {
           ),
           Padding(
             padding:
-                const EdgeInsets.only(top: 20, bottom: 20, left: 10, right: 10),
+            const EdgeInsets.only(top: 20, bottom: 20, left: 10, right: 10),
             child: TextButton(
               style: TextButton.styleFrom(
                 backgroundColor: Colors.green,
@@ -343,7 +362,7 @@ class PanelWidgetState extends State<PanelWidget> {
               ),
               onPressed: () {
                 final hasEmptyField = widget.listDynamic
-                    .any((element) => element.textController.text.isEmpty);
+                    .any((element) => element.placeTextController.text.isEmpty);
 
                 applyConstraints(
                     widget.fromTextEditController, widget.toTextEditController);
@@ -420,7 +439,7 @@ class PanelWidgetState extends State<PanelWidget> {
       return false;
     }
     for (var element in list) {
-      if (element.textController.text.isEmpty) {
+      if (element.placeTextController.text.isEmpty) {
         isFieldNotEmpty = false;
         return true; //true if there is a textfield that is empty
       }
@@ -444,18 +463,18 @@ class PanelWidgetState extends State<PanelWidget> {
 
   //The grey handle bar, displayed at the very top of the panel_widget, to display to the user to swipe up on the panel
   Widget buildDragHandle() => GestureDetector(
-        child: Center(
-          child: Container(
-            height: 5,
-            width: 30,
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
+    child: Center(
+      child: Container(
+        height: 5,
+        width: 30,
+        decoration: BoxDecoration(
+          color: Colors.grey[300],
+          borderRadius: BorderRadius.circular(12),
         ),
-        //onTap: togglePanel,
-      );
+      ),
+    ),
+    //onTap: togglePanel,
+  );
 
   @override
   void dispose() {
@@ -504,21 +523,62 @@ class PanelWidgetState extends State<PanelWidget> {
     - green > icon, to allow users to specify specific docks (if they wish) of the locations user specifies in the TextField
  */
 class DynamicWidget extends StatelessWidget {
-  late TextEditingController textController = TextEditingController();
+  final TextEditingController placeTextController = TextEditingController();
+  final TextEditingController editDockTextEditController = TextEditingController();
   List<List<double?>?>? selectedCords;
   Function(int)? onDelete;
   int position = -1;
   final locationService = LocationService();
   final Map? cordDataMap;
+  // final dockingStationManager _stationManager = dockingStationManager();
+
+
 
   //setter for the position index
   void setIndex(index) {
     position = index;
   }
 
+  @override
+  void initState() {
+    //importDockStation();
+    placeTextController.addListener(() { checkInputLocation(); });
+  }
+
+
+  // void importDockStation() async {
+  //   await _stationManager.importStations();
+  //   print(_stationManager.stations.length.toString() + "this is the length of the stationManager");
+  // }
+
   DynamicWidget({Key? key, required this.selectedCords, this.cordDataMap})
       : super(key: key);
 
+  void checkInputLocation() async {
+    print("THIS IS CLOSET DOCK");
+    if(placeTextController.text.isEmpty){
+      print("Nothing specified");
+    }
+    else{
+      print("REACHED METHOD GETCLOSETDOCK");
+      List coordPlace = await locationService.getPlaceCoords(placeTextController.text); //getting coord of the place [lat,lng]
+      getClosetDock(coordPlace.first,coordPlace.last);
+      //TO-DO
+      // - change to get closet dock with available bikes after getting num of cyclist
+    }
+
+  }
+
+  void getClosetDock(double? lat, double? lng) async {
+   // List coordPlace = await locationService.getPlaceCoords(placeTextController.text); //getting coord of the place [lat,lng]
+    LatLng latlngPlace = LatLng(lat!, lng!); //coverting list to latlng
+    dockingStationManager _stationManager = dockingStationManager();
+    await _stationManager.importStations();
+    print(latlngPlace);
+    DockingStation closetDock = _stationManager.getClosestDock(latlngPlace);
+    print("closet dock ${closetDock.name}");
+    editDockTextEditController.text = closetDock.name;
+  }
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -548,18 +608,26 @@ class DynamicWidget extends StatelessWidget {
                 child: SizedBox(
                   height: 35,
                   child: TextField(
+                    // onChanged: (placeTextController) { //called when you type
+                    //   print("ONCHANGED");
+                    //   checkInputLocation();
+                    // },
+                    onEditingComplete: (){
+                      print("ONCHANGED");
+                      checkInputLocation();
+                    },
                     readOnly: true,
                     onTap: () {
                       _handleSearchClick(context, position);
                     },
-                    controller: textController,
+                    controller: placeTextController,
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.symmetric(vertical: 0),
                       suffixIcon: IconButton(
                         onPressed: () {
                           if (cordDataMap == null) return;
                           _useCurrentLocationButtonHandler(
-                              cordDataMap!, textController);
+                              cordDataMap!, placeTextController);
                         },
                         icon: const Icon(
                           Icons.my_location,
@@ -571,33 +639,33 @@ class DynamicWidget extends StatelessWidget {
                       hintText: 'Where to?',
                       focusedBorder: OutlineInputBorder(
                         borderSide:
-                            const BorderSide(color: Colors.black, width: 2.0),
+                        const BorderSide(color: Colors.black, width: 2.0),
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
                         borderSide:
-                            const BorderSide(color: Colors.black, width: 1.0),
+                        const BorderSide(color: Colors.black, width: 1.0),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
                         borderSide:
-                            const BorderSide(color: Colors.black, width: 1.0),
+                        const BorderSide(color: Colors.black, width: 1.0),
                       ),
                       disabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
                         borderSide:
-                            const BorderSide(color: Colors.black, width: 1.0),
+                        const BorderSide(color: Colors.black, width: 1.0),
                       ),
                       errorBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
                         borderSide:
-                            const BorderSide(color: Colors.black, width: 1.0),
+                        const BorderSide(color: Colors.black, width: 1.0),
                       ),
                       focusedErrorBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
                         borderSide:
-                            const BorderSide(color: Colors.black, width: 1.0),
+                        const BorderSide(color: Colors.black, width: 1.0),
                       ),
                     ),
                   ),
@@ -607,20 +675,34 @@ class DynamicWidget extends StatelessWidget {
             ],
           ),
         ),
+
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(Icons.subdirectory_arrow_right),
-            Container(
-              decoration: BoxDecoration(
-                  border: Border.all(),
-                  borderRadius: BorderRadius.circular(20)),
-              child: Text("Default closest dock"),
+            // Container(
+            //   decoration: BoxDecoration(
+            //       border: Border.all(),
+            //       borderRadius: BorderRadius.circular(20)),
+            //   child: Text("Default closest dock"),
+            // ),
+            Expanded(
+              child: TextField(
+                controller: editDockTextEditController,
+                decoration: InputDecoration(
+                  hintText: "Default closest dock",
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.black, width: 2.0),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+              ),
             ),
             IconButton(
                 onPressed: () async {
                   List temp =
-                      await locationService.getPlaceCoords(textController.text);
+                  await locationService.getPlaceCoords(placeTextController.text);
+                  checkInputLocation();
                   print(temp);
                 },
                 padding: const EdgeInsets.all(0),
@@ -640,7 +722,7 @@ class DynamicWidget extends StatelessWidget {
     final feature = result as Feature?;
     if (feature != null) {
       final len = selectedCords?.length ?? 0;
-      textController.text = feature.placeName ?? "N/A";
+      placeTextController.text = feature.placeName ?? "N/A";
 
       if (position > ((selectedCords?.length) ?? 0) - 1 ||
           (selectedCords?.isEmpty ?? true)) {
@@ -648,9 +730,11 @@ class DynamicWidget extends StatelessWidget {
       } else {
         selectedCords?[position] = feature.geometry?.coordinates;
       }
+      getClosetDock(feature.geometry?.coordinates.first,feature.geometry?.coordinates.last);
     }
     print("RESULT => $result");
   }
+
 
   void removeDynamic(Function(int) onDelete) {
     this.onDelete = onDelete;
@@ -665,6 +749,8 @@ class DynamicWidget extends StatelessWidget {
     double longitudeOfPlace = response['location'].longitude;
     List<double?> currentLocationCoords = [latitudeOfPlace, longitudeOfPlace];
     controller.text = place;
+
+    checkInputLocation();
 
     if (position > ((selectedCords?.length) ?? 0) - 1 ||
         (selectedCords?.isEmpty ?? true)) {
