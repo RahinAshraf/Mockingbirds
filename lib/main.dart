@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:veloplan/providers/connectivity_provider.dart';
+import 'package:scoped_model/scoped_model.dart';
+import 'package:veloplan/scoped_models/map_model.dart';
 import 'navbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:location/location.dart';
@@ -11,7 +13,7 @@ import './screens/verify_email_screen.dart';
 import './screens/auth_screen.dart';
 import './screens/splash_screen.dart';
 
-import '../utilities/connectivityStatusEnum.dart';
+import 'utilities/connectivity_status_enums.dart';
 import '../widgets/connection_error_widget.dart';
 
 late SharedPreferences sharedPreferences;
@@ -22,24 +24,27 @@ void main() async {
 
   initializeLocation(); //Upon opening the app, store the users current location
 
-  runApp(ChangeNotifierProvider(
-      create: (context) => ConnectivityProvider(),
-      child: Consumer<ConnectivityProvider>(
-          builder: (context, connectivityProvider, child) {
-        return MaterialApp(
-          //scaffold
-          home: connectivityProvider.connectionStatus !=
-                  ConnectivityStatus.Offline
-              ? MaterialApp(
-                  initialRoute: '/',
-                  routes: {
-                    '/': (context) => const MyApp(),
-                    '/map': (context) => Navbar()
-                  },
-                )
-              : const ConnectionError(),
-        );
-      })));
+  MapModel _model = MapModel();
+  runApp(
+    ChangeNotifierProvider(
+        create: (context) => ConnectivityProvider(),
+        child: Consumer<ConnectivityProvider>(
+            builder: (context, connectivityProvider, child) {
+          return MaterialApp(
+              home: connectivityProvider.connectionStatus !=
+                      ConnectivityStatus.Offline
+                  ? ScopedModel<MapModel>(
+                      model: _model,
+                      child: MaterialApp(
+                        initialRoute: '/',
+                        routes: {
+                          '/': (context) => const MyApp(),
+                          '/map': (context) => Navbar()
+                        },
+                      ))
+                  : const ConnectionError());
+        })),
+  );
 }
 
 void initializeLocation() async {
@@ -79,130 +84,51 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return //MultiProvider(
-        // providers: [
-        //   ChangeNotifierProvider(create: (context) => ConnectivityProvider()),
-        // ],
-        // child: Consumer<ConnectivityProvider>(
-        //     builder: (context, connectivityProvider, child) {
-        //   return Scaffold(
-        //     body: connectivityProvider.connectionStatus !=
-        //             ConnectivityStatus.Offline
-        //         ?
-        FutureBuilder(
-            future: Firebase.initializeApp(), // _initialization,
-            builder: (context, appSnapshot) {
-              return MaterialApp(
-                title: 'Veloplan',
-                theme: ThemeData(
-                  scaffoldBackgroundColor: Color(0xffffffff),
-                  primarySwatch: const MaterialColor(
-                    0xff99d2a9, // 0%
-                    const <int, Color>{
-                      50: const Color(0xffa3d7b2), //10%
-                      100: const Color(0xffaddbba), //20%
-                      200: const Color(0xffb8e0c3), //30%
-                      300: const Color(0xffc2e4cb), //40%
-                      400: const Color(0xffcce9d4), //50%
-                      500: const Color(0xffd6eddd), //60%
-                      600: const Color(0xffe0f2e5), //70%
-                      700: const Color(0xffebf6ee), //80%
-                      800: const Color(0xfff5fbf6), //90%
-                      900: const Color(0xffffff), //100%
-                    },
-                  ),
-                  buttonTheme: ButtonTheme.of(context).copyWith(
-                    // buttonColor: Colors.green,
-                    //textTheme: ButtonTextTheme.primary,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
+    return FutureBuilder(
+        future: Firebase.initializeApp(), // _initialization,
+        builder: (context, appSnapshot) {
+          return MaterialApp(
+            title: 'Veloplan',
+            theme: ThemeData(
+              scaffoldBackgroundColor: Color(0xffffffff),
+              primarySwatch: const MaterialColor(
+                0xff99d2a9, // 0%
+                const <int, Color>{
+                  50: const Color(0xffa3d7b2), //10%
+                  100: const Color(0xffaddbba), //20%
+                  200: const Color(0xffb8e0c3), //30%
+                  300: const Color(0xffc2e4cb), //40%
+                  400: const Color(0xffcce9d4), //50%
+                  500: const Color(0xffd6eddd), //60%
+                  600: const Color(0xffe0f2e5), //70%
+                  700: const Color(0xffebf6ee), //80%
+                  800: const Color(0xfff5fbf6), //90%
+                  900: const Color(0xffffff), //100%
+                },
+              ),
+              buttonTheme: ButtonTheme.of(context).copyWith(
+                // buttonColor: Colors.green,
+                //textTheme: ButtonTextTheme.primary,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
                 ),
-                home: appSnapshot.connectionState != ConnectionState.done
-                    ? const SplashScreen()
-                    : StreamBuilder(
-                        stream: FirebaseAuth.instance.authStateChanges(),
-                        builder: (ctx, userSnapshot) {
-                          if (userSnapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const SplashScreen();
-                          }
-                          if (userSnapshot.hasData) {
-                            return const VerifyEmailScreen();
-                          }
-                          return const AuthScreen();
-                        }),
-              );
-              //             })
-              //         : const ConnectionError(),
-              //   );
-              // }));
-            });
+              ),
+            ),
+            home: appSnapshot.connectionState != ConnectionState.done
+                ? const SplashScreen()
+                : StreamBuilder(
+                    stream: FirebaseAuth.instance.authStateChanges(),
+                    builder: (ctx, userSnapshot) {
+                      if (userSnapshot.connectionState ==
+                          ConnectionState.waiting) {
+                        return const SplashScreen();
+                      }
+                      if (userSnapshot.hasData) {
+                        return const VerifyEmailScreen();
+                      }
+                      return const AuthScreen();
+                    }),
+          );
+        });
   }
 }
-
-// class _MyAppState extends State<MyApp> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MultiProvider(
-//         providers: [
-//           ChangeNotifierProvider(create: (_) => ConnectivityProvider()),
-//         ],
-//         child: Consumer<ConnectivityProvider>(
-//             builder: (context, connectivityProvider, child) {
-//           return Scaffold(
-//               body: connectivityProvider.connectionStatus !=
-//                       ConnectivityStatus.Offline
-//                   ? child
-//                   : FutureBuilder(
-//                       future: Firebase.initializeApp(), // _initialization,
-//                       builder: (context, appSnapshot) {
-//                         return MaterialApp(
-//                           title: 'Veloplan',
-//                           theme: ThemeData(
-//                             scaffoldBackgroundColor: Color(0xffffffff),
-//                             primarySwatch: const MaterialColor(
-//                               0xff99d2a9, // 0%
-//                               const <int, Color>{
-//                                 50: const Color(0xffa3d7b2), //10%
-//                                 100: const Color(0xffaddbba), //20%
-//                                 200: const Color(0xffb8e0c3), //30%
-//                                 300: const Color(0xffc2e4cb), //40%
-//                                 400: const Color(0xffcce9d4), //50%
-//                                 500: const Color(0xffd6eddd), //60%
-//                                 600: const Color(0xffe0f2e5), //70%
-//                                 700: const Color(0xffebf6ee), //80%
-//                                 800: const Color(0xfff5fbf6), //90%
-//                                 900: const Color(0xffffff), //100%
-//                               },
-//                             ),
-//                             buttonTheme: ButtonTheme.of(context).copyWith(
-//                               // buttonColor: Colors.green,
-//                               //textTheme: ButtonTextTheme.primary,
-//                               shape: RoundedRectangleBorder(
-//                                 borderRadius: BorderRadius.circular(20),
-//                               ),
-//                             ),
-//                           ),
-//                           home: appSnapshot.connectionState !=
-//                                   ConnectionState.done
-//                               ? const SplashScreen()
-//                               : StreamBuilder(
-//                                   stream:
-//                                       FirebaseAuth.instance.authStateChanges(),
-//                                   builder: (ctx, userSnapshot) {
-//                                     if (userSnapshot.connectionState ==
-//                                         ConnectionState.waiting) {
-//                                       return const SplashScreen();
-//                                     }
-//                                     if (userSnapshot.hasData) {
-//                                       return const VerifyEmailScreen();
-//                                     }
-//                                     return const AuthScreen();
-//                                   }),
-//                         );
-//                       }) //: ConnectionError(),
-//               );
-//         }));
-//   }

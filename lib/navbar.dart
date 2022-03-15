@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
-import 'package:veloplan/screens/location_service.dart';
-import 'package:veloplan/screens/place_search_screen.dart';
-import 'screens/map_screen.dart';
+import 'screens/navigation/map_screen.dart';
 import 'screens/profile_screen.dart';
 import 'sidebar.dart';
 

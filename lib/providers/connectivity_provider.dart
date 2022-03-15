@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import '../utilities/connectivityStatusEnum.dart';
+import '../utilities/connectivity_status_enums.dart';
 
 /// Connectivity Provider to identify internet connection changes.
 /// Author(s): Fariha Choudhury k20059723
@@ -17,25 +17,6 @@ class ConnectivityProvider extends ChangeNotifier {
     Connectivity().checkConnectivity().then((value) => connectionChange(value));
     Connectivity().onConnectivityChanged.listen(connectionChange);
   }
-
-  /// Notifies listens of the type of [connectivityResult] that was found.
-  ///
-  /// Checks connection type and updates status.
-  ///
-
-  // ConnectivityStatus _getConnectionStatusFromResult(
-  //     ConnectivityResult connectivityResult) {
-  //   switch (connectivityResult) {
-  //     case ConnectivityResult.mobile:
-  //       return ConnectivityStatus.Mobile;
-  //     case ConnectivityResult.wifi:
-  //       return ConnectivityStatus.Wifi;
-  //     case ConnectivityResult.none:
-  //       return ConnectivityStatus.Offline;
-  //     default:
-  //       return ConnectivityStatus.Offline;
-  //   }
-  // }
 
   /// Notifies listens of the type of [connectivityResult] that was found.
   /// Checks connection type and updates [_connectionStatus].
