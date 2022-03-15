@@ -1,35 +1,38 @@
 import 'package:flutter/material.dart';
 import '../styles/styling.dart';
 
+/// Widget to display a connection error
+/// Author(s): Fariha Choudhury k20059723
+
+/// Builds a widget displaying a cirucular progression indicator and error message
+/// for when no internet connection is established.
 class ConnectionError extends StatelessWidget {
   const ConnectionError({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Container(
-        color: appBarColor,
-        // width: MediaQuery.of(context).size.width * 0.8,
-        // height: MediaQuery.of(context).size.height * 0.8,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              "assets/images/connection_error.png",
-              height: 75,
-              width: 75,
+        child: Container(
+      color: Colors.white,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: const [
+          Padding(
+            padding: EdgeInsets.all(15.0),
+            child: CircularProgressIndicator(
+                color: appBarColor, key: Key('internetErrorSpanner')),
+          ),
+          Text(
+            "Reconnecting... \n please check your internet connection",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.red,
+              fontSize: 18,
             ),
-            const Text(
-              "Connection error, please check your internet connection",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color:Colors.white,
-                fontSize: 16,
-              ),
-            ),
-          ],
-        ),
+            key: Key('internetErrorText'),
+          ),
+        ],
       ),
-    );
+    ));
   }
 }

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:veloplan/services/favourite_service.dart';
 import 'package:veloplan/widgets/docking_station_card.dart';
 import 'package:veloplan/models/favourite.dart';
 import '../styles/styling.dart';
-
 
 //Loads cards of all of the users favourited docking station
 class Favourite extends StatefulWidget {
@@ -22,12 +20,12 @@ class _FavouriteState extends State<Favourite> {
         favourites = data;
       });
     });
-   }
-
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext build) {
-      return Scaffold(
+    return Scaffold(
       body: favourites.isEmpty
           ? SizedBox(
               height: MediaQuery.of(context).size.height / 1.3,
@@ -49,11 +47,10 @@ class _FavouriteState extends State<Favourite> {
                     }),
               ],
             ),
-         
       appBar: AppBar(
         title: const Text('My favourites'),
         backgroundColor: appBarColor,
       ),
-       
-    );}
+    );
+  }
 }

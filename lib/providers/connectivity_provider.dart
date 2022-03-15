@@ -1,74 +1,101 @@
 import 'dart:io';
-// import 'package:app_builder/utilities/connectivity_status_enum.dart';
-// import 'package:connectivity/connectivity.dart';
-
-//import 'package:internet_connection_checker/internet_connection_checker.dart';
-// import 'package:overlay_support/overlay_support.dart';
+import 'package:flutter/material.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import '../utilities/connectivityStatusEnum.dart';
 
-import 'package:flutter/material.dart';
+/// Connectivity Provider to identify internet connection changes.
+/// Author(s): Fariha Choudhury k20059723
 
-class ConnectivityProvider extends ChangeNotifier{
-
+/// Checks connection status and listens in on if connection has changed.
+/// Notifies listeners upon any changes.
+class ConnectivityProvider extends ChangeNotifier {
   ConnectivityStatus? _connectionStatus;
-  ConnectivityStatus? get connectionStatus => _connectionStatus; 
+  ConnectivityStatus? get connectionStatus => _connectionStatus;
   bool connectionExists = false;
-  //getter because _networkState is private, to get from another class use get
 
   ConnectivityProvider() {
-    Connectivity()
-        .checkConnectivity()
-        .then((value) => connectionChange(value));
+    Connectivity().checkConnectivity().then((value) => connectionChange(value));
     Connectivity().onConnectivityChanged.listen(connectionChange);
   }
 
+  /// Notifies listens of the type of [connectivityResult] that was found.
+  ///
+  /// Checks connection type and updates status.
+  ///
+
+  // ConnectivityStatus _getConnectionStatusFromResult(
+  //     ConnectivityResult connectivityResult) {
+  //   switch (connectivityResult) {
+  //     case ConnectivityResult.mobile:
+  //       return ConnectivityStatus.Mobile;
+  //     case ConnectivityResult.wifi:
+  //       return ConnectivityStatus.Wifi;
+  //     case ConnectivityResult.none:
+  //       return ConnectivityStatus.Offline;
+  //     default:
+  //       return ConnectivityStatus.Offline;
+  //   }
+  // }
+
+  /// Notifies listens of the type of [connectivityResult] that was found.
+  /// Checks connection type and updates [_connectionStatus].
   Future<void> connectionChange(ConnectivityResult connectivityResult) async {
-    print('Connection status:  $connectivityResult');
-    
-    if (connectivityResult == ConnectivityResult.mobile){ // || connectivityResult == ConnectivityResult.wifi) {
-      _connectionStatus = ConnectivityStatus.Mobile;
-      notifyListeners();
-    } 
-    else if (connectivityResult == ConnectivityResult.wifi) {
-      _connectionStatus = ConnectivityStatus.Wifi;
-      notifyListeners();
-    } 
-    else {
-      _connectionStatus = ConnectivityStatus.Offline;
-      print("No Internet Connection");
-      notifyListeners();
-    }
-    // CHECK IF CONNECTION IS REALLY THERE 
-    // -- sometimes network exists but is not connected and this is not identified.
-    if (_connectionStatus != ConnectivityStatus.Offline) {
-      _checkConnection(connectivityResult);
+    switch (connectivityResult) {
+      case ConnectivityResult.mobile:
+        _connectionStatus = ConnectivityStatus.Mobile;
+        notifyListeners();
+        checkConnection(connectivityResult);
+        return;
+      case ConnectivityResult.wifi:
+        _connectionStatus = ConnectivityStatus.Wifi;
+        notifyListeners();
+        checkConnection(connectivityResult);
+        return;
+      case ConnectivityResult.none:
+        _connectionStatus = ConnectivityStatus.Offline;
+        notifyListeners();
+        return;
+      default:
+        _connectionStatus = ConnectivityStatus.Offline;
+        notifyListeners();
+        return;
     }
   }
 
+  //   print('Connection status:  $connectivityResult');
 
-  Future<bool> _checkConnection(ConnectivityResult connectivityResult) async {
-    //bool previousConnection = connectionExists;
+  //   if (connectivityResult == ConnectivityResult.mobile) {
+  //     _connectionStatus = ConnectivityStatus.Mobile;
+  //     notifyListeners();
+  //   } else if (connectivityResult == ConnectivityResult.wifi) {
+  //     _connectionStatus = ConnectivityStatus.Wifi;
+  //     notifyListeners();
+  //   } else {
+  //     _connectionStatus = ConnectivityStatus.Offline;
+  //     print("No Internet Connection");
+  //     notifyListeners();
+  //   }
 
+  //   if (_connectionStatus != ConnectivityStatus.Offline) {
+  //     ///Checks type of connection
+  //     checkConnection(connectivityResult);
+  //   }
+  // }
+
+  /// Checks if connection exists by making internet lookups
+  Future<bool> checkConnection(ConnectivityResult connectivityResult) async {
     try {
-      final result = await InternetAddress.lookup('google.com'); //Tests on a real website
+      final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         connectionExists = true;
-      } 
-      else {
+      } else {
         connectionExists = false;
         print("No Internet Connection");
       }
-    } on SocketException catch(_) {
+    } on SocketException catch (_) {
       print("No Internet Connection");
       connectionExists = false;
     }
-    //The connection status changed send out an update to all listeners
-    // if (previousConnection != connectionExists) {
-    //    connectionChangeController.add(connectionExists);
-    // }
     return connectionExists;
   }
-
-
 }
