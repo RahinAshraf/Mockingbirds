@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../popups.dart';
 import '../sidebar.dart';
 import '../screens/map_screen.dart';
 import '../screens/profile_screen.dart';
 import '../screens/trips_scheduler_screen.dart';
-import '../widgets/popup_widget.dart';
 
 ///Defines the navigation bar, allows you to move between the map screen, profile page and view the sidebar.
 /// @author  Elisabeth, Rahin, Tayyibah
@@ -20,6 +20,8 @@ class _NavBarState extends State<NavBar> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   final _currentUser = FirebaseAuth.instance.currentUser!.uid;
+
+  Popups popup = Popups();
 
   var screens = [
     Placeholder(), //is this bad practise?
@@ -46,7 +48,8 @@ class _NavBarState extends State<NavBar> {
                 showDialog(
                   useRootNavigator: false,
                   context: context,
-                  builder: (BuildContext context) => _buildPopupDialog(context),
+                  builder: (BuildContext context) =>
+                      popup.buildPopupDialogNewJourney(context),
                 );
               },
               child: const Icon(
@@ -95,23 +98,5 @@ class _NavBarState extends State<NavBar> {
           ? scaffoldKey.currentState!.openDrawer()
           : currentIndex = index;
     });
-  }
-
-  PopupWidget _buildPopupDialog(BuildContext context) {
-    List<PopupButtonWidget> children = [
-      PopupButtonWidget(
-        text: "Plan a journey",
-        onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => TripScheduler()));
-        },
-      ),
-      PopupButtonWidget(text: "Join a journey", onPressed: () {}),
-    ];
-    return PopupWidget(
-        title: "Choose how to proceed with your trip!",
-        text: "Only one way to find out.",
-        children: children,
-        type: AlertType.question);
   }
 }

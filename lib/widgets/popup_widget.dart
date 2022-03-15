@@ -39,7 +39,7 @@ class PopupWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      alignment: const Alignment(0, -0.28),
+      alignment: const Alignment(0, -0.30),
       children: [
         AlertDialog(
           contentPadding: const EdgeInsets.fromLTRB(1.0, 10.0, 1.0, 0.0),
@@ -52,8 +52,9 @@ class PopupWidget extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Padding(
-                padding: const EdgeInsets.only(bottom: 10.0),
-                child: Text(text),
+                padding: const EdgeInsets.only(
+                    bottom: 10.0, right: 10.0, left: 10.0),
+                child: Text(text, textAlign: TextAlign.center),
               ),
               Container(
                 padding: const EdgeInsets.fromLTRB(1.0, 10.0, 1.0, 10.0),
