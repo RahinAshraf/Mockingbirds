@@ -11,7 +11,7 @@ class HelpBotManager {
           'How do I sign up?', 'Sign up on the main page.', 'Authorisation'),
       Message(
           'How do I plan a new journey?',
-          'Go back to the main screen and click the green bike button in the middle.',
+          'Go back to the main screen and click the green bike button in the middle to start a new journey.',
           'Planning Journey'),
       Message(
           'I have another question that is not listed here.',
