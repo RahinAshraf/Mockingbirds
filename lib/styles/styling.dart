@@ -67,6 +67,8 @@ ButtonStyle authButtonStyle = ButtonStyle(
 );
 const authButtonTextStyle =
     TextStyle(fontSize: 16.0, color: Colors.white, fontWeight: FontWeight.w700);
+const authTextStyle =
+    TextStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 15);
 
 // Trips scheduler panel widget
 ButtonStyle journeyTimeButtonStyle = TextButton.styleFrom(

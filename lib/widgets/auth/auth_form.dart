@@ -80,243 +80,228 @@ class _AuthFormState extends State<AuthForm> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Card(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  if (_isLogin)
-                    SizedBox(
-                        height: 120.0,
-                        width: 120.0,
-                        child: Center(
-                            child: Image.asset('assets/images/logo.png'))),
-                  if (_isLogin)
-                    Container(
-                        alignment: Alignment.center,
-                        padding: const EdgeInsets.all(10),
-                        child: const Text(
-                          'Welcome back!',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 25),
-                        )),
-                  if (!_isLogin) const SizedBox(height: 50),
-                  if (!_isLogin) UserImagePicker(_pickedImage),
-                  if (!_isLogin)
-                    TextFormField(
-                      key: const ValueKey('firstName'),
-                      autocorrect: true,
-                      textCapitalization: TextCapitalization.words,
-                      enableSuggestions: false,
-                      validator: (value) {
-                        if (value!.isEmpty || value.length < 2) {
-                          return 'Please enter at least 2 characters';
-                        }
-                        return null;
-                      },
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'First Name'),
-                      onSaved: (value) {
-                        _firstName = value!;
-                      },
-                    ),
-                  if (!_isLogin || _isLogin) const SizedBox(height: 15),
-                  if (!_isLogin)
-                    TextFormField(
-                      key: const ValueKey('lastName'),
-                      autocorrect: true,
-                      textCapitalization: TextCapitalization.words,
-                      enableSuggestions: false,
-                      validator: (value) {
-                        if (value!.isEmpty || value.length < 2) {
-                          return 'Please enter at least 2 characters';
-                        }
-                        return null;
-                      },
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(), labelText: 'Last Name'),
-                      onSaved: (value) {
-                        _lastName = value!;
-                      },
-                    ),
-                  if (!_isLogin || _isLogin) const SizedBox(height: 15),
-                  TextFormField(
-                    key: const ValueKey('email'),
-                    autocorrect: false,
-                    textCapitalization: TextCapitalization.none,
-                    enableSuggestions: false,
-                    validator: (value) => EmailValidator.validate(value!)
-                        ? null
-                        : "Please enter a valid email",
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Email address',
-                    ),
-                    onSaved: (value) {
-                      _userEmail = value!;
-                    },
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (_isLogin)
+                  Image.asset(
+                    'assets/images/logo_1.png',
+                    height: 150.0,
+                    width: 150.0,
                   ),
-                  if (!_isLogin || _isLogin) const SizedBox(height: 15),
-                  if (!_isLogin)
-                    TextFormField(
-                      key: const ValueKey('username'),
-                      autocorrect: true,
-                      textCapitalization: TextCapitalization.words,
-                      enableSuggestions: false,
-                      validator: (value) {
-                        if (value!.isEmpty || value.length < 4) {
-                          return 'Please enter at least 4 characters';
-                        }
-                        return null;
-                      },
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(), labelText: 'Username'),
-                      onSaved: (value) {
-                        _userName = value!;
-                      },
+                if (_isLogin)
+                  Container(
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.all(10),
+                    child: const Text(
+                      'Welcome back!',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 25),
                     ),
-                  if (!_isLogin || _isLogin) const SizedBox(height: 15),
+                  ),
+                // if (!_isLogin) const SizedBox(height: 50),
+                if (!_isLogin) UserImagePicker(_pickedImage),
+                if (!_isLogin)
                   TextFormField(
-                    key: const ValueKey('password'),
+                    key: const ValueKey('firstName'),
+                    autocorrect: true,
+                    textCapitalization: TextCapitalization.words,
+                    enableSuggestions: false,
                     validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'This field can not be empty';
-                      }
-                      _confirmPassword = value;
-                      if (value.length < 7) {
-                        return 'Password must be at least 7 characters long.';
+                      if (value!.isEmpty || value.length < 2) {
+                        return 'Please enter at least 2 characters';
                       }
                       return null;
                     },
                     decoration: const InputDecoration(
-                        border: OutlineInputBorder(), labelText: 'Password'),
-                    obscureText: true,
+                        border: OutlineInputBorder(), labelText: 'First Name'),
                     onSaved: (value) {
-                      _userPassword = value!;
+                      _firstName = value!;
                     },
                   ),
-                  if (!_isLogin || _isLogin) const SizedBox(height: 15),
-                  if (!_isLogin)
-                    TextFormField(
-                      key: const ValueKey('passwordConfirmation'),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'This field can not be empty';
-                        }
-                        if (value != _confirmPassword) {
-                          return 'The passwords did not match';
-                        }
-                        return null;
-                      },
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Confirm Password'),
-                      obscureText: true,
-                    ),
-                  if (!_isLogin || _isLogin) const SizedBox(height: 15),
-                  if (!_isLogin)
-                    TextFormField(
-                      controller: _dateController,
-                      key: const ValueKey('date'),
-                      validator: (value) {
-                        if(value!.isEmpty) {
-                          return 'This field can not be empty';
-                        }
-                        DateTime _eligibleDate = DateTime(
-                          _dateTime.year + 16,
-                          _dateTime.month,
-                          _dateTime.day,
-                        );
-                        if(_eligibleDate.isAfter(DateTime.now())) {
-                          return 'The minimum age for creating an account is 16';
-                        }
-                        return null;
-                      },
-                      onTap: () {
-                        FocusScope.of(context).requestFocus(FocusNode());
-                        //_selectDate();
-                        showCupertinoModalPopup<void>(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return BottomDatePicker(
-                              CupertinoDatePicker(
-                                mode: CupertinoDatePickerMode.date,
-                                initialDateTime: _dateTime,
-                                maximumDate: DateTime.now(),
-                                onDateTimeChanged: (DateTime newDateTime) {
-                                  if (mounted) {
-                                    setState(() {
-                                      _dateTime = newDateTime;
-                                      _dateController.text =
-                                          DateFormat('dd-MM-yyyy')
-                                              .format(_dateTime);
-                                    });
-                                  }
-                                },
-                              ),
-                            );
-                          },
-                        );
-                      },
-                      decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Date of birth'),
-                    ),
-                  const SizedBox(height: 12),
-                  if (widget.isLoading) const CircularProgressIndicator(),
-                  if (!widget.isLoading)
-                    ElevatedButton(
-                      style: authButtonStyle,
-                      child: Text(_isLogin ? 'Log In' : 'Sign Up',
-                          style: authButtonTextStyle),
-                      onPressed: _trySubmit,
-                    ),
-                  if (!widget.isLoading)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        if (_isLogin)
-                          Container(
-                              alignment: Alignment.center,
-                              padding: const EdgeInsets.all(10),
-                              child: const Text(
-                                'Don\'t have an account?',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 15),
-                              )),
-                        if (!_isLogin)
-                          Container(
-                              alignment: Alignment.center,
-                              padding: const EdgeInsets.all(10),
-                              child: const Text(
-                                'Already have an account?',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 15),
-                              )),
-                        TextButton(
-                          child: Text(_isLogin ? 'Sign up' : 'Log in'),
-                          onPressed: () {
-                            setState(() {
-                              _isLogin = !_isLogin;
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-                ],
-              ),
+                const SizedBox(height: 15),
+                if (!_isLogin)
+                  TextFormField(
+                    key: const ValueKey('lastName'),
+                    autocorrect: true,
+                    textCapitalization: TextCapitalization.words,
+                    enableSuggestions: false,
+                    validator: (value) {
+                      if (value!.isEmpty || value.length < 2) {
+                        return 'Please enter at least 2 characters';
+                      }
+                      return null;
+                    },
+                    decoration: const InputDecoration(
+                        border: OutlineInputBorder(), labelText: 'Last Name'),
+                    onSaved: (value) {
+                      _lastName = value!;
+                    },
+                  ),
+                const SizedBox(height: 15),
+                TextFormField(
+                  key: const ValueKey('email'),
+                  autocorrect: false,
+                  textCapitalization: TextCapitalization.none,
+                  enableSuggestions: false,
+                  validator: (value) => EmailValidator.validate(value!)
+                      ? null
+                      : "Please enter a valid email",
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Email Address',
+                  ),
+                  onSaved: (value) {
+                    _userEmail = value!;
+                  },
+                ),
+                const SizedBox(height: 15),
+                if (!_isLogin)
+                  TextFormField(
+                    key: const ValueKey('username'),
+                    autocorrect: true,
+                    textCapitalization: TextCapitalization.words,
+                    enableSuggestions: false,
+                    validator: (value) {
+                      if (value!.isEmpty || value.length < 4) {
+                        return 'Please enter at least 4 characters';
+                      }
+                      return null;
+                    },
+                    decoration: const InputDecoration(
+                        border: OutlineInputBorder(), labelText: 'Username'),
+                    onSaved: (value) {
+                      _userName = value!;
+                    },
+                  ),
+                const SizedBox(height: 15),
+                TextFormField(
+                  key: const ValueKey('password'),
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'This field can not be empty';
+                    }
+                    _confirmPassword = value;
+                    if (value.length < 7) {
+                      return 'Password must be at least 7 characters long.';
+                    }
+                    return null;
+                  },
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(), labelText: 'Password'),
+                  obscureText: true,
+                  onSaved: (value) {
+                    _userPassword = value!;
+                  },
+                ),
+                const SizedBox(height: 15),
+                if (!_isLogin)
+                  TextFormField(
+                    key: const ValueKey('passwordConfirmation'),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'This field can not be empty';
+                      }
+                      if (value != _confirmPassword) {
+                        return 'The passwords did not match';
+                      }
+                      return null;
+                    },
+                    decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Confirm Password'),
+                    obscureText: true,
+                  ),
+                const SizedBox(height: 15),
+                if (!_isLogin)
+                  TextFormField(
+                    controller: _dateController,
+                    key: const ValueKey('date'),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'This field can not be empty';
+                      }
+                      DateTime _eligibleDate = DateTime(
+                        _dateTime.year + 16,
+                        _dateTime.month,
+                        _dateTime.day,
+                      );
+                      if (_eligibleDate.isAfter(DateTime.now())) {
+                        return 'The minimum age for creating an account is 16';
+                      }
+                      return null;
+                    },
+                    onTap: () {
+                      FocusScope.of(context).requestFocus(FocusNode());
+                      //_selectDate();
+                      showCupertinoModalPopup<void>(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return BottomDatePicker(
+                            CupertinoDatePicker(
+                              mode: CupertinoDatePickerMode.date,
+                              initialDateTime: _dateTime,
+                              maximumDate: DateTime.now(),
+                              onDateTimeChanged: (DateTime newDateTime) {
+                                if (mounted) {
+                                  setState(() {
+                                    _dateTime = newDateTime;
+                                    _dateController.text =
+                                        DateFormat('dd-MM-yyyy')
+                                            .format(_dateTime);
+                                  });
+                                }
+                              },
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Date of birth'),
+                  ),
+                const SizedBox(height: 12),
+                if (widget.isLoading) const CircularProgressIndicator(),
+                if (!widget.isLoading)
+                  ElevatedButton(
+                    style: authButtonStyle,
+                    child: Text(_isLogin ? 'Log In' : 'Sign Up',
+                        style: authButtonTextStyle),
+                    onPressed: _trySubmit,
+                  ),
+                if (!widget.isLoading)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.all(10),
+                          child: Text(
+                            _isLogin
+                                ? 'Don\'t have an account?'
+                                : 'Already have an account?',
+                            style: authTextStyle,
+                          )),
+                      TextButton(
+                        child: Text(_isLogin ? 'Sign up' : 'Log in'),
+                        onPressed: () {
+                          setState(() {
+                            _isLogin = !_isLogin;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+              ],
             ),
           ),
         ),
