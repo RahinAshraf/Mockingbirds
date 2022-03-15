@@ -16,19 +16,18 @@ void placeDockMarkers(
             iconSize: 0.7,
             iconImage: "assets/icon/bicycle.png"),
         {
-          //Map for data
-          "type": "FeatureCollection",
-          "features": [
-            {
-              "stationId": station.stationId,
-              "name": station.name,
-              "numberOfBikes": station.numberOfBikes,
-              "numberOfEmptyDocks": station.numberOfEmptyDocks,
-            },
-          ],
+          "station": station,
         });
   }
 }
+
+// Widget displayDockCard(DockingStation) {
+//   //CHANGE THIS TO CREATE CARD
+//   print("Will call widget next");
+//   // return _DockPopupCard(latlng: current,);
+//   dockingStationKey.currentState?.setState(() {
+//     dockingStationKey.currentState?.setVisible(true);
+//   });
 
 /// Creates a [fills] Map with the specified geometry for the chosen [routeResponse]
 Future<Map<String, Object>> setFills(Map fills, dynamic routeResponse) async {

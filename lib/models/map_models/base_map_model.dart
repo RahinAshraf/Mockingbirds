@@ -2,8 +2,10 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:veloplan/.env.dart';
+import 'package:veloplan/widgets/docking_station_card.dart';
 
 /// Class to display a mapbox map with other possible widgets on top
 /// Author(s): Fariha Choudhury k20059723, Elisabeth Koren Halvorsen k20077737
@@ -56,19 +58,16 @@ class BaseMapboxMap {
     _selectedSymbol = symbol;
     if (_selectedSymbol != null) {
       Map<dynamic, dynamic>? stationData = symbol.data;
+      print("ONSYMBOLTAPPED");
+
       displayDockCard(stationData);
     }
   }
 
   /// Shows the information about the pressed docking station
   void displayDockCard(Map<dynamic, dynamic>? stationData) {
-    //CHANGE THIS TO CREATE CARD
-    //! CAN BE MOVED TO HELPER ONCE HRISTINA IS FINISHED WITH IT
-    print("Will call widget next");
-    print(stationData);
-    //     dockingStationKey.currentState?.setState(() {
-    //   dockingStationKey.currentState?.setVisible(true);
-    // });
+    DockingStation station = stationData!["station"];
+    DockingStationCard.station(station);
   }
 
   /// Initialises map without live location

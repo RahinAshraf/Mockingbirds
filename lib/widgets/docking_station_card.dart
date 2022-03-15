@@ -18,13 +18,13 @@ class DockingStationCard extends StatefulWidget {
     this.numberOfEmptyDocks,
   );
 
-//I have commented this for now but if you want to make a card by just passing a station:
-  // dockingStationCard.station(DockingStation station) {
-  //   this.id = station.id;
-  //   this.name = station.name;
-  //   this.nb_bikes = station.nb_bikes.toString();
-  //   this.nb_empty_docks = station.nb_empty_docks.toString();
-  // }
+  DockingStationCard.station(DockingStation station) {
+    iD = station.stationId;
+    stationName = station.name;
+    numberOfBikes = station.numberOfBikes;
+    numberOfEmptyDocks = station.numberOfEmptyDocks;
+    //print(this.iD);
+  }
 
   @override
   _DockingStationCardState createState() => _DockingStationCardState();
