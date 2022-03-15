@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:veloplan/services/favourite_service.dart';
-import 'package:veloplan/widgets/docking_station_card.dart';
-import 'package:veloplan/models/favourite.dart';
+import '../services/favourite_service.dart';
 import '../styles/styling.dart';
-import 'package:veloplan/models/docking_station.dart';
+import '../models/docking_station.dart';
+import '../widgets/docking_station_card.dart';
 
 ///Loads users favourited docking stations and displays them in a list view.
 ///@author Tayyibah Uddin

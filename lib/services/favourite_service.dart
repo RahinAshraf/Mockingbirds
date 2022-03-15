@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:veloplan/models/favourite.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:veloplan/services/user_services.dart';
 import 'package:collection/collection.dart';
 import 'package:veloplan/models/docking_station.dart';
 
-///Helper functions to add docking stations to the firestore database for a user
-///@author Tayyibah Uddin
+///Helper functions to add,delete or retrieve docking stations
+///from and to the firestore database for a user
+///@author Tayyibah
 
 class FavouriteHelper {
   late CollectionReference _favourites;
@@ -39,11 +39,11 @@ class FavouriteHelper {
             print("Failed to add fave: $error")); //add snackbar instead
   }
 
-  Future<void> deleteFavourite(favid) {
+  Future<void> deleteFavourite(favouriteDocumentId) {
     return _favourites
-        .doc(favid)
+        .doc(favouriteDocumentId)
         .delete()
-        .then((value) => print(favid))
+        .then((value) => print(favouriteDocumentId))
         .catchError((error) => print("Failed to delete fave: $error"));
   }
 
@@ -56,11 +56,8 @@ class FavouriteHelper {
         .doc(getUid())
         .collection('favourites')
         .get();
-    if (docs != null) {
-      //get rid of this if statement
-      for (DocumentSnapshot doc in docs.docs) {
-        favourites.add(DockingStation.map(doc));
-      }
+    for (DocumentSnapshot doc in docs.docs) {
+      favourites.add(DockingStation.map(doc));
     }
     return favourites;
   }
@@ -90,8 +87,8 @@ class FavouriteHelper {
     if (isFavouriteStation(stationId, favouriteList)) {
       DockingStation favouriteStation = favouriteList
           .firstWhere((DockingStation f) => (f.stationId == stationId));
-      String? favouriteId = favouriteStation.documentId;
-      await deleteFavourite(favouriteId);
+      String? favouriteDocumentId = favouriteStation.documentId;
+      await deleteFavourite(favouriteDocumentId);
     } else {
       await addFavourite(stationId, name, numberOfBikes, numberOfEmptyDocks);
     }
