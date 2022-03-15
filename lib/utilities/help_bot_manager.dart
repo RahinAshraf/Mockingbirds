@@ -1,4 +1,5 @@
 import 'package:veloplan/models/message.dart';
+import "package:collection/collection.dart";
 
 class HelpBotManager {
   Map questions = {};

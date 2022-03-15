@@ -7,7 +7,7 @@ import 'dart:convert' as convert;
 *LocationService class to retrieve results from Mapbox API
 * */
 class LocationService {
-  final String key = 'pk.eyJ1IjoibW9ja2luZ2JpcmRzIiwiYSI6ImNremd3NW9weDM2ZmEybm45dzlhYzN0ZnUifQ.lSzpNOhK2CH9-PODR0ojLg'; //Mapbox api key
+  final String key = 'pk.eyJ1IjoibW9ja2luZ2JpcmRzZWxpdGUiLCJhIjoiY2wwaTJ2em4wMDA0ZzNrcGtremZuM3czZyJ9.PDaTlZiPjDa7sGjF-aKnJQ'; //Mapbox api key
 
   final StreamController<List<Feature>?> _feature = StreamController.broadcast();
   Stream<List<Feature>?> get feature => _feature.stream;
