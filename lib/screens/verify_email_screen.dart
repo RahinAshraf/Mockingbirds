@@ -7,10 +7,10 @@ class VerifyEmailScreen extends StatefulWidget {
   const VerifyEmailScreen({Key? key}) : super(key: key);
 
   @override
-  _VerifyEmailSCreenState createState() => _VerifyEmailSCreenState();
+  _VerifyEmailScreenState createState() => _VerifyEmailScreenState();
 }
 
-class _VerifyEmailSCreenState extends State<VerifyEmailScreen> {
+class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
   bool isVerified = false;
   bool canResendEmail = false;
   Timer? timer;
@@ -78,44 +78,63 @@ class _VerifyEmailSCreenState extends State<VerifyEmailScreen> {
     return isVerified
         ? NavBar()
         : Scaffold(
-            body: Padding(
-              padding: const EdgeInsets.all(16),
+            body: SafeArea(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
-                    'A verification email has been sent to your address.',
-                    style: TextStyle(fontSize: 20),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(
-                    height: 24,
-                  ),
-                  ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size.fromHeight(50),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: Image.asset(
+                      'assets/images/right_bubbles_shapes.png',
+                      width: 170,
+                      height: 170,
                     ),
-                    icon: const Icon(Icons.email, size: 32),
-                    label: canResendEmail
-                        ? const Text(
-                            'Resend Email',
-                            style: TextStyle(fontSize: 24),
-                          )
-                        : const Text(
-                            'Wait 1 minute to resend',
+                  ),
+                  const SizedBox(height: 30),
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/images/security_icon.png',
+                          width: 100,
+                          height: 100,
+                        ),
+                        const SizedBox(height: 24),
+                        const Text(
+                          'A verification email has been sent to your address.',
+                          style: TextStyle(fontSize: 20),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(
+                          height: 24,
+                        ),
+                        ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: const Size.fromHeight(50),
+                          ),
+                          icon: const Icon(Icons.email, size: 32),
+                          label: canResendEmail
+                              ? const Text(
+                                  'Resend Email',
+                                  style: TextStyle(fontSize: 24),
+                                )
+                              : const Text(
+                                  'Wait 1 minute to resend',
+                                  style: TextStyle(fontSize: 24),
+                                ),
+                          onPressed:
+                              canResendEmail ? () => sendVerification() : null,
+                        ),
+                        TextButton(
+                          child: const Text(
+                            'Cancel',
                             style: TextStyle(fontSize: 24),
                           ),
-                    onPressed: canResendEmail ? () => sendVerification() : null,
-                  ),
-                  TextButton(
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size.fromHeight(50),
+                          onPressed: () => FirebaseAuth.instance.signOut(),
+                        ),
+                      ],
                     ),
-                    child: const Text(
-                      'Cancel',
-                      style: TextStyle(fontSize: 24),
-                    ),
-                    onPressed: () => FirebaseAuth.instance.signOut(),
                   ),
                 ],
               ),
