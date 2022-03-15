@@ -106,7 +106,7 @@ class _AuthFormState extends State<AuthForm> {
                           fontSize: 25),
                     ),
                   ),
-                // if (!_isLogin) const SizedBox(height: 50),
+                if (!_isLogin) const SizedBox(height: 50),
                 if (!_isLogin) UserImagePicker(_pickedImage),
                 if (!_isLogin)
                   TextFormField(

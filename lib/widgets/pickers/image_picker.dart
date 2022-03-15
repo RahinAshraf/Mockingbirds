@@ -32,24 +32,28 @@ class _UserImagePickerState extends State<UserImagePicker> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: <Widget>[
+      children: [
         CircleAvatar(
           radius: 40,
-          backgroundColor: Colors.green,
-          backgroundImage:
-              _pickedImage != null ? FileImage(_pickedImage!) : null,
+          backgroundImage: _pickedImage != null
+              ? FileImage(_pickedImage!)
+              : Image.asset('assets/images/default_profile_picture.jpg').image,
         ),
-        FlatButton.icon(
-          textColor: Theme.of(context).primaryColor,
+        TextButton.icon(
           onPressed: () => _pickImage(true),
           icon: const Icon(Icons.camera),
           label: const Text('Take a picture'),
+          style: TextButton.styleFrom(
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          ),
         ),
-        FlatButton.icon(
-          textColor: Theme.of(context).primaryColor,
+        TextButton.icon(
           onPressed: () => _pickImage(false),
           icon: const Icon(Icons.image),
           label: const Text('Choose from gallery'),
+          style: TextButton.styleFrom(
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          ),
         ),
       ],
     );
