@@ -13,8 +13,11 @@ class HelpBotManager {
           'How do I plan a new journey?',
           'Go back to the main screen and click the green bike button in the middle.',
           'Planning Journey'),
-      Message('I have another question that is not listed here.',
-          'Please contact k20082541@kcl.ac.uk.', 'Other Questions', true),
+      Message(
+          'I have another question that is not listed here.',
+          'Sorry to hear that I couldn\'t answer your question. Feel free to send an email.',
+          'Other Questions',
+          true),
       // add new messages here
     ];
     questions = _groupByTopic(data);

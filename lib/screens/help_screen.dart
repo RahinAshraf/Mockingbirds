@@ -28,7 +28,8 @@ class _HelpPageState extends State<HelpPage> {
 
   _sendMail() async {
     // Android and iOS
-    const url = 'mailto:k20070238@kc.ac.uk?subject=Help%20with%20app&body=Test';
+    const url =
+        'mailto:k20070238@kcl.ac.uk?subject=Help%20with%20app&body=Help%20me!';
     try {
       await launch(url);
     } catch (e) {
