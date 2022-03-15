@@ -55,6 +55,11 @@ class NavigationDrawerWidget extends StatelessWidget {
             icon: Icons.settings,
             onClicked: () => _renderScreen(context, 5),
           ),
+          buildSidebarItem(
+            text: 'Log Out',
+            icon: Icons.logout,
+            onClicked: () => FirebaseAuth.instance.signOut(),
+          ),
         ],
       ),
     );
