@@ -1,3 +1,5 @@
+import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart';
+
 import '../../helpers/shared_prefs.dart';
 import 'docking_station_card.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +10,9 @@ import 'package:veloplan/providers/docking_station_manager.dart';
 class DockingStationList {
   late List<Widget> dockingStationCards;
   List<Map> cardData = [];
+  LatLng userCoordinates;
+
+  DockingStationList(this.userCoordinates);
 
   Future<List<Widget>> retrieveAllCards() {
     final dockingStationManager _stationManager = dockingStationManager();
@@ -23,8 +28,7 @@ class DockingStationList {
   Future<List<Widget>> retrieveFilteredCards() {
     final dockingStationManager _stationManager = dockingStationManager();
     var list = _stationManager.importStations().then((value) =>
-        createDockingCards(
-            _stationManager.get10ClosestDocks(getLatLngFromSharedPrefs())));
+        createDockingCards(_stationManager.get10ClosestDocks(userCoordinates)));
     return list;
   }
 

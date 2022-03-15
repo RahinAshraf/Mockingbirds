@@ -13,6 +13,8 @@ import 'package:veloplan/helpers/live_location_helper.dart';
 import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart'
 as LatLong;
 import 'package:veloplan/providers/docking_station_manager.dart';
+
+import '../screens/dock_sorter_screen.dart';
 /*
 When rendered, the journey_planner_screen will have this panel_widget at the bottom. It is an interactive panel the user can
 slide up or down, when wanting to input their desired locations for the journey.
@@ -688,6 +690,7 @@ class DynamicWidget extends StatelessWidget {
             // ),
             Expanded(
               child: TextField(
+                enabled: false,
                 controller: editDockTextEditController,
                 decoration: InputDecoration(
                   hintText: "Default closest dock",
@@ -699,11 +702,16 @@ class DynamicWidget extends StatelessWidget {
               ),
             ),
             IconButton(
-                onPressed: () async {
+                onPressed: () async  {
                   List temp =
                   await locationService.getPlaceCoords(placeTextController.text);
                   checkInputLocation();
-                  print(temp);
+                  LatLng locationInLatLng = LatLng(temp.first,temp.last);
+                  print(locationInLatLng);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => DockSorterScreen(locationInLatLng)));
                 },
                 padding: const EdgeInsets.all(0),
                 icon: const Icon(

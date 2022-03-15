@@ -1,24 +1,42 @@
+import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart';
+import 'package:mapbox_gl/mapbox_gl.dart';
+import '../screens/journey_planner_screen.dart';
 import '../widgets/docks/docking_stations_list.dart';
 import 'package:flutter/material.dart';
 
 class DockSorter extends StatefulWidget {
-  const DockSorter({required ScrollController controller});
+  late final LatLng userCoord;
+   DockSorter(this.userCoord, {Key? key, required ScrollController controller}) : super(key: key);
 
   @override
   _DockSorter createState() => _DockSorter();
 }
 
+
 class _DockSorter extends State<DockSorter> {
   ScrollController controller = ScrollController();
+  late LatLng userCoordinates;
+  late var _dockingStationCarousel;
 
-  var _dockingStationCarousel =
-      DockingStationList(); //retrieves all of the docking station cards
+  @override
+  void initState() {
+    // TODO: implement initState
+    userCoordinates = super.widget.userCoord;
+    super.initState();
+    _dockingStationCarousel = DockingStationList(userCoordinates);
+  }
 
   String selectedFilter = "Distance";
 
   @override
   Widget build(BuildContext context) => ListView(
         children: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Icon(Icons.arrow_back_rounded),
+          ),
           Row(
             children: [
               const Text("Sort by: "),
