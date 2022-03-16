@@ -48,9 +48,11 @@ const TextStyle popupDialogTextStyle = TextStyle(
 ButtonStyle popupDialogButtonStyle = ButtonStyle(
   overlayColor: MaterialStateProperty.all(Colors.green.shade200),
   backgroundColor: MaterialStateProperty.all(const Color(0XFFFBAB4B)),
+  padding:
+      MaterialStateProperty.all(const EdgeInsets.only(right: 10.0, left: 10.0)),
 );
 const TextStyle popupDialogButtonTextStyle = TextStyle(
-  fontSize: 20.0,
+  fontSize: 18.0,
   color: Colors.white,
 );
 
