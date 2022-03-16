@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
-import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:veloplan/models/map_models/base_map_model.dart';
 import '../../models/map_models/base_map_with_route_model.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -18,7 +17,7 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  LatLng currentLatLng = getLatLngFromSharedPrefs();
+  LatLng currentLatLng = const LatLng(51.51185004458236, -0.11580820118980878);
   late BaseMapboxMap _baseMap;
   late BaseMapboxRouteMap _baseMapWithRoute;
 
@@ -37,7 +36,7 @@ class _MapPageState extends State<MapPage> {
   //   return Scaffold(body: ScopedModelDescendant<MapModel>(
   //       builder: (BuildContext context, Widget? child, MapModel model) {
   //     _baseMapWithRoute =
-  //         BaseMapboxRouteMap(points, model);
+  //         BaseMapboxRouteMap(points, false, currentLatLng, model);
   //     addPositionZoom();
   //     return SafeArea(child: Stack(children: _baseMapWithRoute.getWidgets()));
   //   }));
@@ -64,7 +63,7 @@ class _MapPageState extends State<MapPage> {
   Widget build(BuildContext context) {
     return Scaffold(body: ScopedModelDescendant<MapModel>(
         builder: (BuildContext context, Widget? child, MapModel model) {
-      _baseMap = BaseMapboxMap(model);
+      _baseMap = BaseMapboxMap(false, currentLatLng, model);
       addPositionZoom();
       return SafeArea(child: Stack(children: _baseMap.getWidgets()));
     }));

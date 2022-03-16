@@ -2,10 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:veloplan/providers/location_service.dart';
 import 'journey_planner_screen.dart';
 
-/*
-  @author - Rahin Ashraf
- */
-
 class PlaceSearchScreen extends StatefulWidget {
   late LocationService locService;
 

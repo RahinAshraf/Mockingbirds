@@ -68,24 +68,24 @@ class _EditProfileState extends State<EditProfile> {
     return WillPopScope(
       onWillPop: () async {
         bool willLeave = false;
-        // show the confirm dialog
-        await showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-                  title: const Text('Are you sure want to leave?'),
-                  actions: [
-                    ElevatedButton(
-                        onPressed: () {
-                          willLeave = true;
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text('Yes')),
-                    TextButton(
-                        onPressed: () => Navigator.of(context).pop(),
-                        child: const Text('No'))
-                  ],
-                ));
-        return willLeave;
+          // show the confirm dialog
+          await showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                    title: const Text('Are you sure want to leave?'),
+                    actions: [
+                      ElevatedButton(
+                          onPressed: () {
+                            willLeave = true;
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('Yes')),
+                      TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: const Text('No'))
+                    ],
+                  ));
+          return willLeave;
       },
       child: Scaffold(
         appBar: AppBar(

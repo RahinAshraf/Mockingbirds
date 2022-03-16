@@ -47,8 +47,7 @@ class _AuthScreenState extends State<AuthScreen> {
           password: password,
         );
 
-        var url =
-            "https://firebasestorage.googleapis.com/v0/b/veloplan-b41d0.appspot.com/o/user_image%2Fdefault_profile_picture.jpg?alt=media&token=edc6abb8-3655-448c-84a0-7d34b02f0c73";
+        var url = "https://firebasestorage.googleapis.com/v0/b/veloplan-b41d0.appspot.com/o/user_image%2Fdefault_profile_picture.jpg?alt=media&token=edc6abb8-3655-448c-84a0-7d34b02f0c73";
 
         if (image != null) {
           final ref = FirebaseStorage.instance
@@ -74,7 +73,7 @@ class _AuthScreenState extends State<AuthScreen> {
         });
       }
     } on PlatformException catch (err) {
-      var message = 'An error occurred, please check your credentials!';
+      var message = 'An error occurred, pelase check your credentials!';
 
       if (err.message != null) {
         message = err.message!;
@@ -115,14 +114,14 @@ class _AuthScreenState extends State<AuthScreen> {
         _submitAuthForm,
         _isLoading,
       ),
-      /*Align(
+      Align(
         alignment: Alignment.topRight,
         child: Container(
             height: 170.0,
             width: 170.0,
             alignment: Alignment.topRight,
             child: Image.asset('assets/images/right_bubbles_shapes.png')),
-      ),*/
+      ),
     ]));
   }
 }

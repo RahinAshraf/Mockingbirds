@@ -2,7 +2,7 @@ import 'package:flutter_mapbox_navigation/library.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 
 /// Helper methods related to converting LatLng to WayPoints
-/// Author(s): Elisabeth Koren Halvorsen k20077737, Fariha Choudhury k20059723, Rahin Ashraf - k20034059
+/// Author(s): Elisabeth Koren Halvorsen k20077737, Fariha Choudhury k20059723
 
 /// Converts a single [latLng] into a WayPoint
 WayPoint latLng2WayPoint(LatLng latLng, name) {
@@ -20,19 +20,4 @@ List<WayPoint> latLngs2WayPoints(List<LatLng> latLngs) {
         longitude: latLngs[i].longitude));
   }
   return points;
-}
-
-/// Convert a [points] to a LatLng list
-List<LatLng>? convertListDoubleToLatLng(List<List<double?>?> points) {
-  try {
-    List<LatLng> myList = [];
-    for (int i = 0; i < points.length; i++) {
-      myList.add(LatLng(points[i]?.first as double, points[i]?.last as double));
-    }
-    return myList;
-  } on StateError {
-    return null;
-  } catch (e) {
-    return null;
-  }
 }

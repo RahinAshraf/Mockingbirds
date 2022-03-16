@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-class Alerts {
+class Alerts{
+
   //Show error message to user for having no destinations specified for the journey
   void showAtLeastOneDestinationSnackBar(BuildContext context) {
     const text = "Choose at least one destination to create your journey";
@@ -41,15 +42,4 @@ class Alerts {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  void showCantHaveAdajcentSnackBar(BuildContext context) {
-    const text = "You cannot have two places the same after each other";
-    const snackBar = SnackBar(
-      content: Text(
-        text,
-        style: TextStyle(fontSize: 17),
-      ),
-      backgroundColor: Colors.red,
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
 }

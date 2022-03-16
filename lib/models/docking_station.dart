@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 ///Represents a docking station
-///Author(s): Liliana, Nicole, Tayyibah
-
+///Authors: Liliana, Nicole, Tayyibah
 class DockingStation {
   late String _stationId;
   late String _name;
@@ -44,16 +43,4 @@ class DockingStation {
     _numberOfBikes = document.get('numberOfBikes');
     _numberOfEmptyDocks = document.get('numberOfEmptyDocks');
   }
-
-  /// An empty constructor useful for initialisations
-  DockingStation.empty()
-      : _stationId = "empty",
-        _name = "empty",
-        _isInstalled = false,
-        _isLocked = true,
-        _numberOfBikes = 0,
-        _numberOfEmptyDocks = 0,
-        _numberOfAllDocks = 0,
-        _lon = 0.0,
-        _lat = 0.0;
 }
