@@ -30,66 +30,22 @@ class Settings extends StatelessWidget {
               value: notifier.isDarkTheme,
             ),
           ),
+          ListTile(
+            leading: const Icon(Icons.logout),
+            title: const Text('Delete account'),
+            onTap: () async {
+              try {
+                await FirebaseAuth.instance.currentUser!.delete();
+              } on FirebaseAuthException catch (e) {
+                if (e.code == 'requires-recent-login') {
+                  print(
+                      'The user must reauthenticate before this operation can be executed.');
+                }
+              }
+            },
+          ),
         ],
       ),
     );
   }
-
-  Widget buildSettings() {
-    return ListView(
-      children: [
-        // buildLogout(),
-        ListTile(
-          leading: const Icon(Icons.logout),
-          title: const Text('Log Out'),
-          onTap: () {
-            FirebaseAuth.instance.signOut();
-          },
-        ),
-        ListTile(
-          leading: const Icon(Icons.logout),
-          title: const Text('Delete account'),
-          onTap: () async {
-            try {
-              await FirebaseAuth.instance.currentUser!.delete();
-            } on FirebaseAuthException catch (e) {
-              if (e.code == 'requires-recent-login') {
-                print(
-                    'The user must reauthenticate before this operation can be executed.');
-              }
-            }
-          },
-        ),
-
-        Consumer<ThemeNotifier>(
-          builder: (context, notifier, child) => SwitchListTile(
-            secondary: const Icon(Icons.dark_mode),
-            title: const Text('Dark mode'),
-            onChanged: (val) {
-              notifier.toggleTheme();
-            },
-            value: notifier.isDarkTheme,
-          ),
-        ),
-      ],
-    );
-  }
-
-  ListTile buildLogout() => ListTile(
-        leading: const Icon(Icons.logout),
-        title: const Text('Logout'),
-        onTap: () {
-          FirebaseAuth.instance.signOut();
-        },
-      );
-
-  // SwitchListTile buildDarkMode() => SwitchListTile(
-  //       onToggle: (bool value) {
-  //         currentTheme.toggleTheme();
-  //       },
-  //       initialValue: false,
-  //       leading: const Icon(Icons.dark_mode),
-  //       title: const Text('Dark mode'),
-  //     );
-
 }
