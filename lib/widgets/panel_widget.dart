@@ -309,43 +309,54 @@ class PanelWidgetState extends State<PanelWidget> {
               onAddressAdded: addCordFrom),
           // _buildStatic(widget.toTextEditController,
           //     hintText: "Where to?", label: "To", onAddressAdded: addCordTo),
-          Column(
+          Row(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              StreamBuilder<List<DynamicWidget>>(
-                builder: (_, snapshot) {
-                  List<DynamicWidget> listOfDynamics = snapshot.data ?? [];
+              Text('TO'),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  StreamBuilder<List<DynamicWidget>>(
+                    builder: (_, snapshot) {
+                      List<DynamicWidget> listOfDynamics = snapshot.data ?? [];
 
-                  return ReorderableListView.builder(
-                    itemExtent: 74,
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    itemBuilder: (_, index) {
-                      final dynamicWidget = listOfDynamics[index];
-                      dynamicWidget.position = index;
-                      dynamicWidget.removeDynamic((p0) {
-                        widget.listDynamic.removeAt(index);
-                        widget.dynamicWidgets.sink.add(widget.listDynamic);
-                      });
-                      return //ListTile(key: ValueKey(index), leading:
-                          Container(
-                              key: ValueKey(index),
-                              child:
-                                  dynamicWidget); //, trailing: Icon(Icons.menu),);
+                      return SizedBox(
+                        width: 300,
+                        child: ReorderableListView.builder(
+                          itemExtent: 74,
+                          padding: EdgeInsets.zero,
+                          shrinkWrap: true,
+                          itemBuilder: (_, index) {
+                            final dynamicWidget = listOfDynamics[index];
+                            dynamicWidget.position = index;
+                            dynamicWidget.removeDynamic((p0) {
+                              widget.listDynamic.removeAt(index);
+                              widget.dynamicWidgets.sink
+                                  .add(widget.listDynamic);
+                            });
+                            return //ListTile(key: ValueKey(index), leading:
+                                Container(
+                                    key: ValueKey(index),
+                                    child:
+                                        dynamicWidget); //, trailing: Icon(Icons.menu),);
+                          },
+                          itemCount: listOfDynamics.length,
+                          physics: const NeverScrollableScrollPhysics(),
+                          onReorder: (oldIndex, newIndex) {
+                            setState(() {
+                              _updateItems(oldIndex, newIndex);
+                            });
+                          },
+                        ),
+                      );
                     },
-                    itemCount: listOfDynamics.length,
-                    physics: const NeverScrollableScrollPhysics(),
-                    onReorder: (oldIndex, newIndex) {
-                      setState(() {
-                        _updateItems(oldIndex, newIndex);
-                      });
-                    },
-                  );
-                },
-                stream: dynamicWidgetsStream,
-              ),
-              const SizedBox(
-                height: 10,
+                    stream: dynamicWidgetsStream,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                ],
               ),
             ],
           ),
