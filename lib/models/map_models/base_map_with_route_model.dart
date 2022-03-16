@@ -17,8 +17,15 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
   String _totalDistanceAndTime = 'No route';
   final RouteManager _manager = RouteManager();
   late Map _routeResponse;
+  final List<List<LatLng>> _points;
 
-  BaseMapboxRouteMap(this._journey, MapModel model) : super(model);
+  // BaseMapboxRouteMap(this._journey, MapModel model) : super(model);
+  BaseMapboxRouteMap(this._points, MapModel model) : super(model) {
+    for (int i = 0; i < _points.length; ++i) {
+      _journey.add(_points[i][0]);
+    }
+    _journey.add(_points[_points.length - 1][1]);
+  }
 
   /// Initialise map features
   @override
