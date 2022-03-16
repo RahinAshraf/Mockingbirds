@@ -81,7 +81,8 @@ class dockingStationCarousel {
 
   FutureBuilder<List<Widget>> build() {
     return FutureBuilder<List<Widget>>(
-        future: retrieveAllCards(),
+        future: retrieveFilteredCards(),
+
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Stack(
