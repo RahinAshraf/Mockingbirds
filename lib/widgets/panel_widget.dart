@@ -5,7 +5,7 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:veloplan/screens/journey_planner_screen.dart';
 import 'package:veloplan/screens/navigation/map_with_route_screen.dart';
 import 'package:veloplan/screens/place_search_screen.dart';
-import '../helpers/navigation_helpers/navigation_conversion_helpers.dart';
+import '../helpers/navigation_helpers/navigation_conversions_helpers.dart';
 import '../models/docking_station.dart';
 import '../providers/location_service.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
