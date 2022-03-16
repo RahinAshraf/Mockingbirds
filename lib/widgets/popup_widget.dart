@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import '../styles/styling.dart';
 
 enum AlertType { warning, question }
@@ -39,7 +40,7 @@ class PopupWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      alignment: const Alignment(0, -0.30),
+      alignment: Alignment.center,
       children: [
         AlertDialog(
           contentPadding: const EdgeInsets.fromLTRB(1.0, 10.0, 1.0, 0.0),
@@ -72,9 +73,12 @@ class PopupWidget extends StatelessWidget {
             ],
           ),
         ),
-        Image.asset(
-          type.imagePath,
-          height: 72,
+        Align(
+          alignment: const Alignment(0, -0.40),
+          child: Image.asset(
+            type.imagePath,
+            height: 72,
+          ),
         ),
       ],
     );
