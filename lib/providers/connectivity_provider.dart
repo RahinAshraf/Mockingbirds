@@ -43,26 +43,6 @@ class ConnectivityProvider extends ChangeNotifier {
     }
   }
 
-  //   print('Connection status:  $connectivityResult');
-
-  //   if (connectivityResult == ConnectivityResult.mobile) {
-  //     _connectionStatus = ConnectivityStatus.Mobile;
-  //     notifyListeners();
-  //   } else if (connectivityResult == ConnectivityResult.wifi) {
-  //     _connectionStatus = ConnectivityStatus.Wifi;
-  //     notifyListeners();
-  //   } else {
-  //     _connectionStatus = ConnectivityStatus.Offline;
-  //     print("No Internet Connection");
-  //     notifyListeners();
-  //   }
-
-  //   if (_connectionStatus != ConnectivityStatus.Offline) {
-  //     ///Checks type of connection
-  //     checkConnection(connectivityResult);
-  //   }
-  // }
-
   /// Checks if connection exists by making internet lookups
   Future<bool> checkConnection(ConnectivityResult connectivityResult) async {
     try {
