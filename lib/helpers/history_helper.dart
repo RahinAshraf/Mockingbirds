@@ -21,7 +21,7 @@ class HistoryHelper {
     _db = FirebaseFirestore.instance;
     _user_id = FirebaseAuth.instance.currentUser!.uid;
 
-    _history = _db.collection('users').doc(_user_id).collection('history');
+    _history = _db.collection('users').doc(_user_id).collection('journey');
   }
 
   static void test(List<List<double?>?> list) async {
@@ -40,6 +40,12 @@ class HistoryHelper {
 
         print(map["name"]);
       }
+    }
+  }
+
+  void getTheList(List<DockingStation> dockingStationList) {
+    for (DockingStation station in dockingStationList) {
+      print(station.name);
     }
   }
   // Future<void> addJourney(

@@ -82,7 +82,33 @@ class dockingStationCarousel {
   FutureBuilder<List<Widget>> build() {
     return FutureBuilder<List<Widget>>(
         future: retrieveFilteredCards(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Stack(
+              children: [
+                Container(
+                  height: 200,
+                  width: MediaQuery.of(context).size.width,
+                  child: CustomCarousel(cards: dockingStationCards),
+                )
+              ],
+            );
+          } else {
+            return SizedBox(
+              height: MediaQuery.of(context).size.height / 1.3,
+              child: const Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
+        });
+  }
 
+  //THIS MUST BE REFACTORED BY TAYYIBAH AND NIKKI:
+
+  FutureBuilder<List<Widget>> buildJourneyCarousel() {
+    return FutureBuilder<List<Widget>>(
+        future: retrieveFilteredCards(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Stack(

@@ -15,7 +15,7 @@ import 'package:veloplan/helpers/live_location_helper.dart';
 import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart'
     as LatLong;
 import 'package:veloplan/providers/docking_station_manager.dart';
-
+import 'package:veloplan/models/docking_station.dart';
 import '../screens/dock_sorter_screen.dart';
 import '../providers/location_service.dart';
 
@@ -311,43 +311,54 @@ class PanelWidgetState extends State<PanelWidget> {
               onAddressAdded: addCordFrom),
           // _buildStatic(widget.toTextEditController,
           //     hintText: "Where to?", label: "To", onAddressAdded: addCordTo),
-          Column(
+          Row(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              StreamBuilder<List<DynamicWidget>>(
-                builder: (_, snapshot) {
-                  List<DynamicWidget> listOfDynamics = snapshot.data ?? [];
+              Text('TO'),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  StreamBuilder<List<DynamicWidget>>(
+                    builder: (_, snapshot) {
+                      List<DynamicWidget> listOfDynamics = snapshot.data ?? [];
 
-                  return ReorderableListView.builder(
-                    itemExtent: 74,
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    itemBuilder: (_, index) {
-                      final dynamicWidget = listOfDynamics[index];
-                      dynamicWidget.position = index;
-                      dynamicWidget.removeDynamic((p0) {
-                        widget.listDynamic.removeAt(index);
-                        widget.dynamicWidgets.sink.add(widget.listDynamic);
-                      });
-                      return //ListTile(key: ValueKey(index), leading:
-                          Container(
-                              key: ValueKey(index),
-                              child:
-                                  dynamicWidget); //, trailing: Icon(Icons.menu),);
+                      return SizedBox(
+                        width: 300,
+                        child: ReorderableListView.builder(
+                          itemExtent: 74,
+                          padding: EdgeInsets.zero,
+                          shrinkWrap: true,
+                          itemBuilder: (_, index) {
+                            final dynamicWidget = listOfDynamics[index];
+                            dynamicWidget.position = index;
+                            dynamicWidget.removeDynamic((p0) {
+                              widget.listDynamic.removeAt(index);
+                              widget.dynamicWidgets.sink
+                                  .add(widget.listDynamic);
+                            });
+                            return //ListTile(key: ValueKey(index), leading:
+                                Container(
+                                    key: ValueKey(index),
+                                    child:
+                                        dynamicWidget); //, trailing: Icon(Icons.menu),);
+                          },
+                          itemCount: listOfDynamics.length,
+                          physics: const NeverScrollableScrollPhysics(),
+                          onReorder: (oldIndex, newIndex) {
+                            setState(() {
+                              _updateItems(oldIndex, newIndex);
+                            });
+                          },
+                        ),
+                      );
                     },
-                    itemCount: listOfDynamics.length,
-                    physics: const NeverScrollableScrollPhysics(),
-                    onReorder: (oldIndex, newIndex) {
-                      setState(() {
-                        _updateItems(oldIndex, newIndex);
-                      });
-                    },
-                  );
-                },
-                stream: dynamicWidgetsStream,
-              ),
-              const SizedBox(
-                height: 10,
+                    stream: dynamicWidgetsStream,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                ],
               ),
             ],
           ),
@@ -387,15 +398,31 @@ class PanelWidgetState extends State<PanelWidget> {
                   tempList.addAll(widget.selectedCoords);
                   print("ALL_COORDINATES => $tempList");
                   List<LatLng>? points = convertListDoubleToLatLng(tempList);
-                  HistoryHelper.test(tempList);
+                  HistoryHelper historyHelper = new HistoryHelper();
+                  List<LatLng> closestDockList = [];
+                  if (points != null) {
+                    for (int i = 0; i < points.length; i++) {
+                      DockingStation closestDock =
+                          _stationManager.getClosestDock(
+                              LatLng(points[i].latitude, points[i].longitude));
+                      LatLng closetDockCoord =
+                          LatLng(closestDock.lat, closestDock.lon);
+                      closestDockList.add(closetDockCoord);
+                      dockingStationList.add(closestDock);
+                    }
+                    print(
+                        "ALL_COORDINATES FOR CLOSEST DOCKS => $closestDockList");
+                  }
+
                   if (points == null) {
                     //! show something went wrong allert
                     print("hello");
                   } else {
+                    historyHelper.getTheList(dockingStationList);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => MapRoutePage(points)),
+                          builder: (context) => MapRoutePage(closestDockList)),
                     );
                   }
                 }
