@@ -1,4 +1,5 @@
 import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart';
+import 'package:veloplan/widgets/carousel/custom_carousel.dart';
 import '../docking_station_card.dart';
 import 'package:flutter/material.dart';
 import 'package:veloplan/models/docking_station.dart';
@@ -56,17 +57,41 @@ class dockingStationCarousel {
     return dockingStationCards;
   }
 
+  // FutureBuilder<List<Widget>> build() {
+  //   return FutureBuilder<List<Widget>>(
+  //       future: retrieveFilteredCards(),
+  //       //future: retrieveAllCards(),
+  //       builder: (context, snapshot) {
+  //         if (snapshot.hasData) {
+  //           return SingleChildScrollView(
+  //             scrollDirection: Axis.horizontal,
+  //             child: Row(
+  //               children: dockingStationCards,
+  //             ),
+  //           );
+  //         } else {
+  //           return SizedBox(
+  //             height: MediaQuery.of(context).size.height / 1.3,
+  //             child: const Center(
+  //               child: CircularProgressIndicator(),
+  //             ),
+  //           );
+  //         }
+  //       });
+
   FutureBuilder<List<Widget>> build() {
     return FutureBuilder<List<Widget>>(
-        future: retrieveFilteredCards(),
-        //future: retrieveAllCards(),
+        future: retrieveAllCards(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: dockingStationCards,
-              ),
+            return Stack(
+              children: [
+                Container(
+                  height: 200,
+                  width: MediaQuery.of(context).size.width,
+                  child: CustomCarousel(cards: dockingStationCards),
+                )
+              ],
             );
           } else {
             return SizedBox(

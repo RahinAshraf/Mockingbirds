@@ -84,7 +84,7 @@ class PanelWidgetState extends State<PanelWidget> {
   addDynamic() {
     widget.listDynamic.add(DynamicWidget(
       selectedCoords: widget.selectedCoords,
-      cordDataMap: response,
+      coordDataMap: response,
     ));
     widget.dynamicWidgets.sink.add(widget.listDynamic);
   }
@@ -129,7 +129,7 @@ class PanelWidgetState extends State<PanelWidget> {
     widget.address.listen((event) {
       final dynamicWidget = DynamicWidget(
         selectedCoords: selectedCoords,
-        cordDataMap: response,
+        coordDataMap: response,
       );
 
       final list = widget.listDynamic;
@@ -533,7 +533,7 @@ class DynamicWidget extends StatelessWidget {
   Function(int)? onDelete;
   int position = -1;
   final locationService = LocationService();
-  final Map? cordDataMap;
+  final Map? coordDataMap;
   // final dockingStationManager _stationManager = dockingStationManager();
 
   //setter for the position index
@@ -554,7 +554,7 @@ class DynamicWidget extends StatelessWidget {
   //   print(_stationManager.stations.length.toString() + "this is the length of the stationManager");
   // }
 
-  DynamicWidget({Key? key, required this.selectedCoords, this.cordDataMap})
+  DynamicWidget({Key? key, required this.selectedCoords, this.coordDataMap})
       : super(key: key);
 
   void checkInputLocation() async {
@@ -628,9 +628,9 @@ class DynamicWidget extends StatelessWidget {
                       contentPadding: EdgeInsets.symmetric(vertical: 0),
                       suffixIcon: IconButton(
                         onPressed: () {
-                          if (cordDataMap == null) return;
+                          if (coordDataMap == null) return;
                           _useCurrentLocationButtonHandler(
-                              cordDataMap!, placeTextController);
+                              coordDataMap!, placeTextController);
                         },
                         icon: const Icon(
                           Icons.my_location,
