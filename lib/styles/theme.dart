@@ -29,6 +29,7 @@ class CustomTheme {
             borderRadius: BorderRadius.all(Radius.circular(10.0))),
         titleTextStyle: popupDialogTitleTextStyle,
         contentTextStyle: popupDialogTextStyle,
+        alignment: Alignment.center,
       ),
       listTileTheme: ListTileThemeData(textColor: CustomColors.green),
       primarySwatch: CustomColors.lightGreen,

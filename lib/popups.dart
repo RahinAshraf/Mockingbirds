@@ -51,13 +51,12 @@ class Popups {
   PopupWidget buildPopupDialogStationAvailabilityIsPredicted(
       BuildContext context) {
     List<PopupButtonWidget> children = [
-      PopupButtonWidget(text: "Back", onPressed: () {}),
+      PopupButtonWidget(text: "Return", onPressed: () {}),
       PopupButtonWidget(text: "Continue", onPressed: () {}),
     ];
     return PopupWidget(
-        title:
-            "The docking station availability is predicted and may not be accurate of the day of the cycle!",
-        text: "Only the bravest continue from now on!",
+        title: "The docking station availability is predicted!",
+        text: "It may not be accurate the day of the journey.",
         children: children,
         type: AlertType.warning);
   }
