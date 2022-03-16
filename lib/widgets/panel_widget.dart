@@ -332,8 +332,7 @@ class PanelWidgetState extends State<PanelWidget> {
                             dynamicWidget.position = index;
                             dynamicWidget.removeDynamic((p0) {
                               widget.listDynamic.removeAt(index);
-                              widget.dynamicWidgets.sink
-                                  .add(widget.listDynamic);
+                              widget.dynamicWidgets.sink.add(widget.listDynamic);
                             });
                             return //ListTile(key: ValueKey(index), leading:
                                 Container(
