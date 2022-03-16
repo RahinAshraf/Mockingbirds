@@ -1,10 +1,10 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/services.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:veloplan/helpers/database_manager.dart';
 
 import '../widgets/auth/auth_form.dart';
 
@@ -16,6 +16,7 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
+  final DatabaseManager _databaseManager = DatabaseManager();
   final _auth = FirebaseAuth.instance;
   var _isLoading = false;
 
@@ -60,11 +61,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
           url = await ref.getDownloadURL();
         }
-
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(authResult.user!.uid)
-            .set({
+        await _databaseManager.setByKey('users', authResult.user!.uid, {
           'username': username,
           'email': email,
           'firstName': firstName,

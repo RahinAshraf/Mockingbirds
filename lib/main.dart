@@ -61,7 +61,7 @@ class _MyAppState extends State<MyApp> {
     //final Future<FirebaseApp> _initialization = Firebase.initializeApp();
     return FutureBuilder(
 
-        // Initialize FlutterFire:
+      // Initialize FlutterFire:
 
         future: Firebase.initializeApp(), // _initialization,
         builder: (context, appSnapshot) {
@@ -70,17 +70,17 @@ class _MyAppState extends State<MyApp> {
             home: appSnapshot.connectionState != ConnectionState.done
                 ? const SplashScreen()
                 : StreamBuilder(
-                    stream: FirebaseAuth.instance.authStateChanges(),
-                    builder: (ctx, userSnapshot) {
-                      if (userSnapshot.connectionState ==
-                          ConnectionState.waiting) {
-                        return const SplashScreen();
-                      }
-                      if (userSnapshot.hasData) {
-                        return const VerifyEmailScreen();
-                      }
-                      return const AuthScreen();
-                    }),
+                stream: FirebaseAuth.instance.authStateChanges(),
+                builder: (ctx, userSnapshot) {
+                  if (userSnapshot.connectionState ==
+                      ConnectionState.waiting) {
+                    return const SplashScreen();
+                  }
+                  if (userSnapshot.hasData) {
+                    return const VerifyEmailScreen();
+                  }
+                  return const AuthScreen();
+                }),
           );
         });
   }

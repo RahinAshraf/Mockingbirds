@@ -8,7 +8,7 @@ void main() {
   final helpPage = HelpPage();
   final helpBotManager = HelpBotManager();
   const someExistingTopic =
-      'Other Question'; // to find a button with existing topic easier
+      'Login'; // to find a button with existing topic easier
 
   testWidgets("Welcome text by bot once helpbot is loaded",
       (WidgetTester tester) async {
@@ -39,15 +39,15 @@ void main() {
     await tester.pump();
 
     expect(find.byType(MessageBubble), findsNWidgets(3));
-    var testConversation = tester.allWidgets.whereType<MessageBubble>() as List;
+    var testConversation = tester.allWidgets.whereType<MessageBubble>();
     // We know that the 0'th element is the initial welcoming message, so we do not check it
     // Element at 1st index should be question MessageBubble, sent by user
-    expect(testConversation[1].text,
+    expect(testConversation.elementAt(1).text,
         helpBotManager.getQuestionText(someExistingTopic));
-    expect(testConversation[1].isSentByBot, false);
+    expect(testConversation.elementAt(1).isSentByBot, false);
     // Element at 2nd index should be answer MessageBubble, sent by bot
-    expect(testConversation[2].text,
+    expect(testConversation.elementAt(2).text,
         helpBotManager.getQuestionAnswer(someExistingTopic));
-    expect(testConversation[2].isSentByBot, true);
+    expect(testConversation.elementAt(2).isSentByBot, true);
   });
 }
