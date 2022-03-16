@@ -12,7 +12,7 @@ import 'package:veloplan/scoped_models/map_model.dart';
 
 class MapRoutePage extends StatefulWidget {
   // const MapPage({Key? key}) : super(key: key);
-  final List<List<LatLng>> _journey;
+  final List<LatLng> _journey;
   MapRoutePage(this._journey);
   @override
   _MapRoutePageState createState() => _MapRoutePageState(_journey);
@@ -22,7 +22,7 @@ class _MapRoutePageState extends State<MapRoutePage> {
   LatLng currentLatLng = getLatLngFromSharedPrefs();
   late BaseMapboxMap _baseMap;
   late BaseMapboxRouteMap _baseMapWithRoute;
-  final List<List<LatLng>> _journey;
+  final List<LatLng> _journey;
 
   _MapRoutePageState(this._journey);
 
@@ -32,7 +32,7 @@ class _MapRoutePageState extends State<MapRoutePage> {
         builder: (BuildContext context, Widget? child, MapModel model) {
       _baseMapWithRoute = BaseMapboxRouteMap(_journey, model);
       addPositionZoom();
-      startTurnByTurn(context, _journey[0]);
+      startTurnByTurn(context, _journey);
       return SafeArea(child: Stack(children: _baseMapWithRoute.getWidgets()));
     }));
   }
@@ -52,6 +52,7 @@ class _MapRoutePageState extends State<MapRoutePage> {
     ));
   }
 
+  /// adds turn a turn by turn to our list of widgets
   void startTurnByTurn(BuildContext context, List<LatLng> subJourney) {
     _baseMapWithRoute.addWidget(Container(
       alignment: Alignment(0, 0),

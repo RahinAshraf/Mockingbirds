@@ -5,6 +5,7 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:veloplan/screens/journey_planner_screen.dart';
 import 'package:veloplan/screens/navigation/map_with_route_screen.dart';
 import 'package:veloplan/screens/place_search_screen.dart';
+import '../helpers/navigation_helpers/navigation_conversion_helpers.dart';
 import '../models/docking_station.dart';
 import '../providers/location_service.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
@@ -382,11 +383,17 @@ class PanelWidgetState extends State<PanelWidget> {
                   tempList.addAll(staticListMap.values);
                   tempList.addAll(widget.selectedCoords);
                   print("ALL_COORDINATES => $tempList");
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //       builder: (context) => MapRoutePage(tempList)),
-                  // );
+                  List<LatLng>? points = convertListDoubleToLatLng(tempList);
+                  if (points == null) {
+                    //! show something went wrong allert
+                    print("hello");
+                  } else {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MapRoutePage(points)),
+                    );
+                  }
                 }
               },
               child: const Text(
