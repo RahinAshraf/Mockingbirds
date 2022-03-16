@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:veloplan/screens/journey_planner_screen.dart';
+import 'package:veloplan/screens/navigation/map_with_route_screen.dart';
 import 'package:veloplan/screens/place_search_screen.dart';
 import '../models/docking_station.dart';
 import '../providers/location_service.dart';
@@ -373,17 +374,20 @@ class PanelWidgetState extends State<PanelWidget> {
                 if (hasEmptyField) {
                   alert.showWhereToTextFieldsMustNotBeEmptySnackBar(context);
                   //return;
-                }
-
-                if (areAdjacentCoords(widget.selectedCoords)) {
+                } else if (areAdjacentCoords(widget.selectedCoords)) {
                   alert.showCantHaveAdajcentSnackBar(context);
                   //return;
+                } else {
+                  List<List<double?>?> tempList = [];
+                  tempList.addAll(staticListMap.values);
+                  tempList.addAll(widget.selectedCoords);
+                  print("ALL_COORDINATES => $tempList");
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //       builder: (context) => MapRoutePage(tempList)),
+                  // );
                 }
-
-                List<List<double?>?> tempList = [];
-                tempList.addAll(staticListMap.values);
-                tempList.addAll(widget.selectedCoords);
-                print("ALL_COORDINATES => $tempList");
               },
               child: const Text(
                 "START",
