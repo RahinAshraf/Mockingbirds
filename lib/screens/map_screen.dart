@@ -1,11 +1,6 @@
 import 'dart:developer';
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:google_maps_routes/google_maps_routes.dart';
-// import 'package:latlong2/latlong.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/providers/path_provider.dart';
 import 'package:veloplan/providers/trip_manager.dart';
@@ -22,20 +17,20 @@ import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:veloplan/screens/place_search_screen.dart';
 import '../.env.dart';
 import 'package:veloplan/providers/location_service.dart';
-import '../screens/turn_by_turn_screen.dart';
-import '../helpers/zoom_helper.dart';
+import '../screens/navigation/turn_by_turn_screen.dart';
+// import '../helpers/zoom_helper.dart';
 import 'package:location/location.dart';
 
 //import 'package:veloplan/widget/carousel/station_carousel.dart';
 const double zoom = 16;
 
-class MapPage extends StatefulWidget {
-  const MapPage({Key? key}) : super(key: key);
+class MapPage2 extends StatefulWidget {
+  const MapPage2({Key? key}) : super(key: key);
   @override
   MyHomePageState createState() => MyHomePageState();
 }
 
-class MyHomePageState extends State<MapPage> {
+class MyHomePageState extends State<MapPage2> {
   RouteManager manager = RouteManager();
   late Future<List<DockingStation>> future_docks;
   bool isRouteDisplayed = false;
@@ -78,9 +73,9 @@ class MyHomePageState extends State<MapPage> {
     // print(_newLocationData.longitude!);
   }
 
-  void getRouteResponse() async {
-    routeResponse = await manager.getDirections(points[0], points[1]);
-  }
+  // void getRouteResponse() async {
+  //   routeResponse = await manager.getDirections(points[0], points[1]);
+  // }
 
   @override
   void initState() {
@@ -90,7 +85,9 @@ class MyHomePageState extends State<MapPage> {
     print(latLng.longitude);
     _cameraPosition = CameraPosition(target: currentLatLng, zoom: 12);
     // _initialCameraPosition = CameraPosition(target: latLng, zoom: zoom);
-    getRouteResponse();
+
+    //getRouteResponse();
+
     timer = Timer.periodic(Duration(seconds: 2),
         (Timer t) => updateCurrentLocation()); ///////////////////////////////
   }
@@ -318,27 +315,27 @@ class MyHomePageState extends State<MapPage> {
   }
 
   void displayJourneyAndRefocus(List<LatLng> journey) {
-    setJourney(journey);
-    refocusCamera(journey);
+    //setJourney(journey);
+    //refocusCamera(journey);
     setPolylineMarkers(journey);
   }
 
-  void refocusCamera(List<LatLng> journey) {
-    LatLng center = getCentroid(journey);
-    // LatLng furthestPoint = getFurthestPointFromCenter(journey, center);
-    // var top = getTopBound(journey);
-    // var bounds = LatLngBounds(northeast: furthestPoint, southwest: top);
-    // var target = LatLng(
-    //     (bounds.northeast.latitude + bounds.southwest.latitude) / 2,
-    //     (bounds.northeast.longitude + bounds.southwest.longitude) / 2);
+  // void refocusCamera(List<LatLng> journey) {
+  //   LatLng center = getCentroid(journey);
+  //   // LatLng furthestPoint = getFurthestPointFromCenter(journey, center);
+  //   // var top = getTopBound(journey);
+  //   // var bounds = LatLngBounds(northeast: furthestPoint, southwest: top);
+  //   // var target = LatLng(
+  //   //     (bounds.northeast.latitude + bounds.southwest.latitude) / 2,
+  //   //     (bounds.northeast.longitude + bounds.southwest.longitude) / 2);
 
-    // print(target.toString());
-    _cameraPosition = CameraPosition(
-        target: center, //target, //center,
-        zoom: 15, //getZoom(getRadius(journey, center)),
-        tilt: 5);
-    controller!.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
-  }
+  //   // print(target.toString());
+  //   _cameraPosition = CameraPosition(
+  //       target: center, //target, //center,
+  //       zoom: 15, //getZoom(getRadius(journey, center)),
+  //       tilt: 5);
+  //   controller!.animateCamera(CameraUpdate.newCameraPosition(_cameraPosition));
+  // }
 
   void addFills() async {
     await controller!.addSource(
@@ -371,25 +368,25 @@ class MyHomePageState extends State<MapPage> {
     });
   }
 
-  void setJourney(List<LatLng> journey) async {
-    List<dynamic> journeyPoints = [];
-    if (journey.length > 1) {
-      routeResponse = await manager.getDirections(points[0], points[1]);
-      for (int i = 0; i < journey.length - 1; ++i) {
-        var directions = await manager.getDirections(points[i], points[i + 1]);
-        for (dynamic a in directions['geometry']['coordinates']) {
-          journeyPoints.add(a);
-        }
-        routeResponse['geometry']
-            .update("coordinates", (value) => journeyPoints);
-      }
-      setFills(routeResponse['geometry']);
-      addFills();
-      setDistanceAndTime();
+  // void setJourney(List<LatLng> journey) async {
+  //   List<dynamic> journeyPoints = [];
+  //   if (journey.length > 1) {
+  //     // routeResponse = await manager.getDirections(points[0], points[1]);
+  //     for (int i = 0; i < journey.length - 1; ++i) {
+  //       // var directions = await manager.getDirections(points[i], points[i + 1]);
+  //       for (dynamic a in directions['geometry']['coordinates']) {
+  //         journeyPoints.add(a);
+  //       }
+  //       routeResponse['geometry']
+  //           .update("coordinates", (value) => journeyPoints);
+  //     }
+  //     setFills(routeResponse['geometry']);
+  //     addFills();
+  //     setDistanceAndTime();
 
-      // print("manager distance: " + a.toString());
-    }
-  }
+  //     // print("manager distance: " + a.toString());
+  //   }
+  // }
 
   void setDistanceAndTime() async {
     try {

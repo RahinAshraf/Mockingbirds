@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
+import 'package:veloplan/scoped_models/map_model.dart';
+import 'screens/login_screen.dart';
 import 'navbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-//import 'package:location/location.dart';
+import 'package:location/location.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -16,11 +19,17 @@ void main() async {
   checkPermissions();
   LiveLocationHelper liveLocationHelper = LiveLocationHelper();
   liveLocationHelper.initializeLocation();
-
-  runApp(MaterialApp(
-    initialRoute: '/',
-    routes: {'/': (context) => const MyApp(), '/map': (context) => Navbar()},
-  ));
+  sharedPreferences = await SharedPreferences.getInstance();
+  MapModel _model = MapModel();
+  runApp(ScopedModel<MapModel>(
+      model: _model,
+      child: MaterialApp(
+        initialRoute: '/',
+        routes: {
+          '/': (context) => const MyApp(),
+          '/map': (context) => Navbar()
+        },
+      )));
 }
 
 //APP IS ONLY WORKING WHEN "GRANTED" IS PRINTED OUT, FIX IT TO NOT CRASH AND REASK IN OTHER CASES
@@ -38,10 +47,6 @@ void checkPermissions() async {
     print("ISLIMITED WAS SELECTED");
   }
 }
-
-// void main() {
-//   runApp(MultiProvider(providers: [], child: const MyApp()));
-// }
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);

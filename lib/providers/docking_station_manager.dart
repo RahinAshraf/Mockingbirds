@@ -28,7 +28,7 @@ class dockingStationManager {
             station["lon"],
             station["lat"]);
 
-        if (!newStation.locked) {
+        if (!newStation.isLocked) {
           stations.add(newStation);
         }
       } on FormatException {}
@@ -39,7 +39,7 @@ class dockingStationManager {
   List<DockingStation> getAllOpenStations() {
     List<DockingStation> openStations = [];
     for (var station in stations) {
-      if (!station.locked) {
+      if (!station.isLocked) {
         openStations.add(station);
       }
     }
@@ -50,7 +50,7 @@ class dockingStationManager {
   List<DockingStation> getAllStationsWithAvailableBike(int numberOfBikes) {
     List<DockingStation> openStations = [];
     for (var station in stations) {
-      if (station.nb_bikes >= numberOfBikes) {
+      if (station.numberOfBikes >= numberOfBikes) {
         openStations.add(station);
       }
     }
@@ -61,7 +61,7 @@ class dockingStationManager {
   List<DockingStation> getAllStationsWithAvailableSpace(int numberOfDocks) {
     List<DockingStation> openStations = [];
     for (var station in stations) {
-      if (station.nb_empty_docks >= numberOfDocks) {
+      if (station.numberOfEmptyDocks >= numberOfDocks) {
         openStations.add(station);
       }
     }

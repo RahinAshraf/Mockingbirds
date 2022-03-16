@@ -1,10 +1,8 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:intl/intl.dart';
-
 import '../pickers/image_picker.dart';
 import '../pickers/bottom_date_picker.dart';
 
@@ -89,22 +87,22 @@ class _AuthFormState extends State<AuthForm> {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   if (_isLogin)
-                    /*Container(
+                    Container(
                         height: 120.0,
                         width: 120.0,
                         child: Center(
-                            child: Image.asset('assets/images/logo.png'))),*/
-                    if (_isLogin)
-                      Container(
-                          alignment: Alignment.center,
-                          padding: const EdgeInsets.all(10),
-                          child: const Text(
-                            'Welcome back!',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 25),
-                          )),
+                            child: Image.asset('assets/images/logo.png'))),
+                  if (_isLogin)
+                    Container(
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.all(10),
+                        child: const Text(
+                          'Welcome back!',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 25),
+                        )),
                   if (!_isLogin) SizedBox(height: 50),
                   if (!_isLogin) UserImagePicker(_pickedImage),
                   if (!_isLogin)

@@ -1,17 +1,17 @@
 import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:veloplan/widgets/carousel/station_carousel.dart';
 import '../screens/journey_planner_screen.dart';
-import '../widgets/docks/docking_stations_list.dart';
 import 'package:flutter/material.dart';
 
 class DockSorter extends StatefulWidget {
   late final LatLng userCoord;
-   DockSorter(this.userCoord, {Key? key, required ScrollController controller}) : super(key: key);
+  DockSorter(this.userCoord, {Key? key, required ScrollController controller})
+      : super(key: key);
 
   @override
   _DockSorter createState() => _DockSorter();
 }
-
 
 class _DockSorter extends State<DockSorter> {
   ScrollController controller = ScrollController();
@@ -23,7 +23,7 @@ class _DockSorter extends State<DockSorter> {
     // TODO: implement initState
     userCoordinates = super.widget.userCoord;
     super.initState();
-    _dockingStationCarousel = DockingStationList(userCoordinates);
+    _dockingStationCarousel = dockingStationCarousel(userCoordinates);
   }
 
   String selectedFilter = "Distance";

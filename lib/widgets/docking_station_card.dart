@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
-import '/models/favourite.dart';
+import '/models/docking_station.dart';
 import '/services/favourite_service.dart';
-import 'favourite_button.dart';
 
 ///Creates a card for a docking station, to include its name, number of bikes and empty bikes.
+///Author: Tayyibah
 
-class dockingStationCard extends StatefulWidget {
-  late String id;
-  late String name;
-  late String nb_bikes;
-  late String nb_empty_docks;
+class DockingStationCard extends StatefulWidget {
+  late final String iD;
+  late final String stationName;
+  late final int numberOfBikes;
+  late final int numberOfEmptyDocks;
 
-  dockingStationCard(
-    this.id,
-    this.name,
-    this.nb_bikes,
-    this.nb_empty_docks,
+  DockingStationCard(
+    this.iD,
+    this.stationName,
+    this.numberOfBikes,
+    this.numberOfEmptyDocks,
   );
 
 //I have commented this for now but if you want to make a card by just passing a station:
@@ -26,20 +26,19 @@ class dockingStationCard extends StatefulWidget {
   //   this.nb_empty_docks = station.nb_empty_docks.toString();
   // }
 
-  _dockingStationCardState createState() => _dockingStationCardState();
+  @override
+  _DockingStationCardState createState() => _DockingStationCardState();
 }
 
-class _dockingStationCardState extends State<dockingStationCard> {
-  var helper = FavouriteHelper(); //change name
-  List<FavouriteDockingStation> favourites = [];
-
-  late Icon favIcon;
+class _DockingStationCardState extends State<DockingStationCard> {
+  final _helper = FavouriteHelper(); //change name
+  List<DockingStation> _favourites = [];
 
   @override
   void initState() {
     FavouriteHelper.getUserFavourites().then((data) {
       setState(() {
-        favourites = data;
+        _favourites = data;
       });
     });
     super.initState();
@@ -58,27 +57,27 @@ class _dockingStationCardState extends State<dockingStationCard> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             IconButton(
-              icon: helper.isFavouriteStation(widget.id, favourites)
-                  ? Icon(
+              icon: _helper.isFavouriteStation(widget.iD, _favourites)
+                  ? const Icon(
                       Icons.favorite,
                       color: Colors.red,
                     )
-                  : Icon(
+                  : const Icon(
                       Icons.favorite,
                       color: Colors.grey,
                     ),
               onPressed: () async {
-                List<FavouriteDockingStation> updatedFavourites =
+                List<DockingStation> updatedFavourites =
                     await FavouriteHelper.getUserFavourites();
-                helper.toggleFavourite(
-                  widget.id,
-                  widget.name,
-                  widget.nb_bikes,
-                  widget.nb_empty_docks,
+                _helper.toggleFavourite(
+                  widget.iD,
+                  widget.stationName,
+                  widget.numberOfBikes,
+                  widget.numberOfEmptyDocks,
                 );
 
                 setState(() {
-                  favourites = updatedFavourites;
+                  _favourites = updatedFavourites;
                 });
               },
             ),
@@ -88,7 +87,7 @@ class _dockingStationCardState extends State<dockingStationCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.name,
+                    widget.stationName,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
@@ -96,8 +95,9 @@ class _dockingStationCardState extends State<dockingStationCard> {
                   const Divider(
                     color: Colors.black,
                   ),
-                  Text('Total bikes: ${widget.nb_bikes}'),
-                  Text('Available bikes: ${widget.nb_empty_docks}'),
+                  Text('Total bikes: ${widget.numberOfBikes.toString()}'),
+                  Text(
+                      'Available bikes: ${widget.numberOfEmptyDocks.toString()}'),
                 ],
               ),
             ),
