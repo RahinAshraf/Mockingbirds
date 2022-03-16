@@ -1,25 +1,22 @@
-import 'dart:developer';
 import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:mapbox_gl/mapbox_gl.dart';
-import 'package:veloplan/providers/path_provider.dart';
-import 'package:veloplan/providers/trip_manager.dart';
-import 'package:veloplan/screens/place_search_screen.dart';
-import 'package:veloplan/models/docking_station.dart';
-import 'package:veloplan/providers/docking_station_manager.dart';
-import 'package:veloplan/providers/route_manager.dart';
-import '../helpers/live_location_helper.dart';
-import '../screens/login_screen.dart';
-import '../navbar.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-// import '../helpers/navigation_helpers.dart';
-import 'package:veloplan/helpers/shared_prefs.dart';
-import 'package:veloplan/screens/place_search_screen.dart';
-import '../.env.dart';
-import 'package:veloplan/providers/location_service.dart';
-import '../screens/navigation/turn_by_turn_screen.dart';
 // import '../helpers/zoom_helper.dart';
 import 'package:location/location.dart';
+import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:veloplan/helpers/database_manager.dart';
+// import '../helpers/navigation_helpers.dart';
+import 'package:veloplan/helpers/shared_prefs.dart';
+import 'package:veloplan/models/docking_station.dart';
+import 'package:veloplan/providers/docking_station_manager.dart';
+import 'package:veloplan/providers/path_provider.dart';
+import 'package:veloplan/providers/route_manager.dart';
+
+import '../.env.dart';
+import '../helpers/live_location_helper.dart';
+import '../screens/navigation/turn_by_turn_screen.dart';
 
 //import 'package:veloplan/widget/carousel/station_carousel.dart';
 const double zoom = 16;
@@ -57,7 +54,7 @@ class MyHomePageState extends State<MapPage2> {
   LatLng currentLatLng = const LatLng(51.51185004458236, -0.11580820118980878);
   String totalDistance = 'No route';
   LatLng latLng = getLatLngFromSharedPrefs();
-  // late CameraPosition _initialCameraPosition;
+  final DatabaseManager _databaseManager = DatabaseManager();
   TextEditingController _searchController = TextEditingController();
   Timer? timer;
   LiveLocationHelper liveLocationHelper = LiveLocationHelper();
@@ -84,6 +81,7 @@ class MyHomePageState extends State<MapPage2> {
     print(latLng.latitude);
     print(latLng.longitude);
     _cameraPosition = CameraPosition(target: currentLatLng, zoom: 12);
+    onClose();
     // _initialCameraPosition = CameraPosition(target: latLng, zoom: zoom);
 
     //getRouteResponse();
@@ -96,6 +94,24 @@ class MyHomePageState extends State<MapPage2> {
     for (var dock in sortedDocks) {
       print(dock.name);
     }
+  }
+
+  Future<void> onClose() async {
+    var user = await _databaseManager.getByKey(
+        'users', _databaseManager.getCurrentUser()!.uid);
+    var group = await _databaseManager.getByEquality(
+        'group', 'code', user.data()!['group']);
+    group.docs.forEach((element) {
+      Timestamp timestamp = element.data()['createdAt'];
+      if (DateTime.now().difference(timestamp.toDate()) > Duration(days: 1)) {
+        element.reference.delete();
+        _databaseManager.setByKey(
+            'users',
+            _databaseManager.getCurrentUser()!.uid,
+            {'group': null},
+            SetOptions(merge: true));
+      }
+    });
   }
 
   _onMapCreated(MapboxMapController controller) async {

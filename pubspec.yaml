@@ -55,6 +55,12 @@ dependencies:
   font_awesome_flutter: ^9.2.0
   extended_nested_scroll_view: ^5.0.0
   flutter_mapbox_navigation: ^0.0.26
+  url_launcher:
+
+
+
+
+>>>>>>> start basic create group
   shared_preferences: ^2.0.13
   mapbox_gl: ^0.15.0
   sliding_up_panel: ^2.0.0+1
