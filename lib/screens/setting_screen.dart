@@ -41,11 +41,26 @@ class Settings extends StatelessWidget {
         // buildLogout(),
         ListTile(
           leading: const Icon(Icons.logout),
-          title: const Text('Logout'),
+          title: const Text('Log Out'),
           onTap: () {
             FirebaseAuth.instance.signOut();
           },
         ),
+        ListTile(
+          leading: const Icon(Icons.logout),
+          title: const Text('Delete account'),
+          onTap: () async {
+            try {
+              await FirebaseAuth.instance.currentUser!.delete();
+            } on FirebaseAuthException catch (e) {
+              if (e.code == 'requires-recent-login') {
+                print(
+                    'The user must reauthenticate before this operation can be executed.');
+              }
+            }
+          },
+        ),
+
         Consumer<ThemeNotifier>(
           builder: (context, notifier, child) => SwitchListTile(
             secondary: const Icon(Icons.dark_mode),
