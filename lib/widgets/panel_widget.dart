@@ -15,7 +15,7 @@ import 'package:veloplan/helpers/live_location_helper.dart';
 import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart'
     as LatLong;
 import 'package:veloplan/providers/docking_station_manager.dart';
-
+import 'package:veloplan/models/docking_station.dart';
 import '../screens/dock_sorter_screen.dart';
 import '../providers/location_service.dart';
 /*
@@ -394,6 +394,17 @@ class PanelWidgetState extends State<PanelWidget> {
                   tempList.addAll(widget.selectedCoords);
                   print("ALL_COORDINATES => $tempList");
                   List<LatLng>? points = convertListDoubleToLatLng(tempList);
+
+                  List<LatLng>closestDockList = [];
+                  if(points != null){
+                    for(int i=0; i < points.length; i++){
+                      DockingStation closestDock = _stationManager.getClosestDock(LatLng(points[i].latitude, points[i].longitude));
+                      LatLng closetDockCoord = LatLng(closestDock.lat,closestDock.lon);
+                      closestDockList.add(closetDockCoord);
+                    }
+                    print("ALL_COORDINATES FOR CLOSEST DOCKS => $closestDockList");
+                  }
+
                   if (points == null) {
                     //! show something went wrong allert
                     print("hello");
@@ -401,7 +412,7 @@ class PanelWidgetState extends State<PanelWidget> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => MapRoutePage(points)),
+                          builder: (context) => MapRoutePage(closestDockList)),
                     );
                   }
                 }
