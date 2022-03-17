@@ -3,6 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../helpers/theme_provider.dart';
 
+///Settings screen where user can log out and change theme of the app.
+///Author: Tayyibah
+///
 class Settings extends StatelessWidget {
   const Settings({Key? key}) : super(key: key);
   @override
@@ -11,7 +14,6 @@ class Settings extends StatelessWidget {
       appBar: AppBar(title: const Text('Settings')),
       body: ListView(
         children: [
-          // buildLogout(),
           ListTile(
             leading: const Icon(Icons.logout),
             title: const Text('Log Out'),
@@ -30,20 +32,20 @@ class Settings extends StatelessWidget {
               value: notifier.isDarkTheme,
             ),
           ),
-          ListTile(
-            leading: const Icon(Icons.logout),
-            title: const Text('Delete account'),
-            onTap: () async {
-              try {
-                await FirebaseAuth.instance.currentUser!.delete();
-              } on FirebaseAuthException catch (e) {
-                if (e.code == 'requires-recent-login') {
-                  print(
-                      'The user must reauthenticate before this operation can be executed.');
-                }
-              }
-            },
-          ),
+          // ListTile(
+          //   leading: const Icon(Icons.delete),
+          //   title: const Text('Delete account'),
+          //   onTap: () async {
+          //     try {
+          //       await FirebaseAuth.instance.currentUser!.delete();
+          //     } on FirebaseAuthException catch (e) {
+          //       if (e.code == 'requires-recent-login') {
+          //         print(
+          //             'The user must reauthenticate before this operation can be executed.');
+          //       }
+          //     }
+          //   },
+          // ),
         ],
       ),
     );

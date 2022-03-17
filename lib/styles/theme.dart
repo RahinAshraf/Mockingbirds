@@ -2,20 +2,9 @@ import 'package:flutter/material.dart';
 import 'colors.dart';
 import 'styling.dart';
 
+///Defines the possible themes of the apps
+///Author(s): Marija, Tayyibah
 class CustomTheme {
-  // static bool _isDarkTheme = true;
-
-  // ThemeMode get currentTheme => _isDarkTheme ? ThemeMode.dark : ThemeMode.light;
-
-  // static TextStyle get sideBarTextColor => _isDarkTheme
-  //     ? TextStyle(color: Colors.white)
-  //     : TextStyle(color: Colors.green);
-
-  // void toggleTheme() {
-  //   _isDarkTheme = !_isDarkTheme;
-  //   notifyListeners();
-  // }
-
   static ThemeData get defaultTheme {
     return ThemeData(
       canvasColor: CustomColors.lightModeScaffoldColour,
