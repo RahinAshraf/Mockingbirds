@@ -4,8 +4,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:veloplan/models/message.dart';
 import 'package:veloplan/styles/styling.dart';
 import 'package:veloplan/utilities/help_bot_manager.dart';
-import 'package:veloplan/widgets/helpbot_topics_list_widget.dart';
-import 'package:veloplan/widgets/message_bubble_widget.dart';
+import 'package:veloplan/widgets/helpbot/choices_button_widget.dart';
+import 'package:veloplan/widgets/helpbot/message_bubble_widget.dart';
 
 const String url =
     'mailto:k20070238@kcl.ac.uk?subject=Help%20with%20app&body=Help%20me!';
@@ -85,7 +85,7 @@ class _HelpPageState extends State<HelpPage> {
     List<ChoiceButton> topics = [];
     for (String topic in questions.getAllTopics()) {
       topics.add(ChoiceButton(
-        topic: topic,
+        content: Text(topic, style: helpbotChoiceTextStyle),
         onPressed: () {
           setState(() {
             selectedTopic = topic;
@@ -99,10 +99,21 @@ class _HelpPageState extends State<HelpPage> {
   }
 
   void _displayQuestions() {
+    choices.add(
+      ChoiceButton(
+        content: const Icon(Icons.arrow_back, color: Colors.green),
+        onPressed: () {
+          setState(() {
+            choices = _displayTopics();
+          });
+        },
+      ),
+    );
     for (Message message in questions.getMessagesByTopic(selectedTopic)) {
       choices.add(
         ChoiceButton(
-          topic: questions.getQuestionText(message),
+          content: Text(questions.getQuestionText(message),
+              style: helpbotChoiceTextStyle),
           onPressed: () {
             setState(() {
               _conversation.add(MessageBubble(
