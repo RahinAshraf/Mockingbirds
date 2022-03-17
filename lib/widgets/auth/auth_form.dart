@@ -1,10 +1,8 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:intl/intl.dart';
-
 import '../pickers/image_picker.dart';
 import '../pickers/bottom_date_picker.dart';
 
@@ -226,7 +224,7 @@ class _AuthFormState extends State<AuthForm> {
                       controller: _dateController,
                       key: const ValueKey('date'),
                       validator: (value) {
-                        if(value!.isEmpty) {
+                        if (value!.isEmpty) {
                           return 'This field can not be empty';
                         }
                         DateTime _eligibleDate = DateTime(
@@ -234,7 +232,7 @@ class _AuthFormState extends State<AuthForm> {
                           _dateTime.month,
                           _dateTime.day,
                         );
-                        if(_eligibleDate.isAfter(DateTime.now())) {
+                        if (_eligibleDate.isAfter(DateTime.now())) {
                           return 'The minimum age for creating an account is 16';
                         }
                         return null;
