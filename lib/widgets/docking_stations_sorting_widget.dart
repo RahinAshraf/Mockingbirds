@@ -53,12 +53,8 @@ class _DockSorter extends State<DockSorter> {
                   const SizedBox(width: 10),
                   DropdownButton(
                     enableFeedback: true,
-                    underline: Container(
-                      height: 1,
-                      color: Colors.green,
-                    ),
+                    underline: Container(height: 1, color: Colors.green),
                     elevation: 16,
-                    iconDisabledColor: Colors.black,
                     style: const TextStyle(
                       color: Colors.green,
                       fontWeight: FontWeight.w500,

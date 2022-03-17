@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
 
-/// Class that loads information of docking stations into cards and builds a row of them.
+/// Loads information of docking stations into cards and builds a row of them.
 /// Author(s): Tayyibah, Nicole
 class DockingStationList {
   DockingStationList(this.userCoordinates); // Constructor

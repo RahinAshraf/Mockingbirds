@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import '/models/docking_station.dart';
 import '/services/favourite_service.dart';
 
-///Creates a card for a docking station, to include its name, number of bikes and empty bikes.
-///Author: Tayyibah
-
+/// Creates a card for a docking station, to include its name, number of bikes and empty bikes.
+/// Author: Tayyibah
 class DockingStationCard extends StatefulWidget {
   late final String iD;
   late final String stationName;
