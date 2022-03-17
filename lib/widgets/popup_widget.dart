@@ -17,9 +17,9 @@ extension AlertTypeString on AlertType {
 /// Creates a generic popup widget.
 ///
 /// To avoid distorting the widget, there should be no more than
-/// two [PopupButtonWidget]s passed in [children] property.
+/// two [PopupButtonWidget]s passed in [PopupWidget.children] property.
 ///
-/// This widget has [type] property of [AlertType]. It determines the
+/// This widget has [PopupWidget.type] property of [AlertType]. It determines the
 /// image that should be rendered for the widget.
 ///
 /// Some of the styling of this widget is specified in [Navbar]s [ThemeData]
