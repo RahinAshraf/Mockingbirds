@@ -1,11 +1,11 @@
-import 'dart:async'; // - fari
-
+import 'dart:async';
 import 'package:flutter/material.dart';
 import '/models/docking_station.dart';
 import '/services/favourite_service.dart';
 
 ///Creates a card for a docking station, to include its name, number of bikes and empty bikes.
 ///Author: Tayyibah
+///Contributor: Fariha Choudhury k20059723
 
 class DockingStationCard extends StatefulWidget {
   late final String iD;
@@ -22,10 +22,10 @@ class DockingStationCard extends StatefulWidget {
 
 //I have commented this for now but if you want to make a card by just passing a station:
   // dockingStationCard.station(DockingStation station) {
-  //   this.id = station.id;
-  //   this.name = station.name;
-  //   this.nb_bikes = station.nb_bikes.toString();
-  //   this.nb_empty_docks = station.nb_empty_docks.toString();
+  //   this.iD = station.iD;
+  //   this.stationName = station.stationName;
+  //   this.numberOfBikes = station.numberOfBikes.toString();
+  //   this.numberOfEmptyDocks = station.numberOfEmptyDocks.toString();
   // }
 
   @override
@@ -35,7 +35,7 @@ class DockingStationCard extends StatefulWidget {
 class _DockingStationCardState extends State<DockingStationCard> {
   final _helper = FavouriteHelper(); //change name
   Set<DockingStation> _favourites = {};
-  StreamController<bool> _controller = StreamController(); ///// - fari
+  bool shouldButtonEnabled = true;
 
   @override
   void initState() {
@@ -47,10 +47,9 @@ class _DockingStationCardState extends State<DockingStationCard> {
     super.initState();
   }
 
-  @override ///////// - fari
-  void dispose() {
-    _controller.close();
-    super.dispose();
+  _disabledButton() {
+    shouldButtonEnabled = false;
+    Timer(Duration(seconds: 3), () => shouldButtonEnabled = true);
   }
 
   @override
@@ -65,43 +64,34 @@ class _DockingStationCardState extends State<DockingStationCard> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            StreamBuilder<bool>(
-                stream: _controller.stream,
-                builder: (context, snapshot) {
-                  return IconButton(
-                    icon: _helper.isFavouriteStation(widget.iD, _favourites)
-                        ? const Icon(
-                            Icons.favorite,
-                            color: Colors.red,
-                          )
-                        : const Icon(
-                            Icons.favorite,
-                            color: Colors.grey,
-                          ),
-                    onPressed: () async {
-                      _controller.add(true);
-
-                      /// - fari ----
-                      await Future.delayed(
-                          const Duration(seconds: 5), () => favStuff());
-                      //);
-                      // _controller.add(false);
-                      // Set<DockingStation> updatedFavourites =
-                      //     await FavouriteHelper.getUserFavourites();
-                      // _helper.toggleFavourite(
-                      //   widget.iD,
-                      //   widget.stationName,
-                      //   widget.numberOfBikes,
-                      //   widget.numberOfEmptyDocks,
-                      // );
-
-                      // setState(() {
-                      //   _favourites = updatedFavourites;
-                      // });
-                      // _controller.add(true);
-                    },
+            IconButton(
+              icon: _helper.isFavouriteStation(widget.iD, _favourites)
+                  ? const Icon(
+                      Icons.favorite,
+                      color: Colors.red,
+                    )
+                  : const Icon(
+                      Icons.favorite,
+                      color: Colors.grey,
+                    ),
+              onPressed: () async {
+                if (shouldButtonEnabled) {
+                  _disabledButton();
+                  Set<DockingStation> updatedFavourites =
+                      await FavouriteHelper.getUserFavourites();
+                  _helper.toggleFavourite(
+                    widget.iD,
+                    widget.stationName,
+                    widget.numberOfBikes,
+                    widget.numberOfEmptyDocks,
                   );
-                }), // - fari })
+
+                  setState(() {
+                    _favourites = updatedFavourites;
+                  });
+                }
+              },
+            ),
             const SizedBox(width: 10),
             Expanded(
               child: Column(
@@ -126,21 +116,5 @@ class _DockingStationCardState extends State<DockingStationCard> {
         ),
       ),
     );
-  }
-
-  Future<dynamic> favStuff() async {
-    Set<DockingStation> updatedFavourites =
-        await FavouriteHelper.getUserFavourites();
-    _helper.toggleFavourite(
-      widget.iD,
-      widget.stationName,
-      widget.numberOfBikes,
-      widget.numberOfEmptyDocks,
-    );
-
-    setState(() {
-      _favourites = updatedFavourites;
-    });
-    _controller.add(false);
   }
 }
