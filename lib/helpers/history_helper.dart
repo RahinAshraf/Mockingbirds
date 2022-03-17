@@ -33,7 +33,7 @@ class HistoryHelper {
         .add({
           'stationId': station.stationId,
           'stationName': station.name,
-          'numberOfBikes': station.numberOfBikes,
+          'numberOfBikes': station.numberOfBikes, //these will be removed
           'numberOfEmptyDocks': station.numberOfEmptyDocks,
         })
         .then((value) => print("docking station Added"))
@@ -52,10 +52,16 @@ class HistoryHelper {
   void getUsersJourneys() async {
     print("madeithere");
     FirebaseFirestore db = FirebaseFirestore.instance;
-    QuerySnapshot<Object?> journeyDocuments =
-        await db.collection('users').doc(_user_id).collection('journeys').get();
-    print(journeyDocuments);
-    for (DocumentSnapshot journeyDocument in journeyDocuments.docs) {}
+    QuerySnapshot<Object?> journeyDocuments = await db
+        .collection('users')
+        .doc(_user_id)
+        .collection('journeys')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        print(doc["stationName"]);
+      });
+    });
   }
 
   static Future<List<DockingStation>> getUserFavourites() async {
@@ -72,6 +78,13 @@ class HistoryHelper {
     }
     return favourites;
   }
+
+  ///TO DO:
+  ///for each journey a user has we want to get the docking stations and add it to a card
+  ///add it to a carousel
+  ///view a carousel for each journey
+  ///
+  ///
 
   // static void test(List<List<double?>?> list) async {
   //   LocationService service = new LocationService();
