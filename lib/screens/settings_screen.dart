@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../helpers/theme_provider.dart';
+import 'package:veloplan/helpers/theme_provider.dart';
 
-///Settings screen where user can log out and change theme of the app.
-///Author: Tayyibah
-///
+/// Settings screen where user can log out and change theme of the app.
+/// @author: Tayyibah
 class Settings extends StatelessWidget {
   const Settings({Key? key}) : super(key: key);
   @override
@@ -14,6 +13,7 @@ class Settings extends StatelessWidget {
       appBar: AppBar(title: const Text('Settings')),
       body: ListView(
         children: [
+          const SizedBox(height: 10),
           ListTile(
             leading: const Icon(Icons.logout),
             title: const Text('Log Out'),

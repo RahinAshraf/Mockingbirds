@@ -1,21 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:veloplan/screens/favourite_screen.dart';
+import 'package:veloplan/screens/help_screen.dart';
+import 'package:veloplan/screens/schedule_screen.dart';
+import 'package:veloplan/screens/settings_screen.dart';
 import 'package:veloplan/styles/styling.dart';
-import 'package:veloplan/styles/theme.dart';
-import '../screens/schedule_screen.dart';
-import '../screens/favourite_screen.dart';
-import '../screens/setting_screen.dart';
-import '../screens/help_screen.dart';
-import 'styles/styling.dart';
 
-///@author Tayyibah
-//NOTE CHANGE NAME TO SIDEBAR
-class NavigationDrawerWidget extends StatelessWidget {
+/// @author Tayyibah
+class SideBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
       child: ListView(
-        children: <Widget>[
+        children: [
           Image.asset(
             'assets/images/right_bubbles_shapes.png',
             height: 150,
@@ -41,7 +38,7 @@ class NavigationDrawerWidget extends StatelessWidget {
             icon: Icons.assessment_outlined,
             onClicked: () => _renderScreen(context, 3),
           ),
-          //NOTE MOVE THE COLOUR
+          // TODO: move the colour
           const SizedBox(height: 24),
           const Divider(color: Colors.grey),
           const SizedBox(height: 24),
@@ -85,7 +82,7 @@ class NavigationDrawerWidget extends StatelessWidget {
       case 1:
         // TODO: create 'My Journeys' screen
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => Placeholder(),
+          builder: (context) => const Placeholder(),
         ));
         break;
       case 2:
@@ -96,7 +93,7 @@ class NavigationDrawerWidget extends StatelessWidget {
       case 3:
         // TODO: create 'Statistics' screen
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => Placeholder(),
+          builder: (context) => const Placeholder(),
         ));
         break;
       case 4:

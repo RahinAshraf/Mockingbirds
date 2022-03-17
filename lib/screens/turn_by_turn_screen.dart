@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mapbox_navigation/library.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
-import 'package:veloplan/screens/map_screen.dart';
 import 'package:veloplan/helpers/latlng_to_waypoint.dart';
+import 'package:veloplan/screens/map_screen.dart';
 
 //Reference: dormmom.com, Jul 20, 2021, flutter_mapbox_navigation 0.0.26, https://pub.dev/packages/flutter_mapbox_navigation
 

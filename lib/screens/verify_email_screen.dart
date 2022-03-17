@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../navbar.dart';
+import 'package:veloplan/navbar.dart';
 
 class VerifyEmailScreen extends StatefulWidget {
   const VerifyEmailScreen({Key? key}) : super(key: key);
@@ -19,10 +19,8 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
   void initState() {
     super.initState();
     isVerified = FirebaseAuth.instance.currentUser!.emailVerified;
-
     if (!isVerified) {
       sendVerification();
-
       timer = Timer.periodic(
         const Duration(seconds: 3),
         (_) => checkEmailVerification(),
@@ -46,7 +44,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
       await user.reload();
       if (!user.emailVerified && mounted) setState(() => canResendEmail = true);
     } catch (error) {
-      var message = 'An error occurred, pelase try again later!';
+      var message = 'An error occurred, please try again later!';
 
       if (error.toString() != "") {
         message = error.toString();

@@ -2,18 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../screens/splash_screen.dart';
-import 'navbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:location/location.dart';
-import 'package:latlong2/latlong.dart';
-import 'screens/auth_screen.dart';
-import 'screens/verify_email_screen.dart';
-import 'styles/theme.dart';
-import 'styles/config.dart';
-import '../helpers/live_location_helper.dart';
-import '../navbar.dart';
+import 'package:veloplan/helpers/live_location_helper.dart';
 import 'package:veloplan/helpers/theme_provider.dart';
+import 'package:veloplan/navbar.dart';
+import 'package:veloplan/screens/auth_screen.dart';
+import 'package:veloplan/screens/splash_screen.dart';
+import 'package:veloplan/screens/verify_email_screen.dart';
+import 'package:veloplan/styles/theme.dart';
 
 late SharedPreferences sharedPreferences;
 

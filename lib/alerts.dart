@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../styles/styling.dart';
+import 'package:veloplan/styles/styling.dart';
 
 class Alerts {
   //Show error message to user for having no destinations specified for the journey

@@ -1,30 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../popups.dart';
-import '../sidebar.dart';
-import '../screens/map_screen.dart';
-import '../screens/profile_screen.dart';
-import '../screens/trips_scheduler_screen.dart';
+import 'package:veloplan/popups.dart';
+import 'package:veloplan/sidebar.dart';
+import 'package:veloplan/screens/map_screen.dart';
+import 'package:veloplan/screens/profile_screen.dart';
 
-///Defines the navigation bar, allows you to move between the map screen, profile page and view the sidebar.
+/// Defines the navigation bar, allows you to move between the map screen, profile page and view the sidebar.
 /// @author  Elisabeth, Rahin, Tayyibah
-
 class NavBar extends StatefulWidget {
   @override
   _NavBarState createState() => _NavBarState();
 }
 
 class _NavBarState extends State<NavBar> {
-  int currentIndex = 1; //index of the screens
+  int currentIndex = 1; // index of the screens
 
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   final _currentUser = FirebaseAuth.instance.currentUser!.uid;
 
-  Popups popup = Popups();
+  final Popups popup = Popups();
 
   var screens = [
-    Placeholder(), //is this bad practise?
+    Placeholder(), // is this bad practise?
     MapPage(),
   ];
 
@@ -34,9 +32,9 @@ class _NavBarState extends State<NavBar> {
     return Scaffold(
         body: IndexedStack(
           index: currentIndex,
-          children: screens, //keeps the screens alive
+          children: screens, // keeps the screens alive
         ),
-        drawer: NavigationDrawerWidget(),
+        drawer: SideBar(),
         key: scaffoldKey,
         floatingActionButton: SizedBox(
             height: 80.0,
@@ -54,7 +52,7 @@ class _NavBarState extends State<NavBar> {
               },
               child: const Icon(
                 Icons.directions_bike,
-                // color: Colors.green,
+                color: Colors.green,
                 size: 50,
               ),
               elevation: 8.0,
@@ -66,8 +64,7 @@ class _NavBarState extends State<NavBar> {
 
   BottomNavigationBar _createNavBar() {
     return BottomNavigationBar(
-      type: BottomNavigationBarType
-          .fixed, //looks past the background colors specified
+      type: BottomNavigationBarType.fixed,
       iconSize: 33,
       currentIndex: currentIndex,
       onTap: _onTabTapped, //(index) => setState(() => currentIndex = index),
