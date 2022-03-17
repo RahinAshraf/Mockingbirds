@@ -81,7 +81,7 @@ class MyHomePageState extends State<MapPage2> {
     print(latLng.latitude);
     print(latLng.longitude);
     _cameraPosition = CameraPosition(target: currentLatLng, zoom: 12);
-    onClose();
+    deleteOldGroup();
     // _initialCameraPosition = CameraPosition(target: latLng, zoom: zoom);
 
     //getRouteResponse();
@@ -96,7 +96,7 @@ class MyHomePageState extends State<MapPage2> {
     }
   }
 
-  Future<void> onClose() async {
+  Future<void> deleteOldGroup() async {
     var user = await _databaseManager.getByKey(
         'users', _databaseManager.getCurrentUser()!.uid);
     var group = await _databaseManager.getByEquality(
