@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
+final bool isGroupID = false;
+
 class SummaryJourneyScreen extends StatelessWidget {
   const SummaryJourneyScreen({Key? key}) : super(key: key);
 
@@ -41,21 +43,34 @@ class SummaryJourneyScreen extends StatelessWidget {
                   style: TextStyle(color: Colors.white)),
               onPressed: () {},
             )),
-        Container(
-            height: 30,
-            padding: const EdgeInsets.fromLTRB(75, 5, 75, 5),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                elevation: 10.0,
-                shape: new RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(15.0),
+        if (isGroupID)
+          Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.all(10),
+              color: Theme.of(context).primaryColor,
+              child: const Text(
+                'Group ID:',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 25),
+              )),
+        if (!isGroupID)
+          Container(
+              height: 30,
+              padding: const EdgeInsets.fromLTRB(75, 5, 75, 5),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  elevation: 10.0,
+                  shape: new RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(15.0),
+                  ),
                 ),
-              ),
-              child: const Text('Group ID:',
-                  style: TextStyle(color: Colors.white)),
-              onPressed: () {},
-            )),
-        const SizedBox(height: 30),
+                child: const Text('Share journey',
+                    style: TextStyle(color: Colors.white)),
+                onPressed: () {},
+              )),
+        const SizedBox(height: 20),
         RichText(
           text: TextSpan(
             children: [
@@ -71,7 +86,7 @@ class SummaryJourneyScreen extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: 30),
+        const SizedBox(height: 20),
         TimelineTile(
           isFirst: true,
           beforeLineStyle: const LineStyle(
@@ -171,8 +186,8 @@ class SummaryJourneyScreen extends StatelessWidget {
             )),
         const SizedBox(height: 20),
         Container(
-            height: 60,
-            padding: const EdgeInsets.fromLTRB(75, 5, 75, 5),
+            height: 40,
+            padding: const EdgeInsets.fromLTRB(100, 5, 100, 5),
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 elevation: 10.0,
@@ -180,7 +195,17 @@ class SummaryJourneyScreen extends StatelessWidget {
                   borderRadius: new BorderRadius.circular(15.0),
                 ),
               ),
-              child: const Text('START THE JOURNEY',
+              child: const Text('LEAVE GROUP/JOURNEY',
+                  style: TextStyle(color: Colors.white)),
+              onPressed: () {},
+            )),
+        //const SizedBox(height: 20),
+        Container(
+            padding: const EdgeInsets.fromLTRB(70, 5, 70, 5),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  elevation: 10.0, shape: StadiumBorder()),
+              child: const Text('START JOURNEY',
                   style: TextStyle(color: Colors.white)),
               onPressed: () {},
             )),
