@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:veloplan/models/map_models/base_map_model.dart';
+import 'package:veloplan/widgets/location_permission_widget.dart';
 import '../../models/map_models/base_map_with_route_model.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
@@ -68,6 +69,7 @@ class _MapPageState extends State<MapPage> {
         builder: (BuildContext context, Widget? child, MapModel model) {
       _baseMap = BaseMapboxMap(model);
       addPositionZoom();
+      settingsButton();
       // addFavouritesCarousel();
       return SafeArea(child: Stack(children: _baseMap.getWidgets()));
     }));
@@ -75,7 +77,7 @@ class _MapPageState extends State<MapPage> {
 
   void addPositionZoom() {
     _baseMap.addWidget(Container(
-      alignment: Alignment(0.9, 0.90),
+      alignment: Alignment(0.9, 0.9),
       child: FloatingActionButton(
         heroTag: "center_to_current_loaction",
         onPressed: () {
@@ -87,9 +89,22 @@ class _MapPageState extends State<MapPage> {
     ));
   }
 
-  // void addFavouritesCarousel() {
-  //   _baseMap.addWidget(
-  //     Container(child: _dockingStationCarousel.buildCarousel()),
-  //   );
-  // }
+//MAKE IT SHOW IN MAIN LIKE THE INTERNET THINGYYYYYY ---
+  void settingsButton() {
+    _baseMap.addWidget(Container(
+      alignment: Alignment(0.6, 0.6),
+      child: FloatingActionButton(
+        heroTag: "Settings thing",
+        onPressed: () {
+          Navigator.push(
+            // SHOW WIDGET AS A SCREEN ??????? OR LIKE WHAT
+            context,
+            MaterialPageRoute(
+                builder: (context) => const LocationPermissionError()),
+          );
+        },
+        child: const Icon(Icons.settings),
+      ),
+    ));
+  }
 }

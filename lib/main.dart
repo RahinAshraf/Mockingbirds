@@ -17,8 +17,12 @@ import 'package:permission_handler/permission_handler.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   checkPermissions();
-  LiveLocationHelper liveLocationHelper = LiveLocationHelper();
-  liveLocationHelper.initializeLocation();
+  //LiveLocationHelper liveLocationHelper = LiveLocationHelper();
+  //liveLocationHelper.
+  initializeLocation();
+
+  checkPermissionsAGAIN();
+  print("whassapp");
   sharedPreferences = await SharedPreferences.getInstance();
   MapModel _model = MapModel();
   runApp(ScopedModel<MapModel>(
@@ -33,20 +37,38 @@ void main() async {
 }
 
 //APP IS ONLY WORKING WHEN "GRANTED" IS PRINTED OUT, FIX IT TO NOT CRASH AND REASK IN OTHER CASES
-void checkPermissions() async {
+// void checkPermissions() async {
+//   var locationStatus = await Permission.location.status;
+
+//   if (locationStatus.isGranted) {
+//     print("GRANTED");
+//   } else if (locationStatus.isDenied) {
+//     await Permission.location.request();
+//     print("- WAS DENIED - NOW REQUESTED");
+//   } else if (locationStatus.isPermanentlyDenied) {
+//     print("TELL USERS TO GO TO SETTINGS TO ALLOW LOCATION");
+//   } else if (locationStatus.isLimited) {
+//     print("ISLIMITED WAS SELECTED");
+//   }
+// }
+
+void checkPermissionsAGAIN() async {
   var locationStatus = await Permission.location.status;
 
   if (locationStatus.isGranted) {
     print("GRANTED");
   } else if (locationStatus.isDenied) {
-    await Permission.location.request();
-    print("ISDENIED HAPPENED");
+    print("was DENIED ");
   } else if (locationStatus.isPermanentlyDenied) {
     print("TELL USERS TO GO TO SETTINGS TO ALLOW LOCATION");
   } else if (locationStatus.isLimited) {
     print("ISLIMITED WAS SELECTED");
   }
 }
+
+//check every 2 seconds if status changed -
+// if it hasnt then open screen with widget to open settings
+//
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
