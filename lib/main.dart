@@ -50,7 +50,6 @@ void saveLocation(LocationData _locationData) {
   sharedPreferences.setDouble('longitude', _locationData.longitude!);
 }
 
-
 // void main() {
 //   runApp(MultiProvider(providers: [], child: const MyApp()));
 // }
@@ -116,6 +115,4 @@ class _MyAppState extends State<MyApp> {
           );
         });
   }
-
-
 }

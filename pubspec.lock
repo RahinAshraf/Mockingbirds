@@ -1215,11 +1215,7 @@ packages:
       name: url_launcher_web
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
     version: "2.0.9"
-=======
-    version: "2.0.6"
->>>>>>> 3af01c1979b4d854f0382b158a6604ee0e6b98e4
   url_launcher_windows:
     dependency: transitive
     description:

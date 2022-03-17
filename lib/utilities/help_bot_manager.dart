@@ -1,12 +1,11 @@
 import 'package:veloplan/models/message.dart';
-import "package:collection/collection.dart";
 
 class HelpBotManager {
   Map questions = {};
-  List<Message> data = [];
+  List<Message> messageBank = [];
 
   HelpBotManager() {
-    data = [
+    messageBank = [
       Message('How do I login?', 'Log in on the main page.', 'Authorisation'),
       Message(
           'How do I sign up?', 'Sign up on the main page.', 'Authorisation'),
@@ -21,7 +20,7 @@ class HelpBotManager {
           true),
       // add new messages here
     ];
-    questions = _groupByTopic(data);
+    questions = _groupByTopic(messageBank);
   }
 
   List getAllTopics() {
@@ -55,7 +54,7 @@ class HelpBotManager {
 
   List<Message> _getAllQuestionsByTopic(String topic) {
     List<Message> questions = [];
-    for (Message message in data) {
+    for (Message message in messageBank) {
       if (message.topic == topic) {
         questions.add(message);
       }

@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-
 class Message {
   final String questionText;
   final String questionAnswer;
