@@ -7,6 +7,7 @@ import '../widgets/docking_station_card.dart';
 ///Loads users favourited docking stations and displays them in a list view.
 ///@author Tayyibah Uddin
 
+//Loads cards of all of the users favourited docking station
 class Favourite extends StatefulWidget {
   @override
   _FavouriteState createState() => _FavouriteState();
