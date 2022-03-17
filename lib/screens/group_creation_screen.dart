@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:veloplan/helpers/database_manager.dart';
 import 'package:veloplan/widgets/group/group_creation_form.dart';
 
 class GroupCreationScreen extends StatefulWidget {
@@ -12,9 +13,9 @@ class GroupCreationScreen extends StatefulWidget {
 }
 
 class _GroupCreationScreenState extends State<GroupCreationScreen> {
-  final _auth = FirebaseAuth.instance;
   var _isLoading = false;
   late String code;
+  final DatabaseManager _databaseManager = DatabaseManager();
 
   @override
   void initState() {
@@ -28,25 +29,23 @@ class _GroupCreationScreenState extends State<GroupCreationScreen> {
     String destination,
     BuildContext ctx,
   ) async {
-    var ownerID = _auth.currentUser?.uid;
+    var ownerID = _databaseManager.getCurrentUser()?.uid;
     List list = [];
-    list.add(_auth.currentUser?.uid);
+    list.add(ownerID);
 
     try {
       setState(() {
         _isLoading = true;
       });
-      await FirebaseFirestore.instance.collection('group').add({
+      await _databaseManager.addToCollection('group', {
         'code': code,
         'destination': destination,
         'ownerID': ownerID,
         'memberList': list,
         'createdAt': Timestamp.fromDate(DateTime.now())
       });
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(_auth.currentUser?.uid)
-          .set({'group': code}, SetOptions(merge: true));
+      await _databaseManager.setByKey(
+          'users', ownerID!, {'group': code}, SetOptions(merge: true));
     } on PlatformException catch (err) {
       var message = 'An error occurred, please check your credentials!';
 
