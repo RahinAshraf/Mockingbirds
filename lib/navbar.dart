@@ -29,7 +29,7 @@ class _MainPageState extends State<MainPage> {
   final _currentUser = FirebaseAuth.instance.currentUser!.uid;
 
   var screens = [
-    Placeholder(), //need to replace this with something?
+    Placeholder(), // need to replace this with something?
     MapPage(),
   ];
 
@@ -37,10 +37,10 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     screens.add(Profile(_currentUser));
     return Scaffold(
-        // body: screens[currentIndex], //looses the progress
+        // body: screens[currentIndex], // looses the progress
         body: IndexedStack(
           index: currentIndex,
-          children: screens, //keeps the screens alive
+          children: screens, // keeps the screens alive
         ),
         drawer: NavigationDrawerWidget(),
         key: scaffoldKey,
@@ -69,8 +69,7 @@ class _MainPageState extends State<MainPage> {
 
   BottomNavigationBar createNavBar() {
     return BottomNavigationBar(
-      type: BottomNavigationBarType
-          .fixed, //looks past the background colors specified
+      type: BottomNavigationBarType.fixed,
       backgroundColor: Colors.green[200],
       selectedItemColor: Colors.black,
       unselectedItemColor: Colors.grey[10],
