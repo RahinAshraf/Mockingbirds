@@ -58,9 +58,6 @@ dependencies:
   url_launcher:
 
 
-
-
->>>>>>> start basic create group
   shared_preferences: ^2.0.13
   mapbox_gl: ^0.15.0
   sliding_up_panel: ^2.0.0+1

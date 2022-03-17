@@ -28,9 +28,22 @@ class DatabaseManager {
       String collection, String key, Map<String, dynamic> value,
       [SetOptions? options]) async {
     await FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser?.uid)
+        .collection(collection)
+        .doc(key)
         .set(value, options);
+  }
+
+  Future<void> updateByKey(
+      String collection, String key, Map<String, dynamic> value) async {
+    await FirebaseFirestore.instance
+        .collection(collection)
+        .doc(key)
+        .update(value);
+  }
+
+  Future<void> addToCollection(
+      String collection, Map<String, dynamic> value) async {
+    await FirebaseFirestore.instance.collection(collection).add(value);
   }
 
   Future<void> signOut() async {
