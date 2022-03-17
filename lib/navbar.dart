@@ -1,16 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:veloplan/providers/location_service.dart';
-import 'package:veloplan/screens/place_search_screen.dart';
-import 'package:veloplan/screens/trips_scheduler_screen.dart';
 import 'screens/navigation/map_screen.dart';
 import 'screens/profile_screen.dart';
-import 'sidebar.dart';
-import '../styles/styling.dart';
-import '../widgets/popup_widget.dart';
+import 'popups.dart';
 import '../sidebar.dart';
 import '../screens/profile_screen.dart';
-import '../screens/trips_scheduler_screen.dart';
 
 ///Authors: Elisabeth, Rahin, Tayyibah
 class Navbar extends StatelessWidget {
@@ -18,8 +12,7 @@ class Navbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //every build method has a BuildContext method passed into it
-    return MaterialApp(
-        theme: ThemeData(primaryColor: Colors.purple[900]), home: MainPage());
+    return MaterialApp(home: MainPage());
   }
 }
 
@@ -30,8 +23,8 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int currentIndex = 1; //index of the screens
-
-  final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+  Popups popups = Popups();
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   final _currentUser = FirebaseAuth.instance.currentUser!.uid;
 
@@ -51,48 +44,27 @@ class _MainPageState extends State<MainPage> {
         ),
         drawer: NavigationDrawerWidget(),
         key: scaffoldKey,
-        floatingActionButton: Container(
-            height: 80.0,
-            width: 80.0,
-            child: FloatingActionButton(
-              heroTag: "btn2",
-              onPressed: () {
-                onTabTapped(1);
-                showDialog(
+        floatingActionButton: SizedBox(
+          height: 80.0,
+          width: 80.0,
+          child: FloatingActionButton(
+            heroTag: "btn2",
+            onPressed: () {
+              onTabTapped(1);
+              showDialog(
                   useRootNavigator: false,
                   context: context,
-                  builder: (BuildContext context) => _buildPopupDialog(context),
-                );
-                print("Link journey_planner screen to this btn");
-              },
-              child: const Icon(
-                Icons.directions_bike,
-                color: Colors.green,
-                size: 50,
-              ),
-              elevation: 8.0,
-              backgroundColor: Colors.white,
-            )),
+                  builder: (BuildContext context) =>
+                      popups.buildPopupDialogNewJourney(context));
+            },
+            child: const Icon(Icons.directions_bike,
+                color: Colors.green, size: 50),
+            elevation: 8.0,
+            backgroundColor: Colors.white,
+          ),
+        ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: createNavBar());
-  }
-
-  PopupWidget _buildPopupDialog(BuildContext context) {
-    List<PopupButtonWidget> children = [
-      PopupButtonWidget(
-        text: "Plan a journey",
-        onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => TripScheduler()));
-        },
-      ),
-      PopupButtonWidget(text: "Join a journey", onPressed: () {}),
-    ];
-    return PopupWidget(
-        title: "Choose how to proceed with your trip!",
-        text: "Only one way to find out.",
-        children: children,
-        type: AlertType.question);
   }
 
   BottomNavigationBar createNavBar() {

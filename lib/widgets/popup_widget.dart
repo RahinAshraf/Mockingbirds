@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../styles/styling.dart';
 
@@ -39,41 +40,52 @@ class PopupWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      alignment: const Alignment(0, -0.28),
+      fit: StackFit.expand,
+      alignment: Alignment.center,
       children: [
-        AlertDialog(
-          contentPadding: const EdgeInsets.fromLTRB(1.0, 10.0, 1.0, 0.0),
-          titlePadding: const EdgeInsets.fromLTRB(24.0, 40.0, 24.0, 0.0),
-          title: Text(
-            title,
-            textAlign: TextAlign.center,
+        Column(children: [
+          Container(
+            height: MediaQuery.of(context).size.height / 3.50,
           ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10.0),
-                child: Text(text),
-              ),
-              Container(
-                padding: const EdgeInsets.fromLTRB(1.0, 10.0, 1.0, 10.0),
-                decoration: const BoxDecoration(
-                  color: Color(0XFFF1F5F8),
-                  borderRadius: BorderRadius.only(
+          AlertDialog(
+            contentPadding: const EdgeInsets.fromLTRB(1.0, 10.0, 1.0, 0.0),
+            titlePadding: const EdgeInsets.fromLTRB(24.0, 40.0, 24.0, 0.0),
+            title: Text(
+              title,
+              textAlign: TextAlign.center,
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(
+                      bottom: 10.0, right: 10.0, left: 10.0),
+                  child: Text(text, textAlign: TextAlign.center),
+                ),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
+                  decoration: const BoxDecoration(
+                    color: Color(0XFFF1F5F8),
+                    borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(10.0),
-                      bottomRight: Radius.circular(10.0)),
+                      bottomRight: Radius.circular(10.0),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: children,
+                  ),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: children,
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-        Image.asset(
-          type.imagePath,
-          height: 72,
+        ]),
+        Align(
+          alignment: const Alignment(0, -0.37),
+          child: Image.asset(
+            type.imagePath,
+            height: 72,
+          ),
         ),
       ],
     );
@@ -89,12 +101,18 @@ class PopupButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 2, left: 2),
-      child: TextButton(
-        style: popupDialogButtonStyle,
-        onPressed: onPressed,
-        child: Text(text, style: popupDialogButtonTextStyle),
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.only(right: 5, left: 5),
+        child: TextButton(
+          style: popupDialogButtonStyle,
+          onPressed: onPressed,
+          child: Text(
+            text,
+            textAlign: TextAlign.center,
+            style: popupDialogButtonTextStyle,
+          ),
+        ),
       ),
     );
   }
