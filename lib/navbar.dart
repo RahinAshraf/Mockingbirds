@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
-import 'package:veloplan/screens/location_service.dart';
-import 'package:veloplan/screens/place_search_screen.dart';
 import 'screens/map_screen.dart';
 import 'screens/profile_screen.dart';
 import 'sidebar.dart';
@@ -25,7 +22,7 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   int currentIndex = 1; //index of the screens
 
-  final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   final _currentUser = FirebaseAuth.instance.currentUser!.uid;
 
@@ -45,14 +42,13 @@ class _MainPageState extends State<MainPage> {
         ),
         drawer: NavigationDrawerWidget(),
         key: scaffoldKey,
-        floatingActionButton: Container(
+        floatingActionButton: SizedBox(
             height: 80.0,
             width: 80.0,
             child: FloatingActionButton(
               heroTag: "btn2",
               onPressed: () {
                 onTabTapped(1);
-                print("Link journey_planner screen to this btn");
               },
               child: const Icon(
                 Icons.directions_bike,
