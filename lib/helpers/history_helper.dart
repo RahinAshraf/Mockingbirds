@@ -13,15 +13,32 @@ import 'package:veloplan/providers/location_service.dart';
 ///@author Tayyibah
 
 class HistoryHelper {
-  late CollectionReference _history;
+  late CollectionReference _journey;
   late final _user_id;
   late FirebaseFirestore _db;
 
   HistoryHelper() {
     _db = FirebaseFirestore.instance;
     _user_id = FirebaseAuth.instance.currentUser!.uid;
+    _journey = _db.collection('users').doc(_user_id).collection('journey');
+  }
 
-    _history = _db.collection('users').doc(_user_id).collection('journey');
+  Future<void> addFavourite(
+    String stationId,
+    String name,
+    int numberOfBikes,
+    int numberOfEmptyDocks,
+  ) {
+    return _favourites
+        .add({
+          'stationId': stationId,
+          'name': name,
+          'numberOfBikes': numberOfBikes,
+          'numberOfEmptyDocks': numberOfEmptyDocks,
+        })
+        .then((value) => print("fave Added"))
+        .catchError((error) =>
+            print("Failed to add fave: $error")); //add snackbar instead
   }
 
   static void test(List<List<double?>?> list) async {

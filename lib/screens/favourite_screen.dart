@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../services/favourite_service.dart';
+import '../helpers/favourite_service.dart';
 import '../styles/styling.dart';
 import '../models/docking_station.dart';
 import '../widgets/docking_station_card.dart';
