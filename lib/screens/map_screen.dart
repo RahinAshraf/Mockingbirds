@@ -126,125 +126,126 @@ class MyHomePageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext build) {
-    return Scaffold(      
-      floatingActionButton: FloatingActionButton(
-        heroTag: "btn1",
-        onPressed: () {
-          controller?.animateCamera(
-              CameraUpdate.newCameraPosition(_cameraPosition));
-        },
-        child: const Icon(Icons.my_location),
-      ),
-      body: SafeArea(
-        child: Stack(
-          children: [
-        Container(
-          alignment: Alignment(0, 0),
-          // height: MediaQuery.of(context).size.height,
-          // width: MediaQuery.of(context).size.width,
-          child: MapboxMap(
-            accessToken: accessToken,
-            initialCameraPosition: _cameraPosition,
-            onMapCreated: _onMapCreated,
-            onStyleLoadedCallback: _onStyleLoadedCallback,
-            myLocationEnabled: true,
-            myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
-            annotationOrder: [AnnotationType.symbol],
-            // minMaxZoomPreference: const MinMaxZoomPreference(14, 17),
-          )),// 
-        //PLACEHOLDER FAB
-        FloatingActionButton(
-          heroTag: "btn3",
+    return Scaffold(
+        floatingActionButton: FloatingActionButton(
+          heroTag: "btn1",
           onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) =>
-                    PlaceSearchScreen(LocationService())));
-            print(
-                "This btn is to the search location screen. There is a screen in the design that comes before the search location screen so it is accessible from here for now");
+            controller?.animateCamera(
+                CameraUpdate.newCameraPosition(_cameraPosition));
           },
+          child: const Icon(Icons.my_location),
         ),
-        Container(
-          alignment: Alignment(-0.5, -0.5),
-          child: (showMarkers)
-              ? FloatingActionButton(
-                  heroTag: "Show markers",
-                  child: Icon(Icons.wallet_giftcard, color: Colors.white),
-                  onPressed: fetchDockingStations, //placeMarkers,
-                )
-              : Container(),
-        ),
-        Container(
-          alignment: Alignment(-0.5, -0.7),
-          child: FloatingActionButton(
-            heroTag: "+",
-            child: Icon(Icons.add, color: Colors.white),
-            onPressed: zoomIn,
-          ),
-        ),
-        Container(
-          alignment: Alignment(-0.9, -0.7),
-          child: FloatingActionButton(
-            heroTag: "-",
-            child: Icon(Icons.horizontal_rule, color: Colors.white),
-            onPressed: zoomOut,
-          ),
-        ),
-        Container(
-          alignment: Alignment(-0.9, 0),
-          child: FloatingActionButton(
-            heroTag: "Show polylines",
-            child: Icon(Icons.arrow_upward, color: Colors.white),
-            onPressed: () async {
-              if (!isRouteDisplayed) {
-                displayJourneyAndRefocus(points);
-                isRouteDisplayed = true;
-              } else {
-                null;
-              }
-            },
-          ),
-        ),
-        Container(
-          alignment: Alignment(-0.5, 0),
-          child: FloatingActionButton(
-            heroTag: "Remove Polylines",
-            child: Icon(Icons.remove, color: Colors.white),
-            onPressed: () async {
-              if (isRouteDisplayed) {
-                removeFills();
-                removeTimeAndDuration();
-                isRouteDisplayed = false;
-              }
-            },
-          ),
-        ),
-        Container(
-          alignment: Alignment(-0.9, -0.5),
-          child: FloatingActionButton(
-            heroTag: "TBT",
-            child: Icon(Icons.start, color: Colors.white),
-            onPressed: () => Navigator.push(
-                context, MaterialPageRoute(builder: (_) => TurnByTurn(points))),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Align(
-            alignment: Alignment(0, 0.9),
-            child: Container(
-                width: 200,
-                height: 50,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(15.0)),
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Text(totalDistance, style: TextStyle(fontSize: 25.0)),
-                )),
-          ),
-        ),
-      ],
-    )));
+        body: SafeArea(
+            child: Stack(
+          children: [
+            Container(
+                alignment: Alignment(0, 0),
+                // height: MediaQuery.of(context).size.height,
+                // width: MediaQuery.of(context).size.width,
+                child: MapboxMap(
+                  accessToken: accessToken,
+                  initialCameraPosition: _cameraPosition,
+                  onMapCreated: _onMapCreated,
+                  onStyleLoadedCallback: _onStyleLoadedCallback,
+                  myLocationEnabled: true,
+                  myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
+                  annotationOrder: [AnnotationType.symbol],
+                  // minMaxZoomPreference: const MinMaxZoomPreference(14, 17),
+                )), //
+            //PLACEHOLDER FAB
+            FloatingActionButton(
+              heroTag: "btn3",
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) =>
+                        PlaceSearchScreen(LocationService())));
+                print(
+                    "This btn is to the search location screen. There is a screen in the design that comes before the search location screen so it is accessible from here for now");
+              },
+            ),
+            Container(
+              alignment: Alignment(-0.5, -0.5),
+              child: (showMarkers)
+                  ? FloatingActionButton(
+                      heroTag: "Show markers",
+                      child: Icon(Icons.wallet_giftcard, color: Colors.white),
+                      onPressed: fetchDockingStations, //placeMarkers,
+                    )
+                  : Container(),
+            ),
+            Container(
+              alignment: Alignment(-0.5, -0.7),
+              child: FloatingActionButton(
+                heroTag: "+",
+                child: Icon(Icons.add, color: Colors.white),
+                onPressed: zoomIn,
+              ),
+            ),
+            Container(
+              alignment: Alignment(-0.9, -0.7),
+              child: FloatingActionButton(
+                heroTag: "-",
+                child: Icon(Icons.horizontal_rule, color: Colors.white),
+                onPressed: zoomOut,
+              ),
+            ),
+            Container(
+              alignment: Alignment(-0.9, 0),
+              child: FloatingActionButton(
+                heroTag: "Show polylines",
+                child: Icon(Icons.arrow_upward, color: Colors.white),
+                onPressed: () async {
+                  if (!isRouteDisplayed) {
+                    displayJourneyAndRefocus(points);
+                    isRouteDisplayed = true;
+                  } else {
+                    null;
+                  }
+                },
+              ),
+            ),
+            Container(
+              alignment: Alignment(-0.5, 0),
+              child: FloatingActionButton(
+                heroTag: "Remove Polylines",
+                child: Icon(Icons.remove, color: Colors.white),
+                onPressed: () async {
+                  if (isRouteDisplayed) {
+                    removeFills();
+                    removeTimeAndDuration();
+                    isRouteDisplayed = false;
+                  }
+                },
+              ),
+            ),
+            Container(
+              alignment: Alignment(-0.9, -0.5),
+              child: FloatingActionButton(
+                heroTag: "TBT",
+                child: Icon(Icons.start, color: Colors.white),
+                onPressed: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => TurnByTurn(points))),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Align(
+                alignment: Alignment(0, 0.9),
+                child: Container(
+                    width: 200,
+                    height: 50,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15.0)),
+                    child: Align(
+                      alignment: Alignment.center,
+                      child:
+                          Text(totalDistance, style: TextStyle(fontSize: 25.0)),
+                    )),
+              ),
+            ),
+          ],
+        )));
   }
 
   _onStyleLoadedCallback() async {
@@ -301,6 +302,44 @@ class MyHomePageState extends State<MapPage> {
         lineWidth: 5,
       ),
     );
+    await controller?.addSource(
+        "spots",
+        GeojsonSourceProperties(
+            data:
+                'https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson',
+            cluster: true,
+            clusterMaxZoom: 14, // Max zoom to cluster points on
+            clusterRadius:
+                50 // Radius of each cluster when clustering points (defaults to 50)
+            ));
+    await controller?.addLayer(
+        "earthquakes",
+        "earthquakes-circles",
+        CircleLayerProperties(circleColor: [
+          Expressions.step,
+          [Expressions.get, 'point_count'],
+          '#51bbd6',
+          100,
+          '#f1f075',
+          750,
+          '#f28cb1'
+        ], circleRadius: [
+          Expressions.step,
+          [Expressions.get, 'point_count'],
+          20,
+          100,
+          30,
+          750,
+          40
+        ]));
+    await controller?.addLayer(
+        "earthquakes",
+        "earthquakes-count",
+        SymbolLayerProperties(
+          textField: [Expressions.get, 'point_count_abbreviated'],
+          textFont: ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+          textSize: 12,
+        ));
     // await controller.addSymbolLayer(sourceId, layerId, properties)
   }
 
