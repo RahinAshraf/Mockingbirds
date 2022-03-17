@@ -419,7 +419,7 @@ class PanelWidgetState extends State<PanelWidget> {
                     //! show something went wrong allert
                     print("hello");
                   } else {
-                    historyHelper.getTheList(dockingStationList);
+                    historyHelper.createJourneyEntry(dockingStationList);
                     Navigator.push(
                       context,
                       MaterialPageRoute(

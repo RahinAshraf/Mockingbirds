@@ -11,11 +11,12 @@ class Schedule extends StatelessWidget {
         title: const Text('Schedule'),
         backgroundColor: appBarColor,
       ),
-      // body: Center(
-      //   child: FloatingActionButton(onPressed: () {
-      //     helper.addDockingStation("second", "name", "journey1");
-      //   }),
-      // ),
+      body: Center(
+        child: FloatingActionButton(onPressed: () {
+          print("here");
+          helper.getUsersJourneys();
+        }),
+      ),
     );
   }
 }

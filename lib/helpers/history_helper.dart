@@ -22,28 +22,55 @@ class HistoryHelper {
     _journeys = _db.collection('users').doc(_user_id).collection('journeys');
   }
 
+//creates a subcollection for each docking station in a journey
   Future<void> addDockingStation(
-      String stationId, String stationName, documentId) {
+    DockingStation station,
+    documentId,
+  ) {
     return _journeys
         .doc(documentId)
         .collection('docking_stations')
         .add({
-          'stationId': stationId,
-          'stationName': stationName,
+          'stationId': station.stationId,
+          'stationName': station.name,
+          'numberOfBikes': station.numberOfBikes,
+          'numberOfEmptyDocks': station.numberOfEmptyDocks,
         })
         .then((value) => print("docking station Added"))
         .catchError((error) => print(
             "Failed to add docking station to journey: $error")); //add snackbar instead
   }
 
-  void getTheList(List<DockingStation> dockingStationList) async {
+//Takes in a list of docking stations from a journey and adds to database
+  void createJourneyEntry(List<DockingStation> dockingStationList) {
     var randomDoc = _journeys.doc();
-
-    // var randomDoc = _journeys.doc().toString();
     for (DockingStation station in dockingStationList) {
-      addDockingStation(station.stationId, station.name, randomDoc.id);
-      print(station.name);
+      addDockingStation(station, randomDoc.id);
     }
+  }
+
+  void getUsersJourneys() async {
+    print("madeithere");
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    QuerySnapshot<Object?> journeyDocuments =
+        await db.collection('users').doc(_user_id).collection('journeys').get();
+    print(journeyDocuments);
+    for (DocumentSnapshot journeyDocument in journeyDocuments.docs) {}
+  }
+
+  static Future<List<DockingStation>> getUserFavourites() async {
+    List<DockingStation> favourites = [];
+    FirebaseFirestore db = FirebaseFirestore.instance;
+
+    QuerySnapshot<Object?> docs = await db
+        .collection('users')
+        .doc(getUid())
+        .collection('favourites')
+        .get();
+    for (DocumentSnapshot doc in docs.docs) {
+      favourites.add(DockingStation.map(doc));
+    }
+    return favourites;
   }
 
   // static void test(List<List<double?>?> list) async {
