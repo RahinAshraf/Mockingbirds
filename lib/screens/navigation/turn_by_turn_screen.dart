@@ -1,8 +1,15 @@
+import 'dart:math';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_mapbox_navigation/library.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:veloplan/helpers/live_location_helper.dart';
 import 'package:veloplan/screens/navigation/map_screen.dart';
 import 'package:veloplan/helpers/navigation_helpers/navigation_conversion_helpers.dart';
+import 'package:location/location.dart';
+import 'package:veloplan/helpers/shared_prefs.dart';
+import 'package:geolocator/geolocator.dart';
 
 /// A splash screen displaying turn by turn navigation for a journey.
 /// Author(s): Fariha Choudhury k20059723, Elisabeth Halvorsen k20077737,
@@ -36,6 +43,7 @@ class _TurnByTurnState extends State<TurnByTurn> {
   bool arrived = false;
   bool routeBuilt = false;
   bool isNavigating = false;
+  double? distance;
 
   @override
   void initState() {
@@ -74,6 +82,13 @@ class _TurnByTurnState extends State<TurnByTurn> {
   Future<void> _onRouteEvent(e) async {
     distanceRemaining = await directions.distanceRemaining;
     durationRemaining = await directions.durationRemaining;
+    if(distance == null) {
+      distance = distanceRemaining;
+      print('SHARED PREFERENCES total distance $distance');
+    } else {
+      sharedPreferences.setDouble('distance', distance! - distanceRemaining);
+    }
+    print('SHARED PREFERENCES DISTANCE WENT${sharedPreferences.getDouble('distance')}');
 
     switch (e.eventType) {
       case MapBoxEvent.progress_change:

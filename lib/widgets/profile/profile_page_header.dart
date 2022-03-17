@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:veloplan/widgets/profile/profile_widget.dart';
+import 'package:veloplan/helpers/live_location_helper.dart';
 
 class ProfilePageHeader extends StatefulWidget {
   final Map<String, dynamic> data;
@@ -61,9 +62,9 @@ class _ProfilePageHeaderState extends State<ProfilePageHeader> {
           children: [
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
+              children: [
                 Text(
-                  '10',
+                  '${sharedPreferences.getDouble('distance')}',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
