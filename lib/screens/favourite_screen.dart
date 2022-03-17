@@ -13,7 +13,7 @@ class Favourite extends StatefulWidget {
 }
 
 class _FavouriteState extends State<Favourite> {
-  Set<DockingStation> favourites = {};
+  List<DockingStation> favourites = [];
   var helper = FavouriteHelper();
 
   @override
@@ -39,10 +39,10 @@ class _FavouriteState extends State<Favourite> {
                   itemCount: favourites.length,
                   itemBuilder: (context, index) {
                     return DockingStationCard(
-                      favourites.elementAt(index).stationId,
-                      favourites.elementAt(index).name,
-                      favourites.elementAt(index).numberOfBikes,
-                      favourites.elementAt(index).numberOfEmptyDocks,
+                      favourites[index].stationId,
+                      favourites[index].name,
+                      favourites[index].numberOfBikes,
+                      favourites[index].numberOfEmptyDocks,
                     );
                   },
                 ),

@@ -4,8 +4,8 @@ import '/models/docking_station.dart';
 import '/services/favourite_service.dart';
 
 ///Creates a card for a docking station, to include its name, number of bikes and empty bikes.
-///Author: Tayyibah
-///Contributor: Fariha Choudhury k20059723
+///Author: Tayyibah Uddin
+///Contributor: Fariha Choudhury
 
 class DockingStationCard extends StatefulWidget {
   late final String iD;
@@ -34,7 +34,7 @@ class DockingStationCard extends StatefulWidget {
 
 class _DockingStationCardState extends State<DockingStationCard> {
   final _helper = FavouriteHelper(); //change name
-  Set<DockingStation> _favourites = {};
+  List<DockingStation> _favourites = [];
   bool isFavouriteEnabled = true;
 
   @override
@@ -78,7 +78,7 @@ class _DockingStationCardState extends State<DockingStationCard> {
               onPressed: () async {
                 if (isFavouriteEnabled) {
                   _disableFavButton();
-                  Set<DockingStation> updatedFavourites =
+                  List<DockingStation> updatedFavourites =
                       await FavouriteHelper.getUserFavourites();
                   _helper.toggleFavourite(
                     widget.iD,
