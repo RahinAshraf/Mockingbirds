@@ -185,20 +185,36 @@ class SummaryJourneyScreen extends StatelessWidget {
               style: TextStyle(color: Color(0xFF99D2A9), fontSize: 18),
             )),
         const SizedBox(height: 20),
-        Container(
-            height: 40,
-            padding: const EdgeInsets.fromLTRB(100, 5, 100, 5),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                elevation: 10.0,
-                shape: new RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(15.0),
+        if (isGroupID)
+          Container(
+              height: 40,
+              padding: const EdgeInsets.fromLTRB(100, 5, 100, 5),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  elevation: 10.0,
+                  shape: new RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(15.0),
+                  ),
                 ),
-              ),
-              child: const Text('LEAVE GROUP/JOURNEY',
-                  style: TextStyle(color: Colors.white)),
-              onPressed: () {},
-            )),
+                child: const Text('LEAVE GROUP',
+                    style: TextStyle(color: Colors.white)),
+                onPressed: () {},
+              )),
+        if (!isGroupID)
+          Container(
+              height: 40,
+              padding: const EdgeInsets.fromLTRB(100, 5, 100, 5),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  elevation: 10.0,
+                  shape: new RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(15.0),
+                  ),
+                ),
+                child: const Text('LEAVE JOURNEY',
+                    style: TextStyle(color: Colors.white)),
+                onPressed: () {},
+              )),
         //const SizedBox(height: 20),
         Container(
             padding: const EdgeInsets.fromLTRB(70, 5, 70, 5),
