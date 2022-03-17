@@ -35,7 +35,7 @@ class DockingStationCard extends StatefulWidget {
 class _DockingStationCardState extends State<DockingStationCard> {
   final _helper = FavouriteHelper(); //change name
   Set<DockingStation> _favourites = {};
-  bool shouldButtonEnabled = true;
+  bool isFavouriteEnabled = true;
 
   @override
   void initState() {
@@ -47,9 +47,10 @@ class _DockingStationCardState extends State<DockingStationCard> {
     super.initState();
   }
 
-  _disabledButton() {
-    shouldButtonEnabled = false;
-    Timer(Duration(seconds: 3), () => shouldButtonEnabled = true);
+  ///Sets [isFavouriteEnabled] to false to disable favourite button for 3 seconds after button click
+  void _disableFavButton() {
+    isFavouriteEnabled = false;
+    Timer(Duration(seconds: 3), () => isFavouriteEnabled = true);
   }
 
   @override
@@ -75,8 +76,8 @@ class _DockingStationCardState extends State<DockingStationCard> {
                       color: Colors.grey,
                     ),
               onPressed: () async {
-                if (shouldButtonEnabled) {
-                  _disabledButton();
+                if (isFavouriteEnabled) {
+                  _disableFavButton();
                   Set<DockingStation> updatedFavourites =
                       await FavouriteHelper.getUserFavourites();
                   _helper.toggleFavourite(
