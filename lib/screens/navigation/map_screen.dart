@@ -22,7 +22,7 @@ class _MapPageState extends State<MapPage> {
   LatLng currentLatLng = getLatLngFromSharedPrefs();
   late BaseMapboxMap _baseMap;
   late BaseMapboxRouteMap _baseMapWithRoute;
-  var _dockingStationCarousel = dockingStationCarousel();
+  // var _dockingStationCarousel = dockingStationCarousel();
 
   // /// ! show usage of BaseMapboxRouteMap
 
@@ -68,7 +68,7 @@ class _MapPageState extends State<MapPage> {
         builder: (BuildContext context, Widget? child, MapModel model) {
       _baseMap = BaseMapboxMap(model);
       addPositionZoom();
-      addFavouritesCarousel();
+      // addFavouritesCarousel();
       return SafeArea(child: Stack(children: _baseMap.getWidgets()));
     }));
   }
@@ -87,9 +87,9 @@ class _MapPageState extends State<MapPage> {
     ));
   }
 
-  void addFavouritesCarousel() {
-    _baseMap.addWidget(
-      Container(child: _dockingStationCarousel.buildCarousel()),
-    );
-  }
+  // void addFavouritesCarousel() {
+  //   _baseMap.addWidget(
+  //     Container(child: _dockingStationCarousel.buildCarousel()),
+  //   );
+  // }
 }
