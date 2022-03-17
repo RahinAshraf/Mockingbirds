@@ -400,6 +400,7 @@ class PanelWidgetState extends State<PanelWidget> {
                   List<LatLng>? points = convertListDoubleToLatLng(tempList);
                   HistoryHelper historyHelper = new HistoryHelper();
                   List<LatLng> closestDockList = [];
+                  dockingStationList = [];
                   if (points != null) {
                     for (int i = 0; i < points.length; i++) {
                       DockingStation closestDock =

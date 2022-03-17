@@ -1,7 +1,6 @@
-import 'dart:html';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/rendering.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/services/user_services.dart';
 import 'package:collection/collection.dart';
@@ -13,58 +12,59 @@ import 'package:veloplan/providers/location_service.dart';
 ///@author Tayyibah
 
 class HistoryHelper {
-  late CollectionReference _journey;
+  late CollectionReference _journeys;
   late final _user_id;
   late FirebaseFirestore _db;
 
   HistoryHelper() {
     _db = FirebaseFirestore.instance;
     _user_id = FirebaseAuth.instance.currentUser!.uid;
-    _journey = _db.collection('users').doc(_user_id).collection('journey');
+    _journeys = _db.collection('users').doc(_user_id).collection('journeys');
   }
 
-  Future<void> addFavourite(
-    String stationId,
-    String name,
-    int numberOfBikes,
-    int numberOfEmptyDocks,
-  ) {
-    return _favourites
+  Future<void> addDockingStation(
+      String stationId, String stationName, documentId) {
+    return _journeys
+        .doc(documentId)
+        .collection('docking_stations')
         .add({
           'stationId': stationId,
-          'name': name,
-          'numberOfBikes': numberOfBikes,
-          'numberOfEmptyDocks': numberOfEmptyDocks,
+          'stationName': stationName,
         })
-        .then((value) => print("fave Added"))
-        .catchError((error) =>
-            print("Failed to add fave: $error")); //add snackbar instead
+        .then((value) => print("docking station Added"))
+        .catchError((error) => print(
+            "Failed to add docking station to journey: $error")); //add snackbar instead
   }
 
-  static void test(List<List<double?>?> list) async {
-    LocationService service = new LocationService();
+  void getTheList(List<DockingStation> dockingStationList) async {
+    var randomDoc = _journeys.doc();
 
-    print("HEREEEEEEEEEEE");
-    print(list);
-    List<double?> destination;
-    if (list != null) {
-      for (int i = 0; i < list.length; i++) {
-        var item = list[i];
-        //service.reverseGeoCode(item[0], item[1]);
-        // myList.add(LatLng(points[i]?.first as double, points[i]?.last as double));
-        Map map = await service.reverseGeoCode(
-            list[i]?.first as double, list[i]?.last as double);
-
-        print(map["name"]);
-      }
-    }
-  }
-
-  void getTheList(List<DockingStation> dockingStationList) {
+    // var randomDoc = _journeys.doc().toString();
     for (DockingStation station in dockingStationList) {
+      addDockingStation(station.stationId, station.name, randomDoc.id);
       print(station.name);
     }
   }
+
+  // static void test(List<List<double?>?> list) async {
+  //   LocationService service = new LocationService();
+
+  //   print("HEREEEEEEEEEEE");
+  //   print(list);
+  //   List<double?> destination;
+  //   if (list != null) {
+  //     for (int i = 0; i < list.length; i++) {
+  //       var item = list[i];
+  //       //service.reverseGeoCode(item[0], item[1]);
+  //       // myList.add(LatLng(points[i]?.first as double, points[i]?.last as double));
+  //       Map map = await service.reverseGeoCode(
+  //           list[i]?.first as double, list[i]?.last as double);
+
+  //       print(map["name"]);
+  //     }
+  //   }
+  // }
+
   // Future<void> addJourney(
   //   double ,
   // ) {

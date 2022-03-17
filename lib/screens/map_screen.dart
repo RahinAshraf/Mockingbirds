@@ -270,7 +270,7 @@ class MyHomePageState extends State<MapPage2> {
               alignment: Alignment(-0.9, -0.5),
               child: FloatingActionButton(
                 heroTag: "TBT",
-                child: Icon(Icons.start, color: Colors.white),
+                child: Icon(Icons.headset_mic_sharp, color: Colors.white),
                 onPressed: () => Navigator.push(context,
                     MaterialPageRoute(builder: (_) => TurnByTurn(points))),
               ),
