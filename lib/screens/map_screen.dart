@@ -21,7 +21,7 @@ import '../screens/navigation/turn_by_turn_screen.dart';
 // import '../helpers/zoom_helper.dart';
 import 'package:location/location.dart';
 
-//import 'package:veloplan/widget/carousel/station_carousel.dart';
+//import 'package:veloplan/widget/carousel/docking_stations_list_widget.dart';
 const double zoom = 16;
 
 class MapPage2 extends StatefulWidget {

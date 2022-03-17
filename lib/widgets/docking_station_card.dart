@@ -82,24 +82,22 @@ class _DockingStationCardState extends State<DockingStationCard> {
               },
             ),
             const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.stationName,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.stationName,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
                   ),
-                  const Divider(
-                    color: Colors.black,
-                  ),
-                  Text('Total bikes: ${widget.numberOfBikes.toString()}'),
-                  Text(
-                      'Available bikes: ${widget.numberOfEmptyDocks.toString()}'),
-                ],
-              ),
+                ),
+                const Divider(
+                  color: Colors.black,
+                ),
+                Text('Total bikes: ${widget.numberOfBikes.toString()}'),
+                Text(
+                    'Available bikes: ${widget.numberOfEmptyDocks.toString()}'),
+              ],
             ),
           ],
         ),
