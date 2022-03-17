@@ -332,7 +332,8 @@ class PanelWidgetState extends State<PanelWidget> {
                             dynamicWidget.position = index;
                             dynamicWidget.removeDynamic((p0) {
                               widget.listDynamic.removeAt(index);
-                              widget.dynamicWidgets.sink.add(widget.listDynamic);
+                              widget.dynamicWidgets.sink
+                                  .add(widget.listDynamic);
                             });
                             return //ListTile(key: ValueKey(index), leading:
                                 Container(
@@ -386,7 +387,7 @@ class PanelWidgetState extends State<PanelWidget> {
                   alert.showWhereToTextFieldsMustNotBeEmptySnackBar(context);
                   //return;
                 } else if (areAdjacentCoords(widget.selectedCoords)) {
-                  alert.showCantHaveAdajcentSnackBar(context);
+                  alert.showCantHaveAdjacentSnackBar(context);
                   //return;
                 } else {
                   List<List<double?>?> tempList = [];
@@ -395,14 +396,18 @@ class PanelWidgetState extends State<PanelWidget> {
                   print("ALL_COORDINATES => $tempList");
                   List<LatLng>? points = convertListDoubleToLatLng(tempList);
 
-                  List<LatLng>closestDockList = [];
-                  if(points != null){
-                    for(int i=0; i < points.length; i++){
-                      DockingStation closestDock = _stationManager.getClosestDock(LatLng(points[i].latitude, points[i].longitude));
-                      LatLng closetDockCoord = LatLng(closestDock.lat,closestDock.lon);
+                  List<LatLng> closestDockList = [];
+                  if (points != null) {
+                    for (int i = 0; i < points.length; i++) {
+                      DockingStation closestDock =
+                          _stationManager.getClosestDock(
+                              LatLng(points[i].latitude, points[i].longitude));
+                      LatLng closetDockCoord =
+                          LatLng(closestDock.lat, closestDock.lon);
                       closestDockList.add(closetDockCoord);
                     }
-                    print("ALL_COORDINATES FOR CLOSEST DOCKS => $closestDockList");
+                    print(
+                        "ALL_COORDINATES FOR CLOSEST DOCKS => $closestDockList");
                   }
 
                   if (points == null) {

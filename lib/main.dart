@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
-import 'screens/login_screen.dart';
 import 'navbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:location/location.dart';
-import 'package:latlong2/latlong.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import './screens/verify_email_screen.dart';

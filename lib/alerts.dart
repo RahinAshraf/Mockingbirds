@@ -41,7 +41,7 @@ class Alerts {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  void showCantHaveAdajcentSnackBar(BuildContext context) {
+  void showCantHaveAdjacentSnackBar(BuildContext context) {
     const text = "You cannot have two places the same after each other";
     const snackBar = SnackBar(
       content: Text(
