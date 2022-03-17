@@ -3,12 +3,12 @@ import 'package:veloplan/helpers/favourite_helper.dart';
 import 'package:veloplan/widgets/docking_station_card.dart';
 import 'package:veloplan/models/favourite.dart';
 
-//Loads cards of all of the users favourited docking station
-class Favourite extends StatefulWidget {
-  _FavouriteState createState() => _FavouriteState();
+/// Loads cards of all of the users favourited docking station
+class Favourites extends StatefulWidget {
+  _FavouritesState createState() => _FavouritesState();
 }
 
-class _FavouriteState extends State<Favourite> {
+class _FavouritesState extends State<Favourites> {
   List<FavouriteDockingStation> favourites = [];
   var helper = FavouriteHelper();
 
@@ -28,7 +28,7 @@ class _FavouriteState extends State<Favourite> {
       body: favourites.isEmpty
           ? SizedBox(
               height: MediaQuery.of(context).size.height / 1.3,
-              child: Center(
+              child: const Center(
                 child: Text("You haven't added any favourites."),
               ),
             )
@@ -48,7 +48,6 @@ class _FavouriteState extends State<Favourite> {
             ),
       appBar: AppBar(
         title: const Text('My favourites'),
-        //    backgroundColor: primaryColor,
       ),
     );
   }

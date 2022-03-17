@@ -100,7 +100,6 @@ class _AuthScreenState extends State<AuthScreen> {
         _isLoading = false;
       });
     } catch (err) {
-      // print(err);
       setState(() {
         _isLoading = false;
       });
@@ -110,21 +109,23 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          AuthForm(
-            _submitAuthForm,
-            _isLoading,
-          ),
-          Align(
-            alignment: Alignment.topRight,
-            child: Image.asset(
-              'assets/images/right_bubbles_shapes.png',
-              height: 170.0,
-              width: 170.0,
+      body: SafeArea(
+        child: Stack(
+          children: [
+            AuthForm(
+              _submitAuthForm,
+              _isLoading,
             ),
-          ),
-        ],
+            Align(
+              alignment: Alignment.topRight,
+              child: Image.asset(
+                'assets/images/right_bubbles_shapes.png',
+                height: 170.0,
+                width: 170.0,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

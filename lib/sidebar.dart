@@ -87,7 +87,7 @@ class SideBar extends StatelessWidget {
         break;
       case 2:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => Favourite(),
+          builder: (context) => Favourites(),
         ));
         break;
       case 3:
