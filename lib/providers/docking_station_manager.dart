@@ -10,7 +10,7 @@ import 'dart:math';
 class dockingStationManager {
   List<DockingStation> stations = [];
 
-/* import the docking stations from the tfl api */
+/* import the dockign sttaions from the tfl api */
   Future<void> importStations() async {
     var data = await http.get(Uri.parse("https://api.tfl.gov.uk/BikePoint"));
     var jsonData = json.decode(data.body);
