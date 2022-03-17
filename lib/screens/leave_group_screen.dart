@@ -1,5 +1,3 @@
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -26,9 +24,9 @@ class _GroupCreationScreenState extends State<GroupCreationScreen> {
   }
 
   void _submitLeaveGroupForm(
-      String ownerID,
-      BuildContext ctx,
-      ) async {
+    String ownerID,
+    BuildContext ctx,
+  ) async {
     var userID = _databaseManager.getCurrentUser()?.uid;
     try {
       setState(() {
@@ -45,9 +43,14 @@ class _GroupCreationScreenState extends State<GroupCreationScreen> {
         id = element.id;
         list = element.data()['memberList'];
         list.removeWhere((element) => element.id == userID);
+        if (list.isEmpty) {
+          element.reference.delete();
+        } else {
+          _databaseManager.updateByKey('group', id!, {'memberList': list});
+        }
       });
-      await _databaseManager.updateByKey('group', id!, {'memberList': list});
-      await _databaseManager.setByKey('users', userID, {'group': null}, SetOptions(merge: true));
+      await _databaseManager.setByKey(
+          'users', userID, {'group': null}, SetOptions(merge: true));
     } on PlatformException catch (err) {
       var message = 'An error occurred, please check your credentials!';
 
