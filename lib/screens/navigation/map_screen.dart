@@ -4,6 +4,7 @@ import 'package:veloplan/models/map_models/base_map_model.dart';
 import '../../models/map_models/base_map_with_route_model.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
+import '../../widgets/carousel/station_carousel.dart';
 
 /// Map screen focused on a user's live location
 /// Author(s): Fariha Choudhury k20059723, Elisabeth Halvorsen k20077737,
@@ -20,6 +21,7 @@ class _MapPageState extends State<MapPage> {
   LatLng currentLatLng = const LatLng(51.51185004458236, -0.11580820118980878);
   late BaseMapboxMap _baseMap;
   late BaseMapboxRouteMap _baseMapWithRoute;
+  var _dockingStationCarousel = dockingStationCarousel();
 
   // /// ! show usage of BaseMapboxRouteMap
 
@@ -65,6 +67,7 @@ class _MapPageState extends State<MapPage> {
         builder: (BuildContext context, Widget? child, MapModel model) {
       _baseMap = BaseMapboxMap(false, currentLatLng, model);
       addPositionZoom();
+      addFavouritesCarousel();
       return SafeArea(child: Stack(children: _baseMap.getWidgets()));
     }));
   }
@@ -81,5 +84,11 @@ class _MapPageState extends State<MapPage> {
         child: const Icon(Icons.my_location),
       ),
     ));
+  }
+
+  void addFavouritesCarousel() {
+    _baseMap.addWidget(
+      Container(child: _dockingStationCarousel.buildCarousel()),
+    );
   }
 }

@@ -32,7 +32,7 @@ class DockingStationCard extends StatefulWidget {
 
 class _DockingStationCardState extends State<DockingStationCard> {
   final _helper = FavouriteHelper(); //change name
-  List<DockingStation> _favourites = [];
+  Set<DockingStation> _favourites = {};
 
   @override
   void initState() {
@@ -67,7 +67,7 @@ class _DockingStationCardState extends State<DockingStationCard> {
                       color: Colors.grey,
                     ),
               onPressed: () async {
-                List<DockingStation> updatedFavourites =
+                Set<DockingStation> updatedFavourites =
                     await FavouriteHelper.getUserFavourites();
                 _helper.toggleFavourite(
                   widget.iD,

@@ -47,8 +47,8 @@ class FavouriteHelper {
         .catchError((error) => print("Failed to delete fave: $error"));
   }
 
-  static Future<List<DockingStation>> getUserFavourites() async {
-    List<DockingStation> favourites = [];
+  static Future<Set<DockingStation>> getUserFavourites() async {
+    Set<DockingStation> favourites = {};
     FirebaseFirestore db = FirebaseFirestore.instance;
 
     QuerySnapshot<Object?> docs = await db
@@ -70,8 +70,7 @@ class FavouriteHelper {
     }
   }
 
-  bool isFavouriteStation(
-      String stationId, List<DockingStation> favouriteList) {
+  bool isFavouriteStation(String stationId, Set<DockingStation> favouriteList) {
     DockingStation? station = favouriteList
         .firstWhereOrNull((DockingStation f) => (f.stationId == stationId));
     if (station == null) {
