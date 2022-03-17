@@ -1,48 +1,56 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
-import '/models/favourite.dart';
+import '/models/docking_station.dart';
 import '/services/favourite_service.dart';
-import 'favourite_button.dart';
 
 ///Creates a card for a docking station, to include its name, number of bikes and empty bikes.
+///Author: Tayyibah Uddin
+///Contributor: Fariha Choudhury
 
-class dockingStationCard extends StatefulWidget {
-  late String id;
-  late String name;
-  late String nb_bikes;
-  late String nb_empty_docks;
+class DockingStationCard extends StatefulWidget {
+  late final String iD;
+  late final String stationName;
+  late final int numberOfBikes;
+  late final int numberOfEmptyDocks;
 
-  dockingStationCard(
-    this.id,
-    this.name,
-    this.nb_bikes,
-    this.nb_empty_docks,
+  DockingStationCard(
+    this.iD,
+    this.stationName,
+    this.numberOfBikes,
+    this.numberOfEmptyDocks,
   );
 
 //I have commented this for now but if you want to make a card by just passing a station:
   // dockingStationCard.station(DockingStation station) {
-  //   this.id = station.id;
-  //   this.name = station.name;
-  //   this.nb_bikes = station.nb_bikes.toString();
-  //   this.nb_empty_docks = station.nb_empty_docks.toString();
+  //   this.iD = station.iD;
+  //   this.stationName = station.stationName;
+  //   this.numberOfBikes = station.numberOfBikes.toString();
+  //   this.numberOfEmptyDocks = station.numberOfEmptyDocks.toString();
   // }
 
-  _dockingStationCardState createState() => _dockingStationCardState();
+  @override
+  _DockingStationCardState createState() => _DockingStationCardState();
 }
 
-class _dockingStationCardState extends State<dockingStationCard> {
-  var helper = FavouriteHelper(); //change name
-  List<FavouriteDockingStation> favourites = [];
-
-  late Icon favIcon;
+class _DockingStationCardState extends State<DockingStationCard> {
+  final _helper = FavouriteHelper(); //change name
+  List<DockingStation> _favourites = [];
+  bool isFavouriteEnabled = true;
 
   @override
   void initState() {
     FavouriteHelper.getUserFavourites().then((data) {
       setState(() {
-        favourites = data;
+        _favourites = data;
       });
     });
     super.initState();
+  }
+
+  ///Sets [isFavouriteEnabled] to false to disable favourite button for 3 seconds after button click
+  void _disableFavButton() {
+    isFavouriteEnabled = false;
+    Timer(Duration(seconds: 3), () => isFavouriteEnabled = true);
   }
 
   @override
@@ -58,28 +66,31 @@ class _dockingStationCardState extends State<dockingStationCard> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             IconButton(
-              icon: helper.isFavouriteStation(widget.id, favourites)
-                  ? Icon(
+              icon: _helper.isFavouriteStation(widget.iD, _favourites)
+                  ? const Icon(
                       Icons.favorite,
                       color: Colors.red,
                     )
-                  : Icon(
+                  : const Icon(
                       Icons.favorite,
                       color: Colors.grey,
                     ),
               onPressed: () async {
-                List<FavouriteDockingStation> updatedFavourites =
-                    await FavouriteHelper.getUserFavourites();
-                helper.toggleFavourite(
-                  widget.id,
-                  widget.name,
-                  widget.nb_bikes,
-                  widget.nb_empty_docks,
-                );
+                if (isFavouriteEnabled) {
+                  _disableFavButton();
+                  List<DockingStation> updatedFavourites =
+                      await FavouriteHelper.getUserFavourites();
+                  _helper.toggleFavourite(
+                    widget.iD,
+                    widget.stationName,
+                    widget.numberOfBikes,
+                    widget.numberOfEmptyDocks,
+                  );
 
-                setState(() {
-                  favourites = updatedFavourites;
-                });
+                  setState(() {
+                    _favourites = updatedFavourites;
+                  });
+                }
               },
             ),
             const SizedBox(width: 10),
@@ -88,7 +99,7 @@ class _dockingStationCardState extends State<dockingStationCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.name,
+                    widget.stationName,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
@@ -96,8 +107,9 @@ class _dockingStationCardState extends State<dockingStationCard> {
                   const Divider(
                     color: Colors.black,
                   ),
-                  Text('Total bikes: ${widget.nb_bikes}'),
-                  Text('Available bikes: ${widget.nb_empty_docks}'),
+                  Text('Total bikes: ${widget.numberOfBikes.toString()}'),
+                  Text(
+                      'Available bikes: ${widget.numberOfEmptyDocks.toString()}'),
                 ],
               ),
             ),
