@@ -30,7 +30,8 @@ class _MapRoutePageState extends State<MapRoutePage> {
   Widget build(BuildContext context) {
     return Scaffold(body: ScopedModelDescendant<MapModel>(
         builder: (BuildContext context, Widget? child, MapModel model) {
-      _baseMapWithRoute = BaseMapboxRouteMap(_journey, model);
+      _baseMapWithRoute = BaseMapboxRouteMap(
+          _journey, model, true); //TRUE - DISPLAY POLYLINE AND MARKERS
       addPositionZoom();
       startTurnByTurn(context, _journey);
       return SafeArea(child: Stack(children: _baseMapWithRoute.getWidgets()));

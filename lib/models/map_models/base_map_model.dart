@@ -18,7 +18,7 @@ class BaseMapboxMap {
   final MapModel model;
   late CameraPosition cameraPosition;
   late MapboxMapController? controller;
-  late Symbol? _selectedSymbol;
+  late Symbol? selectedSymbol;
   late final bool _useLiveLocation;
   Timer? timer;
 
@@ -50,6 +50,12 @@ class BaseMapboxMap {
     this.controller = controller;
     model.setController(controller);
     model.fetchDockingStations();
+    onMarkerTapped(controller);
+    //controller.onSymbolTapped.add(onSymbolTapped);
+  }
+
+  /// Defines [onSymbolTapped] functionality for a docking station marker
+  void onMarkerTapped(MapboxMapController controller) {
     controller.onSymbolTapped.add(onSymbolTapped);
   }
 
@@ -71,9 +77,9 @@ class BaseMapboxMap {
 
   /// Shows the on tapped docking station information
   Future<void> onSymbolTapped(Symbol symbol) async {
-    _selectedSymbol = symbol;
+    selectedSymbol = symbol;
     Future<LatLng> variable = controller!.getSymbolLatLng(symbol);
-    if (_selectedSymbol != null) {
+    if (selectedSymbol != null) {
       LatLng current = await variable;
       displayDockCard(current);
     }

@@ -17,9 +17,12 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
   String _totalDistanceAndTime = 'No route';
   final RouteManager _manager = RouteManager();
   late Map _routeResponse;
+  late bool _displayPolyline;
 
   // BaseMapboxRouteMap(this._journey, MapModel model) : super(model);
-  BaseMapboxRouteMap(this._journey, MapModel model) : super(model);
+  BaseMapboxRouteMap(this._journey, MapModel model,
+      this._displayPolyline) //ADD BOOLEAN FOR DISPLAYING POLYLINE SO CAN REUSE FOR ONLY MARKERS
+      : super(model);
 
   /// Initialise map features
   @override
@@ -28,12 +31,39 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
     model.setController(controller);
     model.fetchDockingStations();
     _displayJourneyAndRefocus(_journey);
-    controller.onSymbolTapped.add(onSymbolTapped);
+    onMarkerTapped(controller);
+    //controller.onSymbolTapped.add(onSymbolTapped);  --- no tapping functionality for route model
+  }
+
+  /// Defines [onSymbolTapped] functionality to docking station markers on maps that do not [_displayPolyline]
+  @override
+  void onMarkerTapped(MapboxMapController controller) {
+    if (!_displayPolyline) {
+      controller.onSymbolTapped.add(onEditMarkerTapped);
+    }
+  }
+
+  /// Retrieves the information about the selected docking station [symbol]
+  Future<void> onEditMarkerTapped(Symbol symbol) async {
+    ///CHANGE ---- USE DOCK DATA ONCE HRISTINA IS DONE ------
+    selectedSymbol = symbol;
+    Future<LatLng> variable = controller!.getSymbolLatLng(symbol);
+    if (selectedSymbol != null) {
+      LatLng current = await variable;
+      //displayDockCard(current);
+      print("SELECTED SYMBOL IS..............: " +
+          symbol.toString() +
+          "   " +
+          current.toString());
+    }
   }
 
   /// Display journey and refocus camera position
   void _displayJourneyAndRefocus(List<LatLng> journey) {
-    _setJourney(journey);
+    if (_displayPolyline) {
+      _setJourney(journey);
+    }
+    //_setJourney(journey);
     _refocusCamera(journey);
     setPolylineMarkers(controller!, journey, _polylineSymbols);
   }
