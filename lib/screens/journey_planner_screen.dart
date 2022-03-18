@@ -10,9 +10,7 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:veloplan/widgets/dynamic_widget.dart';
 
-/*
-  @author - Rahin Ashraf
- */
+///@author - Rahin Ashraf
 class MapPlace {
   String? address;
   LatLng? coords;

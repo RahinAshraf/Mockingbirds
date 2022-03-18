@@ -8,6 +8,8 @@ import '../../providers/location_service.dart';
 import '../../screens/journey_planner_screen.dart';
 import '../dynamic_widget.dart';
 
+///the base for the panel widget which contains all necessary controllers, streams and data sets
+///@author: Rahin Ashraf - k20034059
 abstract class PanelWidgetBase extends StatefulWidget {
   final ScrollController scrollController;
   final PanelController panelController;
@@ -34,9 +36,8 @@ abstract class PanelWidgetBase extends StatefulWidget {
         Key? key})
       : super(key: key);
 
-  //When triggered, redirects the user to the place_search_Screen in order for them to specify a location to visit
-  //for the journey
-
+  ///When triggered, redirects the user to the place_search_Screen in order for them to specify a location to visit
+  ///for the journey
   void handleSearchClick(
       PanelWidget widget,
       BuildContext context,
@@ -56,7 +57,7 @@ abstract class PanelWidgetBase extends StatefulWidget {
     }
   }
 
-  //The logic to restrict the user from being able to start a journey without defining at least one destination for the journey
+  ///The logic to restrict the user from being able to start a journey without defining at least one destination for the journey
   bool oneDestinationMustBeSpecified( PanelWidget widget,
       BuildContext context, Alerts alert) {
     if (widget.listDynamic.isEmpty) {

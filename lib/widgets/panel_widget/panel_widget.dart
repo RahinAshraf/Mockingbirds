@@ -20,7 +20,7 @@ import '../dynamic_widget.dart';
 
 ///When rendered, the journey_planner_screen will have this panel_widget at the bottom. It is an interactive panel the user can
 ///slide up or down, when wanting to input their desired locations for the journey.
-///@author - Rahin Ashraf
+///@author: Rahin Ashraf - k20034059
 
 class PanelWidget extends PanelWidgetBase {
    PanelWidget({Key? key, required Map<String, List<double?>> selectionMap, required Stream<MapPlace> address,
@@ -33,8 +33,10 @@ class PanelWidget extends PanelWidgetBase {
     return PanelWidgetState();
   }
 
+  ///Returns whether or not the user has specified a destination. If not, displays an error message
   bool hasSpecifiedOneDestination(BuildContext context, Alerts alert) => oneDestinationMustBeSpecified(this, context, alert);
 
+  ///Handle when the user presses a textfield to input a location
   void handleOnSearchClick(BuildContext context,
       TextEditingController textEditingController,
       Function(List<double?>) onAddressAdded){
@@ -63,18 +65,18 @@ class PanelWidgetState extends State<PanelWidget> {
     widget.dynamicWidgets.sink.add(widget.listDynamic);
   }
 
+  ///imports the docking stations from the TFL api
   void importDockStation() async {
     await _stationManager.importStations();
     print(_stationManager.stations.length.toString() +
         "this is the length of the stationManager");
   }
 
-  //Initialises variables and listens for user interaction to act on
+  ///Initialises variables and listens for user interaction to act on
   @override
   void initState() {
     staticListMap = widget.staticListMap;
     selectionMap = widget.selectionMap;
-
     LatLng currentLocation = getLatLngFromSharedPrefs();
     locService
         .reverseGeoCode(currentLocation.latitude, currentLocation.longitude)
@@ -85,7 +87,6 @@ class PanelWidgetState extends State<PanelWidget> {
         }
       });
     });
-
     _listToMapClick();
     importDockStation();
     super.initState();
@@ -123,7 +124,7 @@ class PanelWidgetState extends State<PanelWidget> {
     });
   }
 
-  //When called, this function sets the first location of the journey to the users current location
+  ///When called, this function sets the first location of the journey to the users current location
   _useCurrentLocationButtonHandler(
       TextEditingController controller, String key) async {
     sharedPreferences.setString('source', json.encode(response));
@@ -134,14 +135,12 @@ class PanelWidgetState extends State<PanelWidget> {
     controller.text = place;
     staticListMap[key] = currentLocationCoords;
 
-
     PanelExtensions.of().checkInputLocation(controller, editDockTextEditController);
   }
 
-  /*
-  Function which builds the static row of components which are displayed permanently. Statically built, as every journey
-  needs to specify a starting point
-  */
+
+  ///Function which builds the static row of components which are displayed permanently. Statically built, as every journey
+  ///needs to specify a starting point
   Widget _buildStatic(TextEditingController controller,
       {String? hintText,
       required String label,
@@ -153,7 +152,7 @@ class PanelWidgetState extends State<PanelWidget> {
             const SizedBox(
               width: 10,
             ),
-            Container(
+            SizedBox(
               width: 50,
               child: FittedBox(
                 fit: BoxFit.scaleDown,
@@ -164,10 +163,7 @@ class PanelWidgetState extends State<PanelWidget> {
                     )),
               ),
             ),
-
             const SizedBox(width: 20),
-
-
             Expanded(
               child: Column(
                 children: [
@@ -206,22 +202,8 @@ class PanelWidgetState extends State<PanelWidget> {
                 ],
               ),
             ),
-            //SizedBox(width: 10),
-            TextButton(
-              onPressed: () async {
-                print("Link carasoul stuff here");
-                // List temp = await locService.getPlaceCoords(controller.text);
-                // print(temp);
-              },
-              child: const Icon(
-                Icons.keyboard_arrow_right_rounded,
-                size: 50,
-                color: Colors.green,
-              ),
-            ),
           ],
         ),
-
         PanelExtensions.of().buildDefaultClosestDock(editDockTextEditController,
             controller),
       ],
@@ -253,6 +235,7 @@ class PanelWidgetState extends State<PanelWidget> {
     }
   }
 
+  ///The build which creates the panel itself.
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -274,13 +257,11 @@ class PanelWidgetState extends State<PanelWidget> {
               hintText: "Where from?",
               label: "From",
               onAddressAdded: addCordFrom),
-          // _buildStatic(widget.toTextEditController,
-          //     hintText: "Where to?", label: "To", onAddressAdded: addCordTo),
           Row(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('TO'),
+              const Text('TO'),
               Column(
                 mainAxisSize: MainAxisSize.max,
                 children: [
@@ -290,7 +271,7 @@ class PanelWidgetState extends State<PanelWidget> {
 
                       return SizedBox(
                         width: 300,
-                        child: ReorderableListView.builder(
+                        child: ReorderableListView.builder( //user can reorder the listItems
                           itemExtent: 74,
                           padding: EdgeInsets.zero,
                           shrinkWrap: true,
@@ -301,11 +282,10 @@ class PanelWidgetState extends State<PanelWidget> {
                               widget.listDynamic.removeAt(index);
                               widget.dynamicWidgets.sink.add(widget.listDynamic);
                             });
-                            return //ListTile(key: ValueKey(index), leading:
-                                Container(
+                            return Container(
                                     key: ValueKey(index),
                                     child:
-                                        dynamicWidget); //, trailing: Icon(Icons.menu),);
+                                        dynamicWidget);
                           },
                           itemCount: listOfDynamics.length,
                           physics: const NeverScrollableScrollPhysics(),
@@ -345,6 +325,10 @@ class PanelWidgetState extends State<PanelWidget> {
     );
   }
 
+  ///The function to deal with the user pressing the START button. Applies the constraints for a journey.
+  ///For all the coordinates of the locations the user specified, creates a new list - this new list is a list of all the
+  ///closest docking stations for the locations the user specified. This new list is then passed onto MapRoutePage.
+  ///THIS FUNCTION NEEDS TO BE REFACTORED FURTHER
   void _handleStartClick(){
     final hasEmptyField = widget.listDynamic
         .any((element) => element.placeTextController.text.isEmpty);
@@ -384,6 +368,8 @@ class PanelWidgetState extends State<PanelWidget> {
     }
   }
 
+  ///applies all the constraints needed for the panel widget. If any constraints are broken, program execution terminates
+  ///and  displays necessary error message to the user
   void applyConstraints(TextEditingController fromEditingController,
       TextEditingController toEditingController) {
     if (startLocationMustBeSpecified(fromEditingController) ||
@@ -400,11 +386,7 @@ class PanelWidgetState extends State<PanelWidget> {
     }
   }
 
-  //Returns all the coordinates for the locations the user specifies
-  List<List<double?>?> getCoordinatesForJourney() {
-    return widget.selectedCoords;
-  }
-
+  ///The logic to restrict the user from being able to start a journey with 2 locations in the journey being one after the other
   bool areAdjacentCoords(List<List<double?>?> myList) {
     for (int i = 0; i < myList.length - 1; i++) {
       if (myList[i]?.first == myList[i + 1]?.first &&
@@ -422,7 +404,7 @@ class PanelWidgetState extends State<PanelWidget> {
     return false;
   }
 
-  //The logic to restrict the user from being able to start a journey, with blank location fields
+  ///The logic to restrict the user from being able to start a journey, with blank location fields
   bool aSearchBarCannotBeEmpty(List<DynamicWidget>? list) {
     bool isFieldNotEmpty = true;
     if (list == null) {
@@ -442,7 +424,7 @@ class PanelWidgetState extends State<PanelWidget> {
     return false;
   }
 
-  //The logic to restrict the user from being able to start a journey without a starting point
+  ///The logic to restrict the user from being able to start a journey without a starting point
   bool startLocationMustBeSpecified(
       TextEditingController textEditingController) {
     if (widget.fromTextEditController.text.isEmpty) {

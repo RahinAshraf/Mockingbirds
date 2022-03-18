@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../providers/location_service.dart';
 import '../screens/place_search_screen.dart';
 
+///helper extensions for panel widget
+///@author: Rahin Ashraf - k20034059
 extension BuildContextExt on BuildContext {
   Future<dynamic> openSearch() {
     return Navigator.of(this).push(MaterialPageRoute(

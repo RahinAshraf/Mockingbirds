@@ -5,13 +5,12 @@ import 'package:veloplan/widgets/panel_widget/panel_widget_exts.dart';
 import '../helpers/live_location_helper.dart';
 import '../providers/location_service.dart';
 
-
- ///The widgets the user dynamically creates during runtime, for them to specify the locations of the journey.
- ///Each dynamic widget is a row which comes with a row of children:
- /// - red cross, to delete a location from the journey planner list
- /// - TextField , to insert a location to the journey planner list
- /// - green > icon, to allow users to specify specific docks (if they wish) of the locations user specifies in the TextField
-
+///The widgets the user dynamically creates during runtime, for them to specify the locations of the journey.
+///Each dynamic widget has the following properties:
+/// - red cross, to delete a location from the journey planner list
+/// - TextField , which redirects the user to PlaceSearchScreen to insert a location to the journey planner list
+/// - menu item icon, to indicate to the user that the list is reorderable via dragging
+///@author: Rahin Ashraf - k20034059
 
 class DynamicWidget extends StatelessWidget {
   final TextEditingController placeTextController = TextEditingController();
@@ -23,10 +22,12 @@ class DynamicWidget extends StatelessWidget {
   final locationService = LocationService();
   final Map? coordDataMap;
 
+  ///set the position of the selected coordinates list to the passed in index
   void setIndex(index) {
     position = index;
   }
 
+  ///listen to changes for user input on the location specified in the location textfield
   @override
   void initState() {
     placeTextController.addListener(() {
@@ -43,10 +44,7 @@ class DynamicWidget extends StatelessWidget {
       children: [
         Expanded(
           child: Row(
-            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              //const SizedBox(height: 17),
-              //Expanded(
               TextButton(
                 onPressed: () {
                   int len = selectedCoords?.length ?? 0;
@@ -124,7 +122,7 @@ class DynamicWidget extends StatelessWidget {
                   ),
                 ),
               ),
-              Icon(Icons.menu),
+              const Icon(Icons.menu),
             ],
           ),
         ),
@@ -133,8 +131,7 @@ class DynamicWidget extends StatelessWidget {
     );
   }
 
-
-  //Executed when the user presses on a search TextField
+  ///Executed when the user presses on a location TextField
   void _handleSearchClick(BuildContext context, int position) async {
     final result = await context.openSearch();
     print("Navigator_Navigator_Navigator => $position");
@@ -155,18 +152,17 @@ class DynamicWidget extends StatelessWidget {
     print("RESULT => $result");
   }
 
-
-
+  ///Handler for when the user removes a dynamic widget from the list
   void removeDynamic(Function(int) onDelete) {
     this.onDelete = onDelete;
   }
 
+  ///Reacts to user input for the location TextField
   void checkInputLocation(){
-
     PanelExtensions.of().checkInputLocation(placeTextController, editDockTextEditController);
   }
 
-  ///When called, this function sets the first location of the journey to the users current location
+  ///When called, this function sets location of a TextField to the users current location
   _useCurrentLocationButtonHandler(
       Map response, TextEditingController controller) async {
     sharedPreferences.setString('source', json.encode(response));
