@@ -1,15 +1,10 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:veloplan/screens/group_creation_screen.dart';
+import 'package:flutter/material.dart';
 import 'package:veloplan/screens/summary_journey_screen.dart';
-import 'package:veloplan/widgets/dock_station.dart';
-import 'package:veloplan/widgets/carousel/dockings_station_card.dart';
-import 'package:veloplan/widgets/docking_station_card.dart';
-import '../screens/schedule_screen.dart';
+
 import '../screens/favourite_screen.dart';
-import '../screens/setting_screen.dart';
 import '../screens/help_screen.dart';
-import '../screens/join_group_screen.dart';
+import '../screens/schedule_screen.dart';
 
 ///Author: Tayyibah
 
@@ -132,7 +127,7 @@ class NavigationDrawerWidget extends StatelessWidget {
         break;
       case 5:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => Settings(),
+          builder: (context) => Placeholder(),
         ));
         break;
       case 6:
