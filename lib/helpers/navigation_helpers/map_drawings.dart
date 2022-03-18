@@ -11,11 +11,13 @@ void placeDockMarkers(
     MapboxMapController controller, List<DockingStation> docks) {
   for (var station in docks) {
     controller.addSymbol(
-      SymbolOptions(
-          geometry: LatLng(station.lat, station.lon),
-          iconSize: 0.7,
-          iconImage: "assets/icon/bicycle.png"),
-    );
+        SymbolOptions(
+            geometry: LatLng(station.lat, station.lon),
+            iconSize: 0.7,
+            iconImage: "assets/icon/bicycle.png"),
+        {
+          "station": station,
+        });
   }
 }
 

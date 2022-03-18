@@ -5,8 +5,10 @@ import 'package:location/location.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/helpers/live_location_helper.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
+import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:veloplan/.env.dart';
+import 'package:veloplan/widgets/docking_station_card.dart';
 
 /// Class to display a mapbox map with other possible widgets on top
 /// Author(s): Fariha Choudhury k20059723, Elisabeth Koren Halvorsen k20077737
@@ -76,20 +78,33 @@ class BaseMapboxMap {
   }
 
   /// Shows the on tapped docking station information
+  // Future<void> onSymbolTapped(Symbol symbol) async {
+  //   selectedSymbol = symbol;
+  //   Future<LatLng> variable = controller!.getSymbolLatLng(symbol);
+  //   if (selectedSymbol != null) {
+  //     LatLng current = await variable;
+  //     displayDockCard(current);
+  //   }
+  // }
   Future<void> onSymbolTapped(Symbol symbol) async {
     selectedSymbol = symbol;
-    Future<LatLng> variable = controller!.getSymbolLatLng(symbol);
     if (selectedSymbol != null) {
-      LatLng current = await variable;
-      displayDockCard(current);
+      Map<dynamic, dynamic>? stationData = symbol.data;
+      print("ON SYMBOL TAPPED");
+
+      displayDockCard(stationData);
     }
   }
 
   /// Shows the information about the pressed docking station
-  void displayDockCard(LatLng current) {
-    //CHANGE THIS TO CREATE CARD
-    //! CAN BE MOVED TO HELPER ONCE HRISTINA IS FINISHED WITH IT
-    print("Will call widget next");
+  // void displayDockCard(LatLng current) {
+  //   //CHANGE THIS TO CREATE CARD
+  //   //! CAN BE MOVED TO HELPER ONCE HRISTINA IS FINISHED WITH IT
+  //   print("Will call widget next");
+  // }
+  void displayDockCard(Map<dynamic, dynamic>? stationData) {
+    DockingStation station = stationData!["station"];
+    DockingStationCard.station(station);
   }
 
   /// Initialises map without live location
