@@ -5,6 +5,7 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:veloplan/screens/journey_planner_screen.dart';
 import 'package:veloplan/screens/navigation/map_with_route_screen.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
+import 'package:veloplan/widgets/panel_widget/panel_widget_exts.dart';
 import 'package:veloplan/widgets/panel_widget/panel_widgets_base.dart';
 import '../../helpers/navigation_helpers/navigation_conversion_helpers.dart';
 import '../../models/docking_station.dart';
@@ -40,7 +41,7 @@ class PanelWidget extends PanelWidgetBase {
   void handleOnSearchClick(BuildContext context,
       TextEditingController textEditingController,
       Function(List<double?>) onAddressAdded){
-    return  handleSearchClick(this, context, textEditingController, onAddressAdded);
+    handleSearchClick(this, context, textEditingController, onAddressAdded);
   }
 }
 
@@ -49,12 +50,15 @@ class PanelWidgetState extends State<PanelWidget> {
       widget.dynamicWidgets.stream;
   final locService = LocationService();
   late Map<String, List<double?>> selectionMap;
-  late TextEditingController firstTextEditingController =
-      TextEditingController();
+
   late Map<String, List<double?>> staticListMap;
   late Map response;
   late List<DockingStation> dockingStationList;
   final dockingStationManager _stationManager = dockingStationManager();
+
+  //final TextEditingController placeTextController = TextEditingController();
+  final TextEditingController editDockTextEditController =
+  TextEditingController();
 
   static const String fromLabelKey = "From";
   static const String toLabelKey = "To";
@@ -140,6 +144,9 @@ class PanelWidgetState extends State<PanelWidget> {
     List<double?> currentLocationCoords = [latitudeOfPlace, longitudeOfPlace];
     controller.text = place;
     staticListMap[key] = currentLocationCoords;
+
+
+    PanelExtensions.of().checkInputLocation(controller, editDockTextEditController);
   }
 
   /*
@@ -150,73 +157,92 @@ class PanelWidgetState extends State<PanelWidget> {
       {String? hintText,
       required String label,
       required Function(List<double?>) onAddressAdded}) {
-    return Row(
+    return Column(
       children: [
-        const SizedBox(
-          width: 10,
-        ),
-        Container(
-          width: 50,
-          child: FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Text(label,
-                style: const TextStyle(
-                  fontWeight: FontWeight.normal,
-                  fontSize: 20,
-                )),
-          ),
-        ),
-
-        const SizedBox(width: 20),
-        Expanded(
-          child: SizedBox(
-            child: TextField(
-              readOnly: true,
-              onTap: () {
-                widget.handleOnSearchClick(context, controller, onAddressAdded);
-              },
-              controller: controller,
-              decoration: InputDecoration(
-                hintText: hintText,
-                focusedBorder: circularInputBorder(width: 2.0),
-                border: circularInputBorder(),
-                enabledBorder: circularInputBorder(),
-                disabledBorder: circularInputBorder(),
-                errorBorder: circularInputBorder(),
-                focusedErrorBorder: circularInputBorder(),
-                suffixIcon: IconButton(
-                  onPressed: () {
-                    _useCurrentLocationButtonHandler(controller, label);
-                  },
-                  icon: const Icon(
-                    Icons.my_location,
-                    size: 20,
-                    color: Colors.blue,
-                  ),
-                ),
+        Row(
+          children: [
+            const SizedBox(
+              width: 10,
+            ),
+            Container(
+              width: 50,
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(label,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.normal,
+                      fontSize: 20,
+                    )),
               ),
             ),
-          ),
+
+            const SizedBox(width: 20),
+
+
+            Expanded(
+              child: Column(
+                children: [
+                  SizedBox(
+                    child: TextField(
+                      readOnly: true,
+                      onTap: () {
+                        widget.handleOnSearchClick(context, controller, onAddressAdded);
+                      },
+                      onEditingComplete: () {
+                        print("ONCHANGED");
+                        PanelExtensions.of(context:context).checkInputLocation(controller, editDockTextEditController);
+                      },
+                      controller: controller,
+                      decoration: InputDecoration(
+                        hintText: hintText,
+                        focusedBorder: circularInputBorder(width: 2.0),
+                        border: circularInputBorder(),
+                        enabledBorder: circularInputBorder(),
+                        disabledBorder: circularInputBorder(),
+                        errorBorder: circularInputBorder(),
+                        focusedErrorBorder: circularInputBorder(),
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            _useCurrentLocationButtonHandler(controller, label);
+                          },
+                          icon: const Icon(
+                            Icons.my_location,
+                            size: 20,
+                            color: Colors.blue,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            //SizedBox(width: 10),
+            TextButton(
+              onPressed: () async {
+                print("Link carasoul stuff here");
+                // List temp = await locService.getPlaceCoords(controller.text);
+                // print(temp);
+              },
+              child: const Icon(
+                Icons.keyboard_arrow_right_rounded,
+                size: 50,
+                color: Colors.green,
+              ),
+            ),
+          ],
         ),
-        //SizedBox(width: 10),
-        TextButton(
-          onPressed: () async {
-            print("Link carasoul stuff here");
-            // List temp = await locService.getPlaceCoords(controller.text);
-            // print(temp);
-          },
-          child: const Icon(
-            Icons.keyboard_arrow_right_rounded,
-            size: 50,
-            color: Colors.green,
-          ),
-        ),
+
+        PanelExtensions.of().buildDefaultClosestDock(editDockTextEditController,
+            controller),
       ],
     );
   }
 
   void addCordFrom(List<double?> newCord) {
     staticListMap[fromLabelKey] = newCord;
+    PanelExtensions.of(context: context).getClosetDock(newCord[0],
+        newCord[1], editDockTextEditController);
   }
 
   void addCordTo(List<double?> newCord) {
@@ -267,7 +293,7 @@ class PanelWidgetState extends State<PanelWidget> {
             children: [
               Text('TO'),
               Column(
-                mainAxisSize: MainAxisSize.min,
+                mainAxisSize: MainAxisSize.max,
                 children: [
                   StreamBuilder<List<DynamicWidget>>(
                     builder: (_, snapshot) {

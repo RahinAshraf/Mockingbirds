@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
 import 'package:veloplan/widgets/panel_widget/panel_widget.dart';
+import 'package:veloplan/widgets/panel_widget/panel_widget_exts.dart';
 import '../helpers/live_location_helper.dart';
 import '../models/docking_station.dart';
 import '../providers/docking_station_manager.dart';
@@ -40,7 +41,7 @@ class DynamicWidget extends StatelessWidget {
   void initState() {
     //importDockStation();
     placeTextController.addListener(() {
-      checkInputLocation();
+      PanelExtensions.of().checkInputLocation(placeTextController, editDockTextEditController);
     });
   }
 
@@ -52,30 +53,8 @@ class DynamicWidget extends StatelessWidget {
   DynamicWidget({Key? key, required this.selectedCoords, this.coordDataMap})
       : super(key: key);
 
-  void checkInputLocation() async {
-    print("THIS IS CLOSET DOCK");
-    if (placeTextController.text.isEmpty) {
-      print("Nothing specified");
-    } else {
-      print("REACHED METHOD GETCLOSETDOCK");
-      List coordPlace = await locationService.getPlaceCoords(
-          placeTextController.text); //getting coord of the place [lat,lng]
-      getClosetDock(coordPlace.first, coordPlace.last);
-      //TO-DO
-      // - change to get closet dock with available bikes after getting num of cyclist
-    }
-  }
 
-  void getClosetDock(double? lat, double? lng) async {
-    // List coordPlace = await locationService.getPlaceCoords(placeTextController.text); //getting coord of the place [lat,lng]
-    LatLong.LatLng latlngPlace = LatLong.LatLng(lat!, lng!); //coverting list to latlng
-    dockingStationManager _stationManager = dockingStationManager();
-    await _stationManager.importStations();
-    print(latlngPlace);
-    DockingStation closetDock = _stationManager.getClosestDock(latlngPlace);
-    print("closet dock ${closetDock.name}");
-    editDockTextEditController.text = closetDock.name;
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +91,7 @@ class DynamicWidget extends StatelessWidget {
                     // },
                     onEditingComplete: () {
                       print("ONCHANGED");
-                      checkInputLocation();
+                      PanelExtensions.of(context:context).checkInputLocation(placeTextController, editDockTextEditController);
                     },
                     readOnly: true,
                     onTap: () {
@@ -173,54 +152,11 @@ class DynamicWidget extends StatelessWidget {
             ],
           ),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.subdirectory_arrow_right),
-            // Container(
-            //   decoration: BoxDecoration(
-            //       border: Border.all(),
-            //       borderRadius: BorderRadius.circular(20)),
-            //   child: Text("Default closest dock"),
-            // ),
-            Expanded(
-              child: TextField(
-                enabled: false,
-                controller: editDockTextEditController,
-                decoration: InputDecoration(
-                  hintText: "Default closest dock",
-                  focusedBorder: OutlineInputBorder(
-                    borderSide:
-                    const BorderSide(color: Colors.black, width: 2.0),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                ),
-              ),
-            ),
-            IconButton(
-                onPressed: () async {
-                  List temp = await locationService
-                      .getPlaceCoords(placeTextController.text);
-                  checkInputLocation();
-                  //LatLng locationInLatLng = LatLng(temp.first, temp.last);
-                  //print(locationInLatLng);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              DockSorterScreen(_latLng(temp.first, temp.last))));
-                },
-                padding: const EdgeInsets.all(0),
-                icon: const Icon(
-                  Icons.navigate_next_outlined,
-                )),
-          ],
-        ),
+      PanelExtensions(context: context).buildDefaultClosestDock(editDockTextEditController, placeTextController)
       ],
     );
   }
 
-  LatLong.LatLng _latLng(double lat, double lng) => LatLong.LatLng(lat, lng);
 
   //Executed when the user presses on a search TextField
   void _handleSearchClick(BuildContext context, int position) async {
@@ -237,14 +173,21 @@ class DynamicWidget extends StatelessWidget {
       } else {
         selectedCoords?[position] = feature.geometry?.coordinates;
       }
-      getClosetDock(feature.geometry?.coordinates.first,
-          feature.geometry?.coordinates.last);
+      PanelExtensions.of(context: context).getClosetDock(feature.geometry?.coordinates.first,
+          feature.geometry?.coordinates.last, editDockTextEditController);
     }
     print("RESULT => $result");
   }
 
+
+
   void removeDynamic(Function(int) onDelete) {
     this.onDelete = onDelete;
+  }
+
+  void checkInputLocation(){
+
+    PanelExtensions.of().checkInputLocation(placeTextController, editDockTextEditController);
   }
 
   //When called, this function sets the first location of the journey to the users current location
@@ -267,3 +210,4 @@ class DynamicWidget extends StatelessWidget {
     }
   }
 }
+
