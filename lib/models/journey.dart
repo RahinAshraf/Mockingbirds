@@ -1,59 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'docking_station.dart';
 
-///Represents a docking station
-///Author(s): Liliana, Nicole, Tayyibah
+///Represents a journey
+///Author: Tayyibah
 
-class DockingStation {
-  late String _stationId;
-  late String _name;
-  late int _numberOfBikes;
-  late int _numberOfEmptyDocks;
-  late int _numberOfAllDocks;
-  late bool _isInstalled;
-  late bool _isLocked;
-  late double _lon;
-  late double _lat;
-  String? _documentId;
+class Journey {
+  String? _journeyDocumentId;
+  late List<DockingStation>
+      _stationList; //list of docking stations in a journey
 
-  DockingStation(
-      this._stationId,
-      this._name,
-      this._isInstalled,
-      this._isLocked,
-      this._numberOfBikes,
-      this._numberOfEmptyDocks,
-      this._numberOfAllDocks,
-      this._lon,
-      this._lat);
+  Journey(this._journeyDocumentId, this._stationList);
 
-  String get stationId => _stationId;
-  String get name => _name;
-  bool get isInstalled => _isInstalled;
-  bool get isLocked => _isLocked;
-  int get numberOfBikes => _numberOfBikes;
-  int get numberOfEmptyDocks => _numberOfEmptyDocks;
-  int get numberOfAllDocks => _numberOfAllDocks;
-  double get lon => _lon;
-  double get lat => _lat;
-  String? get documentId => _documentId;
+  String? get journeyDocumentId => _journeyDocumentId;
+  List<DockingStation> get stationList => _stationList;
 
-  DockingStation.map(DocumentSnapshot document) {
-    _documentId = document.id;
-    _stationId = document.get('stationId');
-    _name = document.get('name');
-    _numberOfBikes = document.get('numberOfBikes');
-    _numberOfEmptyDocks = document.get('numberOfEmptyDocks');
-  }
+  // Journey.map(DocumentSnapshot document) {
+  //   _documentId = document.id;
+  //   _stationId = document.get('stationId');
+  //   _name = document.get('name');
+  //   _numberOfBikes = document.get('numberOfBikes');
+  //   _numberOfEmptyDocks = document.get('numberOfEmptyDocks');
+  // }
 
-  /// An empty constructor useful for initialisations
-  DockingStation.empty()
-      : _stationId = "empty",
-        _name = "empty",
-        _isInstalled = false,
-        _isLocked = true,
-        _numberOfBikes = 0,
-        _numberOfEmptyDocks = 0,
-        _numberOfAllDocks = 0,
-        _lon = 0.0,
-        _lat = 0.0;
 }

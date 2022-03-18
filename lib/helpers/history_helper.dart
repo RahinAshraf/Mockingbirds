@@ -1,15 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/rendering.dart';
-import 'package:mapbox_gl/mapbox_gl.dart';
-import 'package:veloplan/services/user_services.dart';
+import '../widgets/carousel/station_carousel.dart';
 import 'package:collection/collection.dart';
 import 'package:veloplan/models/docking_station.dart';
-import 'package:veloplan/providers/location_service.dart';
+import '../models/journey.dart';
+import 'package:intl/intl.dart';
 
 ///Helper functions to add,delete or retrieve docking stations
 ///from and to the firestore database for a user
-///@author Tayyibah
+///Author: Tayyibah
 
 class HistoryHelper {
   late CollectionReference _journeys;
@@ -22,7 +21,16 @@ class HistoryHelper {
     _journeys = _db.collection('users').doc(_user_id).collection('journeys');
   }
 
-//creates a subcollection for each docking station in a journey
+  ///Creates a new journey entry and adds the time and docking stations
+  void createJourneyEntry(List<DockingStation> dockingStationList) {
+    var newJourney = _journeys.doc();
+    addJourneyTime(newJourney.id);
+    for (DockingStation station in dockingStationList) {
+      addDockingStation(station, newJourney.id);
+    }
+  }
+
+  ///Adds a docking station subcollection to a given journey
   Future<void> addDockingStation(
     DockingStation station,
     documentId,
@@ -33,7 +41,8 @@ class HistoryHelper {
         .add({
           'stationId': station.stationId,
           'stationName': station.name,
-          'numberOfBikes': station.numberOfBikes, //these will be removed
+          'numberOfBikes': station
+              .numberOfBikes, //these will be removed and changed to lat and lng
           'numberOfEmptyDocks': station.numberOfEmptyDocks,
         })
         .then((value) => print("docking station Added"))
@@ -41,44 +50,62 @@ class HistoryHelper {
             "Failed to add docking station to journey: $error")); //add snackbar instead
   }
 
-//Takes in a list of docking stations from a journey and adds to database
-  void createJourneyEntry(List<DockingStation> dockingStationList) {
-    var randomDoc = _journeys.doc();
-    for (DockingStation station in dockingStationList) {
-      addDockingStation(station, randomDoc.id);
+  ///Calculates the date and adds as a field to journey
+  Future<void> addJourneyTime(journeyDocumentId) {
+    final DateTime timeNow = DateTime.now();
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    final String formattedTime = formatter.format(timeNow);
+    return _journeys.doc(journeyDocumentId).set({'date': formattedTime});
+  }
+
+  ///Gets all of the docking station information from a given journey
+  void getDockingStationsInJourney(journeyDocumentId) async {
+    var list = await _journeys
+        .doc(journeyDocumentId)
+        .collection('docking_stations')
+        .get();
+
+    list.docs.forEach((doc) {
+      print(doc["stationId"]);
+    });
+  }
+
+  ///Gets all of a users journey documents
+  Future<void> getAllJourneys() async {
+    FirebaseFirestore db = FirebaseFirestore.instance;
+
+    QuerySnapshot<Object?> journeys =
+        await db.collection('users').doc(_user_id).collection('journeys').get();
+
+    for (DocumentSnapshot doc in journeys.docs) {
+      print(doc.id);
     }
   }
 
-  void deleteJourney(journeyDocumentId) {
-    _journeys
-        .doc(journeyDocumentId)
-        .get()
-        .then((DocumentSnapshot documentSnapshot) {
-      if (documentSnapshot.exists) {
-        print('Document exists on the database');
-      } else {
-        print("doesnt");
-      }
-    });
+  ///Deletes docking station subcollection and then deletes journey entry
+  ///from the database.
+  void deleteJourneyEntryWithDockingStations(String journeyDocumentId) async {
+    deleteDockingStations(journeyDocumentId);
+    deleteJourneyEntry(journeyDocumentId);
   }
 
-  void deleteNestedSubcollections(String id) {
-    Future<QuerySnapshot> dockingStationDocuments =
-        _journeys.doc(id).collection("docking_stations").get();
+  ///Deletes docking station subcollection from a given journey.
+  void deleteDockingStations(String journeyDocumentId) async {
+    var dockingStations =
+        _journeys.doc(journeyDocumentId).collection("docking_stations");
 
-    dockingStationDocuments.then((value) {
-      value.docs.forEach((element) {
-        _journeys
-            .doc(id)
-            .collection("docking_stations")
-            .doc(element.id)
-            .delete()
-            .then((value) => print("success"));
-      });
-    });
+    QuerySnapshot<Object?> dockingStationDocuments =
+        await dockingStations.get();
 
-     _journeys
-        .doc(id)
+    for (DocumentSnapshot doc in dockingStationDocuments.docs) {
+      dockingStations.doc(doc.id).delete();
+    }
+  }
+
+  ///Deletes a given journey
+  void deleteJourneyEntry(String journeyDocumentId) {
+    _journeys
+        .doc(journeyDocumentId)
         .delete()
         .then((value) => print("deleted"))
         .catchError((error) => print("Failed to delete fave: $error"));
@@ -132,73 +159,7 @@ class HistoryHelper {
   //   }
   // }
 
-  // Future<void> addJourney(
-  //   double ,
-  // ) {
-  //   return _favourites
-  //       .add({
-  //         'stationId': stationId,
-  //         'name': name,
-  //         'numberOfBikes': numberOfBikes,
-  //         'numberOfEmptyDocks': numberOfEmptyDocks,
-  //       })
-  //       .then((value) => print("fave Added"))
-  //       .catchError((error) =>
-  //           print("Failed to add fave: $error")); //add snackbar instead
-  // }
 
-//   Future<void> deleteFavourite(favouriteDocumentId) {
-//     return _favourites
-//         .doc(favouriteDocumentId)
-//         .delete()
-//         .then((value) => print(favouriteDocumentId))
-//         .catchError((error) => print("Failed to delete fave: $error"));
-//   }
 
-//   static Future<List<DockingStation>> getUserFavourites() async {
-//     List<DockingStation> favourites = [];
-//     FirebaseFirestore db = FirebaseFirestore.instance;
 
-//     QuerySnapshot<Object?> docs = await db
-//         .collection('users')
-//         .doc(getUid())
-//         .collection('favourites')
-//         .get();
-//     for (DocumentSnapshot doc in docs.docs) {
-//       favourites.add(DockingStation.map(doc));
-//     }
-//     return favourites;
-//   }
 
-// //Deletes every single favourite documents, maybe move this to settings?
-//   Future deleteUsersFavourites() async {
-//     var snapshots = await _favourites.get();
-//     for (var doc in snapshots.docs) {
-//       await doc.reference.delete();
-//     }
-//   }
-
-//   bool isFavouriteStation(
-//       String stationId, List<DockingStation> favouriteList) {
-//     DockingStation? station = favouriteList
-//         .firstWhereOrNull((DockingStation f) => (f.stationId == stationId));
-//     if (station == null) {
-//       return false;
-//     } else {
-//       return true;
-//     }
-//   }
-
-//   void toggleFavourite(String stationId, String name, int numberOfBikes,
-//       int numberOfEmptyDocks) async {
-//     var favouriteList = await getUserFavourites();
-//     if (isFavouriteStation(stationId, favouriteList)) {
-//       DockingStation favouriteStation = favouriteList
-//           .firstWhere((DockingStation f) => (f.stationId == stationId));
-//       String? favouriteDocumentId = favouriteStation.documentId;
-//       await deleteFavourite(favouriteDocumentId);
-//     } else {
-//       await addFavourite(stationId, name, numberOfBikes, numberOfEmptyDocks);
-//     }
-//   }
-}

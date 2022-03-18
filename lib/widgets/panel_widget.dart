@@ -76,7 +76,7 @@ class PanelWidgetState extends State<PanelWidget> {
       TextEditingController();
   late Map<String, List<double?>> staticListMap;
   late Map response;
-  late List<DockingStation> dockingStationList;
+  List<DockingStation> dockingStationList = [];
   final dockingStationManager _stationManager = dockingStationManager();
 
   static const String fromLabelKey = "From";
@@ -400,7 +400,6 @@ class PanelWidgetState extends State<PanelWidget> {
                   List<LatLng>? points = convertListDoubleToLatLng(tempList);
                   HistoryHelper historyHelper = new HistoryHelper();
                   List<LatLng> closestDockList = [];
-                  dockingStationList = [];
                   if (points != null) {
                     for (int i = 0; i < points.length; i++) {
                       DockingStation closestDock =
