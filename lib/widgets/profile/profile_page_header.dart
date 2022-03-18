@@ -24,8 +24,7 @@ class _ProfilePageHeaderState extends State<ProfilePageHeader> {
         await FirebaseFirestore.instance.collection('users').doc(user).get();
     final data = snapshot.data();
     if (data != null && data['distance'] != null) {
-      distance = data['distance'];
-      print('DISTANCE $distance');
+      distance = data['distance'] / 1000;
     }
   }
 

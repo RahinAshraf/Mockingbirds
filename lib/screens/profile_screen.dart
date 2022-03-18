@@ -77,9 +77,7 @@ class _ProfileState extends State<Profile> {
             appBar: _buildAppBar(context, data),
             body: RefreshIndicator(
               onRefresh: () async {
-                setState(() {
-                  
-                });
+                setState(() {});
               },
               child: DefaultTabController(
                 length: 2,
