@@ -78,7 +78,7 @@ class _ProfilePageHeaderState extends State<ProfilePageHeader> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    '$distance',
+                    (distance).toStringAsFixed(2),
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
