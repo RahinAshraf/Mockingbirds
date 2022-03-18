@@ -75,64 +75,71 @@ class _ProfileState extends State<Profile> {
           return Scaffold(
             backgroundColor: Theme.of(context).backgroundColor,
             appBar: _buildAppBar(context, data),
-            body: DefaultTabController(
-              length: 2,
-              child: ScrollConfiguration(
-                behavior: NewScrollBehavior(),
-                child: ExtendedNestedScrollView(
-                  onlyOneScrollInBody: true,
-                  headerSliverBuilder: (context, _) {
-                    return [
-                      SliverList(
-                        delegate: SliverChildListDelegate([
-                          ProfilePageHeader(
-                              data, _currentUser == widget.userID),
-                        ]),
-                      )
-                    ];
-                  },
-                  body: Column(
-                    children: [
-                      Container(
-                        color: Colors.white,
-                        child: ScrollConfiguration(
-                          behavior: NewScrollBehavior(),
-                          child: TabBar(
-                            labelPadding:
-                                const EdgeInsets.symmetric(horizontal: 22.0),
-                            labelColor: Colors.green,
-                            unselectedLabelColor: Colors.grey[400],
-                            indicatorWeight: 2,
-                            indicatorColor: Colors.green,
-                            indicatorSize: TabBarIndicatorSize.label,
-                            tabs: const [
-                              Tab(
-                                text: 'About',
-                              ),
-                              Tab(
-                                text: 'Groups',
-                              ),
-                            ],
+            body: RefreshIndicator(
+              onRefresh: () async {
+                setState(() {
+                  
+                });
+              },
+              child: DefaultTabController(
+                length: 2,
+                child: ScrollConfiguration(
+                  behavior: NewScrollBehavior(),
+                  child: ExtendedNestedScrollView(
+                    onlyOneScrollInBody: true,
+                    headerSliverBuilder: (context, _) {
+                      return [
+                        SliverList(
+                          delegate: SliverChildListDelegate([
+                            ProfilePageHeader(
+                                data, _currentUser == widget.userID),
+                          ]),
+                        )
+                      ];
+                    },
+                    body: Column(
+                      children: [
+                        Container(
+                          color: Colors.white,
+                          child: ScrollConfiguration(
+                            behavior: NewScrollBehavior(),
+                            child: TabBar(
+                              labelPadding:
+                                  const EdgeInsets.symmetric(horizontal: 22.0),
+                              labelColor: Colors.green,
+                              unselectedLabelColor: Colors.grey[400],
+                              indicatorWeight: 2,
+                              indicatorColor: Colors.green,
+                              indicatorSize: TabBarIndicatorSize.label,
+                              tabs: const [
+                                Tab(
+                                  text: 'About',
+                                ),
+                                Tab(
+                                  text: 'Groups',
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      Expanded(
-                          child: ScrollConfiguration(
-                        behavior: NewScrollBehavior(),
-                        child: const TabBarView(children: [
-                          Material(
-                            child: Center(
-                              child: Text('About'),
+                        Expanded(
+                            child: ScrollConfiguration(
+                          behavior: NewScrollBehavior(),
+                          child: const TabBarView(children: [
+                            Material(
+                              child: Center(
+                                child: Text('About'),
+                              ),
                             ),
-                          ),
-                          Material(
-                            child: Center(
-                              child: Text('Groups'),
+                            Material(
+                              child: Center(
+                                child: Text('Groups'),
+                              ),
                             ),
-                          ),
-                        ]),
-                      ))
-                    ],
+                          ]),
+                        ))
+                      ],
+                    ),
                   ),
                 ),
               ),
