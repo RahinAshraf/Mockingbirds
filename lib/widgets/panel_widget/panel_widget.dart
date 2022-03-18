@@ -17,13 +17,10 @@ import 'package:veloplan/helpers/live_location_helper.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:veloplan/models/docking_station.dart';
 import '../dynamic_widget.dart';
-/*
-When rendered, the journey_planner_screen will have this panel_widget at the bottom. It is an interactive panel the user can
-slide up or down, when wanting to input their desired locations for the journey.
 
-@author - Rahin Ashraf
- */
-
+///When rendered, the journey_planner_screen will have this panel_widget at the bottom. It is an interactive panel the user can
+///slide up or down, when wanting to input their desired locations for the journey.
+///@author - Rahin Ashraf
 
 class PanelWidget extends PanelWidgetBase {
    PanelWidget({Key? key, required Map<String, List<double?>> selectionMap, required Stream<MapPlace> address,
@@ -46,26 +43,18 @@ class PanelWidget extends PanelWidgetBase {
 }
 
 class PanelWidgetState extends State<PanelWidget> {
-  Stream<List<DynamicWidget>> get dynamicWidgetsStream =>
-      widget.dynamicWidgets.stream;
+  Stream<List<DynamicWidget>> get dynamicWidgetsStream => widget.dynamicWidgets.stream;
   final locService = LocationService();
   late Map<String, List<double?>> selectionMap;
-
   late Map<String, List<double?>> staticListMap;
   late Map response;
-  late List<DockingStation> dockingStationList;
   final dockingStationManager _stationManager = dockingStationManager();
-
-  //final TextEditingController placeTextController = TextEditingController();
-  final TextEditingController editDockTextEditController =
-  TextEditingController();
-
+  final TextEditingController editDockTextEditController = TextEditingController();
   static const String fromLabelKey = "From";
   static const String toLabelKey = "To";
-
   final Alerts alert = Alerts();
 
-  //creates a new dynamic widget and adds this to the list of destinations for the journey
+  ///creates a new dynamic widget and adds this to the list of destinations for the journey
   addDynamic() {
     widget.listDynamic.add(DynamicWidget(
       selectedCoords: widget.selectedCoords,

@@ -1,25 +1,17 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:latlong2/latlong.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
-import 'package:veloplan/widgets/panel_widget/panel_widget.dart';
 import 'package:veloplan/widgets/panel_widget/panel_widget_exts.dart';
 import '../helpers/live_location_helper.dart';
-import '../models/docking_station.dart';
-import '../providers/docking_station_manager.dart';
 import '../providers/location_service.dart';
-import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart'
-as LatLong;
 
-import '../screens/dock_sorter_screen.dart';
 
-/*
- The widgets the user dynamically creates during runtime, for them to specify the locations of the journey.
- Each dynamic widget is a row which comes with a row of children:
-    - red cross, to delete a location from the journey planner list
-    - TextField , to insert a location to the journey planner list
-    - green > icon, to allow users to specify specific docks (if they wish) of the locations user specifies in the TextField
- */
+ ///The widgets the user dynamically creates during runtime, for them to specify the locations of the journey.
+ ///Each dynamic widget is a row which comes with a row of children:
+ /// - red cross, to delete a location from the journey planner list
+ /// - TextField , to insert a location to the journey planner list
+ /// - green > icon, to allow users to specify specific docks (if they wish) of the locations user specifies in the TextField
+
 
 class DynamicWidget extends StatelessWidget {
   final TextEditingController placeTextController = TextEditingController();
@@ -30,31 +22,20 @@ class DynamicWidget extends StatelessWidget {
   int position = -1;
   final locationService = LocationService();
   final Map? coordDataMap;
-  // final dockingStationManager _stationManager = dockingStationManager();
 
-  //setter for the position index
   void setIndex(index) {
     position = index;
   }
 
   @override
   void initState() {
-    //importDockStation();
     placeTextController.addListener(() {
       PanelExtensions.of().checkInputLocation(placeTextController, editDockTextEditController);
     });
   }
 
-  // void importDockStation() async {
-  //   await _stationManager.importStations();
-  //   print(_stationManager.stations.length.toString() + "this is the length of the stationManager");
-  // }
-
   DynamicWidget({Key? key, required this.selectedCoords, this.coordDataMap})
       : super(key: key);
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -80,15 +61,10 @@ class DynamicWidget extends StatelessWidget {
                   color: Colors.red,
                 ),
               ),
-              //),
               Expanded(
                 child: SizedBox(
                   height: 35,
                   child: TextField(
-                    // onChanged: (placeTextController) { //called when you type
-                    //   print("ONCHANGED");
-                    //   checkInputLocation();
-                    // },
                     onEditingComplete: () {
                       print("ONCHANGED");
                       PanelExtensions.of(context:context).checkInputLocation(placeTextController, editDockTextEditController);
@@ -190,7 +166,7 @@ class DynamicWidget extends StatelessWidget {
     PanelExtensions.of().checkInputLocation(placeTextController, editDockTextEditController);
   }
 
-  //When called, this function sets the first location of the journey to the users current location
+  ///When called, this function sets the first location of the journey to the users current location
   _useCurrentLocationButtonHandler(
       Map response, TextEditingController controller) async {
     sharedPreferences.setString('source', json.encode(response));

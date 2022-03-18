@@ -1,12 +1,9 @@
-
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:veloplan/alerts.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
 import 'package:veloplan/widgets/panel_widget/panel_widget.dart';
-
 import '../../providers/location_service.dart';
 import '../../screens/journey_planner_screen.dart';
 import '../dynamic_widget.dart';
@@ -56,7 +53,6 @@ abstract class PanelWidgetBase extends StatefulWidget {
       if (featureCord != null) {
         onAddressAdded.call(featureCord);
       }
-      // staticList = feature.geometry?.coordinates;
     }
   }
 

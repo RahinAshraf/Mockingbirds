@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 import '../providers/location_service.dart';
 import '../screens/place_search_screen.dart';
 

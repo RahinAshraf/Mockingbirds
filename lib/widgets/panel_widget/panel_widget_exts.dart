@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart'
-as LatLong;
+import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart' as LatLong;
 import '../../models/docking_station.dart';
 import '../../providers/docking_station_manager.dart';
 import '../../providers/location_service.dart';
 import '../../screens/dock_sorter_screen.dart';
 
 class PanelExtensions {
-
 
   final locationService = LocationService();
   BuildContext? context;
