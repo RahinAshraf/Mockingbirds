@@ -88,40 +88,16 @@ class DynamicWidget extends StatelessWidget {
                       ),
                       suffixIconColor: Colors.blue,
                       hintText: 'Where to?',
-                      focusedBorder: OutlineInputBorder(
-                        borderSide:
-                        const BorderSide(color: Colors.black, width: 2.0),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide:
-                        const BorderSide(color: Colors.black, width: 1.0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide:
-                        const BorderSide(color: Colors.black, width: 1.0),
-                      ),
-                      disabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide:
-                        const BorderSide(color: Colors.black, width: 1.0),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide:
-                        const BorderSide(color: Colors.black, width: 1.0),
-                      ),
-                      focusedErrorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide:
-                        const BorderSide(color: Colors.black, width: 1.0),
+                      focusedBorder: circularInputBorder(),
+                      border: circularInputBorder(),
+                      enabledBorder: circularInputBorder(),
+                      disabledBorder: circularInputBorder(),
+                      errorBorder: circularInputBorder(),
+                      focusedErrorBorder: circularInputBorder(),
                       ),
                     ),
                   ),
                 ),
-              ),
               const Icon(Icons.menu),
             ],
           ),
