@@ -65,59 +65,82 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.green,
-        elevation: 0,
-        title: const Text('Edit profile'),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 20.0),
-            child: GestureDetector(
-              onTap: () {
-                _submitChanges();
-              },
-              child: const Icon(
-                Icons.check,
-                size: 26.0,
-                color: Colors.green,
+    return WillPopScope(
+      onWillPop: () async {
+        bool willLeave = false;
+        // show the confirm dialog
+        await showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+                  title: const Text('Are you sure want to leave?'),
+                  actions: [
+                    ElevatedButton(
+                        onPressed: () {
+                          willLeave = true;
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('Yes')),
+                    TextButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: const Text('No'))
+                  ],
+                ));
+        return willLeave;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.green,
+          elevation: 0,
+          title: const Text('Edit profile'),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 20.0),
+              child: GestureDetector(
+                onTap: () {
+                  _submitChanges();
+                },
+                child: const Icon(
+                  Icons.check,
+                  size: 26.0,
+                  color: Colors.green,
+                ),
               ),
             ),
-          ),
-        ],
-      ),
-      backgroundColor: Colors.white,
-      body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 32),
-        physics: const BouncingScrollPhysics(),
-        children: [
-          ProfileWidget(widget.data['image_url'], () async {}, true),
-          const SizedBox(height: 24),
-          TextFieldWidget(
-            label: 'First Name',
-            text: widget.data['firstName'],
-            onChanged: (firstName) {
-              _firstName = firstName;
-            },
-          ),
-          const SizedBox(height: 24),
-          TextFieldWidget(
-            label: 'Last Name',
-            text: widget.data['lastName'],
-            onChanged: (lastName) {
-              _lastName = lastName;
-            },
-          ),
-          const SizedBox(height: 24),
-          TextFieldWidget(
-            label: 'Username',
-            text: widget.data['username'],
-            onChanged: (username) {
-              _username = username;
-            },
-          ),
-        ],
+          ],
+        ),
+        backgroundColor: Colors.white,
+        body: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 32),
+          physics: const BouncingScrollPhysics(),
+          children: [
+            ProfileWidget(widget.data['image_url'], () async {}, true),
+            const SizedBox(height: 24),
+            TextFieldWidget(
+              label: 'First Name',
+              text: widget.data['firstName'],
+              onChanged: (firstName) {
+                _firstName = firstName;
+              },
+            ),
+            const SizedBox(height: 24),
+            TextFieldWidget(
+              label: 'Last Name',
+              text: widget.data['lastName'],
+              onChanged: (lastName) {
+                _lastName = lastName;
+              },
+            ),
+            const SizedBox(height: 24),
+            TextFieldWidget(
+              label: 'Username',
+              text: widget.data['username'],
+              onChanged: (username) {
+                _username = username;
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

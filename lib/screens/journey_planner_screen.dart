@@ -1,15 +1,25 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
-import '../.env.dart';
+import 'package:veloplan/models/map_models/base_map_with_on_click_model.dart';
 import '../widgets/panel_widget.dart';
-import 'map_screen.dart';
+import '../providers/location_service.dart';
+import 'package:scoped_model/scoped_model.dart';
+import 'package:veloplan/scoped_models/map_model.dart';
+
+/*
+  @author - Rahin Ashraf
+ */
+class MapPlace {
+  String? address;
+  LatLng? coords;
+  MapPlace(this.address, this.coords);
+}
 
 class JourneyPlanner extends StatefulWidget {
-  JourneyPlanner({Key? key}) : super(key: key);
+  const JourneyPlanner({Key? key}) : super(key: key);
 
   @override
   _JourneyPlanner createState() => _JourneyPlanner();
@@ -17,67 +27,66 @@ class JourneyPlanner extends StatefulWidget {
 
 class _JourneyPlanner extends State<JourneyPlanner> {
   LatLng latLng = getLatLngFromSharedPrefs();
-  late CameraPosition _initialCameraPosition;
-  late MapboxMapController controller;
   final panelController = PanelController();
-  final standAloneSearchController = TextEditingController();
+  final fromTextEditingController = TextEditingController(),
+      toTextEditingController = TextEditingController();
+  final StreamController<MapPlace> address = StreamController.broadcast();
   final StreamController<List<DynamicWidget>> dynamicWidgets =
       StreamController.broadcast();
+  final locService = LocationService();
+  late BaseMapboxClickMap _baseClickMap;
 
   List<DynamicWidget> dynamicWidgetList = [];
-  List<List<double?>> cordsList = [];
+  List<List<double?>> coordsList = [];
 
   @override
   void initState() {
     super.initState();
-    _initialCameraPosition = CameraPosition(target: latLng, zoom: zoom);
-  }
-
-  _onMapCreated(MapboxMapController controller) async {
-    this.controller = controller;
   }
 
   @override
   Widget build(BuildContext context) {
-    final panelHeightClosed = MediaQuery.of(context).size.height * 0.1;
-    final panelHeightOpen = MediaQuery.of(context).size.height * 0.6;
+    Map<String, List<double?>> staticCordMap = {};
 
     return Scaffold(
-      body: SlidingUpPanel(
-        padding: const EdgeInsets.only(left: 10, right: 10),
-        minHeight: panelHeightClosed,
-        maxHeight: panelHeightOpen,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-        parallaxEnabled: true,
-        parallaxOffset: .5,
-        controller: panelController,
-        body: SafeArea(
-          child: Stack(
-            children: [
-              SizedBox(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
-                child: MapboxMap(
-                  accessToken: MAPBOX_ACCESS_TOKEN,
-                  initialCameraPosition: _initialCameraPosition,
-                  onMapCreated: _onMapCreated,
-                  myLocationEnabled: true,
-                  myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
-                  minMaxZoomPreference: const MinMaxZoomPreference(14, 17),
-                ),
-              ),
-            ],
+        body: Stack(children: [
+      SizedBox(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+      ),
+      SizedBox(
+        height: MediaQuery.of(context).size.height * 0.45,
+        width: MediaQuery.of(context).size.width,
+        child: ScopedModelDescendant<MapModel>(
+            builder: (BuildContext context, Widget? child, MapModel model) {
+          _baseClickMap = BaseMapboxClickMap(model, address);
+          return SafeArea(child: Stack(children: _baseClickMap.getWidgets()));
+        }),
+      ),
+      Positioned.fill(
+        top: MediaQuery.of(context).size.height * 0.40,
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          //height: MediaQuery.of(context).size.height * 0.7,
+          padding: const EdgeInsets.only(left: 10, right: 10),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            color: Colors.white,
+          ),
+          child: PanelWidget(
+            scrollController: ScrollController(),
+            selectionMap: Map(),
+            address: address.stream,
+            listDynamic: dynamicWidgetList,
+            fromTextEditController: fromTextEditingController,
+            toTextEditController: toTextEditingController,
+            dynamicWidgets: dynamicWidgets,
+            panelController: panelController,
+            selectedCoords: coordsList,
+            staticListMap: staticCordMap,
           ),
         ),
-        panelBuilder: (controller) => PanelWidget(
-          controller: controller,
-          listDynamic: dynamicWidgetList,
-          textEditingController: standAloneSearchController,
-          dynamicWidgets: dynamicWidgets,
-          panelController: panelController,
-          selectedCords: cordsList,
-        ),
       ),
-    );
+    ]));
   }
 }

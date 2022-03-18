@@ -36,13 +36,15 @@ class _SplashScreenState extends State<SplashScreen> {
       SizedBox(height: 50),
       SpinKitDualRing(color: Color.fromARGB(255, 153, 210, 169)),
       SizedBox(height: 50),
-      Text(
-        'Life is like riding a bicycle. In order to keep your balance you must keep moving. ',
-        textAlign: TextAlign.center,
-        style:
-            TextStyle(fontSize: 15, color: Color.fromARGB(255, 153, 210, 169)),
-      ),
-      SizedBox(height: 20),
+      Padding(
+        padding: const EdgeInsets.only(right: 20.0),
+        child: Text(
+          'Life is like riding a bicycle. In order to keep your balance you must keep moving. ',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontSize: 15, color: Color.fromARGB(255, 153, 210, 169)),
+        ),
+      )
     ])));
   }
 }
