@@ -49,35 +49,62 @@ class HistoryHelper {
     }
   }
 
-  void getUsersJourneys() async {
-    print("madeithere");
-    FirebaseFirestore db = FirebaseFirestore.instance;
-    QuerySnapshot<Object?> journeyDocuments = await db
-        .collection('users')
-        .doc(_user_id)
-        .collection('journeys')
+  void deleteJourney(journeyDocumentId) {
+    _journeys
+        .doc(journeyDocumentId)
         .get()
-        .then((QuerySnapshot querySnapshot) {
-      querySnapshot.docs.forEach((doc) {
-        print(doc["stationName"]);
-      });
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        print('Document exists on the database');
+      } else {
+        print("doesnt");
+      }
     });
   }
 
-  static Future<List<DockingStation>> getUserFavourites() async {
-    List<DockingStation> favourites = [];
-    FirebaseFirestore db = FirebaseFirestore.instance;
+  void deleteNestedSubcollections(String id) {
+    Future<QuerySnapshot> dockingStationDocuments =
+        _journeys.doc(id).collection("docking_stations").get();
 
-    QuerySnapshot<Object?> docs = await db
-        .collection('users')
-        .doc(getUid())
-        .collection('favourites')
-        .get();
-    for (DocumentSnapshot doc in docs.docs) {
-      favourites.add(DockingStation.map(doc));
-    }
-    return favourites;
+    dockingStationDocuments.then((value) {
+      value.docs.forEach((element) {
+        _journeys
+            .doc(id)
+            .collection("docking_stations")
+            .doc(element.id)
+            .delete()
+            .then((value) => print("success"));
+      });
+    });
+
+     _journeys
+        .doc(id)
+        .delete()
+        .then((value) => print("deleted"))
+        .catchError((error) => print("Failed to delete fave: $error"));
   }
+
+  // void getUsersJourneys() async {
+  //   print("madeithere");
+  //   FirebaseFirestore db = FirebaseFirestore.instance;
+  //   QuerySnapshot<Object?> journeyDocuments =
+  //       await db.collection('users').doc(_user_id).collection('journeys').get();
+  // }
+
+  // static Future<List<DockingStation>> getUserFavourites() async {
+  //   List<DockingStation> favourites = [];
+  //   FirebaseFirestore db = FirebaseFirestore.instance;
+
+  //   QuerySnapshot<Object?> docs = await db
+  //       .collection('users')
+  //       .doc(getUid())
+  //       .collection('favourites')
+  //       .get();
+  //   for (DocumentSnapshot doc in docs.docs) {
+  //     favourites.add(DockingStation.map(doc));
+  //   }
+  //   return favourites;
+  // }
 
   ///TO DO:
   ///for each journey a user has we want to get the docking stations and add it to a card

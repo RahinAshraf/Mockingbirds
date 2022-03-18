@@ -14,7 +14,7 @@ class Schedule extends StatelessWidget {
       body: Center(
         child: FloatingActionButton(onPressed: () {
           print("here");
-          helper.getUsersJourneys();
+          helper.deleteNestedSubcollections("ukCkJDgnQiKNmihlXbDO");
         }),
       ),
     );
