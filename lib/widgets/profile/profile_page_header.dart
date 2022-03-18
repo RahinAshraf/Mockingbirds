@@ -17,6 +17,17 @@ class ProfilePageHeader extends StatefulWidget {
 
 class _ProfilePageHeaderState extends State<ProfilePageHeader> {
   final user = FirebaseAuth.instance.currentUser!.uid;
+  double distance = 0;
+
+  Future getDistance() async {
+    final snapshot =
+        await FirebaseFirestore.instance.collection('users').doc(user).get();
+    final data = snapshot.data();
+    if (data != null && data['distance'] != null) {
+      distance = data['distance'];
+      print('DISTANCE $distance');
+    }
+  }
 
   String calculateAge(Timestamp birthDateTimestamp) {
     DateTime currentDate = DateTime.now();
@@ -55,59 +66,66 @@ class _ProfilePageHeaderState extends State<ProfilePageHeader> {
         ],
       );
 
-  Widget buildCyclingHistory(Map<String, dynamic> data) => Padding(
-        padding: const EdgeInsets.only(top: 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  '${sharedPreferences.getDouble('distance')}',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  'Kilometers',
-                  style: TextStyle(
-                    color: Colors.grey,
+  Widget buildCyclingHistory(Map<String, dynamic> data) {
+    return FutureBuilder(
+      future: getDistance(),
+      builder: (context, snapshot) {
+        return Padding(
+          padding: const EdgeInsets.only(top: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    '$distance',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                ),
-              ],
-            ),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 20),
-              height: 30,
-              width: 1,
-              color: Colors.grey,
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Text(
-                  '18',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  'Journeys',
-                  style: TextStyle(
-                    color: Colors.grey,
+                  SizedBox(
+                    height: 10,
                   ),
-                ),
-              ],
-            ),
-            Container(
-              width: 11,
-            ),
-          ],
-        ),
-      );
+                  Text(
+                    'Kilometers',
+                    style: TextStyle(
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                height: 30,
+                width: 1,
+                color: Colors.grey,
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Text(
+                    '18',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    'Journeys',
+                    style: TextStyle(
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                width: 11,
+              ),
+            ],
+          ),
+        );
+      }
+    );
+  }
 
   Widget buildButtons() => Padding(
         padding: const EdgeInsets.symmetric(vertical: 20),
