@@ -21,6 +21,7 @@ abstract class PanelWidgetBase extends StatefulWidget {
   final Stream<MapPlace> address;
   final Map<String, List<double?>> selectionMap;
   final Map<String, List<double?>> staticListMap;
+  final int numberOfCyclists ;
 
    const PanelWidgetBase(
       {required this.selectionMap,
@@ -33,6 +34,7 @@ abstract class PanelWidgetBase extends StatefulWidget {
         required this.toTextEditController,
         required this.fromTextEditController,
         required this.panelController,
+        required this.numberOfCyclists,
         Key? key})
       : super(key: key);
 

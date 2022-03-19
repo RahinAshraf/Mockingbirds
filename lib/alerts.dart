@@ -1,6 +1,33 @@
 import 'package:flutter/material.dart';
 
 class Alerts {
+
+  //Show error message to user for having no destinations specified for the journey
+  void showAllDestinationsHaveTheSameDockingStationSetAsClosest(BuildContext context) {
+    const text = "showAllDestinationsHaveTheSameDockingStationSetAsClosest";
+    const snackBar = SnackBar(
+      content: Text(
+        text,
+        style: TextStyle(fontSize: 17),
+      ),
+      backgroundColor: Colors.red,
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  //Show error message to user for having no destinations specified for the journey
+  void showPlaceLocationMustBeSpecifiedBeforeEditingDocks(BuildContext context) {
+    const text = "Please fill in the location you would like to visit, before editing the docking station";
+    const snackBar = SnackBar(
+      content: Text(
+        text,
+        style: TextStyle(fontSize: 17),
+      ),
+      backgroundColor: Colors.red,
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
   //Show error message to user for having no destinations specified for the journey
   void showAtLeastOneDestinationSnackBar(BuildContext context) {
     const text = "Choose at least one destination to create your journey";

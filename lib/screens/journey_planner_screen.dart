@@ -18,7 +18,10 @@ class MapPlace {
 }
 
 class JourneyPlanner extends StatefulWidget {
-  const JourneyPlanner({Key? key}) : super(key: key);
+
+  final int? numberOfCyclists;
+
+   JourneyPlanner({Key? key, this.numberOfCyclists}) : super(key: key);
 
   @override
   _JourneyPlanner createState() => _JourneyPlanner();
@@ -46,6 +49,8 @@ class _JourneyPlanner extends State<JourneyPlanner> {
   @override
   Widget build(BuildContext context) {
     Map<String, List<double?>> staticCordMap = {};
+
+    print("numberOfCyclists: ${widget.numberOfCyclists}");
 
     return Scaffold(
         body: Stack(children: [
@@ -81,6 +86,7 @@ class _JourneyPlanner extends State<JourneyPlanner> {
             toTextEditController: toTextEditingController,
             dynamicWidgets: dynamicWidgets,
             panelController: panelController,
+            numberOfCyclists: widget.numberOfCyclists ?? 0,
             selectedCoords: coordsList,
             staticListMap: staticCordMap,
           ),

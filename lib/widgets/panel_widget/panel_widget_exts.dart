@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart'
     as LatLong;
+import 'package:veloplan/alerts.dart';
 import '../../models/docking_station.dart';
 import '../../providers/docking_station_manager.dart';
 import '../../providers/location_service.dart';
@@ -10,6 +11,7 @@ import '../../screens/dock_sorter_screen.dart';
 class PanelExtensions {
   final locationService = LocationService();
   BuildContext? context;
+  Alerts alert = Alerts();
 
   PanelExtensions({required this.context});
 
@@ -46,10 +48,16 @@ class PanelExtensions {
         Expanded(
           child: IconButton(
               onPressed: () async {
-                List temp = await locationService
-                    .getPlaceCoords(placeTextController.text);
+                if(placeTextController.text.isEmpty){
+                  alert.showPlaceLocationMustBeSpecifiedBeforeEditingDocks(context!);
+                  print("hello");
+                  return;
+                }
+
+                List temp = await locationService.getPlaceCoords(placeTextController.text);
                 checkInputLocation(
-                    editDockTextEditController, editDockTextEditController);
+                    placeTextController, editDockTextEditController);
+
                 Navigator.push(
                     context!,
                     MaterialPageRoute(

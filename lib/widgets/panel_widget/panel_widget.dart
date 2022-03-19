@@ -27,7 +27,12 @@ class PanelWidget extends PanelWidgetBase {
      required ScrollController scrollController, required StreamController<List<DynamicWidget>> dynamicWidgets,
      required List<DynamicWidget> listDynamic, required List<List<double?>?> selectedCoords,
      required Map<String, List<double?>> staticListMap, required TextEditingController toTextEditController,
-     required TextEditingController fromTextEditController, required PanelController panelController}) : super(selectionMap: selectionMap, address: address, scrollController: scrollController, dynamicWidgets: dynamicWidgets, listDynamic: listDynamic, selectedCoords: selectedCoords, staticListMap: staticListMap, toTextEditController: toTextEditController, fromTextEditController: fromTextEditController, panelController: panelController);
+     required int numberOfCyclists,
+     required TextEditingController fromTextEditController, required PanelController panelController})
+       : super(selectionMap: selectionMap, address: address, scrollController: scrollController,
+       dynamicWidgets: dynamicWidgets, listDynamic: listDynamic, selectedCoords: selectedCoords,
+       staticListMap: staticListMap, toTextEditController: toTextEditController,
+       fromTextEditController: fromTextEditController, panelController: panelController, numberOfCyclists: numberOfCyclists);
   @override
   PanelWidgetState createState() {
     return PanelWidgetState();
@@ -77,6 +82,7 @@ class PanelWidgetState extends State<PanelWidget> {
   void initState() {
     staticListMap = widget.staticListMap;
     selectionMap = widget.selectionMap;
+    print("PanelWidgetState => ${widget.numberOfCyclists}"); //access number of cyclist like this
     LatLng currentLocation = getLatLngFromSharedPrefs();
     locService
         .reverseGeoCode(currentLocation.latitude, currentLocation.longitude)
@@ -143,6 +149,7 @@ class PanelWidgetState extends State<PanelWidget> {
   ///needs to specify a starting point
   Widget _buildStatic(TextEditingController controller,
       {String? hintText,
+        required BuildContext context,
       required String label,
       required Function(List<double?>) onAddressAdded}) {
     return Column(
@@ -204,7 +211,7 @@ class PanelWidgetState extends State<PanelWidget> {
             ),
           ],
         ),
-        PanelExtensions.of().buildDefaultClosestDock(editDockTextEditController,
+        PanelExtensions.of(context: context).buildDefaultClosestDock(editDockTextEditController,
             controller),
       ],
     );
@@ -256,6 +263,7 @@ class PanelWidgetState extends State<PanelWidget> {
           _buildStatic(widget.fromTextEditController,
               hintText: "Where from?",
               label: "From",
+              context: context,
               onAddressAdded: addCordFrom),
           Row(
             mainAxisSize: MainAxisSize.min,
@@ -357,6 +365,28 @@ class PanelWidgetState extends State<PanelWidget> {
           closestDockList.add(closetDockCoord);
         }
         print("ALL_COORDINATES FOR CLOSEST DOCKS => $closestDockList");
+      }
+
+      List<LatLng> closestDocksWithNoAdjancents = [];
+      for(int i=0; i < closestDockList.length - 1; i++){
+        if(closestDockList[i].latitude == closestDockList[i+1].latitude && closestDockList[i].longitude == closestDockList[i+1].longitude){
+          if(closestDocksWithNoAdjancents.contains(closestDockList[i])){
+            print("ALREADY EXISTS");
+          }
+          else{
+            closestDocksWithNoAdjancents.add(closestDockList[i]);
+          }
+        }
+      }
+      print("CLOSESTDOCKS WITH NO ADJACENTS");
+      print(closestDocksWithNoAdjancents);
+
+      print("CLOSESTDOCKLIST");
+      print(closestDockList);
+
+      if(closestDocksWithNoAdjancents.length == 1){
+        alert.showAllDestinationsHaveTheSameDockingStationSetAsClosest(context);
+        return;
       }
 
       if (points == null) {

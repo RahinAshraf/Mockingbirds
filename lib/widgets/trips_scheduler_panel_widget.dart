@@ -140,10 +140,11 @@ class _PanelWidgetTripScheduler extends State<PanelWidgetTripScheduler> {
               TextButton(
                 style: journeyTimeButtonStyle,
                 onPressed: () {
+                  //MyEventBus.instance.post(numberOfCyclists);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => JourneyPlanner()));
+                          builder: (context) => JourneyPlanner(numberOfCyclists : numberOfCyclists))); //numberOfCyclists
                 },
                 child: const Text('Now'),
               ),
