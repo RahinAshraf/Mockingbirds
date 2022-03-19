@@ -6,6 +6,7 @@ import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:veloplan/.env.dart';
 import 'package:veloplan/widgets/docking_station_card.dart';
+import 'package:veloplan/helpers/navigation_helpers/map_drawings.dart';
 
 /// Class to display a mapbox map with other possible widgets on top
 /// Author(s): Fariha Choudhury k20059723, Elisabeth Koren Halvorsen k20077737
@@ -67,7 +68,9 @@ class BaseMapboxMap {
   /// Shows the information about the pressed docking station
   void displayDockCard(Map<dynamic, dynamic>? stationData) {
     DockingStation station = stationData!["station"];
-    DockingStationCard.station(station);
+    dockingStationKey.currentState?.setState(() {
+      dockingStationKey.currentState?.setData(station, true);
+    });
   }
 
   /// Initialises map without live location

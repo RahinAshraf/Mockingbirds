@@ -1,10 +1,13 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:veloplan/widgets/docking_station_card.dart';
 import '../../models/docking_station.dart';
+import 'package:veloplan/widgets/docking_station_widget.dart';
 
 /// Helper methods related to adding layers to the map
 /// Author(s): Fariha Choudhury k20059723, Elisabeth Koren Halvorsen k20077737
+final GlobalKey<DockStationState> dockingStationKey = GlobalKey();
 
 /// Adds symbol layer to map for every docking station in London
 void placeDockMarkers(
@@ -21,13 +24,13 @@ void placeDockMarkers(
   }
 }
 
-// Widget displayDockCard(DockingStation) {
+// Widget displayDockCard(DockingStation station) {
 //   //CHANGE THIS TO CREATE CARD
 //   print("Will call widget next");
 //   // return _DockPopupCard(latlng: current,);
-//   dockingStationKey.currentState?.setState(() {
-//     dockingStationKey.currentState?.setVisible(true);
-//   });
+//   dockingStationKey.currentState
+//       ?.setData(DockingStationCard.station(station), true);
+// }
 
 /// Creates a [fills] Map with the specified geometry for the chosen [routeResponse]
 Future<Map<String, Object>> setFills(Map fills, dynamic routeResponse) async {

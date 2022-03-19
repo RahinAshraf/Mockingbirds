@@ -4,6 +4,8 @@ import 'package:veloplan/models/map_models/base_map_model.dart';
 import '../../models/map_models/base_map_with_route_model.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
+import 'package:veloplan/widgets/docking_station_widget.dart';
+import 'package:veloplan/helpers/navigation_helpers/map_drawings.dart';
 
 /// Map screen focused on a user's live location
 /// Author(s): Fariha Choudhury k20059723, Elisabeth Halvorsen k20077737,
@@ -61,12 +63,23 @@ class _MapPageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: ScopedModelDescendant<MapModel>(
-        builder: (BuildContext context, Widget? child, MapModel model) {
-      _baseMap = BaseMapboxMap(false, currentLatLng, model);
-      addPositionZoom();
-      return SafeArea(child: Stack(children: _baseMap.getWidgets()));
-    }));
+    return Scaffold(
+      body: ScopedModelDescendant<MapModel>(
+          builder: (BuildContext context, Widget? child, MapModel model) {
+        _baseMap = BaseMapboxMap(false, currentLatLng, model);
+        addPositionZoom();
+        return SafeArea(
+            child: Stack(
+                children: _baseMap.getWidgets() +
+                    [
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                            child: DockStation(key: dockingStationKey)),
+                      )
+                    ]));
+      }),
+    );
   }
 
   void addPositionZoom() {
