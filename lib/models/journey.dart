@@ -8,18 +8,16 @@ class Journey {
   String? _journeyDocumentId;
   late List<DockingStation>
       _stationList; //list of docking stations in a journey
+  String? _time;
+  Journey(this._journeyDocumentId, this._stationList, this._time);
 
-  Journey(this._journeyDocumentId, this._stationList);
-
+  String? get time => _time;
   String? get journeyDocumentId => _journeyDocumentId;
   List<DockingStation> get stationList => _stationList;
 
-  // Journey.map(DocumentSnapshot document) {
-  //   _documentId = document.id;
-  //   _stationId = document.get('stationId');
-  //   _name = document.get('name');
-  //   _numberOfBikes = document.get('numberOfBikes');
-  //   _numberOfEmptyDocks = document.get('numberOfEmptyDocks');
-  // }
-
+  Journey.map(DocumentSnapshot document, List<DockingStation> stationList) {
+    _journeyDocumentId = document.id;
+    _time = 
+    _stationList = stationList;
+  }
 }

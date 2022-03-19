@@ -95,14 +95,20 @@ class HistoryHelper {
   ///Gets all of a users journey documents
   Future<void> getAllJourneyDocuments() async {
     FirebaseFirestore db = FirebaseFirestore.instance;
+    List test = [];
 
     QuerySnapshot<Object?> journeys = await _journeys.get();
 
     for (DocumentSnapshot doc in journeys.docs) {
-      // getDockingStationsInJourney(doc.id);
-      print(doc["date"]);
-      print(doc.id);
+      var stationList = await getDockingStationsInJourney(doc.id);
+      test.add(Journey.map(doc["date"], stationList));
+      print("inside for loop");
+      print(Journey.map(doc.id, stationList));
+      // print(doc["date"]);
+      // print(doc.id);
     }
+    print("outside for loop");
+    print(test);
   }
 
   Future<List<String>> getAllTimes() async {
