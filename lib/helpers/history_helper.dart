@@ -46,8 +46,8 @@ class HistoryHelper {
           'numberOfEmptyDocks': station.numberOfEmptyDocks,
         })
         .then((value) => print("docking station Added"))
-        .catchError((error) => print(
-            "Failed to add docking station to journey: $error")); //add snackbar instead
+        .catchError((error) =>
+            print("Failed to add docking station to journey: $error"));
   }
 
   ///Calculates the date and adds as a field to journey
@@ -74,10 +74,11 @@ class HistoryHelper {
   Future<void> getAllJourneys() async {
     FirebaseFirestore db = FirebaseFirestore.instance;
 
-    QuerySnapshot<Object?> journeys =
-        await db.collection('users').doc(_user_id).collection('journeys').get();
+    QuerySnapshot<Object?> journeys = await _journeys.get();
 
     for (DocumentSnapshot doc in journeys.docs) {
+      getDockingStationsInJourney(doc.id);
+      print(doc["date"]);
       print(doc.id);
     }
   }
@@ -110,14 +111,7 @@ class HistoryHelper {
         .then((value) => print("deleted"))
         .catchError((error) => print("Failed to delete fave: $error"));
   }
-
-  // void getUsersJourneys() async {
-  //   print("madeithere");
-  //   FirebaseFirestore db = FirebaseFirestore.instance;
-  //   QuerySnapshot<Object?> journeyDocuments =
-  //       await db.collection('users').doc(_user_id).collection('journeys').get();
-  // }
-
+}
   // static Future<List<DockingStation>> getUserFavourites() async {
   //   List<DockingStation> favourites = [];
   //   FirebaseFirestore db = FirebaseFirestore.instance;

@@ -17,7 +17,7 @@ class Schedule extends StatelessWidget {
       body: Center(
         child: FloatingActionButton(onPressed: () {
           //  helper.getDockingStationsInJourney("c1QnH3tKi7RC352sgm8i");
-          // helper.getAllJourneys();
+          helper.getAllJourneys();
           // print("here");
           // helper.deleteDockingStations("UvCmTAFcbMSA1tprUy6T");
         }),
