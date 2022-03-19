@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '/models/docking_station.dart';
 import '../helpers/favourite_service.dart';
+import '../widgets/carousel/station_carousel.dart';
 
 ///Creates a card for a journey, to include its time
 ///Author: Tayyibah
@@ -17,6 +18,8 @@ class MyJourneyCard extends StatefulWidget {
 }
 
 class _MyJourneyCardState extends State<MyJourneyCard> {
+  dockingStationCarousel stationCarousel = dockingStationCarousel.test();
+
   @override
   void initState() {
     super.initState();
@@ -45,6 +48,7 @@ class _MyJourneyCardState extends State<MyJourneyCard> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+                  Container(child: stationCarousel.buildJourneyCarousel()),
                 ],
               ),
             ),
