@@ -15,12 +15,14 @@ class Schedule extends StatelessWidget {
         backgroundColor: appBarColor,
       ),
       body: Center(
-        child: FloatingActionButton(onPressed: () {
-          //  helper.getDockingStationsInJourney("c1QnH3tKi7RC352sgm8i");
-          helper.getAllTimes();
-          // print("here");
-          // helper.deleteDockingStations("UvCmTAFcbMSA1tprUy6T");
-        }),
+        child: Container(child: stationCarousel.buildJourneyCarousel()),
+
+        //  FloatingActionButton(onPressed: () {
+        //   helper.getDockingStationsInJourney("kzAIWV0no6spala5FhZu");
+        //   //  helper.getAllTimes();
+        //   // print("here");
+        //   // helper.deleteDockingStations("UvCmTAFcbMSA1tprUy6T");
+        // }),
       ),
     );
   }

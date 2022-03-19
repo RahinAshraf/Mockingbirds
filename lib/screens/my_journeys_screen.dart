@@ -47,7 +47,7 @@ class _MyJourneysState extends State<MyJourneys> {
               ],
             ),
       appBar: AppBar(
-        title: const Text('My favourites'),
+        title: const Text('My Journeys'),
         backgroundColor: appBarColor,
       ),
     );

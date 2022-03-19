@@ -40,7 +40,7 @@ class HistoryHelper {
         .collection('docking_stations')
         .add({
           'stationId': station.stationId,
-          'stationName': station.name,
+          'name': station.name,
           'numberOfBikes': station
               .numberOfBikes, //these will be removed and changed to lat and lng
           'numberOfEmptyDocks': station.numberOfEmptyDocks,
@@ -59,42 +59,59 @@ class HistoryHelper {
   }
 
   ///Gets all of the docking station information from a given journey
-  void getDockingStationsInJourney(journeyDocumentId) async {
+  // void getDockingStationsInJourney(journeyDocumentId) async {
+  //   List<DockingStation> stationsInJourney = [];
+
+  //   var list = await _journeys
+  //       .doc(journeyDocumentId)
+  //       .collection('docking_stations')
+  //       .get();
+
+  //   list.docs.forEach((doc) {
+  //     stationsInJourney.add(DockingStation.map(doc));
+  //   });
+  //   }
+  //   print("STATIONSINJOURNEY:");
+  //   print(stationsInJourney);
+  // }
+
+  ///Gets all of the docking station information from a given journey
+  Future<List<DockingStation>> getDockingStationsInJourney(
+      journeyDocumentId) async {
+    List<DockingStation> stationsInJourney = [];
+
     var list = await _journeys
         .doc(journeyDocumentId)
         .collection('docking_stations')
         .get();
 
-    list.docs.forEach((doc) {
-      print(doc["stationId"]);
-    });
+    for (DocumentSnapshot doc in list.docs) {
+      stationsInJourney.add(DockingStation.map(doc));
+    }
+
+    return stationsInJourney;
   }
 
   ///Gets all of a users journey documents
-  Future<void> getAllJourneys() async {
+  Future<void> getAllJourneyDocuments() async {
     FirebaseFirestore db = FirebaseFirestore.instance;
 
     QuerySnapshot<Object?> journeys = await _journeys.get();
 
     for (DocumentSnapshot doc in journeys.docs) {
-      getDockingStationsInJourney(doc.id);
+      // getDockingStationsInJourney(doc.id);
       print(doc["date"]);
       print(doc.id);
     }
   }
 
   Future<List<String>> getAllTimes() async {
-    FirebaseFirestore db = FirebaseFirestore.instance;
     List<String> times = [];
-
     QuerySnapshot<Object?> journeys = await _journeys.get();
 
     for (DocumentSnapshot doc in journeys.docs) {
       times.add(doc["date"]);
     }
-    print("THE TIME IS");
-    print(times);
-
     return times;
   }
 
