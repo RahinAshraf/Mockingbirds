@@ -52,13 +52,7 @@ class BaseMapboxMap {
     this.controller = controller;
     model.setController(controller);
     model.fetchDockingStations();
-    onMarkerTapped(controller);
-    //controller.onSymbolTapped.add(onSymbolTapped);
-  }
-
-  /// Defines [onSymbolTapped] functionality for a docking station marker
-  void onMarkerTapped(MapboxMapController controller) {
-    controller.onSymbolTapped.add(onSymbolTapped);
+    model.controller?.onSymbolTapped.add(onSymbolTapped);
   }
 
   void updateCurrentLocation() async {
@@ -77,15 +71,12 @@ class BaseMapboxMap {
     //print(coordinates);
   }
 
-  /// Shows the on tapped docking station information
-  // Future<void> onSymbolTapped(Symbol symbol) async {
-  //   selectedSymbol = symbol;
-  //   Future<LatLng> variable = controller!.getSymbolLatLng(symbol);
-  //   if (selectedSymbol != null) {
-  //     LatLng current = await variable;
-  //     displayDockCard(current);
-  //   }
+  /// Defines [onSymbolTapped] functionality for a docking station marker
+  // void onMarkerTapped(MapboxMapController controller) {
+  //   controller.onSymbolTapped.add(onSymbolTapped);
   // }
+
+  /// Retrieves the [stationData] of the docking station [symbol] that was tapped
   Future<void> onSymbolTapped(Symbol symbol) async {
     selectedSymbol = symbol;
     if (selectedSymbol != null) {
@@ -102,6 +93,8 @@ class BaseMapboxMap {
   //   //! CAN BE MOVED TO HELPER ONCE HRISTINA IS FINISHED WITH IT
   //   print("Will call widget next");
   // }
+
+  /// Displays card with [stationData] about pressed on docking station
   void displayDockCard(Map<dynamic, dynamic>? stationData) {
     DockingStation station = stationData!["station"];
     DockingStationCard.station(station);

@@ -13,7 +13,7 @@ import 'package:veloplan/utilities/travel_type.dart';
 class BaseMapboxRouteMap extends BaseMapboxMap {
   late final List<LatLng> _journey;
   Map<String, Object> _fills = {};
-  final Set<Symbol> _polylineSymbols = {};
+  final Set<Symbol> polylineSymbols = {};
   String _totalDistanceAndTime = 'No route';
   final RouteManager _manager = RouteManager();
   late Map _routeResponse;
@@ -35,27 +35,26 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
     //controller.onSymbolTapped.add(onSymbolTapped);  --- no tapping functionality for route model
   }
 
-  /// Defines [onSymbolTapped] functionality to docking station markers on maps that do not [_displayPolyline]
-  @override
+  /// Calls [onSymbolTapped] functionality for docking station markers on maps that do not [_displayPolyline]
   void onMarkerTapped(MapboxMapController controller) {
-    if (!_displayPolyline) {
-      controller.onSymbolTapped.add(onEditMarkerTapped);
-    }
+    // if (!_displayPolyline) {
+    //   controller.onSymbolTapped.add(onSymbolTapped);
+    // }
   }
 
-  /// Retrieves the information about the selected docking station [symbol]
-  Future<void> onEditMarkerTapped(Symbol symbol) async {
-    ///CHANGE ---- USE DOCK DATA ONCE HRISTINA IS DONE ------
-    selectedSymbol = symbol;
-    Future<LatLng> variable = controller!.getSymbolLatLng(symbol);
-    if (selectedSymbol != null) {
-      LatLng current = await variable;
-      //displayDockCard(current);
-      print("SELECTED SYMBOL IS..............: " +
-          symbol.toString() +
-          "   " +
-          current.toString());
-    }
+  /// Retrieves the [stationData] of the docking station [symbol] that was tapped
+  @override
+  Future<void> onSymbolTapped(Symbol symbol) async {
+    // selectedSymbol = symbol;
+    // Future<LatLng> variable = controller!.getSymbolLatLng(symbol);
+    // if (selectedSymbol != null) {
+    //   LatLng selectedtLatLng = await variable;
+    //   //displayDockCard(current);
+    //   print("SELECTED SYMBOL IS..............: " +
+    //       symbol.toString() +
+    //       "   " +
+    //       selectedtLatLng.toString());
+    // }
   }
 
   /// Display journey and refocus camera position
@@ -65,7 +64,7 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
     }
     //_setJourney(journey);
     _refocusCamera(journey);
-    setPolylineMarkers(controller!, journey, _polylineSymbols);
+    setPolylineMarkers(controller!, journey, polylineSymbols);
   }
 
   /// Refocus camera positioning to focus on the [journey] polyline

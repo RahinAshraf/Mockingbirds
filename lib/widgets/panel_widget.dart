@@ -736,6 +736,16 @@ class DynamicWidget extends StatelessWidget {
     );
   }
 
+// // TODO: check if it works without futures!!!
+//   Future<List<DockingStation>> getFilteredDocks(LatLng userCoordinates) async {
+//     // return getFilter(userCoordinates);
+//     late List<DockingStation> temp;
+//     final dockingStationManager _stationManager = dockingStationManager();
+//     var list = await _stationManager.importStations();
+//     temp = _stationManager.get10ClosestDocks(userCoordinates);
+//     return temp;
+//   }
+
   //Executed when the user presses on a search TextField
   void _handleSearchClick(BuildContext context, int position) async {
     final result = await context.openSearch();

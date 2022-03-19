@@ -7,17 +7,17 @@ import '../../models/docking_station.dart';
 /// Author(s): Fariha Choudhury k20059723, Elisabeth Koren Halvorsen k20077737
 
 /// Adds symbol layer to map for every docking station in London
-void placeDockMarkers(
-    MapboxMapController controller, List<DockingStation> docks) {
+void placeDockMarkers(MapboxMapController controller,
+    List<DockingStation> docks, Set<Symbol> dockSymbols) async {
   for (var station in docks) {
-    controller.addSymbol(
+    dockSymbols.add(await controller.addSymbol(
         SymbolOptions(
             geometry: LatLng(station.lat, station.lon),
             iconSize: 0.7,
             iconImage: "assets/icon/bicycle.png"),
         {
           "station": station,
-        });
+        }));
   }
 }
 
@@ -63,7 +63,7 @@ void removeFills(MapboxMapController? controller, Set<Symbol> polylineSymbols,
   fills.clear();
 }
 
-/// Adds marker symbols for each multistop destination of a [journey] to the map
+/// Adds marker symbols for each location of a [journey] list to the map
 void setPolylineMarkers(MapboxMapController controller, List<LatLng> journey,
     Set<Symbol> polylineSymbols) async {
   for (var stop in journey) {
@@ -76,9 +76,18 @@ void setPolylineMarkers(MapboxMapController controller, List<LatLng> journey,
   }
 }
 
-/// Removes the multistop destination markers of a [journey] from the map
-void removePolylineMarkers(MapboxMapController controller, List<LatLng> journey,
-    Set<Symbol> polylineSymbols) async {
+/// Adds marker symbol for a single [point] to the map
+void setMarker(MapboxMapController controller, LatLng point,
+    Set<Symbol> currentSymbol) async {
+  currentSymbol.add(await controller.addSymbol(
+    SymbolOptions(
+        geometry: point, iconSize: 0.7, iconImage: "assets/icon/bicycle.png"),
+  ));
+}
+
+/// Removes the specified location markers [polylineSymbols] from the map
+void removePolylineMarkers(
+    MapboxMapController controller, Set<Symbol> polylineSymbols) async {
   if (polylineSymbols.isNotEmpty) {
     await controller.removeSymbols(polylineSymbols);
     polylineSymbols.clear();

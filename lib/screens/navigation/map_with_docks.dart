@@ -9,7 +9,7 @@ import 'package:veloplan/scoped_models/map_model.dart';
 /// Author(s): Fariha Choudhury k20059723,
 
 class MapDockPage extends StatefulWidget {
-  final List<LatLng> _docks;
+  late List<LatLng> _docks;
   MapDockPage(this._docks);
 
   @override
@@ -18,7 +18,6 @@ class MapDockPage extends StatefulWidget {
 
 class _MapDockPageState extends State<MapDockPage> {
   LatLng currentLatLng = getLatLngFromSharedPrefs();
-  // late BaseMapboxMap _baseMap;
   late BaseMapboxRouteMap _baseMapWithRoute;
   final List<LatLng> _docks;
   late LatLng _focusDock;

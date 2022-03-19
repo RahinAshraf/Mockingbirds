@@ -50,7 +50,7 @@ class CustomCarouselState extends State<CustomCarousel>
                 return imageSlider(position);
               }),
         ),
-        Flexible(child: buildIndicator())
+        //Flexible(child: buildIndicator())
       ],
     );
   }

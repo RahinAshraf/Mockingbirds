@@ -53,7 +53,6 @@ class dockingStationCarousel {
               carouselData[index]['numberOfBikes'],
               carouselData[index]['numberOfEmptyDocks'],
             ));
-
     return dockingStationCards;
   }
 
@@ -82,7 +81,6 @@ class dockingStationCarousel {
   FutureBuilder<List<Widget>> build() {
     return FutureBuilder<List<Widget>>(
         future: retrieveFilteredCards(),
-
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Stack(
