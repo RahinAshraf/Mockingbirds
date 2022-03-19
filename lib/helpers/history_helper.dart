@@ -6,8 +6,8 @@ import 'package:veloplan/models/docking_station.dart';
 import '../models/journey.dart';
 import 'package:intl/intl.dart';
 
-///Helper functions to add,delete or retrieve docking stations
-///from and to the firestore database for a user
+///Helper functions to add or remove a journey from the database.
+///A journey comprises of a list of docking stations and the time the journey was started.
 ///Author: Tayyibah
 
 class HistoryHelper {
@@ -83,6 +83,21 @@ class HistoryHelper {
     }
   }
 
+  Future<List<String>> getAllTimes() async {
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    List<String> times = [];
+
+    QuerySnapshot<Object?> journeys = await _journeys.get();
+
+    for (DocumentSnapshot doc in journeys.docs) {
+      times.add(doc["date"]);
+    }
+    print("THE TIME IS");
+    print(times);
+
+    return times;
+  }
+
   ///Deletes docking station subcollection and then deletes journey entry
   ///from the database.
   void deleteJourneyEntryWithDockingStations(String journeyDocumentId) async {
@@ -109,7 +124,7 @@ class HistoryHelper {
         .doc(journeyDocumentId)
         .delete()
         .then((value) => print("deleted"))
-        .catchError((error) => print("Failed to delete fave: $error"));
+        .catchError((error) => print("Failed to delete journey: $error"));
   }
 }
   // static Future<List<DockingStation>> getUserFavourites() async {

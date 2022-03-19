@@ -4,6 +4,7 @@ import '../screens/schedule_screen.dart';
 import '../screens/favourite_screen.dart';
 import '../screens/setting_screen.dart';
 import '../screens/help_screen.dart';
+import '../screens/my_journeys_screen.dart';
 
 ///Author: Tayyibah
 
@@ -85,7 +86,7 @@ class NavigationDrawerWidget extends StatelessWidget {
         break;
       case 1:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => Placeholder(),
+          builder: (context) => MyJourneys(),
         ));
         break;
       case 2:
