@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '/models/docking_station.dart';
+import '/models/journey.dart';
+
 import '../helpers/favourite_service.dart';
 import '../widgets/carousel/station_carousel.dart';
 
@@ -7,19 +9,20 @@ import '../widgets/carousel/station_carousel.dart';
 ///Author: Tayyibah
 
 class MyJourneyCard extends StatefulWidget {
-  late final String journeyStartTime;
+  late Journey journey;
+  dockingStationCarousel stationCarousel = dockingStationCarousel.test();
+  late List<Widget> stationCards;
 
-  MyJourneyCard(
-    this.journeyStartTime,
-  );
+  MyJourneyCard(Journey journey) {
+    this.journey = journey;
+    this.stationCards = stationCarousel.createDockingCards(journey.stationList);
+  }
 
   @override
   _MyJourneyCardState createState() => _MyJourneyCardState();
 }
 
 class _MyJourneyCardState extends State<MyJourneyCard> {
-  dockingStationCarousel stationCarousel = dockingStationCarousel.test();
-
   @override
   void initState() {
     super.initState();
@@ -43,12 +46,14 @@ class _MyJourneyCardState extends State<MyJourneyCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.journeyStartTime,
+                    widget.journey.date!,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Container(child: stationCarousel.buildJourneyCarousel()),
+                  Container(
+                      child: widget.stationCarousel
+                          .buildCarousel(widget.stationCards)),
                 ],
               ),
             ),

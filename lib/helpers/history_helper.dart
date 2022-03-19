@@ -92,23 +92,18 @@ class HistoryHelper {
     return stationsInJourney;
   }
 
-  ///Gets all of a users journey documents
-  Future<void> getAllJourneyDocuments() async {
+  ///Gets all of a users journeys
+  Future<List<Journey>> getAllJourneyDocuments() async {
     FirebaseFirestore db = FirebaseFirestore.instance;
-    List test = [];
+    List<Journey> journeyList = [];
 
     QuerySnapshot<Object?> journeys = await _journeys.get();
-
     for (DocumentSnapshot doc in journeys.docs) {
-      var stationList = await getDockingStationsInJourney(doc.id);
-      test.add(Journey.map(doc["date"], stationList));
-      print("inside for loop");
-      print(Journey.map(doc.id, stationList));
-      // print(doc["date"]);
-      // print(doc.id);
+      List<DockingStation> stationList =
+          await getDockingStationsInJourney(doc.id);
+      journeyList.add(Journey.map(doc, stationList));
     }
-    print("outside for loop");
-    print(test);
+    return journeyList;
   }
 
   Future<List<String>> getAllTimes() async {
@@ -150,48 +145,43 @@ class HistoryHelper {
         .catchError((error) => print("Failed to delete journey: $error"));
   }
 }
-  // static Future<List<DockingStation>> getUserFavourites() async {
-  //   List<DockingStation> favourites = [];
-  //   FirebaseFirestore db = FirebaseFirestore.instance;
+// static Future<List<DockingStation>> getUserFavourites() async {
+//   List<DockingStation> favourites = [];
+//   FirebaseFirestore db = FirebaseFirestore.instance;
 
-  //   QuerySnapshot<Object?> docs = await db
-  //       .collection('users')
-  //       .doc(getUid())
-  //       .collection('favourites')
-  //       .get();
-  //   for (DocumentSnapshot doc in docs.docs) {
-  //     favourites.add(DockingStation.map(doc));
-  //   }
-  //   return favourites;
-  // }
+//   QuerySnapshot<Object?> docs = await db
+//       .collection('users')
+//       .doc(getUid())
+//       .collection('favourites')
+//       .get();
+//   for (DocumentSnapshot doc in docs.docs) {
+//     favourites.add(DockingStation.map(doc));
+//   }
+//   return favourites;
+// }
 
-  ///TO DO:
-  ///for each journey a user has we want to get the docking stations and add it to a card
-  ///add it to a carousel
-  ///view a carousel for each journey
-  ///
-  ///
+///TO DO:
+///for each journey a user has we want to get the docking stations and add it to a card
+///add it to a carousel
+///view a carousel for each journey
+///
+///
 
-  // static void test(List<List<double?>?> list) async {
-  //   LocationService service = new LocationService();
+// static void test(List<List<double?>?> list) async {
+//   LocationService service = new LocationService();
 
-  //   print("HEREEEEEEEEEEE");
-  //   print(list);
-  //   List<double?> destination;
-  //   if (list != null) {
-  //     for (int i = 0; i < list.length; i++) {
-  //       var item = list[i];
-  //       //service.reverseGeoCode(item[0], item[1]);
-  //       // myList.add(LatLng(points[i]?.first as double, points[i]?.last as double));
-  //       Map map = await service.reverseGeoCode(
-  //           list[i]?.first as double, list[i]?.last as double);
+//   print("HEREEEEEEEEEEE");
+//   print(list);
+//   List<double?> destination;
+//   if (list != null) {
+//     for (int i = 0; i < list.length; i++) {
+//       var item = list[i];
+//       //service.reverseGeoCode(item[0], item[1]);
+//       // myList.add(LatLng(points[i]?.first as double, points[i]?.last as double));
+//       Map map = await service.reverseGeoCode(
+//           list[i]?.first as double, list[i]?.last as double);
 
-  //       print(map["name"]);
-  //     }
-  //   }
-  // }
-
-
-
-
-
+//       print(map["name"]);
+//     }
+//   }
+// }

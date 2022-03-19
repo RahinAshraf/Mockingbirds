@@ -42,15 +42,6 @@ class dockingStationCarousel {
   //   return createDockingCards(list);
   // }
 
-  Future<List<Widget>> retrieveCardsForJourney() async {
-    HistoryHelper helper = new HistoryHelper();
-
-    var list = await helper.getDockingStationsInJourney("kzAIWV0no6spala5FhZu");
-
-    var finalList = createDockingCards(list);
-    return finalList;
-  }
-
   List<Widget> createDockingCards(List<DockingStation> docks) {
     for (int index = 0; index < docks.length; index++) {
       for (var station in docks) {
@@ -127,28 +118,10 @@ class dockingStationCarousel {
 
   //THIS MUST BE REFACTORED BY TAYYIBAH AND NIKKI:
 
-  FutureBuilder<List<Widget>> buildJourneyCarousel() {
-    return FutureBuilder<List<Widget>>(
-        future: retrieveCardsForJourney(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Stack(
-              children: [
-                Container(
-                  height: 200,
-                  width: MediaQuery.of(context).size.width,
-                  child: CustomCarousel(cards: dockingStationCards),
-                )
-              ],
-            );
-          } else {
-            return SizedBox(
-              height: MediaQuery.of(context).size.height / 1.3,
-              child: const Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
-          }
-        });
+  Container buildCarousel(List<Widget> cardsIn) {
+    return Container(
+      height: 200,
+      child: CustomCarousel(cards: cardsIn),
+    );
   }
 }
