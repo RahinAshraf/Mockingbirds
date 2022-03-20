@@ -1,13 +1,12 @@
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/services.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:veloplan/helpers/database_manager.dart';
 
-import 'package:veloplan/widgets/auth/auth_form.dart';
+import '../widgets/auth/auth_form.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({Key? key}) : super(key: key);
@@ -17,6 +16,7 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
+  final DatabaseManager _databaseManager = DatabaseManager();
   final _auth = FirebaseAuth.instance;
   var _isLoading = false;
 
@@ -39,12 +39,17 @@ class _AuthScreenState extends State<AuthScreen> {
       });
       if (isLogin) {
         authResult = await _auth.signInWithEmailAndPassword(
-            email: email, password: password);
+          email: email,
+          password: password,
+        );
       } else {
         authResult = await _auth.createUserWithEmailAndPassword(
-            email: email, password: password);
+          email: email,
+          password: password,
+        );
 
-        var url = "assets/images/default_profile_picture.jpg";
+        var url =
+            "https://firebasestorage.googleapis.com/v0/b/veloplan-b41d0.appspot.com/o/user_image%2Fdefault_profile_picture.jpg?alt=media&token=edc6abb8-3655-448c-84a0-7d34b02f0c73";
 
         if (image != null) {
           final ref = FirebaseStorage.instance
@@ -56,11 +61,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
           url = await ref.getDownloadURL();
         }
-
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(authResult.user!.uid)
-            .set({
+        await _databaseManager.setByKey('users', authResult.user!.uid, {
           'username': username,
           'email': email,
           'firstName': firstName,
@@ -76,9 +77,10 @@ class _AuthScreenState extends State<AuthScreen> {
         message = err.message!;
       }
 
-      ScaffoldMessenger.of(context).showSnackBar(
+      Scaffold.of(ctx).showSnackBar(
         SnackBar(
           content: Text(message),
+          backgroundColor: Theme.of(ctx).errorColor,
         ),
       );
       setState(() {
@@ -88,12 +90,14 @@ class _AuthScreenState extends State<AuthScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(err.message!),
+          backgroundColor: Theme.of(context).errorColor,
         ),
       );
       setState(() {
         _isLoading = false;
       });
     } catch (err) {
+      // print(err);
       setState(() {
         _isLoading = false;
       });
@@ -103,24 +107,19 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: [
-            AuthForm(
-              _submitAuthForm,
-              _isLoading,
-            ),
-            Align(
-              alignment: Alignment.topRight,
-              child: Image.asset(
-                'assets/images/right_bubbles_shapes.png',
-                height: 170.0,
-                width: 170.0,
-              ),
-            ),
-          ],
-        ),
+        body: Stack(children: <Widget>[
+      AuthForm(
+        _submitAuthForm,
+        _isLoading,
       ),
-    );
+      /*Align(
+        alignment: Alignment.topRight,
+        child: Container(
+            height: 170.0,
+            width: 170.0,
+            alignment: Alignment.topRight,
+            child: Image.asset('assets/images/right_bubbles_shapes.png')),
+      ),*/
+    ]));
   }
 }
