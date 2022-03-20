@@ -5,6 +5,8 @@ import 'package:favorite_button/favorite_button.dart';
 import 'package:veloplan/widgets/docking_station_card.dart';
 import '/models/docking_station.dart';
 
+///Author: Hristina
+///
 class DockStation extends StatefulWidget {
   DockStation({Key? key}) : super(key: key);
 
@@ -19,8 +21,10 @@ class DockStationState extends State<DockStation> {
   DockingStation? station = null;
 
   void setData(DockingStation station, bool isVisible) {
+    //setState(() {
     this.station = station;
     this.isVisible = isVisible;
+    // });
   }
 
   @override
@@ -29,6 +33,21 @@ class DockStationState extends State<DockStation> {
         visible: isVisible,
         child: station == null
             ? Container()
-            : DockingStationCard.station(station!));
+            : Stack(
+                children: [
+                  DockingStationCard.station(station!),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.close,
+                        color: Color(0xFF99D2A9),
+                        size: 25,
+                      ),
+                      onPressed: () => setState(() => isVisible = false),
+                    ),
+                  ),
+                ],
+              ));
   }
 }
