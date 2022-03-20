@@ -7,7 +7,9 @@ import 'package:flutter/services.dart';
 import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import 'package:veloplan/helpers/database_manager.dart';
+import 'package:veloplan/models/path.dart';
 
+import '../models/trip.dart';
 import 'navigation/map_with_route_screen.dart';
 
 class SummaryJourneyScreen extends StatefulWidget {
@@ -24,8 +26,13 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
   late String groupID = "";
   late String organiser = "";
   final List<LatLng> points;
+  late Trip trip;
+  late List<Path> paths;
 
-  SummaryJourneyScreenState(this.points);
+  SummaryJourneyScreenState(this.points) {
+    this.trip = Trip(this.points);
+    paths = trip.getPaths();
+  }
 
   @override
   void initState() {
@@ -243,12 +250,12 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
         RichText(
           text: TextSpan(
             children: [
-              WidgetSpan(
-                  child: ImageIcon(
-                AssetImage("assets/images/logo.png"),
-                color: Color(0xFF99D2A9),
-                size: 24,
-              )),
+              // WidgetSpan(
+              //     child: ImageIcon(
+              //   AssetImage("assets/images/logo.png"),
+              //   color: Color(0xFF99D2A9),
+              //   size: 24,
+              // )),
               TextSpan(
                   text: "Planned stops:",
                   style: TextStyle(color: Color(0xFF99D2A9), fontSize: 25)),

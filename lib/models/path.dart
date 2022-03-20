@@ -32,4 +32,20 @@ class Path {
   DockingStation getDock1() {
     return this.doc1;
   }
+
+  void printPath() {
+    print("-----path:  des1: " +
+        des1.toString() +
+        " des2: " +
+        des2.toString() +
+        " dock1: " +
+        doc1.toString() +
+        " dock2: " +
+        doc2.toString() +
+        " distance: " +
+        distance.toString() +
+        " . duration:  " +
+        duration.toString() +
+        " ");
+  }
 }
