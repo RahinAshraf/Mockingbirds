@@ -3,7 +3,7 @@ import '../styles/styling.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 /// Widget to display a connection error
-/// Author(s): Fariha Choudhury k20059723
+/// Author(s): Fariha Choudhury k20059723, Hristina-Andreea Sararu k20036771
 
 /// Builds a widget displaying a cirucular progression indicator and error message
 /// for when no internet connection is established.
