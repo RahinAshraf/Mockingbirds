@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:veloplan/widgets/group_id_otp_widget.dart';
 import 'package:veloplan/widgets/popup_widget.dart';
 import 'package:veloplan/screens/trips_scheduler_screen.dart';
 
@@ -14,7 +15,15 @@ class Popups {
               MaterialPageRoute(builder: (context) => TripScheduler()));
         },
       ),
-      PopupButtonWidget(text: "Join a journey", onPressed: () {}),
+      PopupButtonWidget(
+          text: "Join a journey",
+          onPressed: () {
+            Navigator.pop(context);
+            showDialog(
+                useRootNavigator: false,
+                context: context,
+                builder: (BuildContext context) => GroupId());
+          }),
     ];
     return PopupWidget(
         title: "Choose how to proceed with your trip!",
