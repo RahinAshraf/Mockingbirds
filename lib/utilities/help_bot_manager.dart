@@ -1,64 +1,85 @@
+import 'package:flutter/cupertino.dart';
 import 'package:veloplan/models/message.dart';
+import "package:collection/collection.dart";
 
 class HelpBotManager {
   Map questions = {};
-  List<Message> messageBank = [];
+  var data;
 
   HelpBotManager() {
-    messageBank = [
-      Message('How do I login?', 'Log in on the main page.', 'Authorisation'),
-      Message(
-          'How do I sign up?', 'Sign up on the main page.', 'Authorisation'),
-      Message(
-          'How do I plan a new journey?',
-          'Go back to the main screen and click the green bike button in the middle.',
+    data = [
+      Message('How do I login?', 'Login on the main page.', 'Login', "1"),
+      Message('How do I plan a new journey?', 'Click the bike button.', "2",
           'Planning Journey'),
-      Message(
-          'I have another question that is not listed here.',
-          'Sorry to hear that I couldn\'t answer your question. Feel free to send an email.',
-          'Other Questions',
-          true),
-      // add new messages here
+      Message('How do I sign up?', 'Sign up on the main page.', 'Signup', "3"),
+      Message('How do I sign up?', 'Sign up on the main page.', 'Signup', "4"),
+      // add messages here
     ];
-    questions = _groupByTopic(messageBank);
+    Message otherQuestion = Message(
+        'I have another question that is not listed here.',
+        'Please contact k20082541@kcl.ac.uk.',
+        'Other Question',
+        "5");
+    otherQuestion.setLaunch(true);
+    data.add(otherQuestion);
+
+    questions = _groupByTopic(data);
   }
 
-  List getAllTopics() {
-    return questions.keys.toList();
+  List<String> getAllTopics() {
+    List<String> allTopics = [];
+    for (String topic in questions.keys) {
+      allTopics.add(topic);
+    }
+    return allTopics;
   }
 
-  List<Message> getMessagesByTopic(String topic) {
+  String getQuestionText(String id) {
+    for (Message message in data) {
+      if (message.id == id) {
+        return message.questionText;
+      }
+    }
+    return 'Internal error.';
+  }
+
+  List<Message> getQuestionsByTopic(String topic) {
     return questions[topic];
   }
 
-  String getQuestionText(Message message) {
-    return message.questionText;
+  String getQuestionAnswer(String id) {
+    for (Message message in data) {
+      if (message.id == id) {
+        return message.questionAnswer;
+      }
+    }
+    return 'Internal error.';
   }
 
-  String getQuestionAnswer(Message message) {
-    return message.questionAnswer;
-  }
-
-  bool getLaunch(Message message) {
-    return message.launch;
-  }
-
-  Map<String, List<Message>> _groupByTopic(List<Message> list) {
-    Map<String, List<Message>> resultMap = {};
-    for (Message message in list) {
-      resultMap.putIfAbsent(
-          message.topic, () => _getAllQuestionsByTopic(message.topic));
+  Map<String, List<Message>> _groupByTopic(var list) {
+    Map<String, List<Message>> resultMap = new Map();
+    for (Message e in list) {
+      resultMap.putIfAbsent(e.topic, () => _getAllQuestionsByTopic(e.topic));
     }
     return resultMap;
   }
 
   List<Message> _getAllQuestionsByTopic(String topic) {
-    List<Message> questions = [];
-    for (Message message in messageBank) {
+    List<Message> lst = [];
+    for (Message message in data) {
       if (message.topic == topic) {
-        questions.add(message);
+        lst.add(message);
       }
     }
-    return questions;
+    return lst;
+  }
+
+  bool getLaunch(String id) {
+    for (Message message in data) {
+      if (message.id == id) {
+        return message.launch;
+      }
+    }
+    return false;
   }
 }

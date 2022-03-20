@@ -12,21 +12,23 @@ const TextStyle botMessageTextStyle =
 const TextStyle userMessageTextStyle =
     TextStyle(fontSize: 15.0, color: Colors.white);
 
-/// Creates a chat bubble used in HelpBotPage.
-///
-/// This widget differentiates between a bot chat bubble
-/// and user chat bubble (uses different styling for different parties).
-///
-/// The [content] argument is required. It corresponds to the content
-/// of a chat bubble.
-///
-/// By default, the chat bubble is created for bots' messages, therefore
-/// [isSentByBot] equals to true. If [isSentByBot] is set to false,
-/// the chat bubble is created for the user.
 class MessageBubble extends StatelessWidget {
-  const MessageBubble({required this.content, this.isSentByBot = true});
+  /// Creates a chat bubble used in HelpBotPage.
+  ///
+  /// This widget differentiates between a bot chat bubble
+  /// and user chat bubble (uses different styling for different parties).
+  ///
+  /// The [text] argument is required. It corresponds to the content
+  /// of a chat bubble.
+  ///
+  /// By default, the chat bubble is created for bots' messages, therefore
+  /// [sender] is the name of the bot and [isSentByBot] equals to
+  /// true. If [sender] is specified, the chat bubble is created for the user,
+  /// and therefore [isSentByBot] must be set to false.
 
-  final String content;
+  MessageBubble({required this.text, this.isSentByBot = true});
+
+  final String text;
   final bool isSentByBot;
 
   @override
@@ -37,7 +39,7 @@ class MessageBubble extends StatelessWidget {
         key: const Key('alignmentKey'),
         crossAxisAlignment:
             isSentByBot ? CrossAxisAlignment.start : CrossAxisAlignment.end,
-        children: [
+        children: <Widget>[
           Text(
             isSentByBot ? botName : userName,
             style: messageAuthorTextStyle,
@@ -60,7 +62,7 @@ class MessageBubble extends StatelessWidget {
               padding:
                   const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
               child: Text(
-                content,
+                text,
                 style: isSentByBot ? botMessageTextStyle : userMessageTextStyle,
               ),
             ),

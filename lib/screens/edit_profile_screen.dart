@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:veloplan/helpers/database_manager.dart';
+
 import '../widgets/profile/profile_widget.dart';
 import '../widgets/textfield_widget.dart';
 
@@ -15,7 +16,8 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
-  final userID = FirebaseAuth.instance.currentUser!.uid;
+  final DatabaseManager _databaseManager = DatabaseManager();
+  late final userID = _databaseManager.getCurrentUser()!.uid;
   var _firstName = '';
   var _lastName = '';
   var _username = '';
@@ -24,10 +26,8 @@ class _EditProfileState extends State<EditProfile> {
     if (_username == widget.data['username']) {
       return true;
     }
-    return (await FirebaseFirestore.instance
-            .collection('users')
-            .where('username', isEqualTo: _username)
-            .get())
+    return (await _databaseManager.getByEquality(
+            'users', 'username', _username))
         .docs
         .isEmpty;
   }
@@ -45,11 +45,15 @@ class _EditProfileState extends State<EditProfile> {
           );
           return;
         } else {
-          await FirebaseFirestore.instance.collection('users').doc(userID).set({
-            if (_firstName != '') 'firstName': _firstName,
-            if (_lastName != '') 'lastName': _lastName,
-            if (_username != '') 'username': _username
-          }, SetOptions(merge: true));
+          await _databaseManager.setByKey(
+              'users',
+              userID,
+              {
+                if (_firstName != '') 'firstName': _firstName,
+                if (_lastName != '') 'lastName': _lastName,
+                if (_username != '') 'username': _username
+              },
+              SetOptions(merge: true));
           Navigator.of(context).pop();
         }
       });

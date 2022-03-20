@@ -1,18 +1,15 @@
 import 'dart:collection';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:veloplan/models/message.dart';
-import 'package:veloplan/styles/styling.dart';
 import 'package:veloplan/utilities/help_bot_manager.dart';
-import 'package:veloplan/widgets/helpbot/choices_button_widget.dart';
-import 'package:veloplan/widgets/helpbot/message_bubble_widget.dart';
+import '../styles/styling.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-const String url =
-    'mailto:k20070238@kcl.ac.uk?subject=Help%20with%20app&body=Help%20me!';
+import '../widgets/helpbot/message_bubble_widget.dart';
+
 HelpBotManager questions = HelpBotManager();
 
-// STYLING
-const Color helpScreenBorderColor = Color(0x4D99D2A9);
+// CONSTANTS
+//const Color appBarColor = Color(0xFF99D2A9);
 
 class HelpPage extends StatefulWidget {
   @override
@@ -21,15 +18,17 @@ class HelpPage extends StatefulWidget {
 
 class _HelpPageState extends State<HelpPage> {
   List<MessageBubble> _conversation = [
-    MessageBubble(content: 'Hello. How can I help you?')
+    MessageBubble(text: 'Hello. How can I help you?')
   ];
-  List<ChoiceButton> choices = [];
-  String selectedTopic = "";
 
-  @override
-  void initState() {
-    choices = _displayTopics();
-    super.initState();
+  _sendMail() async {
+    // Android and iOS
+    const url = 'mailto:k20070238@kc.ac.uk?subject=Help%20with%20app&body=Test';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   @override
@@ -37,6 +36,7 @@ class _HelpPageState extends State<HelpPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('HelpBot'),
+        backgroundColor: appBarColor,
       ),
       body: SafeArea(
         child: Column(
@@ -49,20 +49,51 @@ class _HelpPageState extends State<HelpPage> {
               ),
             ),
             Container(
-              width: double.infinity,
               decoration: const BoxDecoration(
                 border: Border(
                   top: BorderSide(
-                    color: helpScreenBorderColor,
-                    width: 1.5,
+                    color: Color(0x4D99D2A9),
                   ),
                 ),
               ),
-              padding: const EdgeInsets.fromLTRB(5.0, 10.0, 0.0, 10.0),
+              padding: const EdgeInsets.only(bottom: 10.0, top: 10.0),
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  children: choices,
+                  children: <Widget>[
+                    for (var topic in questions.getAllTopics())
+                      Padding(
+                        padding: const EdgeInsets.only(right: 5.0),
+                        child: OutlinedButton(
+                            style: ButtonStyle(
+                              overlayColor: MaterialStateProperty.all<Color>(
+                                  const Color(0x1A99D2A9)),
+                              shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30.0),
+                                ),
+                              ),
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _conversation.add(MessageBubble(
+                                    text: questions.getQuestionText(topic),
+                                    isSentByBot: false));
+                                _conversation.add(MessageBubble(
+                                    text: questions.getQuestionAnswer(topic)));
+                              });
+                              if (questions.getLaunch(topic)) {
+                                _sendMail();
+                              }
+                            },
+                            child: Text(
+                              topic,
+                              style: const TextStyle(
+                                color: Color(0xFF99D2A9),
+                              ),
+                            )),
+                      ),
+                  ],
                 ),
               ),
             ),
@@ -70,65 +101,5 @@ class _HelpPageState extends State<HelpPage> {
         ),
       ),
     );
-  }
-
-  _sendMail() async {
-    // Android and iOS
-    try {
-      await launch(url);
-    } catch (e) {
-      throw 'Could not launch $url';
-    }
-  }
-
-  List<ChoiceButton> _displayTopics() {
-    List<ChoiceButton> topics = [];
-    for (String topic in questions.getAllTopics()) {
-      topics.add(ChoiceButton(
-        content: Text(topic, style: helpbotChoiceTextStyle),
-        onPressed: () {
-          setState(() {
-            selectedTopic = topic;
-            choices = [];
-            _displayQuestions();
-          });
-        },
-      ));
-    }
-    return topics;
-  }
-
-  void _displayQuestions() {
-    choices.add(
-      ChoiceButton(
-        content: const Icon(Icons.arrow_back, color: Colors.green),
-        onPressed: () {
-          setState(() {
-            choices = _displayTopics();
-          });
-        },
-      ),
-    );
-    for (Message message in questions.getMessagesByTopic(selectedTopic)) {
-      choices.add(
-        ChoiceButton(
-          content: Text(questions.getQuestionText(message),
-              style: helpbotChoiceTextStyle),
-          onPressed: () {
-            setState(() {
-              _conversation.add(MessageBubble(
-                  content: questions.getQuestionText(message),
-                  isSentByBot: false));
-              _conversation.add(
-                  MessageBubble(content: questions.getQuestionAnswer(message)));
-              choices = _displayTopics();
-              if (questions.getLaunch(message)) {
-                _sendMail();
-              }
-            });
-          },
-        ),
-      );
-    }
   }
 }
