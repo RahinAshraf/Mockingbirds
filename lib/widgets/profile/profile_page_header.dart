@@ -46,6 +46,7 @@ class _ProfilePageHeaderState extends State<ProfilePageHeader> {
             data['email'],
             style: const TextStyle(color: Colors.grey),
           ),
+          const SizedBox(height: 4),
           Text(
             calculateAge(data['birthDate']),
             style: const TextStyle(color: Colors.grey),

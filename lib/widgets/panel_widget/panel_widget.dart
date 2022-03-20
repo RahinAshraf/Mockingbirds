@@ -348,7 +348,7 @@ class PanelWidgetState extends State<PanelWidget> {
       alert.showSnackBarErrorMessage(context, alert.startPointMustBeDefinedMessage);
       return;
     } else if (areAdjacentCoords(widget.selectedCoords)) {
-      alert.showSnackBarErrorMessage(context, alert.noAdjaentLocationsAllowed);
+      alert.showSnackBarErrorMessage(context, alert.noAdjacentLocationsAllowed);
       return;
     } else {
       List<List<double?>?> tempList = [];

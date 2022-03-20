@@ -9,16 +9,14 @@ class Alerts {
   final String cannotHaveEmptySearchLocationsMessage =
       "Please specify locations for all destinations of the journey. Otherwise, remove any empty choices";
   final String startPointMustBeDefinedMessage = "Please specify the starting location of the journey";
-  final String noAdjaentLocationsAllowed = "You cannot have two places the same after each other";
+  final String noAdjacentLocationsAllowed = "You cannot have two places the same after each other";
 
-  //Show error message to user for having no destinations specified for the journey
+  ///Show error message to user for having no destinations specified for the journey
   void showSnackBarErrorMessage(BuildContext context, message) {
     SnackBar snackBar = SnackBar(
       content: Text(
         message,
-        style: TextStyle(fontSize: 17),
       ),
-      backgroundColor: Colors.red,
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
