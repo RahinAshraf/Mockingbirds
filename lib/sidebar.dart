@@ -52,11 +52,6 @@ class SideBar extends StatelessWidget {
             icon: Icons.settings,
             onClicked: () => _renderScreen(context, 5),
           ),
-          _buildSidebarItem(
-            text: 'Log Out',
-            icon: Icons.logout,
-            onClicked: () => FirebaseAuth.instance.signOut(),
-          ),
         ],
       ),
     );
