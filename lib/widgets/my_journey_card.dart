@@ -35,27 +35,33 @@ class _MyJourneyCardState extends State<MyJourneyCard> {
       shadowColor: Colors.green[200],
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       clipBehavior: Clip.antiAlias,
-      child: Padding(
-        padding: const EdgeInsets.all(10),
+      child: Expanded(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.journey.date!,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.journey.date!,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
                   ),
-                  Container(
-                      child: widget.stationCarousel
-                          .buildCarousel(widget.stationCards)),
-                ],
-              ),
+                ),
+              ],
+            ),
+            Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: widget.stationCards.length,
+                    itemBuilder: (context, index) {
+                      return widget.stationCards[index];
+                    },
+                  ),
+                ),
+              ],
             ),
           ],
         ),
