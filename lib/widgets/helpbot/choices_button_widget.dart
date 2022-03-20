@@ -13,9 +13,9 @@ ButtonStyle helpbotChoiceButtonStyle = ButtonStyle(
 /// Generates a button for either a question or a topic
 /// in bottom choices panel in [HelpPage].
 class ChoiceButton extends StatelessWidget {
-  const ChoiceButton({required this.topic, required this.onPressed});
+  const ChoiceButton({required this.content, required this.onPressed});
   final VoidCallback onPressed;
-  final String topic;
+  final Widget content;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class ChoiceButton extends StatelessWidget {
       child: OutlinedButton(
         style: helpbotChoiceButtonStyle,
         onPressed: onPressed,
-        child: Text(topic, style: helpbotChoiceTextStyle),
+        child: content,
       ),
     );
   }
