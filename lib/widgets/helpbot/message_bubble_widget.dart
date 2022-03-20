@@ -1,22 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:veloplan/screens/help_screen.dart';
-import '../styles/styling.dart';
 
+// CONSTANTS
 const String botName = 'HelpBot';
 const String userName = 'You';
+const Color userMessageBubbleColor = Color(0xFF99D2A9);
+const Color botMessageBubbleColor = Colors.white;
+const TextStyle messageAuthorTextStyle =
+    TextStyle(fontSize: 13.0, color: Colors.black54);
+const TextStyle botMessageTextStyle =
+    TextStyle(fontSize: 15.0, color: Colors.black54);
+const TextStyle userMessageTextStyle =
+    TextStyle(fontSize: 15.0, color: Colors.white);
 
-/// Creates a message bubble used in [HelpPage].
+/// Creates a chat bubble used in HelpBotPage.
 ///
-/// This widget differentiates between a bot message bubble
+/// This widget differentiates between a bot chat bubble
 /// and user chat bubble (uses different styling for different parties).
+///
+/// The [content] argument is required. It corresponds to the content
+/// of a chat bubble.
 ///
 /// By default, the chat bubble is created for bots' messages, therefore
 /// [isSentByBot] equals to true. If [isSentByBot] is set to false,
-/// the message bubble is created for the user.
+/// the chat bubble is created for the user.
 class MessageBubble extends StatelessWidget {
-  const MessageBubble({required this.text, this.isSentByBot = true});
+  const MessageBubble({required this.content, this.isSentByBot = true});
 
-  final String text;
+  final String content;
   final bool isSentByBot;
 
   @override
@@ -27,7 +37,7 @@ class MessageBubble extends StatelessWidget {
         key: const Key('alignmentKey'),
         crossAxisAlignment:
             isSentByBot ? CrossAxisAlignment.start : CrossAxisAlignment.end,
-        children: <Widget>[
+        children: [
           Text(
             isSentByBot ? botName : userName,
             style: messageAuthorTextStyle,
@@ -50,7 +60,7 @@ class MessageBubble extends StatelessWidget {
               padding:
                   const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
               child: Text(
-                text,
+                content,
                 style: isSentByBot ? botMessageTextStyle : userMessageTextStyle,
               ),
             ),

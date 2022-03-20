@@ -1,13 +1,11 @@
 import 'dart:io';
-
-import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
-import '../../styles/styling.dart';
-import '../pickers/image_picker.dart';
-import '../pickers/bottom_date_picker.dart';
+import 'package:veloplan/styles/styling.dart';
+import 'package:veloplan/widgets/pickers/bottom_date_picker.dart';
+import 'package:veloplan/widgets/pickers/image_picker.dart';
 
 class AuthForm extends StatefulWidget {
   const AuthForm(this.submitFn, this.isLoading, {Key? key}) : super(key: key);

@@ -74,12 +74,12 @@ const authTextStyle =
 
 // Trips scheduler panel widget
 ButtonStyle journeyTimeButtonStyle = TextButton.styleFrom(
-    textStyle: const TextStyle(fontSize: 20),
+    textStyle: const TextStyle(fontSize: 15),
     backgroundColor: Colors.green[500],
     primary: Colors.white);
 const TextStyle infoTextStyle =
     TextStyle(fontStyle: FontStyle.italic, fontSize: 18);
 const TextStyle tripSchedulerTextStyle =
-    TextStyle(fontWeight: FontWeight.normal, fontSize: 20);
+    TextStyle(fontWeight: FontWeight.normal, fontSize: 18);
 const TextStyle cyclistNumberTextStyle =
     TextStyle(fontSize: 30.0, fontWeight: FontWeight.w500);

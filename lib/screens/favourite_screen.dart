@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:veloplan/helpers/favourite_helper.dart';
+import 'package:veloplan/models/docking_station.dart';
+import 'package:veloplan/styles/styling.dart';
 import 'package:veloplan/widgets/docking_station_card.dart';
-import 'package:veloplan/models/favourite.dart';
 
-/// Loads cards of all of the users favourited docking station
-class Favourites extends StatefulWidget {
-  _FavouritesState createState() => _FavouritesState();
+///Loads users favourited docking stations and displays them in a list view.
+///@author Tayyibah Uddin
+
+//Loads cards of all of the users favourited docking station
+class Favourite extends StatefulWidget {
+  @override
+  _FavouriteState createState() => _FavouriteState();
 }
 
-class _FavouritesState extends State<Favourites> {
-  List<FavouriteDockingStation> favourites = [];
+class _FavouriteState extends State<Favourite> {
+  List<DockingStation> favourites = [];
   var helper = FavouriteHelper();
 
   @override
@@ -26,28 +31,27 @@ class _FavouritesState extends State<Favourites> {
   Widget build(BuildContext build) {
     return Scaffold(
       body: favourites.isEmpty
-          ? SizedBox(
-              height: MediaQuery.of(context).size.height / 1.3,
-              child: const Center(
-                child: Text("You haven't added any favourites."),
-              ),
+          ? const SafeArea(
+              child: Center(child: Text("You haven't added any favourites.")),
             )
           : Stack(
               children: [
                 ListView.builder(
-                    itemCount: favourites.length,
-                    itemBuilder: (context, index) {
-                      return dockingStationCard(
-                        favourites[index].station_id,
-                        favourites[index].name,
-                        favourites[index].nb_bikes,
-                        favourites[index].nb_empty_docks,
-                      );
-                    }),
+                  itemCount: favourites.length,
+                  itemBuilder: (context, index) {
+                    return DockingStationCard(
+                      favourites[index].stationId,
+                      favourites[index].name,
+                      favourites[index].numberOfBikes,
+                      favourites[index].numberOfEmptyDocks,
+                    );
+                  },
+                ),
               ],
             ),
       appBar: AppBar(
         title: const Text('My favourites'),
+        backgroundColor: appBarColor,
       ),
     );
   }

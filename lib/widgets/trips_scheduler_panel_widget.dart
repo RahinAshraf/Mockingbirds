@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../screens/journey_planner_screen.dart';
-import '../styles/styling.dart';
+import 'package:veloplan/screens/journey_planner_screen.dart';
+import 'package:veloplan/styles/styling.dart';
 
 class PanelWidgetTripScheduler extends StatefulWidget {
   const PanelWidgetTripScheduler({required ScrollController controller});
@@ -11,7 +11,6 @@ class PanelWidgetTripScheduler extends StatefulWidget {
 
 class _PanelWidgetTripScheduler extends State<PanelWidgetTripScheduler> {
   ScrollController controller = ScrollController();
-
   final int maximumNumberOfCyclists = 6; // there can be <=6 people in the group
   int numberOfCyclists = 1; // min one cyclist allowed
   DateTime selectedDate = DateTime.now();
@@ -19,75 +18,71 @@ class _PanelWidgetTripScheduler extends State<PanelWidgetTripScheduler> {
 
   @override
   Widget build(BuildContext context) => ListView(
-        padding: EdgeInsets.zero,
+        padding: const EdgeInsets.only(right: 24.0, left: 24.0),
         children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 36, bottom: 24),
-            child: fillInInfoText(),
+          const Padding(
+            padding: EdgeInsets.only(top: 24.0, bottom: 24.0),
+            child: Text(
+              "Please fill in the following details of your trip. Please fill in the following details of your trip. Please fill in the following details of your trip. Please fill in the following details of your trip. Please fill in the following details of your trip.",
+              style: infoTextStyle,
+            ),
           ),
           Row(
             children: [
-              const Padding(
-                padding: EdgeInsets.only(left: 20, right: 20),
-                child: Text(
-                  "Number of cyclists:",
-                  style: tripSchedulerTextStyle,
+              SizedBox(
+                width: MediaQuery.of(context).size.width / 2,
+                child: const Text("Number of cyclists:",
+                    style: tripSchedulerTextStyle),
+              ),
+              const SizedBox(width: 10),
+              IconButton(
+                onPressed: _decrementCounter,
+                icon: const Icon(
+                  Icons.remove_rounded,
+                  color: Colors.black,
                 ),
               ),
-              Row(
-                children: <Widget>[
-                  IconButton(
-                    onPressed: _decrementCounter,
-                    icon: const Icon(
-                      Icons.remove_rounded,
-                      color: Colors.black,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                    child: Text(
-                      '$numberOfCyclists',
-                      style: cyclistNumberTextStyle,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: _incrementCounter,
-                    icon: const Icon(
-                      Icons.add_rounded,
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
+              Padding(
+                padding: const EdgeInsets.only(left: 3.0, right: 3.0),
+                child: Text(
+                  '$numberOfCyclists',
+                  style: cyclistNumberTextStyle,
+                ),
+              ),
+              IconButton(
+                onPressed: _incrementCounter,
+                icon: const Icon(
+                  Icons.add_rounded,
+                  color: Colors.black,
+                ),
               ),
             ],
           ),
           const SizedBox(
-            height: 36,
+            height: 24,
           ),
           Row(
             children: [
-              const Padding(
-                padding: EdgeInsets.only(left: 20, right: 20),
-                child: SizedBox(
-                  width: 180,
-                  child: Text(
-                    "When would you like to cycle?",
-                    style: tripSchedulerTextStyle,
-                  ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width / 2,
+                child: const Text(
+                  "When would you like to cycle?",
+                  style: tripSchedulerTextStyle,
                 ),
               ),
+              const SizedBox(width: 10),
               TextButton(
                 style: journeyTimeButtonStyle,
                 onPressed: () {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => JourneyPlanner()));
+                          builder: (context) => const JourneyPlanner()));
                 },
                 child: const Text('Now'),
               ),
               const SizedBox(
-                width: 10,
+                width: 6,
               ),
               TextButton(
                 style: journeyTimeButtonStyle,
@@ -96,25 +91,13 @@ class _PanelWidgetTripScheduler extends State<PanelWidgetTripScheduler> {
               ),
             ],
           ),
-          // TODO: do something with the time value rather than just displaying it.
           Padding(
-            padding: const EdgeInsets.only(top: 30.0),
+            // TODO: do something with the time value rather than just displaying it.
+            // TODO: check if there is no journey planned for the same day. [OPTIONAL]
+            padding: const EdgeInsets.only(top: 24.0),
             child: Center(child: Text(selectedDate.toString())),
           ),
         ],
-      );
-
-  Widget fillInInfoText() => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            Text(
-              "Please fill in the following details of your trip.",
-              style: infoTextStyle,
-            )
-          ],
-        ),
       );
 
   void _incrementCounter() {

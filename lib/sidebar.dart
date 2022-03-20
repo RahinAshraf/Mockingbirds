@@ -18,22 +18,22 @@ class SideBar extends StatelessWidget {
             height: 150,
             alignment: Alignment.topRight,
           ),
-          buildSidebarItem(
+          _buildSidebarItem(
             text: 'Schedule',
             icon: Icons.date_range,
             onClicked: () => _renderScreen(context, 0),
           ),
-          buildSidebarItem(
+          _buildSidebarItem(
             text: 'My Journeys',
             icon: Icons.history,
             onClicked: () => _renderScreen(context, 1),
           ),
-          buildSidebarItem(
+          _buildSidebarItem(
             text: 'Favourites',
             icon: Icons.favorite,
             onClicked: () => _renderScreen(context, 2),
           ),
-          buildSidebarItem(
+          _buildSidebarItem(
             text: 'Statistics',
             icon: Icons.assessment_outlined,
             onClicked: () => _renderScreen(context, 3),
@@ -42,17 +42,17 @@ class SideBar extends StatelessWidget {
           const SizedBox(height: 24),
           const Divider(color: Colors.grey),
           const SizedBox(height: 24),
-          buildSidebarItem(
+          _buildSidebarItem(
             text: 'Help',
             icon: Icons.chat_bubble_outlined,
             onClicked: () => _renderScreen(context, 4),
           ),
-          buildSidebarItem(
+          _buildSidebarItem(
             text: 'Settings',
             icon: Icons.settings,
             onClicked: () => _renderScreen(context, 5),
           ),
-          buildSidebarItem(
+          _buildSidebarItem(
             text: 'Log Out',
             icon: Icons.logout,
             onClicked: () => FirebaseAuth.instance.signOut(),
@@ -62,7 +62,7 @@ class SideBar extends StatelessWidget {
     );
   }
 
-  Widget buildSidebarItem(
+  Widget _buildSidebarItem(
       {required String text, required IconData icon, VoidCallback? onClicked}) {
     return ListTile(
       leading: Icon(icon),
@@ -87,7 +87,7 @@ class SideBar extends StatelessWidget {
         break;
       case 2:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => Favourites(),
+          builder: (context) => Favourite(),
         ));
         break;
       case 3:

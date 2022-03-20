@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mapbox_navigation/library.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
-import 'package:veloplan/helpers/latlng_to_waypoint.dart';
-import 'package:veloplan/screens/map_screen.dart';
+import 'package:veloplan/screens/navigation/map_screen.dart';
+import 'package:veloplan/helpers/navigation_helpers/navigation_conversion_helpers.dart';
 
-//Reference: dormmom.com, Jul 20, 2021, flutter_mapbox_navigation 0.0.26, https://pub.dev/packages/flutter_mapbox_navigation
+/// A splash screen displaying turn by turn navigation for a journey.
+/// Author(s): Fariha Choudhury k20059723, Elisabeth Halvorsen k20077737,
+/// Reference: dormmom.com, Jul 20, 2021, flutter_mapbox_navigation 0.0.26, https://pub.dev/packages/flutter_mapbox_navigation
 
 class TurnByTurn extends StatefulWidget {
   late List<LatLng> points;
@@ -24,7 +26,7 @@ class _TurnByTurnState extends State<TurnByTurn> {
     wayPoints = latLngs2WayPoints(points);
   }
 
-  // Config variables for Mapbox Navigation
+  /// Configuration variables for Mapbox Navigation
   late MapBoxNavigation directions;
   late MapBoxOptions _options;
   late double distanceRemaining, durationRemaining;
@@ -41,10 +43,11 @@ class _TurnByTurnState extends State<TurnByTurn> {
     initialize();
   }
 
+  /// Initialises the navigation
   Future<void> initialize() async {
     if (!mounted) return;
 
-    // Setup directions and options
+    /// Setup directions and options
     directions = MapBoxNavigation(onRouteEvent: _onRouteEvent);
     _options = MapBoxOptions(
         zoom: 18.0,
@@ -53,10 +56,12 @@ class _TurnByTurnState extends State<TurnByTurn> {
         mode: MapBoxNavigationMode.cycling,
         isOptimized: true,
         units: VoiceUnits.metric,
-        simulateRoute: true, //false to use live movement
+        simulateRoute: true,
+
+        ///false to use live movement
         language: "en");
 
-    // Start the trip
+    /// Start the trip
     await directions.startNavigation(wayPoints: wayPoints, options: _options);
   }
 
@@ -65,6 +70,7 @@ class _TurnByTurnState extends State<TurnByTurn> {
     return const MapPage();
   }
 
+  /// Turn by turn navigation
   Future<void> _onRouteEvent(e) async {
     distanceRemaining = await directions.distanceRemaining;
     durationRemaining = await directions.durationRemaining;
@@ -102,7 +108,8 @@ class _TurnByTurnState extends State<TurnByTurn> {
       default:
         break;
     }
-    //refresh UI
+
+    /// refresh UI
     setState(() {});
   }
 }

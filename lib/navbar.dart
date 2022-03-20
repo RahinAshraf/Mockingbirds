@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:veloplan/popups.dart';
-import 'package:veloplan/sidebar.dart';
-import 'package:veloplan/screens/map_screen.dart';
+import 'package:veloplan/screens/navigation/map_screen.dart';
 import 'package:veloplan/screens/profile_screen.dart';
+import 'package:veloplan/sidebar.dart';
 
 /// Defines the navigation bar, allows you to move between the map screen, profile page and view the sidebar.
 /// @author  Elisabeth, Rahin, Tayyibah
@@ -44,11 +44,10 @@ class _NavBarState extends State<NavBar> {
               onPressed: () {
                 _onTabTapped(1);
                 showDialog(
-                  useRootNavigator: false,
-                  context: context,
-                  builder: (BuildContext context) =>
-                      popup.buildPopupDialogNewJourney(context),
-                );
+                    useRootNavigator: false,
+                    context: context,
+                    builder: (BuildContext context) =>
+                        popup.buildPopupDialogNewJourney(context));
               },
               child: const Icon(
                 Icons.directions_bike,
@@ -67,7 +66,7 @@ class _NavBarState extends State<NavBar> {
       type: BottomNavigationBarType.fixed,
       iconSize: 33,
       currentIndex: currentIndex,
-      onTap: _onTabTapped, //(index) => setState(() => currentIndex = index),
+      onTap: _onTabTapped, // (index) => setState(() => currentIndex = index),
       items: _retrieveNavItems(),
     );
   }

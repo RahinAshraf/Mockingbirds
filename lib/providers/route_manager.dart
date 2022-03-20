@@ -1,40 +1,40 @@
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:veloplan/.env.dart';
+import 'package:veloplan/utilities/travel_type.dart';
+
+/// Route provider for fetching journey details from the  Mapbox directions API
+/// Author(s): Fariha Choudhury k20059723, Elisabeth Halvorsen k20077737
 
 class RouteManager {
-  String baseUrl = 'https://api.mapbox.com/directions/v5/mapbox';
-  String accessToken =
-      'pk.eyJ1IjoibW9ja2luZ2JpcmRzIiwiYSI6ImNrempyNnZtajNkbmkybm8xb3lybWE3MTIifQ.AsZJbQPNRb2N3unNdA98nQ';
-  String navType = 'cycling';
-  Dio _dio = Dio();
-  Map<String, Object> directions = {};
+  final String _baseUrl = 'https://api.mapbox.com/directions/v5/mapbox';
+  final String _accessToken = MAPBOX_ACCESS_TOKEN;
+  final Dio _dio = Dio();
+  Map<String, Object> _directions = {};
 
-  Future<Map> getDirections(
-      LatLng currentLatLng, LatLng location_placeholder) async {
-    final response = await getCyclingRoute(currentLatLng, location_placeholder);
-    Map geometry = response['routes'][0]['geometry'];
-    num duration = response['routes'][0]['duration'];
-    num distance = response['routes'][0]['distance'];
-    // print(
-    //     '-------------------${location_placeholder['name']}-------------------');
-    print(distance);
-    print(duration);
-    directions = {
-      "geometry": geometry,
-      "duration": duration,
-      "distance": distance,
+  /// populate directions map with route information
+  Future<Map<String, dynamic>> getDirections(LatLng currentLatLng,
+      LatLng location_placeholder, NavigationType navigationType) async {
+    final response =
+        await getRoute(currentLatLng, location_placeholder, navigationType);
+    _directions = {
+      "geometry": response['routes'][0]['geometry'],
+      "duration": response['routes'][0]['duration'],
+      "distance": response['routes'][0]['distance'],
     };
-    return {
-      "geometry": geometry,
-      "duration": duration,
-      "distance": distance,
-    };
+    return _directions;
   }
 
-  Future getCyclingRoute(LatLng source, LatLng destination) async {
+  /// gets the current route information from the directions API
+  Future getRoute(
+      LatLng source, LatLng destination, NavigationType navigationType) async {
+    String type = getNavigationType(navigationType);
+    if (type.isEmpty) {
+      return null;
+    }
     String url =
-        '$baseUrl/$navType/${source.longitude},${source.latitude};${destination.longitude},${destination.latitude}?alternatives=true&continue_straight=true&geometries=geojson&language=en&overview=full&steps=true&access_token=$accessToken';
+        '$_baseUrl/$type/${source.longitude},${source.latitude};${destination.longitude},${destination.latitude}?alternatives=true&continue_straight=true&geometries=geojson&language=en&overview=full&steps=true&access_token=$_accessToken';
     try {
       _dio.options.contentType = Headers.jsonContentType;
       final responseData = await _dio.get(url);
@@ -45,41 +45,30 @@ class RouteManager {
     }
   }
 
-  Future getWalkingRoute(LatLng source, LatLng destination) async {
-    String url =
-        '$baseUrl/${'walking'}/${source.longitude},${source.latitude};${destination.longitude},${destination.latitude}?alternatives=true&continue_straight=true&geometries=geojson&language=en&overview=full&steps=true&access_token=$accessToken';
-    try {
-      _dio.options.contentType = Headers.jsonContentType;
-      final responseData = await _dio.get(url);
-      return responseData.data;
-    } catch (e) {
-      final errorMessage = e.toString();
-      debugPrint(errorMessage);
-    }
-  }
-
+  /// gets the geometry of the current route
   Object? getGeometry() {
-    if (directions.isNotEmpty)
-      return directions['geometry'];
-    else {}
+    if (_directions.isNotEmpty) {
+      return _directions['geometry'];
+    } else {
+      return null;
+    }
   }
 
+  /// gets the duration of the current route
   Object? getDuration() async {
-    if (directions.isNotEmpty)
-      return directions['duration'];
-    else {}
+    if (_directions.isNotEmpty) {
+      return _directions['duration'];
+    } else {
+      return null;
+    }
   }
 
+  /// gets the distance of the current route
   Object? getDistance() async {
-    if (directions.isNotEmpty)
-      return directions['distance'];
-    else {}
+    if (_directions.isNotEmpty) {
+      return _directions['distance'];
+    } else {
+      return null;
+    }
   }
-
-  //TODO: get geometry
-  //TODO: get duration
-  //TODO: get distance
-
-  //TODO: get geometry
-  //TODO: refactor cycling and walking route methods
 }

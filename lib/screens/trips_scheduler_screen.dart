@@ -3,8 +3,8 @@ import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:veloplan/.env.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
-import 'package:veloplan/screens/map_screen.dart';
 import 'package:veloplan/widgets/trips_scheduler_panel_widget.dart';
+import 'package:veloplan/screens/navigation/map_screen.dart';
 
 class TripScheduler extends StatefulWidget {
   const TripScheduler({Key? key}) : super(key: key);
