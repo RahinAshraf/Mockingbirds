@@ -127,6 +127,7 @@ class _TurnByTurnState extends State<TurnByTurn> {
           await _controller.finishNavigation();
         } else {}
         await updateDistanceOnServer();
+        directions.finishNavigation();
         break;
       case MapBoxEvent.navigation_finished:
       case MapBoxEvent.navigation_cancelled:
