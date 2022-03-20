@@ -63,7 +63,7 @@ void removeFills(MapboxMapController? controller, Set<Symbol> polylineSymbols,
   fills.clear();
 }
 
-/// Adds marker symbols for each location of a [journey] list to the map
+/// Adds marker symbols for each location of a [journey] list to the map, using [LatLng]s 
 void setPolylineMarkers(MapboxMapController controller, List<LatLng> journey,
     Set<Symbol> polylineSymbols) async {
   for (var stop in journey) {
@@ -76,7 +76,24 @@ void setPolylineMarkers(MapboxMapController controller, List<LatLng> journey,
   }
 }
 
-/// Adds marker symbol for a single [point] to the map
+
+/// Set markers for docking stations using yellow marker using [DockingStation]s.
+void setMarkers(MapboxMapController controller, List<DockingStation> docks,
+    Set<Symbol> symbolsSet) async {
+  for (var station in docks) {
+    symbolsSet.add(await controller.addSymbol(
+      SymbolOptions(
+            geometry: LatLng(station.lat, station.lon),
+            iconSize: 0.7,
+            iconImage: "assets/icon/yellow_marker.png"),
+        {
+          "station": station,
+        }
+    ));
+  }
+}
+
+/// Adds marker symbol for a single [point] to the map in its own set 
 void setMarker(MapboxMapController controller, LatLng point,
     Set<Symbol> currentSymbol) async {
   currentSymbol.add(await controller.addSymbol(
@@ -93,3 +110,4 @@ void removePolylineMarkers(
     polylineSymbols.clear();
   }
 }
+

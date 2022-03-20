@@ -55,16 +55,13 @@ class _DockSorterScreen extends State<DockSorterScreen> {
     var list = await _stationManager.importStations();
     filteredDockingStations =
         _stationManager.get10ClosestDocks(userCoordinates);
-
+    //Add to a list of DockingStations^
     for (var station in filteredDockingStations) {
-      // print(_docks.length.toString() +
-      //     "HIIIIIIIIIIIIIIII FARIHAAAAAAAA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
       _docks.add(LatLng(station.lat, station.lon));
+      //Add to a list of LatLng^
     }
-
     //As future is returned for filtered docks, must call on map details after retrieving data
     refreshStations();
-    //print(_docks.toString());
   }
 
   @override
@@ -96,10 +93,6 @@ class _DockSorterScreen extends State<DockSorterScreen> {
                     model,
                   );
                   addClearDocksButton();
-                  //SET CAMERA POSITION TO FOCUS ON CHOSEN DOCK: - doesnt work??
-                  // _baseMapWithRoute.controller?.animateCamera(
-                  //     CameraUpdate.newCameraPosition(
-                  //         CameraPosition(target: _docks[0], zoom: 12, tilt: 5)));
                   return SafeArea(
                       child: Stack(children: _baseMapWithStation.getWidgets()));
                 })),
@@ -114,11 +107,8 @@ class _DockSorterScreen extends State<DockSorterScreen> {
   /// Resets docking stations - calls map methods of BaseMapboxStationMap as markers cannot be displayed until
   /// fetched (futures).
   void refreshStations() {
-    // removePolylineMarkers(_baseMapWithStation.controller!, editDocksSymbols);
-    // setPolylineMarkers(
-    //     _baseMapWithStation.controller!, _docks, editDocksSymbols);
-    // _baseMapWithStation.refocusCamera(_docks);
-    _baseMapWithStation.displayFeatures(_docks, userCoordinates);
+    _baseMapWithStation.displayFeatures(
+        _docks, filteredDockingStations, userCoordinates);
     _baseMapWithStation.controller!.onSymbolTapped
         .add(_baseMapWithStation.onSymbolTapped);
   }
@@ -140,6 +130,23 @@ class _DockSorterScreen extends State<DockSorterScreen> {
     ));
   }
 }
+
+/// TO DO:    Add focus dock with a marker too (? does it do it - check -)
+/// TO DO:    Add tap; return docking station info 
+/// TO DO:    After tap; switch colour and redraw map after focussing on that dock (? maybe or leave second part)
+/// TO DO:    Refactor drawing helpers; separate latlng and docking station passing; pass in data for stations 
+
+
+
+
+
+
+
+
+
+
+
+
 
 // import 'package:flutter/material.dart';
 // import 'package:sliding_up_panel/sliding_up_panel.dart';

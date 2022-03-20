@@ -1,6 +1,7 @@
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:tuple/tuple.dart';
 import 'package:veloplan/helpers/navigation_helpers/navigation_helpers.dart';
+import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/models/map_models/base_map_with_route_model.dart';
 import 'package:veloplan/providers/route_manager.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
@@ -8,15 +9,15 @@ import 'package:veloplan/models/map_models/base_map_model.dart';
 import 'package:veloplan/helpers/navigation_helpers/map_drawings.dart';
 import 'package:veloplan/utilities/travel_type.dart';
 
-/// Class to display a mapbox map with a route and other possible widgets
-/// Author(s): Fariha Choudhury k20059723, Elisabeth Koren Halvorsen k20077737
+/// Class to display a mapbox map with markers for a station and its surroudning stations, and other possible widgets
+/// Author(s): Fariha Choudhury k20059723
 
 /// OVERRIDE ROUTE MAP - PASS IN JOURNEY - BUT DO NOT DISPLAY, CALL FUNCTIONS FROM SCREEN SEPARATELY.
 
 class BaseMapboxStationMap extends BaseMapboxRouteMap {
-  //BaseMapboxMap {
   late final List<LatLng> _journey;
-  LatLng _curentDock;
+  LatLng
+      _curentDock; //change to type docking station and retrieve station via lat lng
   final Set<Symbol> filteredDockSymbols = {};
   final Set<Symbol> currentSymbol = {};
 
@@ -34,8 +35,8 @@ class BaseMapboxStationMap extends BaseMapboxRouteMap {
     model.fetchDockingStations();
     // _displayFeatures(_journey);
     // onMarkerTapped(controller);
-    print(_journey);
-    print(_curentDock);
+    print("journey: " + _journey.toString());
+    print("currentDock: " + _curentDock.toString());
   }
 
   /// Calls [onSymbolTapped] functionality for docking station markers on maps that do not [_displayPolyline]
@@ -60,13 +61,16 @@ class BaseMapboxStationMap extends BaseMapboxRouteMap {
   }
 
   /// Display journey and refocus camera position
-  void displayFeatures(List<LatLng> journey, LatLng focusDock) {
-    // if (_displayPolyline) {
-    //   //_setJourney(journey);
-    // }
-    //_setJourney(journey);
-    refocusCamera(journey);
-    setPolylineMarkers(controller!, journey, filteredDockSymbols);
+  void displayFeatures(List<LatLng> latLngPoints, List<DockingStation> stations,
+      LatLng focusDock) {
+    // List<LatLng> docks =
+    //     stations.map((dock) => LatLng(dock.lat, dock.lon)).toList();
+    // print("WHATFFGJBKLL:      ------ " + docks.toString());
+
+    //CHANGE LIST OF DOCKING STATIONS INTO LIST OF LATLNG^^ or take both in
+
+    refocusCamera(latLngPoints);
+    setMarkers(controller!, stations, filteredDockSymbols);
     setMarker(controller!, focusDock, currentSymbol);
   }
 
