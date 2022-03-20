@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:veloplan/screens/navigation/map_screen.dart';
 import '../.env.dart';
 import '../widgets/docking_stations_sorting_widget.dart';
-import 'map_screen.dart';
 
 class DockSorterScreen extends StatefulWidget {
   late final LatLng userCoord;
@@ -62,9 +62,9 @@ class _DockSorterScreen extends State<DockSorterScreen> {
             ],
           ),
         ),
-        panelBuilder: (controller) => DockSorter(userCoordinates, controller: controller),
+        panelBuilder: (controller) =>
+            DockSorter(userCoordinates, controller: controller),
       ),
     );
   }
-
 }

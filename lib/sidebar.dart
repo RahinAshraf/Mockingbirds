@@ -5,7 +5,8 @@ import '../screens/favourite_screen.dart';
 import '../screens/setting_screen.dart';
 import '../screens/help_screen.dart';
 
-/// Author: Tayyibah
+///Author: Tayyibah
+
 class NavigationDrawerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -33,8 +34,9 @@ class NavigationDrawerWidget extends StatelessWidget {
             icon: Icons.assessment_outlined,
             onClicked: () => selectedItem(context, 3),
           ),
+          //decided to remove this, not sure if it looks nice
           const SizedBox(height: 24),
-          const Divider(color: Colors.grey),
+          Divider(color: Colors.grey),
           const SizedBox(height: 24),
           buildMenuItem(
             text: 'Help',
@@ -60,12 +62,13 @@ class NavigationDrawerWidget extends StatelessWidget {
       {required String text, required IconData icon, VoidCallback? onClicked}) {
     return ListTile(
       leading: Icon(icon),
-      title: Text(text, style: const TextStyle(color: Colors.green)),
+      title: Text(text, style: TextStyle(color: Colors.green)),
       onTap: onClicked,
     );
   }
 
   selectedItem(BuildContext context, int i) {
+    //Navigator.of(context).pop();
     switch (i) {
       case 0:
         Navigator.of(context).push(MaterialPageRoute(
@@ -74,8 +77,7 @@ class NavigationDrawerWidget extends StatelessWidget {
         break;
       case 1:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => const Placeholder(),
-          // TODO: link 'My journeys' screen here
+          builder: (context) => Placeholder(),
         ));
         break;
       case 2:
@@ -85,8 +87,7 @@ class NavigationDrawerWidget extends StatelessWidget {
         break;
       case 3:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => const Placeholder(),
-          // TODO: link 'Statistics' screen here
+          builder: (context) => Placeholder(),
         ));
         break;
       case 4:
