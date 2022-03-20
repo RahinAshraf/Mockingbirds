@@ -13,25 +13,16 @@ const Color helpScreenBorderColor = Color(0x4D99D2A9);
 
 // Popup dialogs
 const TextStyle popupDialogTitleTextStyle = TextStyle(
-  fontWeight: FontWeight.bold,
-  fontSize: 24.0,
-  color: Color(0xFF7C8691),
-);
+    fontWeight: FontWeight.bold, fontSize: 24.0, color: Color(0xFF7C8691));
 const TextStyle popupDialogTextStyle = TextStyle(
-  color: Color(0xffD3DAE0),
-  fontWeight: FontWeight.w600,
-  fontSize: 18.0,
-);
+    color: Color(0xffD3DAE0), fontWeight: FontWeight.w600, fontSize: 18.0);
 ButtonStyle popupDialogButtonStyle = ButtonStyle(
-  overlayColor: MaterialStateProperty.all(Colors.green.shade200),
-  backgroundColor: MaterialStateProperty.all(const Color(0XFFFBAB4B)),
-  padding:
-      MaterialStateProperty.all(const EdgeInsets.only(right: 10.0, left: 10.0)),
-);
-const TextStyle popupDialogButtonTextStyle = TextStyle(
-  fontSize: 18.0,
-  color: Colors.white,
-);
+    overlayColor: MaterialStateProperty.all(Colors.green.shade200),
+    backgroundColor: MaterialStateProperty.all(const Color(0XFFFBAB4B)),
+    padding: MaterialStateProperty.all(
+        const EdgeInsets.only(right: 10.0, left: 10.0)));
+const TextStyle popupDialogButtonTextStyle =
+    TextStyle(fontSize: 18.0, color: Colors.white);
 
 // Authorisation (login, signup, email validation)
 const authTextStyle =

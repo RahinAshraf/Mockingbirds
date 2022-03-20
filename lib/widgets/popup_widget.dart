@@ -1,6 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../styles/styling.dart';
+import 'package:veloplan/styles/styling.dart';
 
 enum AlertType { warning, question }
 
@@ -22,9 +21,6 @@ extension AlertTypeString on AlertType {
 ///
 /// This widget has [type] property of [AlertType]. It determines the
 /// image that should be rendered for the widget.
-///
-/// Some of the styling of this widget is specified in [Navbar]s [ThemeData]
-/// property.
 class PopupWidget extends StatelessWidget {
   PopupWidget(
       {required this.title,
