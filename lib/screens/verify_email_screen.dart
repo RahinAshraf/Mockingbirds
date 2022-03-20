@@ -54,7 +54,6 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(message),
-            backgroundColor: Theme.of(context).errorColor,
           ),
         );
       }

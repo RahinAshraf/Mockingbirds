@@ -111,7 +111,6 @@ class _ProfileWidgetState extends State<ProfileWidget> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(error.toString()),
-            backgroundColor: Theme.of(context).errorColor,
           ),
         );
       }

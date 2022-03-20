@@ -53,7 +53,6 @@ class _AuthFormState extends State<AuthForm> {
     //   Scaffold.of(context).showSnackBar(
     //     SnackBar(
     //       content: Text('Please pick an image.'),
-    //       backgroundColor: Theme.of(context).errorColor,
     //     ),
     //   );
     //   return;
@@ -95,13 +94,7 @@ class _AuthFormState extends State<AuthForm> {
                 if (_isLogin)
                   Container(
                     padding: const EdgeInsets.all(10),
-                    child: const Text(
-                      'Welcome back!',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 25),
-                    ),
+                    child: const Text('Welcome back!', style: welcomeTextStyle),
                   ),
                 if (!_isLogin) const SizedBox(height: 50),
                 if (!_isLogin) UserImagePicker(_pickedImage),
@@ -117,7 +110,8 @@ class _AuthFormState extends State<AuthForm> {
                       }
                       return null;
                     },
-                    decoration: const InputDecoration(labelText: 'First Name'),
+                    decoration: const InputDecoration(
+                        border: OutlineInputBorder(), labelText: 'First Name'),
                     onSaved: (value) {
                       _firstName = value!;
                     },
@@ -135,7 +129,8 @@ class _AuthFormState extends State<AuthForm> {
                       }
                       return null;
                     },
-                    decoration: const InputDecoration(labelText: 'Last Name'),
+                    decoration: const InputDecoration(
+                        border: OutlineInputBorder(), labelText: 'Last Name'),
                     onSaved: (value) {
                       _lastName = value!;
                     },
@@ -150,7 +145,8 @@ class _AuthFormState extends State<AuthForm> {
                       ? null
                       : "Please enter a valid email",
                   keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(labelText: 'Email Address'),
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(), labelText: 'Email Address'),
                   onSaved: (value) {
                     _userEmail = value!;
                   },
@@ -168,7 +164,8 @@ class _AuthFormState extends State<AuthForm> {
                       }
                       return null;
                     },
-                    decoration: const InputDecoration(labelText: 'Username'),
+                    decoration: const InputDecoration(
+                        border: OutlineInputBorder(), labelText: 'Username'),
                     onSaved: (value) {
                       _userName = value!;
                     },
@@ -186,7 +183,8 @@ class _AuthFormState extends State<AuthForm> {
                     }
                     return null;
                   },
-                  decoration: const InputDecoration(labelText: 'Password'),
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(), labelText: 'Password'),
                   obscureText: true,
                   onSaved: (value) {
                     _userPassword = value!;
@@ -205,8 +203,9 @@ class _AuthFormState extends State<AuthForm> {
                       }
                       return null;
                     },
-                    decoration:
-                        const InputDecoration(labelText: 'Confirm Password'),
+                    decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Confirm Password'),
                     obscureText: true,
                   ),
                 const SizedBox(height: 15),
@@ -254,8 +253,9 @@ class _AuthFormState extends State<AuthForm> {
                         },
                       );
                     },
-                    decoration:
-                        const InputDecoration(labelText: 'Date of Birth'),
+                    decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Date of Birth'),
                   ),
                 const SizedBox(height: 12),
                 if (widget.isLoading) const CircularProgressIndicator(),

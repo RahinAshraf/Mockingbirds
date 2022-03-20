@@ -13,6 +13,10 @@ class CustomTheme {
         color: CustomColors.green,
         foregroundColor: CustomColors.appBarTextColor,
       ),
+      snackBarTheme: const SnackBarThemeData(
+        backgroundColor: Colors.red,
+        contentTextStyle: TextStyle(fontSize: 17),
+      ),
       dialogTheme: const DialogTheme(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(10.0))),
@@ -32,14 +36,10 @@ class CustomTheme {
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           textStyle: const TextStyle(color: Color(0xFF99D2A9)),
-          onSurface: const Color(0x00000000),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
           side: const BorderSide(color: Color(0x4D99D2A9), width: 1.0),
         ),
-      ),
-      inputDecorationTheme: const InputDecorationTheme(
-        border: OutlineInputBorder(),
       ),
       listTileTheme: ListTileThemeData(textColor: CustomColors.green),
       primarySwatch: CustomColors.lightGreen,

@@ -62,7 +62,7 @@ class SideBar extends StatelessWidget {
       {required String text, required IconData icon, VoidCallback? onClicked}) {
     return ListTile(
       leading: Icon(icon),
-      title: Text(text, style: sidebarItemTextStyle),
+      title: Text(text),
       onTap: onClicked,
     );
   }

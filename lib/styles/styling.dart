@@ -1,20 +1,6 @@
 import 'package:flutter/material.dart';
 
-// General
-
-// const Color appBarTextColor = Colors.white;
-
-// Sidebar
-const TextStyle sidebarItemTextStyle = TextStyle(color: Colors.green);
-
-// Alerts
-const Color alertSnackBarBackgroundColor = Colors.red;
-const TextStyle alertTextStyle = TextStyle(fontSize: 17);
-
 // Helpbot and message bubbles
-const helpPageTopicButtonTextStyle = TextStyle(
-  color: Color(0xFF99D2A9),
-);
 const Color userMessageBubbleColor = Color(0xFF99D2A9);
 const Color botMessageBubbleColor = Colors.white;
 const TextStyle messageAuthorTextStyle =
@@ -23,6 +9,7 @@ const TextStyle botMessageTextStyle =
     TextStyle(fontSize: 15.0, color: Colors.black54);
 const TextStyle userMessageTextStyle =
     TextStyle(fontSize: 15.0, color: Colors.white);
+const Color helpScreenBorderColor = Color(0x4D99D2A9);
 
 // Popup dialogs
 const TextStyle popupDialogTitleTextStyle = TextStyle(
@@ -46,9 +33,11 @@ const TextStyle popupDialogButtonTextStyle = TextStyle(
   color: Colors.white,
 );
 
-// Authorisation
+// Authorisation (login, signup, email validation)
 const authTextStyle =
     TextStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 15);
+const welcomeTextStyle =
+    TextStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 25);
 
 // Trips scheduler panel widget
 const TextStyle infoTextStyle =
