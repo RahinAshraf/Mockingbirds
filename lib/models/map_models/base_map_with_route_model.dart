@@ -18,9 +18,8 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
   final RouteManager _manager = RouteManager();
   late Map _routeResponse;
 
-  BaseMapboxRouteMap(
-      this._journey, bool useLiveLocation, LatLng target, MapModel model)
-      : super(useLiveLocation, target, model);
+  // BaseMapboxRouteMap(this._journey, MapModel model) : super(model);
+  BaseMapboxRouteMap(this._journey, MapModel model) : super(model);
 
   /// Initialise map features
   @override
