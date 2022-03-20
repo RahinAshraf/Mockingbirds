@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../styles/styling.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 /// Widget to display a connection error
 /// Author(s): Fariha Choudhury k20059723
@@ -11,28 +12,51 @@ class ConnectionError extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: Container(
-      color: Colors.white,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
-          Padding(
-            padding: EdgeInsets.all(15.0),
-            child: CircularProgressIndicator(
-                color: appBarColor, key: Key('internetErrorSpanner')),
-          ),
-          Text(
-            "Reconnecting... \n please check your internet connection",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.red,
-              fontSize: 18,
+    return Scaffold(
+        backgroundColor: Colors.white,
+        body: (Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+                height: 170.0,
+                width: 170.0,
+                alignment: Alignment.topRight,
+                child: Image.asset('assets/images/right_bubbles_shapes.png')),
+            Container(
+                height: 170.0,
+                width: 170.0,
+                child: Center(
+                    child: Image.asset('assets/images/no_connection.png'))),
+            Align(
+              alignment: Alignment.center,
+              child: Padding(
+                padding: EdgeInsets.all(15.0),
+                child: CircularProgressIndicator(
+                    color: appBarColor, key: Key('internetErrorSpanner')),
+              ),
             ),
-            key: Key('internetErrorText'),
-          ),
-        ],
-      ),
-    ));
+            SizedBox(height: 20),
+            Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.all(10),
+                child: const Text(
+                  'Ooops!',
+                  style: TextStyle(
+                      color: Color(0xFF99D2A9),
+                      fontWeight: FontWeight.w500,
+                      fontSize: 25),
+                )),
+            SizedBox(height: 20),
+            Text(
+              "No Internet Connection Found \n Check your internet connection",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Color(0xFF99D2A9),
+                fontSize: 15,
+              ),
+              key: Key('internetErrorText'),
+            ),
+          ],
+        )));
   }
 }
