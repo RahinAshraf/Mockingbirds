@@ -5,11 +5,12 @@ import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:veloplan/.env.dart';
-import 'package:veloplan/widgets/docking_station_card.dart';
-import 'package:veloplan/helpers/navigation_helpers/map_drawings.dart';
+import 'package:veloplan/widgets/docking_station_widget.dart';
 
 /// Class to display a mapbox map with other possible widgets on top
 /// Author(s): Fariha Choudhury k20059723, Elisabeth Koren Halvorsen k20077737
+final GlobalKey<DockStationState> dockingStationKey = GlobalKey();
+
 class BaseMapboxMap {
   final String _accessToken = MAPBOX_ACCESS_TOKEN;
   late final LatLng _target;

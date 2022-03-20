@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
-import 'package:veloplan/widgets/docking_station_card.dart';
 import '../../models/docking_station.dart';
 import 'package:veloplan/widgets/docking_station_widget.dart';
 

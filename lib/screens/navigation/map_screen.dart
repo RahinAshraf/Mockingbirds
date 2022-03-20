@@ -5,7 +5,7 @@ import '../../models/map_models/base_map_with_route_model.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:veloplan/widgets/docking_station_widget.dart';
-import 'package:veloplan/helpers/navigation_helpers/map_drawings.dart';
+import 'package:veloplan/models/map_models/base_map_model.dart';
 
 /// Map screen focused on a user's live location
 /// Author(s): Fariha Choudhury k20059723, Elisabeth Halvorsen k20077737,

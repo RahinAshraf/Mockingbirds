@@ -18,9 +18,9 @@ class DockStationState extends State<DockStation> {
   bool isVisible = false;
   DockingStation? station = null;
 
-  void setData(DockingStation station, bool newVisible) {
-    this.station;
-    this.isVisible;
+  void setData(DockingStation station, bool isVisible) {
+    this.station = station;
+    this.isVisible = isVisible;
   }
 
   @override
