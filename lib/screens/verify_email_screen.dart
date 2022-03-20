@@ -106,22 +106,23 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                         const SizedBox(
                           height: 24,
                         ),
-                        ElevatedButton.icon(
-                          style: ElevatedButton.styleFrom(
-                            minimumSize: const Size.fromHeight(50),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: ElevatedButton.icon(
+                            icon: const Icon(Icons.email, size: 32),
+                            label: canResendEmail
+                                ? const Text(
+                                    'Resend Email',
+                                    style: TextStyle(fontSize: 24),
+                                  )
+                                : const Text(
+                                    'Wait 1 minute to resend',
+                                    style: TextStyle(fontSize: 24),
+                                  ),
+                            onPressed: canResendEmail
+                                ? () => sendVerification()
+                                : null,
                           ),
-                          icon: const Icon(Icons.email, size: 32),
-                          label: canResendEmail
-                              ? const Text(
-                                  'Resend Email',
-                                  style: TextStyle(fontSize: 24),
-                                )
-                              : const Text(
-                                  'Wait 1 minute to resend',
-                                  style: TextStyle(fontSize: 24),
-                                ),
-                          onPressed:
-                              canResendEmail ? () => sendVerification() : null,
                         ),
                         TextButton(
                           child: const Text(
