@@ -384,13 +384,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.3.0"
-  flutter_lints:
-    dependency: "direct dev"
-    description:
-      name: flutter_lints
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.4"
   flutter_localizations:
     dependency: transitive
     description: flutter
@@ -424,6 +417,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
+
+  flutter_spinkit:
+    dependency: "direct main"
+    description:
+      name: flutter_spinkit
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "5.1.0"
+
   flutter_settings_screens:
     dependency: "direct main"
     description:
@@ -431,6 +433,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.3.2-null-safety"
+
   flutter_svg:
     dependency: transitive
     description:
@@ -665,13 +668,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.8.1"
-  lints:
-    dependency: transitive
-    description:
-      name: lints
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.1"
   lists:
     dependency: transitive
     description:
