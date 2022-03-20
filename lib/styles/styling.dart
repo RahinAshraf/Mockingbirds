@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 
 // General
 
-// Appbar
-const Color appBarColor = Color(0xFF99D2A9);
-const Color appBarTextColor = Colors.white;
+// const Color appBarTextColor = Colors.white;
 
 // Sidebar
 const TextStyle sidebarItemTextStyle = TextStyle(color: Colors.green);
@@ -25,14 +23,6 @@ const TextStyle botMessageTextStyle =
     TextStyle(fontSize: 15.0, color: Colors.black54);
 const TextStyle userMessageTextStyle =
     TextStyle(fontSize: 15.0, color: Colors.white);
-ButtonStyle outlinedButtonStyle = ButtonStyle(
-  overlayColor: MaterialStateProperty.all(const Color(0x1A99D2A9)),
-  shape: MaterialStateProperty.all(
-    RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(30.0),
-    ),
-  ),
-);
 
 // Popup dialogs
 const TextStyle popupDialogTitleTextStyle = TextStyle(
@@ -57,26 +47,10 @@ const TextStyle popupDialogButtonTextStyle = TextStyle(
 );
 
 // Authorisation
-ButtonStyle authButtonStyle = ButtonStyle(
-  minimumSize: MaterialStateProperty.all(const Size(251, 46)),
-  overlayColor: MaterialStateProperty.all(Colors.green),
-  backgroundColor: MaterialStateProperty.all(const Color(0xFF99D2A9)),
-  shape: MaterialStateProperty.all(
-    RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(20.0),
-    ),
-  ),
-);
-const authButtonTextStyle =
-    TextStyle(fontSize: 16.0, color: Colors.white, fontWeight: FontWeight.w700);
 const authTextStyle =
     TextStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 15);
 
 // Trips scheduler panel widget
-ButtonStyle journeyTimeButtonStyle = TextButton.styleFrom(
-    textStyle: const TextStyle(fontSize: 15),
-    backgroundColor: Colors.green[500],
-    primary: Colors.white);
 const TextStyle infoTextStyle =
     TextStyle(fontStyle: FontStyle.italic, fontSize: 18);
 const TextStyle tripSchedulerTextStyle =

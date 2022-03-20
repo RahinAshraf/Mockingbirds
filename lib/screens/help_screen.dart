@@ -85,7 +85,7 @@ class _HelpPageState extends State<HelpPage> {
     List<ChoiceButton> topics = [];
     for (String topic in questions.getAllTopics()) {
       topics.add(ChoiceButton(
-        content: Text(topic, style: helpbotChoiceTextStyle),
+        content: Text(topic),
         onPressed: () {
           setState(() {
             selectedTopic = topic;
@@ -112,8 +112,7 @@ class _HelpPageState extends State<HelpPage> {
     for (Message message in questions.getMessagesByTopic(selectedTopic)) {
       choices.add(
         ChoiceButton(
-          content: Text(questions.getQuestionText(message),
-              style: helpbotChoiceTextStyle),
+          content: Text(questions.getQuestionText(message)),
           onPressed: () {
             setState(() {
               _conversation.add(MessageBubble(

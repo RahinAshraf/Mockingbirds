@@ -72,8 +72,7 @@ class _PanelWidgetTripScheduler extends State<PanelWidgetTripScheduler> {
               const SizedBox(width: 10),
               Flexible(
                 fit: FlexFit.tight,
-                child: TextButton(
-                  style: journeyTimeButtonStyle,
+                child: ElevatedButton(
                   onPressed: () {
                     Navigator.push(
                         context,
@@ -88,8 +87,7 @@ class _PanelWidgetTripScheduler extends State<PanelWidgetTripScheduler> {
               ),
               Flexible(
                 fit: FlexFit.tight,
-                child: TextButton(
-                  style: journeyTimeButtonStyle,
+                child: ElevatedButton(
                   onPressed: () => _selectDate(context),
                   child: const Text('Later'),
                 ),

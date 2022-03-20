@@ -94,7 +94,6 @@ class _AuthFormState extends State<AuthForm> {
                   ),
                 if (_isLogin)
                   Container(
-                    alignment: Alignment.center,
                     padding: const EdgeInsets.all(10),
                     child: const Text(
                       'Welcome back!',
@@ -118,8 +117,7 @@ class _AuthFormState extends State<AuthForm> {
                       }
                       return null;
                     },
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(), labelText: 'First Name'),
+                    decoration: const InputDecoration(labelText: 'First Name'),
                     onSaved: (value) {
                       _firstName = value!;
                     },
@@ -137,8 +135,7 @@ class _AuthFormState extends State<AuthForm> {
                       }
                       return null;
                     },
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(), labelText: 'Last Name'),
+                    decoration: const InputDecoration(labelText: 'Last Name'),
                     onSaved: (value) {
                       _lastName = value!;
                     },
@@ -153,10 +150,7 @@ class _AuthFormState extends State<AuthForm> {
                       ? null
                       : "Please enter a valid email",
                   keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Email Address',
-                  ),
+                  decoration: const InputDecoration(labelText: 'Email Address'),
                   onSaved: (value) {
                     _userEmail = value!;
                   },
@@ -174,8 +168,7 @@ class _AuthFormState extends State<AuthForm> {
                       }
                       return null;
                     },
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(), labelText: 'Username'),
+                    decoration: const InputDecoration(labelText: 'Username'),
                     onSaved: (value) {
                       _userName = value!;
                     },
@@ -193,8 +186,7 @@ class _AuthFormState extends State<AuthForm> {
                     }
                     return null;
                   },
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder(), labelText: 'Password'),
+                  decoration: const InputDecoration(labelText: 'Password'),
                   obscureText: true,
                   onSaved: (value) {
                     _userPassword = value!;
@@ -213,9 +205,8 @@ class _AuthFormState extends State<AuthForm> {
                       }
                       return null;
                     },
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Confirm Password'),
+                    decoration:
+                        const InputDecoration(labelText: 'Confirm Password'),
                     obscureText: true,
                   ),
                 const SizedBox(height: 15),
@@ -263,32 +254,29 @@ class _AuthFormState extends State<AuthForm> {
                         },
                       );
                     },
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Date of birth'),
+                    decoration:
+                        const InputDecoration(labelText: 'Date of Birth'),
                   ),
                 const SizedBox(height: 12),
                 if (widget.isLoading) const CircularProgressIndicator(),
                 if (!widget.isLoading)
-                  ElevatedButton(
-                    style: authButtonStyle,
-                    child: Text(_isLogin ? 'Log In' : 'Sign Up',
-                        style: authButtonTextStyle),
-                    onPressed: _trySubmit,
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width / 1.5,
+                    child: ElevatedButton(
+                      child: Text(_isLogin ? 'Log In' : 'Sign Up'),
+                      onPressed: _trySubmit,
+                    ),
                   ),
                 if (!widget.isLoading)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(
-                          alignment: Alignment.center,
-                          padding: const EdgeInsets.all(10),
-                          child: Text(
-                            _isLogin
-                                ? 'Don\'t have an account?'
-                                : 'Already have an account?',
-                            style: authTextStyle,
-                          )),
+                      Text(
+                        _isLogin
+                            ? 'Don\'t have an account?'
+                            : 'Already have an account?',
+                        style: authTextStyle,
+                      ),
                       TextButton(
                         child: Text(_isLogin ? 'Sign up' : 'Log in'),
                         onPressed: () {

@@ -5,7 +5,7 @@ import 'package:veloplan/screens/navigation/map_screen.dart';
 import 'package:veloplan/screens/profile_screen.dart';
 import 'package:veloplan/sidebar.dart';
 
-/// Defines the navigation bar, allows you to move between the map screen, profile page and view the sidebar.
+/// Defines the bottom navigation bar, allows you to move between the map, profile and sidebar
 /// @author  Elisabeth, Rahin, Tayyibah
 class NavBar extends StatefulWidget {
   @override
