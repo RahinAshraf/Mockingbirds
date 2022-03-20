@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../screens/journey_planner_screen.dart';
+import 'package:veloplan/screens/journey_planner_screen.dart';
+import 'package:veloplan/styles/styling.dart';
 
 class PanelWidgetTripScheduler extends StatefulWidget {
   const PanelWidgetTripScheduler({required ScrollController controller});
@@ -10,17 +11,97 @@ class PanelWidgetTripScheduler extends StatefulWidget {
 
 class _PanelWidgetTripScheduler extends State<PanelWidgetTripScheduler> {
   ScrollController controller = ScrollController();
-
   final int maximumNumberOfCyclists = 6; // there can be <=6 people in the group
   int numberOfCyclists = 1; // min one cyclist allowed
-
   DateTime selectedDate = DateTime.now();
-  TimeOfDay selectedTime = TimeOfDay(hour: 0, minute: 0); // DON'T add const
+  TimeOfDay selectedTime = const TimeOfDay(hour: 0, minute: 0);
 
-  ButtonStyle journeyTimeButtonStyle = TextButton.styleFrom(
-      textStyle: const TextStyle(fontSize: 20),
-      backgroundColor: Colors.green[500],
-      primary: Colors.white);
+  @override
+  Widget build(BuildContext context) => ListView(
+        padding: const EdgeInsets.only(right: 24.0, left: 24.0),
+        children: [
+          const Padding(
+            padding: EdgeInsets.only(top: 24.0, bottom: 24.0),
+            child: Text(
+              'Please fill in the following details of your trip.',
+              style: infoTextStyle,
+            ),
+          ),
+          Row(
+            children: [
+              SizedBox(
+                width: (MediaQuery.of(context).size.width / 2) - 24,
+                child: const Text("Number of cyclists in the group:",
+                    style: tripSchedulerTextStyle),
+              ),
+              const SizedBox(width: 10),
+              IconButton(
+                onPressed: _decrementCounter,
+                icon: const Icon(
+                  Icons.remove_rounded,
+                  color: Colors.black,
+                ),
+              ),
+              const Spacer(),
+              Text(
+                '$numberOfCyclists',
+                style: cyclistNumberTextStyle,
+              ),
+              const Spacer(),
+              IconButton(
+                onPressed: _incrementCounter,
+                icon: const Icon(
+                  Icons.add_rounded,
+                  color: Colors.black,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 24,
+          ),
+          Row(
+            children: [
+              SizedBox(
+                width: (MediaQuery.of(context).size.width / 2) - 24,
+                child: const Text(
+                  "When would you like to cycle?",
+                  style: tripSchedulerTextStyle,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Flexible(
+                fit: FlexFit.tight,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const JourneyPlanner()));
+                  },
+                  child: const Text('Now'),
+                ),
+              ),
+              const SizedBox(
+                width: 6,
+              ),
+              Flexible(
+                fit: FlexFit.tight,
+                child: ElevatedButton(
+                  onPressed: () => _selectDate(context),
+                  child: const Text('Later'),
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            // TODO: do something with the time value rather than just displaying it.
+            // TODO: check if there is no journey planned for the same day. [OPTIONAL]
+            padding: const EdgeInsets.only(top: 24.0),
+            child: Center(child: Text(selectedDate.toString())),
+          ),
+        ],
+      );
 
   void _incrementCounter() {
     setState(() {
@@ -45,8 +126,7 @@ class _PanelWidgetTripScheduler extends State<PanelWidgetTripScheduler> {
       firstDate: DateTime.now(), // users cannot plan a journey for past date
       lastDate: DateTime(DateTime.now().year + 1, DateTime.now().month,
           DateTime.now().day + 1),
-      errorInvalidText:
-          "You cannot plan a journey for past date or more than one year ahead.",
+      errorInvalidText: "Please select future date no more than a year ahead.",
     );
     if (picked != null) {
       setState(() {
@@ -72,137 +152,5 @@ class _PanelWidgetTripScheduler extends State<PanelWidgetTripScheduler> {
             selectedDate.day, picked.hour, picked.minute);
       });
     }
-  }
-
-  @override
-  Widget build(BuildContext context) => ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          const SizedBox(
-            height: 36,
-          ),
-          fillInInfoText(),
-          const SizedBox(height: 24),
-          Row(
-            children: [
-              const SizedBox(
-                width: 20,
-              ),
-              const Text(
-                "Number of cyclists:",
-                style: TextStyle(fontWeight: FontWeight.normal, fontSize: 20),
-              ),
-              const SizedBox(
-                width: 20,
-              ),
-              Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    RoundIncDecButton(
-                      tag: "DecBtn",
-                      onPressed: _decrementCounter,
-                      icon: Icons.remove_rounded,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                      child: Text('$numberOfCyclists',
-                          style: const TextStyle(fontSize: 30.0)),
-                    ),
-                    RoundIncDecButton(
-                      tag: "IncBtn",
-                      onPressed: _incrementCounter,
-                      icon: Icons.add_rounded,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 36,
-          ),
-          Row(
-            children: [
-              const SizedBox(
-                width: 20,
-              ),
-              const SizedBox(
-                width: 180,
-                child: Text(
-                  "When would you like to cycle?",
-                  style: TextStyle(fontWeight: FontWeight.normal, fontSize: 20),
-                ),
-              ),
-              const SizedBox(
-                width: 15,
-              ),
-              TextButton(
-                style: journeyTimeButtonStyle,
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => JourneyPlanner()));
-                },
-                child: const Text('Now'),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              TextButton(
-                style: journeyTimeButtonStyle,
-                onPressed: () => _selectDate(context),
-                child: const Text('Later'),
-              ),
-            ],
-          ),
-          // TODO: do something with the time value rather than just displaying it.
-          // TODO: check if there is no journey planned for the same day. [OPTIONAL]
-          Padding(
-            padding: const EdgeInsets.only(top: 30.0),
-            child: Center(child: Text(selectedDate.toString())),
-          ),
-        ],
-      );
-
-  Widget fillInInfoText() => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            Text(
-              "Please fill in the following details of your trip.",
-              style: TextStyle(
-                fontStyle: FontStyle.italic,
-                fontSize: 18,
-              ),
-            )
-          ],
-        ),
-      );
-}
-
-class RoundIncDecButton extends StatelessWidget {
-  const RoundIncDecButton(
-      {required this.tag, required this.onPressed, required this.icon});
-
-  final Object tag;
-  final void Function() onPressed;
-  final IconData icon;
-
-  @override
-  Widget build(BuildContext context) {
-    return FloatingActionButton(
-      heroTag: tag,
-      onPressed: onPressed,
-      elevation: 3.0,
-      mini: true,
-      child: Icon(
-        icon,
-        color: Colors.black,
-      ),
-      backgroundColor: Colors.white,
-    );
   }
 }

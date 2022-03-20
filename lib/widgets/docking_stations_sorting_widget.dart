@@ -24,7 +24,6 @@ class _DockSorter extends State<DockSorter> {
     userCoordinates = super.widget.userCoord;
     super.initState();
     _dockingStationCarousel = dockingStationCarousel(userCoordinates);
-    print("HELLLOOOOOO ---------------------- BYE");
   }
 
   String selectedFilter = "Distance";
