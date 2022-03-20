@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:veloplan/screens/navigation/map_screen.dart';
 import '../styles/styling.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'dart:async';

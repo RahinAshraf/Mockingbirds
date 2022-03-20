@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:veloplan/screens/navigation/map_screen.dart';
 import '../.env.dart';
 import '../widgets/docking_stations_sorting_widget.dart';
 import 'navigation/map_screen.dart';
