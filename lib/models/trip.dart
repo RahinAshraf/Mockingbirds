@@ -43,11 +43,16 @@ class Trip {
       for (int i = 1; i < _journey.length - 1; ++i) {
         var directions = await _manager.getDirections(
             _journey[i], _journey[i + 1], NavigationType.cycling);
-            
-       _wholeTrip.add(Path.api(_docks[i-1], _docks[i], _journey[i],
-          _journey[i+1], _routeResponse["distance"], _routeResponse["duration"]));
-            
+
+        _wholeTrip.add(Path.api(
+            _docks[i - 1],
+            _docks[i],
+            _journey[i],
+            _journey[i + 1],
+            _routeResponse["distance"],
+            _routeResponse["duration"]));
       }
+    }
   }
 
   void updatePath(Path newPath) {

@@ -1,16 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:veloplan/providers/location_service.dart';
-import 'package:veloplan/screens/place_search_screen.dart';
+import 'package:veloplan/screens/navigation/map_screen.dart';
+import 'package:veloplan/screens/profile_screen.dart';
 import 'package:veloplan/screens/trips_scheduler_screen.dart';
-import 'screens/navigation/map_screen.dart';
-import 'screens/profile_screen.dart';
-import 'sidebar.dart';
-import '../styles/styling.dart';
-import '../widgets/popup_widget.dart';
-import '../sidebar.dart';
-import '../screens/profile_screen.dart';
-import '../screens/trips_scheduler_screen.dart';
+import 'package:veloplan/sidebar.dart';
+import 'package:veloplan/widgets/popup_widget.dart';
 
 ///Authors: Elisabeth, Rahin, Tayyibah
 class Navbar extends StatelessWidget {
@@ -18,8 +12,7 @@ class Navbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //every build method has a BuildContext method passed into it
-    return MaterialApp(
-        theme: ThemeData(primaryColor: Colors.purple[900]), home: MainPage());
+    return MaterialApp(home: MainPage());
   }
 }
 
@@ -31,7 +24,7 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   int currentIndex = 1; //index of the screens
 
-  final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   final _currentUser = FirebaseAuth.instance.currentUser!.uid;
 
@@ -51,7 +44,7 @@ class _MainPageState extends State<MainPage> {
         ),
         drawer: NavigationDrawerWidget(),
         key: scaffoldKey,
-        floatingActionButton: Container(
+        floatingActionButton: SizedBox(
             height: 80.0,
             width: 80.0,
             child: FloatingActionButton(
@@ -63,7 +56,6 @@ class _MainPageState extends State<MainPage> {
                   context: context,
                   builder: (BuildContext context) => _buildPopupDialog(context),
                 );
-                print("Link journey_planner screen to this btn");
               },
               child: const Icon(
                 Icons.directions_bike,
@@ -97,18 +89,15 @@ class _MainPageState extends State<MainPage> {
 
   BottomNavigationBar createNavBar() {
     return BottomNavigationBar(
-      type: BottomNavigationBarType
-          .fixed, //looks past the background colors specified
+      type: BottomNavigationBarType.fixed,
       backgroundColor: Colors.green[200],
       selectedItemColor: Colors.black,
       unselectedItemColor: Colors.grey[10],
       iconSize: 33,
-      //selectedFontSize: 16,
       showSelectedLabels: true,
       showUnselectedLabels: true,
       currentIndex: currentIndex,
       onTap: onTabTapped, //(index) => setState(() => currentIndex = index),
-
       items: retrieveNavItems(),
     );
   }

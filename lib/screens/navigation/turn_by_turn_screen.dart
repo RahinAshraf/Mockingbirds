@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mapbox_navigation/library.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/screens/navigation/map_screen.dart';
-import 'package:veloplan/helpers/navigation_helpers/navigation_conversion_helpers.dart';
+import 'package:veloplan/helpers/navigation_helpers/navigation_conversions_helpers.dart';
 
 import '../../widgets/popup_widget.dart';
 
