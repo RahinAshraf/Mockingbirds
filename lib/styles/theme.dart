@@ -41,7 +41,9 @@ class CustomTheme {
           side: const BorderSide(color: Color(0x4D99D2A9), width: 1.0),
         ),
       ),
-      listTileTheme: ListTileThemeData(textColor: CustomColors.green),
+      listTileTheme: ListTileThemeData(
+        textColor: CustomColors.green,
+      ),
       primarySwatch: CustomColors.lightGreen,
       backgroundColor: CustomColors.green,
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
