@@ -1,12 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import '/models/docking_station.dart';
-import '/services/favourite_service.dart';
+import 'package:veloplan/helpers/favourite_helper.dart';
+import 'package:veloplan/models/docking_station.dart';
 
 ///Creates a card for a docking station, to include its name, number of bikes and empty bikes.
 ///Author: Tayyibah Uddin
 ///Contributor: Fariha Choudhury
-
 class DockingStationCard extends StatefulWidget {
   late final String iD;
   late final String stationName;
@@ -50,7 +49,7 @@ class _DockingStationCardState extends State<DockingStationCard> {
   ///Sets [isFavouriteEnabled] to false to disable favourite button for 3 seconds after button click
   void _disableFavButton() {
     isFavouriteEnabled = false;
-    Timer(Duration(seconds: 3), () => isFavouriteEnabled = true);
+    Timer(const Duration(seconds: 3), () => isFavouriteEnabled = true);
   }
 
   @override

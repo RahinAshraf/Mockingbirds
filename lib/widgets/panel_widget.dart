@@ -5,19 +5,16 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:veloplan/screens/journey_planner_screen.dart';
 import 'package:veloplan/screens/navigation/map_with_route_screen.dart';
 import 'package:veloplan/screens/place_search_screen.dart';
-import '../helpers/navigation_helpers/navigation_conversion_helpers.dart';
-import '../models/docking_station.dart';
-import '../providers/location_service.dart';
+import 'package:veloplan/helpers/navigation_helpers/navigation_conversion_helpers.dart';
+import 'package:veloplan/models/docking_station.dart';
+import 'package:veloplan/providers/location_service.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/alerts.dart';
 import 'package:veloplan/helpers/live_location_helper.dart';
-import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart'
-    as LatLong;
 import 'package:veloplan/providers/docking_station_manager.dart';
+import 'package:veloplan/screens/dock_sorter_screen.dart';
 
-import '../screens/dock_sorter_screen.dart';
-import '../providers/location_service.dart';
 /*
 When rendered, the journey_planner_screen will have this panel_widget at the bottom. It is an interactive panel the user can
 slide up or down, when wanting to input their desired locations for the journey.
@@ -376,7 +373,7 @@ class PanelWidgetState extends State<PanelWidget> {
                   alert.showWhereToTextFieldsMustNotBeEmptySnackBar(context);
                   //return;
                 } else if (areAdjacentCoords(widget.selectedCoords)) {
-                  alert.showCantHaveAdajcentSnackBar(context);
+                  alert.showCantHaveAdjacentSnackBar(context);
                   //return;
                 } else {
                   List<List<double?>?> tempList = [];
