@@ -53,26 +53,54 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
 
   /// Sets the [journey] geometry
   void _setJourney(List<LatLng> journey) async {
+    // vars used to collect data for WHOLE journey; incremented by vars of each sub journey AB, BC etc.
     List<dynamic> journeyPoints = [];
+    double totalDistance = 0.0;
+    double totalDuration = 0.0;
+
     if (journey.length > 1) {
+      //WALKING:
       _routeResponse = await _manager.getDirections(
           journey[0], journey[1], NavigationType.walking);
-      for (int i = 0; i < journey.length - 1; ++i) {
+
+      //update local vars ---
+      totalDistance += await _manager.getDistance() as num;
+      totalDuration += await _manager.getDuration() as num;
+      for (dynamic a in _routeResponse['geometry']!['coordinates']) {
+        journeyPoints.add(a);
+      }
+
+      for (int i = 1; i < journey.length - 1; ++i) {
+        //CYCLING:
         var directions = await _manager.getDirections(
             journey[i], journey[i + 1], NavigationType.cycling);
+
+        //update local vars ---
+        totalDistance += await _manager.getDistance() as num;
+        totalDuration += await _manager.getDuration() as num;
         for (dynamic a in directions['geometry']!['coordinates']) {
           journeyPoints.add(a);
         }
         _routeResponse['geometry']
             .update("coordinates", (value) => journeyPoints);
+        _routeResponse.update("distance", (value) => totalDistance);
+        _routeResponse.update("duration", (value) => totalDuration);
       }
+      //set distance and duration of whole journey: don't do this if you will reuse distance and duration within this class
+      _manager.setDistance(_routeResponse['distance']);
+      _manager.setDuration(_routeResponse['duration']);
+      _manager.setGeometry(_routeResponse['geometry']);
+
       _displayJourney();
     }
   }
 
   /// Draws out the journey onto map
   void _displayJourney() async {
-    _fills = await setFills(_fills, _routeResponse['geometry']);
+    _fills = await setFills(
+        _fills,
+        _manager
+            .getGeometry()); //_routeResponse['geometry']); - can use local var instead but i've set it anyway
     addFills(controller!, _fills, model);
     _setDistanceAndTime();
   }
@@ -80,14 +108,16 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
   /// Sets distance and time
   void _setDistanceAndTime() async {
     try {
-      var duration = await _manager.getDistance() as double; //meters
-      var distance = await _manager.getDuration() as double; //sec
+      var distance = await _manager.getDistance() as double; //meters
+      var duration = await _manager.getDuration() as double; //sec
+
       _totalDistanceAndTime = "distance: " +
           (distance / 1000).truncate().toString() +
-          ", duration: " +
+          "km, duration: " +
           (duration / 60).truncate().toString();
+      print(_totalDistanceAndTime);
     } catch (e) {
-      _totalDistanceAndTime = "Route not avalible";
+      _totalDistanceAndTime = "Route not available";
     }
   }
 

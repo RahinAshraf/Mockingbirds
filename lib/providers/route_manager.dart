@@ -71,4 +71,19 @@ class RouteManager {
       return null;
     }
   }
+
+  /// sets the [geometry] of the current route
+  void setGeometry(Object geometry) {
+    _directions['geometry'] = geometry;
+  }
+
+  /// sets the [duration] of the current route
+  void setDuration(double duration) async {
+    _directions['duration'] = duration;
+  }
+
+  /// sets the [distance] of the current route
+  void setDistance(double distance) async {
+    _directions['distance'] = distance;
+  }
 }
