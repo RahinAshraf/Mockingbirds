@@ -44,16 +44,16 @@ class PanelWidget extends StatefulWidget {
 
   const PanelWidget(
       {required this.selectionMap,
-      required this.address,
-      required this.scrollController,
-      required this.dynamicWidgets,
-      required this.listDynamic,
-      required this.selectedCoords,
-      required this.staticListMap,
-      required this.toTextEditController,
-      required this.fromTextEditController,
-      required this.panelController,
-      Key? key})
+        required this.address,
+        required this.scrollController,
+        required this.dynamicWidgets,
+        required this.listDynamic,
+        required this.selectedCoords,
+        required this.staticListMap,
+        required this.toTextEditController,
+        required this.fromTextEditController,
+        required this.panelController,
+        Key? key})
       : super(key: key);
 
   @override
@@ -68,7 +68,7 @@ class PanelWidgetState extends State<PanelWidget> {
   final locService = LocationService();
   late Map<String, List<double?>> selectionMap;
   late TextEditingController firstTextEditingController =
-      TextEditingController();
+  TextEditingController();
   late Map<String, List<double?>> staticListMap;
   late Map response;
   late List<DockingStation> dockingStationList;
@@ -173,8 +173,8 @@ class PanelWidgetState extends State<PanelWidget> {
   */
   Widget _buildStatic(TextEditingController controller,
       {String? hintText,
-      required String label,
-      required Function(List<double?>) onAddressAdded}) {
+        required String label,
+        required Function(List<double?>) onAddressAdded}) {
     // widget.textEditingController
     return Row(
       children: [
@@ -325,10 +325,10 @@ class PanelWidgetState extends State<PanelWidget> {
                         widget.dynamicWidgets.sink.add(widget.listDynamic);
                       });
                       return //ListTile(key: ValueKey(index), leading:
-                          Container(
-                              key: ValueKey(index),
-                              child:
-                                  dynamicWidget); //, trailing: Icon(Icons.menu),);
+                        Container(
+                            key: ValueKey(index),
+                            child:
+                            dynamicWidget); //, trailing: Icon(Icons.menu),);
                     },
                     itemCount: listOfDynamics.length,
                     physics: const NeverScrollableScrollPhysics(),
@@ -356,7 +356,7 @@ class PanelWidgetState extends State<PanelWidget> {
           ),
           Padding(
             padding:
-                const EdgeInsets.only(top: 20, bottom: 20, left: 10, right: 10),
+            const EdgeInsets.only(top: 20, bottom: 20, left: 10, right: 10),
             child: TextButton(
               style: TextButton.styleFrom(
                 backgroundColor: Colors.green,
@@ -474,18 +474,18 @@ class PanelWidgetState extends State<PanelWidget> {
 
   //The grey handle bar, displayed at the very top of the panel_widget, to display to the user to swipe up on the panel
   Widget buildDragHandle() => GestureDetector(
-        child: Center(
-          child: Container(
-            height: 5,
-            width: 30,
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
+    child: Center(
+      child: Container(
+        height: 5,
+        width: 30,
+        decoration: BoxDecoration(
+          color: Colors.grey[300],
+          borderRadius: BorderRadius.circular(12),
         ),
-        //onTap: togglePanel,
-      );
+      ),
+    ),
+    //onTap: togglePanel,
+  );
 
   @override
   void dispose() {
@@ -536,7 +536,7 @@ class PanelWidgetState extends State<PanelWidget> {
 class DynamicWidget extends StatelessWidget {
   final TextEditingController placeTextController = TextEditingController();
   final TextEditingController editDockTextEditController =
-      TextEditingController();
+  TextEditingController();
   List<List<double?>?>? selectedCoords;
   Function(int)? onDelete;
   int position = -1;
@@ -650,33 +650,33 @@ class DynamicWidget extends StatelessWidget {
                       hintText: 'Where to?',
                       focusedBorder: OutlineInputBorder(
                         borderSide:
-                            const BorderSide(color: Colors.black, width: 2.0),
+                        const BorderSide(color: Colors.black, width: 2.0),
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
                         borderSide:
-                            const BorderSide(color: Colors.black, width: 1.0),
+                        const BorderSide(color: Colors.black, width: 1.0),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
                         borderSide:
-                            const BorderSide(color: Colors.black, width: 1.0),
+                        const BorderSide(color: Colors.black, width: 1.0),
                       ),
                       disabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
                         borderSide:
-                            const BorderSide(color: Colors.black, width: 1.0),
+                        const BorderSide(color: Colors.black, width: 1.0),
                       ),
                       errorBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
                         borderSide:
-                            const BorderSide(color: Colors.black, width: 1.0),
+                        const BorderSide(color: Colors.black, width: 1.0),
                       ),
                       focusedErrorBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
                         borderSide:
-                            const BorderSide(color: Colors.black, width: 1.0),
+                        const BorderSide(color: Colors.black, width: 1.0),
                       ),
                     ),
                   ),
@@ -704,7 +704,7 @@ class DynamicWidget extends StatelessWidget {
                   hintText: "Default closest dock",
                   focusedBorder: OutlineInputBorder(
                     borderSide:
-                        const BorderSide(color: Colors.black, width: 2.0),
+                    const BorderSide(color: Colors.black, width: 2.0),
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),

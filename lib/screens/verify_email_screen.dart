@@ -2,8 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:veloplan/helpers/database_manager.dart';
-
-import '../navbar.dart';
+import 'package:veloplan/navbar.dart';
 
 class VerifyEmailScreen extends StatefulWidget {
   const VerifyEmailScreen({Key? key}) : super(key: key);
@@ -28,7 +27,7 @@ class _VerifyEmailSCreenState extends State<VerifyEmailScreen> {
 
       timer = Timer.periodic(
         const Duration(seconds: 3),
-            (_) => checkEmailVerification(),
+        (_) => checkEmailVerification(),
       );
     }
   }
@@ -79,50 +78,70 @@ class _VerifyEmailSCreenState extends State<VerifyEmailScreen> {
   @override
   Widget build(BuildContext context) {
     return isVerified
-        ? Navbar()
+        ? NavBar()
         : Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              'A verification email has been sent to your address.',
-              style: TextStyle(fontSize: 20),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(
-              height: 24,
-            ),
-            ElevatedButton.icon(
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size.fromHeight(50),
+            body: SafeArea(
+              child: Column(
+                children: [
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: Image.asset(
+                      'assets/images/right_bubbles_shapes.png',
+                      width: 170,
+                      height: 170,
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/images/security_icon.png',
+                          width: 100,
+                          height: 100,
+                        ),
+                        const SizedBox(height: 24),
+                        const Text(
+                          'A verification email has been sent to your address.',
+                          style: TextStyle(fontSize: 20),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(
+                          height: 24,
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: ElevatedButton.icon(
+                            icon: const Icon(Icons.email, size: 32),
+                            label: canResendEmail
+                                ? const Text(
+                                    'Resend Email',
+                                    style: TextStyle(fontSize: 24),
+                                  )
+                                : const Text(
+                                    'Wait 1 minute to resend',
+                                    style: TextStyle(fontSize: 24),
+                                  ),
+                            onPressed: canResendEmail
+                                ? () => sendVerification()
+                                : null,
+                          ),
+                        ),
+                        TextButton(
+                          child: const Text(
+                            'Cancel',
+                            style: TextStyle(fontSize: 24),
+                          ),
+                          onPressed: () => _databaseManager.signOut(),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              icon: const Icon(Icons.email, size: 32),
-              label: canResendEmail
-                  ? const Text(
-                'Resend Email',
-                style: TextStyle(fontSize: 24),
-              )
-                  : const Text(
-                'Wait 1 minute to resend',
-                style: TextStyle(fontSize: 24),
-              ),
-              onPressed: canResendEmail ? () => sendVerification() : null,
             ),
-            TextButton(
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size.fromHeight(50),
-              ),
-              child: const Text(
-                'Cancel',
-                style: TextStyle(fontSize: 24),
-              ),
-              onPressed: () => _databaseManager.signOut(),
-            ),
-          ],
-        ),
-      ),
-    );
+          );
   }
 }
