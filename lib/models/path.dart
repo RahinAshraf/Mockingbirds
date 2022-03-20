@@ -18,6 +18,8 @@ class Path {
       : des2 = LatLong.LatLng(0.0, 0.0),
         doc2 = DockingStation.empty();
   Path(this.doc1, this.doc2, this.des1, this.des2);
+  Path.api(
+      this.doc1, this.doc2, this.des1, this.des2, this.distance, this.duration);
 
   double getDistace() {
     return distance;
