@@ -3,6 +3,7 @@ import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:veloplan/models/map_models/base_map_model.dart';
 import 'package:veloplan/screens/navigation/turn_by_turn_screen.dart';
+import '../../helpers/navigation_helpers/navigation_conversion_helpers.dart';
 import '../../models/map_models/base_map_with_route_model.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
@@ -60,9 +61,10 @@ class _MapRoutePageState extends State<MapRoutePage> {
           heroTag: "start_turn_by_trun",
           onPressed: () {
             Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => TurnByTurn(subJourney)),
-            );
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        TurnByTurn(latLngs2WayPoints(subJourney))));
           }),
     ));
   }

@@ -10,7 +10,6 @@ class Path {
   double distance = 0.0;
   double duration = 0;
 
-
 /**
  * A constructor that is useful for dock sorting paths in edit dock screen
  * 

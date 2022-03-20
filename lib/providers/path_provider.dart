@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
 
-//import 'package:latlong2/latlong.dart' as LatLong;
 import 'package:dio/dio.dart';
 import "package:http/http.dart" as http;
 import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart'
@@ -26,9 +25,7 @@ class PathProvider {
 
 // https://api.mapbox.com/directions-matrix/v1/mapbox/cycling/-0.176933,51.498558;-0.13991,51.488976;-0.111055,51.512328?sources=0&destinations=1;2&annotations=distance,duration&access_token=pk.eyJ1Ijoia2lraS1raWtpIiwiYSI6ImNsMHBkZmFwZDA2YnczbHBlZ2N4NGtlYmcifQ.5kF9hN-2zTBd1cj4e45PFg
 
-/**
- * Get the destinations lon and lat in a string that is possible to put in a url
- */
+  /// Get the destinations lon and lat in a string that is possible to put in a url
   String produceDestinationString(List<DockingStation> docks) {
     List<String> resultingStr = [];
     for (var i = 0; i < docks.length; i++) {
@@ -52,10 +49,7 @@ class PathProvider {
     return resultingStr.join();
   }
 
-/**
- * import the dockign sttaions from the tfl api
- * 
-*/
+  /// import the dockign sttaions from the tfl api
   Future<void> importPathsForDockSorter(
       LatLong.LatLng currentUserLoc, List<DockingStation> docks) async {
     String destinationsStr = produceDestinationString(docks);
@@ -82,19 +76,15 @@ class PathProvider {
     }
   }
 
-  /** 
-   * Sort the given paths by distance from the given location
-   * */
+  /// Sort the given paths by distance from the given location
   List<Path> sortPathsByDistanceFromGivenLocation(
       LatLong.LatLng currentUserLoc, List<Path> paths) {
     paths.sort((a, b) => a.distance.compareTo(b.distance));
     return paths;
   }
 
-  /**
-   * Convert paths between the current user loc and a docking station to just 
-   * a sorted by correct path distance from user location to the dock station ascending.
-   */
+  /// Convert paths between the current user loc and a docking station to just
+  /// a sorted by correct path distance from user location to the dock station ascending.
   List<DockingStation> convertPathToSortedDocks(List<Path> paths) {
     List<DockingStation> sortedDocks = [];
     for (Path path in paths) {

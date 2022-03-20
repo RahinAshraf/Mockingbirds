@@ -6,6 +6,9 @@ import '../../models/map_models/base_map_with_route_model.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 
+import '../../widgets/popup_widget.dart';
+import 'turn_by_turn_screen.dart';
+
 /// Map screen focused on a user's live location
 /// Author(s): Fariha Choudhury k20059723, Elisabeth Halvorsen k20077737,
 
@@ -21,6 +24,10 @@ class _MapPageState extends State<MapPage> {
   LatLng currentLatLng = getLatLngFromSharedPrefs();
   late BaseMapboxMap _baseMap;
   late BaseMapboxRouteMap _baseMapWithRoute;
+  List<LatLng> points = [
+    LatLng(51.514951, -0.112762),
+    LatLng(51.513146, -0.115256),
+  ];
 
   // /// ! show usage of BaseMapboxRouteMap
 
@@ -82,5 +89,33 @@ class _MapPageState extends State<MapPage> {
         child: const Icon(Icons.my_location),
       ),
     ));
+  }
+
+  void addPopup() {
+    _baseMap.addWidget(_buildPopupDialog(context, points));
+  }
+
+  PopupWidget _buildPopupDialog(BuildContext context, var wayPoints) {
+    List<PopupButtonWidget> children = [
+      PopupButtonWidget(
+        text: "Redirect",
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => TurnByTurn(wayPoints)));
+        },
+      ),
+      PopupButtonWidget(
+        text: "Finish journey",
+        onPressed: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => MapPage()));
+        },
+      ),
+    ];
+    return PopupWidget(
+        title: "Choose how to proceed with your trip!",
+        text: "Only one way to find out.",
+        children: children,
+        type: AlertType.question);
   }
 }
