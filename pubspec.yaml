@@ -38,6 +38,7 @@ dependencies:
   flutterfire_ui: ^0.3.4
   font_awesome_flutter: ^9.2.0
   extended_nested_scroll_view: ^5.0.0
+  timeline_tile: ^2.0.0
   url_launcher:
   settings_ui: ^2.0.2
   flutter_mapbox_navigation: ^0.0.26
