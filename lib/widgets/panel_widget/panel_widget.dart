@@ -109,7 +109,7 @@ class PanelWidgetState extends State<PanelWidget> {
 
       final list = widget.listDynamic;
       if (list.any((element) => element.placeTextController.text.isEmpty)) {
-        alert.showWhereToTextFieldsMustNotBeEmptySnackBar(context);
+        alert.showSnackBarErrorMessage(context, alert.cannotHaveEmptySearchLocationsMessage);
         return;
       }
 
@@ -345,11 +345,11 @@ class PanelWidgetState extends State<PanelWidget> {
         widget.fromTextEditController, widget.toTextEditController);
 
     if (hasEmptyField) {
-      alert.showWhereToTextFieldsMustNotBeEmptySnackBar(context);
-      //return;
+      alert.showSnackBarErrorMessage(context, alert.startPointMustBeDefinedMessage);
+      return;
     } else if (areAdjacentCoords(widget.selectedCoords)) {
-      alert.showCantHaveAdajcentSnackBar(context);
-      //return;
+      alert.showSnackBarErrorMessage(context, alert.noAdjaentLocationsAllowed);
+      return;
     } else {
       List<List<double?>?> tempList = [];
       tempList.addAll(staticListMap.values);
@@ -385,7 +385,7 @@ class PanelWidgetState extends State<PanelWidget> {
       print(closestDockList);
 
       if(closestDocksWithNoAdjancents.length == 1){
-        alert.showAllDestinationsHaveTheSameDockingStationSetAsClosest(context);
+        alert.showSnackBarErrorMessage(context, alert.adjacentClosestDocksMessage);
         return;
       }
 
@@ -438,7 +438,7 @@ class PanelWidgetState extends State<PanelWidget> {
   bool aSearchBarCannotBeEmpty(List<DynamicWidget>? list) {
     bool isFieldNotEmpty = true;
     if (list == null) {
-      alert.showWhereToTextFieldsMustNotBeEmptySnackBar(context);
+      alert.showSnackBarErrorMessage(context, alert.cannotHaveEmptySearchLocationsMessage);
       return false;
     }
     for (var element in list) {
@@ -448,7 +448,7 @@ class PanelWidgetState extends State<PanelWidget> {
       }
     }
     if (!isFieldNotEmpty) {
-      alert.showWhereToTextFieldsMustNotBeEmptySnackBar(context);
+      alert.showSnackBarErrorMessage(context, alert.cannotHaveEmptySearchLocationsMessage);
       return false;
     }
     return false;
@@ -458,7 +458,7 @@ class PanelWidgetState extends State<PanelWidget> {
   bool startLocationMustBeSpecified(
       TextEditingController textEditingController) {
     if (widget.fromTextEditController.text.isEmpty) {
-      alert.showStartLocationMustNotBeEmptySnackBar(context);
+      alert.showSnackBarErrorMessage(context, alert.startPointMustBeDefinedMessage);
       return true;
     }
     return false;

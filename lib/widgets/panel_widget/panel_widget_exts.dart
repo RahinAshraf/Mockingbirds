@@ -49,7 +49,7 @@ class PanelExtensions {
           child: IconButton(
               onPressed: () async {
                 if(placeTextController.text.isEmpty){
-                  alert.showPlaceLocationMustBeSpecifiedBeforeEditingDocks(context!);
+                  alert.showSnackBarErrorMessage(context!, alert.fillInLocationBeforeEditingDockMesssage);
                   print("hello");
                   return;
                 }

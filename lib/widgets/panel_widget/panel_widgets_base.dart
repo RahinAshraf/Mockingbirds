@@ -63,7 +63,7 @@ abstract class PanelWidgetBase extends StatefulWidget {
   bool oneDestinationMustBeSpecified( PanelWidget widget,
       BuildContext context, Alerts alert) {
     if (widget.listDynamic.isEmpty) {
-      alert.showAtLeastOneDestinationSnackBar(context);
+      alert.showSnackBarErrorMessage(context, alert.chooseAtLeastOneDestinationMessage);
       return true;
     }
     return false;
