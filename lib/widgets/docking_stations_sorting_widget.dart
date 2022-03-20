@@ -1,12 +1,12 @@
 import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:flutter/material.dart';
-import 'package:veloplan/widgets/docking_stations_list_widget.dart';
+import 'package:veloplan/widgets/carousel/station_carousel.dart';
 
 /// Class that sorts docking stations based on a specific filter.
 ///
 /// This class fetches 10 closest stations from [DockingStationList]
-/// based on given [_DockSorter.userCoordinates]. It then displays the cards
+/// based on given [userCoord]. It then displays the cards
 /// and can be sorted based on options given in [_DockSorter.dropdownItems].
 /// By default, cards are sorted by [_DockSorter.selectedFilter].
 class DockSorter extends StatefulWidget {
@@ -22,16 +22,15 @@ class DockSorter extends StatefulWidget {
 class _DockSorter extends State<DockSorter> {
   ScrollController controller = ScrollController();
   late LatLng userCoordinates;
-  late DockingStationList _dockingStationList;
+  late DockingStationCarousel _dockingStations;
   List<String> dropdownItems = ['Distance', 'Favourites', 'Most Popular'];
   String selectedFilter = 'Distance';
 
   @override
   void initState() {
-    // TODO: implement initState
     userCoordinates = super.widget.userCoord;
     super.initState();
-    _dockingStationList = DockingStationList(userCoordinates);
+    _dockingStations = DockingStationCarousel(userCoordinates);
   }
 
   @override
@@ -82,7 +81,7 @@ class _DockSorter extends State<DockSorter> {
             padding: EdgeInsets.only(bottom: 10.0),
             child: Divider(),
           ),
-          _dockingStationList.build(),
+          _dockingStations.build(),
         ],
       );
 }

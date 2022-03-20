@@ -1,33 +1,34 @@
-import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart';
-import 'docking_station_card.dart';
 import 'package:flutter/material.dart';
+import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart';
 import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
+import 'package:veloplan/widgets/carousel/custom_carousel.dart';
+import 'package:veloplan/widgets/docking_station_card.dart';
 
-/// Loads information of docking stations into cards and builds a row of them.
-/// Author(s): Tayyibah, Nicole
-class DockingStationList {
-  DockingStationList(this.userCoordinates); // Constructor
-
+///Class that loads information of docking stations into cards and builds a carousel
+///Author(s): Tayyibah, Nicole
+class DockingStationCarousel {
   late List<Widget> dockingStationCards;
-  List<Map> cardsData = [];
+  List<Map> carouselData = [];
   LatLng userCoordinates;
 
-  /// Retrieve 10 cards that are closest to a given location for edit dock.
+  DockingStationCarousel(this.userCoordinates);
+
+  /// Retrieve the filtered cards for edit dock. Get 10 cards that are the closest to the given location
   Future<List<Widget>> retrieveFilteredCards() {
     final dockingStationManager _stationManager = dockingStationManager();
-    var cards = _stationManager.importStations().then((value) =>
+    var list = _stationManager.importStations().then((value) =>
         createDockingCards(_stationManager.get10ClosestDocks(userCoordinates)));
-    return cards;
+    return list;
   }
 
   List<Widget> createDockingCards(List<DockingStation> docks) {
     for (int index = 0; index < docks.length; index++) {
       for (var station in docks) {
-        cardsData.add(
+        carouselData.add(
           {
             'index': index,
-            // 'station': station,
+            //  'station': station,
             'stationId': station.stationId,
             'name': station.name,
             'numberOfBikes': station.numberOfBikes,
@@ -39,10 +40,10 @@ class DockingStationList {
     dockingStationCards = List<Widget>.generate(
         docks.length,
         (index) => DockingStationCard(
-              cardsData[index]['stationId'],
-              cardsData[index]['name'],
-              cardsData[index]['numberOfBikes'],
-              cardsData[index]['numberOfEmptyDocks'],
+              carouselData[index]['stationId'],
+              carouselData[index]['name'],
+              carouselData[index]['numberOfBikes'],
+              carouselData[index]['numberOfEmptyDocks'],
             ));
 
     return dockingStationCards;
@@ -53,11 +54,15 @@ class DockingStationList {
         future: retrieveFilteredCards(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: dockingStationCards,
-              ),
+            return Stack(
+              children: [
+                Container(
+                  alignment: Alignment.center,
+                  height: MediaQuery.of(context).size.height / 3,
+                  width: MediaQuery.of(context).size.width,
+                  child: CustomCarousel(cards: dockingStationCards),
+                )
+              ],
             );
           } else {
             return SizedBox(

@@ -49,7 +49,7 @@ class _DockingStationCardState extends State<DockingStationCard> {
   ///Sets [isFavouriteEnabled] to false to disable favourite button for 3 seconds after button click
   void _disableFavButton() {
     isFavouriteEnabled = false;
-    Timer(Duration(seconds: 3), () => isFavouriteEnabled = true);
+    Timer(const Duration(seconds: 3), () => isFavouriteEnabled = true);
   }
 
   @override
@@ -62,7 +62,8 @@ class _DockingStationCardState extends State<DockingStationCard> {
       child: Padding(
         padding: const EdgeInsets.all(10),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             IconButton(
               icon: _helper.isFavouriteStation(widget.iD, _favourites)
@@ -95,7 +96,8 @@ class _DockingStationCardState extends State<DockingStationCard> {
             const SizedBox(width: 10),
             Expanded(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     widget.stationName,
