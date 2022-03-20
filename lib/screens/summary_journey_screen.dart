@@ -4,14 +4,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import 'package:veloplan/helpers/database_manager.dart';
 
+import 'navigation/map_with_route_screen.dart';
+
 class SummaryJourneyScreen extends StatefulWidget {
-  const SummaryJourneyScreen({Key? key}) : super(key: key);
+  final List<LatLng> points;
+  SummaryJourneyScreen(this.points, {Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => SummaryJourneyScreenState();
+  State<StatefulWidget> createState() => SummaryJourneyScreenState(points);
 }
 
 class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
@@ -19,6 +23,9 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
   bool isInGroup = false;
   late String groupID = "";
   late String organiser = "";
+  final List<LatLng> points;
+
+  SummaryJourneyScreenState(this.points);
 
   @override
   void initState() {
@@ -372,7 +379,12 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
                   elevation: 10.0, shape: StadiumBorder()),
               child: const Text('START JOURNEY',
                   style: TextStyle(color: Colors.white)),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MapRoutePage(points)),
+                );
+              },
             )),
       ],
     ));

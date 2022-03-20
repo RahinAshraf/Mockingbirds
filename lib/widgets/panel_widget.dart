@@ -18,6 +18,7 @@ import 'package:veloplan/providers/docking_station_manager.dart';
 
 import '../screens/dock_sorter_screen.dart';
 import '../providers/location_service.dart';
+import '../screens/summary_journey_screen.dart';
 /*
 When rendered, the journey_planner_screen will have this panel_widget at the bottom. It is an interactive panel the user can
 slide up or down, when wanting to input their desired locations for the journey.
@@ -388,11 +389,14 @@ class PanelWidgetState extends State<PanelWidget> {
                     //! show something went wrong allert
                     print("hello");
                   } else {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => MapRoutePage(points)),
-                    );
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => SummaryJourneyScreen(points),
+                    ));
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //       builder: (context) => MapRoutePage(points)),
+                    // );
                   }
                 }
               },

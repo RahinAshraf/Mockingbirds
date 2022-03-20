@@ -130,11 +130,6 @@ class NavigationDrawerWidget extends StatelessWidget {
           builder: (context) => Placeholder(),
         ));
         break;
-      case 6:
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => SummaryJourneyScreen(),
-        ));
-        break;
       // case 7:
       //   Navigator.of(context).push(MaterialPageRoute(
       //     builder: (context) =>
