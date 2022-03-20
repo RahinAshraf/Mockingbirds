@@ -23,15 +23,15 @@ class _PanelWidgetTripScheduler extends State<PanelWidgetTripScheduler> {
           const Padding(
             padding: EdgeInsets.only(top: 24.0, bottom: 24.0),
             child: Text(
-              "Please fill in the following details of your trip. Please fill in the following details of your trip. Please fill in the following details of your trip. Please fill in the following details of your trip. Please fill in the following details of your trip.",
+              'Please fill in the following details of your trip.',
               style: infoTextStyle,
             ),
           ),
           Row(
             children: [
               SizedBox(
-                width: MediaQuery.of(context).size.width / 2,
-                child: const Text("Number of cyclists:",
+                width: (MediaQuery.of(context).size.width / 2) - 24,
+                child: const Text("Number of cyclists in the group:",
                     style: tripSchedulerTextStyle),
               ),
               const SizedBox(width: 10),
@@ -42,13 +42,12 @@ class _PanelWidgetTripScheduler extends State<PanelWidgetTripScheduler> {
                   color: Colors.black,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 3.0, right: 3.0),
-                child: Text(
-                  '$numberOfCyclists',
-                  style: cyclistNumberTextStyle,
-                ),
+              const Spacer(),
+              Text(
+                '$numberOfCyclists',
+                style: cyclistNumberTextStyle,
               ),
+              const Spacer(),
               IconButton(
                 onPressed: _incrementCounter,
                 icon: const Icon(
@@ -64,30 +63,36 @@ class _PanelWidgetTripScheduler extends State<PanelWidgetTripScheduler> {
           Row(
             children: [
               SizedBox(
-                width: MediaQuery.of(context).size.width / 2,
+                width: (MediaQuery.of(context).size.width / 2) - 24,
                 child: const Text(
                   "When would you like to cycle?",
                   style: tripSchedulerTextStyle,
                 ),
               ),
               const SizedBox(width: 10),
-              TextButton(
-                style: journeyTimeButtonStyle,
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const JourneyPlanner()));
-                },
-                child: const Text('Now'),
+              Flexible(
+                fit: FlexFit.tight,
+                child: TextButton(
+                  style: journeyTimeButtonStyle,
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const JourneyPlanner()));
+                  },
+                  child: const Text('Now'),
+                ),
               ),
               const SizedBox(
                 width: 6,
               ),
-              TextButton(
-                style: journeyTimeButtonStyle,
-                onPressed: () => _selectDate(context),
-                child: const Text('Later'),
+              Flexible(
+                fit: FlexFit.tight,
+                child: TextButton(
+                  style: journeyTimeButtonStyle,
+                  onPressed: () => _selectDate(context),
+                  child: const Text('Later'),
+                ),
               ),
             ],
           ),
