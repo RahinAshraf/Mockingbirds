@@ -18,6 +18,7 @@ class ProfilePageHeader extends StatefulWidget {
 class _ProfilePageHeaderState extends State<ProfilePageHeader> {
   final user = FirebaseAuth.instance.currentUser!.uid;
   double distance = 0;
+  int journeys = 0;
 
   Future getDistance() async {
     final snapshot =
@@ -26,6 +27,14 @@ class _ProfilePageHeaderState extends State<ProfilePageHeader> {
     if (data != null && data['distance'] != null) {
       distance = data['distance'] / 1000;
     }
+  }
+
+  Future getJourneys() async {
+    final snapshot = await FirebaseFirestore.instance
+        .collection('journey')
+        .where('userid', isEqualTo: user)
+        .get();
+    journeys = snapshot.size;
   }
 
   String calculateAge(Timestamp birthDateTimestamp) {
@@ -66,63 +75,68 @@ class _ProfilePageHeaderState extends State<ProfilePageHeader> {
       );
 
   Widget buildCyclingHistory(Map<String, dynamic> data) {
-    return FutureBuilder(
-      future: getDistance(),
-      builder: (context, snapshot) {
-        return Padding(
-          padding: const EdgeInsets.only(top: 10),
-          child: Row(
+    return Padding(
+      padding: const EdgeInsets.only(top: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    (distance).toStringAsFixed(2),
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    'Kilometers',
-                    style: TextStyle(
-                      color: Colors.grey,
-                    ),
-                  ),
-                ],
+              FutureBuilder(
+                  future: getDistance(),
+                  builder: (context, snapshot) {
+                    return Text(
+                      (distance).toStringAsFixed(2),
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    );
+                  }),
+              SizedBox(
+                height: 10,
               ),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 20),
-                height: 30,
-                width: 1,
-                color: Colors.grey,
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Text(
-                    '18',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    'Journeys',
-                    style: TextStyle(
-                      color: Colors.grey,
-                    ),
-                  ),
-                ],
-              ),
-              Container(
-                width: 11,
+              Text(
+                'Kilometers',
+                style: TextStyle(
+                  color: Colors.grey,
+                ),
               ),
             ],
           ),
-        );
-      }
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 20),
+            height: 30,
+            width: 1,
+            color: Colors.grey,
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              FutureBuilder(
+                  future: getJourneys(),
+                  builder: (context, snapshot) {
+                    return Text(
+                      '$journeys',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    );
+                  }),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                'Journeys',
+                style: TextStyle(
+                  color: Colors.grey,
+                ),
+              ),
+            ],
+          ),
+          Container(
+            width: 11,
+          ),
+        ],
+      ),
     );
   }
 
