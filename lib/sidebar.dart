@@ -18,62 +18,59 @@ class NavigationDrawerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: Container(
-        child: ListView(
-          children: <Widget>[
-            const SizedBox(height: 48),
-            buildMenuItem(
-              text: 'Schedule',
-              icon: Icons.date_range,
-              onClicked: () => selectedItem(context, 0),
-            ),
-            buildMenuItem(
-              text: 'My Journeys',
-              icon: Icons.history,
-              onClicked: () => selectedItem(context, 1),
-            ),
-            buildMenuItem(
-              text: 'Favourites',
-              icon: Icons.favorite,
-              onClicked: () => selectedItem(context, 2),
-            ),
-            buildMenuItem(
-              text: 'Statistics',
-              icon: Icons.assessment_outlined,
-              onClicked: () => selectedItem(context, 3),
-            ),
-            //decided to remove this, not sure if it looks nice
-            const SizedBox(height: 24),
-            Divider(color: Colors.grey),
-            const SizedBox(height: 24),
-            buildMenuItem(
-              text: 'Help',
-              icon: Icons.chat_bubble_outlined,
-              onClicked: () => selectedItem(context, 4),
-            ),
-            buildMenuItem(
-              text: 'Settings',
-              icon: Icons.settings,
-              onClicked: () => selectedItem(context, 5),
-            ),
+      child: ListView(
+        children: [
+          const SizedBox(height: 48),
+          buildMenuItem(
+            text: 'Schedule',
+            icon: Icons.date_range,
+            onClicked: () => selectedItem(context, 0),
+          ),
+          buildMenuItem(
+            text: 'My Journeys',
+            icon: Icons.history,
+            onClicked: () => selectedItem(context, 1),
+          ),
+          buildMenuItem(
+            text: 'Favourites',
+            icon: Icons.favorite,
+            onClicked: () => selectedItem(context, 2),
+          ),
+          buildMenuItem(
+            text: 'Statistics',
+            icon: Icons.assessment_outlined,
+            onClicked: () => selectedItem(context, 3),
+          ),
+          const SizedBox(height: 24),
+          Divider(color: Colors.grey),
+          const SizedBox(height: 24),
+          buildMenuItem(
+            text: 'Help',
+            icon: Icons.chat_bubble_outlined,
+            onClicked: () => selectedItem(context, 4),
+          ),
+          buildMenuItem(
+            text: 'Settings',
+            icon: Icons.settings,
+            onClicked: () => selectedItem(context, 5),
+          ),
 
-            buildMenuItem(
-              text: 'Summary Journey',
-              icon: Icons.map_outlined,
-              onClicked: () => selectedItem(context, 6),
-            ),
-            // buildMenuItem(
-            //   text: 'Docking station',
-            //   icon: Icons.map_outlined,
-            //   onClicked: () => selectedItem(context, 7),
-            // ),
-            buildMenuItem(
-              text: 'Log Out',
-              icon: Icons.logout,
-              onClicked: () => FirebaseAuth.instance.signOut(),
-            ),
-          ],
-        ),
+          buildMenuItem(
+            text: 'Summary Journey',
+            icon: Icons.map_outlined,
+            onClicked: () => selectedItem(context, 6),
+          ),
+          // buildMenuItem(
+          //   text: 'Docking station',
+          //   icon: Icons.map_outlined,
+          //   onClicked: () => selectedItem(context, 7),
+          // ),
+          buildMenuItem(
+            text: 'Log Out',
+            icon: Icons.logout,
+            onClicked: () => FirebaseAuth.instance.signOut(),
+          ),
+        ],
       ),
     );
   }
@@ -108,11 +105,6 @@ class NavigationDrawerWidget extends StatelessWidget {
       case 2:
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => Favourite(),
-        ));
-        break;
-      case 3:
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => Placeholder(),
         ));
         break;
       case 3:

@@ -8,8 +8,7 @@ import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import 'package:veloplan/helpers/database_manager.dart';
 import 'package:veloplan/models/path.dart';
-
-import '../models/trip.dart';
+import 'package:veloplan/models/trip.dart';
 import 'navigation/map_with_route_screen.dart';
 
 class SummaryJourneyScreen extends StatefulWidget {
@@ -163,237 +162,200 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: ListView(
-      children: <Widget>[
-        Container(
-            alignment: Alignment.center,
-            padding: const EdgeInsets.all(10),
-            color: Theme.of(context).primaryColor,
-            child: const Text(
-              'Summary of Journey',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 25),
-            )),
-        //const SizedBox(height: 30),
-        Container(
-            height: 120.0,
-            width: 120.0,
-            child: Center(
-                child: Image.asset('assets/images/summary_journey.png'))),
-        //const SizedBox(height: 30),
-        Container(
-            height: 30,
-            padding: const EdgeInsets.fromLTRB(75, 5, 75, 5),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                elevation: 10.0,
-                shape: new RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(15.0),
+        appBar: AppBar(
+          title: const Text('Summary of Journey'),
+          automaticallyImplyLeading: false,
+        ),
+        body: SafeArea(
+          child: ListView(
+            children: [
+              const SizedBox(height: 30),
+              SizedBox(
+                  height: 120.0,
+                  width: 120.0,
+                  child: Center(
+                      child: Image.asset('assets/images/summary_journey.png'))),
+              Container(
+                  height: 30,
+                  padding: const EdgeInsets.fromLTRB(75, 5, 75, 5),
+                  child: ElevatedButton(
+                    child: Text('Organiser:' + organiser,
+                        style: const TextStyle(color: Colors.white)),
+                    onPressed: () {},
+                  )),
+              if (isInGroup)
+                Container(
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.all(10),
+                    color: Theme.of(context).primaryColor,
+                    child: FutureBuilder<String>(
+                        future: _getGroup(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return GestureDetector(
+                              child: Text(
+                                "Tap here to copy the code: " + groupID,
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 13),
+                              ),
+                              onTap: () {
+                                Clipboard.setData(
+                                  ClipboardData(text: groupID),
+                                );
+                              },
+                            );
+                          } else {
+                            return SizedBox(
+                              height: MediaQuery.of(context).size.height / 1.3,
+                              child: const Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            );
+                          }
+                        })),
+              if (!isInGroup)
+                Container(
+                    height: 30,
+                    padding: const EdgeInsets.fromLTRB(75, 5, 75, 5),
+                    child: ElevatedButton(
+                      child: const Text('Share journey',
+                          style: TextStyle(color: Colors.white)),
+                      onPressed: () {
+                        _createGroup();
+                      },
+                    )),
+              const SizedBox(height: 20),
+              RichText(
+                text: const TextSpan(
+                  children: [
+                    // WidgetSpan(
+                    //     child: ImageIcon(
+                    //   AssetImage("assets/images/logo.png"),
+                    //   color: Color(0xFF99D2A9),
+                    //   size: 24,
+                    // )),
+                    TextSpan(
+                        text: "Planned stops:",
+                        style:
+                            TextStyle(color: Color(0xFF99D2A9), fontSize: 25)),
+                  ],
                 ),
               ),
-              child: Text('Organiser:' + organiser,
-                  style: TextStyle(color: Colors.white)),
-              onPressed: () {},
-            )),
-        if (isInGroup)
-          Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.all(10),
-              color: Theme.of(context).primaryColor,
-              child: FutureBuilder<String>(
-                  future: _getGroup(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return GestureDetector(
-                        child: Text(
-                          "Tap here to copy the code: " + groupID,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 13),
+              const SizedBox(height: 20),
+              // MANO
+              Column(
+                children: _generateStops(),
+              ),
+              Container(
+                  alignment: Alignment.bottomLeft,
+                  padding: const EdgeInsets.all(10),
+                  child: const Text(
+                    'Final stop:',
+                    style: TextStyle(color: Color(0xFF99D2A9), fontSize: 18),
+                  )),
+              const SizedBox(height: 20),
+              if (isInGroup)
+                Container(
+                    height: 40,
+                    padding: const EdgeInsets.fromLTRB(100, 5, 100, 5),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        elevation: 10.0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0),
                         ),
-                        onTap: () {
-                          Clipboard.setData(
-                            ClipboardData(text: groupID),
-                          );
-                        },
+                      ),
+                      child: const Text('LEAVE GROUP',
+                          style: TextStyle(color: Colors.white)),
+                      onPressed: () {
+                        _leaveGroup();
+                      },
+                    )),
+              Container(
+                  padding: const EdgeInsets.fromLTRB(70, 5, 70, 5),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        elevation: 10.0, shape: const StadiumBorder()),
+                    child: const Text('START JOURNEY',
+                        style: TextStyle(color: Colors.white)),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MapRoutePage(points)),
                       );
-                    } else {
-                      return SizedBox(
-                        height: MediaQuery.of(context).size.height / 1.3,
-                        child: Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                      );
-                    }
-                  })),
-        if (!isInGroup)
-          Container(
-              height: 30,
-              padding: const EdgeInsets.fromLTRB(75, 5, 75, 5),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  elevation: 10.0,
-                  shape: new RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(15.0),
-                  ),
-                ),
-                child: const Text('Share journey',
-                    style: TextStyle(color: Colors.white)),
-                onPressed: () {
-                  _createGroup();
-                },
-              )),
-        const SizedBox(height: 20),
-        RichText(
-          text: TextSpan(
+                    },
+                  )),
+            ],
+          ),
+        ));
+  }
+
+  List<Widget> _generateStops() {
+    List<Widget> smth = [];
+    for (var stop in points) {
+      smth.add(StationTempWidget(content: stop.toString()));
+    }
+    return smth;
+  }
+}
+
+class StationTempWidget extends StatelessWidget {
+  const StationTempWidget(
+      {this.first = false, this.last = false, required this.content});
+
+  final bool first;
+  final bool last;
+  final String content;
+
+  @override
+  Widget build(BuildContext context) {
+    return TimelineTile(
+      isFirst: true,
+      beforeLineStyle: const LineStyle(
+        thickness: 1.0,
+        color: Color(0XFFe1e1e1),
+      ),
+      indicatorStyle: const IndicatorStyle(
+        padding: EdgeInsets.all(5),
+        width: 10,
+        indicatorXY: 0.0,
+        color: Color(0xFF99D2A9),
+      ),
+      alignment: TimelineAlign.start,
+      endChild: Card(
+        elevation: 1,
+        margin: const EdgeInsets.fromLTRB(10.0, 15.0, 20.0, 15.0),
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(15.0),
+          bottomRight: Radius.circular(15.0),
+          topRight: Radius.circular(15.0),
+        )),
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // WidgetSpan(
-              //     child: ImageIcon(
-              //   AssetImage("assets/images/logo.png"),
-              //   color: Color(0xFF99D2A9),
-              //   size: 24,
-              // )),
-              TextSpan(
-                  text: "Planned stops:",
-                  style: TextStyle(color: Color(0xFF99D2A9), fontSize: 25)),
+              Text(
+                content,
+                style: TextStyle(
+                  fontSize: 15.0,
+                  color: Color(0xFF99D2A9),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              ImageIcon(
+                AssetImage("assets/images/logo.png"),
+                color: Color(0xFF99D2A9),
+                size: 24,
+              )
             ],
           ),
         ),
-        const SizedBox(height: 20),
-        TimelineTile(
-          isFirst: true,
-          beforeLineStyle: const LineStyle(
-            thickness: 1.0,
-            color: Color(0XFFe1e1e1),
-          ),
-          indicatorStyle: const IndicatorStyle(
-            padding: EdgeInsets.all(5),
-            width: 10,
-            indicatorXY: 0.0,
-            color: Color(0xFF99D2A9),
-          ),
-          alignment: TimelineAlign.start,
-          endChild: Card(
-            elevation: 1,
-            margin: EdgeInsets.fromLTRB(10.0, 15.0, 20.0, 15.0),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(15.0),
-              bottomRight: Radius.circular(15.0),
-              topRight: Radius.circular(15.0),
-            )),
-            child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Station 1',
-                    style: TextStyle(
-                      fontSize: 15.0,
-                      color: Color(0xFF99D2A9),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  ImageIcon(
-                    AssetImage("assets/images/logo.png"),
-                    color: Color(0xFF99D2A9),
-                    size: 24,
-                  )
-                ],
-              ),
-            ),
-          ),
-        ),
-        TimelineTile(
-          isFirst: true,
-          beforeLineStyle: const LineStyle(
-            thickness: 1.0,
-            color: Color(0XFFe1e1e1),
-          ),
-          indicatorStyle: const IndicatorStyle(
-            padding: EdgeInsets.all(5),
-            width: 10,
-            indicatorXY: 0.0,
-            color: Color(0xFF99D2A9),
-          ),
-          alignment: TimelineAlign.start,
-          endChild: Card(
-            elevation: 1,
-            margin: EdgeInsets.fromLTRB(10.0, 15.0, 20.0, 15.0),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(15.0),
-              bottomRight: Radius.circular(15.0),
-              topRight: Radius.circular(15.0),
-            )),
-            child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Station 2',
-                    style: TextStyle(
-                      fontSize: 15.0,
-                      color: Color(0xFF99D2A9),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  //SizedBox(width: 200.0),
-                  ImageIcon(
-                    AssetImage("assets/images/logo.png"),
-                    color: Color(0xFF99D2A9),
-                    size: 24,
-                  )
-                ],
-              ),
-            ),
-          ),
-        ),
-        Container(
-            alignment: Alignment.bottomLeft,
-            padding: const EdgeInsets.all(10),
-            child: const Text(
-              'Final stop:',
-              style: TextStyle(color: Color(0xFF99D2A9), fontSize: 18),
-            )),
-        const SizedBox(height: 20),
-        if (isInGroup)
-          Container(
-              height: 40,
-              padding: const EdgeInsets.fromLTRB(100, 5, 100, 5),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  elevation: 10.0,
-                  shape: new RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(15.0),
-                  ),
-                ),
-                child: const Text('LEAVE GROUP',
-                    style: TextStyle(color: Colors.white)),
-                onPressed: () {
-                  _leaveGroup();
-                },
-              )),
-        Container(
-            padding: const EdgeInsets.fromLTRB(70, 5, 70, 5),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  elevation: 10.0, shape: StadiumBorder()),
-              child: const Text('START JOURNEY',
-                  style: TextStyle(color: Colors.white)),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => MapRoutePage(points)),
-                );
-              },
-            )),
-      ],
-    ));
+      ),
+    );
   }
 }
