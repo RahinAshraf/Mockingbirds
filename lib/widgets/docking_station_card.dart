@@ -105,7 +105,14 @@ class _DockingStationCardState extends State<DockingStationCard> {
                       color: Color(0xFF99D2A9),
                       size: 15.0,
                     ),
-                    Text('Total bikes: ${widget.numberOfBikes.toString()}'),
+                    Text(
+                      'Total bikes: ${widget.numberOfBikes.toString()}',
+                      style: const TextStyle(
+                        fontSize: 15.0,
+                        color: Color(0xFF99D2A9),
+                        fontWeight: FontWeight.w700,
+                      ),
+                    )
                   ]),
                   Row(children: [
                     SizedBox(width: 30.0),
@@ -115,7 +122,13 @@ class _DockingStationCardState extends State<DockingStationCard> {
                       size: 15,
                     ),
                     Text(
-                        'Available bikes: ${widget.numberOfEmptyDocks.toString()}'),
+                      'Available bikes: ${widget.numberOfEmptyDocks.toString()}',
+                      style: const TextStyle(
+                        fontSize: 15.0,
+                        color: Color(0xFF99D2A9),
+                        fontWeight: FontWeight.w700,
+                      ),
+                    )
                   ]),
                 ],
               ),

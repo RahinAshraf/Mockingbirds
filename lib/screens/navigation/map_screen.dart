@@ -75,7 +75,7 @@ class _MapPageState extends State<MapPage> {
                       Align(
                         alignment: Alignment.bottomCenter,
                         child: Container(
-                            height: 200,
+                            height: 150,
                             child: DockStation(key: dockingStationKey)),
                       )
                     ]));
