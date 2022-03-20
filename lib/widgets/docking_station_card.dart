@@ -89,15 +89,34 @@ class _DockingStationCardState extends State<DockingStationCard> {
                   Text(
                     widget.stationName,
                     style: const TextStyle(
-                      fontWeight: FontWeight.bold,
+                      fontSize: 25.0,
+                      color: Color(0xFF99D2A9),
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                   const Divider(
-                    color: Colors.black,
+                    color: Color(0xFF99D2A9),
+                    thickness: 5,
                   ),
-                  Text('Total bikes: ${widget.numberOfBikes.toString()}'),
-                  Text(
-                      'Available bikes: ${widget.numberOfEmptyDocks.toString()}'),
+                  Row(children: [
+                    SizedBox(width: 30.0),
+                    Icon(
+                      Icons.event_available,
+                      color: Color(0xFF99D2A9),
+                      size: 15.0,
+                    ),
+                    Text('Total bikes: ${widget.numberOfBikes.toString()}'),
+                  ]),
+                  Row(children: [
+                    SizedBox(width: 30.0),
+                    ImageIcon(
+                      AssetImage("assets/images/logo.png"),
+                      color: Color(0xFF99D2A9),
+                      size: 15,
+                    ),
+                    Text(
+                        'Available bikes: ${widget.numberOfEmptyDocks.toString()}'),
+                  ]),
                 ],
               ),
             ),
