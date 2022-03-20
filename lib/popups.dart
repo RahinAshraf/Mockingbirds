@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:veloplan/widgets/popup_widget.dart';
 import 'package:veloplan/screens/trips_scheduler_screen.dart';
-import '../widgets/popup_widget.dart';
 
+// Generic popups used thorough the app
 class Popups {
   // Questions
   PopupWidget buildPopupDialogNewJourney(BuildContext context) {

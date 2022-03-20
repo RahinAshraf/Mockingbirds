@@ -1,6 +1,4 @@
-//import 'dart:html';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -22,10 +20,8 @@ class ProfileWidget extends StatefulWidget {
 class _ProfileWidgetState extends State<ProfileWidget> {
   Widget buildImage() {
     final image = NetworkImage(widget.imagePath);
-
     return ClipOval(
       child: Material(
-        color: Colors.transparent,
         child: Ink.image(
           image: image,
           fit: BoxFit.cover,
@@ -115,7 +111,6 @@ class _ProfileWidgetState extends State<ProfileWidget> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(error.toString()),
-            backgroundColor: Theme.of(context).errorColor,
           ),
         );
       }
@@ -126,7 +121,6 @@ class _ProfileWidgetState extends State<ProfileWidget> {
   @override
   Widget build(BuildContext context) {
     final color = Theme.of(context).colorScheme.primary;
-    // final color = Colors.green;
 
     return Center(
       child: widget.isEdit
@@ -138,7 +132,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                 ),
                 Positioned(
                   bottom: 0,
-                  right: 4,
+                  right: 6,
                   child: GestureDetector(
                     onTap: showPicker,
                     child: buildEditIcon(color),
@@ -146,10 +140,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                 ),
               ],
             )
-          : Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: buildImage(),
-            ),
+          : Padding(padding: const EdgeInsets.all(15.0), child: buildImage()),
     );
   }
 }

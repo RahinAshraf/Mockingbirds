@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import '/models/docking_station.dart';
-import '/services/favourite_service.dart';
+import 'package:veloplan/helpers/favourite_helper.dart';
+import 'package:veloplan/models/docking_station.dart';
 
 ///Creates a card for a docking station, to include its name, number of bikes and empty bikes.
 ///Author: Tayyibah Uddin

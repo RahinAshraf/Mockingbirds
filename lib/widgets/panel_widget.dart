@@ -5,19 +5,16 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:veloplan/screens/journey_planner_screen.dart';
 import 'package:veloplan/screens/navigation/map_with_route_screen.dart';
 import 'package:veloplan/screens/place_search_screen.dart';
-import '../helpers/navigation_helpers/navigation_conversion_helpers.dart';
-import '../models/docking_station.dart';
-import '../providers/location_service.dart';
+import 'package:veloplan/helpers/navigation_helpers/navigation_conversion_helpers.dart';
+import 'package:veloplan/models/docking_station.dart';
+import 'package:veloplan/providers/location_service.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/alerts.dart';
 import 'package:veloplan/helpers/live_location_helper.dart';
-import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart'
-    as LatLong;
 import 'package:veloplan/providers/docking_station_manager.dart';
-import 'package:veloplan/models/docking_station.dart';
-import '../screens/dock_sorter_screen.dart';
-import '../providers/location_service.dart';
+import 'package:veloplan/screens/dock_sorter_screen.dart';
+
 /*
 When rendered, the journey_planner_screen will have this panel_widget at the bottom. It is an interactive panel the user can
 slide up or down, when wanting to input their desired locations for the journey.
@@ -309,54 +306,43 @@ class PanelWidgetState extends State<PanelWidget> {
               onAddressAdded: addCordFrom),
           // _buildStatic(widget.toTextEditController,
           //     hintText: "Where to?", label: "To", onAddressAdded: addCordTo),
-          Row(
+          Column(
             mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('TO'),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  StreamBuilder<List<DynamicWidget>>(
-                    builder: (_, snapshot) {
-                      List<DynamicWidget> listOfDynamics = snapshot.data ?? [];
+              StreamBuilder<List<DynamicWidget>>(
+                builder: (_, snapshot) {
+                  List<DynamicWidget> listOfDynamics = snapshot.data ?? [];
 
-                      return SizedBox(
-                        width: 300,
-                        child: ReorderableListView.builder(
-                          itemExtent: 74,
-                          padding: EdgeInsets.zero,
-                          shrinkWrap: true,
-                          itemBuilder: (_, index) {
-                            final dynamicWidget = listOfDynamics[index];
-                            dynamicWidget.position = index;
-                            dynamicWidget.removeDynamic((p0) {
-                              widget.listDynamic.removeAt(index);
-                              widget.dynamicWidgets.sink
-                                  .add(widget.listDynamic);
-                            });
-                            return //ListTile(key: ValueKey(index), leading:
-                                Container(
-                                    key: ValueKey(index),
-                                    child:
-                                        dynamicWidget); //, trailing: Icon(Icons.menu),);
-                          },
-                          itemCount: listOfDynamics.length,
-                          physics: const NeverScrollableScrollPhysics(),
-                          onReorder: (oldIndex, newIndex) {
-                            setState(() {
-                              _updateItems(oldIndex, newIndex);
-                            });
-                          },
-                        ),
-                      );
+                  return ReorderableListView.builder(
+                    itemExtent: 74,
+                    padding: EdgeInsets.zero,
+                    shrinkWrap: true,
+                    itemBuilder: (_, index) {
+                      final dynamicWidget = listOfDynamics[index];
+                      dynamicWidget.position = index;
+                      dynamicWidget.removeDynamic((p0) {
+                        widget.listDynamic.removeAt(index);
+                        widget.dynamicWidgets.sink.add(widget.listDynamic);
+                      });
+                      return //ListTile(key: ValueKey(index), leading:
+                          Container(
+                              key: ValueKey(index),
+                              child:
+                                  dynamicWidget); //, trailing: Icon(Icons.menu),);
                     },
-                    stream: dynamicWidgetsStream,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                ],
+                    itemCount: listOfDynamics.length,
+                    physics: const NeverScrollableScrollPhysics(),
+                    onReorder: (oldIndex, newIndex) {
+                      setState(() {
+                        _updateItems(oldIndex, newIndex);
+                      });
+                    },
+                  );
+                },
+                stream: dynamicWidgetsStream,
+              ),
+              const SizedBox(
+                height: 10,
               ),
             ],
           ),
@@ -395,21 +381,6 @@ class PanelWidgetState extends State<PanelWidget> {
                   tempList.addAll(widget.selectedCoords);
                   print("ALL_COORDINATES => $tempList");
                   List<LatLng>? points = convertListDoubleToLatLng(tempList);
-
-                  List<LatLng> closestDockList = [];
-                  if (points != null) {
-                    for (int i = 0; i < points.length; i++) {
-                      DockingStation closestDock =
-                          _stationManager.getClosestDock(
-                              LatLng(points[i].latitude, points[i].longitude));
-                      LatLng closetDockCoord =
-                          LatLng(closestDock.lat, closestDock.lon);
-                      closestDockList.add(closetDockCoord);
-                    }
-                    print(
-                        "ALL_COORDINATES FOR CLOSEST DOCKS => $closestDockList");
-                  }
-
                   if (points == null) {
                     //! show something went wrong allert
                     print("hello");
@@ -417,7 +388,7 @@ class PanelWidgetState extends State<PanelWidget> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => MapRoutePage(closestDockList)),
+                          builder: (context) => MapRoutePage(points)),
                     );
                   }
                 }
