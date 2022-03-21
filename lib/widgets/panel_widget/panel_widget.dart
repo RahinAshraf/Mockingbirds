@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:veloplan/helpers/schedule_helper.dart';
 import 'package:veloplan/screens/journey_planner_screen.dart';
 import 'package:veloplan/screens/navigation/map_with_route_screen.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
@@ -36,7 +37,9 @@ class PanelWidget extends PanelWidgetBase {
       required TextEditingController toTextEditController,
       required int numberOfCyclists,
       required TextEditingController fromTextEditController,
-      required PanelController panelController})
+      required PanelController panelController,
+      required bool isScheduled,
+      required DateTime journeyDate})
       : super(
             selectionMap: selectionMap,
             address: address,
@@ -48,7 +51,9 @@ class PanelWidget extends PanelWidgetBase {
             toTextEditController: toTextEditController,
             fromTextEditController: fromTextEditController,
             panelController: panelController,
-            numberOfCyclists: numberOfCyclists);
+            numberOfCyclists: numberOfCyclists,
+            isScheduled: isScheduled,
+            journeyDate: journeyDate);
   @override
   PanelWidgetState createState() {
     return PanelWidgetState();
@@ -104,6 +109,7 @@ class PanelWidgetState extends State<PanelWidget> {
     selectionMap = widget.selectionMap;
     print(
         "PanelWidgetState => ${widget.numberOfCyclists}"); //access number of cyclist like this
+    print("is scheduled: ${widget.isScheduled}");
     LatLng currentLocation = getLatLngFromSharedPrefs();
     locService
         .reverseGeoCode(currentLocation.latitude, currentLocation.longitude)
@@ -348,13 +354,21 @@ class PanelWidgetState extends State<PanelWidget> {
                 backgroundColor: Colors.green,
                 primary: Colors.white,
               ),
-              onPressed: _handleStartClick,
-              child: text("START"),
+              onPressed:
+                  widget.isScheduled ? _handleSaveClick : _handleStartClick,
+              child: widget.isScheduled ? text("SAVE") : text("START"),
             ),
           ),
         ],
       ),
     );
+  }
+
+  void _handleSaveClick() {
+    ScheduleHelper helper = ScheduleHelper();
+    helper.createJourneyEntry(widget.journeyDate);
+    // save the journey for the future
+    // popup warning station availability
   }
 
   ///The function to deal with the user pressing the START button. Applies the constraints for a journey.

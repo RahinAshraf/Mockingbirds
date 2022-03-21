@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:timeline_tile/timeline_tile.dart';
+import '../helpers/schedule_helper.dart';
+import '../models/journey.dart';
 import '../styles/styling.dart';
 
 class SchedulePage extends StatefulWidget {
@@ -9,6 +12,19 @@ class SchedulePage extends StatefulWidget {
 }
 
 class _SchedulePageState extends State<SchedulePage> {
+  List<Journey> journeyList = [];
+  var helper = ScheduleHelper();
+
+  @override
+  void initState() {
+    helper.getAllJourneyDocuments().then((data) {
+      setState(() {
+        journeyList = data;
+      });
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,46 +50,39 @@ class _SchedulePageState extends State<SchedulePage> {
               child:
                   Text('Upcoming journeys', style: upcomingJourneysTextStyle),
             ),
+            // ListView.builder(
+            //     itemBuilder: (context, index) {
+            //       return TimelineItem(
+            //         journeyList[index],
+            //         index,
+            //       );
+            //     },
+            //     itemCount: journeyList.length),
             // TODO: instead of manually generating timeline items, pass a list (map?) of upcoming journeys
-            const TimelineItem(
-              month: "March",
-              day: "2",
-              isFirst: true,
-              upcomingEventCards: [
-                UpcomingEventCard(
-                    title: "Trip to Westminster Abbey",
-                    number: 3,
-                    time: "21:00")
-              ],
-            ),
-            const TimelineItem(month: "March", day: "3", upcomingEventCards: [
-              UpcomingEventCard(
-                  title: "Trip to London Bridge", number: 1, time: "12:00")
-            ]),
-            const TimelineItem(month: "May", day: "1", upcomingEventCards: [
-              UpcomingEventCard(
-                  title: "Cycle around Stratford", number: 5, time: "13:00")
-            ]),
-            const TimelineItem(
-              day: "16",
-              month: "Aug",
-              upcomingEventCards: [
-                UpcomingEventCard(
-                    title: "Biking society's trip to Regent's Park",
-                    number: 5,
-                    time: "16:00")
-              ],
-            ),
-            const TimelineItem(
-              day: "31",
-              month: "Sept",
-              upcomingEventCards: [
-                UpcomingEventCard(
-                    title: "Trip to London Bridge", number: 1, time: "15:30"),
-                UpcomingEventCard(
-                    title: "Trip to Science Museum", number: 2, time: "23:00"),
-              ],
-            )
+            TimelineItem(journeyList[0], 0),
+
+            // const TimelineItem(month: "March", day: "3", upcomingEventCards: [
+            //   UpcomingEventCard(title: "Trip to London Bridge")
+            // ]),
+            // const TimelineItem(month: "May", day: "1", upcomingEventCards: [
+            //   UpcomingEventCard(title: "Cycle around Stratford")
+            // ]),
+            // const TimelineItem(
+            //   day: "16",
+            //   month: "Aug",
+            //   upcomingEventCards: [
+            //     UpcomingEventCard(
+            //         title: "Biking society's trip to Regent's Park")
+            //   ],
+            // ),
+            // const TimelineItem(
+            //   day: "31",
+            //   month: "Sept",
+            //   upcomingEventCards: [
+            //     UpcomingEventCard(title: "Trip to London Bridge"),
+            //     UpcomingEventCard(title: "Trip to Science Museum"),
+            //   ],
+            // )
           ],
         ),
       ),
@@ -96,24 +105,14 @@ class _SchedulePageState extends State<SchedulePage> {
 /// The list [upcomingEventCards] should already contain all the events
 /// of a user on the same date, sorted from earliest to latest.
 class TimelineItem extends StatelessWidget {
-  const TimelineItem(
-      {required this.month,
-      required this.day,
-      this.isFirst = false,
-      this.isLast = false,
-      required this.upcomingEventCards});
-
-  final String day;
-  final String month;
-  final bool isFirst;
-  final bool isLast;
-  final List<UpcomingEventCard> upcomingEventCards;
+  final Journey journey;
+  final int index;
+  TimelineItem(this.journey, this.index);
 
   @override
   Widget build(BuildContext context) {
     return TimelineTile(
-      isFirst: isFirst,
-      isLast: isLast,
+      isFirst: index == 0 ? true : false,
       beforeLineStyle: timelineTileBeforeLineStyle,
       indicatorStyle: timelineTileIndicatorStyle,
       alignment: TimelineAlign.manual,
@@ -123,14 +122,12 @@ class TimelineItem extends StatelessWidget {
         alignment: Alignment.topCenter,
         child: Column(
           children: [
-            Text(day, style: timelineTileDayTextStyle),
-            Text(month, style: timelineTileMonthTextStyle),
+            Text(journey.date!, style: timelineTileDayTextStyle),
+            // Text(month, style: timelineTileMonthTextStyle),
           ],
         ),
       ),
-      endChild: Column(
-        children: upcomingEventCards,
-      ),
+      endChild: UpcomingEventCard(title: 'TRIP:D'),
     );
   }
 }
@@ -143,12 +140,9 @@ class TimelineItem extends StatelessWidget {
 /// takes place. At this stage, it is not concerned with the date
 /// of the trip. These cards were designed to be used with [TimelineItem].
 class UpcomingEventCard extends StatelessWidget {
-  const UpcomingEventCard(
-      {required this.title, required this.number, required this.time});
+  const UpcomingEventCard({required this.title});
 
   final String title;
-  final int number;
-  final String time;
 
   @override
   Widget build(BuildContext context) {

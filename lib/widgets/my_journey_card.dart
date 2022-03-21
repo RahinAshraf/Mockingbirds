@@ -11,7 +11,8 @@ class MyJourneyCard extends StatefulWidget {
 
   MyJourneyCard(Journey journey) {
     this.journey = journey;
-    this.stationCards = stationCarousel.createDockingCards(journey.stationList);
+    this.stationCards =
+        stationCarousel.createDockingCards(journey.stationList!);
   }
 
   @override
@@ -42,7 +43,7 @@ class _MyJourneyCardState extends State<MyJourneyCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.journey.date!,
+                    widget.journey.date!.toString(),
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                     ),

@@ -80,7 +80,9 @@ class _PanelWidgetTripScheduler extends State<PanelWidgetTripScheduler> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => JourneyPlanner(
-                                numberOfCyclists: numberOfCyclists)));
+                                  numberOfCyclists: numberOfCyclists,
+                                  journeyDate: DateTime.now(),
+                                )));
                   },
                   child: const Text('Now'),
                 ),
@@ -100,6 +102,7 @@ class _PanelWidgetTripScheduler extends State<PanelWidgetTripScheduler> {
           Padding(
             // TODO: do something with the time value rather than just displaying it.
             // TODO: check if there is no journey planned for the same day. [OPTIONAL]
+
             padding: const EdgeInsets.only(top: 24.0),
             child: Center(child: Text(formatter.format(selectedDate))),
           ),
@@ -134,7 +137,14 @@ class _PanelWidgetTripScheduler extends State<PanelWidgetTripScheduler> {
     if (picked != null) {
       setState(() {
         selectedDate = picked;
-        // _selectTime(context);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => JourneyPlanner(
+                      numberOfCyclists: numberOfCyclists,
+                      journeyDate: selectedDate,
+                      isScheduled: true,
+                    )));
       });
     }
   }
