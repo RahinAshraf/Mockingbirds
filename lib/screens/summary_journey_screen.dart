@@ -192,7 +192,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
                     child: Image.asset('assets/images/summary_journey.png'))),
             //const SizedBox(height: 30),
             Container(
-                height: 30,
+                height: 50,
                 padding: const EdgeInsets.fromLTRB(75, 5, 75, 5),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -239,7 +239,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
                       })),
             if (!isInGroup)
               Container(
-                  height: 30,
+                  height: 50,
                   padding: const EdgeInsets.fromLTRB(75, 5, 75, 5),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -373,7 +373,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
             const SizedBox(height: 20),
             if (isInGroup)
               Container(
-                  height: 40,
+                  height: 60,
                   padding: const EdgeInsets.fromLTRB(100, 5, 100, 5),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
