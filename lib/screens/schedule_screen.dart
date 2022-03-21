@@ -172,22 +172,15 @@ class UpcomingEventCard extends StatelessWidget {
             Row(
               children: [
                 const SizedBox(width: 15.0),
-                const Icon(
-                  Icons.person_outline_outlined,
-                  color: Colors.black54,
-                  size: 15.0,
-                ),
                 Text(
-                  number <= 1 ? " $number person" : " $number people",
+                  "View journey itinerary",
                   style: eventCardDetailsTextStyle,
                 ),
-                const SizedBox(width: 15.0),
                 const Icon(
-                  Icons.watch_later_outlined,
+                  Icons.arrow_forward_ios_rounded,
                   color: Colors.black54,
                   size: 15.0,
                 ),
-                Text(" $time", style: eventCardDetailsTextStyle),
               ],
             ),
           ],
