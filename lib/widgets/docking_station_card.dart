@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
-import '/models/docking_station.dart';
-import '/services/favourite_service.dart';
 import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:veloplan/helpers/favourite_helper.dart';
+import 'package:veloplan/models/docking_station.dart';
 
 ///Creates a card for a docking station, to include its name, number of bikes and empty bikes.
-///Author: Tayyibah, Hristina
-
+///Author: Tayyibah Uddin
+///Contributor: Fariha Choudhury
 class DockingStationCard extends StatefulWidget {
   late final String iD;
   late final String stationName;
@@ -63,7 +63,8 @@ class _DockingStationCardState extends State<DockingStationCard> {
       child: Padding(
         padding: const EdgeInsets.all(10),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             IconButton(
               icon: _helper.isFavouriteStation(widget.iD, _favourites)
@@ -96,7 +97,8 @@ class _DockingStationCardState extends State<DockingStationCard> {
             const SizedBox(width: 30),
             Expanded(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     widget.stationName,

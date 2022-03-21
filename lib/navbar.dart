@@ -1,36 +1,28 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:veloplan/providers/location_service.dart';
-import 'package:veloplan/screens/place_search_screen.dart';
-import 'screens/navigation/map_screen.dart';
-import 'screens/profile_screen.dart';
-import 'sidebar.dart';
+import 'package:flutter/material.dart';
+import 'package:veloplan/popups.dart';
+import 'package:veloplan/screens/navigation/map_screen.dart';
+import 'package:veloplan/screens/profile_screen.dart';
+import 'package:veloplan/sidebar.dart';
 
-///Authors: Elisabeth, Rahin, Tayyibah
-class Navbar extends StatelessWidget {
-  //We need to override the Build method because StatelessWidget has a build method
+/// Defines the bottom navigation bar, allows you to move between the map, profile and sidebar
+/// @author  Elisabeth, Rahin, Tayyibah
+class NavBar extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    //every build method has a BuildContext method passed into it
-    return MaterialApp(
-        theme: ThemeData(primaryColor: Colors.purple[900]), home: MainPage());
-  }
+  _NavBarState createState() => _NavBarState();
 }
 
-class MainPage extends StatefulWidget {
-  @override
-  _MainPageState createState() => _MainPageState();
-}
+class _NavBarState extends State<NavBar> {
+  int currentIndex = 1; // index of the screens
 
-class _MainPageState extends State<MainPage> {
-  int currentIndex = 1; //index of the screens
-
-  final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   final _currentUser = FirebaseAuth.instance.currentUser!.uid;
 
+  final Popups popup = Popups();
+
   var screens = [
-    Placeholder(), //need to replace this with something?
+    Placeholder(), // is this bad practise?
     MapPage(),
   ];
 
@@ -38,21 +30,24 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     screens.add(Profile(_currentUser));
     return Scaffold(
-        // body: screens[currentIndex], //looses the progress
         body: IndexedStack(
           index: currentIndex,
-          children: screens, //keeps the screens alive
+          children: screens, // keeps the screens alive
         ),
-        drawer: NavigationDrawerWidget(),
+        drawer: SideBar(),
         key: scaffoldKey,
-        floatingActionButton: Container(
+        floatingActionButton: SizedBox(
             height: 80.0,
             width: 80.0,
             child: FloatingActionButton(
               heroTag: "btn2",
               onPressed: () {
-                onTabTapped(1);
-                print("Link journey_planner screen to this btn");
+                _onTabTapped(1);
+                showDialog(
+                    useRootNavigator: false,
+                    context: context,
+                    builder: (BuildContext context) =>
+                        popup.buildPopupDialogNewJourney(context));
               },
               child: const Icon(
                 Icons.directions_bike,
@@ -63,28 +58,20 @@ class _MainPageState extends State<MainPage> {
               backgroundColor: Colors.white,
             )),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        bottomNavigationBar: createNavBar());
+        bottomNavigationBar: _createNavBar());
   }
 
-  BottomNavigationBar createNavBar() {
+  BottomNavigationBar _createNavBar() {
     return BottomNavigationBar(
-      type: BottomNavigationBarType
-          .fixed, //looks past the background colors specified
-      backgroundColor: Colors.green[200],
-      selectedItemColor: Colors.black,
-      unselectedItemColor: Colors.grey[10],
+      type: BottomNavigationBarType.fixed,
       iconSize: 33,
-      //selectedFontSize: 16,
-      showSelectedLabels: true,
-      showUnselectedLabels: true,
       currentIndex: currentIndex,
-      onTap: onTabTapped, //(index) => setState(() => currentIndex = index),
-
-      items: retrieveNavItems(),
+      onTap: _onTabTapped, // (index) => setState(() => currentIndex = index),
+      items: _retrieveNavItems(),
     );
   }
 
-  List<BottomNavigationBarItem> retrieveNavItems() {
+  List<BottomNavigationBarItem> _retrieveNavItems() {
     return const [
       BottomNavigationBarItem(
         icon: Icon(Icons.format_align_justify_sharp),
@@ -101,13 +88,11 @@ class _MainPageState extends State<MainPage> {
     ];
   }
 
-  void onTabTapped(int index) {
+  void _onTabTapped(int index) {
     setState(() {
-      if (index == 0) {
-        scaffoldKey.currentState!.openDrawer();
-      } else {
-        currentIndex = index;
-      }
+      index == 0
+          ? scaffoldKey.currentState!.openDrawer()
+          : currentIndex = index;
     });
   }
 }

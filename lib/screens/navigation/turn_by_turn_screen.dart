@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mapbox_navigation/library.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/screens/navigation/map_screen.dart';
-import 'package:veloplan/helpers/navigation_helpers/latlng_to_waypoint.dart';
+import 'package:veloplan/helpers/navigation_helpers/navigation_conversion_helpers.dart';
 
 /// A splash screen displaying turn by turn navigation for a journey.
 /// Author(s): Fariha Choudhury k20059723, Elisabeth Halvorsen k20077737,
@@ -29,7 +29,7 @@ class _TurnByTurnState extends State<TurnByTurn> {
   /// Configuration variables for Mapbox Navigation
   late MapBoxNavigation directions;
   late MapBoxOptions _options;
-  late double distanceRemaining, durationRemaining;
+  double? distanceRemaining, durationRemaining;
   late MapBoxNavigationViewController _controller;
   final bool isMultipleStop = true;
   String instruction = "";

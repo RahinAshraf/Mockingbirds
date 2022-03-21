@@ -1,23 +1,25 @@
-import 'package:flutter/material.dart';
-import 'package:scoped_model/scoped_model.dart';
-import 'package:veloplan/scoped_models/map_model.dart';
-import 'screens/login_screen.dart';
-import 'navbar.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:location/location.dart';
-import 'package:latlong2/latlong.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import './screens/verify_email_screen.dart';
-import './screens/auth_screen.dart';
-import './screens/splash_screen.dart';
-
-late SharedPreferences sharedPreferences;
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:veloplan/helpers/live_location_helper.dart';
+import 'package:veloplan/helpers/theme_provider.dart';
+import 'package:veloplan/navbar.dart';
+import 'package:veloplan/screens/auth_screen.dart';
+import 'package:veloplan/screens/splash_screen.dart';
+import 'package:veloplan/screens/verify_email_screen.dart';
+import 'package:veloplan/styles/theme.dart';
+import 'package:scoped_model/scoped_model.dart';
+import 'package:veloplan/scoped_models/map_model.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  checkPermissions();
+  LiveLocationHelper liveLocationHelper = LiveLocationHelper();
+  liveLocationHelper.initializeLocation();
   sharedPreferences = await SharedPreferences.getInstance();
-  initializeLocation(); //Upon opening the app, store the users current location
   MapModel _model = MapModel();
   runApp(ScopedModel<MapModel>(
       model: _model,
@@ -25,41 +27,26 @@ void main() async {
         initialRoute: '/',
         routes: {
           '/': (context) => const MyApp(),
-          '/map': (context) => Navbar()
+          '/map': (context) => NavBar()
         },
       )));
 }
 
-void initializeLocation() async {
-  Location _location = Location();
-  bool? _serviceEnabled;
-  PermissionStatus? _permissionGranted;
+//APP IS ONLY WORKING WHEN "GRANTED" IS PRINTED OUT, FIX IT TO NOT CRASH AND REASK IN OTHER CASES
+void checkPermissions() async {
+  var locationStatus = await Permission.location.status;
 
-  _serviceEnabled = await _location.serviceEnabled();
-  if (!_serviceEnabled) {
-    _serviceEnabled = await _location.requestService();
+  if (locationStatus.isGranted) {
+    print("GRANTED");
+  } else if (locationStatus.isDenied) {
+    await Permission.location.request();
+    print("ISDENIED HAPPENED");
+  } else if (locationStatus.isPermanentlyDenied) {
+    print("TELL USERS TO GO TO SETTINGS TO ALLOW LOCATION");
+  } else if (locationStatus.isLimited) {
+    print("ISLIMITED WAS SELECTED");
   }
-
-  _permissionGranted = await _location.hasPermission();
-  if (_permissionGranted == PermissionStatus.denied) {
-    _permissionGranted = await _location.requestPermission();
-  }
-
-  LocationData _locationData = await _location.getLocation();
-  LatLng currentLatLng =
-      LatLng(_locationData.latitude!, _locationData.longitude!);
-
-  saveLocation(_locationData);
 }
-
-void saveLocation(LocationData _locationData) {
-  sharedPreferences.setDouble('latitude', _locationData.latitude!);
-  sharedPreferences.setDouble('longitude', _locationData.longitude!);
-}
-
-// void main() {
-//   runApp(MultiProvider(providers: [], child: const MyApp()));
-// }
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -70,56 +57,46 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
+  void initState() {
+    super.initState();
+    // currentTheme.addListener(() {
+    //   setState(() {});
+    // });
+  }
+
+  @override
   Widget build(BuildContext context) {
     //final Future<FirebaseApp> _initialization = Firebase.initializeApp();
     return FutureBuilder(
-
-        // Initialize FlutterFire:
-
         future: Firebase.initializeApp(), // _initialization,
         builder: (context, appSnapshot) {
-          return MaterialApp(
-            title: 'Veloplan',
-            theme: ThemeData(
-              scaffoldBackgroundColor: Color(0xffffffff),
-              primarySwatch: const MaterialColor(
-                0xff99d2a9, // 0%
-                const <int, Color>{
-                  50: const Color(0xffa3d7b2), //10%
-                  100: const Color(0xffaddbba), //20%
-                  200: const Color(0xffb8e0c3), //30%
-                  300: const Color(0xffc2e4cb), //40%
-                  400: const Color(0xffcce9d4), //50%
-                  500: const Color(0xffd6eddd), //60%
-                  600: const Color(0xffe0f2e5), //70%
-                  700: const Color(0xffebf6ee), //80%
-                  800: const Color(0xfff5fbf6), //90%
-                  900: const Color(0xffffff), //100%
+          return ChangeNotifierProvider(
+              create: (_) => ThemeNotifier(),
+              child: Consumer<ThemeNotifier>(
+                builder: (context, ThemeNotifier notifier, child) {
+                  return MaterialApp(
+                    title: 'Veloplan',
+                    theme: notifier.isDarkTheme
+                        ? CustomTheme.darkTheme
+                        : CustomTheme.defaultTheme,
+                    home: appSnapshot.connectionState != ConnectionState.done
+                        ? const SplashScreen()
+                        : StreamBuilder(
+                            stream: FirebaseAuth.instance.authStateChanges(),
+                            builder: (ctx, userSnapshot) {
+                              if (userSnapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const SplashScreen();
+                              }
+                              if (userSnapshot.hasData) {
+                                return const VerifyEmailScreen();
+                              }
+                              return const AuthScreen();
+                            },
+                          ),
+                  );
                 },
-              ),
-              buttonTheme: ButtonTheme.of(context).copyWith(
-                // buttonColor: Colors.green,
-                //textTheme: ButtonTextTheme.primary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              ),
-            ),
-            home: appSnapshot.connectionState != ConnectionState.done
-                ? const SplashScreen()
-                : StreamBuilder(
-                    stream: FirebaseAuth.instance.authStateChanges(),
-                    builder: (ctx, userSnapshot) {
-                      if (userSnapshot.connectionState ==
-                          ConnectionState.waiting) {
-                        return const SplashScreen();
-                      }
-                      if (userSnapshot.hasData) {
-                        return const VerifyEmailScreen();
-                      }
-                      return const AuthScreen();
-                    }),
-          );
+              ));
         });
   }
 }
