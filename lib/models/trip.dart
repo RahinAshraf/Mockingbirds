@@ -47,8 +47,8 @@ class Trip {
             DockingStation.empty(), // _docks[i],
             _journey[i],
             _journey[i + 1],
-            directions["distance"],
-            directions["duration"]));
+            directions["distance"].toDouble(),
+            directions["duration"].toDouble()));
       }
     }
     //uncomment if you want to test it!

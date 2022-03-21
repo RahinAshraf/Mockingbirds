@@ -7,6 +7,7 @@ import 'package:veloplan/screens/navigation/map_with_route_screen.dart';
 import 'package:veloplan/screens/place_search_screen.dart';
 import '../helpers/navigation_helpers/navigation_conversions_helpers.dart';
 import '../models/docking_station.dart';
+import '../models/trip.dart';
 import '../providers/location_service.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
@@ -389,8 +390,9 @@ class PanelWidgetState extends State<PanelWidget> {
                     //! show something went wrong allert
                     print("hello");
                   } else {
+                    Trip trip = Trip(points);
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => SummaryJourneyScreen(points),
+                      builder: (context) => SummaryJourneyScreen(points, trip),
                     ));
                     // Navigator.push(
                     //   context,

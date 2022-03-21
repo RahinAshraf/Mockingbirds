@@ -10,13 +10,16 @@ import 'package:veloplan/helpers/database_manager.dart';
 import 'package:veloplan/models/path.dart';
 import 'package:veloplan/models/trip.dart';
 import 'navigation/map_with_route_screen.dart';
+import '../providers/location_service.dart';
 
 class SummaryJourneyScreen extends StatefulWidget {
   final List<LatLng> points;
-  SummaryJourneyScreen(this.points, {Key? key}) : super(key: key);
+  late Trip trip;
+  SummaryJourneyScreen(this.points, this.trip, {Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => SummaryJourneyScreenState(points);
+  State<StatefulWidget> createState() =>
+      SummaryJourneyScreenState(this.points, this.trip);
 }
 
 class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
@@ -27,10 +30,10 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
   final List<LatLng> points;
   late Trip trip;
   late List<Path> paths;
+  List<Widget> _intStation = [];
 
-  SummaryJourneyScreenState(this.points) {
-    this.trip = Trip(this.points);
-    paths = trip.getPaths();
+  SummaryJourneyScreenState(this.points, this.trip) {
+    // this.trip = Trip(this.points);
   }
 
   @override
@@ -230,12 +233,6 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
               RichText(
                 text: const TextSpan(
                   children: [
-                    // WidgetSpan(
-                    //     child: ImageIcon(
-                    //   AssetImage("assets/images/logo.png"),
-                    //   color: Color(0xFF99D2A9),
-                    //   size: 24,
-                    // )),
                     TextSpan(
                         text: "Planned stops:",
                         style:
@@ -295,8 +292,10 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
 
   List<Widget> _generateStops() {
     List<Widget> smth = [];
-    for (var stop in points) {
-      smth.add(StationTempWidget(content: stop.toString()));
+    paths = trip.getPaths();
+    for (var path in paths) {
+      print("-----------" + path.des2Name);
+      smth.add(StationTempWidget(content: path.des1Name));
     }
     return smth;
   }
