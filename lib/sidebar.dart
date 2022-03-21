@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:veloplan/screens/my_journeys_screen.dart';
 import '../screens/schedule_screen.dart';
 import '../screens/favourite_screen.dart';
 import '../screens/help_screen.dart';
@@ -78,7 +79,6 @@ class SideBar extends StatelessWidget {
         ));
         break;
       case 1:
-        // TODO: create 'My Journeys' screen
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => MyJourneys(),
         ));
