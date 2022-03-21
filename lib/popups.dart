@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:veloplan/widgets/group_id_otp_widget.dart';
+import 'package:veloplan/widgets/group_id_join_code_widget.dart';
 import 'package:veloplan/widgets/popup_widget.dart';
 import 'package:veloplan/screens/trips_scheduler_screen.dart';
 

@@ -1,33 +1,12 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:otp_text_field/otp_text_field.dart';
-import 'package:otp_text_field/style.dart';
-import 'package:veloplan/helpers/database_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:veloplan/utilities/dart_exts.dart';
 
+import '../helpers/database_manager.dart';
 import '../helpers/navigation_helpers/navigation_conversion_helpers.dart';
 import '../screens/summary_journey_screen.dart';
-import 'dart:math';
-import 'dart:async';
 
-import 'package:flutter/material.dart';
-
-import 'package:mapbox_gl/mapbox_gl.dart';
-
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
-import 'package:flutter/services.dart';
-import 'package:timeline_tile/timeline_tile.dart';
-import 'package:veloplan/helpers/database_manager.dart';
-
-
-//TODO : Redirect user if correct
-//TODO : Empty field if incorrect
-//TODO : Remove button
-
-OtpFieldController otpController = OtpFieldController();
 
 class GroupId extends StatefulWidget {
   const GroupId({Key? key}) : super(key: key);
@@ -37,11 +16,20 @@ class GroupId extends StatefulWidget {
 }
 
 class GroupIdState extends State<GroupId> {
-  late List<List<double?>?> points;
+  String fullPin = '';
+  bool? groupExists;
+  late List<LatLng>? points;
   final DatabaseManager _databaseManager = DatabaseManager();
   bool? exists = null;
 
-  joinGroup(String code) async {
+
+  @override
+  void initState(){
+    super.initState();
+
+  }
+
+  _joinGroup(String code) async {
     print(" CODDD " + code);
     var group = await _databaseManager.getByEquality('group', 'code', code);
 
@@ -60,7 +48,13 @@ class GroupIdState extends State<GroupId> {
       });
       group.docs.forEach((element) {
         print(element.data());
-        points = convertStringToList(element.data()['points']);
+        var geoList = element.data()['points'];
+        List<List<double>> tempList = [];
+        for(int i =0; i<geoList.length;i++){
+          tempList.add([geoList[i].latitude, geoList[i].longitude]);
+        }
+        points = convertListDoubleToLatLng(tempList);
+
         print(points);
         id = element.id;
         list = element.data()['memberList'];
@@ -72,18 +66,18 @@ class GroupIdState extends State<GroupId> {
             SetOptions(merge: true));
       });
       await _databaseManager.updateByKey('group', id, {'memberList': list});
+      context.push(SummaryJourneyScreen(points!));
     }
   }
 
 
-  @override
   Widget build(BuildContext context) {
     return AlertDialog(
       contentPadding: const EdgeInsets.fromLTRB(0, 10.0, 0, 0.0),
       titlePadding: const EdgeInsets.fromLTRB(24.0, 40.0, 24.0, 0.0),
       title: const Center(
         child: Text(
-          'Enter PIN',
+          "Enter PIN",
           textAlign: TextAlign.center,
         ),
       ),
@@ -96,34 +90,12 @@ class GroupIdState extends State<GroupId> {
               padding: const EdgeInsets.all(15.0),
               child: Column(
                 children: [
-                  OTPTextField(
-                    controller: otpController,
-                    length: 6,
-                    width: MediaQuery.of(context).size.width,
-                    textFieldAlignment: MainAxisAlignment.spaceAround,
-                    fieldWidth: 40,
-                    fieldStyle: FieldStyle.box,
-                    outlineBorderRadius: 10,
-                    style: const TextStyle(fontSize: 17),
-                    onChanged: (pin) {},
-                    onCompleted: (pin) {
-                      joinGroup(pin);
-                      if(exists == null){
-
-                      }
-                      else if(exists!){
-                        Navigator.pop(context,
-                          MaterialPageRoute(
-                              builder: (context) => SummaryJourneyScreen(points)),
-                        );
-                      }
-                      else{
-                        Navigator.pop(context);
-                        showDialog(
-                            useRootNavigator: false,
-                            context: context,
-                            builder: (BuildContext context) => GroupId());
-                      }
+                  TextField(
+                    maxLength: 6,
+                    onChanged: (pin) {
+                      // TODO: do something with the pin
+                      fullPin = pin;
+                      print("The pin: " + pin);
                     },
                   ),
                   const SizedBox(
@@ -132,7 +104,9 @@ class GroupIdState extends State<GroupId> {
                   SizedBox(
                     width: MediaQuery.of(context).size.width / 0.5,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        _joinGroup(fullPin);
+                      },
                       child: const Text('Confirm'),
                     ),
                   )
@@ -144,6 +118,4 @@ class GroupIdState extends State<GroupId> {
       ),
     );
   }
-
-
 }

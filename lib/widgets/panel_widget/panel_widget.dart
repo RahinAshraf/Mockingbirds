@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:veloplan/screens/journey_planner_screen.dart';
 import 'package:veloplan/screens/navigation/map_with_route_screen.dart';
+import 'package:veloplan/screens/summary_journey_screen.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
 import 'package:veloplan/widgets/panel_widget/panel_widget_exts.dart';
 import 'package:veloplan/widgets/panel_widget/panel_widgets_base.dart';
@@ -23,16 +25,16 @@ import '../dynamic_widget.dart';
 ///@author: Rahin Ashraf - k20034059
 
 class PanelWidget extends PanelWidgetBase {
-   PanelWidget({Key? key, required Map<String, List<double?>> selectionMap, required Stream<MapPlace> address,
-     required ScrollController scrollController, required StreamController<List<DynamicWidget>> dynamicWidgets,
-     required List<DynamicWidget> listDynamic, required List<List<double?>?> selectedCoords,
-     required Map<String, List<double?>> staticListMap, required TextEditingController toTextEditController,
-     required int numberOfCyclists,
-     required TextEditingController fromTextEditController, required PanelController panelController})
-       : super(selectionMap: selectionMap, address: address, scrollController: scrollController,
-       dynamicWidgets: dynamicWidgets, listDynamic: listDynamic, selectedCoords: selectedCoords,
-       staticListMap: staticListMap, toTextEditController: toTextEditController,
-       fromTextEditController: fromTextEditController, panelController: panelController, numberOfCyclists: numberOfCyclists);
+  PanelWidget({Key? key, required Map<String, List<double?>> selectionMap, required Stream<MapPlace> address,
+    required ScrollController scrollController, required StreamController<List<DynamicWidget>> dynamicWidgets,
+    required List<DynamicWidget> listDynamic, required List<List<double?>?> selectedCoords,
+    required Map<String, List<double?>> staticListMap, required TextEditingController toTextEditController,
+    required int numberOfCyclists,
+    required TextEditingController fromTextEditController, required PanelController panelController})
+      : super(selectionMap: selectionMap, address: address, scrollController: scrollController,
+      dynamicWidgets: dynamicWidgets, listDynamic: listDynamic, selectedCoords: selectedCoords,
+      staticListMap: staticListMap, toTextEditController: toTextEditController,
+      fromTextEditController: fromTextEditController, panelController: panelController, numberOfCyclists: numberOfCyclists);
   @override
   PanelWidgetState createState() {
     return PanelWidgetState();
@@ -150,8 +152,8 @@ class PanelWidgetState extends State<PanelWidget> {
   Widget _buildStatic(TextEditingController controller,
       {String? hintText,
         required BuildContext context,
-      required String label,
-      required Function(List<double?>) onAddressAdded}) {
+        required String label,
+        required Function(List<double?>) onAddressAdded}) {
     return Column(
       children: [
         Row(
@@ -291,9 +293,9 @@ class PanelWidgetState extends State<PanelWidget> {
                               widget.dynamicWidgets.sink.add(widget.listDynamic);
                             });
                             return Container(
-                                    key: ValueKey(index),
-                                    child:
-                                        dynamicWidget);
+                                key: ValueKey(index),
+                                child:
+                                dynamicWidget);
                           },
                           itemCount: listOfDynamics.length,
                           physics: const NeverScrollableScrollPhysics(),
@@ -318,7 +320,7 @@ class PanelWidgetState extends State<PanelWidget> {
           buildFloatingActionButton(onPressed: addDynamic),
           Padding(
             padding:
-                const EdgeInsets.only(top: 20, bottom: 20, left: 10, right: 10),
+            const EdgeInsets.only(top: 20, bottom: 20, left: 10, right: 10),
             child: TextButton(
               style: TextButton.styleFrom(
                 backgroundColor: Colors.green,
@@ -393,7 +395,7 @@ class PanelWidgetState extends State<PanelWidget> {
         //! show something went wrong allert
         print("hello");
       } else {
-        context.push(MapRoutePage(closestDockList));
+        context.push(SummaryJourneyScreen(closestDockList));
       }
     }
   }

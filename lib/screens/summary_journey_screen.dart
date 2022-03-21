@@ -12,12 +12,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import 'package:veloplan/helpers/database_manager.dart';
+import 'package:veloplan/navbar.dart';
+import 'package:veloplan/screens/navigation/map_screen.dart';
+import 'package:veloplan/utilities/dart_exts.dart';
 
 import '../helpers/navigation_helpers/navigation_conversion_helpers.dart';
 import 'navigation/map_with_route_screen.dart';
 
 class SummaryJourneyScreen extends StatefulWidget {
-  List<List<double?>?> points;
+  List<LatLng> points;
   SummaryJourneyScreen(this.points, {Key? key}) : super(key: key);
 
   @override
@@ -33,7 +36,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
 
   @override
   void initState() {
-    points = widget.points;
+    points = convertLatLngToDouble(widget.points)!;
     _setData();
 
     super.initState();
@@ -56,19 +59,21 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
       var group = await _databaseManager.getByEquality(
           'group', 'code', user.data()!['group']);
       res = await _getGroupOwner(group);
+      points = [];
       group.docs.forEach((element) {
-        points = convertStringToList(element.data()['points']);
+        var geoList = element.data()['points'];
+        for(int i = 0; i< geoList.length;i++){
+          points.add([geoList[i].latitude,geoList[i].longitude]);
+        }
+
       });
     }
-    print(hasGroup);
     setState(() {
       isInGroup = hasGroup;
       organiser = user.data()!['username'];
       if (isInGroup) {
-
         organiser = res.data()!['username'];
       }
-      print('ORG ' + organiser);
     });
   }
 
@@ -95,7 +100,10 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
       code = rng.nextInt(999999).toString();
       x = await _databaseManager.getByEquality('group', 'code', code);
     }
-    print('A');
+    List<GeoPoint> geoList = [];
+    for(int i = 0; i < points.length;i++){
+      geoList.add(GeoPoint(points[i]![0]!,points[i]![1]!));
+    }
 
     try {
       await _databaseManager.addToCollection('group', {
@@ -104,7 +112,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
         'ownerID': ownerID,
         'memberList': list,
         'createdAt': Timestamp.fromDate(DateTime.now()),
-        'points': points.join(),
+        'points': geoList,
       });
       await _databaseManager.setByKey(
           'users', ownerID!, {'group': code}, SetOptions(merge: true));
@@ -126,7 +134,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
         ),
       );
     } catch (err) {
-       print(err);
+      print(err);
     }
   }
 
@@ -134,18 +142,34 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
     try {
       var temp = await _databaseManager.getByEquality('group', 'code', groupID);
       var userID = _databaseManager.getCurrentUser()?.uid;
+      var ownerID;
+      List list=[];
+      bool wasDeleted = false;
       for (var element in temp.docs) {
-        List list = element.data()['memberList'];
+        ownerID = element.data()['ownerID'];
+       list  = element.data()['memberList'];
         list.removeWhere((element) => (element == userID));
         if (list.isEmpty) {
+          wasDeleted = true;
           element.reference.delete();
         } else {
+          if(ownerID == userID){
+            _databaseManager
+                .updateByKey('group', element.id, {'ownerID': list[0]});
+          }
           _databaseManager
               .updateByKey('group', element.id, {'memberList': list});
         }
       }
       await _databaseManager
           .updateByKey('users', userID!, {'group': FieldValue.delete()});
+      if(ownerID == _databaseManager.getCurrentUser()?.uid){
+
+      }
+      else{
+        context.push(NavBar());
+      }
+
     } on PlatformException catch (err) {
       var message = 'An error occurred, please check your credentials!';
 
@@ -162,9 +186,10 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
     } catch (err) {
       //print(err);
     }
+    var user = await  _databaseManager.getByKey('users', _databaseManager.getCurrentUser()!.uid);
     setState(() {
       isInGroup = false;
-      organiser = _databaseManager.getCurrentUser()!.uid;
+      organiser = user.data()!['username'];
     });
   }
 
@@ -397,10 +422,10 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
                       style: TextStyle(color: Colors.white)),
                   onPressed: () {
                     Navigator.push(
-                      context,
-                      MaterialPageRoute(
+                        context,
+                        MaterialPageRoute(
                           builder: (context) =>  MapRoutePage(convertListDoubleToLatLng(points)!),
-                    )
+                        )
                     );
                   },
                 )),

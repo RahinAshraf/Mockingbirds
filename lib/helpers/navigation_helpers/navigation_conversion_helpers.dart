@@ -37,6 +37,20 @@ List<LatLng>? convertListDoubleToLatLng(List<List<double?>?> points) {
   }
 }
 
+List<List<double?>?>? convertLatLngToDouble(List<LatLng?> points) {
+  try {
+    List<List<double?>?> myList = [];
+    for (int i = 0; i < points.length; i++) {
+      myList.add([points[i]?.latitude, points[i]?.longitude]);
+    }
+    return myList;
+  } on StateError {
+    return null;
+  } catch (e) {
+    return null;
+  }
+}
+
 
 List<List<double?>?> convertStringToList(String points){
   List<List<double?>?> res = [];
