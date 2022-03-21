@@ -7,7 +7,6 @@ import 'package:veloplan/models/docking_station.dart';
 ///Helper functions to add,delete or retrieve docking stations
 ///from and to the firestore database for a user
 ///@author Tayyibah
-
 class FavouriteHelper {
   late CollectionReference _favourites;
   late final _user_id;

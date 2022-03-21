@@ -1,60 +1,59 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import '../screens/schedule_screen.dart';
 import '../screens/favourite_screen.dart';
-import '../screens/setting_screen.dart';
 import '../screens/help_screen.dart';
 import '../screens/my_journeys_screen.dart';
+import 'package:veloplan/screens/favourite_screen.dart';
+import 'package:veloplan/screens/help_screen.dart';
+import 'package:veloplan/screens/schedule_screen.dart';
+import 'package:veloplan/screens/settings_screen.dart';
 
-///Author: Tayyibah
-
-class NavigationDrawerWidget extends StatelessWidget {
-  final padding = EdgeInsets.symmetric(horizontal: 20);
+/// Defines the sidebar
+/// @author Tayyibah
+class SideBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      child: Container(
+    return SafeArea(
+      child: Drawer(
         child: ListView(
-          children: <Widget>[
-            const SizedBox(height: 48),
-            buildMenuItem(
+          children: [
+            Image.asset(
+              'assets/images/right_bubbles_shapes.png',
+              height: 150,
+              alignment: Alignment.topRight,
+            ),
+            _buildSidebarItem(
               text: 'Schedule',
               icon: Icons.date_range,
-              onClicked: () => selectedItem(context, 0),
+              onClicked: () => _renderScreen(context, 0),
             ),
-            buildMenuItem(
+            _buildSidebarItem(
               text: 'My Journeys',
               icon: Icons.history,
-              onClicked: () => selectedItem(context, 1),
+              onClicked: () => _renderScreen(context, 1),
             ),
-            buildMenuItem(
+            _buildSidebarItem(
               text: 'Favourites',
               icon: Icons.favorite,
-              onClicked: () => selectedItem(context, 2),
+              onClicked: () => _renderScreen(context, 2),
             ),
-            buildMenuItem(
+            _buildSidebarItem(
               text: 'Statistics',
               icon: Icons.assessment_outlined,
-              onClicked: () => selectedItem(context, 3),
+              onClicked: () => _renderScreen(context, 3),
             ),
-            //decided to remove this, not sure if it looks nice
             const SizedBox(height: 24),
-            Divider(color: Colors.grey),
+            const Divider(color: Colors.grey),
             const SizedBox(height: 24),
-            buildMenuItem(
+            _buildSidebarItem(
               text: 'Help',
               icon: Icons.chat_bubble_outlined,
-              onClicked: () => selectedItem(context, 4),
+              onClicked: () => _renderScreen(context, 4),
             ),
-            buildMenuItem(
+            _buildSidebarItem(
               text: 'Settings',
               icon: Icons.settings,
-              onClicked: () => selectedItem(context, 5),
-            ),
-            buildMenuItem(
-              text: 'Log Out',
-              icon: Icons.logout,
-              onClicked: () => FirebaseAuth.instance.signOut(),
+              onClicked: () => _renderScreen(context, 5),
             ),
           ],
         ),
@@ -62,22 +61,16 @@ class NavigationDrawerWidget extends StatelessWidget {
     );
   }
 
-  Widget buildMenuItem({
-    required String text,
-    required IconData icon,
-    VoidCallback? onClicked,
-  }) {
-    final color = Colors.green;
-
+  Widget _buildSidebarItem(
+      {required String text, required IconData icon, VoidCallback? onClicked}) {
     return ListTile(
       leading: Icon(icon),
-      title: Text(text, style: TextStyle(color: color)),
+      title: Text(text),
       onTap: onClicked,
     );
   }
 
-  selectedItem(BuildContext context, int i) {
-    //Navigator.of(context).pop();
+  _renderScreen(BuildContext context, int i) {
     switch (i) {
       case 0:
         Navigator.of(context).push(MaterialPageRoute(
@@ -85,6 +78,7 @@ class NavigationDrawerWidget extends StatelessWidget {
         ));
         break;
       case 1:
+        // TODO: create 'My Journeys' screen
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => MyJourneys(),
         ));
@@ -95,13 +89,9 @@ class NavigationDrawerWidget extends StatelessWidget {
         ));
         break;
       case 3:
+        // TODO: create 'Statistics' screen
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => Placeholder(),
-        ));
-        break;
-      case 3:
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => Placeholder(),
+          builder: (context) => const Placeholder(),
         ));
         break;
       case 4:
@@ -111,7 +101,7 @@ class NavigationDrawerWidget extends StatelessWidget {
         break;
       case 5:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => Settings(),
+          builder: (context) => const Settings(),
         ));
         break;
     }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '/models/docking_station.dart';
 import '/models/journey.dart';
 
-import '../helpers/favourite_service.dart';
 import '../widgets/carousel/station_carousel.dart';
 
 ///Creates a card for a journey, to include its time

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../helpers/favourite_service.dart';
 import '../helpers/history_helper.dart';
 import '../styles/styling.dart';
 import '../models/docking_station.dart';
@@ -49,7 +48,6 @@ class _MyJourneysState extends State<MyJourneys> {
             ),
       appBar: AppBar(
         title: const Text('My Journeys'),
-        backgroundColor: appBarColor,
       ),
     );
   }
