@@ -13,6 +13,17 @@ class DockingStationCarousel {
   LatLng? userCoordinates;
 
   DockingStationCarousel(this.userCoordinates);
+  DockingStationCarousel.test() {
+    retrieveAllCards(); //just to initialise for now delete later
+  }
+
+  Future<List<Widget>> retrieveAllCards() {
+    final dockingStationManager _stationManager = dockingStationManager();
+    var list = _stationManager
+        .importStations()
+        .then((value) => createDockingCards(_stationManager.stations));
+    return list;
+  }
 
   /// Retrieve the filtered cards for edit dock. Get 10 cards that are the closest to the given location
   Future<List<Widget>> retrieveFilteredCards() {

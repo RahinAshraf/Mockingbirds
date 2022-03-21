@@ -9,7 +9,7 @@ import '../widgets/carousel/station_carousel.dart';
 
 class MyJourneyCard extends StatefulWidget {
   late Journey journey;
-  dockingStationCarousel stationCarousel = dockingStationCarousel.test();
+  DockingStationCarousel stationCarousel = DockingStationCarousel.test();
   late List<Widget> stationCards;
 
   MyJourneyCard(Journey journey) {
