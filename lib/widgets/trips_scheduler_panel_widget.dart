@@ -77,7 +77,7 @@ class _PanelWidgetTripScheduler extends State<PanelWidgetTripScheduler> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const JourneyPlanner()));
+                            builder: (context) => JourneyPlanner(numberOfCyclists : numberOfCyclists)));
                   },
                   child: const Text('Now'),
                 ),
