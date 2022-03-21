@@ -59,7 +59,7 @@ class CustomCarouselState extends State<CustomCarousel>
     return AnimatedBuilder(
       animation: _pageController,
       builder: (BuildContext context, widget) {
-        return Container(child: Center(child: widget));
+        return Center(child: widget);
       },
       child: Container(child: cards[position]),
     );
