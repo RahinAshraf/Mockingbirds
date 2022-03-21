@@ -40,7 +40,6 @@ class _EditProfileState extends State<EditProfile> {
             SnackBar(
               content: const Text(
                   'This username is already taken! Please choose something else.'),
-              backgroundColor: Theme.of(context).errorColor,
             ),
           );
           return;
@@ -57,7 +56,6 @@ class _EditProfileState extends State<EditProfile> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(error.toString()),
-          backgroundColor: Theme.of(context).errorColor,
         ),
       );
     }
@@ -68,24 +66,24 @@ class _EditProfileState extends State<EditProfile> {
     return WillPopScope(
       onWillPop: () async {
         bool willLeave = false;
-          // show the confirm dialog
-          await showDialog(
-              context: context,
-              builder: (context) => AlertDialog(
-                    title: const Text('Are you sure want to leave?'),
-                    actions: [
-                      ElevatedButton(
-                          onPressed: () {
-                            willLeave = true;
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text('Yes')),
-                      TextButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          child: const Text('No'))
-                    ],
-                  ));
-          return willLeave;
+        // show the confirm dialog
+        await showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+                  title: const Text('Are you sure want to leave?'),
+                  actions: [
+                    ElevatedButton(
+                        onPressed: () {
+                          willLeave = true;
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('Yes')),
+                    TextButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: const Text('No'))
+                  ],
+                ));
+        return willLeave;
       },
       child: Scaffold(
         appBar: AppBar(

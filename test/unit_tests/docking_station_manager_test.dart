@@ -4,7 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
-import 'package:latlong2/latlong.dart' as LatLong;
+import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart'
+    as LatLong;
 import '../unit_tests/docking_stations_values.dart';
 
 void main() {
@@ -104,7 +105,7 @@ void main() {
   });
   test('Get 5 Closest docks with available bikes', () {
     expect(
-        stationManager2Docks
+        stationManager5Docks
             .get5ClosestDocksWithAvailableBikes(userLocation, 4)
             .length,
         4);
@@ -112,14 +113,14 @@ void main() {
 
   test('Get 5 Closest docks with available SPACES', () {
     expect(
-        stationManager2Docks
+        stationManager5Docks
             .get5ClosestDocksWithAvailableSpace(userLocation, 30)
             .length,
         1);
   });
 
   test('Sort docks from 6 given', () {
-    stationManager2Docks.stations.add(DockingStation(
+    stationManager5Docks.stations.add(DockingStation(
         "452",
         "Limburg Road, Clapham Junction",
         true,
@@ -132,12 +133,12 @@ void main() {
     expect(
         stationManager2Docks
             .sortDocksByDistanceFromGivenLocation(
-                userLocation, stationManager2Docks.getStations())[4]
+                userLocation, stationManager5Docks.getStations())[4]
             .name,
         'Hurlingham Park, Parsons Green');
   });
   test('Get 5 Closest docks', () {
-    expect(stationManager2Docks.get5ClosestDocks(userLocation)[4].name,
+    expect(stationManager5Docks.get5ClosestDocks(userLocation)[4].name,
         'Little Brook Green, Brook Green');
   });
 }
