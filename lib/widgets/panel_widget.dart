@@ -14,6 +14,7 @@ import 'package:veloplan/alerts.dart';
 import 'package:veloplan/helpers/live_location_helper.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:veloplan/screens/dock_sorter_screen.dart';
+import 'package:veloplan/screens/summary_journey_screen.dart';
 
 /*
 When rendered, the journey_planner_screen will have this panel_widget at the bottom. It is an interactive panel the user can
@@ -380,15 +381,15 @@ class PanelWidgetState extends State<PanelWidget> {
                   tempList.addAll(staticListMap.values);
                   tempList.addAll(widget.selectedCoords);
                   print("ALL_COORDINATES => $tempList");
-                  List<LatLng>? points = convertListDoubleToLatLng(tempList);
-                  if (points == null) {
+
+                  if (tempList == null) {
                     //! show something went wrong allert
                     print("hello");
                   } else {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => MapRoutePage(points)),
+                          builder: (context) => SummaryJourneyScreen(tempList)),
                     );
                   }
                 }

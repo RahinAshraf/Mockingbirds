@@ -5,7 +5,22 @@ import 'package:otp_text_field/style.dart';
 import 'package:veloplan/helpers/database_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../helpers/navigation_helpers/navigation_conversion_helpers.dart';
 import '../screens/summary_journey_screen.dart';
+import 'dart:math';
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+
+import 'package:mapbox_gl/mapbox_gl.dart';
+
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import 'package:flutter/services.dart';
+import 'package:timeline_tile/timeline_tile.dart';
+import 'package:veloplan/helpers/database_manager.dart';
 
 
 //TODO : Redirect user if correct
@@ -22,6 +37,7 @@ class GroupId extends StatefulWidget {
 }
 
 class GroupIdState extends State<GroupId> {
+  late List<List<double?>?> points;
   final DatabaseManager _databaseManager = DatabaseManager();
   bool? exists = null;
 
@@ -44,6 +60,8 @@ class GroupIdState extends State<GroupId> {
       });
       group.docs.forEach((element) {
         print(element.data());
+        points = convertStringToList(element.data()['points']);
+        print(points);
         id = element.id;
         list = element.data()['memberList'];
         list.add(_databaseManager.getCurrentUser()?.uid);
@@ -96,7 +114,7 @@ class GroupIdState extends State<GroupId> {
                       else if(exists!){
                         Navigator.pop(context,
                           MaterialPageRoute(
-                              builder: (context) => SummaryJourneyScreen()),
+                              builder: (context) => SummaryJourneyScreen(points)),
                         );
                       }
                       else{
