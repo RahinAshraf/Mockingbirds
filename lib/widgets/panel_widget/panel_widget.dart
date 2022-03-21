@@ -17,46 +17,66 @@ import 'package:veloplan/helpers/live_location_helper.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:veloplan/models/docking_station.dart';
 import '../dynamic_widget.dart';
+import 'package:veloplan/helpers/history_helper.dart';
 
 ///When rendered, the journey_planner_screen will have this panel_widget at the bottom. It is an interactive panel the user can
 ///slide up or down, when wanting to input their desired locations for the journey.
 ///@author: Rahin Ashraf - k20034059
 
 class PanelWidget extends PanelWidgetBase {
-   PanelWidget({Key? key, required Map<String, List<double?>> selectionMap, required Stream<MapPlace> address,
-     required ScrollController scrollController, required StreamController<List<DynamicWidget>> dynamicWidgets,
-     required List<DynamicWidget> listDynamic, required List<List<double?>?> selectedCoords,
-     required Map<String, List<double?>> staticListMap, required TextEditingController toTextEditController,
-     required int numberOfCyclists,
-     required TextEditingController fromTextEditController, required PanelController panelController})
-       : super(selectionMap: selectionMap, address: address, scrollController: scrollController,
-       dynamicWidgets: dynamicWidgets, listDynamic: listDynamic, selectedCoords: selectedCoords,
-       staticListMap: staticListMap, toTextEditController: toTextEditController,
-       fromTextEditController: fromTextEditController, panelController: panelController, numberOfCyclists: numberOfCyclists);
+  PanelWidget(
+      {Key? key,
+      required Map<String, List<double?>> selectionMap,
+      required Stream<MapPlace> address,
+      required ScrollController scrollController,
+      required StreamController<List<DynamicWidget>> dynamicWidgets,
+      required List<DynamicWidget> listDynamic,
+      required List<List<double?>?> selectedCoords,
+      required Map<String, List<double?>> staticListMap,
+      required TextEditingController toTextEditController,
+      required int numberOfCyclists,
+      required TextEditingController fromTextEditController,
+      required PanelController panelController})
+      : super(
+            selectionMap: selectionMap,
+            address: address,
+            scrollController: scrollController,
+            dynamicWidgets: dynamicWidgets,
+            listDynamic: listDynamic,
+            selectedCoords: selectedCoords,
+            staticListMap: staticListMap,
+            toTextEditController: toTextEditController,
+            fromTextEditController: fromTextEditController,
+            panelController: panelController,
+            numberOfCyclists: numberOfCyclists);
   @override
   PanelWidgetState createState() {
     return PanelWidgetState();
   }
 
   ///Returns whether or not the user has specified a destination. If not, displays an error message
-  bool hasSpecifiedOneDestination(BuildContext context, Alerts alert) => oneDestinationMustBeSpecified(this, context, alert);
+  bool hasSpecifiedOneDestination(BuildContext context, Alerts alert) =>
+      oneDestinationMustBeSpecified(this, context, alert);
 
   ///Handle when the user presses a textfield to input a location
-  void handleOnSearchClick(BuildContext context,
+  void handleOnSearchClick(
+      BuildContext context,
       TextEditingController textEditingController,
-      Function(List<double?>) onAddressAdded){
+      Function(List<double?>) onAddressAdded) {
     handleSearchClick(this, context, textEditingController, onAddressAdded);
   }
 }
 
 class PanelWidgetState extends State<PanelWidget> {
-  Stream<List<DynamicWidget>> get dynamicWidgetsStream => widget.dynamicWidgets.stream;
+  Stream<List<DynamicWidget>> get dynamicWidgetsStream =>
+      widget.dynamicWidgets.stream;
   final locService = LocationService();
   late Map<String, List<double?>> selectionMap;
   late Map<String, List<double?>> staticListMap;
   late Map response;
   final dockingStationManager _stationManager = dockingStationManager();
-  final TextEditingController editDockTextEditController = TextEditingController();
+  final TextEditingController editDockTextEditController =
+      TextEditingController();
   static const String fromLabelKey = "From";
   static const String toLabelKey = "To";
   final Alerts alert = Alerts();
@@ -82,7 +102,8 @@ class PanelWidgetState extends State<PanelWidget> {
   void initState() {
     staticListMap = widget.staticListMap;
     selectionMap = widget.selectionMap;
-    print("PanelWidgetState => ${widget.numberOfCyclists}"); //access number of cyclist like this
+    print(
+        "PanelWidgetState => ${widget.numberOfCyclists}"); //access number of cyclist like this
     LatLng currentLocation = getLatLngFromSharedPrefs();
     locService
         .reverseGeoCode(currentLocation.latitude, currentLocation.longitude)
@@ -109,7 +130,8 @@ class PanelWidgetState extends State<PanelWidget> {
 
       final list = widget.listDynamic;
       if (list.any((element) => element.placeTextController.text.isEmpty)) {
-        alert.showSnackBarErrorMessage(context, alert.cannotHaveEmptySearchLocationsMessage);
+        alert.showSnackBarErrorMessage(
+            context, alert.cannotHaveEmptySearchLocationsMessage);
         return;
       }
 
@@ -141,15 +163,15 @@ class PanelWidgetState extends State<PanelWidget> {
     controller.text = place;
     staticListMap[key] = currentLocationCoords;
 
-    PanelExtensions.of().checkInputLocation(controller, editDockTextEditController);
+    PanelExtensions.of()
+        .checkInputLocation(controller, editDockTextEditController);
   }
-
 
   ///Function which builds the static row of components which are displayed permanently. Statically built, as every journey
   ///needs to specify a starting point
   Widget _buildStatic(TextEditingController controller,
       {String? hintText,
-        required BuildContext context,
+      required BuildContext context,
       required String label,
       required Function(List<double?>) onAddressAdded}) {
     return Column(
@@ -178,11 +200,13 @@ class PanelWidgetState extends State<PanelWidget> {
                     child: TextField(
                       readOnly: true,
                       onTap: () {
-                        widget.handleOnSearchClick(context, controller, onAddressAdded);
+                        widget.handleOnSearchClick(
+                            context, controller, onAddressAdded);
                       },
                       onEditingComplete: () {
                         print("ONCHANGED");
-                        PanelExtensions.of(context:context).checkInputLocation(controller, editDockTextEditController);
+                        PanelExtensions.of(context: context).checkInputLocation(
+                            controller, editDockTextEditController);
                       },
                       controller: controller,
                       decoration: InputDecoration(
@@ -211,16 +235,16 @@ class PanelWidgetState extends State<PanelWidget> {
             ),
           ],
         ),
-        PanelExtensions.of(context: context).buildDefaultClosestDock(editDockTextEditController,
-            controller),
+        PanelExtensions.of(context: context)
+            .buildDefaultClosestDock(editDockTextEditController, controller),
       ],
     );
   }
 
   void addCordFrom(List<double?> newCord) {
     staticListMap[fromLabelKey] = newCord;
-    PanelExtensions.of(context: context).getClosetDock(newCord[0],
-        newCord[1], editDockTextEditController);
+    PanelExtensions.of(context: context)
+        .getClosetDock(newCord[0], newCord[1], editDockTextEditController);
   }
 
   void addCordTo(List<double?> newCord) {
@@ -279,7 +303,8 @@ class PanelWidgetState extends State<PanelWidget> {
 
                       return SizedBox(
                         width: 300,
-                        child: ReorderableListView.builder( //user can reorder the listItems
+                        child: ReorderableListView.builder(
+                          //user can reorder the listItems
                           itemExtent: 74,
                           padding: EdgeInsets.zero,
                           shrinkWrap: true,
@@ -288,12 +313,11 @@ class PanelWidgetState extends State<PanelWidget> {
                             dynamicWidget.position = index;
                             dynamicWidget.removeDynamic((p0) {
                               widget.listDynamic.removeAt(index);
-                              widget.dynamicWidgets.sink.add(widget.listDynamic);
+                              widget.dynamicWidgets.sink
+                                  .add(widget.listDynamic);
                             });
                             return Container(
-                                    key: ValueKey(index),
-                                    child:
-                                        dynamicWidget);
+                                key: ValueKey(index), child: dynamicWidget);
                           },
                           itemCount: listOfDynamics.length,
                           physics: const NeverScrollableScrollPhysics(),
@@ -337,7 +361,7 @@ class PanelWidgetState extends State<PanelWidget> {
   ///For all the coordinates of the locations the user specified, creates a new list - this new list is a list of all the
   ///closest docking stations for the locations the user specified. This new list is then passed onto MapRoutePage.
   ///THIS FUNCTION NEEDS TO BE REFACTORED FURTHER
-  void _handleStartClick(){
+  void _handleStartClick() {
     final hasEmptyField = widget.listDynamic
         .any((element) => element.placeTextController.text.isEmpty);
 
@@ -345,7 +369,8 @@ class PanelWidgetState extends State<PanelWidget> {
         widget.fromTextEditController, widget.toTextEditController);
 
     if (hasEmptyField) {
-      alert.showSnackBarErrorMessage(context, alert.startPointMustBeDefinedMessage);
+      alert.showSnackBarErrorMessage(
+          context, alert.startPointMustBeDefinedMessage);
       return;
     } else if (areAdjacentCoords(widget.selectedCoords)) {
       alert.showSnackBarErrorMessage(context, alert.noAdjacentLocationsAllowed);
@@ -357,23 +382,28 @@ class PanelWidgetState extends State<PanelWidget> {
       print("ALL_COORDINATES => $tempList");
       List<LatLng>? points = convertListDoubleToLatLng(tempList);
 
-      List<LatLng>closestDockList = [];
-      if(points != null){
-        for(int i=0; i < points.length; i++){
-          DockingStation closestDock = _stationManager.getClosestDock(LatLng(points[i].latitude, points[i].longitude));
-          LatLng closetDockCoord = LatLng(closestDock.lat,closestDock.lon);
+      List<LatLng> closestDockList = [];
+      HistoryHelper historyHelper = new HistoryHelper();
+
+      List<DockingStation> dockingStationList = [];
+      if (points != null) {
+        for (int i = 0; i < points.length; i++) {
+          DockingStation closestDock = _stationManager
+              .getClosestDock(LatLng(points[i].latitude, points[i].longitude));
+          LatLng closetDockCoord = LatLng(closestDock.lat, closestDock.lon);
+          dockingStationList.add(closestDock);
           closestDockList.add(closetDockCoord);
         }
         print("ALL_COORDINATES FOR CLOSEST DOCKS => $closestDockList");
       }
 
       List<LatLng> closestDocksWithNoAdjancents = [];
-      for(int i=0; i < closestDockList.length - 1; i++){
-        if(closestDockList[i].latitude == closestDockList[i+1].latitude && closestDockList[i].longitude == closestDockList[i+1].longitude){
-          if(closestDocksWithNoAdjancents.contains(closestDockList[i])){
+      for (int i = 0; i < closestDockList.length - 1; i++) {
+        if (closestDockList[i].latitude == closestDockList[i + 1].latitude &&
+            closestDockList[i].longitude == closestDockList[i + 1].longitude) {
+          if (closestDocksWithNoAdjancents.contains(closestDockList[i])) {
             print("ALREADY EXISTS");
-          }
-          else{
+          } else {
             closestDocksWithNoAdjancents.add(closestDockList[i]);
           }
         }
@@ -384,8 +414,9 @@ class PanelWidgetState extends State<PanelWidget> {
       print("CLOSESTDOCKLIST");
       print(closestDockList);
 
-      if(closestDocksWithNoAdjancents.length == 1){
-        alert.showSnackBarErrorMessage(context, alert.adjacentClosestDocksMessage);
+      if (closestDocksWithNoAdjancents.length == 1) {
+        alert.showSnackBarErrorMessage(
+            context, alert.adjacentClosestDocksMessage);
         return;
       }
 
@@ -393,6 +424,8 @@ class PanelWidgetState extends State<PanelWidget> {
         //! show something went wrong allert
         print("hello");
       } else {
+        historyHelper.createJourneyEntry(dockingStationList);
+
         context.push(MapRoutePage(closestDockList));
       }
     }
@@ -407,7 +440,7 @@ class PanelWidgetState extends State<PanelWidget> {
       return;
     }
 
-    if (widget.hasSpecifiedOneDestination( context, alert)) {
+    if (widget.hasSpecifiedOneDestination(context, alert)) {
       return;
     }
 
@@ -438,7 +471,8 @@ class PanelWidgetState extends State<PanelWidget> {
   bool aSearchBarCannotBeEmpty(List<DynamicWidget>? list) {
     bool isFieldNotEmpty = true;
     if (list == null) {
-      alert.showSnackBarErrorMessage(context, alert.cannotHaveEmptySearchLocationsMessage);
+      alert.showSnackBarErrorMessage(
+          context, alert.cannotHaveEmptySearchLocationsMessage);
       return false;
     }
     for (var element in list) {
@@ -448,7 +482,8 @@ class PanelWidgetState extends State<PanelWidget> {
       }
     }
     if (!isFieldNotEmpty) {
-      alert.showSnackBarErrorMessage(context, alert.cannotHaveEmptySearchLocationsMessage);
+      alert.showSnackBarErrorMessage(
+          context, alert.cannotHaveEmptySearchLocationsMessage);
       return false;
     }
     return false;
@@ -458,7 +493,8 @@ class PanelWidgetState extends State<PanelWidget> {
   bool startLocationMustBeSpecified(
       TextEditingController textEditingController) {
     if (widget.fromTextEditController.text.isEmpty) {
-      alert.showSnackBarErrorMessage(context, alert.startPointMustBeDefinedMessage);
+      alert.showSnackBarErrorMessage(
+          context, alert.startPointMustBeDefinedMessage);
       return true;
     }
     return false;
@@ -468,6 +504,4 @@ class PanelWidgetState extends State<PanelWidget> {
   void dispose() {
     super.dispose();
   }
-
 }
-

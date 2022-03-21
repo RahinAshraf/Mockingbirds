@@ -1,6 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 
+/// FIX DOC BEFORE PUSHING
 class ThemeNotifier extends ChangeNotifier {
   final String key = "theme";
   late SharedPreferences _prefs;
