@@ -54,11 +54,13 @@ void addFills(MapboxMapController? controller, Map fills, _model) async {
 /// Removes the currently displayed polyline layer and destination markers from the map
 void removeFills(MapboxMapController? controller, Set<Symbol> polylineSymbols,
     Map fills) async {
-  await controller!.removeLayer("lines");
-  await controller.removeSource("fills");
-  await controller.removeSymbols(polylineSymbols);
-  polylineSymbols.clear();
-  fills.clear();
+  try {
+    await controller!.removeLayer("lines");
+    await controller.removeSource("fills");
+    await controller.removeSymbols(polylineSymbols);
+    polylineSymbols.clear();
+    fills.clear();
+  } catch (e) {}
 }
 
 /// Adds marker symbols for each multistop destination of a [journey] to the map
@@ -78,7 +80,9 @@ void setPolylineMarkers(MapboxMapController controller, List<LatLng> journey,
 void removePolylineMarkers(MapboxMapController controller, List<LatLng> journey,
     Set<Symbol> polylineSymbols) async {
   if (polylineSymbols.isNotEmpty) {
-    await controller.removeSymbols(polylineSymbols);
-    polylineSymbols.clear();
+    try {
+      await controller.removeSymbols(polylineSymbols);
+      polylineSymbols.clear();
+    } catch (e) {}
   }
 }

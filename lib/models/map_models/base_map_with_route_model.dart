@@ -12,7 +12,7 @@ import 'package:veloplan/utilities/travel_type.dart';
 
 class BaseMapboxRouteMap extends BaseMapboxMap {
   late final List<LatLng> _journey;
-  Map<String, Object> _fills = {};
+  Map<String, Object> fills = {};
   final Set<Symbol> _polylineSymbols = {};
   String _totalDistanceAndTime = 'No route';
   final RouteManager _manager = RouteManager();
@@ -33,7 +33,7 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
 
   /// Display journey and refocus camera position
   void _displayJourneyAndRefocus(List<LatLng> journey) {
-    _setJourney(journey);
+    setJourney(journey);
     _refocusCamera(journey);
     setPolylineMarkers(controller!, journey, _polylineSymbols);
   }
@@ -52,7 +52,7 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
   }
 
   /// Sets the [journey] geometry
-  void _setJourney(List<LatLng> journey) async {
+  void setJourney(List<LatLng> journey) async {
     // vars used to collect data for WHOLE journey; incremented by vars of each sub journey AB, BC etc.
     List<dynamic> journeyPoints = [];
     double totalDistance = 0.0;
@@ -97,11 +97,11 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
 
   /// Draws out the journey onto map
   void _displayJourney() async {
-    _fills = await setFills(
-        _fills,
+    fills = await setFills(
+        fills,
         _manager
             .getGeometry()); //_routeResponse['geometry']); - can use local var instead but i've set it anyway
-    addFills(controller!, _fills, model);
+    addFills(controller!, fills, model);
     _setDistanceAndTime();
   }
 

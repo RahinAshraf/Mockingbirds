@@ -27,11 +27,13 @@ class MapUpdatedRoutePage extends StatefulWidget {
 }
 
 class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
-  LatLng currentLatLng = getLatLngFromSharedPrefs();
+  // LatLng currentLatLng = getLatLngFromSharedPrefs();
   late MapWithRouteUpdated _baseMapWithUpdatedRoute;
   final List<LatLng> _journey;
 
-  _MapUpdatedRoutePageState(this._journey);
+  _MapUpdatedRoutePageState(this._journey) {
+    print("points: " + _journey.toString());
+  }
 
   @override
   Widget build(BuildContext context) {
