@@ -25,66 +25,63 @@ class _MapPageState extends State<MapPage> {
 
   // /// ! show usage of BaseMapboxRouteMap
 
-  // List<LatLng> points = [
-  //   LatLng(51.514951, -0.112762),
-  //   LatLng(51.513146, -0.115256),
-  //   LatLng(51.511407, -0.125497),
-  //   LatLng(51.506053, -0.130310),
-  //   LatLng(51.502254, -0.217760),
-  // ];
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(body: ScopedModelDescendant<MapModel>(
-  //       builder: (BuildContext context, Widget? child, MapModel model) {
-  //     _baseMapWithRoute =
-  //         BaseMapboxRouteMap(points, model);
-  //     addPositionZoom();
-  //     return SafeArea(child: Stack(children: _baseMapWithRoute.getWidgets()));
-  //   }));
-  // }
-
-  // /// add positional zoom to our widgets
-  // void addPositionZoom() {
-  //   _baseMapWithRoute.addWidget(Container(
-  //     alignment: Alignment(0.9, 0.90),
-  //     child: FloatingActionButton(
-  //       heroTag: "center_to_current_loaction",
-  //       onPressed: () {
-  //         _baseMapWithRoute.controller?.animateCamera(
-  //             CameraUpdate.newCameraPosition(_baseMapWithRoute.cameraPosition));
-  //       },
-  //       child: const Icon(Icons.my_location),
-  //     ),
-  //   ));
-  // }
-
-  // /// ! show usage of BaseMapboxMap
+  List<LatLng> points = [
+    LatLng(51.514951, -0.112762),
+    LatLng(51.513146, -0.115256),
+    LatLng(51.511407, -0.125497),
+    LatLng(51.506053, -0.130310),
+    LatLng(51.502254, -0.217760),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: ScopedModelDescendant<MapModel>(
         builder: (BuildContext context, Widget? child, MapModel model) {
-      _baseMap = BaseMapboxMap(model);
+      _baseMapWithRoute = BaseMapboxRouteMap(points, model);
       addPositionZoom();
-      // addFavouritesCarousel();
-      return SafeArea(child: Stack(children: _baseMap.getWidgets()));
+      return SafeArea(child: Stack(children: _baseMapWithRoute.getWidgets()));
     }));
   }
 
+  /// add positional zoom to our widgets
   void addPositionZoom() {
-    _baseMap.addWidget(Container(
+    _baseMapWithRoute.addWidget(Container(
       alignment: Alignment(0.9, 0.90),
       child: FloatingActionButton(
         heroTag: "center_to_current_loaction",
         onPressed: () {
-          _baseMap.controller?.animateCamera(
-              CameraUpdate.newCameraPosition(_baseMap.cameraPosition));
+          _baseMapWithRoute.controller?.animateCamera(
+              CameraUpdate.newCameraPosition(_baseMapWithRoute.cameraPosition));
         },
         child: const Icon(Icons.my_location),
       ),
     ));
   }
+
+  // /// ! show usage of BaseMapboxMap
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Scaffold(body: ScopedModelDescendant<MapModel>(
+  //       builder: (BuildContext context, Widget? child, MapModel model) {
+  //     _baseMap = BaseMapboxMap(model);
+  //     addPositionZoom();
+  //     return SafeArea(child: Stack(children: _baseMap.getWidgets()));
+  //   }));
+  // }
+
+  // void addPositionZoom() {
+  //   _baseMap.addWidget(Container(
+  //     alignment: Alignment(0.9, 0.90),
+  //     child: FloatingActionButton(
+  //       heroTag: "center_to_current_loaction",
+  //       onPressed: () {
+  //         _baseMap.controller?.animateCamera(
+  //             CameraUpdate.newCameraPosition(_baseMap.cameraPosition));
+  //       },
+  //       child: const Icon(Icons.my_location),
+  //     ),
+  //   ));
 
   // void addFavouritesCarousel() {
   //   _baseMap.addWidget(
