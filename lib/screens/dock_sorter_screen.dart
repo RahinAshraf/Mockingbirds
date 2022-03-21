@@ -50,6 +50,7 @@ class _DockSorterScreen extends State<DockSorterScreen> {
   void initState() {
     userCoordinates = super.widget.userCoord;
     focusStation = super.widget.closetDockStation;
+    print("focus stattion name ${focusStation.name}");
     //getFilteredDocks(userCoordinates);
     String text = "" + focusStation.name.toString();
 
