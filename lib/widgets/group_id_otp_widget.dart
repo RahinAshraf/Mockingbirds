@@ -1,10 +1,63 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:otp_text_field/otp_text_field.dart';
 import 'package:otp_text_field/style.dart';
+import 'package:veloplan/helpers/database_manager.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../screens/summary_journey_screen.dart';
+
+
+//TODO : Redirect user if correct
+//TODO : Empty field if incorrect
+//TODO : Remove button
 
 OtpFieldController otpController = OtpFieldController();
 
-class GroupId extends StatelessWidget {
+class GroupId extends StatefulWidget {
+  const GroupId({Key? key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => GroupIdState();
+}
+
+class GroupIdState extends State<GroupId> {
+  final DatabaseManager _databaseManager = DatabaseManager();
+  bool? exists = null;
+
+  joinGroup(String code) async {
+    print(" CODDD " + code);
+    var group = await _databaseManager.getByEquality('group', 'code', code);
+
+    var list = [];
+    String id = "";
+
+    if(group.size == 0){
+      setState(() {
+        exists = false;
+      });
+    }
+    else{
+      print(4);
+      setState(() {
+        exists = true;
+      });
+      group.docs.forEach((element) {
+        print(element.data());
+        id = element.id;
+        list = element.data()['memberList'];
+        list.add(_databaseManager.getCurrentUser()?.uid);
+        _databaseManager.setByKey(
+            'users',
+            _databaseManager.getCurrentUser()!.uid,
+            {'group': element.data()['code']},
+            SetOptions(merge: true));
+      });
+      await _databaseManager.updateByKey('group', id, {'memberList': list});
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -35,7 +88,25 @@ class GroupId extends StatelessWidget {
                     outlineBorderRadius: 10,
                     style: const TextStyle(fontSize: 17),
                     onChanged: (pin) {},
-                    onCompleted: (pin) {},
+                    onCompleted: (pin) {
+                      joinGroup(pin);
+                      if(exists == null){
+
+                      }
+                      else if(exists!){
+                        Navigator.pop(context,
+                          MaterialPageRoute(
+                              builder: (context) => SummaryJourneyScreen()),
+                        );
+                      }
+                      else{
+                        Navigator.pop(context);
+                        showDialog(
+                            useRootNavigator: false,
+                            context: context,
+                            builder: (BuildContext context) => GroupId());
+                      }
+                    },
                   ),
                   const SizedBox(
                     height: 20,
@@ -55,4 +126,6 @@ class GroupId extends StatelessWidget {
       ),
     );
   }
+
+
 }

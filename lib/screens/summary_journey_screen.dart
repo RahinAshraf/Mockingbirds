@@ -48,7 +48,6 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
         organiser = user.data()!['username'];
         if (isInGroup) {
           organiser = res.data()!['username'];
-          print("tempor" + res.data()!['username']);
         }
       });
     }
