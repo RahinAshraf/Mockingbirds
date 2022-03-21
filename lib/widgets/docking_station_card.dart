@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '/models/docking_station.dart';
 import '/services/favourite_service.dart';
+import 'dart:async';
 
 ///Creates a card for a docking station, to include its name, number of bikes and empty bikes.
 ///Author: Tayyibah, Hristina
@@ -33,6 +34,7 @@ class DockingStationCard extends StatefulWidget {
 class _DockingStationCardState extends State<DockingStationCard> {
   final _helper = FavouriteHelper(); //change name
   List<DockingStation> _favourites = [];
+  bool isFavouriteEnabled = true;
   bool isVisible = true;
 
   @override
@@ -43,6 +45,12 @@ class _DockingStationCardState extends State<DockingStationCard> {
       });
     });
     super.initState();
+  }
+
+  ///Sets [isFavouriteEnabled] to false to disable favourite button for 3 seconds after button click
+  void _disableFavButton() {
+    isFavouriteEnabled = false;
+    Timer(const Duration(seconds: 3), () => isFavouriteEnabled = true);
   }
 
   @override
@@ -57,7 +65,6 @@ class _DockingStationCardState extends State<DockingStationCard> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(width: 30.0),
             IconButton(
               icon: _helper.isFavouriteStation(widget.iD, _favourites)
                   ? const Icon(
@@ -69,18 +76,21 @@ class _DockingStationCardState extends State<DockingStationCard> {
                       color: Colors.grey,
                     ),
               onPressed: () async {
-                List<DockingStation> updatedFavourites =
-                    await FavouriteHelper.getUserFavourites();
-                _helper.toggleFavourite(
-                  widget.iD,
-                  widget.stationName,
-                  widget.numberOfBikes,
-                  widget.numberOfEmptyDocks,
-                );
+                if (isFavouriteEnabled) {
+                  _disableFavButton();
+                  List<DockingStation> updatedFavourites =
+                      await FavouriteHelper.getUserFavourites();
+                  _helper.toggleFavourite(
+                    widget.iD,
+                    widget.stationName,
+                    widget.numberOfBikes,
+                    widget.numberOfEmptyDocks,
+                  );
 
-                setState(() {
-                  _favourites = updatedFavourites;
-                });
+                  setState(() {
+                    _favourites = updatedFavourites;
+                  });
+                }
               },
             ),
             const SizedBox(width: 30),
