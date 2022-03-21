@@ -97,7 +97,7 @@ class _TurnByTurnState extends State<TurnByTurn> {
       distance = distanceRemaining;
       print('SHARED PREFERENCES total distance $distance');
     } else {
-      sharedPreferences.setDouble('distance', distance! - distanceRemaining);
+      sharedPreferences.setDouble('distance', distance! - (distanceRemaining ?? 0));
     }
     print(
         'SHARED PREFERENCES DISTANCE WENT${sharedPreferences.getDouble('distance')}');
