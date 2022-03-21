@@ -5,8 +5,6 @@ import 'package:timeline_tile/timeline_tile.dart';
 // General
 const Color whiteReplacement =
     Color(0xFFf5f5f5); // replacement for bright white color
-const Color appBarColor = Color(0xFF99D2A9); // top appbar color
-const Color appBarTextColor = Colors.white;
 
 // Helpbot and message bubbles
 const Color userMessageBubbleColor = Color(0xFF99D2A9);

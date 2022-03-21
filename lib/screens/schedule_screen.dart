@@ -100,17 +100,20 @@ class TimelineItem extends StatelessWidget {
       {required this.month,
       required this.day,
       this.isFirst = false,
+      this.isLast = false,
       required this.upcomingEventCards});
 
   final String day;
   final String month;
   final bool isFirst;
+  final bool isLast;
   final List<UpcomingEventCard> upcomingEventCards;
 
   @override
   Widget build(BuildContext context) {
     return TimelineTile(
       isFirst: isFirst,
+      isLast: isLast,
       beforeLineStyle: timelineTileBeforeLineStyle,
       indicatorStyle: timelineTileIndicatorStyle,
       alignment: TimelineAlign.manual,
