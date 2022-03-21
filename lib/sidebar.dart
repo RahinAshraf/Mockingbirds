@@ -3,7 +3,6 @@ import 'package:veloplan/screens/favourite_screen.dart';
 import 'package:veloplan/screens/help_screen.dart';
 import 'package:veloplan/screens/schedule_screen.dart';
 import 'package:veloplan/screens/settings_screen.dart';
-import 'package:veloplan/styles/styling.dart';
 
 /// Defines the sidebar
 /// @author Tayyibah

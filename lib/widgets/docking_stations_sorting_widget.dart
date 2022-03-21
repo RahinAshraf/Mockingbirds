@@ -1,13 +1,19 @@
 import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
-import 'package:veloplan/widgets/carousel/station_carousel.dart';
-import '../screens/journey_planner_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:veloplan/widgets/carousel/station_carousel.dart';
 
+/// Class that sorts docking stations based on a specific filter.
+///
+/// This class fetches 10 closest stations from [DockingStationList]
+/// based on given [userCoord]. It then displays the cards
+/// and can be sorted based on options given in [_DockSorter.dropdownItems].
+/// By default, cards are sorted by [_DockSorter.selectedFilter].
 class DockSorter extends StatefulWidget {
-  late final LatLng userCoord;
   DockSorter(this.userCoord, {Key? key, required ScrollController controller})
       : super(key: key);
+
+  late final LatLng userCoord;
 
   @override
   _DockSorter createState() => _DockSorter();
@@ -16,87 +22,66 @@ class DockSorter extends StatefulWidget {
 class _DockSorter extends State<DockSorter> {
   ScrollController controller = ScrollController();
   late LatLng userCoordinates;
-  late var _dockingStationCarousel;
+  late DockingStationCarousel _dockingStations;
+  List<String> dropdownItems = ['Distance', 'Favourites', 'Most Popular'];
+  String selectedFilter = 'Distance';
 
   @override
   void initState() {
-    // TODO: implement initState
     userCoordinates = super.widget.userCoord;
     super.initState();
-    _dockingStationCarousel = dockingStationCarousel(userCoordinates);
-  }
-
-  String selectedFilter = "Distance";
-
-  printStuff() {
-    print("IN THIS BUILD THING");
+    _dockingStations = DockingStationCarousel(userCoordinates);
   }
 
   @override
   Widget build(BuildContext context) => ListView(
         children: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Icon(Icons.arrow_back_rounded),
-          ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text("Sort by: "),
-              const SizedBox(width: 10.0),
-              DropdownButton(
-                enableFeedback: true,
-                underline: Container(
-                  height: 1,
-                  color: Colors.green,
-                ),
-                elevation: 16,
-                iconDisabledColor: Colors.black,
-                style: const TextStyle(
-                  color: Colors.green,
-                  fontWeight: FontWeight.w500,
-                ),
-                value: selectedFilter,
-                items: ['Distance', 'Favourites', 'Most Popular']
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (String? newFilter) {
-                  setState(() {
-                    selectedFilter = newFilter!;
-                    // TODO: reload sorted docks based on selected filter
-                  });
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
                 },
+                child:
+                    const Icon(Icons.arrow_back_rounded, color: Colors.green),
               ),
-              const SizedBox(width: 160.0),
-              Tooltip(
-                message:
-                    'Here, you can sort your docking stations based on some filter.',
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(25),
-                  color: const Color(0xFFb6e59e),
-                ),
-                height: 50,
-                padding: const EdgeInsets.all(8.0),
-                preferBelow: false,
-                textStyle: const TextStyle(
-                  fontSize: 12,
-                ),
-                showDuration: const Duration(seconds: 2),
-                waitDuration: const Duration(seconds: 1),
-                child: const Icon(
-                  Icons.info_outline,
-                  color: Colors.green,
-                ),
+              Row(
+                children: [
+                  const Text("Sort by: "),
+                  const SizedBox(width: 10),
+                  DropdownButton(
+                    enableFeedback: true,
+                    underline: Container(height: 1, color: Colors.green),
+                    elevation: 16,
+                    style: const TextStyle(
+                      color: Colors.green,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    value: selectedFilter,
+                    items: dropdownItems
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (String? newFilter) {
+                      setState(() {
+                        selectedFilter = newFilter!;
+                        // TODO: reload sorted docks based on selected filter
+                      });
+                    },
+                  ),
+                ],
               ),
             ],
           ),
-          const Divider(),
-          _dockingStationCarousel.build(),
+          const Padding(
+            padding: EdgeInsets.only(bottom: 10.0),
+            child: Divider(),
+          ),
+          _dockingStations.build(),
         ],
       );
 }

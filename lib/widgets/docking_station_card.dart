@@ -62,7 +62,8 @@ class _DockingStationCardState extends State<DockingStationCard> {
       child: Padding(
         padding: const EdgeInsets.all(10),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             IconButton(
               icon: _helper.isFavouriteStation(widget.iD, _favourites)
@@ -95,7 +96,8 @@ class _DockingStationCardState extends State<DockingStationCard> {
             const SizedBox(width: 10),
             Expanded(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     widget.stationName,
