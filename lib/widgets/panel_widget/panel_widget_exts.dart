@@ -39,7 +39,8 @@ class PanelExtensions {
             decoration: InputDecoration(
               hintText: "Default closest dock",
               focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: Colors.black, width: 2.0),
+                borderSide:
+                    const BorderSide(color: Color(0xFF99D2A9), width: 2.0),
                 borderRadius: BorderRadius.circular(10.0),
               ),
             ),
@@ -48,13 +49,15 @@ class PanelExtensions {
         Expanded(
           child: IconButton(
               onPressed: () async {
-                if(placeTextController.text.isEmpty){
-                  alert.showSnackBarErrorMessage(context!, alert.fillInLocationBeforeEditingDockMesssage);
+                if (placeTextController.text.isEmpty) {
+                  alert.showSnackBarErrorMessage(
+                      context!, alert.fillInLocationBeforeEditingDockMesssage);
                   print("hello");
                   return;
                 }
 
-                List temp = await locationService.getPlaceCoords(placeTextController.text);
+                List temp = await locationService
+                    .getPlaceCoords(placeTextController.text);
                 checkInputLocation(
                     placeTextController, editDockTextEditController);
 
