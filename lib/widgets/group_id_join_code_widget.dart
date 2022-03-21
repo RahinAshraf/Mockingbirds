@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:otp_text_field/otp_text_field.dart';
-import 'package:otp_text_field/style.dart';
-
-OtpFieldController otpController = OtpFieldController();
 
 class GroupId extends StatelessWidget {
+  String fullPin = "";
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -12,7 +9,7 @@ class GroupId extends StatelessWidget {
       titlePadding: const EdgeInsets.fromLTRB(24.0, 40.0, 24.0, 0.0),
       title: const Center(
         child: Text(
-          'Enter PIN',
+          "Enter PIN",
           textAlign: TextAlign.center,
         ),
       ),
@@ -25,17 +22,13 @@ class GroupId extends StatelessWidget {
               padding: const EdgeInsets.all(15.0),
               child: Column(
                 children: [
-                  OTPTextField(
-                    controller: otpController,
-                    length: 6,
-                    width: MediaQuery.of(context).size.width,
-                    textFieldAlignment: MainAxisAlignment.spaceAround,
-                    fieldWidth: 40,
-                    fieldStyle: FieldStyle.box,
-                    outlineBorderRadius: 10,
-                    style: const TextStyle(fontSize: 17),
-                    onChanged: (pin) {},
-                    onCompleted: (pin) {},
+                  TextField(
+                    maxLength: 6,
+                    onChanged: (pin) {
+                      // TODO: do something with the pin
+                      fullPin = pin;
+                      print("The pin: " + pin);
+                    },
                   ),
                   const SizedBox(
                     height: 20,
@@ -43,7 +36,14 @@ class GroupId extends StatelessWidget {
                   SizedBox(
                     width: MediaQuery.of(context).size.width / 0.5,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        // TODO: do something with pin
+                        if (fullPin == '123') {
+                          print('The pin is correct omg');
+                        } else {
+                          print('The pin is incorrect');
+                        }
+                      },
                       child: const Text('Confirm'),
                     ),
                   )
