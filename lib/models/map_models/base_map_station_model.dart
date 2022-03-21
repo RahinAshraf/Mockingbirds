@@ -3,11 +3,11 @@ import 'package:tuple/tuple.dart';
 import 'package:veloplan/helpers/navigation_helpers/navigation_helpers.dart';
 import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/models/map_models/base_map_with_route_model.dart';
-import 'package:veloplan/providers/route_manager.dart';
+// import 'package:veloplan/providers/route_manager.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
-import 'package:veloplan/models/map_models/base_map_model.dart';
+// import 'package:veloplan/models/map_models/base_map_model.dart';
 import 'package:veloplan/helpers/navigation_helpers/map_drawings.dart';
-import 'package:veloplan/utilities/travel_type.dart';
+// import 'package:veloplan/utilities/travel_type.dart';
 
 /// Class to display a mapbox map with markers for a station and its surroudning stations, and other possible widgets
 /// Author(s): Fariha Choudhury k20059723
@@ -18,14 +18,22 @@ class BaseMapboxStationMap extends BaseMapboxRouteMap {
   late final List<LatLng> _journey;
   LatLng
       _curentDock; //change to type docking station and retrieve station via lat lng
+  DockingStation _chosenDock;
   final Set<Symbol> filteredDockSymbols = {};
   final Set<Symbol> currentSymbol = {};
 
   BaseMapboxStationMap(
     this._journey,
     this._curentDock,
+    this._chosenDock,
     MapModel model,
   ) : super(_journey, model, false);
+
+  late DockingStation chosenDock = _chosenDock;
+  late List<DockingStation> dockingStations;
+  // bool tapped = false;
+
+  String text = "  ";
 
   /// Initialise map features
   @override
@@ -35,6 +43,8 @@ class BaseMapboxStationMap extends BaseMapboxRouteMap {
     model.fetchDockingStations();
     // _displayFeatures(_journey);
     // onMarkerTapped(controller);
+    chosenDock = _chosenDock;
+    text = "" + chosenDock.name.toString();
     print("journey: " + _journey.toString());
     print("currentDock: " + _curentDock.toString());
   }
@@ -47,28 +57,58 @@ class BaseMapboxStationMap extends BaseMapboxRouteMap {
 
   /// Retrieves the [stationData] of the docking station [symbol] that was tapped
   @override
+  // Future<void> onSymbolTapped(Symbol symbol) async {
+  //   selectedSymbol = symbol;
+  //   Future<LatLng> variable = controller!.getSymbolLatLng(symbol);
+  //   if (selectedSymbol != null) {
+  //     LatLng selectedtLatLng = await variable;
+  //     //displayDockCard(current);
+  //     print("SELECTED SYMBOL IS..............: " +
+  //         symbol.toString() +
+  //         "   " +
+  //         selectedtLatLng.toString());
+  //   }
+  // }
   Future<void> onSymbolTapped(Symbol symbol) async {
     selectedSymbol = symbol;
-    Future<LatLng> variable = controller!.getSymbolLatLng(symbol);
     if (selectedSymbol != null) {
-      LatLng selectedtLatLng = await variable;
-      //displayDockCard(current);
-      print("SELECTED SYMBOL IS..............: " +
-          symbol.toString() +
-          "   " +
-          selectedtLatLng.toString());
+      Map<dynamic, dynamic>? stationData = symbol.data;
+      DockingStation station = stationData!["station"];
+      chosenDock = station;
+      text = "" + chosenDock.name.toString();
+      _curentDock = LatLng(station.lat, station.lon);
+
+      print("SELECTED SYMBOL IS..............: ");
+      print(station.toString());
+
+      super.resetCameraPosition(
+          _curentDock, cameraPosition.zoom); //refocus on selected dock.
+
+      // setText();
     }
   }
 
+  // void setText(){
+  //     setState(() {
+  //       //if (focusStation != null) {
+  //       text = chosenDock.toString();
+  //       //}
+  //     });
+  // }
+
+  // void removeTimeAndDuration() {
+  //   setState(() {
+  //     totalDistance = "No route";
+  //   });
+  // }
+
+  DockingStation getChosenDock() {
+    return chosenDock;
+  }
+
   /// Display journey and refocus camera position
-  void displayFeatures(List<LatLng> latLngPoints, List<DockingStation> stations,
-      LatLng focusDock) {
-    // List<LatLng> docks =
-    //     stations.map((dock) => LatLng(dock.lat, dock.lon)).toList();
-    // print("WHATFFGJBKLL:      ------ " + docks.toString());
-
-    //CHANGE LIST OF DOCKING STATIONS INTO LIST OF LATLNG^^ or take both in
-
+  void displayFeaturesAndRefocus(List<LatLng> latLngPoints,
+      List<DockingStation> stations, LatLng focusDock) {
     refocusCamera(latLngPoints);
     setMarkers(controller!, stations, filteredDockSymbols);
     setMarker(controller!, focusDock, currentSymbol);

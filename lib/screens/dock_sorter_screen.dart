@@ -1,17 +1,16 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:veloplan/helpers/navigation_helpers/map_drawings.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/models/docking_station.dart';
-import 'package:veloplan/models/map_models/base_map_model.dart';
 import 'package:veloplan/models/map_models/base_map_station_model.dart';
-import 'package:veloplan/models/map_models/base_map_with_route_model.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import '../providers/docking_station_manager.dart';
 import '../widgets/docking_stations_sorting_widget.dart';
 
-import '../../models/map_models/base_map_with_route_model.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 /// Screen displaying filtered stations around a chosen dock with functionality to sort stations
@@ -20,8 +19,10 @@ import 'package:scoped_model/scoped_model.dart';
 
 class DockSorterScreen extends StatefulWidget {
   late final LatLng userCoord;
+  late DockingStation closetDockStation;
 
-  DockSorterScreen(this.userCoord, {Key? key}) : super(key: key);
+  DockSorterScreen(this.userCoord, this.closetDockStation, {Key? key})
+      : super(key: key);
 
   @override
   _DockSorterScreen createState() => _DockSorterScreen();
@@ -38,13 +39,24 @@ class _DockSorterScreen extends State<DockSorterScreen> {
   List<LatLng> _docks = [];
   late LatLng _focusDock; //The chosen dock - userCoord
 
+  late DockingStation focusStation;
+
   final Set<Symbol> editDocksSymbols = {};
   final Set<Symbol> selectedDockSymbol = {};
+
+  String text = ""; //closetDockStation;
 
   @override
   void initState() {
     userCoordinates = super.widget.userCoord;
+    focusStation = super.widget.closetDockStation;
     //getFilteredDocks(userCoordinates);
+    String text = "" + focusStation.name.toString();
+
+    // Timer mytimer = Timer.periodic(Duration(seconds: 3), (timer) {
+    //   implementTime();
+    //   // setState(() {});
+    // });
 
     super.initState();
   }
@@ -55,6 +67,7 @@ class _DockSorterScreen extends State<DockSorterScreen> {
     var list = await _stationManager.importStations();
     filteredDockingStations =
         _stationManager.get10ClosestDocks(userCoordinates);
+    focusStation = filteredDockingStations[0];
     //Add to a list of DockingStations^
     for (var station in filteredDockingStations) {
       _docks.add(LatLng(station.lat, station.lon));
@@ -66,6 +79,7 @@ class _DockSorterScreen extends State<DockSorterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    focusStation = super.widget.closetDockStation;
     final panelHeightClosed = MediaQuery.of(context).size.height * 0.4;
     final panelHeightOpen = MediaQuery.of(context).size.height * 0.4;
     getFilteredDocks(userCoordinates);
@@ -90,9 +104,12 @@ class _DockSorterScreen extends State<DockSorterScreen> {
                   _baseMapWithStation = BaseMapboxStationMap(
                     _docks,
                     userCoordinates,
+                    focusStation,
                     model,
                   );
+                  // implementTime();
                   addClearDocksButton();
+                  addDockBar();
                   return SafeArea(
                       child: Stack(children: _baseMapWithStation.getWidgets()));
                 })),
@@ -104,14 +121,31 @@ class _DockSorterScreen extends State<DockSorterScreen> {
     ));
   }
 
-  /// Resets docking stations - calls map methods of BaseMapboxStationMap as markers cannot be displayed until
-  /// fetched (futures).
+  /// Resets docking station markers to display markers and add tap functionality
   void refreshStations() {
-    _baseMapWithStation.displayFeatures(
+    _baseMapWithStation.displayFeaturesAndRefocus(
         _docks, filteredDockingStations, userCoordinates);
     _baseMapWithStation.controller!.onSymbolTapped
         .add(_baseMapWithStation.onSymbolTapped);
+
+    //focusStation = _baseMapWithStation.chosenDock;
+    // print("/n");
+    // print(focusStation.toString());
+    // print(focusStation!.name.toString());
+
+    // setState(() {
+    //   focusStation = _baseMapWithStation.chosenDock;
+    //   text = focusStation.name.toString();
+    //   // }
+    // });
   }
+
+  ////// USE TIMER ----
+
+  // Timer mytimer = Timer.periodic(Duration(seconds: 3), (timer) {
+  //   implementTime();
+  //   // setState(() {});
+  // });
 
   /// For testing
   void addClearDocksButton() {
@@ -129,24 +163,79 @@ class _DockSorterScreen extends State<DockSorterScreen> {
       ),
     ));
   }
+
+  void addDockBar() {
+    _baseMapWithStation.addWidget(
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Align(
+          alignment: Alignment(0, 0.9),
+          child: Container(
+              width: 200,
+              height: 50,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15.0)),
+              child: Align(
+                alignment: Alignment.center,
+                child: Text("THIS DOESNT WORK " + getStuff(),
+                    // Timer.periodic(Duration(seconds: 3), (timer) {
+                    //   implementTime();
+                    // }),
+                    //Text("Selected station: " + _baseMapWithStation.text,
+                    //     setState(() {
+                    //       focusStation.name.toString();
+                    //     }), //(_) => setState(() {}),//(_)=> focusStation.name.toString(),
+                    style: TextStyle(fontSize: 12.0)),
+              )),
+        ),
+      ),
+    );
+  }
+
+  String getStuff() {
+    text = "Selected:   ";
+    Timer.periodic(Duration(seconds: 5), (timer) {
+      text = _baseMapWithStation.chosenDock.name.toString();
+    });
+    return text;
+  }
+
+  // String implementTime() {
+  //   print(text);
+  //   return text = _baseMapWithStation.chosenDock.name.toString();
+  // }
+
+  // Timer mytimer = Timer.periodic(Duration(seconds: 3), (timer) {
+  //   implementTime();
+  //   // setState(() {});
+  // });
+
+  // String setText() {
+
+  //     if (_baseMapWithStation.text = ""  + _chosenDock.name.toString();) {
+  //       focusStation = _baseMapWithStation.chosenDock;
+  //       //text = focusStation.name.toString();
+  //     }
+  //     // else{
+  //     //   // text = focusStation.name.toString();
+  //     // }
+  //     // }
+  //   return text;
+  // }
+
+  // setState(() {
+  //   if (focusStation != null) {
+  //     text = _baseMapWithStation.chosenDock.toString();
+  //   }
+  // });
+
 }
 
 /// TO DO:    Add focus dock with a marker too (? does it do it - check -)
-/// TO DO:    Add tap; return docking station info 
+/// TO DO:    Add tap; return docking station info
 /// TO DO:    After tap; switch colour and redraw map after focussing on that dock (? maybe or leave second part)
-/// TO DO:    Refactor drawing helpers; separate latlng and docking station passing; pass in data for stations 
-
-
-
-
-
-
-
-
-
-
-
-
+/// TO DO:    Refactor drawing helpers; separate latlng and docking station passing; pass in data for stations
 
 // import 'package:flutter/material.dart';
 // import 'package:sliding_up_panel/sliding_up_panel.dart';

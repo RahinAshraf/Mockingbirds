@@ -128,4 +128,13 @@ class BaseMapboxMap {
   MapboxMap getMap() {
     return _map;
   }
+
+  /// Refocus map on specified location [position]
+  void resetCameraPosition(LatLng position, double zoom) {
+    cameraPosition = CameraPosition(
+        target: position, //target, //center,
+        zoom: zoom,
+        tilt: cameraPosition.zoom);
+    controller!.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+  }
 }

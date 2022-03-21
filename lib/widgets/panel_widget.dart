@@ -545,6 +545,8 @@ class DynamicWidget extends StatelessWidget {
   int position = -1;
   final locationService = LocationService();
   final Map? coordDataMap;
+
+  // DockingStation closetDockStation;
   // final dockingStationManager _stationManager = dockingStationManager();
 
   //setter for the position index
@@ -568,6 +570,8 @@ class DynamicWidget extends StatelessWidget {
   DynamicWidget({Key? key, required this.selectedCoords, this.coordDataMap})
       : super(key: key);
 
+  late DockingStation closetDockStation;
+
   void checkInputLocation() async {
     print("THIS IS CLOSET DOCK");
     if (placeTextController.text.isEmpty) {
@@ -589,6 +593,7 @@ class DynamicWidget extends StatelessWidget {
     await _stationManager.importStations();
     print(latlngPlace);
     DockingStation closetDock = _stationManager.getClosestDock(latlngPlace);
+    closetDockStation = closetDock;
     print("closet dock ${closetDock.name}");
     editDockTextEditController.text = closetDock.name;
   }
@@ -723,8 +728,8 @@ class DynamicWidget extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              DockSorterScreen(locationInLatLng)));
+                          builder: (context) => DockSorterScreen(
+                              locationInLatLng, closetDockStation)));
                 },
                 padding: const EdgeInsets.all(0),
                 icon: const Icon(
