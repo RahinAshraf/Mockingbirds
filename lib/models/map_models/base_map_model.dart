@@ -11,16 +11,16 @@ import 'package:veloplan/.env.dart';
 /// Class to display a mapbox map with other possible widgets on top
 /// Author(s): Fariha Choudhury k20059723, Elisabeth Koren Halvorsen k20077737
 class BaseMapboxMap {
-  final String _accessToken = MAPBOX_ACCESS_TOKEN;
+  final String accessToken = MAPBOX_ACCESS_TOKEN;
   LatLng _target = getLatLngFromSharedPrefs();
-  late MapboxMap _map;
+  late MapboxMap map;
   final List<Widget> _widgets = [];
   final MapModel model;
   late CameraPosition cameraPosition;
   late MapboxMapController? controller;
   late Symbol? _selectedSymbol;
-  late final bool _useLiveLocation;
   Timer? timer;
+  bool recenter = true;
 
   BaseMapboxMap(this.model) {
     cameraPosition = CameraPosition(target: _target, zoom: 15);
@@ -29,8 +29,8 @@ class BaseMapboxMap {
     // } else {
     //   _setMapWithoutLiveLocation();
     // }
-    _setMapWithLiveLocation();
-    addWidget(_map);
+    setMap();
+    addWidget(map);
   }
 
   /// Adds a [widget] to [_widgets]
@@ -66,6 +66,7 @@ class BaseMapboxMap {
 
   /// Adds click functionality to map
   void onMapClick(Point<double> point, LatLng coordinates) async {
+    recenter = false;
     //print(coordinates);
   }
 
@@ -99,9 +100,9 @@ class BaseMapboxMap {
   // }
 
   /// Initialises map with live location
-  void _setMapWithLiveLocation() {
-    _map = MapboxMap(
-      accessToken: _accessToken,
+  void setMap() {
+    map = MapboxMap(
+      accessToken: accessToken,
       initialCameraPosition: cameraPosition,
       onMapCreated: onMapCreated,
       myLocationEnabled: true,
@@ -112,6 +113,6 @@ class BaseMapboxMap {
   }
 
   MapboxMap getMap() {
-    return _map;
+    return map;
   }
 }

@@ -1,4 +1,3 @@
-// import 'dart:html';
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/cupertino.dart';
@@ -79,9 +78,10 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
   void updateRoute() {
     //! check new if we need to reroute here if yes then we update
     //! check if we are within 10m
-    _currentStation = 1;
+    _currentStation = 10;
     removePolylineMarkers(controller!, _journey, _polylineSymbols);
     removeFills(controller, _polylineSymbols, fills);
+
     _displayJourneyAndRefocus();
   }
 
@@ -90,6 +90,7 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
     if (isAtGoal) {
       return;
     }
+    print("I got display and refocus!! ------------------");
     setPolylineMarkers(controller!, _journey, _polylineSymbols);
   }
 
@@ -97,10 +98,13 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
     distances = [];
     durations = [];
     _journeyPoints = [];
+
     await _setBikeRoute();
     if (isAtGoal) {
       return;
     }
+    print("I got set route!! ------------------");
+
     manager.setDistance(_routeResponse['distance'].toDouble());
     manager.setDuration(_routeResponse['duration'].toDouble());
     manager.setGeometry(_routeResponse['geometry']);
@@ -109,39 +113,46 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
   }
 
   Future<void> _setBikeRoute() async {
-    if (_currentStation >= _journey.length) {
-      return;
-    }
     if (firstLoactionCompleted) {
       await _setInitRoute(NavigationType.cycling);
     } else {
       await _setInitRoute(NavigationType.walking);
     }
-    // for (int i = _currentStation + 1; i < _journey.length - 1; ++i) {
-    //   //CYCLING:
-    //   var directions = await manager.getDirections(
-    //       _journey[i - 1], _journey[i], NavigationType.cycling);
+    if (isAtGoal) {
+      return;
+    }
+    print("I got set bike route!! ------------------");
+    print("curr station : " +
+        _currentStation.toString() +
+        " .   journey len " +
+        _journey.length.toString());
+    for (int i = _currentStation + 1; i < _journey.length; ++i) {
+      //CYCLING:
+      var directions = await manager.getDirections(
+          _journey[i - 1], _journey[i], NavigationType.cycling);
 
-    //   //update local vars ---
-    //   num distance = await manager.getDistance() as num;
-    //   num duration = await manager.getDuration() as num;
-    //   for (dynamic a in directions['geometry']!['coordinates']) {
-    //     _journeyPoints.add(a);
-    //   }
-    //   distances.add(distance);
-    //   durations.add(duration);
-    //   _routeResponse['geometry']
-    //       .update("coordinates", (value) => _journeyPoints);
-    // }
+      //update local vars ---
+      num distance = await manager.getDistance() as num;
+      num duration = await manager.getDuration() as num;
+      for (dynamic a in directions['geometry']!['coordinates']) {
+        _journeyPoints.add(a);
+      }
+      distances.add(distance);
+      durations.add(duration);
+      _routeResponse['geometry']
+          .update("coordinates", (value) => _journeyPoints);
+    }
   }
 
   Future<void> _setInitRoute(NavigationType type) async {
-    if (_currentStation >= _journey.length) {
-      isAtGoal = true;
-      return;
-    }
+    // if (_currentStation >= _journey.length) {
+    //   isAtGoal = true;
+    //   return;
+    // }
+    print("I got setInitRoute!! ------------------");
     _routeResponse =
         await manager.getDirections(_target, _journey[_currentStation], type);
+    print(_routeResponse.toString());
     //update local vars ---
     num distance = await manager.getDistance() as num;
     num duration = await manager.getDuration() as num;
@@ -155,7 +166,7 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
 }
 
 /// TODO: if user has pressed button refocus on current location if user taps screen go back to follow
-/// DONE: split up walking and biking distance, check if you've been on the first goal
+/// TODO: split up walking and biking distance, check if you've been on the first goal
 /// TODO: check if we're at the last place
-/// TODO: if within 10m of target utdate integer
+/// TODO: if within 10m of target then remove from _journey update markers as well
 /// TODO: Check endpoints if still avalible -> help Nicole/Lili

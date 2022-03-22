@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:veloplan/popups.dart';
 import 'package:veloplan/screens/navigation/map_screen.dart';
+import 'package:veloplan/screens/navigation/polyline_turn_by_turn.dart';
 import 'package:veloplan/screens/profile_screen.dart';
 import 'package:veloplan/sidebar.dart';
 
@@ -23,7 +24,8 @@ class _NavBarState extends State<NavBar> {
 
   var screens = [
     Placeholder(), // is this bad practise?
-    MapPage(),
+    // MapPage(),
+    MapUpdatedRoutePage(),
   ];
 
   @override

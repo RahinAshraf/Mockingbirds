@@ -117,22 +117,22 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
     } else {
       await _setInitRoute(NavigationType.walking);
     }
-    // for (int i = _currentStation + 1; i < _journey.length - 1; ++i) {
-    //   //CYCLING:
-    //   var directions = await manager.getDirections(
-    //       _journey[i - 1], _journey[i], NavigationType.cycling);
+    for (int i = _currentStation + 1; i < _journey.length - 1; ++i) {
+      //CYCLING:
+      var directions = await manager.getDirections(
+          _journey[i - 1], _journey[i], NavigationType.cycling);
 
-    //   //update local vars ---
-    //   num distance = await manager.getDistance() as num;
-    //   num duration = await manager.getDuration() as num;
-    //   for (dynamic a in directions['geometry']!['coordinates']) {
-    //     _journeyPoints.add(a);
-    //   }
-    //   distances.add(distance);
-    //   durations.add(duration);
-    //   _routeResponse['geometry']
-    //       .update("coordinates", (value) => _journeyPoints);
-    // }
+      //update local vars ---
+      num distance = await manager.getDistance() as num;
+      num duration = await manager.getDuration() as num;
+      for (dynamic a in directions['geometry']!['coordinates']) {
+        _journeyPoints.add(a);
+      }
+      distances.add(distance);
+      durations.add(duration);
+      _routeResponse['geometry']
+          .update("coordinates", (value) => _journeyPoints);
+    }
   }
 
   Future<void> _setInitRoute(NavigationType type) async {
@@ -155,7 +155,7 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
 }
 
 /// TODO: if user has pressed button refocus on current location if user taps screen go back to follow
-/// DONE: split up walking and biking distance, check if you've been on the first goal
+/// TODO: split up walking and biking distance, check if you've been on the first goal
 /// TODO: check if we're at the last place
-/// TODO: if within 10m of target utdate integer
+/// TODO: if within 10m of target then remove from _journey update markers as well
 /// TODO: Check endpoints if still avalible -> help Nicole/Lili

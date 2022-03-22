@@ -1,11 +1,19 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:veloplan/models/map_models/base_map_model.dart';
 import 'package:veloplan/models/map_models/base_map_with_route_updated_model.dart';
+import 'package:veloplan/navbar.dart';
+import 'package:veloplan/popups.dart';
 import 'package:veloplan/screens/navigation/turn_by_turn_screen.dart';
+import 'package:veloplan/widgets/popup_widget.dart';
 import '../../models/map_models/base_map_with_route_model.dart';
 import 'package:scoped_model/scoped_model.dart';
+
+import '../../navbar.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 
 /// Map screen focused on a user's live location
@@ -30,9 +38,16 @@ class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
   // LatLng currentLatLng = getLatLngFromSharedPrefs();
   late MapWithRouteUpdated _baseMapWithUpdatedRoute;
   final List<LatLng> _journey;
+  Timer? timer;
+  // late BuildContext _context;
+  bool finished = false;
 
   _MapUpdatedRoutePageState(this._journey) {
-    print("points: " + _journey.toString());
+    // print("points: " + _journey.toString());
+  }
+
+  void myTapCallback(MapWithRouteUpdated page) {
+    print('is at goal $page.isAtGoal');
   }
 
   @override
@@ -43,7 +58,13 @@ class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
       addPositionZoom();
       return SafeArea(
           child: Stack(children: _baseMapWithUpdatedRoute.getWidgets()));
+
+      ///* listen to isAtGoal if is at goal redirect
     }));
+  }
+
+  void checkValue() {
+    if (_baseMapWithUpdatedRoute.isAtGoal) {}
   }
 
   /// add positional zoom to our widgets
@@ -56,6 +77,7 @@ class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
           _baseMapWithUpdatedRoute.controller?.animateCamera(
               CameraUpdate.newCameraPosition(
                   _baseMapWithUpdatedRoute.cameraPosition));
+          _baseMapWithUpdatedRoute.recenter = true;
         },
         child: const Icon(Icons.my_location),
       ),
