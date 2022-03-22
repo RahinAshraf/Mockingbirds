@@ -4,6 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:veloplan/helpers/theme_provider.dart';
+import 'package:veloplan/screens/change_password_screen.dart';
 
 /// Settings screen where user can log out and change theme of the app.
 /// @author: Tayyibah
@@ -63,6 +64,10 @@ class Settings extends StatelessWidget {
         });
   }
 
+  void changePassword(context) {
+    Navigator.of(context).push(MaterialPageRoute(builder: ((context) => ChangePasswordScreen())));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,6 +92,11 @@ class Settings extends StatelessWidget {
               },
               value: notifier.isDarkTheme,
             ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.password),
+            title: const Text('Change password'),
+            onTap: () => changePassword(context),
           ),
           ListTile(
             leading: const Icon(Icons.delete),
