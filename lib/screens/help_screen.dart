@@ -1,16 +1,23 @@
 import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:veloplan/utilities/help_bot_manager.dart';
+<<<<<<< HEAD
 import '../styles/styling.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../widgets/helpbot/message_bubble_widget.dart';
+=======
+import 'package:veloplan/widgets/message_bubble_widget.dart';
+>>>>>>> main
 
 HelpBotManager questions = HelpBotManager();
 
+<<<<<<< HEAD
 // CONSTANTS
 //const Color appBarColor = Color(0xFF99D2A9);
 
+=======
+>>>>>>> main
 class HelpPage extends StatefulWidget {
   @override
   _HelpPageState createState() => _HelpPageState();
@@ -20,6 +27,11 @@ class _HelpPageState extends State<HelpPage> {
   List<MessageBubble> _conversation = [
     MessageBubble(text: 'Hello. How can I help you?')
   ];
+<<<<<<< HEAD
+=======
+  List<Widget> choices = [];
+  String selectedTopic = "";
+>>>>>>> main
 
   _sendMail() async {
     // Android and iOS
@@ -102,4 +114,76 @@ class _HelpPageState extends State<HelpPage> {
       ),
     );
   }
+<<<<<<< HEAD
+=======
+
+  _sendMail() async {
+    // Android and iOS
+    try {
+      await launch(url);
+    } catch (e) {
+      throw 'Could not launch $url';
+    }
+  }
+
+  List<Widget> _displayTopics() {
+    List<Widget> topics = [];
+    for (String topic in questions.getAllTopics()) {
+      topics.add(
+        _getOutlinedButton(
+          content: Text(topic),
+          onPressed: () {
+            setState(() {
+              selectedTopic = topic;
+              choices = [];
+              _displayQuestions();
+            });
+          },
+        ),
+      );
+    }
+    return topics;
+  }
+
+  void _displayQuestions() {
+    choices.add(
+      _getOutlinedButton(
+        content: const Icon(Icons.arrow_back, color: Colors.green),
+        onPressed: () {
+          setState(() {
+            choices = _displayTopics();
+          });
+        },
+      ),
+    );
+    for (Message message in questions.getMessagesByTopic(selectedTopic)) {
+      choices.add(
+        _getOutlinedButton(
+          content: Text(questions.getQuestionText(message)),
+          onPressed: () {
+            setState(() {
+              _conversation.add(MessageBubble(
+                  content: questions.getQuestionText(message),
+                  isSentByBot: false));
+              _conversation.add(
+                  MessageBubble(content: questions.getQuestionAnswer(message)));
+              choices = _displayTopics();
+              if (questions.getLaunch(message)) {
+                _sendMail();
+              }
+            });
+          },
+        ),
+      );
+    }
+  }
+
+  Widget _getOutlinedButton(
+      {required Widget content, required VoidCallback onPressed}) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 5.0),
+      child: OutlinedButton(onPressed: onPressed, child: content),
+    );
+  }
+>>>>>>> main
 }

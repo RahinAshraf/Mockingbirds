@@ -5,7 +5,6 @@ import 'package:veloplan/models/map_models/base_map_model.dart';
 import '../../models/map_models/base_map_with_route_model.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
-import '../../widgets/carousel/station_carousel.dart';
 
 import '../../widgets/popup_widget.dart';
 import 'turn_by_turn_screen.dart';

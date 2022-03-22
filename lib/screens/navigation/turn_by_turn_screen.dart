@@ -35,7 +35,7 @@ class _TurnByTurnState extends State<TurnByTurn> {
   /// Configuration variables for Mapbox Navigation
   late MapBoxNavigation directions;
   late MapBoxOptions _options;
-  late double distanceRemaining, durationRemaining;
+  double? distanceRemaining, durationRemaining;
   late MapBoxNavigationViewController _controller;
   final bool isMultipleStop = true;
   String instruction = "";

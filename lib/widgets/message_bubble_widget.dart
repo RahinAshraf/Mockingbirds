@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:veloplan/styles/styling.dart';
 
-// CONSTANTS
 const String botName = 'HelpBot';
 const String userName = 'You';
-const Color userMessageBubbleColor = Color(0xFF99D2A9);
-const Color botMessageBubbleColor = Colors.white;
-const TextStyle messageAuthorTextStyle =
-    TextStyle(fontSize: 13.0, color: Colors.black54);
-const TextStyle botMessageTextStyle =
-    TextStyle(fontSize: 15.0, color: Colors.black54);
-const TextStyle userMessageTextStyle =
-    TextStyle(fontSize: 15.0, color: Colors.white);
 
+<<<<<<< HEAD:lib/widgets/helpbot/message_bubble_widget.dart
+=======
+/// Creates a chat bubble used in [HelpPage].
+///
+/// This widget differentiates between a bot chat bubble
+/// and user chat bubble (uses different styling for different parties).
+///
+/// The [content] argument is required. It corresponds to the content
+/// of a chat bubble.
+///
+/// By default, the chat bubble is created for bots' messages, therefore
+/// [isSentByBot] equals to true. If [isSentByBot] is set to false,
+/// the chat bubble is created for the user.
+>>>>>>> main:lib/widgets/message_bubble_widget.dart
 class MessageBubble extends StatelessWidget {
   /// Creates a chat bubble used in HelpBotPage.
   ///
