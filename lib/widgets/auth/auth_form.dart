@@ -287,6 +287,13 @@ class _AuthFormState extends State<AuthForm> {
                       ),
                     ],
                   ),
+                if (_isLogin)
+                  TextButton(
+                        child: Text('Forgot my password'),
+                        onPressed: () {
+                          
+                        },
+                      ),
               ],
             ),
           ),
