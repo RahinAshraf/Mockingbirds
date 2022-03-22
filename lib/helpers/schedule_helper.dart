@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/models/journey.dart';
 import 'package:intl/intl.dart';
@@ -20,73 +21,26 @@ class ScheduleHelper {
   }
 
   ///Creates a new journey entry and adds the time and docking stations
-  void createJourneyEntry(DateTime journeyDate) {
+  void createJourneyEntry(
+      DateTime journeyDate, List<List<double?>?> points, int numberOfCyclists) {
     var newJourney = _journeys.doc();
-    addJourneyTime(newJourney.id, journeyDate);
-    //for (DockingStation station in dockingStationList) {
-    //addDockingStation(station, newJourney.id);
-    //}
-  }
-
-  ///Adds a docking station subcollection to a given journey
-  Future<void> addDockingStation(
-    DockingStation station,
-    documentId,
-  ) {
-    return _journeys
-        .doc(documentId)
-        .collection('docking_stations')
-        .add({
-          'stationId': station.stationId,
-          'name': station.name,
-          'numberOfBikes': station
-              .numberOfBikes, //these will be removed and changed to lat and lng
-          'numberOfEmptyDocks': station.numberOfEmptyDocks,
-        })
-        .then((value) => print("docking station Added"))
-        .catchError((error) =>
-            print("Failed to add docking station to journey: $error"));
+    addJourneyTime(newJourney.id, journeyDate, points, numberOfCyclists);
   }
 
   ///Calculates the date and adds as a field to journey
-  Future<void> addJourneyTime(journeyDocumentId, DateTime journeyDate) {
+  void addJourneyTime(journeyDocumentId, DateTime journeyDate,
+      List<List<double?>?> points, int numberOfCyclists) {
+    List<GeoPoint> geoList = [];
+    for (int i = 0; i < points!.length; i++) {
+      geoList.add(GeoPoint(points[i]![0]!, points[i]![1]!));
+    }
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     final String formattedTime = formatter.format(journeyDate);
-    return _journeys.doc(journeyDocumentId).set({'date': formattedTime});
-  }
-
-  ///Gets all of the docking station information from a given journey
-  // void getDockingStationsInJourney(journeyDocumentId) async {
-  //   List<DockingStation> stationsInJourney = [];
-
-  //   var list = await _journeys
-  //       .doc(journeyDocumentId)
-  //       .collection('docking_stations')
-  //       .get();
-
-  //   list.docs.forEach((doc) {
-  //     stationsInJourney.add(DockingStation.map(doc));
-  //   });
-  //   }
-  //   print("STATIONSINJOURNEY:");
-  //   print(stationsInJourney);
-  // }
-
-  ///Gets all of the docking station information from a given journey
-  Future<List<DockingStation>> getDockingStationsInJourney(
-      journeyDocumentId) async {
-    List<DockingStation> stationsInJourney = [];
-
-    var list = await _journeys
-        .doc(journeyDocumentId)
-        .collection('docking_stations')
-        .get();
-
-    for (DocumentSnapshot doc in list.docs) {
-      stationsInJourney.add(DockingStation.map(doc));
-    }
-
-    return stationsInJourney;
+    _journeys.doc(journeyDocumentId).set({
+      'date': journeyDate,
+      'points': geoList,
+      'numberOfCyclists': numberOfCyclists,
+    });
   }
 
   ///Gets all of a users journeys

@@ -6,6 +6,8 @@ import '../helpers/schedule_helper.dart';
 import '../models/journey.dart';
 import '../styles/styling.dart';
 
+///Author: Marija
+///Contributor: Tayyibah
 class SchedulePage extends StatefulWidget {
   @override
   _SchedulePageState createState() => _SchedulePageState();
@@ -22,6 +24,7 @@ class _SchedulePageState extends State<SchedulePage> {
         journeyList = data;
       });
     });
+    //print("THE LENGTH IS:" + journeyList[.length.toString()]);
     super.initState();
   }
 
@@ -50,16 +53,18 @@ class _SchedulePageState extends State<SchedulePage> {
               child:
                   Text('Upcoming journeys', style: upcomingJourneysTextStyle),
             ),
-            // ListView.builder(
-            //     itemBuilder: (context, index) {
-            //       return TimelineItem(
-            //         journeyList[index],
-            //         index,
-            //       );
-            //     },
+            Column(
+              //present some text if the length of journey list is 0 (e.g. 'you havent scheduled any journeys yet')
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                for (var item in journeyList)
+                  TimelineItem(item, journeyList.indexOf(item))
+              ],
+            ),
+
             //     itemCount: journeyList.length),
             // TODO: instead of manually generating timeline items, pass a list (map?) of upcoming journeys
-            TimelineItem(journeyList[0], 0),
+            //TimelineItem(journeyList[0], 0),
 
             // const TimelineItem(month: "March", day: "3", upcomingEventCards: [
             //   UpcomingEventCard(title: "Trip to London Bridge")
@@ -122,7 +127,8 @@ class TimelineItem extends StatelessWidget {
         alignment: Alignment.topCenter,
         child: Column(
           children: [
-            Text(journey.date!, style: timelineTileDayTextStyle),
+            Text(journey.date!.month.toString(),
+                style: timelineTileDayTextStyle),
             // Text(month, style: timelineTileMonthTextStyle),
           ],
         ),

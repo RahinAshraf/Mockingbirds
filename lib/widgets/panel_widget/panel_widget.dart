@@ -365,8 +365,30 @@ class PanelWidgetState extends State<PanelWidget> {
   }
 
   void _handleSaveClick() {
-    ScheduleHelper helper = ScheduleHelper();
-    helper.createJourneyEntry(widget.journeyDate);
+    final hasEmptyField = widget.listDynamic
+        .any((element) => element.placeTextController.text.isEmpty);
+
+    applyConstraints(
+        widget.fromTextEditController, widget.toTextEditController);
+
+    if (hasEmptyField) {
+      alert.showSnackBarErrorMessage(
+          context, alert.startPointMustBeDefinedMessage);
+      return;
+    } else if (areAdjacentCoords(widget.selectedCoords)) {
+      alert.showSnackBarErrorMessage(context, alert.noAdjacentLocationsAllowed);
+      return;
+    } else {
+      List<List<double?>?> tempList = [];
+      tempList.addAll(staticListMap.values);
+      tempList.addAll(widget.selectedCoords);
+      print("ALL_COORDINATES => $tempList");
+      List<LatLng>? points = convertListDoubleToLatLng(tempList);
+      ScheduleHelper helper = ScheduleHelper();
+      helper.createJourneyEntry(
+          widget.journeyDate, tempList, widget.numberOfCyclists);
+    }
+
     // save the journey for the future
     // popup warning station availability
   }
