@@ -9,7 +9,7 @@ class ChangePasswordScreen extends StatefulWidget {
 }
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
-  
+
   TextEditingController _currentPassword = new TextEditingController();
 
   TextEditingController _newPassword = new TextEditingController();
@@ -34,7 +34,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
       await updateUserPassword(_newPassword.text);
 
-      Navigator.of(context).pop();
+      Navigator.of(context).pop(true);
     }
   }
 

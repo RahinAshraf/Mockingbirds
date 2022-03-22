@@ -64,8 +64,16 @@ class Settings extends StatelessWidget {
         });
   }
 
-  void changePassword(context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: ((context) => ChangePasswordScreen())));
+  void changePassword(context) async {
+    var result = await Navigator.of(context).push(MaterialPageRoute(builder: ((context) => ChangePasswordScreen())));
+    if(result == true) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Your password has been successfully updated"),
+          backgroundColor: Colors.green,
+        ),
+      );
+    }
   }
 
   @override
