@@ -16,6 +16,7 @@ import 'package:veloplan/alerts.dart';
 import 'package:veloplan/helpers/live_location_helper.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:veloplan/models/docking_station.dart';
+import '../../styles/styling.dart';
 import '../dynamic_widget.dart';
 
 ///When rendered, the journey_planner_screen will have this panel_widget at the bottom. It is an interactive panel the user can
@@ -177,21 +178,6 @@ class PanelWidgetState extends State<PanelWidget> {
       children: [
         Row(
           children: [
-            const SizedBox(
-              width: 10,
-            ),
-            SizedBox(
-              width: 50,
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(label,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.normal,
-                      fontSize: 20,
-                    )),
-              ),
-            ),
-            const SizedBox(width: 20),
             Expanded(
               child: Column(
                 children: [
@@ -203,13 +189,15 @@ class PanelWidgetState extends State<PanelWidget> {
                             context, controller, onAddressAdded);
                       },
                       onEditingComplete: () {
-                        print("ONCHANGED");
                         PanelExtensions.of(context: context).checkInputLocation(
                             controller, editDockTextEditController);
                       },
                       controller: controller,
                       decoration: InputDecoration(
                         hintText: hintText,
+                        labelText: label,
+                        helperText: 'Please enter your starting location.',
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
                         focusedBorder: circularInputBorder(
                             width: 2.0, color: Color(0xFF99D2A9)),
                         border: circularInputBorder(color: Color(0xFF99D2A9)),
@@ -228,7 +216,7 @@ class PanelWidgetState extends State<PanelWidget> {
                           icon: const Icon(
                             Icons.my_location,
                             size: 20,
-                            color: Color(0xFF99D2A9),
+                            color: Colors.green,
                           ),
                         ),
                       ),
@@ -277,51 +265,32 @@ class PanelWidgetState extends State<PanelWidget> {
       controller: widget.scrollController,
       child: Column(
         children: [
-          const SizedBox(
-            height: 20,
-          ),
-          const SizedBox(height: 6),
-          const Center(
+          const Padding(
+            padding:
+                EdgeInsets.only(top: 24.0, bottom: 24, right: 12, left: 12),
             child: Text(
-              "EXPLORE LONDON",
-              style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 30,
-                  color: Color(0xFF99D2A9)),
+              'Please specify the starting location of your trip and add destinations by clicking the + button. When you are done, click START.',
+              style: infoTextStyle,
             ),
           ),
-          const SizedBox(height: 15),
           _buildStatic(widget.fromTextEditController,
               hintText: "Where from?",
               label: "FROM",
               context: context,
               onAddressAdded: addCordFrom),
-          const SizedBox(height: 15),
           Row(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
-                child: const Text('TO',
-                    style: TextStyle(
-                      color: Color(0xFF99D2A9),
-                      fontWeight: FontWeight.w500,
-                      fontSize: 20,
-                    )),
-              ),
               Column(
-                mainAxisSize: MainAxisSize.max,
                 children: [
                   StreamBuilder<List<DynamicWidget>>(
                     builder: (_, snapshot) {
                       List<DynamicWidget> listOfDynamics = snapshot.data ?? [];
 
                       return SizedBox(
-                        width: 300,
+                        width: MediaQuery.of(context).size.width - 20,
                         child: ReorderableListView.builder(
                           //user can reorder the listItems
-                          itemExtent: 74,
+                          itemExtent: 140, // TODO: flexible
                           padding: EdgeInsets.zero,
                           shrinkWrap: true,
                           itemBuilder: (_, index) {
@@ -346,9 +315,6 @@ class PanelWidgetState extends State<PanelWidget> {
                       );
                     },
                     stream: dynamicWidgetsStream,
-                  ),
-                  const SizedBox(
-                    height: 10,
                   ),
                 ],
               ),

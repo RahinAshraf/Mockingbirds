@@ -28,9 +28,9 @@ class PanelExtensions {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Expanded(
-          child: Icon(Icons.subdirectory_arrow_right),
-          flex: 0,
+        IconButton(
+          icon: Icon(Icons.subdirectory_arrow_right),
+          onPressed: () {},
         ),
         Expanded(
           child: TextField(
