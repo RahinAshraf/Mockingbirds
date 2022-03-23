@@ -89,12 +89,6 @@ class BaseMapboxStationMap extends BaseMapboxRouteMap {
       if (station != chosenDock) {
         super.resetCameraPosition(
             _curentDock, cameraPosition.zoom); //refocus on selected dock.
-        // remove old red
-
-        //removeMarkers(controller!, {symbol});
-        // replace old red with yellow
-        // remopve old yellow
-        // place new red
 
         // REMOVE ALL MARKERS:
         removeMarkers(controller!, filteredDockSymbols);
@@ -108,28 +102,14 @@ class BaseMapboxStationMap extends BaseMapboxRouteMap {
         displayFeaturesAndRefocus(
             dockingStations, dockingStations[0]); //1st = red, rest = yellow
 
-        //alternative: station
-        // displayFeaturesAndRefocus(
-        //     dockingStations, station);
-
         editChosenDockText(station);
 
         chosenDock = station;
         print("should be same as ^^ :" + chosenDock.name.toString());
       }
-      // chosenDock = station;
-
-      // text = "" + chosenDock.name.toString();
 
       print(filteredDockSymbols.length);
-
-      //CHECK IF THIS WORKS AFTER ??/
-      // editChosenDockText(station);
     }
-
-    /// CHANGE TO DO:
-    /// bring selected dock to front of list;  mylist.insert(0, mylist.pop(mylist.index(targetvalue)))
-    ///
   }
 
   void setStationList(
@@ -143,7 +123,6 @@ class BaseMapboxStationMap extends BaseMapboxRouteMap {
   /// Display red and yellow markers
   void displayFeaturesAndRefocus(
       List<DockingStation> stations, DockingStation focus) {
-    // refocusCamera(latLngPoints);
     stations.remove(focus); //remove index 0 - will be red
     print("After removing symbol clicked on :   " + stations.length.toString());
     setRedMarkers(
@@ -157,7 +136,6 @@ class BaseMapboxStationMap extends BaseMapboxRouteMap {
 
   /// Refocus camera positioning to focus on the [journey] polyline
   void refocusCamera(List<LatLng> latLngPoints) {
-    //List<LatLng> journey
     LatLng center = getCenter(latLngPoints);
     Tuple2<LatLng, LatLng> corners = getCornerCoordinates(latLngPoints);
     double zoom = getZoom(calculateDistance(center, corners.item1));
@@ -177,61 +155,4 @@ class BaseMapboxStationMap extends BaseMapboxRouteMap {
   void editChosenDockText(DockingStation chosenDock) {
     this._editDockTextEditController.text = chosenDock.name;
   }
-
-  // void _refocusCamera(List<LatLng> journey) {
-  //   LatLng center = getCenter(journey);
-  //   Tuple2<LatLng, LatLng> corners = getCornerCoordinates(journey);
-  //   double zoom = getZoom(calculateDistance(center, corners.item1));
-
-  //   cameraPosition = CameraPosition(
-  //       target: center, //target, //center,
-  //       zoom: zoom,
-  //       tilt: 5);
-  //   controller!.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
-  // }
-
-  /// Sets the [journey] geometry
-  // void _setJourney(List<LatLng> journey) async {
-  //   List<dynamic> journeyPoints = [];
-  //   if (journey.length > 1) {
-  //     _routeResponse = await _manager.getDirections(
-  //         journey[0], journey[1], NavigationType.walking);
-  //     for (int i = 0; i < journey.length - 1; ++i) {
-  //       var directions = await _manager.getDirections(
-  //           journey[i], journey[i + 1], NavigationType.cycling);
-  //       for (dynamic a in directions['geometry']!['coordinates']) {
-  //         journeyPoints.add(a);
-  //       }
-  //       _routeResponse['geometry']
-  //           .update("coordinates", (value) => journeyPoints);
-  //     }
-  //     _displayJourney();
-  //   }
-  // }
-
-  /// Draws out the journey onto map
-  // void _displayJourney() async {
-  //   _fills = await setFills(_fills, _routeResponse['geometry']);
-  //   addFills(controller!, _fills, model);
-  //   _setDistanceAndTime();
-  // }
-
-  /// Sets distance and time
-  // void _setDistanceAndTime() async {
-  //   try {
-  //     var duration = await _manager.getDistance() as double; //meters
-  //     var distance = await _manager.getDuration() as double; //sec
-  //     _totalDistanceAndTime = "distance: " +
-  //         (distance / 1000).truncate().toString() +
-  //         ", duration: " +
-  //         (duration / 60).truncate().toString();
-  //   } catch (e) {
-  //     _totalDistanceAndTime = "Route not avalible";
-  //   }
-  // }
-
-  /// Gets the [_totalDistanceAndTime] of a journey
-  // String _getTotalDistance() {
-  //   return _totalDistanceAndTime;
-  // }
 }
