@@ -58,7 +58,7 @@ class BaseMapboxMap {
   void updateCurrentLocation() async {
     Location newCurrentLocation = Location();
     LocationData _newLocationData = await newCurrentLocation.getLocation();
-    sharedPreferences.clear();
+    //sharedPreferences.clear();
     sharedPreferences.setDouble('latitude', _newLocationData.latitude!);
     sharedPreferences.setDouble('longitude', _newLocationData.longitude!);
     // print("UPDATED");

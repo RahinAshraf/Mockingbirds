@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:veloplan/screens/journey_planner_screen.dart';
 import 'package:veloplan/screens/navigation/map_with_route_screen.dart';
+import 'package:veloplan/screens/summary_journey_screen.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
 import 'package:veloplan/widgets/panel_widget/panel_widget_exts.dart';
 import 'package:veloplan/widgets/panel_widget/panel_widgets_base.dart';
@@ -419,7 +421,7 @@ class PanelWidgetState extends State<PanelWidget> {
         //! show something went wrong allert
         print("hello");
       } else {
-        context.push(MapRoutePage(closestDockList));
+        context.push(SummaryJourneyScreen(closestDockList));
       }
     }
   }

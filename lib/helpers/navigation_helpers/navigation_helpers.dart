@@ -1,8 +1,6 @@
 import 'dart:math';
-// import 'package:latlong2/latlong.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:tuple/tuple.dart';
-import 'package:vector_math/vector_math.dart';
 
 /// Helper methods related to map navigation
 /// Author(s): Elisabeth Koren Halvorsen k20077737

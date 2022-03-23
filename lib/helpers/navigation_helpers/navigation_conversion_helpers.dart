@@ -36,3 +36,55 @@ List<LatLng>? convertListDoubleToLatLng(List<List<double?>?> points) {
     return null;
   }
 }
+
+List<List<double?>?>? convertLatLngToDouble(List<LatLng?> points) {
+  try {
+    List<List<double?>?> myList = [];
+    for (int i = 0; i < points.length; i++) {
+      myList.add([points[i]?.latitude, points[i]?.longitude]);
+    }
+    return myList;
+  } on StateError {
+    return null;
+  } catch (e) {
+    return null;
+  }
+}
+
+
+List<List<double?>?> convertStringToList(String points){
+  List<List<double?>?> res = [];
+  String num ='';
+  double numDouble;
+  List<double> temp = [];
+  for(int i =0; i <points.length; i++){
+
+    if(points.substring(i, i+1) == '['){
+
+    } else if(points.substring(i, i+1) == ']'){
+      print(num);
+      numDouble = double.parse(num);
+      temp.add(numDouble);
+      num ='';
+      numDouble = 0;
+      res.add(temp);
+      temp=[];
+    }
+    else if(points.substring(i, i+1) == ','){
+      print(num);
+      numDouble = double.parse(num);
+      temp.add(numDouble);
+      num ='';
+      numDouble = 0;
+    }
+    else if(points.substring(i, i+1) == ' '){
+
+    }
+    else{
+      num = num + points.substring(i, i+1);
+    }
+  }
+
+  return res;
+
+}
