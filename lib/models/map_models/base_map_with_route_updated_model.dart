@@ -85,8 +85,13 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
       return;
     }
     double distance = calculateDistance(_target, _journey[_currentStation]);
-    if (distance < 0.01) {
+    if (distance < 1) {
       ++_currentStation;
+      if (_currentStation >= _journey.length) {
+        print("we got to the goal!!!");
+        isAtGoal = true;
+        return;
+      }
     }
     removePolylineMarkers(controller!, _journey, _polylineSymbols);
     removeFills(controller, _polylineSymbols, fills);
@@ -95,9 +100,6 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
 
   void _displayJourneyAndRefocus() {
     setRoute();
-    if (isAtGoal) {
-      return;
-    }
     setPolylineMarkers(controller!, _journey, _polylineSymbols);
   }
 
@@ -106,9 +108,6 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
     durations = [];
     _journeyPoints = [];
     await _setBikeRoute();
-    if (isAtGoal) {
-      return;
-    }
     manager.setDistance(_routeResponse['distance'].toDouble());
     manager.setDuration(_routeResponse['duration'].toDouble());
     manager.setGeometry(_routeResponse['geometry']);
@@ -139,17 +138,15 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
     //   }
     //   distances.add(distance);
     //   durations.add(duration);
-    //   _routeResponse['geometry']
-    //       .update("coordinates", (value) => _journeyPoints);
+    // _routeResponse['geometry'].update("coordinates", (value) => _journeyPoints);
     // }
+    manager.setGeometry(_routeResponse['geometry']);
+    print("set bike route done");
   }
 
   /// sets the route
   Future<void> _setInitRoute(NavigationType type) async {
-    if (_currentStation >= _journey.length) {
-      isAtGoal = true;
-      return;
-    }
+    print("current station num:" + _currentStation.toString());
     _routeResponse =
         await manager.getDirections(_target, _journey[_currentStation], type);
     //update local vars ---
