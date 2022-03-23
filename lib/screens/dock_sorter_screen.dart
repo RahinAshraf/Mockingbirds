@@ -19,9 +19,12 @@ import 'package:scoped_model/scoped_model.dart';
 
 class DockSorterScreen extends StatefulWidget {
   late final LatLng userCoord;
-  late DockingStation closetDockStation;
+  late TextEditingController editDockTextEditController;
+  //late DockingStation closetDockStation;
 
-  DockSorterScreen(this.userCoord, this.closetDockStation, {Key? key})
+  DockSorterScreen(this.userCoord, this.editDockTextEditController,
+      //this.closetDockStation,
+      {Key? key})
       : super(key: key);
 
   @override
@@ -33,6 +36,7 @@ class _DockSorterScreen extends State<DockSorterScreen> {
   final panelController = PanelController();
   late List<DockingStation> filteredDockingStations = [];
   late LatLng userCoordinates; //IS THIS THE SAME AS _FOCUSDOCK???
+  late TextEditingController editDockTextEditController;
 
   // late BaseMapboxMap _baseMap;
   late BaseMapboxStationMap _baseMapWithStation;
@@ -49,10 +53,11 @@ class _DockSorterScreen extends State<DockSorterScreen> {
   @override
   void initState() {
     userCoordinates = super.widget.userCoord;
-    focusStation = super.widget.closetDockStation;
-    print("focus stattion name ${focusStation.name}");
+    editDockTextEditController = super.widget.editDockTextEditController;
+    //focusStation = super.widget.closetDockStation;
+    //print("focus stattion name ${focusStation.name}");
     //getFilteredDocks(userCoordinates);
-    String text = "" + focusStation.name.toString();
+    // String text = "" + focusStation.name.toString();
 
     // Timer mytimer = Timer.periodic(Duration(seconds: 3), (timer) {
     //   implementTime();
@@ -80,7 +85,7 @@ class _DockSorterScreen extends State<DockSorterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    focusStation = super.widget.closetDockStation;
+    //focusStation = super.widget.closetDockStation;
     final panelHeightClosed = MediaQuery.of(context).size.height * 0.4;
     final panelHeightOpen = MediaQuery.of(context).size.height * 0.4;
     getFilteredDocks(userCoordinates);
@@ -105,12 +110,12 @@ class _DockSorterScreen extends State<DockSorterScreen> {
                   _baseMapWithStation = BaseMapboxStationMap(
                     _docks,
                     userCoordinates,
-                    focusStation,
+                    // focusStation,
                     model,
                   );
                   // implementTime();
                   addClearDocksButton();
-                  addDockBar();
+                  //addDockBar();
                   return SafeArea(
                       child: Stack(children: _baseMapWithStation.getWidgets()));
                 })),
@@ -124,29 +129,18 @@ class _DockSorterScreen extends State<DockSorterScreen> {
 
   /// Resets docking station markers to display markers and add tap functionality
   void refreshStations() {
+    _baseMapWithStation.setStationList(filteredDockingStations, _docks);
+
+    _baseMapWithStation.setEditTextController(editDockTextEditController);
+
     _baseMapWithStation.displayFeaturesAndRefocus(
-        _docks, filteredDockingStations, userCoordinates);
+        filteredDockingStations, filteredDockingStations[0]);
+    // focusStation = filteredDockingStations[0] ^
+    _baseMapWithStation.refocusCamera(_docks);
+
     _baseMapWithStation.controller!.onSymbolTapped
         .add(_baseMapWithStation.onSymbolTapped);
-
-    //focusStation = _baseMapWithStation.chosenDock;
-    // print("/n");
-    // print(focusStation.toString());
-    // print(focusStation!.name.toString());
-
-    // setState(() {
-    //   focusStation = _baseMapWithStation.chosenDock;
-    //   text = focusStation.name.toString();
-    //   // }
-    // });
   }
-
-  ////// USE TIMER ----
-
-  // Timer mytimer = Timer.periodic(Duration(seconds: 3), (timer) {
-  //   implementTime();
-  //   // setState(() {});
-  // });
 
   /// For testing
   void addClearDocksButton() {
@@ -165,42 +159,43 @@ class _DockSorterScreen extends State<DockSorterScreen> {
     ));
   }
 
-  void addDockBar() {
-    _baseMapWithStation.addWidget(
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Align(
-          alignment: Alignment(0, 0.9),
-          child: Container(
-              width: 200,
-              height: 50,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15.0)),
-              child: Align(
-                alignment: Alignment.center,
-                child: Text("THIS DOESNT WORK " + getStuff(),
-                    // Timer.periodic(Duration(seconds: 3), (timer) {
-                    //   implementTime();
-                    // }),
-                    //Text("Selected station: " + _baseMapWithStation.text,
-                    //     setState(() {
-                    //       focusStation.name.toString();
-                    //     }), //(_) => setState(() {}),//(_)=> focusStation.name.toString(),
-                    style: TextStyle(fontSize: 12.0)),
-              )),
-        ),
-      ),
-    );
-  }
+  // void addDockBar() {
+  //   _baseMapWithStation.addWidget(
+  //     Padding(
+  //       padding: const EdgeInsets.all(8.0),
+  //       child: Align(
+  //         alignment: Alignment(0, 0.9),
+  //         child: Container(
+  //             width: 200,
+  //             height: 50,
+  //             decoration: BoxDecoration(
+  //                 color: Colors.white,
+  //                 borderRadius: BorderRadius.circular(15.0)),
+  //             child: Align(
+  //               alignment: Alignment.center,
+  //               child: Text("THIS DOESNT WORK " + getStuff(),
+  //                   // Timer.periodic(Duration(seconds: 3), (timer) {
+  //                   //   implementTime();
+  //                   // }),
+  //                   //Text("Selected station: " + _baseMapWithStation.text,
+  //                   //     setState(() {
+  //                   //       focusStation.name.toString();
+  //                   //     }), //(_) => setState(() {}),//(_)=> focusStation.name.toString(),
+  //                   style: TextStyle(fontSize: 12.0)),
+  //             )),
+  //       ),
+  //     ),
+  //   );
+  // }
 
-  String getStuff() {
-    text = "Selected:   ";
-    Timer.periodic(Duration(seconds: 5), (timer) {
-      text = _baseMapWithStation.chosenDock.name.toString();
-    });
-    return text;
-  }
+  // String getStuff() {
+  //   text = "Selected:   ";
+  //   Timer.periodic(Duration(seconds: 5), (timer) {
+  //     //text = _baseMapWithStation.chosenDock.name.toString();
+  //     text = "hi";
+  //   });
+  //   return text;
+  // }
 
   // String implementTime() {
   //   print(text);

@@ -21,7 +21,7 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
 
   // BaseMapboxRouteMap(this._journey, MapModel model) : super(model);
   BaseMapboxRouteMap(this._journey, MapModel model,
-      this._displayPolyline) //ADD BOOLEAN FOR DISPLAYING POLYLINE SO CAN REUSE FOR ONLY MARKERS
+      this._displayPolyline) //ADD BOOLEAN FOR DISPLAYING POLYLINE SO CAN REUSE FOR ONLY MARKERS - remove it now
       : super(model);
 
   /// Initialise map features
@@ -48,9 +48,9 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
 
   /// Display journey and refocus camera position
   void _displayJourneyAndRefocus(List<LatLng> journey) {
-    if (_displayPolyline) {
-      _setJourney(journey);
-    }
+    // if (_displayPolyline) {
+    _setJourney(journey);
+    // }
     //_setJourney(journey);
     _refocusCamera(journey);
     setPolylineMarkers(controller!, journey, polylineSymbols);

@@ -19,12 +19,15 @@ class PanelExtensions {
     return PanelExtensions(context: context);
   }
 
-  late DockingStation closetDockStation;
+  //late DockingStation closetDockStation;
+  dockingStationManager _stationManager = dockingStationManager();
 
   ///builds the bubble which displays the closest docking station from the place specified in the location TextField
   Widget buildDefaultClosestDock(
       TextEditingController editDockTextEditController,
       TextEditingController placeTextController) {
+    //stuff();
+
     return Row(
       mainAxisSize: MainAxisSize.max,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,19 +60,28 @@ class PanelExtensions {
                   return;
                 } else {
                   print(editDockTextEditController.text);
+                  // getCoords(editDockTextEditController);
                 }
+
+                List temp = await locationService
+                    .getPlaceCoords(placeTextController.text);
+                checkInputLocation(
+                    placeTextController, editDockTextEditController);
+                // print("closet dock stattion ${closetDockStation.name}");
 
                 // List temp = await locationService
                 //     .getPlaceCoords(placeTextController.text);
-                // checkInputLocation(
-                //     placeTextController, editDockTextEditController);
+                // checkInput(placeTextController, editDockTextEditController);
                 //print("closet dock stattion ${closetDockStation.name}");
-                // Navigator.push(
-                //     context!,
-                //     MaterialPageRoute(
-                //         builder: (context) => DockSorterScreen(
-                //             _latLng(temp.first, temp.last),
-                //             closetDockStation)));
+
+                Navigator.push(
+                    context!,
+                    MaterialPageRoute(
+                        builder: (context) => DockSorterScreen(
+                            _latLng(temp.first, temp.last),
+                            editDockTextEditController)));
+
+                ///closetDockStation)));
               },
               padding: const EdgeInsets.all(0),
               icon: const Icon(
@@ -105,17 +117,32 @@ class PanelExtensions {
   ///to the location specfied by the user
   void getClosetDock(double? lat, double? lng,
       TextEditingController editDockTextEditController) async {
-    LatLong.LatLng latlngPlace =
-        LatLong.LatLng(lat!, lng!); //coverting list to latlng
-    dockingStationManager _stationManager = dockingStationManager();
-    await _stationManager.importStations();
-    print(latlngPlace);
-    DockingStation closestDock = _stationManager.getClosestDock(latlngPlace);
-    print("KEPPENS");
-    // print(closestDock);
-    this.closetDockStation = closestDock;
-    print("closet dock!!!!! ${closestDock.name}");
-    print("closet dock???????? ${closetDockStation.name}");
-    editDockTextEditController.text = closestDock.name;
+    try {
+      LatLong.LatLng latlngPlace =
+          LatLong.LatLng(lat!, lng!); //coverting list to latlng
+      dockingStationManager _stationManager = dockingStationManager();
+      await _stationManager.importStations();
+      print(latlngPlace);
+      DockingStation closestDock = _stationManager.getClosestDock(latlngPlace);
+      print("KEPPENS");
+      // print(closestDock);
+      //this.closetDockStation = closestDock;
+      //print("closet dock!!!!! ${closestDock.name}");
+      //print("closet dock???????? ${closetDockStation.name}");
+      editDockTextEditController.text = closestDock.name;
+    } catch (error) {
+      print(" caught this exception :  ------------------ ${error}");
+      ScaffoldMessenger.of(context!).showSnackBar(
+        SnackBar(
+          content: Text("Sorry this request failed, please try again later!"),
+        ),
+      );
+    }
+  }
+
+  /// Set the text of the closest dock
+  void setEditDockText(
+      TextEditingController editDockTextEditController, String text) {
+    editDockTextEditController.text = text;
   }
 }
