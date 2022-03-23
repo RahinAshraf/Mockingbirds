@@ -67,6 +67,7 @@ class BaseMapboxMap {
   /// Adds click functionality to map
   void onMapClick(Point<double> point, LatLng coordinates) async {
     recenter = false;
+    print("map tapped! --------------");
     //print(coordinates);
   }
 
@@ -109,6 +110,7 @@ class BaseMapboxMap {
       myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
       annotationOrder: const [AnnotationType.symbol],
       onMapClick: onMapClick,
+      onMapLongClick: onMapClick,
     );
   }
 

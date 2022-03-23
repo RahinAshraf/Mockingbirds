@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart';
 import 'package:veloplan/helpers/navigation_helpers/map_drawings.dart';
+import 'package:veloplan/helpers/navigation_helpers/navigation_helpers.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:veloplan/models/map_models/base_map_with_route_model.dart';
 import 'package:veloplan/providers/route_manager.dart';
@@ -33,6 +34,7 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
   List<num> durations = [];
   List<dynamic> _journeyPoints = [];
   int _currentStation = 0;
+  bool buttonPressed = true;
 
   @override
   void updateCurrentLocation() async {
@@ -79,7 +81,13 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
   void updateRoute() {
     //! check new if we need to reroute here if yes then we update
     //! check if we are within 10m
-    ++_currentStation;
+    if (isAtGoal) {
+      return;
+    }
+    double distance = calculateDistance(_target, _journey[_currentStation]);
+    if (distance < 0.01) {
+      ++_currentStation;
+    }
     removePolylineMarkers(controller!, _journey, _polylineSymbols);
     removeFills(controller, _polylineSymbols, fills);
     _displayJourneyAndRefocus();
@@ -154,11 +162,16 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
     durations.add(duration);
     _routeResponse['geometry'].update("coordinates", (value) => _journeyPoints);
   }
+
+  @override
+  void onMapClick(Point<double> point, LatLng coordinates) async {
+    recenter = false;
+  }
 }
 
-/// TODO: if user has pressed button refocus on current location if user taps screen go back to follow
+/// DONE: if user has pressed button refocus on current location if user taps screen go back to follow
 /// DONE: split up walking and biking distance, check if you've been on the first goal
 /// TODO: check if we're at the last place
-/// TODO: if within 10m of target utdate integer
+/// DONE: if within 10m of target utdate integer
 /// TODO: Check endpoints if still avalible -> help Nicole/Lili
 /// TODO: Redirect

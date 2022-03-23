@@ -27,9 +27,9 @@ class MapUpdatedRoutePage extends StatefulWidget {
   List<LatLng> points = [
     LatLng(51.514951, -0.112762),
     LatLng(51.513146, -0.115256),
-    LatLng(51.511407, -0.125497),
-    LatLng(51.506053, -0.130310),
-    LatLng(51.502254, -0.217760),
+    // LatLng(51.511407, -0.125497),
+    // LatLng(51.506053, -0.130310),
+    // LatLng(51.502254, -0.217760),
   ];
   // MapUpdatedRoutePage(this._journey);
   @override
@@ -94,7 +94,7 @@ class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
           }
         },
         child: const Icon(
-          Icons.stop,
+          Icons.close_rounded,
         ),
         backgroundColor: Colors.red,
       ),

@@ -112,7 +112,7 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
       var duration = await manager.getDuration() as double; //sec
 
       _totalDistanceAndTime = "distance: " +
-          (distance / 1000).truncate().toString() +
+          (distance / 1000).toStringAsFixed(2) +
           "km, duration: " +
           (duration / 60).truncate().toString();
       print(_totalDistanceAndTime);
