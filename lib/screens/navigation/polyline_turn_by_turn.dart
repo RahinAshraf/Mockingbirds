@@ -52,7 +52,7 @@ class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
   Widget build(BuildContext context) {
     return Scaffold(body: ScopedModelDescendant<MapModel>(
         builder: (BuildContext context, Widget? child, MapModel model) {
-      _baseMapWithUpdatedRoute = MapWithRouteUpdated(_journey, model);
+      _baseMapWithUpdatedRoute = MapWithRouteUpdated(_journey, model, context);
       addPositionZoom();
       addStopTurnByTurn();
       return SafeArea(
