@@ -20,9 +20,12 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
   late bool _displayPolyline;
 
   // BaseMapboxRouteMap(this._journey, MapModel model) : super(model);
-  BaseMapboxRouteMap(this._journey, MapModel model,
-      this._displayPolyline) //ADD BOOLEAN FOR DISPLAYING POLYLINE SO CAN REUSE FOR ONLY MARKERS - remove it now
-      : super(model);
+  BaseMapboxRouteMap(
+    this._journey,
+    MapModel model,
+  ) //ADD BOOLEAN FOR DISPLAYING POLYLINE SO CAN REUSE FOR ONLY MARKERS - remove it now
+  //  this._displayPolyline
+  : super(model);
 
   /// Initialise map features
   @override
@@ -36,11 +39,7 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
   }
 
   /// Calls [onSymbolTapped] functionality for docking station markers on maps that do not [_displayPolyline]
-  void onMarkerTapped(MapboxMapController controller) {
-    // if (!_displayPolyline) {
-    //   controller.onSymbolTapped.add(onSymbolTapped);
-    // }
-  }
+  void onMarkerTapped(MapboxMapController controller) {}
 
   /// Retrieves the [stationData] of the docking station [symbol] that was tapped
   @override
@@ -48,12 +47,10 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
 
   /// Display journey and refocus camera position
   void _displayJourneyAndRefocus(List<LatLng> journey) {
-    // if (_displayPolyline) {
     _setJourney(journey);
-    // }
-    //_setJourney(journey);
     _refocusCamera(journey);
-    setPolylineMarkers(controller!, journey, polylineSymbols);
+    //setPolylineMarkers(controller!, journey, polylineSymbols); - renamed
+    setLocationMarkers(controller!, journey, polylineSymbols);
   }
 
   /// Refocus camera positioning to focus on the [journey] polyline

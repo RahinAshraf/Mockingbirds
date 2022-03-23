@@ -1,10 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:veloplan/screens/journey_planner_screen.dart';
-import 'package:veloplan/screens/navigation/map_with_route_screen.dart';
 import 'package:veloplan/screens/summary_journey_screen.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
 import 'package:veloplan/widgets/panel_widget/panel_widget_exts.dart';
@@ -94,8 +92,6 @@ class PanelWidgetState extends State<PanelWidget> {
   ///imports the docking stations from the TFL api
   void importDockStation() async {
     await _stationManager.importStations();
-    print(_stationManager.stations.length.toString() +
-        "this is the length of the stationManager");
   }
 
   ///Initialises variables and listens for user interaction to act on

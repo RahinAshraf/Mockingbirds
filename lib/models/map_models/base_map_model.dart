@@ -6,9 +6,12 @@ import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/helpers/live_location_helper.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:veloplan/models/docking_station.dart';
+import 'package:veloplan/providers/location_service.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:veloplan/.env.dart';
 import 'package:veloplan/widgets/docking_station_card.dart';
+
+import '../../screens/journey_planner_screen.dart';
 
 /// Class to display a mapbox map with other possible widgets on top
 /// Author(s): Fariha Choudhury k20059723, Elisabeth Koren Halvorsen k20077737
@@ -24,7 +27,10 @@ class BaseMapboxMap {
   late final bool _useLiveLocation;
   Timer? timer;
 
-  BaseMapboxMap(this.model) {
+  late final StreamController<MapPlace>? address;
+  final locService = LocationService();
+
+  BaseMapboxMap(this.model, {this.address}) {
     cameraPosition = CameraPosition(target: _target, zoom: 15);
     // if (_useLiveLocation) {
     //   _setMapWithLiveLocation();
@@ -45,14 +51,22 @@ class BaseMapboxMap {
     return _widgets;
   }
 
+  // @override
+  // void onMapCreated(MapboxMapController controller) async {
+  //   this.controller = controller;
+  //   model.setController(controller);
+  // }
+
   /// Initialize map features
   void onMapCreated(MapboxMapController controller) async {
-    timer = Timer.periodic(
-        Duration(seconds: 2), (Timer t) => updateCurrentLocation());
     this.controller = controller;
     model.setController(controller);
-    model.fetchDockingStations();
-    model.controller?.onSymbolTapped.add(onSymbolTapped);
+    timer = Timer.periodic(
+        Duration(seconds: 2), (Timer t) => updateCurrentLocation());
+    if (address == null) {
+      model.fetchDockingStations();
+      model.controller?.onSymbolTapped.add(onSymbolTapped);
+    }
   }
 
   void updateCurrentLocation() async {
@@ -68,8 +82,17 @@ class BaseMapboxMap {
 
   /// Adds click functionality to map
   void onMapClick(Point<double> point, LatLng coordinates) async {
-    //print(coordinates);
+    if (address != null) {
+      Map s = await locService.reverseGeoCode(
+          coordinates.latitude, coordinates.longitude);
+      address!.sink.add(MapPlace(s['place'], s['location']));
+      print(s['place']);
+      print("Latitdue");
+      print(s['location'].latitude);
+      print(coordinates);
+    }
   }
+  //print(coordinates);
 
   /// Defines [onSymbolTapped] functionality for a docking station marker
   // void onMarkerTapped(MapboxMapController controller) {
@@ -87,30 +110,11 @@ class BaseMapboxMap {
     }
   }
 
-  /// Shows the information about the pressed docking station
-  // void displayDockCard(LatLng current) {
-  //   //CHANGE THIS TO CREATE CARD
-  //   //! CAN BE MOVED TO HELPER ONCE HRISTINA IS FINISHED WITH IT
-  //   print("Will call widget next");
-  // }
-
   /// Displays card with [stationData] about pressed on docking station
   void displayDockCard(Map<dynamic, dynamic>? stationData) {
     DockingStation station = stationData!["station"];
     DockingStationCard.station(station);
   }
-
-  /// Initialises map without live location
-  // void _setMapWithoutLiveLocation() {
-  //   _map = MapboxMap(
-  //     accessToken: _accessToken,
-  //     initialCameraPosition: cameraPosition,
-  //     onMapCreated: onMapCreated,
-  //     myLocationEnabled: true,
-  //     annotationOrder: [AnnotationType.symbol],
-  //     onMapClick: onMapClick,
-  //   );
-  // }
 
   /// Initialises map with live location
   void _setMapWithLiveLocation() {

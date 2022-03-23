@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
-import 'package:veloplan/models/map_models/base_map_with_on_click_model.dart';
+import 'package:veloplan/models/map_models/base_map_model.dart';
 import '../widgets/panel_widget/panel_widget.dart';
 import '../providers/location_service.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -18,10 +18,9 @@ class MapPlace {
 }
 
 class JourneyPlanner extends StatefulWidget {
-
   final int? numberOfCyclists;
 
-   JourneyPlanner({Key? key, this.numberOfCyclists}) : super(key: key);
+  JourneyPlanner({Key? key, this.numberOfCyclists}) : super(key: key);
 
   @override
   _JourneyPlanner createState() => _JourneyPlanner();
@@ -36,7 +35,7 @@ class _JourneyPlanner extends State<JourneyPlanner> {
   final StreamController<List<DynamicWidget>> dynamicWidgets =
       StreamController.broadcast();
   final locService = LocationService();
-  late BaseMapboxClickMap _baseClickMap;
+  late BaseMapboxMap _baseMap;
 
   List<DynamicWidget> dynamicWidgetList = [];
   List<List<double?>> coordsList = [];
@@ -63,8 +62,8 @@ class _JourneyPlanner extends State<JourneyPlanner> {
         width: MediaQuery.of(context).size.width,
         child: ScopedModelDescendant<MapModel>(
             builder: (BuildContext context, Widget? child, MapModel model) {
-          _baseClickMap = BaseMapboxClickMap(model, address);
-          return SafeArea(child: Stack(children: _baseClickMap.getWidgets()));
+          _baseMap = BaseMapboxMap(model, address: address);
+          return SafeArea(child: Stack(children: _baseMap.getWidgets()));
         }),
       ),
       Positioned.fill(

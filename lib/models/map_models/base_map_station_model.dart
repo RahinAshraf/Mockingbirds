@@ -20,7 +20,7 @@ class BaseMapboxStationMap extends BaseMapboxRouteMap {
     this._journey,
     this._curentDock,
     MapModel model,
-  ) : super(_journey, model, false);
+  ) : super(_journey, model); //false
 
   late DockingStation chosenDock; //= _chosenDock;
   late List<DockingStation> dockingStations;
@@ -49,7 +49,7 @@ class BaseMapboxStationMap extends BaseMapboxRouteMap {
 
       _curentDock = LatLng(station.lat, station.lon);
       print("SELECTED SYMBOL IS..............: ");
-      print(station.toString());
+      print(station.name.toString());
 
       if (station != chosenDock) {
         super.resetCameraPosition(
@@ -90,9 +90,8 @@ class BaseMapboxStationMap extends BaseMapboxRouteMap {
         controller!, [focus], filteredDockSymbols); //add red and remove
     setYellowMarkers(
         controller!, stations, filteredDockSymbols); //add rest as yellow
-
     stations.insert(0, focus); //put red back into first index
-    print("put in red back :   " + stations.length.toString());
+    print("put red back in :   " + stations.length.toString());
   }
 
   /// Refocus camera positioning to focus on the [journey] polyline
@@ -100,8 +99,6 @@ class BaseMapboxStationMap extends BaseMapboxRouteMap {
     LatLng center = getCenter(latLngPoints);
     Tuple2<LatLng, LatLng> corners = getCornerCoordinates(latLngPoints);
     double zoom = getZoom(calculateDistance(center, corners.item1));
-    print(latLngPoints);
-
     cameraPosition = CameraPosition(target: center, zoom: zoom, tilt: 5);
     controller!.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
   }

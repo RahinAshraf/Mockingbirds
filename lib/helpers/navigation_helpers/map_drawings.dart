@@ -79,6 +79,7 @@ void setRedMarkers(MapboxMapController controller, List<DockingStation> docks,
 }
 
 ///// ADDS SYMBOL LAYERS TO CONTROLLER WITH BIKE INFO :
+/// Adds marker
 void addDockSymbol(MapboxMapController controller, Set<Symbol> symbolsSet,
     DockingStation station, String marker, double iconSize) async {
   symbolsSet.add(await controller.addSymbol(
@@ -92,7 +93,7 @@ void addDockSymbol(MapboxMapController controller, Set<Symbol> symbolsSet,
 }
 
 /// Adds marker symbols for each location of a [journey] list to the map, using [LatLng]s
-void setPolylineMarkers(MapboxMapController controller, List<LatLng> journey,
+void setLocationMarkers(MapboxMapController controller, List<LatLng> journey,
     Set<Symbol> polylineSymbols) async {
   for (var stop in journey) {
     addSymbol(controller, polylineSymbols, stop,
@@ -100,13 +101,14 @@ void setPolylineMarkers(MapboxMapController controller, List<LatLng> journey,
   }
 }
 
-/// Adds marker symbol for a single [point] to the map in its own set
-void setMarker(MapboxMapController controller, LatLng point,
-    Set<Symbol> currentSymbol) async {
-  addSymbol(
-      controller, currentSymbol, point, "assets/icon/yellow_marker.png", 0.1);
-}
+/// Adds marker symbol for a single [point] to the map and the [currentSymbol] set
+// void setMarker(MapboxMapController controller, LatLng point,
+//     Set<Symbol> currentSymbol) async {
+//   addSymbol(
+//       controller, currentSymbol, point, "assets/icon/yellow_marker.png", 0.1);
+// }
 
+/// Adds a symbol to the [MapBoxController] and [symbolsSet] with the given [marker] and [iconSize]
 void addSymbol(MapboxMapController controller, Set<Symbol> symbolsSet,
     LatLng location, String marker, double iconSize) async {
   symbolsSet.add(await controller.addSymbol(

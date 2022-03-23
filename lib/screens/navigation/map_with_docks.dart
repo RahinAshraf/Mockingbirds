@@ -40,8 +40,8 @@ class _MapDockPageState extends State<MapDockPage> {
   Widget build(BuildContext context) {
     return Scaffold(body: ScopedModelDescendant<MapModel>(
         builder: (BuildContext context, Widget? child, MapModel model) {
-      _baseMapWithRoute = BaseMapboxRouteMap(
-          _docks, model, false); //FALSE: DONT DISPLAY POLYLINE - ONLY MARKERS
+      _baseMapWithRoute = BaseMapboxRouteMap(_docks,
+          model); // false  //FALSE: DONT DISPLAY POLYLINE - ONLY MARKERS
       _baseMapWithRoute.controller?.animateCamera(
           //SET CAMERA POSITION TO FOCUS ON CHOSEN DOCK
           CameraUpdate.newCameraPosition(
