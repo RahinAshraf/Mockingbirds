@@ -70,15 +70,6 @@ void setYellowMarkers(MapboxMapController controller,
   }
 }
 
-// void setRedMarker(MapboxMapController controller, DockingStation dock,
-//     Set<Symbol> symbolsSet, Symbol currentRedSymbol) async {
-//   var redMarker = await controller.addSymbol(
-//       controller, symbolsSet, dock, "assets/icon/red_marker.png", 0.2);
-
-//   symbolsSet.add(redMarker);
-//   currentRedSymbol = redMarker;
-// }
-
 void setRedMarkers(MapboxMapController controller, List<DockingStation> docks,
     Set<Symbol> symbolsSet) async {
   for (var station in docks) {
@@ -99,8 +90,6 @@ void addDockSymbol(MapboxMapController controller, Set<Symbol> symbolsSet,
         "station": station,
       }));
 }
-
-/// LOCATION SYMBOLS; LatLng
 
 /// Adds marker symbols for each location of a [journey] list to the map, using [LatLng]s
 void setPolylineMarkers(MapboxMapController controller, List<LatLng> journey,
@@ -126,15 +115,13 @@ void addSymbol(MapboxMapController controller, Set<Symbol> symbolsSet,
 }
 
 /// Removes the specified location markers [polylineSymbols] from the map
-void removePolylineMarkers(
-    MapboxMapController controller, Set<Symbol> polylineSymbols) async {
-  if (polylineSymbols.isNotEmpty) {
-    await controller.removeSymbols(polylineSymbols);
-    polylineSymbols.clear();
-  }
-}
-
-//SAME METHOD AS ABOVE^^^ RENAME --
+// void removePolylineMarkers(
+//     MapboxMapController controller, Set<Symbol> polylineSymbols) async {
+//   if (polylineSymbols.isNotEmpty) {
+//     await controller.removeSymbols(polylineSymbols);
+//     polylineSymbols.clear();
+//   }
+// }
 
 ///Removes all markers from the map that are in [removeMarkerSet] and clears the set
 void removeMarkers(
@@ -144,7 +131,3 @@ void removeMarkers(
     removeMarkerSet.clear();
   }
 }
-
-///TO DO:
-///Separate 'setDockMarkers' from 'setLocationMarkers'
-///dock takes docking station, location takes LatLng

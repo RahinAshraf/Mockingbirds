@@ -135,28 +135,9 @@ class DynamicWidget extends StatelessWidget {
           feature.geometry?.coordinates.first,
           feature.geometry?.coordinates.last,
           editDockTextEditController);
-      // getClosetDock(feature.geometry?.coordinates.first,
-      //     feature.geometry?.coordinates.last, editDockTextEditController);
     }
     print("RESULT => $result");
   }
-
-  // getClosetDock(double? lat, double? lng,
-  //     TextEditingController editDockTextEditController) async {
-  //   LatLong.LatLng latlngPlace =
-  //       LatLong.LatLng(lat!, lng!); //coverting list to latlng
-  //   dockingStationManager _stationManager = dockingStationManager();
-  //   await _stationManager.importStations();
-  //   print(latlngPlace);
-  //   DockingStation closestDock = _stationManager.getClosestDock(latlngPlace);
-  //   print("KEPPENS");
-  //   // print(closestDock);
-  //   this.closetDockStation = closestDock;
-  //   print("closet dock!!!!! ${closestDock.name}");
-  //   print("closet dock???????? ${closetDockStation?.name}");
-  //   editDockTextEditController.text = closestDock.name;
-  //   print("hi");
-  // }
 
   ///Handler for when the user removes a dynamic widget from the list
   void removeDynamic(Function(int) onDelete) {

@@ -1,8 +1,5 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:veloplan/helpers/navigation_helpers/map_drawings.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/models/docking_station.dart';
@@ -10,21 +7,17 @@ import 'package:veloplan/models/map_models/base_map_station_model.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import '../providers/docking_station_manager.dart';
 import '../widgets/docking_stations_sorting_widget.dart';
-
 import 'package:scoped_model/scoped_model.dart';
 
 /// Screen displaying filtered stations around a chosen dock with functionality to sort stations
 /// and view on map
-/// Author(s): Nicole, Fariha
+/// Author(s): Nicole, Fariha Choudhury k20059723
 
 class DockSorterScreen extends StatefulWidget {
   late final LatLng userCoord;
   late TextEditingController editDockTextEditController;
-  //late DockingStation closetDockStation;
 
-  DockSorterScreen(this.userCoord, this.editDockTextEditController,
-      //this.closetDockStation,
-      {Key? key})
+  DockSorterScreen(this.userCoord, this.editDockTextEditController, {Key? key})
       : super(key: key);
 
   @override
@@ -35,20 +28,13 @@ class _DockSorterScreen extends State<DockSorterScreen> {
   LatLng currentLatLng = getLatLngFromSharedPrefs();
   final panelController = PanelController();
   late List<DockingStation> filteredDockingStations = [];
-  late LatLng userCoordinates; //IS THIS THE SAME AS _FOCUSDOCK???
+  late LatLng userCoordinates;
   late TextEditingController editDockTextEditController;
-
-  // late BaseMapboxMap _baseMap;
   late BaseMapboxStationMap _baseMapWithStation;
   List<LatLng> _docks = [];
-  late LatLng _focusDock; //The chosen dock - userCoord
-
-  late DockingStation focusStation;
 
   final Set<Symbol> editDocksSymbols = {};
   final Set<Symbol> selectedDockSymbol = {};
-
-  String text = ""; //closetDockStation;
 
   @override
   void initState() {
@@ -63,19 +49,16 @@ class _DockSorterScreen extends State<DockSorterScreen> {
     var list = await _stationManager.importStations();
     filteredDockingStations =
         _stationManager.get10ClosestDocks(userCoordinates);
-    focusStation = filteredDockingStations[0];
-    //Add to a list of DockingStations^
     for (var station in filteredDockingStations) {
       _docks.add(LatLng(station.lat, station.lon));
-      //Add to a list of LatLng^
     }
-    //As future is returned for filtered docks, must call on map details after retrieving data
-    refreshStations();
+    // Call on map details after retrieving docking station data
+    setBaseMapFeatures();
+    displayStations();
   }
 
   @override
   Widget build(BuildContext context) {
-    //focusStation = super.widget.closetDockStation;
     final panelHeightClosed = MediaQuery.of(context).size.height * 0.4;
     final panelHeightOpen = MediaQuery.of(context).size.height * 0.4;
     getFilteredDocks(userCoordinates);
@@ -100,7 +83,6 @@ class _DockSorterScreen extends State<DockSorterScreen> {
                   _baseMapWithStation = BaseMapboxStationMap(
                     _docks,
                     userCoordinates,
-                    // focusStation,
                     model,
                   );
                   return SafeArea(
@@ -114,17 +96,18 @@ class _DockSorterScreen extends State<DockSorterScreen> {
     ));
   }
 
-  /// Resets docking station markers to display markers and add tap functionality
-  void refreshStations() {
+  /// Set the [filteredDockingStations] list and [editDockTextEditController] to base map
+  void setBaseMapFeatures() {
     _baseMapWithStation.setStationList(filteredDockingStations, _docks);
-
     _baseMapWithStation.setEditTextController(editDockTextEditController);
+  }
 
+  /// Displays the [filteredDockingStations] list with markers with camera focus around default choice
+  /// and add tap on these markers.
+  void displayStations() {
     _baseMapWithStation.displayFeaturesAndRefocus(
         filteredDockingStations, filteredDockingStations[0]);
-    // focusStation = filteredDockingStations[0] ^
     _baseMapWithStation.refocusCamera(_docks);
-
     _baseMapWithStation.controller!.onSymbolTapped
         .add(_baseMapWithStation.onSymbolTapped);
   }
