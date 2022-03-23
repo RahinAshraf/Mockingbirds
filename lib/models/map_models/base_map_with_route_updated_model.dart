@@ -79,7 +79,7 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
   void updateRoute() {
     //! check new if we need to reroute here if yes then we update
     //! check if we are within 10m
-    _currentStation = 1;
+    ++_currentStation;
     removePolylineMarkers(controller!, _journey, _polylineSymbols);
     removeFills(controller, _polylineSymbols, fills);
     _displayJourneyAndRefocus();
@@ -108,6 +108,7 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
     displayJourney();
   }
 
+  /// sets the next section of the bike route
   Future<void> _setBikeRoute() async {
     if (_currentStation >= _journey.length) {
       return;
@@ -135,6 +136,7 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
     // }
   }
 
+  /// sets the route
   Future<void> _setInitRoute(NavigationType type) async {
     if (_currentStation >= _journey.length) {
       isAtGoal = true;
@@ -159,3 +161,4 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
 /// TODO: check if we're at the last place
 /// TODO: if within 10m of target utdate integer
 /// TODO: Check endpoints if still avalible -> help Nicole/Lili
+/// TODO: Redirect

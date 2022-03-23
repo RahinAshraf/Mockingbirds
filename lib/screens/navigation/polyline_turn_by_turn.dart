@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:veloplan/models/map_models/base_map_model.dart';
 import 'package:veloplan/models/map_models/base_map_with_route_updated_model.dart';
 import 'package:veloplan/navbar.dart';
 import 'package:veloplan/popups.dart';
+import 'package:veloplan/screens/navigation/map_screen.dart';
 import 'package:veloplan/screens/navigation/turn_by_turn_screen.dart';
 import 'package:veloplan/widgets/popup_widget.dart';
 import '../../models/map_models/base_map_with_route_model.dart';
@@ -46,25 +48,18 @@ class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
     // print("points: " + _journey.toString());
   }
 
-  void myTapCallback(MapWithRouteUpdated page) {
-    print('is at goal $page.isAtGoal');
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: ScopedModelDescendant<MapModel>(
         builder: (BuildContext context, Widget? child, MapModel model) {
       _baseMapWithUpdatedRoute = MapWithRouteUpdated(_journey, model);
       addPositionZoom();
+      addStopTurnByTurn();
       return SafeArea(
           child: Stack(children: _baseMapWithUpdatedRoute.getWidgets()));
 
       ///* listen to isAtGoal if is at goal redirect
     }));
-  }
-
-  void checkValue() {
-    if (_baseMapWithUpdatedRoute.isAtGoal) {}
   }
 
   /// add positional zoom to our widgets
@@ -80,6 +75,28 @@ class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
           _baseMapWithUpdatedRoute.recenter = true;
         },
         child: const Icon(Icons.my_location),
+      ),
+    ));
+  }
+
+  /// add a reroute button to navbar
+  void addStopTurnByTurn() {
+    _baseMapWithUpdatedRoute.addWidget(Container(
+      alignment: Alignment(0.9, -0.90),
+      child: FloatingActionButton(
+        heroTag: "stop_journey",
+        onPressed: () {
+          try {
+            Navigator.of(context).pushReplacement(new MaterialPageRoute(
+                builder: (BuildContext context) => MapPage()));
+          } catch (e) {
+            log("failed to push replacement");
+          }
+        },
+        child: const Icon(
+          Icons.stop,
+        ),
+        backgroundColor: Colors.red,
       ),
     ));
   }
