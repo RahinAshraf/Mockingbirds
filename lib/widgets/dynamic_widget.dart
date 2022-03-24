@@ -1,15 +1,12 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
 import 'package:veloplan/widgets/panel_widget/panel_widget_exts.dart';
 import '../helpers/live_location_helper.dart';
 import '../providers/location_service.dart';
 
 ///The widgets the user dynamically creates during runtime, for them to specify the locations of the journey.
-///Each dynamic widget has the following properties:
-/// - red cross, to delete a location from the journey planner list
-/// - TextField , which redirects the user to PlaceSearchScreen to insert a location to the journey planner list
-/// - menu item icon, to indicate to the user that the list is reorderable via dragging
 ///@author: Rahin Ashraf - k20034059
 
 class DynamicWidget extends StatelessWidget {
@@ -21,6 +18,7 @@ class DynamicWidget extends StatelessWidget {
   int position = -1;
   final locationService = LocationService();
   final Map? coordDataMap;
+  late List<LatLng> latLngList;
 
   ///set the position of the selected coordinates list to the passed in index
   void setIndex(index) {
@@ -31,11 +29,11 @@ class DynamicWidget extends StatelessWidget {
   @override
   void initState() {
     placeTextController.addListener(() {
-      PanelExtensions.of().checkInputLocation(placeTextController, editDockTextEditController);
+      PanelExtensions.of().checkInputLocation(placeTextController, editDockTextEditController, latLngList);
     });
   }
 
-  DynamicWidget({Key? key, required this.selectedCoords, this.coordDataMap})
+  DynamicWidget({Key? key, required this.selectedCoords, this.coordDataMap, required this.latLngList })
       : super(key: key);
 
   @override
@@ -65,7 +63,10 @@ class DynamicWidget extends StatelessWidget {
                   child: TextField(
                     onEditingComplete: () {
                       print("ONCHANGED");
-                      PanelExtensions.of(context:context).checkInputLocation(placeTextController, editDockTextEditController);
+                      final ext = PanelExtensions.of(context:context);
+                      ext.setPosition(position);
+                      ext . checkInputLocation(placeTextController,
+                          editDockTextEditController, latLngList);
                     },
                     readOnly: true,
                     onTap: () {
@@ -102,12 +103,13 @@ class DynamicWidget extends StatelessWidget {
             ],
           ),
         ),
-      PanelExtensions(context: context).buildDefaultClosestDock(editDockTextEditController, placeTextController)
+      PanelExtensions(context: context).buildDefaultClosestDock(editDockTextEditController, placeTextController, latLngList)
       ],
     );
   }
 
-  ///Executed when the user presses on a location TextField
+  ///Executed when the user presses on a location TextField. The [position] is the position of the SearchBar of destinations
+  ///respect to the other SearchBars in the Journey Planner
   void _handleSearchClick(BuildContext context, int position) async {
     final result = await context.openSearch();
     print("Navigator_Navigator_Navigator => $position");
@@ -123,7 +125,7 @@ class DynamicWidget extends StatelessWidget {
         selectedCoords?[position] = feature.geometry?.coordinates;
       }
       PanelExtensions.of(context: context).getClosetDock(feature.geometry?.coordinates.first,
-          feature.geometry?.coordinates.last, editDockTextEditController);
+          feature.geometry?.coordinates.last, editDockTextEditController, latLngList);
     }
     print("RESULT => $result");
   }
@@ -135,10 +137,11 @@ class DynamicWidget extends StatelessWidget {
 
   ///Reacts to user input for the location TextField
   void checkInputLocation(){
-    PanelExtensions.of().checkInputLocation(placeTextController, editDockTextEditController);
+    PanelExtensions.of().checkInputLocation(placeTextController, editDockTextEditController, latLngList);
   }
 
-  ///When called, this function sets location of a TextField to the users current location
+  ///When called, this function sets location of a TextField to the users current location. The [controller] is filled in
+  ///with the current location of the user.
   _useCurrentLocationButtonHandler(
       Map response, TextEditingController controller) async {
     sharedPreferences.setString('source', json.encode(response));

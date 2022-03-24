@@ -23,25 +23,30 @@ import '../dynamic_widget.dart';
 ///@author: Rahin Ashraf - k20034059
 
 class PanelWidget extends PanelWidgetBase {
+  late List<LatLng> dockList;
    PanelWidget({Key? key, required Map<String, List<double?>> selectionMap, required Stream<MapPlace> address,
      required ScrollController scrollController, required StreamController<List<DynamicWidget>> dynamicWidgets,
      required List<DynamicWidget> listDynamic, required List<List<double?>?> selectedCoords,
      required Map<String, List<double?>> staticListMap, required TextEditingController toTextEditController,
      required int numberOfCyclists,
-     required TextEditingController fromTextEditController, required PanelController panelController})
+     required TextEditingController fromTextEditController, required PanelController panelController,
+     required this.dockList})
        : super(selectionMap: selectionMap, address: address, scrollController: scrollController,
        dynamicWidgets: dynamicWidgets, listDynamic: listDynamic, selectedCoords: selectedCoords,
        staticListMap: staticListMap, toTextEditController: toTextEditController,
-       fromTextEditController: fromTextEditController, panelController: panelController, numberOfCyclists: numberOfCyclists);
+       fromTextEditController: fromTextEditController, panelController: panelController,
+       numberOfCyclists: numberOfCyclists);
   @override
   PanelWidgetState createState() {
     return PanelWidgetState();
   }
 
-  ///Returns whether or not the user has specified a destination. If not, displays an error message
+  ///Returns whether or not the user has specified a destination. If not, displays an [alert]
   bool hasSpecifiedOneDestination(BuildContext context, Alerts alert) => oneDestinationMustBeSpecified(this, context, alert);
 
-  ///Handle when the user presses a textfield to input a location
+  ///Handle when the user presses a TextField to input a location. The [textEditingController] is the TextField that the
+   ///user pressed on to search for a location. [onAddressAdded] are the coordinates of the address the user selects to add
+   ///to their journey
   void handleOnSearchClick(BuildContext context,
       TextEditingController textEditingController,
       Function(List<double?>) onAddressAdded){
@@ -60,12 +65,15 @@ class PanelWidgetState extends State<PanelWidget> {
   static const String fromLabelKey = "From";
   static const String toLabelKey = "To";
   final Alerts alert = Alerts();
+  late List<LatLng> dockList;
 
-  ///creates a new dynamic widget and adds this to the list of destinations for the journey
+  ///Adds a new dynamic widget to the list of destinations for the journey
   addDynamic() {
     widget.listDynamic.add(DynamicWidget(
       selectedCoords: widget.selectedCoords,
       coordDataMap: response,
+      latLngList: dockList,
+
     ));
     widget.dynamicWidgets.sink.add(widget.listDynamic);
   }
@@ -73,13 +81,12 @@ class PanelWidgetState extends State<PanelWidget> {
   ///imports the docking stations from the TFL api
   void importDockStation() async {
     await _stationManager.importStations();
-    print(_stationManager.stations.length.toString() +
-        "this is the length of the stationManager");
   }
 
   ///Initialises variables and listens for user interaction to act on
   @override
   void initState() {
+    dockList = widget.dockList;
     staticListMap = widget.staticListMap;
     selectionMap = widget.selectionMap;
     print("PanelWidgetState => ${widget.numberOfCyclists}"); //access number of cyclist like this
@@ -98,27 +105,28 @@ class PanelWidgetState extends State<PanelWidget> {
     super.initState();
   }
 
+  ///Listens to the map and adds the place that the user taps on the map, to the Journey Planner as a new location.
   void _listToMapClick() {
     final selectedCoords = widget.selectedCoords;
 
     widget.address.listen((event) {
       final dynamicWidget = DynamicWidget(
         selectedCoords: selectedCoords,
-        coordDataMap: response,
+        coordDataMap: response,   latLngList: dockList,
       );
 
+      //Cannot add by click of the map if there exists non-specified locations
       final list = widget.listDynamic;
       if (list.any((element) => element.placeTextController.text.isEmpty)) {
         alert.showSnackBarErrorMessage(context, alert.cannotHaveEmptySearchLocationsMessage);
         return;
       }
 
+      //Set the location tapped on from the map, as the place specified in the destination TextController
       dynamicWidget.placeTextController.text = event.address ?? "";
       dynamicWidget.checkInputLocation();
       dynamicWidget.position = widget.listDynamic.length;
       widget.listDynamic.add(dynamicWidget);
-      print(
-          "DynamicWidget_pos: ${dynamicWidget.position} ${selectedCoords.length} _${widget.listDynamic.length}");
 
       if (dynamicWidget.position > selectedCoords.length) {
         selectedCoords.add([event.coords?.latitude, event.coords?.longitude]);
@@ -130,7 +138,7 @@ class PanelWidgetState extends State<PanelWidget> {
     });
   }
 
-  ///When called, this function sets the first location of the journey to the users current location
+  ///This function sets the [controller] to the users current location.
   _useCurrentLocationButtonHandler(
       TextEditingController controller, String key) async {
     sharedPreferences.setString('source', json.encode(response));
@@ -141,12 +149,12 @@ class PanelWidgetState extends State<PanelWidget> {
     controller.text = place;
     staticListMap[key] = currentLocationCoords;
 
-    PanelExtensions.of().checkInputLocation(controller, editDockTextEditController);
+    PanelExtensions.of().checkInputLocation(controller, editDockTextEditController,  dockList,);
   }
 
-
-  ///Function which builds the static row of components which are displayed permanently. Statically built, as every journey
-  ///needs to specify a starting point
+  ///Builds the static row of components which are displayed permanently. Statically built, as every journey
+  ///needs to specify a starting point. [controller] is the TextField used to input and display the destination the user is
+  ///to start their journey from. [hintText] is the text to describe the purpose of each TextField to the user.
   Widget _buildStatic(TextEditingController controller,
       {String? hintText,
         required BuildContext context,
@@ -181,8 +189,7 @@ class PanelWidgetState extends State<PanelWidget> {
                         widget.handleOnSearchClick(context, controller, onAddressAdded);
                       },
                       onEditingComplete: () {
-                        print("ONCHANGED");
-                        PanelExtensions.of(context:context).checkInputLocation(controller, editDockTextEditController);
+                        PanelExtensions.of(context:context).checkInputLocation(controller, editDockTextEditController,   dockList,);
                       },
                       controller: controller,
                       decoration: InputDecoration(
@@ -212,21 +219,28 @@ class PanelWidgetState extends State<PanelWidget> {
           ],
         ),
         PanelExtensions.of(context: context).buildDefaultClosestDock(editDockTextEditController,
-            controller),
+            controller,  dockList,),
       ],
     );
   }
 
+  ///Given a coordinate, [newCord], it sets the 'From' location as the place specified by the coordinates passed in
   void addCordFrom(List<double?> newCord) {
     staticListMap[fromLabelKey] = newCord;
-    PanelExtensions.of(context: context).getClosetDock(newCord[0],
-        newCord[1], editDockTextEditController);
+    final ext = PanelExtensions.of(context:context);
+    ext.setPosition(position);
+    ext.getClosetDock(newCord[0],
+        newCord[1], editDockTextEditController,  dockList,);
   }
 
+  ///Given a coordinate, [newCord], it sets the 'To' location as the place specified by the coordinates passed in
   void addCordTo(List<double?> newCord) {
     staticListMap[toLabelKey] = newCord;
   }
 
+  ///Callback for when the user reorders items in the list of locations. It rearranges the order of the
+  ///coordinates according to the reordering of the listItems. [oldIndex] is where the item used to be located in the
+  ///draggable list, and [newIndex] is where the item has been moved to by the user.
   void _updateItems(int oldIndex, int newIndex) {
     if (newIndex > oldIndex) {
       newIndex -= 1;
@@ -242,7 +256,6 @@ class PanelWidgetState extends State<PanelWidget> {
     }
   }
 
-  ///The build which creates the panel itself.
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -357,15 +370,12 @@ class PanelWidgetState extends State<PanelWidget> {
       print("ALL_COORDINATES => $tempList");
       List<LatLng>? points = convertListDoubleToLatLng(tempList);
 
-      List<LatLng>closestDockList = [];
-      if(points != null){
-        for(int i=0; i < points.length; i++){
-          DockingStation closestDock = _stationManager.getClosestDock(LatLng(points[i].latitude, points[i].longitude));
-          LatLng closetDockCoord = LatLng(closestDock.lat,closestDock.lon);
-          closestDockList.add(closetDockCoord);
-        }
-        print("ALL_COORDINATES FOR CLOSEST DOCKS => $closestDockList");
-      }
+
+      ///REMOVE THIS TO USE EDIT DOCK CONTROLLERS - DO NOT RECALCULATE IT /////////////////////////////////////////
+      List<LatLng> closestDockList = dockList;
+      print("ALREADY EXISTS ==> $closestDockList");
+      ///REMOVE THIS TO USE EDIT DOCK CONTROLLERS - DO NOT RECALCULATE IT /////////////////////////////////
+
 
       List<LatLng> closestDocksWithNoAdjancents = [];
       for(int i=0; i < closestDockList.length - 1; i++){
@@ -398,8 +408,9 @@ class PanelWidgetState extends State<PanelWidget> {
     }
   }
 
-  ///applies all the constraints needed for the panel widget. If any constraints are broken, program execution terminates
-  ///and  displays necessary error message to the user
+  ///Applies all the constraints needed for the panel widget. If any constraints are broken, program execution terminates
+  ///and  displays necessary error message to the user. [fromEditingController] and the [toEditingController] are the
+  ///controllers where the user specifies the destination to start their journey from and where to go respectively.
   void applyConstraints(TextEditingController fromEditingController,
       TextEditingController toEditingController) {
     if (startLocationMustBeSpecified(fromEditingController) ||
@@ -416,8 +427,13 @@ class PanelWidgetState extends State<PanelWidget> {
     }
   }
 
-  ///The logic to restrict the user from being able to start a journey with 2 locations in the journey being one after the other
+  ///The logic to restrict the user from being able to start a journey with 2 locations in the journey being
+  ///one after the other. [myList] is the list of coordinates for the journey, produced from the destinations
+  ///the user selects to visit.
   bool areAdjacentCoords(List<List<double?>?> myList) {
+    if(myList.isEmpty){
+      return true;
+    }
     for (int i = 0; i < myList.length - 1; i++) {
       if (myList[i]?.first == myList[i + 1]?.first &&
           myList[i]?.last == myList[i + 1]?.last) {
@@ -434,7 +450,8 @@ class PanelWidgetState extends State<PanelWidget> {
     return false;
   }
 
-  ///The logic to restrict the user from being able to start a journey, with blank location fields
+  ///The logic to restrict the user from being able to start a journey, with blank location fields. [list] is the list of
+  ///dynamic widgets, where the user has inputted the destinations they wish to visit on their trip.
   bool aSearchBarCannotBeEmpty(List<DynamicWidget>? list) {
     bool isFieldNotEmpty = true;
     if (list == null) {
@@ -454,7 +471,8 @@ class PanelWidgetState extends State<PanelWidget> {
     return false;
   }
 
-  ///The logic to restrict the user from being able to start a journey without a starting point
+  ///The logic to restrict the user from being able to start a journey without a starting point in the
+  ///[textEditingController].
   bool startLocationMustBeSpecified(
       TextEditingController textEditingController) {
     if (widget.fromTextEditController.text.isEmpty) {

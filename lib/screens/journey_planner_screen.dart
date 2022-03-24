@@ -11,17 +11,19 @@ import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:veloplan/widgets/dynamic_widget.dart';
 
 ///@author - Rahin Ashraf
+///The place on the Map
 class MapPlace {
   String? address;
   LatLng? coords;
+
   MapPlace(this.address, this.coords);
 }
 
+///The screen in the app where the user specifies the locations they wish to visit in London on their trip
 class JourneyPlanner extends StatefulWidget {
-
   final int? numberOfCyclists;
 
-   JourneyPlanner({Key? key, this.numberOfCyclists}) : super(key: key);
+  JourneyPlanner({Key? key, this.numberOfCyclists}) : super(key: key);
 
   @override
   _JourneyPlanner createState() => _JourneyPlanner();
@@ -40,6 +42,7 @@ class _JourneyPlanner extends State<JourneyPlanner> {
 
   List<DynamicWidget> dynamicWidgetList = [];
   List<List<double?>> coordsList = [];
+  List<LatLng> dockList = [];
 
   @override
   void initState() {
@@ -89,6 +92,7 @@ class _JourneyPlanner extends State<JourneyPlanner> {
             numberOfCyclists: widget.numberOfCyclists ?? 0,
             selectedCoords: coordsList,
             staticListMap: staticCordMap,
+            dockList: dockList,
           ),
         ),
       ),

@@ -46,7 +46,8 @@ class BaseMapboxMap {
   /// Initialize map features
   void onMapCreated(MapboxMapController controller) async {
     timer = Timer.periodic(
-        Duration(seconds: 2), (Timer t) => updateCurrentLocation());
+       Duration(seconds: 40 ), (Timer t) => updateCurrentLocation());
+    updateCurrentLocation();
     this.controller = controller;
     model.setController(controller);
     model.fetchDockingStations();
@@ -59,9 +60,7 @@ class BaseMapboxMap {
     sharedPreferences.clear();
     sharedPreferences.setDouble('latitude', _newLocationData.latitude!);
     sharedPreferences.setDouble('longitude', _newLocationData.longitude!);
-    // print("UPDATED");
-    // print(_newLocationData.latitude!);
-    // print(_newLocationData.longitude!);
+
   }
 
   /// Adds click functionality to map
