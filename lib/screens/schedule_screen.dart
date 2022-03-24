@@ -19,7 +19,7 @@ class _SchedulePageState extends State<SchedulePage> {
 
   @override
   void initState() {
-    helper.getAllJourneyDocuments().then((data) {
+    helper.getAllScheduleDocuments().then((data) {
       setState(() {
         journeyList = data;
       });

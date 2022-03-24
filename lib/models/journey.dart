@@ -3,7 +3,7 @@ import 'package:mapbox_gl/mapbox_gl.dart';
 import 'docking_station.dart';
 import '../helpers/navigation_helpers/navigation_conversion_helpers.dart';
 
-///Represents a journey which is made up of list of docking stations
+///Represents a journey which is made up of list of docking stations and/or destinations.
 ///Author: Tayyibah
 
 class Journey {
@@ -20,23 +20,28 @@ class Journey {
   List<DockingStation>? get stationList => _stationList;
   int? get numberOfCyclists => _numberOfCyclists;
 
+  ///Creates a journey from firebase when a journey has started,
+  ///to include its document id, list of docking stations and start time.
+
   Journey.map(DocumentSnapshot document, List<DockingStation> stationList) {
     _journeyDocumentId = document.id;
-    _date = document.get('date');
+    _date = (document.get('date')).toDate();
     _stationList = stationList;
   }
 
-  Journey.mapDates(DocumentSnapshot document) {
+  ///Creates a scheduled journey from firebase to include its planned date, document id
+  ///and list of destinations
+  Journey.scheduleMap(DocumentSnapshot document) {
     var geoList = document.get('points');
 
     List<List<double>> tempList = [];
     for (int i = 0; i < geoList.length; i++) {
       tempList.add([geoList[i].latitude, geoList[i].longitude]);
     }
+
     _myDestinations = convertListDoubleToLatLng(tempList);
     _journeyDocumentId = document.id;
-    var timeStamp = document.get('date');
-    _date = timeStamp.toDate();
+    _date = (document.get('date')).toDate();
     _numberOfCyclists = document.get('numberOfCyclists');
   }
 }

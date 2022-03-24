@@ -382,10 +382,9 @@ class PanelWidgetState extends State<PanelWidget> {
       List<List<double?>?> tempList = [];
       tempList.addAll(staticListMap.values);
       tempList.addAll(widget.selectedCoords);
-      print("ALL_COORDINATES => $tempList");
-      List<LatLng>? points = convertListDoubleToLatLng(tempList);
+
       ScheduleHelper helper = ScheduleHelper();
-      helper.createJourneyEntry(
+      helper.createScheduleEntry(
           widget.journeyDate, tempList, widget.numberOfCyclists);
     }
 
