@@ -1,28 +1,29 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:veloplan/screens/journey_planner_screen.dart';
-import 'package:veloplan/screens/navigation/map_with_route_screen.dart';
-import 'package:veloplan/utilities/dart_exts.dart';
-import 'package:veloplan/widgets/panel_widget/panel_widget_exts.dart';
-import 'package:veloplan/widgets/panel_widget/panel_widgets_base.dart';
-import '../../helpers/navigation_helpers/navigation_conversion_helpers.dart';
-import '../../models/docking_station.dart';
-import '../../providers/location_service.dart';
-import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:veloplan/alerts.dart';
 import 'package:veloplan/helpers/live_location_helper.dart';
-import 'package:veloplan/providers/docking_station_manager.dart';
+import 'package:veloplan/helpers/navigation_helpers/navigation_conversion_helpers.dart';
+import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:veloplan/models/docking_station.dart';
-import '../../styles/colors.dart';
-import '../../styles/styling.dart';
-import '../dynamic_widget.dart';
+import 'package:veloplan/providers/docking_station_manager.dart';
+import 'package:veloplan/providers/location_service.dart';
+import 'package:veloplan/screens/journey_planner_screen.dart';
+import 'package:veloplan/screens/navigation/map_with_route_screen.dart';
+import 'package:veloplan/styles/colors.dart';
+import 'package:veloplan/styles/styling.dart';
+import 'package:veloplan/utilities/dart_exts.dart';
+import 'package:veloplan/widgets/dynamic_widget.dart';
+import 'package:veloplan/widgets/panel_widget/panel_widgets_base.dart';
+import 'package:veloplan/widgets/panel_widget/panel_widget_exts.dart';
 
-///When rendered, the journey_planner_screen will have this panel_widget at the bottom. It is an interactive panel the user can
-///slide up or down, when wanting to input their desired locations for the journey.
-///@author: Rahin Ashraf - k20034059
+/// Renders [PanelWidget] used in [JourneyPlanner] screen.
+///
+/// It is an interactive panel the user can slide up or down,
+/// when wanting to input their desired locations for the journey.
+/// @author: Rahin Ashraf - k20034059
 class PanelWidget extends PanelWidgetBase {
   PanelWidget(
       {Key? key,
@@ -54,11 +55,11 @@ class PanelWidget extends PanelWidgetBase {
     return PanelWidgetState();
   }
 
-  ///Returns whether or not the user has specified a destination. If not, displays an error message
+  /// Returns whether or not the user has specified a destination. If not, displays an error message.
   bool hasSpecifiedOneDestination(BuildContext context, Alerts alert) =>
       oneDestinationMustBeSpecified(this, context, alert);
 
-  ///Handle when the user presses a textfield to input a location
+  /// Handles when the user presses a TextField to input a location.
   void handleOnSearchClick(
       BuildContext context,
       TextEditingController textEditingController,
@@ -81,7 +82,7 @@ class PanelWidgetState extends State<PanelWidget> {
   static const String toLabelKey = "To";
   final Alerts alert = Alerts();
 
-  /// Creates a new dynamic widget and adds this to the list of destinations for the journey.
+  /// Creates a new dynamic widget and adds it to the list of destinations for the journey.
   addDynamic() {
     widget.listDynamic.add(DynamicWidget(
       selectedCoords: widget.selectedCoords,
@@ -236,7 +237,7 @@ class PanelWidgetState extends State<PanelWidget> {
     }
   }
 
-  ///The build which creates the panel itself.
+  /// Creates the panel itself.
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -346,7 +347,7 @@ class PanelWidgetState extends State<PanelWidget> {
 
   /// Deals with the user pressing the START button. Applies the constraints for a journey.
   /// For all the coordinates of the locations the user specified, creates a new list - this new list is a list of all the
-  /// closest docking stations for the locations the user specified. This new list is then passed onto MapRoutePage.
+  /// closest docking stations for the locations the user specified. This new list is then passed onto [MapRoutePage].
   /// THIS FUNCTION NEEDS TO BE REFACTORED FURTHER
   void _handleStartClick() {
     final hasEmptyField = widget.listDynamic
@@ -404,7 +405,7 @@ class PanelWidgetState extends State<PanelWidget> {
       }
 
       if (points == null) {
-        //! show something went wrong allert
+        //! show something went wrong alert
         print("hello");
       } else {
         context.push(MapRoutePage(closestDockList));
@@ -459,7 +460,7 @@ class PanelWidgetState extends State<PanelWidget> {
     for (var element in list) {
       if (element.placeTextController.text.isEmpty) {
         isFieldNotEmpty = false;
-        return true; //true if there is a textfield that is empty
+        return true; // true if there is a TextField that is empty
       }
     }
     if (!isFieldNotEmpty) {
