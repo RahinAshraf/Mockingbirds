@@ -33,6 +33,7 @@ dependencies:
   latlong2: ^0.8.1
   geolocator: ^8.1.1
   favorite_button: ^0.0.4
+  timeline_tile: ^2.0.0
   carousel_slider: ^4.0.0
   smooth_page_indicator: ^1.0.0+2
   flutterfire_ui: ^0.3.4
@@ -106,4 +107,4 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
 
-  
+
