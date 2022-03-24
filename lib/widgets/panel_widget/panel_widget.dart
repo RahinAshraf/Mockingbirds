@@ -261,84 +261,105 @@ class PanelWidgetState extends State<PanelWidget> {
   ///The build which creates the panel itself.
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      controller: widget.scrollController,
-      child: Column(
-        children: [
-          const Padding(
-            padding:
-                EdgeInsets.only(top: 24.0, bottom: 24, right: 12, left: 12),
-            child: Text(
-              'Please specify the starting location of your trip and add destinations by clicking the + button. When you are done, click START.',
-              style: infoTextStyle,
-            ),
-          ),
-          _buildStatic(widget.fromTextEditController,
-              hintText: "Where from?",
-              label: "FROM",
-              context: context,
-              onAddressAdded: addCordFrom),
-          Row(
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(top: 24.0, bottom: 0, right: 12, left: 12),
+          child: Row(
             children: [
-              Column(
+              Text(
+                'Please fill in the following trip details.',
+                style: infoTextStyle,
+              ),
+              SizedBox(width: 5.0),
+              Tooltip(
+                preferBelow: false,
+                margin: EdgeInsets.all(10.0),
+                textStyle: TextStyle(color: Colors.white),
+                message:
+                    'Please specify the starting location of your trip and add destinations by clicking the + button. Tapping on the location in the map is another way of adding a stop to your trip! Ensure there are no blank destinations when you do so. When you are done, click START.',
+                showDuration: const Duration(seconds: 3),
+                child: const Icon(Icons.info_outline_rounded,
+                    size: 20.0, color: Colors.green),
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: ListView(
+            controller: widget.scrollController,
+            children: [
+              _buildStatic(widget.fromTextEditController,
+                  hintText: "Where from?",
+                  label: "FROM",
+                  context: context,
+                  onAddressAdded: addCordFrom),
+              Row(
                 children: [
-                  StreamBuilder<List<DynamicWidget>>(
-                    builder: (_, snapshot) {
-                      List<DynamicWidget> listOfDynamics = snapshot.data ?? [];
+                  Column(
+                    children: [
+                      StreamBuilder<List<DynamicWidget>>(
+                        builder: (_, snapshot) {
+                          List<DynamicWidget> listOfDynamics =
+                              snapshot.data ?? [];
 
-                      return SizedBox(
-                        width: MediaQuery.of(context).size.width - 20,
-                        child: ReorderableListView.builder(
-                          //user can reorder the listItems
-                          itemExtent: 140, // TODO: flexible
-                          padding: EdgeInsets.zero,
-                          shrinkWrap: true,
-                          itemBuilder: (_, index) {
-                            final dynamicWidget = listOfDynamics[index];
-                            dynamicWidget.position = index;
-                            dynamicWidget.removeDynamic((p0) {
-                              widget.listDynamic.removeAt(index);
-                              widget.dynamicWidgets.sink
-                                  .add(widget.listDynamic);
-                            });
-                            return Container(
-                                key: ValueKey(index), child: dynamicWidget);
-                          },
-                          itemCount: listOfDynamics.length,
-                          physics: const NeverScrollableScrollPhysics(),
-                          onReorder: (oldIndex, newIndex) {
-                            setState(() {
-                              _updateItems(oldIndex, newIndex);
-                            });
-                          },
-                        ),
-                      );
-                    },
-                    stream: dynamicWidgetsStream,
+                          return SizedBox(
+                            width: MediaQuery.of(context).size.width - 20,
+                            child: ReorderableListView.builder(
+                              //user can reorder the listItems
+                              itemExtent: 140, // TODO: flexible
+                              padding: EdgeInsets.zero,
+                              shrinkWrap: true,
+                              itemBuilder: (_, index) {
+                                final dynamicWidget = listOfDynamics[index];
+                                dynamicWidget.position = index;
+                                dynamicWidget.removeDynamic((p0) {
+                                  widget.listDynamic.removeAt(index);
+                                  widget.dynamicWidgets.sink
+                                      .add(widget.listDynamic);
+                                });
+                                return Container(
+                                    key: ValueKey(index), child: dynamicWidget);
+                              },
+                              itemCount: listOfDynamics.length,
+                              physics: const NeverScrollableScrollPhysics(),
+                              onReorder: (oldIndex, newIndex) {
+                                setState(() {
+                                  _updateItems(oldIndex, newIndex);
+                                });
+                              },
+                            ),
+                          );
+                        },
+                        stream: dynamicWidgetsStream,
+                      ),
+                    ],
                   ),
                 ],
               ),
             ],
           ),
-          //The default is a + icon
-          buildFloatingActionButton(onPressed: addDynamic),
-          Padding(
-            padding:
-                const EdgeInsets.only(top: 20, bottom: 20, left: 10, right: 10),
-            child: TextButton(
-              style: TextButton.styleFrom(
-                backgroundColor: Color(0xFF99D2A9),
-                primary: Colors.white,
-                shape: new RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(15.0),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width / 2,
+            child: Row(
+              children: [
+                buildFloatingActionButton(onPressed: addDynamic),
+                Padding(
+                    child: Text('OR'),
+                    padding: EdgeInsets.symmetric(horizontal: 5.0)),
+                ElevatedButton(
+                  onPressed: _handleStartClick,
+                  child: text("START"),
                 ),
-              ),
-              onPressed: _handleStartClick,
-              child: text("START"),
+              ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

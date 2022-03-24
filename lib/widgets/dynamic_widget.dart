@@ -49,6 +49,7 @@ class DynamicWidget extends StatelessWidget {
               children: [
                 Expanded(
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       IconButton(
                         onPressed: () {
@@ -58,11 +59,11 @@ class DynamicWidget extends StatelessWidget {
                           }
                           onDelete?.call(position);
                         },
-                        padding: EdgeInsets.zero,
+                        padding: EdgeInsets.symmetric(vertical: 17.0),
                         constraints: BoxConstraints(),
                         icon: const Icon(
                           Icons.close_outlined,
-                          size: 20,
+                          size: 15,
                           color: Colors.red,
                         ),
                       ),
