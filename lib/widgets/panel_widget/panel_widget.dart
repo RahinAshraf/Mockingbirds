@@ -12,6 +12,7 @@ import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:veloplan/providers/location_service.dart';
 import 'package:veloplan/screens/journey_planner_screen.dart';
 import 'package:veloplan/screens/navigation/map_with_route_screen.dart';
+import 'package:veloplan/screens/summary_journey_screen.dart';
 import 'package:veloplan/styles/colors.dart';
 import 'package:veloplan/styles/styling.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
@@ -405,7 +406,7 @@ class PanelWidgetState extends State<PanelWidget> {
         //! show something went wrong alert
         print("hello");
       } else {
-        context.push(MapRoutePage(closestDockList));
+        context.push(SummaryJourneyScreen(closestDockList));
       }
     }
   }

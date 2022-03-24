@@ -1,6 +1,7 @@
 import 'dart:async';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
+import 'package:veloplan/helpers/database_manager.dart';
 import 'package:veloplan/navbar.dart';
 
 class VerifyEmailScreen extends StatefulWidget {
@@ -11,6 +12,7 @@ class VerifyEmailScreen extends StatefulWidget {
 }
 
 class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
+  final DatabaseManager _databaseManager = DatabaseManager();
   bool isVerified = false;
   bool canResendEmail = false;
   Timer? timer;
@@ -18,7 +20,8 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
   @override
   void initState() {
     super.initState();
-    isVerified = FirebaseAuth.instance.currentUser!.emailVerified;
+    isVerified = _databaseManager.getCurrentUser()!.emailVerified;
+
     if (!isVerified) {
       sendVerification();
       timer = Timer.periodic(
@@ -36,7 +39,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
 
   Future sendVerification() async {
     try {
-      final user = FirebaseAuth.instance.currentUser!;
+      final user = _databaseManager.getCurrentUser()!;
       await user.sendEmailVerification();
 
       setState(() => canResendEmail = false);
@@ -61,10 +64,10 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
   }
 
   Future checkEmailVerification() async {
-    await FirebaseAuth.instance.currentUser!.reload();
+    await _databaseManager.getCurrentUser()!.reload();
 
     setState(() {
-      isVerified = FirebaseAuth.instance.currentUser!.emailVerified;
+      isVerified = _databaseManager.getCurrentUser()!.emailVerified;
     });
 
     if (isVerified) timer?.cancel();
@@ -129,7 +132,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                             'Cancel',
                             style: TextStyle(fontSize: 24),
                           ),
-                          onPressed: () => FirebaseAuth.instance.signOut(),
+                          onPressed: () => _databaseManager.signOut(),
                         ),
                       ],
                     ),
