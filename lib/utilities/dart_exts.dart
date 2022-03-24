@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import '../providers/location_service.dart';
 import '../screens/place_search_screen.dart';
+import '../styles/colors.dart';
 
-///helper extensions for panel widget
-///@author: Rahin Ashraf - k20034059
+/// Helper extensions for [PanelWidget].
+/// @author: Rahin Ashraf - k20034059
 extension BuildContextExt on BuildContext {
   Future<dynamic> openSearch() {
     return Navigator.of(this).push(MaterialPageRoute(
@@ -36,10 +37,7 @@ extension WidgetExts on dynamic {
       onPressed: onPressed,
       backgroundColor: Colors.white,
       elevation: 3,
-      child: Icon(
-        iconData,
-        color: Colors.green[200],
-      ),
+      child: Icon(iconData, color: CustomColors.green),
     );
   }
 

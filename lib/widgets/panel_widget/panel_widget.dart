@@ -341,32 +341,35 @@ class PanelWidgetState extends State<PanelWidget> {
             ],
           ),
         ),
+        Divider(),
         Padding(
-          padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width / 2,
-            child: Row(
-              children: [
-                buildFloatingActionButton(onPressed: addDynamic),
-                Padding(
-                    child: Text('OR'),
-                    padding: EdgeInsets.symmetric(horizontal: 5.0)),
-                ElevatedButton(
+          padding: const EdgeInsets.only(bottom: 8.0, top: 8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              buildFloatingActionButton(onPressed: addDynamic),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: const Text('OR'),
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width / 2,
+                child: ElevatedButton(
                   onPressed: _handleStartClick,
                   child: text("START"),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ],
     );
   }
 
-  ///The function to deal with the user pressing the START button. Applies the constraints for a journey.
-  ///For all the coordinates of the locations the user specified, creates a new list - this new list is a list of all the
-  ///closest docking stations for the locations the user specified. This new list is then passed onto MapRoutePage.
-  ///THIS FUNCTION NEEDS TO BE REFACTORED FURTHER
+  /// Deals with the user pressing the START button. Applies the constraints for a journey.
+  /// For all the coordinates of the locations the user specified, creates a new list - this new list is a list of all the
+  /// closest docking stations for the locations the user specified. This new list is then passed onto MapRoutePage.
+  /// THIS FUNCTION NEEDS TO BE REFACTORED FURTHER
   void _handleStartClick() {
     final hasEmptyField = widget.listDynamic
         .any((element) => element.placeTextController.text.isEmpty);
@@ -431,8 +434,8 @@ class PanelWidgetState extends State<PanelWidget> {
     }
   }
 
-  ///applies all the constraints needed for the panel widget. If any constraints are broken, program execution terminates
-  ///and  displays necessary error message to the user
+  /// Applies all the constraints needed for the panel widget.
+  /// If any constraints are broken, program execution terminates and  displays necessary error message to the user.
   void applyConstraints(TextEditingController fromEditingController,
       TextEditingController toEditingController) {
     if (startLocationMustBeSpecified(fromEditingController) ||
@@ -449,7 +452,7 @@ class PanelWidgetState extends State<PanelWidget> {
     }
   }
 
-  ///The logic to restrict the user from being able to start a journey with 2 locations in the journey being one after the other
+  /// Restricts the user from being able to start a journey with 2 locations in the journey being one after the other.
   bool areAdjacentCoords(List<List<double?>?> myList) {
     for (int i = 0; i < myList.length - 1; i++) {
       if (myList[i]?.first == myList[i + 1]?.first &&
@@ -467,7 +470,7 @@ class PanelWidgetState extends State<PanelWidget> {
     return false;
   }
 
-  ///The logic to restrict the user from being able to start a journey, with blank location fields
+  /// Restricts the user from being able to start a journey, with blank location fields.
   bool aSearchBarCannotBeEmpty(List<DynamicWidget>? list) {
     bool isFieldNotEmpty = true;
     if (list == null) {
@@ -489,7 +492,7 @@ class PanelWidgetState extends State<PanelWidget> {
     return false;
   }
 
-  ///The logic to restrict the user from being able to start a journey without a starting point
+  /// Restricts the user from being able to start a journey without a starting point.
   bool startLocationMustBeSpecified(
       TextEditingController textEditingController) {
     if (widget.fromTextEditController.text.isEmpty) {
