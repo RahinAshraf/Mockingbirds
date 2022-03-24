@@ -16,6 +16,7 @@ import 'package:veloplan/alerts.dart';
 import 'package:veloplan/helpers/live_location_helper.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:veloplan/models/docking_station.dart';
+import '../../styles/colors.dart';
 import '../../styles/styling.dart';
 import '../dynamic_widget.dart';
 
@@ -175,56 +176,34 @@ class PanelWidgetState extends State<PanelWidget> {
       required Function(List<double?>) onAddressAdded}) {
     return Column(
       children: [
-        Row(
-          children: [
-            Expanded(
-              child: Column(
-                children: [
-                  SizedBox(
-                    child: TextField(
-                      readOnly: true,
-                      onTap: () {
-                        widget.handleOnSearchClick(
-                            context, controller, onAddressAdded);
-                      },
-                      onEditingComplete: () {
-                        PanelExtensions.of(context: context).checkInputLocation(
-                            controller, editDockTextEditController);
-                      },
-                      controller: controller,
-                      decoration: InputDecoration(
-                        hintText: hintText,
-                        labelText: label,
-                        helperText: 'Please enter your starting location.',
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        focusedBorder: circularInputBorder(
-                            width: 2.0, color: Color(0xFF99D2A9)),
-                        border: circularInputBorder(color: Color(0xFF99D2A9)),
-                        enabledBorder:
-                            circularInputBorder(color: Color(0xFF99D2A9)),
-                        disabledBorder:
-                            circularInputBorder(color: Color(0xFF99D2A9)),
-                        errorBorder:
-                            circularInputBorder(color: Color(0xFF99D2A9)),
-                        focusedErrorBorder:
-                            circularInputBorder(color: Color(0xFF99D2A9)),
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            _useCurrentLocationButtonHandler(controller, label);
-                          },
-                          icon: const Icon(
-                            Icons.my_location,
-                            size: 20,
-                            color: Colors.green,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+        SizedBox(
+          child: TextField(
+            readOnly: true,
+            onTap: () {
+              widget.handleOnSearchClick(context, controller, onAddressAdded);
+            },
+            onEditingComplete: () {
+              PanelExtensions.of(context: context)
+                  .checkInputLocation(controller, editDockTextEditController);
+            },
+            controller: controller,
+            decoration: InputDecoration(
+              hintText: hintText,
+              labelText: label,
+              floatingLabelBehavior: FloatingLabelBehavior.always,
+              border: circularInputBorder(),
+              focusedBorder:
+                  circularInputBorder(width: 2.0, color: CustomColors.green),
+              disabledBorder: circularInputBorder(),
+              suffixIcon: IconButton(
+                onPressed: () {
+                  _useCurrentLocationButtonHandler(controller, label);
+                },
+                icon: Icon(Icons.my_location,
+                    size: 20, color: CustomColors.green),
               ),
             ),
-          ],
+          ),
         ),
         PanelExtensions.of(context: context)
             .buildDefaultClosestDock(editDockTextEditController, controller),
