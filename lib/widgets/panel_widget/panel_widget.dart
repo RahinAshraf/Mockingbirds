@@ -22,7 +22,6 @@ import '../dynamic_widget.dart';
 ///When rendered, the journey_planner_screen will have this panel_widget at the bottom. It is an interactive panel the user can
 ///slide up or down, when wanting to input their desired locations for the journey.
 ///@author: Rahin Ashraf - k20034059
-
 class PanelWidget extends PanelWidgetBase {
   PanelWidget(
       {Key? key,
@@ -81,7 +80,7 @@ class PanelWidgetState extends State<PanelWidget> {
   static const String toLabelKey = "To";
   final Alerts alert = Alerts();
 
-  ///creates a new dynamic widget and adds this to the list of destinations for the journey
+  /// Creates a new dynamic widget and adds this to the list of destinations for the journey.
   addDynamic() {
     widget.listDynamic.add(DynamicWidget(
       selectedCoords: widget.selectedCoords,
@@ -90,20 +89,20 @@ class PanelWidgetState extends State<PanelWidget> {
     widget.dynamicWidgets.sink.add(widget.listDynamic);
   }
 
-  ///imports the docking stations from the TFL api
+  /// Imports the docking stations from the TFL API.
   void importDockStation() async {
     await _stationManager.importStations();
     print(_stationManager.stations.length.toString() +
         "this is the length of the stationManager");
   }
 
-  ///Initialises variables and listens for user interaction to act on
+  /// Initialises variables and listens for user interaction to act on.
   @override
   void initState() {
     staticListMap = widget.staticListMap;
     selectionMap = widget.selectionMap;
     print(
-        "PanelWidgetState => ${widget.numberOfCyclists}"); //access number of cyclist like this
+        "PanelWidgetState => ${widget.numberOfCyclists}"); // access number of cyclists like this
     LatLng currentLocation = getLatLngFromSharedPrefs();
     locService
         .reverseGeoCode(currentLocation.latitude, currentLocation.longitude)
@@ -152,7 +151,7 @@ class PanelWidgetState extends State<PanelWidget> {
     });
   }
 
-  ///When called, this function sets the first location of the journey to the users current location
+  /// When called, this function sets the first location of the journey to the user's current location.
   _useCurrentLocationButtonHandler(
       TextEditingController controller, String key) async {
     sharedPreferences.setString('source', json.encode(response));
@@ -167,8 +166,8 @@ class PanelWidgetState extends State<PanelWidget> {
         .checkInputLocation(controller, editDockTextEditController);
   }
 
-  ///Function which builds the static row of components which are displayed permanently. Statically built, as every journey
-  ///needs to specify a starting point
+  /// Builds the static row of components which are displayed permanently.
+  /// Statically built, as every journey needs to specify a starting point.
   Widget _buildStatic(TextEditingController controller,
       {String? hintText,
       required BuildContext context,
