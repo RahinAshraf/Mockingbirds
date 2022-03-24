@@ -74,7 +74,6 @@ class SideBar extends StatelessWidget {
         ));
         break;
       case 1:
-        // TODO: create 'My Journeys' screen
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => const Placeholder(),
         ));
@@ -85,7 +84,6 @@ class SideBar extends StatelessWidget {
         ));
         break;
       case 3:
-        // TODO: create 'Statistics' screen
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => const Placeholder(),
         ));

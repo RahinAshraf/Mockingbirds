@@ -11,7 +11,7 @@ class Popups {
         text: "Plan a journey",
         onPressed: () {
           Navigator.push(context,
-              MaterialPageRoute(builder: (context) => TripScheduler()));
+              MaterialPageRoute(builder: (context) => TripSchedulerScreen()));
         },
       ),
       PopupButtonWidget(text: "Join a journey", onPressed: () {}),

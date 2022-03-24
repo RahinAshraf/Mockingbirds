@@ -177,32 +177,30 @@ class PanelWidgetState extends State<PanelWidget> {
       required Function(List<double?>) onAddressAdded}) {
     return Column(
       children: [
-        SizedBox(
-          child: TextField(
-            readOnly: true,
-            onTap: () {
-              widget.handleOnSearchClick(context, controller, onAddressAdded);
-            },
-            onEditingComplete: () {
-              PanelExtensions.of(context: context)
-                  .checkInputLocation(controller, editDockTextEditController);
-            },
-            controller: controller,
-            decoration: InputDecoration(
-              hintText: hintText,
-              labelText: label,
-              floatingLabelBehavior: FloatingLabelBehavior.always,
-              border: circularInputBorder(),
-              focusedBorder:
-                  circularInputBorder(width: 2.0, color: CustomColors.green),
-              disabledBorder: circularInputBorder(),
-              suffixIcon: IconButton(
-                onPressed: () {
-                  _useCurrentLocationButtonHandler(controller, label);
-                },
-                icon: Icon(Icons.my_location,
-                    size: 20, color: CustomColors.green),
-              ),
+        TextField(
+          readOnly: true,
+          onTap: () {
+            widget.handleOnSearchClick(context, controller, onAddressAdded);
+          },
+          onEditingComplete: () {
+            PanelExtensions.of(context: context)
+                .checkInputLocation(controller, editDockTextEditController);
+          },
+          controller: controller,
+          decoration: InputDecoration(
+            hintText: hintText,
+            labelText: label,
+            floatingLabelBehavior: FloatingLabelBehavior.always,
+            border: circularInputBorder(),
+            focusedBorder:
+                circularInputBorder(width: 2.0, color: CustomColors.green),
+            disabledBorder: circularInputBorder(),
+            suffixIcon: IconButton(
+              onPressed: () {
+                _useCurrentLocationButtonHandler(controller, label);
+              },
+              icon:
+                  Icon(Icons.my_location, size: 20, color: CustomColors.green),
             ),
           ),
         ),
@@ -244,8 +242,9 @@ class PanelWidgetState extends State<PanelWidget> {
       mainAxisSize: MainAxisSize.max,
       children: [
         Padding(
-          padding: EdgeInsets.only(top: 24.0, bottom: 0, right: 12, left: 12),
+          padding: EdgeInsets.only(top: 24.0, left: 12.0, right: 12.0),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 'Please fill in the following trip details.',
@@ -255,7 +254,12 @@ class PanelWidgetState extends State<PanelWidget> {
               Tooltip(
                 preferBelow: false,
                 margin: EdgeInsets.all(10.0),
+                padding: EdgeInsets.all(10.0),
                 textStyle: TextStyle(color: Colors.white),
+                decoration: BoxDecoration(
+                  color: CustomColors.green,
+                  borderRadius: BorderRadius.circular(20),
+                ),
                 message:
                     'Please specify the starting location of your trip and add destinations by clicking the + button. Tapping on the location in the map is another way of adding a stop to your trip! Ensure there are no blank destinations when you do so. When you are done, click START.',
                 showDuration: const Duration(seconds: 3),
@@ -274,55 +278,48 @@ class PanelWidgetState extends State<PanelWidget> {
                   label: "FROM",
                   context: context,
                   onAddressAdded: addCordFrom),
-              Row(
+              Column(
                 children: [
-                  Column(
-                    children: [
-                      StreamBuilder<List<DynamicWidget>>(
-                        builder: (_, snapshot) {
-                          List<DynamicWidget> listOfDynamics =
-                              snapshot.data ?? [];
+                  StreamBuilder<List<DynamicWidget>>(
+                    builder: (_, snapshot) {
+                      List<DynamicWidget> listOfDynamics = snapshot.data ?? [];
 
-                          return SizedBox(
-                            width: MediaQuery.of(context).size.width - 20,
-                            child: ReorderableListView.builder(
-                              //user can reorder the listItems
-                              itemExtent: 140, // TODO: flexible
-                              padding: EdgeInsets.zero,
-                              shrinkWrap: true,
-                              itemBuilder: (_, index) {
-                                final dynamicWidget = listOfDynamics[index];
-                                dynamicWidget.position = index;
-                                dynamicWidget.removeDynamic((p0) {
-                                  widget.listDynamic.removeAt(index);
-                                  widget.dynamicWidgets.sink
-                                      .add(widget.listDynamic);
-                                });
-                                return Container(
-                                    key: ValueKey(index), child: dynamicWidget);
-                              },
-                              itemCount: listOfDynamics.length,
-                              physics: const NeverScrollableScrollPhysics(),
-                              onReorder: (oldIndex, newIndex) {
-                                setState(() {
-                                  _updateItems(oldIndex, newIndex);
-                                });
-                              },
-                            ),
-                          );
-                        },
-                        stream: dynamicWidgetsStream,
-                      ),
-                    ],
+                      return SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: ReorderableListView.builder(
+                          itemExtent: 120,
+                          shrinkWrap: true,
+                          itemBuilder: (_, index) {
+                            final dynamicWidget = listOfDynamics[index];
+                            dynamicWidget.position = index;
+                            dynamicWidget.removeDynamic((p0) {
+                              widget.listDynamic.removeAt(index);
+                              widget.dynamicWidgets.sink
+                                  .add(widget.listDynamic);
+                            });
+                            return Container(
+                                key: ValueKey(index), child: dynamicWidget);
+                          },
+                          itemCount: listOfDynamics.length,
+                          physics: const NeverScrollableScrollPhysics(),
+                          onReorder: (oldIndex, newIndex) {
+                            setState(() {
+                              _updateItems(oldIndex, newIndex);
+                            });
+                          },
+                        ),
+                      );
+                    },
+                    stream: dynamicWidgetsStream,
                   ),
                 ],
               ),
             ],
           ),
         ),
-        Divider(),
+        SizedBox(child: Divider(), width: MediaQuery.of(context).size.width),
         Padding(
-          padding: const EdgeInsets.only(bottom: 8.0, top: 8.0),
+          padding: const EdgeInsets.only(bottom: 5.0, top: 5.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

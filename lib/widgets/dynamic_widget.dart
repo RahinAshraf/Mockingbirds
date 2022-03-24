@@ -1,17 +1,17 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:veloplan/helpers/live_location_helper.dart';
+import 'package:veloplan/providers/location_service.dart';
+import 'package:veloplan/styles/colors.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
 import 'package:veloplan/widgets/panel_widget/panel_widget_exts.dart';
-import '../helpers/live_location_helper.dart';
-import '../providers/location_service.dart';
 
-///The widgets the user dynamically creates during runtime, for them to specify the locations of the journey.
-///Each dynamic widget has the following properties:
+/// The widgets the user dynamically creates during runtime, for them to specify the locations of the journey.
+/// Each dynamic widget has the following properties:
 /// - red cross, to delete a location from the journey planner list
-/// - TextField , which redirects the user to PlaceSearchScreen to insert a location to the journey planner list
+/// - TextField, which redirects the user to [PlaceSearchScreen] to insert a location to the journey planner list
 /// - menu item icon, to indicate to the user that the list is reorderable via dragging
-///@author: Rahin Ashraf - k20034059
-
+/// @author: Rahin Ashraf - k20034059
 class DynamicWidget extends StatelessWidget {
   final TextEditingController placeTextController = TextEditingController();
   final TextEditingController editDockTextEditController =
@@ -22,12 +22,12 @@ class DynamicWidget extends StatelessWidget {
   final locationService = LocationService();
   final Map? coordDataMap;
 
-  ///set the position of the selected coordinates list to the passed in index
+  /// Set the position of the selected coordinates list to the passed in index.
   void setIndex(index) {
     position = index;
   }
 
-  ///listen to changes for user input on the location specified in the location textfield
+  /// Listen to changes for user input on the location specified in the location textfield.
   void initState() {
     placeTextController.addListener(() {
       PanelExtensions.of()
@@ -49,7 +49,6 @@ class DynamicWidget extends StatelessWidget {
               children: [
                 Expanded(
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       IconButton(
                         onPressed: () {
@@ -61,11 +60,8 @@ class DynamicWidget extends StatelessWidget {
                         },
                         padding: EdgeInsets.symmetric(vertical: 17.0),
                         constraints: BoxConstraints(),
-                        icon: const Icon(
-                          Icons.close_outlined,
-                          size: 15,
-                          color: Colors.red,
-                        ),
+                        icon: const Icon(Icons.close_outlined,
+                            size: 15, color: Colors.red),
                       ),
                       Expanded(
                         child: TextField(
@@ -88,17 +84,14 @@ class DynamicWidget extends StatelessWidget {
                                 _useCurrentLocationButtonHandler(
                                     coordDataMap!, placeTextController);
                               },
-                              icon: const Icon(Icons.my_location,
-                                  size: 20, color: Colors.green),
+                              icon: Icon(Icons.my_location,
+                                  size: 20, color: CustomColors.green),
                             ),
                             hintText: 'Where to?',
-                            helperText: 'Please enter your destination.',
-                            focusedBorder: circularInputBorder(),
                             border: circularInputBorder(),
-                            enabledBorder: circularInputBorder(),
+                            focusedBorder: circularInputBorder(
+                                width: 2.0, color: CustomColors.green),
                             disabledBorder: circularInputBorder(),
-                            errorBorder: circularInputBorder(),
-                            focusedErrorBorder: circularInputBorder(),
                           ),
                         ),
                       ),
@@ -120,10 +113,7 @@ class DynamicWidget extends StatelessWidget {
             },
             padding: EdgeInsets.zero,
             constraints: BoxConstraints(),
-            icon: const Icon(
-              Icons.menu,
-              size: 20,
-            ),
+            icon: const Icon(Icons.menu, size: 20),
           ),
         ],
       ),
