@@ -16,6 +16,7 @@ import 'package:veloplan/alerts.dart';
 import 'package:veloplan/helpers/live_location_helper.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:veloplan/models/docking_station.dart';
+import '../../screens/navigation/polyline_turn_by_turn.dart';
 import '../dynamic_widget.dart';
 
 ///When rendered, the journey_planner_screen will have this panel_widget at the bottom. It is an interactive panel the user can
@@ -382,14 +383,21 @@ class PanelWidgetState extends State<PanelWidget> {
       List<LatLng>? points = convertListDoubleToLatLng(tempList);
 
       List<LatLng> closestDockList = [];
+      List<DockingStation> _closestDocksList = [];
       if (points != null) {
         for (int i = 0; i < points.length; i++) {
           DockingStation closestDock = _stationManager
               .getClosestDock(LatLng(points[i].latitude, points[i].longitude));
+
+          //get the actual dock!
+          _closestDocksList.add(closestDock);
+
+          //get the actual dock coord
           LatLng closetDockCoord = LatLng(closestDock.lat, closestDock.lon);
           closestDockList.add(closetDockCoord);
         }
         print("ALL_COORDINATES FOR CLOSEST DOCKS => $closestDockList");
+        print("ALL_DOCKS FOR CLOSEST DOCKS => $_closestDocksList");
       }
 
       List<LatLng> closestDocksWithNoAdjancents = [];
@@ -419,7 +427,9 @@ class PanelWidgetState extends State<PanelWidget> {
         //! show something went wrong allert
         print("hello");
       } else {
-        context.push(MapRoutePage(closestDockList));
+        // TODO: CHANGE TO THIS BEFORE MERGING
+        // context.push(MapRoutePage(closestDockList, _closestDocksList));
+        context.push(MapUpdatedRoutePage(_closestDocksList));
       }
     }
   }

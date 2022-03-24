@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:convert';
+import "package:http/http.dart" as http;
 
 ///Represents a docking station
 ///Author(s): Liliana, Nicole, Tayyibah
@@ -25,6 +27,58 @@ class DockingStation {
       this._numberOfAllDocks,
       this._lon,
       this._lat);
+
+  set setStationId(String temp) {
+    _stationId = temp;
+  }
+
+  set setName(String temp) {
+    _name = temp;
+  }
+
+  set setNumberOfBikes(int temp) {
+    _numberOfBikes = temp;
+  }
+
+  set setNumberOfEmptyDocks(int temp) {
+    _numberOfEmptyDocks = temp;
+  }
+
+  set setNumberOfAllDocks(int temp) {
+    _numberOfAllDocks = temp;
+  }
+
+  set setIsInstalled(bool temp) {
+    _isInstalled = temp;
+  }
+
+  set setisLocked(bool temp) {
+    _isLocked = temp;
+  }
+
+  set setLon(double temp) {
+    _lon = temp;
+  }
+
+  set setLat(double temp) {
+    _lat = temp;
+  }
+
+  set setDocumentId(String temp) {
+    _documentId = temp;
+  }
+
+  void assign(DockingStation other) {
+    this._stationId = other.stationId;
+    this._name = other.name;
+    this._numberOfBikes = other._numberOfBikes;
+    this._numberOfEmptyDocks = other.numberOfEmptyDocks;
+    this._numberOfAllDocks = other._numberOfAllDocks;
+    this._isInstalled = other._isInstalled;
+    this._isLocked = other.isLocked;
+    this._lon = other.lon;
+    this._lat = other.lat;
+  }
 
   String get stationId => _stationId;
   String get name => _name;
@@ -56,4 +110,52 @@ class DockingStation {
         _numberOfAllDocks = 0,
         _lon = 0.0,
         _lat = 0.0;
+
+  /* import the docking stations from the tfl api -_--- MAYBE CHANGE TO DOCK MANAGER */
+  Future<DockingStation> checkStation(DockingStation dock) async {
+    print("----------|________i am in check station___________|------------ ");
+    print("----------|_______before change dock: " +
+        dock.stationId +
+        "-- " +
+        dock._numberOfEmptyDocks.toString() +
+        "___________|------------ ");
+    var data = await http
+        .get(Uri.parse("https://api.tfl.gov.uk/BikePoint/${dock.stationId}"));
+    var station = json.decode(data.body);
+    try {
+      dock.setNumberOfBikes =
+          int.parse(station["additionalProperties"][6]["value"]);
+      dock.setNumberOfEmptyDocks =
+          int.parse(station["additionalProperties"][7]["value"]);
+      dock.setNumberOfAllDocks =
+          int.parse(station["additionalProperties"][8]["value"]);
+      dock.setIsInstalled = true;
+      dock.setisLocked = station["additionalProperties"][2]["value"] == "true";
+
+      print(
+          "----------|________i am in check station___________|------------ ");
+      print("----------|_______after dock: " +
+          dock.stationId +
+          "-- " +
+          dock._numberOfEmptyDocks.toString() +
+          "___________|------------ ");
+    } on FormatException {}
+    return dock;
+  }
+  //https://api.tfl.gov.uk/BikePoint/BikePoints_5
+
+  Future<bool> checkDockWithAvailableSpace(
+      DockingStation dock, int numberOfBikes) async {
+    dock.assign(await checkStation(dock));
+    print("->>>>>>>>>>> " +
+        dock.numberOfEmptyDocks.toString() +
+        " " +
+        (dock.numberOfEmptyDocks >= numberOfBikes).toString());
+    return (dock.numberOfEmptyDocks >= numberOfBikes);
+  }
+
+  bool checkDockWithAvailableBikes(DockingStation dock, int numberOfBikes) {
+    checkStation(dock);
+    return (dock.numberOfBikes >= numberOfBikes);
+  }
 }

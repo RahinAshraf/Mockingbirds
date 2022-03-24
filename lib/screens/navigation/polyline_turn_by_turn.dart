@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
+import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/models/map_models/base_map_model.dart';
 import 'package:veloplan/models/map_models/base_map_with_route_updated_model.dart';
 import 'package:veloplan/navbar.dart';
@@ -24,6 +25,7 @@ import 'package:veloplan/scoped_models/map_model.dart';
 class MapUpdatedRoutePage extends StatefulWidget {
   // const MapPage({Key? key}) : super(key: key);
   // final List<LatLng> _journey;
+  final List<DockingStation> _journey;
   List<LatLng> points = [
     LatLng(51.514951, -0.112762),
     LatLng(51.513146, -0.115256),
@@ -31,20 +33,26 @@ class MapUpdatedRoutePage extends StatefulWidget {
     // LatLng(51.506053, -0.130310),
     // LatLng(51.502254, -0.217760),
   ];
+  MapUpdatedRoutePage(this._journey);
   // MapUpdatedRoutePage(this._journey);
   @override
-  _MapUpdatedRoutePageState createState() => _MapUpdatedRoutePageState(points);
+  //original -> change to latlongs
+  // _MapUpdatedRoutePageState createState() => _MapUpdatedRoutePageState(points);
+  _MapUpdatedRoutePageState createState() =>
+      _MapUpdatedRoutePageState(_journey, points);
 }
 
 class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
   // LatLng currentLatLng = getLatLngFromSharedPrefs();
   late MapWithRouteUpdated _baseMapWithUpdatedRoute;
   final List<LatLng> _journey;
+  final List<DockingStation> _docks;
   Timer? timer;
   // late BuildContext _context;
   bool finished = false;
 
-  _MapUpdatedRoutePageState(this._journey) {
+  // _MapUpdatedRoutePageState(this._journey) {
+  _MapUpdatedRoutePageState(this._docks, this._journey) {
     // print("points: " + _journey.toString());
   }
 
@@ -52,7 +60,8 @@ class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
   Widget build(BuildContext context) {
     return Scaffold(body: ScopedModelDescendant<MapModel>(
         builder: (BuildContext context, Widget? child, MapModel model) {
-      _baseMapWithUpdatedRoute = MapWithRouteUpdated(_journey, model, context);
+      //jounrey to list<docks>
+      _baseMapWithUpdatedRoute = MapWithRouteUpdated(_journey, _docks, model);
       addPositionZoom();
       addStopTurnByTurn();
       return SafeArea(

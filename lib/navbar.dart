@@ -24,8 +24,8 @@ class _NavBarState extends State<NavBar> {
 
   var screens = [
     Placeholder(), // is this bad practise?
-    // MapPage(),
-    MapUpdatedRoutePage(),
+    MapPage(),
+    // MapUpdatedRoutePage(),
   ];
 
   @override

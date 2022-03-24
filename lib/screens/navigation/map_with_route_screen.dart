@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
+import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/models/map_models/base_map_model.dart';
 import 'package:veloplan/screens/navigation/turn_by_turn_screen.dart';
 import '../../models/map_models/base_map_with_route_model.dart';
@@ -13,9 +14,11 @@ import 'package:veloplan/scoped_models/map_model.dart';
 class MapRoutePage extends StatefulWidget {
   // const MapPage({Key? key}) : super(key: key);
   final List<LatLng> _journey;
-  MapRoutePage(this._journey);
+  final List<DockingStation> _journeyDocks;
+  MapRoutePage(this._journey, this._journeyDocks);
   @override
-  _MapRoutePageState createState() => _MapRoutePageState(_journey);
+  _MapRoutePageState createState() =>
+      _MapRoutePageState(_journey, _journeyDocks);
 }
 
 class _MapRoutePageState extends State<MapRoutePage> {
@@ -23,8 +26,9 @@ class _MapRoutePageState extends State<MapRoutePage> {
   late BaseMapboxMap _baseMap;
   late BaseMapboxRouteMap _baseMapWithRoute;
   final List<LatLng> _journey;
+  final List<DockingStation> _journeyDocks;
 
-  _MapRoutePageState(this._journey);
+  _MapRoutePageState(this._journey, this._journeyDocks);
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +37,11 @@ class _MapRoutePageState extends State<MapRoutePage> {
       _baseMapWithRoute = BaseMapboxRouteMap(_journey, model);
       addPositionZoom();
       startTurnByTurn(context, _journey);
+
+      print(
+          "---------------------------------------------------------------check the dock checkup---------------------------------------------------------------------");
+      _journeyDocks[0].checkDockWithAvailableBikes(_journeyDocks[0], 8);
+
       return SafeArea(child: Stack(children: _baseMapWithRoute.getWidgets()));
     }));
   }

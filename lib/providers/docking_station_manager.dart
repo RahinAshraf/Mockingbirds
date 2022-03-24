@@ -10,7 +10,7 @@ import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart'
 class dockingStationManager {
   List<DockingStation> stations = [];
 
-/* import the dockign sttaions from the tfl api */
+/* import the docking stations from the tfl api */
   Future<void> importStations() async {
     var data = await http.get(Uri.parse("https://api.tfl.gov.uk/BikePoint"));
     var jsonData = json.decode(data.body);
@@ -249,5 +249,33 @@ class dockingStationManager {
     } else {
       return filteredStations;
     }
+  }
+
+  /* import the docking stations from the tfl api */
+  Future<void> checkStation(DockingStation dock) async {
+    var data = await http
+        .get(Uri.parse("https://api.tfl.gov.uk/BikePoint/${dock.stationId}"));
+    var station = json.decode(data.body);
+    try {
+      dock.setNumberOfBikes =
+          int.parse(station["additionalProperties"][6]["value"]);
+      dock.setNumberOfEmptyDocks =
+          int.parse(station["additionalProperties"][7]["value"]);
+      dock.setNumberOfAllDocks =
+          int.parse(station["additionalProperties"][8]["value"]);
+      dock.setIsInstalled = true;
+      dock.setisLocked = station["additionalProperties"][2]["value"] == "true";
+    } on FormatException {}
+  }
+  //https://api.tfl.gov.uk/BikePoint/BikePoints_5
+
+  bool checkDockWithAvailableSpace(DockingStation dock, int numberOfBikes) {
+    checkStation(dock);
+    return (dock.numberOfEmptyDocks >= numberOfBikes);
+  }
+
+  bool checkDockWithAvailableBikes(DockingStation dock, int numberOfBikes) {
+    checkStation(dock);
+    return (dock.numberOfBikes >= numberOfBikes);
   }
 }

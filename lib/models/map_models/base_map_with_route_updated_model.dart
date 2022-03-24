@@ -12,15 +12,19 @@ import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/helpers/live_location_helper.dart';
 import 'package:veloplan/utilities/travel_type.dart';
 
+import '../docking_station.dart';
+
 /// Map screen focused on a user's live location
 /// Author(s): Elisabeth Halvorsen k20077737
 
 class MapWithRouteUpdated extends BaseMapboxRouteMap {
   late List<LatLng> _journey;
-  final BuildContext context;
-  MapWithRouteUpdated(List<LatLng> journey, MapModel model, this.context)
+  late List<DockingStation> _docks;
+  MapWithRouteUpdated(
+      List<LatLng> journey, List<DockingStation> docks, MapModel model)
       : super(journey, model) {
     this._journey = journey;
+    this._docks = docks;
   }
   LatLng _target = getLatLngFromSharedPrefs();
   Timer? timer;
@@ -49,6 +53,12 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
     this.controller = controller;
     model.setController(controller);
     print("map created");
+    print("---------------------dock checker-------------------");
+
+    bool isChecked = await _docks[0].checkDockWithAvailableSpace(_docks[0], 5);
+    print("--------------------- checker FINISHED -------------------" +
+        isChecked.toString());
+
     timer = Timer.periodic(
         Duration(seconds: 1), (Timer t) => updateCurrentLocation());
     timer = Timer.periodic(
