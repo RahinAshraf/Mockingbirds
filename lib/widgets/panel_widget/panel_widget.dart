@@ -380,6 +380,8 @@ class PanelWidgetState extends State<PanelWidget> {
       List<LatLng>? points = convertListDoubleToLatLng(tempList);
 
       List<LatLng> closestDockList = [];
+      /////////////////////////////////////////////////////////////////////// WHY DO WE CALL GET CLOSEST DOCK AGAIN????????
+      ///YO - call on the list of docking stations and retrieve it by the indez of 'points' - should be the same RIGHTTT
       if (points != null) {
         for (int i = 0; i < points.length; i++) {
           DockingStation closestDock = _stationManager
