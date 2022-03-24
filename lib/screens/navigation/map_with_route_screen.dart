@@ -38,10 +38,6 @@ class _MapRoutePageState extends State<MapRoutePage> {
       addPositionZoom();
       startTurnByTurn(context, _journey);
 
-      print(
-          "---------------------------------------------------------------check the dock checkup---------------------------------------------------------------------");
-      _journeyDocks[0].checkDockWithAvailableBikes(_journeyDocks[0], 8);
-
       return SafeArea(child: Stack(children: _baseMapWithRoute.getWidgets()));
     }));
   }

@@ -251,8 +251,14 @@ class dockingStationManager {
     }
   }
 
-  /* import the docking stations from the tfl api */
-  Future<void> checkStation(DockingStation dock) async {
+  /* import the docking station from the tfl api and check its updated info*/
+  Future<DockingStation> checkStation(DockingStation dock) async {
+    print("----------|________i am in check station___________|------------ ");
+    print("----------|_______before change dock: " +
+        dock.stationId +
+        "-- " +
+        dock.numberOfEmptyDocks.toString() +
+        "___________|------------ ");
     var data = await http
         .get(Uri.parse("https://api.tfl.gov.uk/BikePoint/${dock.stationId}"));
     var station = json.decode(data.body);
@@ -265,12 +271,25 @@ class dockingStationManager {
           int.parse(station["additionalProperties"][8]["value"]);
       dock.setIsInstalled = true;
       dock.setisLocked = station["additionalProperties"][2]["value"] == "true";
-    } on FormatException {}
-  }
-  //https://api.tfl.gov.uk/BikePoint/BikePoints_5
 
-  bool checkDockWithAvailableSpace(DockingStation dock, int numberOfBikes) {
-    checkStation(dock);
+      print(
+          "----------|________i am in check station___________|------------ ");
+      print("----------|_______after dock: " +
+          dock.stationId +
+          "-- " +
+          dock.numberOfEmptyDocks.toString() +
+          "___________|------------ ");
+    } on FormatException {}
+    return dock;
+  }
+
+  Future<bool> checkDockWithAvailableSpace(
+      DockingStation dock, int numberOfBikes) async {
+    dock.assign(await checkStation(dock));
+    print("->>>>>>>>>>> " +
+        dock.numberOfEmptyDocks.toString() +
+        " " +
+        (dock.numberOfEmptyDocks >= numberOfBikes).toString());
     return (dock.numberOfEmptyDocks >= numberOfBikes);
   }
 

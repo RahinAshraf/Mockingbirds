@@ -6,6 +6,7 @@ import 'package:veloplan/helpers/navigation_helpers/map_drawings.dart';
 import 'package:veloplan/helpers/navigation_helpers/navigation_helpers.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:veloplan/models/map_models/base_map_with_route_model.dart';
+import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:location/location.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
@@ -37,6 +38,7 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
   List<dynamic> _journeyPoints = [];
   int _currentStation = 0;
   bool buttonPressed = true;
+  dockingStationManager _dockManager = dockingStationManager();
 
   @override
   void updateCurrentLocation() async {
@@ -55,9 +57,16 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
     print("map created");
     print("---------------------dock checker-------------------");
 
-    bool isChecked = await _docks[0].checkDockWithAvailableSpace(_docks[0], 5);
+    bool isDockFree =
+        await _dockManager.checkDockWithAvailableSpace(_docks[0], 5);
+
+    // bool isChecked = await _docks[0].checkDockWithAvailableSpace(_docks[0], 5);
     print("--------------------- checker FINISHED -------------------" +
-        isChecked.toString());
+        isDockFree.toString());
+
+    if (!isDockFree) {
+      _docks[0] = _dockManager.getClosestDockWithAvailableSpace(_journey[0], 5);
+    }
 
     timer = Timer.periodic(
         Duration(seconds: 1), (Timer t) => updateCurrentLocation());

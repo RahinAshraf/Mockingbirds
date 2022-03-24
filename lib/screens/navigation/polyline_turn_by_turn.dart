@@ -26,20 +26,20 @@ class MapUpdatedRoutePage extends StatefulWidget {
   // const MapPage({Key? key}) : super(key: key);
   // final List<LatLng> _journey;
   final List<DockingStation> _journey;
-  List<LatLng> points = [
-    LatLng(51.514951, -0.112762),
-    LatLng(51.513146, -0.115256),
-    // LatLng(51.511407, -0.125497),
-    // LatLng(51.506053, -0.130310),
-    // LatLng(51.502254, -0.217760),
-  ];
-  MapUpdatedRoutePage(this._journey);
+  final List<LatLng> _points;
+  //   LatLng(51.514951, -0.112762),
+  //   LatLng(51.513146, -0.115256),
+  // LatLng(51.511407, -0.125497),
+  // LatLng(51.506053, -0.130310),
+  // LatLng(51.502254, -0.217760),
+  // ];
+  MapUpdatedRoutePage(this._journey, this._points);
   // MapUpdatedRoutePage(this._journey);
   @override
   //original -> change to latlongs
   // _MapUpdatedRoutePageState createState() => _MapUpdatedRoutePageState(points);
   _MapUpdatedRoutePageState createState() =>
-      _MapUpdatedRoutePageState(_journey, points);
+      _MapUpdatedRoutePageState(_journey, _points);
 }
 
 class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
