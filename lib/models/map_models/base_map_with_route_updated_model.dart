@@ -2,10 +2,12 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:veloplan/helpers/navigation_helpers/map_drawings.dart';
 import 'package:veloplan/helpers/navigation_helpers/navigation_helpers.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:veloplan/models/map_models/base_map_with_route_model.dart';
+import 'package:veloplan/navbar.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:location/location.dart';
@@ -21,12 +23,13 @@ import '../docking_station.dart';
 class MapWithRouteUpdated extends BaseMapboxRouteMap {
   late List<LatLng> _journey;
   late List<DockingStation> _docks;
+  final BuildContext context;
   MapWithRouteUpdated(
-      List<LatLng> journey, List<DockingStation> docks, MapModel model)
+      List<LatLng> journey, this._docks, MapModel model, this.context)
       : super(journey, model) {
     this._journey = journey;
-    this._docks = docks;
   }
+
   LatLng _target = getLatLngFromSharedPrefs();
   Timer? timer;
   final Set<Symbol> _polylineSymbols = {};
@@ -40,6 +43,9 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
   bool buttonPressed = true;
   dockingStationManager _dockManager = dockingStationManager();
 
+  // change to one class with dock, people and destinations
+  int numberCyclists = 5;
+
   @override
   void updateCurrentLocation() async {
     Location newCurrentLocation = Location();
@@ -50,32 +56,63 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
     _target = LatLng(_newLocationData.latitude!, _newLocationData.longitude!);
   }
 
-  @override
-  void onMapCreated(MapboxMapController controller) async {
-    this.controller = controller;
-    model.setController(controller);
-    print("map created");
+  void checkAndUpdateDock() async {
+    if (_currentStation >= _journey.length) {
+      print(
+          "---------------------got into check and update checker-------------------");
+      return;
+    }
     print("---------------------dock checker-------------------");
 
-    bool isDockFree =
-        await _dockManager.checkDockWithAvailableSpace(_docks[0], 5);
+    bool isDockFree = await _dockManager.checkDockWithAvailableSpace(
+        _docks[_currentStation], numberCyclists);
 
     // bool isChecked = await _docks[0].checkDockWithAvailableSpace(_docks[0], 5);
     print("--------------------- checker FINISHED -------------------" +
         isDockFree.toString());
 
     if (!isDockFree) {
-      _docks[0] = _dockManager.getClosestDockWithAvailableSpace(_journey[0], 5);
+      _docks[_currentStation] = _dockManager.getClosestDockWithAvailableSpace(
+          _journey[_currentStation], numberCyclists);
     }
+  }
 
-    timer = Timer.periodic(
-        Duration(seconds: 1), (Timer t) => updateCurrentLocation());
-    timer = Timer.periodic(
-        Duration(seconds: 1), (Timer t) => _updateCameraPosition());
+  @override
+  void onMapCreated(MapboxMapController controller) async {
+    this.controller = controller;
+    model.setController(controller);
+    print("map created");
+    timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
+      if (isAtGoal) {
+        t.cancel();
+      }
+      updateCurrentLocation();
+    });
+    timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
+      if (isAtGoal) {
+        t.cancel();
+      }
+      _updateCameraPosition();
+    });
 
-    timer = Timer.periodic(
-        Duration(seconds: 1), (Timer t) => _updateLiveCameraPosition());
-    timer = Timer.periodic(Duration(seconds: 15), (Timer t) => updateRoute());
+    timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
+      if (isAtGoal) {
+        t.cancel();
+      }
+      _updateLiveCameraPosition();
+    });
+    timer = Timer.periodic(Duration(seconds: 15), (Timer t) {
+      if (isAtGoal) {
+        t.cancel();
+      }
+      updateRoute();
+    });
+    timer = Timer.periodic(Duration(seconds: 15), (Timer t) {
+      if (isAtGoal) {
+        t.cancel();
+      }
+      checkAndUpdateDock();
+    });
     model.fetchDockingStations();
     _displayJourney();
     controller.onSymbolTapped.add(onSymbolTapped);
@@ -95,15 +132,23 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
   }
 
   void reRoute() {
-    // Navigator.popUntil(context, ModalRoute.withName('/map'));
+    //Navigator.popUntil(context, ModalRoute.withName('/map'));
     // Navigator.pop(context, ModalRoute.withName('/map'));
     // Navigator.of(context).pushReplacement(
-    //     new MaterialPageRoute(builder: (BuildContext context) => MapPage()));
+    //     new MaterialPageRoute(builder: (BuildContext context) => NavBar()));
+    // Navigator.of(context).pushAndRemoveUntil(
+    // MaterialPageRoute(builder: (c) => NavBar()), (route) => false);
+    Navigator.of(context).pop(true);
   }
 
   /// Update route
   void updateRoute() {
+    print(
+        "---------------_______________------------------updating route to navbar _________________--------");
     if (isAtGoal) {
+      // timer?.cancel();
+
+      reRoute();
       return;
     }
     double distance = calculateDistance(_target, _journey[_currentStation]);

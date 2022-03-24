@@ -61,7 +61,8 @@ class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
     return Scaffold(body: ScopedModelDescendant<MapModel>(
         builder: (BuildContext context, Widget? child, MapModel model) {
       //jounrey to list<docks>
-      _baseMapWithUpdatedRoute = MapWithRouteUpdated(_journey, _docks, model);
+      _baseMapWithUpdatedRoute =
+          MapWithRouteUpdated(_journey, _docks, model, context);
       addPositionZoom();
       addStopTurnByTurn();
       return SafeArea(
@@ -96,8 +97,8 @@ class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
         heroTag: "stop_journey",
         onPressed: () {
           try {
-            Navigator.of(context).pushReplacement(new MaterialPageRoute(
-                builder: (BuildContext context) => MapPage()));
+            _baseMapWithUpdatedRoute.isAtGoal = true;
+            _baseMapWithUpdatedRoute.reRoute();
           } catch (e) {
             log("failed to push replacement");
           }

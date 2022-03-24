@@ -73,11 +73,15 @@ class _PanelWidgetTripScheduler extends State<PanelWidgetTripScheduler> {
               Flexible(
                 fit: FlexFit.tight,
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
+                  onPressed: () async {
+                    final response = await Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => JourneyPlanner(numberOfCyclists : numberOfCyclists)));
+                            builder: (context) => JourneyPlanner(
+                                numberOfCyclists: numberOfCyclists)));
+                    if (response) {
+                      Navigator.of(context).pop(true);
+                    }
                   },
                   child: const Text('Now'),
                 ),

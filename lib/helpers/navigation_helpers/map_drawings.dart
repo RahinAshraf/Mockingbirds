@@ -21,34 +21,40 @@ void placeDockMarkers(
 
 /// Creates a [fills] Map with the specified geometry for the chosen [routeResponse]
 Future<Map<String, Object>> setFills(Map fills, dynamic routeResponse) async {
-  return <String, Object>{
-    "type": "FeatureCollection",
-    "features": [
-      {
-        "type": "Feature",
-        "id": 0,
-        "geometry": routeResponse,
-      },
-    ],
-  };
+  try {
+    return <String, Object>{
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "id": 0,
+          "geometry": routeResponse,
+        },
+      ],
+    };
+  } catch (e) {
+    return {};
+  }
 }
 
 /// Adds the journey as a polyline layer to the map
 void addFills(MapboxMapController? controller, Map fills, _model) async {
-  await controller!.addSource(
-      "fills", GeojsonSourceProperties(data: fills)); //creates the line
-  await controller.addLineLayer(
-    "fills",
-    "lines",
-    LineLayerProperties(
-      lineColor: Color.fromARGB(255, 197, 23, 23).toHexStringRGB(),
-      lineCap: "round",
-      lineJoin: "round",
-      lineWidth: 5,
-    ),
-  );
-  _model.setController(controller); //MOVE THIS OUT OF ADDFILLS -----????
-  // await controller.addSymbolLayer(sourceId, layerId, properties)
+  try {
+    await controller!.addSource(
+        "fills", GeojsonSourceProperties(data: fills)); //creates the line
+    await controller.addLineLayer(
+      "fills",
+      "lines",
+      LineLayerProperties(
+        lineColor: Color.fromARGB(255, 197, 23, 23).toHexStringRGB(),
+        lineCap: "round",
+        lineJoin: "round",
+        lineWidth: 5,
+      ),
+    );
+    _model.setController(controller); //MOVE THIS OUT OF ADDFILLS -----????
+    // await controller.addSymbolLayer(sourceId, layerId, properties)
+  } catch (e) {}
 }
 
 /// Removes the currently displayed polyline layer and destination markers from the map

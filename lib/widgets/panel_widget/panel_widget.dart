@@ -879,7 +879,7 @@ class PanelWidgetState extends State<PanelWidget> {
   ///For all the coordinates of the locations the user specified, creates a new list - this new list is a list of all the
   ///closest docking stations for the locations the user specified. This new list is then passed onto MapRoutePage.
   ///THIS FUNCTION NEEDS TO BE REFACTORED FURTHER
-  void _handleStartClick() {
+  Future<void> _handleStartClick() async {
     final hasEmptyField = widget.listDynamic
         .any((element) => element.placeTextController.text.isEmpty);
 
@@ -947,7 +947,11 @@ class PanelWidgetState extends State<PanelWidget> {
       } else {
         // TODO: CHANGE TO THIS BEFORE MERGING
         // context.push(MapRoutePage(closestDockList, _closestDocksList));
-        context.push(MapUpdatedRoutePage(_closestDocksList, points));
+        final response =
+            await context.push(MapUpdatedRoutePage(_closestDocksList, points));
+        if (response) {
+          Navigator.of(context).pop(true);
+        }
       }
     }
   }
