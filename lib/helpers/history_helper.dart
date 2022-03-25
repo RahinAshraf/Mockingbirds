@@ -44,11 +44,9 @@ class HistoryHelper {
             print("Failed to add docking station to journey: $error"));
   }
 
-  ///Calculates the date and adds as a field to journey
+  ///Calculates the current date and adds as a field to journey
   Future<void> addJourneyTime(journeyDocumentId) {
     final DateTime timeNow = DateTime.now();
-    // final DateFormat formatter = DateFormat('yyyy-MM-dd');
-    // final String formattedTime = formatter.format(timeNow);
     return _journeys.doc(journeyDocumentId).set({'date': timeNow});
   }
 
@@ -71,26 +69,15 @@ class HistoryHelper {
 
   ///Gets all of a users journeys
   Future<List<Journey>> getAllJourneyDocuments() async {
-    FirebaseFirestore db = FirebaseFirestore.instance;
     List<Journey> journeyList = [];
 
-    QuerySnapshot<Object?> journeys = await _journeys.get();
+    var journeys = await _journeys.get();
     for (DocumentSnapshot doc in journeys.docs) {
       List<DockingStation> stationList =
           await getDockingStationsInJourney(doc.id);
       journeyList.add(Journey.map(doc, stationList));
     }
     return journeyList;
-  }
-
-  Future<List<String>> getAllTimes() async {
-    List<String> times = [];
-    QuerySnapshot<Object?> journeys = await _journeys.get();
-
-    for (DocumentSnapshot doc in journeys.docs) {
-      times.add(doc["date"]);
-    }
-    return times;
   }
 
   ///Deletes docking station subcollection and then deletes journey entry
@@ -115,10 +102,6 @@ class HistoryHelper {
 
   ///Deletes a given journey
   void deleteJourneyEntry(String journeyDocumentId) {
-    _journeys
-        .doc(journeyDocumentId)
-        .delete()
-        .then((value) => print("deleted"))
-        .catchError((error) => print("Failed to delete journey: $error"));
+    databaseManager.deleteDocument(_journeys, journeyDocumentId);
   }
 }

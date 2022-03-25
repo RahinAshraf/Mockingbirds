@@ -31,7 +31,7 @@ class ScheduleHelper {
   ///Gets all of a users schedules
   Future<List<Journey>> getAllScheduleDocuments() async {
     List<Journey> scheduleList = [];
-    QuerySnapshot<Object?> journeys = await _schedules.get();
+    var journeys = await _schedules.get();
     for (DocumentSnapshot doc in journeys.docs) {
       scheduleList.add(Journey.scheduleMap(doc));
     }
