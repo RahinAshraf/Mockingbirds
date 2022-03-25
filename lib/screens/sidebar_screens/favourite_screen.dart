@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:veloplan/helpers/favourite_helper.dart';
+import 'package:veloplan/helpers/database_helpers/favourite_helper.dart';
 import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/widgets/docking_station_card.dart';
 

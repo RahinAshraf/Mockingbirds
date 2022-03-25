@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:timeline_tile/timeline_tile.dart';
-import '../helpers/schedule_helper.dart';
-import '../models/journey.dart';
-import '../styles/styling.dart';
+import '../../helpers/database_helpers/schedule_helper.dart';
+import '../../models/journey.dart';
+import '../../styles/styling.dart';
 
 ///Author: Marija
 ///Contributor: Tayyibah

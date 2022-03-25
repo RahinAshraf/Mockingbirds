@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
 
-import '../helpers/database_manager.dart';
+import '../helpers/database_helpers/database_manager.dart';
 import '../helpers/navigation_helpers/navigation_conversion_helpers.dart';
 import '../screens/summary_journey_screen.dart';
-
 
 class GroupId extends StatefulWidget {
   const GroupId({Key? key}) : super(key: key);
@@ -22,11 +21,9 @@ class GroupIdState extends State<GroupId> {
   final DatabaseManager _databaseManager = DatabaseManager();
   bool? exists = null;
 
-
   @override
-  void initState(){
+  void initState() {
     super.initState();
-
   }
 
   _joinGroup(String code) async {
@@ -36,12 +33,11 @@ class GroupIdState extends State<GroupId> {
     var list = [];
     String id = "";
 
-    if(group.size == 0){
+    if (group.size == 0) {
       setState(() {
         exists = false;
       });
-    }
-    else{
+    } else {
       print(4);
       setState(() {
         exists = true;
@@ -50,7 +46,7 @@ class GroupIdState extends State<GroupId> {
         print(element.data());
         var geoList = element.data()['points'];
         List<List<double>> tempList = [];
-        for(int i =0; i<geoList.length;i++){
+        for (int i = 0; i < geoList.length; i++) {
           tempList.add([geoList[i].latitude, geoList[i].longitude]);
         }
         points = convertListDoubleToLatLng(tempList);
@@ -69,7 +65,6 @@ class GroupIdState extends State<GroupId> {
       context.push(SummaryJourneyScreen(points!));
     }
   }
-
 
   Widget build(BuildContext context) {
     return AlertDialog(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../helpers/database_helpers/history_helper.dart';
-import '../models/journey.dart';
-import '../widgets/my_journey_card.dart';
+import '../../helpers/database_helpers/history_helper.dart';
+import '../../models/journey.dart';
+import '../../widgets/my_journey_card.dart';
 
 ///Displays users started journeys
 ///Author: Tayyibah

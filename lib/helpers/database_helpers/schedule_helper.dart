@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:veloplan/helpers/database_helpers/database_manager.dart';
-import '../models/journey.dart';
+import '../../models/journey.dart';
 
 ///Helper functions to add or remove a scheduled itinerary from the database.
 ///An itinerary includes a list of destinations and the time the trip should start.
