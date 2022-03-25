@@ -40,6 +40,7 @@ class _EditProfileState extends State<EditProfile> {
             SnackBar(
               content: const Text(
                   'This username is already taken! Please choose something else.'),
+              backgroundColor: Theme.of(context).errorColor,
             ),
           );
           return;
@@ -60,6 +61,7 @@ class _EditProfileState extends State<EditProfile> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(error.toString()),
+          backgroundColor: Theme.of(context).errorColor,
         ),
       );
     }

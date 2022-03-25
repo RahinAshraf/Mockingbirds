@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
-import 'package:favorite_button/favorite_button.dart';
 import 'package:veloplan/widgets/carousel/dockings_station_card.dart';
-import 'package:veloplan/widgets/docking_station_card.dart';
 
 class DockStation extends StatefulWidget {
   DockStation({Key? key}) : super(key: key);

@@ -24,6 +24,7 @@ void main() async {
   runApp(ScopedModel<MapModel>(
       model: _model,
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         initialRoute: '/',
         routes: {
           '/': (context) => const MyApp(),
@@ -68,30 +69,6 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     //final Future<FirebaseApp> _initialization = Firebase.initializeApp();
     return FutureBuilder(
-<<<<<<< HEAD
-
-      // Initialize FlutterFire:
-
-        future: Firebase.initializeApp(), // _initialization,
-        builder: (context, appSnapshot) {
-          return MaterialApp(
-            title: 'Veloplan',
-            home: appSnapshot.connectionState != ConnectionState.done
-                ? const SplashScreen()
-                : StreamBuilder(
-                stream: FirebaseAuth.instance.authStateChanges(),
-                builder: (ctx, userSnapshot) {
-                  if (userSnapshot.connectionState ==
-                      ConnectionState.waiting) {
-                    return const SplashScreen();
-                  }
-                  if (userSnapshot.hasData) {
-                    return const VerifyEmailScreen();
-                  }
-                  return const AuthScreen();
-                }),
-          );
-=======
         future: Firebase.initializeApp(), // _initialization,
         builder: (context, appSnapshot) {
           return ChangeNotifierProvider(
@@ -121,7 +98,6 @@ class _MyAppState extends State<MyApp> {
                   );
                 },
               ));
->>>>>>> main
         });
   }
 }

@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
-<<<<<<< HEAD
 import 'package:flutter/material.dart';
 import 'package:veloplan/helpers/database_manager.dart';
 import 'package:veloplan/screens/edit_profile_screen.dart';
@@ -8,12 +7,9 @@ import 'package:veloplan/screens/edit_profile_screen.dart';
 import './splash_screen.dart';
 import '../helpers/new_scroll_behavior.dart';
 import '../widgets/profile/profile_page_header.dart';
-=======
 import 'package:veloplan/helpers/new_scroll_behavior.dart';
-import 'package:veloplan/screens/edit_profile_screen.dart';
 import 'package:veloplan/screens/splash_screen.dart';
 import 'package:veloplan/widgets/profile/profile_page_header.dart';
->>>>>>> main
 
 class Profile extends StatefulWidget {
   final String userID;
@@ -80,64 +76,69 @@ class _ProfileState extends State<Profile> {
           return Scaffold(
             backgroundColor: Theme.of(context).backgroundColor,
             appBar: _buildAppBar(context, data),
-            body: DefaultTabController(
-              length: 2,
-              child: ScrollConfiguration(
-                behavior: NewScrollBehavior(),
-                child: ExtendedNestedScrollView(
-                  onlyOneScrollInBody: true,
-                  headerSliverBuilder: (context, _) {
-                    return [
-                      SliverList(
-                        delegate: SliverChildListDelegate([
-                          ProfilePageHeader(
-                              data, _currentUser == widget.userID),
-                        ]),
-                      )
-                    ];
-                  },
-                  body: Column(
-                    children: [
-                      Container(
-                        color: Colors.white,
-                        child: ScrollConfiguration(
-                          behavior: NewScrollBehavior(),
-                          child: TabBar(
-                            labelPadding:
-                                const EdgeInsets.symmetric(horizontal: 22.0),
-                            labelColor: Colors.green,
-                            unselectedLabelColor: Colors.grey[400],
-                            indicatorWeight: 2,
-                            indicatorColor: Colors.green,
-                            indicatorSize: TabBarIndicatorSize.label,
-                            tabs: const [
-                              Tab(
-                                text: 'About',
-                              ),
-                              Tab(
-                                text: 'Groups',
-                              ),
-                            ],
+            body: RefreshIndicator(
+              onRefresh: () async {
+                setState(() {});
+              },
+              child: DefaultTabController(
+                length: 2,
+                child: ScrollConfiguration(
+                  behavior: NewScrollBehavior(),
+                  child: ExtendedNestedScrollView(
+                    onlyOneScrollInBody: true,
+                    headerSliverBuilder: (context, _) {
+                      return [
+                        SliverList(
+                          delegate: SliverChildListDelegate([
+                            ProfilePageHeader(
+                                data, _currentUser == widget.userID),
+                          ]),
+                        )
+                      ];
+                    },
+                    body: Column(
+                      children: [
+                        Container(
+                          color: Colors.white,
+                          child: ScrollConfiguration(
+                            behavior: NewScrollBehavior(),
+                            child: TabBar(
+                              labelPadding:
+                                  const EdgeInsets.symmetric(horizontal: 22.0),
+                              labelColor: Colors.green,
+                              unselectedLabelColor: Colors.grey[400],
+                              indicatorWeight: 2,
+                              indicatorColor: Colors.green,
+                              indicatorSize: TabBarIndicatorSize.label,
+                              tabs: const [
+                                Tab(
+                                  text: 'About',
+                                ),
+                                Tab(
+                                  text: 'Groups',
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      Expanded(
-                          child: ScrollConfiguration(
-                        behavior: NewScrollBehavior(),
-                        child: const TabBarView(children: [
-                          Material(
-                            child: Center(
-                              child: Text('About'),
+                        Expanded(
+                            child: ScrollConfiguration(
+                          behavior: NewScrollBehavior(),
+                          child: const TabBarView(children: [
+                            Material(
+                              child: Center(
+                                child: Text('About'),
+                              ),
                             ),
-                          ),
-                          Material(
-                            child: Center(
-                              child: Text('Groups'),
+                            Material(
+                              child: Center(
+                                child: Text('Groups'),
+                              ),
                             ),
-                          ),
-                        ]),
-                      ))
-                    ],
+                          ]),
+                        ))
+                      ],
+                    ),
                   ),
                 ),
               ),
