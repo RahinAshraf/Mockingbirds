@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:veloplan/models/docking_station.dart';
-import '../models/journey.dart';
+import '../../models/journey.dart';
 import 'database_manager.dart';
 
 ///Helper functions to add started journeys to data base.

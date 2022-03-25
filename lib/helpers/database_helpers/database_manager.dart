@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+///Helper functions for database usage
+///Author: Lilliana
+///Contributor: Tayyibah
 class DatabaseManager {
   late FirebaseFirestore _database;
   late final _userId;
