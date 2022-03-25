@@ -19,14 +19,10 @@ class FavouriteHelper {
   Future<void> addFavourite(
     String stationId,
     String name,
-    int numberOfBikes,
-    int numberOfEmptyDocks,
   ) {
     return _databaseManager.addToSubCollection(_favourites, {
       'stationId': stationId,
       'name': name,
-      'numberOfBikes': numberOfBikes,
-      'numberOfEmptyDocks': numberOfEmptyDocks,
     });
   }
 
@@ -51,8 +47,7 @@ class FavouriteHelper {
   }
 
   ///Toggles between adding or removing a docking station from favourites.
-  void toggleFavourite(String stationId, String name, int numberOfBikes,
-      int numberOfEmptyDocks) async {
+  void toggleFavourite(String stationId, String name) async {
     var favouriteList = await getUserFavourites();
     if (isFavouriteStation(stationId, favouriteList)) {
       DockingStation favouriteStation = favouriteList
@@ -60,7 +55,7 @@ class FavouriteHelper {
       String? favouriteDocumentId = favouriteStation.documentId;
       await deleteFavourite(favouriteDocumentId);
     } else {
-      await addFavourite(stationId, name, numberOfBikes, numberOfEmptyDocks);
+      await addFavourite(stationId, name);
     }
   }
 

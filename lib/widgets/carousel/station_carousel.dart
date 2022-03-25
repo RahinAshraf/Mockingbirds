@@ -60,8 +60,6 @@ class DockingStationCarousel {
         (index) => DockingStationCard(
               carouselData[index]['stationId'],
               carouselData[index]['name'],
-              carouselData[index]['numberOfBikes'],
-              carouselData[index]['numberOfEmptyDocks'],
             ));
 
     return dockingStationCards;

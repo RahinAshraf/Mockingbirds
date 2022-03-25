@@ -37,8 +37,6 @@ class _FavouriteState extends State<Favourite> {
                   return DockingStationCard(
                     favourites[index].stationId,
                     favourites[index].name,
-                    favourites[index].numberOfBikes,
-                    favourites[index].numberOfEmptyDocks,
                   );
                 },
               ),

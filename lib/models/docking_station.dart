@@ -42,8 +42,6 @@ class DockingStation {
     _documentId = document.id;
     _stationId = document.get('stationId');
     _name = document.get('name');
-    _numberOfBikes = document.get('numberOfBikes');
-    _numberOfEmptyDocks = document.get('numberOfEmptyDocks');
   }
 
   /// An empty constructor useful for initialisations

@@ -10,14 +10,10 @@ import 'package:veloplan/models/docking_station.dart';
 class DockingStationCard extends StatefulWidget {
   late final String iD;
   late final String stationName;
-  late final int numberOfBikes;
-  late final int numberOfEmptyDocks;
 
   DockingStationCard(
     this.iD,
     this.stationName,
-    this.numberOfBikes,
-    this.numberOfEmptyDocks,
   );
 
 //I have commented this for now but if you want to make a card by just passing a station:
@@ -78,9 +74,6 @@ class _DockingStationCardState extends State<DockingStationCard> {
                   const Divider(
                     color: Colors.black,
                   ),
-                  Text('Total bikes: ${widget.numberOfBikes.toString()}'),
-                  Text(
-                      'Available bikes: ${widget.numberOfEmptyDocks.toString()}'),
                 ],
               ),
             ),
@@ -100,8 +93,6 @@ class _DockingStationCardState extends State<DockingStationCard> {
           _helper.toggleFavourite(
             widget.iD,
             widget.stationName,
-            widget.numberOfBikes,
-            widget.numberOfEmptyDocks,
           );
 
           List<DockingStation> updatedFavourites =
