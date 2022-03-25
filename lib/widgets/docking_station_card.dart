@@ -4,6 +4,7 @@ import 'package:veloplan/helpers/favourite_helper.dart';
 import 'package:veloplan/models/docking_station.dart';
 
 ///Creates a card for a docking station, to include its name, number of bikes and empty bikes.
+///A card can be favourited.
 ///Author: Tayyibah
 ///Contributor: Fariha
 class DockingStationCard extends StatefulWidget {
@@ -35,7 +36,7 @@ class _DockingStationCardState extends State<DockingStationCard> {
   final _helper = FavouriteHelper(); //change name
   List<DockingStation> _favourites = [];
   bool _isFavouriteButtonEnabled = true;
-   bool _isFavourited = false;
+  bool _isFavourited = false;
 
   @override
   void initState() {
@@ -46,12 +47,6 @@ class _DockingStationCardState extends State<DockingStationCard> {
       });
     });
     super.initState();
-  }
-
-  ///Sets [isFavouriteEnabled] to false to disable favourite button for 3 seconds after button click
-  void _disableFavButton() {
-    _isFavouriteButtonEnabled = false;
-    Timer(const Duration(seconds: 3), () => _isFavouriteButtonEnabled = true);
   }
 
   @override
@@ -97,7 +92,7 @@ class _DockingStationCardState extends State<DockingStationCard> {
 
   IconButton buildFaveButton() {
     return IconButton(
-      icon: getFaveButtonColour(),
+      icon: getFaveButton(),
       onPressed: () async {
         if (_isFavouriteButtonEnabled) {
           _disableFavButton();
@@ -120,15 +115,17 @@ class _DockingStationCardState extends State<DockingStationCard> {
     );
   }
 
-  Icon getFaveButtonColour() {
-    return _isFavourited
-        ? const Icon(
-            Icons.favorite,
-            color: Colors.red,
-          )
-        : const Icon(
-            Icons.favorite,
-            color: Colors.grey,
-          );
+  Icon getFaveButton() {
+    return Icon(
+      Icons.favorite,
+      color: _isFavourited ? Colors.red : Colors.grey,
+    );
+  }
+
+  ///Disables favourite button for 3 seconds after button click
+  ///to prevent spamming the database
+  void _disableFavButton() {
+    _isFavouriteButtonEnabled = false;
+    Timer(const Duration(seconds: 3), () => _isFavouriteButtonEnabled = true);
   }
 }
