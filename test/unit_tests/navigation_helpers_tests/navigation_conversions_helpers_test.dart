@@ -1,3 +1,4 @@
+import 'package:flutter_mapbox_navigation/library.dart';
 import 'package:test/test.dart';
 import 'package:veloplan/helpers/navigation_helpers/navigation_conversions_helpers.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
@@ -6,7 +7,6 @@ import 'package:mapbox_gl/mapbox_gl.dart';
 /// Author(s): Elisabeth Koren Halvorsen k20077737, Fariha Choudhury k20059723
 
 void main() {
-
   List<LatLng> prettyCoords = [
     const LatLng(-50, 1),
     const LatLng(-51, -1),
@@ -15,32 +15,37 @@ void main() {
 
   List<LatLng> emptyList = [];
 
-  // group('convert LatLng to waypoint', () {
-  //   test('LatLng with empty name should return waypoint with empty name', () {
-  //     expect(
-  //         latLng2WayPoint(zeroCoord, ""),
-  //         WayPoint(
-  //             name: "",
-  //             latitude: zeroCoord.latitude as double,
-  //             longitude: zeroCoord.longitude as double));
-  //   });
+  LatLng zeroCoord = LatLng(0, 0);
 
-  //   test('different locations distance should be returned', () {
-  //     expect(latLng2WayPoint(prettyCoords[0], "name"),
-  //         WayPoint(latitude: 0, longitude: 0, name: ''));
-  //     // WayPoint(
-  //     //     name: "name",
-  //     //     latitude: prettyCoords[0].latitude,
-  //     //     longitude: prettyCoords[0].longitude));
-  //   });
-  // });
+  group('convert LatLng to waypoint', () {
+    test('LatLng with empty name should return waypoint with empty name', () {
+      String name = "";
+      WayPoint wayPoint = latLng2WayPoint(zeroCoord, name);
+      expect(wayPoint.name, name);
+      expect(wayPoint.latitude, zeroCoord.latitude);
+      expect(wayPoint.longitude, zeroCoord.longitude);
+    });
+
+    test('different locations distance should be returned', () {
+      String name = "name";
+      LatLng coord = prettyCoords[0];
+      WayPoint wayPoint = latLng2WayPoint(coord, name);
+      expect(wayPoint.name, name);
+      expect(wayPoint.latitude, coord.latitude);
+      expect(wayPoint.longitude, coord.longitude);
+    });
+  });
 
   group('test list of lat longs to list of waypoints', () {
-    test(
-        'List of LatLngs with empty name should return list of waypoints of the same size',
+    test("List of LatLngs with empty name should return list valid wayponints",
         () {
       var waypoints = latLngs2WayPoints(prettyCoords);
       expect(waypoints.length, prettyCoords.length);
+      for (int i = 0; i < waypoints.length; ++i) {
+        waypoints[i].latitude = prettyCoords[i].latitude;
+        waypoints[i].longitude = prettyCoords[i].longitude;
+        waypoints[i].name = i.toString();
+      }
     });
 
     test(
@@ -50,12 +55,12 @@ void main() {
       expect(waypoints.length, 0);
     });
 
-    // test('List of Latlng returns a waypoint with index as name', () {
-    //   var waypoints = latLngs2WayPoints(prettyCoords);
-    //   expect(waypoints[0], WayPoint(latitude: -50, longitude: 1, name: '0'));
-    //   expect(waypoints[1], WayPoint(latitude: -51, longitude: -1, name: '1'));
-    //   expect(waypoints[2], WayPoint(latitude: -50.5, longitude: 0, name: '2'));
-    // });
+    test('List of Latlng returns a waypoint with index as name', () {
+      var waypoints = latLngs2WayPoints(prettyCoords);
+      for (int i = 0; i < waypoints.length; ++i) {
+        waypoints[i].name = i.toString();
+      }
+    });
   });
 
   group('convert LatLng to waypoint', () {
@@ -65,8 +70,20 @@ void main() {
       [5, 6]
     ];
 
-    List<List<double?>?> badList = [
+    List<List<double?>?> listWithNull = [
       [1, null],
+      [3, 4],
+      [5, 6]
+    ];
+
+    List<List<double?>?> toSmallList = [
+      [1],
+      [3],
+      [5]
+    ];
+
+    List<List<double?>?> toBigList = [
+      [1, 2, 3],
       [3, 4],
       [5, 6]
     ];
@@ -76,10 +93,28 @@ void main() {
     });
 
     test('null should be returned when passing a list with null', () {
-      expect(convertListDoubleToLatLng(badList), null);
+      expect(convertListDoubleToLatLng(listWithNull), null);
     });
 
     test('LatLng points should be assigned in a good list', () {
+      List<LatLng>? list = convertListDoubleToLatLng(goodList);
+      int length = list?.length as int;
+      expect(goodList.length, length);
+      for (int i = 0; i < length; ++i) {
+        LatLng currentPoint = list![i];
+        expect(currentPoint.latitude, goodList[i]![0]);
+        expect(currentPoint.longitude, goodList[i]![1]);
+      }
+    });
+
+    test('too big or small list should return null', () {
+      List<LatLng>? toSmall = convertListDoubleToLatLng(toSmallList);
+      List<LatLng>? toBig = convertListDoubleToLatLng(toBigList);
+      expect(toSmall, null);
+      expect(toBig, null);
+    });
+
+    test('too big list should return null', () {
       List<LatLng>? list = convertListDoubleToLatLng(goodList);
       int length = list?.length as int;
       expect(goodList.length, length);

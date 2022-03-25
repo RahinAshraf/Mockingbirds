@@ -27,6 +27,9 @@ List<LatLng>? convertListDoubleToLatLng(List<List<double?>?> points) {
   try {
     List<LatLng> myList = [];
     for (int i = 0; i < points.length; i++) {
+      if (!(points[i]?.length == 2)) {
+        return null;
+      }
       myList.add(LatLng(points[i]?.first as double, points[i]?.last as double));
     }
     return myList;
