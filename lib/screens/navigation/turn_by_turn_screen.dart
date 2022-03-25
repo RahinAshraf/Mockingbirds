@@ -86,8 +86,6 @@ class _TurnByTurnState extends State<TurnByTurn> {
   @override
   Widget build(BuildContext context) {
     Future.delayed(const Duration(seconds: 3));
-    //if you want to try popup screen which then proceeds to crash
-    // return _buildPopupDialog(context, wayPoints);
     return const MapPage();
   }
 
@@ -167,29 +165,5 @@ class _TurnByTurnState extends State<TurnByTurn> {
 
     /// refresh UI
     setState(() {});
-  }
-
-  PopupWidget _buildPopupDialog(BuildContext context, var wayPoints) {
-    List<PopupButtonWidget> children = [
-      PopupButtonWidget(
-        text: "Redirect",
-        onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => TurnByTurn(wayPoints)));
-        },
-      ),
-      PopupButtonWidget(
-        text: "Finish journey",
-        onPressed: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => MapPage()));
-        },
-      ),
-    ];
-    return PopupWidget(
-        title: "Choose how to proceed with your trip!",
-        text: "Only one way to find out.",
-        children: children,
-        type: AlertType.question);
   }
 }

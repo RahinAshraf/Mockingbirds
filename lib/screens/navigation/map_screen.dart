@@ -23,72 +23,29 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> {
   LatLng currentLatLng = getLatLngFromSharedPrefs();
   late BaseMapboxMap _baseMap;
-  late BaseMapboxRouteMap _baseMapWithRoute;
-  List<LatLng> points = [
-    LatLng(51.514951, -0.112762),
-    LatLng(51.513146, -0.115256),
-  ];
-
-  // /// ! show usage of BaseMapboxRouteMap
-
-  // List<LatLng> points = [
-  //   LatLng(51.514951, -0.112762),
-  //   LatLng(51.513146, -0.115256),
-  //   LatLng(51.511407, -0.125497),
-  //   LatLng(51.506053, -0.130310),
-  //   LatLng(51.502254, -0.217760),
-  // ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: ScopedModelDescendant<MapModel>(
         builder: (BuildContext context, Widget? child, MapModel model) {
-      _baseMapWithRoute = BaseMapboxRouteMap(points, model);
+      _baseMap = BaseMapboxMap(model);
       addPositionZoom();
-      return SafeArea(child: Stack(children: _baseMapWithRoute.getWidgets()));
+      return SafeArea(child: Stack(children: _baseMap.getWidgets()));
     }));
   }
 
   /// add positional zoom to our widgets
   void addPositionZoom() {
-    _baseMapWithRoute.addWidget(Container(
+    _baseMap.addWidget(Container(
       alignment: Alignment(0.9, 0.90),
       child: FloatingActionButton(
         heroTag: "center_to_current_loaction",
         onPressed: () {
-          _baseMapWithRoute.controller?.animateCamera(
-              CameraUpdate.newCameraPosition(_baseMapWithRoute.cameraPosition));
+          _baseMap.controller?.animateCamera(
+              CameraUpdate.newCameraPosition(_baseMap.cameraPosition));
         },
         child: const Icon(Icons.my_location),
       ),
     ));
-  }
-
-  void addPopup() {
-    _baseMap.addWidget(_buildPopupDialog(context, points));
-  }
-
-  PopupWidget _buildPopupDialog(BuildContext context, var wayPoints) {
-    List<PopupButtonWidget> children = [
-      PopupButtonWidget(
-        text: "Redirect",
-        onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => TurnByTurn(wayPoints)));
-        },
-      ),
-      PopupButtonWidget(
-        text: "Finish journey",
-        onPressed: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => MapPage()));
-        },
-      ),
-    ];
-    return PopupWidget(
-        title: "Choose how to proceed with your trip!",
-        text: "Only one way to find out.",
-        children: children,
-        type: AlertType.question);
   }
 }

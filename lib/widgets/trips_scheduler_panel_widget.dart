@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:veloplan/screens/journey_planner_screen.dart';
 import 'package:veloplan/styles/styling.dart';
@@ -14,7 +15,8 @@ class _PanelWidgetTripScheduler extends State<PanelWidgetTripScheduler> {
   final int maximumNumberOfCyclists = 6; // there can be <=6 people in the group
   int numberOfCyclists = 1; // min one cyclist allowed
   DateTime selectedDate = DateTime.now();
-  TimeOfDay selectedTime = const TimeOfDay(hour: 0, minute: 0);
+  DateFormat formatter = DateFormat('yyyy-MM-dd');
+  late String formattedDate;
 
   @override
   Widget build(BuildContext context) => ListView(
@@ -77,7 +79,10 @@ class _PanelWidgetTripScheduler extends State<PanelWidgetTripScheduler> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => JourneyPlanner(numberOfCyclists : numberOfCyclists)));
+                            builder: (context) => JourneyPlanner(
+                                  numberOfCyclists: numberOfCyclists,
+                                  journeyDate: DateTime.now(),
+                                )));
                   },
                   child: const Text('Now'),
                 ),
@@ -97,8 +102,9 @@ class _PanelWidgetTripScheduler extends State<PanelWidgetTripScheduler> {
           Padding(
             // TODO: do something with the time value rather than just displaying it.
             // TODO: check if there is no journey planned for the same day. [OPTIONAL]
+
             padding: const EdgeInsets.only(top: 24.0),
-            child: Center(child: Text(selectedDate.toString())),
+            child: Center(child: Text(formatter.format(selectedDate))),
           ),
         ],
       );
@@ -131,25 +137,14 @@ class _PanelWidgetTripScheduler extends State<PanelWidgetTripScheduler> {
     if (picked != null) {
       setState(() {
         selectedDate = picked;
-        _selectTime(context);
-      });
-    }
-  }
-
-  void _selectTime(BuildContext context) async {
-    final TimeOfDay? picked = await showTimePicker(
-        context: context,
-        initialTime: selectedTime,
-        builder: (context, child) {
-          return MediaQuery(
-            data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
-            child: child!,
-          );
-        });
-    if (picked != null) {
-      setState(() {
-        selectedDate = DateTime(selectedDate.year, selectedDate.month,
-            selectedDate.day, picked.hour, picked.minute);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => JourneyPlanner(
+                      numberOfCyclists: numberOfCyclists,
+                      journeyDate: selectedDate,
+                      isScheduled: true,
+                    )));
       });
     }
   }

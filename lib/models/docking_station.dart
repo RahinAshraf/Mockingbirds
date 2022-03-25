@@ -37,6 +37,7 @@ class DockingStation {
   double get lat => _lat;
   String? get documentId => _documentId;
 
+  ///Creates an instance of a docking station including its document id when added to firebase
   DockingStation.map(DocumentSnapshot document) {
     _documentId = document.id;
     _stationId = document.get('stationId');
