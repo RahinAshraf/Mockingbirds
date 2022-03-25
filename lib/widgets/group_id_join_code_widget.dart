@@ -5,7 +5,7 @@ import 'package:veloplan/utilities/dart_exts.dart';
 
 import '../helpers/database_manager.dart';
 import '../helpers/navigation_helpers/navigation_conversions_helpers.dart';
-import '../models/trip.dart';
+import '../models/itineraryManager.dart';
 import '../screens/summary_journey_screen.dart';
 
 class GroupId extends StatefulWidget {
@@ -65,8 +65,10 @@ class GroupIdState extends State<GroupId> {
             SetOptions(merge: true));
       });
       await _databaseManager.updateByKey('group', id, {'memberList': list});
-      Trip trip = Trip(points!);
-      context.push(SummaryJourneyScreen(points!, trip));
+//TODO need from lili -> to save the data with itinerary-> retrieve a itiner object
+
+      //TODO: call an itinerary manager here to get the destination and durations -> uncomment once done
+      // context.push(SummaryJourneyScreen(_itinerary));
     }
   }
 

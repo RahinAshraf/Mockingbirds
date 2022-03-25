@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
-import '/models/journey.dart';
+import '../models/itinerary.dart';
 import '../widgets/carousel/station_carousel.dart';
 
 ///Creates a card for a started journey, to include its start time and planned docking stations
 ///Author: Tayyibah
 class MyJourneyCard extends StatefulWidget {
-  late Journey journey;
+  late Itinerary journey;
   DockingStationCarousel stationCarousel =
       DockingStationCarousel.test(); //change this
   late List<Widget> stationCards;
 
-  MyJourneyCard(Journey journey) {
+  MyJourneyCard(Itinerary journey) {
     this.journey = journey;
-    this.stationCards =
-        stationCarousel.createDockingCards(journey.stationList!);
+    this.stationCards = stationCarousel.createDockingCards(journey.docks!);
   }
 
   @override

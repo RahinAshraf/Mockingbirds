@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:veloplan/helpers/schedule_helper.dart';
+import 'package:veloplan/models/itinerary.dart';
 import 'package:veloplan/screens/journey_planner_screen.dart';
 import 'package:veloplan/screens/navigation/map_with_route_screen.dart';
 import 'package:veloplan/screens/summary_journey_screen.dart';
@@ -12,7 +13,7 @@ import 'package:veloplan/widgets/panel_widget/panel_widget_exts.dart';
 import 'package:veloplan/widgets/panel_widget/panel_widgets_base.dart';
 import '../../helpers/navigation_helpers/navigation_conversions_helpers.dart';
 import '../../models/docking_station.dart';
-import '../../models/trip.dart';
+import '../../models/itineraryManager.dart';
 import '../../providers/location_service.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
@@ -423,14 +424,16 @@ class PanelWidgetState extends State<PanelWidget> {
       List<LatLng> closestDockList = [];
       HistoryHelper historyHelper = new HistoryHelper();
 
-      List<DockingStation> dockingStationList = [];
+// TODO: change that method to include the selected docks by the user and not the default closest docks!
+      List<DockingStation> selectedDocks = [];
       if (points != null) {
         for (int i = 0; i < points.length; i++) {
           DockingStation closestDock = _stationManager
               .getClosestDock(LatLng(points[i].latitude, points[i].longitude));
-          LatLng closetDockCoord = LatLng(closestDock.lat, closestDock.lon);
-          dockingStationList.add(closestDock);
-          closestDockList.add(closetDockCoord);
+          //get the dock
+          selectedDocks.add(closestDock);
+          //get the coord
+          closestDockList.add(closestDock.getLatlng());
         }
         print("ALL_COORDINATES FOR CLOSEST DOCKS => $closestDockList");
       }
@@ -459,12 +462,18 @@ class PanelWidgetState extends State<PanelWidget> {
       }
 
       if (points == null) {
-        //! show something went wrong allert
+        //! show something went wrong alert
         print("hello");
       } else {
-        Trip trip = Trip(points);
-        historyHelper.createJourneyEntry(dockingStationList);
-        context.push(SummaryJourneyScreen(closestDockList, trip));
+        //TODO change after merge with tbt
+        Itinerary _itinerary = new Itinerary.navigation(
+            selectedDocks, points, widget.numberOfCyclists);
+
+        //save the journey into the database
+        historyHelper.createJourneyEntry(selectedDocks);
+
+        //go to the summary of journey screen
+        context.push(SummaryJourneyScreen(_itinerary));
 
         // Navigator.of(context).push(MaterialPageRoute(
         //   builder: (context) => SummaryJourneyScreen(points, trip),

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart';
 
 ///Represents a docking station
 ///Author(s): Liliana, Nicole, Tayyibah
@@ -44,6 +45,10 @@ class DockingStation {
     _name = document.get('name');
     _numberOfBikes = document.get('numberOfBikes');
     _numberOfEmptyDocks = document.get('numberOfEmptyDocks');
+  }
+
+  LatLng getLatlng() {
+    return new LatLng(this._lat, this._lon);
   }
 
   /// An empty constructor useful for initialisations

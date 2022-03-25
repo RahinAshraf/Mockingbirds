@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../widgets/carousel/station_carousel.dart';
 import 'package:collection/collection.dart';
 import 'package:veloplan/models/docking_station.dart';
-import '../models/journey.dart';
+import '../models/itinerary.dart';
 import 'package:intl/intl.dart';
 
 ///Helper functions to add started journeys to data base.
@@ -76,15 +76,15 @@ class HistoryHelper {
   }
 
   ///Gets all of a users journeys
-  Future<List<Journey>> getAllJourneyDocuments() async {
+  Future<List<Itinerary>> getAllJourneyDocuments() async {
     FirebaseFirestore db = FirebaseFirestore.instance;
-    List<Journey> journeyList = [];
+    List<Itinerary> journeyList = [];
 
     QuerySnapshot<Object?> journeys = await _journeys.get();
     for (DocumentSnapshot doc in journeys.docs) {
       List<DockingStation> stationList =
           await getDockingStationsInJourney(doc.id);
-      journeyList.add(Journey.map(doc, stationList));
+      journeyList.add(Itinerary.map(doc, stationList));
     }
     return journeyList;
   }

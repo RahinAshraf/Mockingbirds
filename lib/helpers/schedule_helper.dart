@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../models/journey.dart';
+import '../models/itinerary.dart';
 
 ///Helper functions to add or remove a scheduled itinerary from the database.
 ///An itinerary includes a list of destinations and the time the trip should start.
@@ -31,11 +31,11 @@ class ScheduleHelper {
   }
 
   ///Gets all of a users schedules
-  Future<List<Journey>> getAllScheduleDocuments() async {
-    List<Journey> scheduleList = [];
+  Future<List<Itinerary>> getAllScheduleDocuments() async {
+    List<Itinerary> scheduleList = [];
     QuerySnapshot<Object?> journeys = await _schedules.get();
     for (DocumentSnapshot doc in journeys.docs) {
-      scheduleList.add(Journey.scheduleMap(doc));
+      scheduleList.add(Itinerary.scheduleMap(doc));
     }
     return scheduleList;
   }

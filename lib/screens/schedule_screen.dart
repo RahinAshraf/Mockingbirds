@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import '../helpers/schedule_helper.dart';
-import '../models/journey.dart';
+import '../models/itinerary.dart';
 import '../styles/styling.dart';
 
 ///Author: Marija
@@ -14,7 +14,7 @@ class SchedulePage extends StatefulWidget {
 }
 
 class _SchedulePageState extends State<SchedulePage> {
-  List<Journey> journeyList = [];
+  List<Itinerary> journeyList = [];
   var helper = ScheduleHelper();
 
   @override
@@ -110,7 +110,7 @@ class _SchedulePageState extends State<SchedulePage> {
 /// The list [upcomingEventCards] should already contain all the events
 /// of a user on the same date, sorted from earliest to latest.
 class TimelineItem extends StatelessWidget {
-  final Journey journey;
+  final Itinerary journey;
   final int index;
   TimelineItem(this.journey, this.index);
 

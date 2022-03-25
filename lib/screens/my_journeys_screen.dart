@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../helpers/history_helper.dart';
 import '../styles/styling.dart';
 import '../models/docking_station.dart';
-import '../models/journey.dart';
+import '../models/itinerary.dart';
 import '../widgets/my_journey_card.dart';
 
 ///Loads users favourited docking stations and displays them in a list view.
@@ -15,7 +15,7 @@ class MyJourneys extends StatefulWidget {
 }
 
 class _MyJourneysState extends State<MyJourneys> {
-  List<Journey> journeyList = [];
+  List<Itinerary> journeyList = [];
 
   var helper = HistoryHelper();
 

@@ -1,6 +1,8 @@
 import 'package:flutter_mapbox_navigation/library.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 
+import '../../models/docking_station.dart';
+
 /// Helper methods related to converting LatLng to WayPoints
 /// Author(s): Elisabeth Koren Halvorsen k20077737, Fariha Choudhury k20059723, Rahin Ashraf - k20034059
 
@@ -51,40 +53,62 @@ List<List<double?>?>? convertLatLngToDouble(List<LatLng?> points) {
   }
 }
 
+List<List<double?>?>? convertDocksToDouble(List<DockingStation> docks) {
+  try {
+    List<List<double?>?> myList = [];
+    for (int i = 0; i < docks.length; i++) {
+      myList.add([docks[i].lat, docks[i].lat]);
+    }
+    return myList;
+  } on StateError {
+    return null;
+  } catch (e) {
+    return null;
+  }
+}
 
-List<List<double?>?> convertStringToList(String points){
+List<LatLng>? convertDocksToLatLng(List<DockingStation> docks) {
+  try {
+    List<LatLng> myList = [];
+    if (docks.length > 0) {
+      for (int i = 0; i < docks.length; i++) {
+        myList.add(LatLng(docks[i].lat, docks[i].lon));
+      }
+    }
+    return myList;
+  } on StateError {
+    return null;
+  } catch (e) {
+    return null;
+  }
+}
+
+List<List<double?>?> convertStringToList(String points) {
   List<List<double?>?> res = [];
-  String num ='';
+  String num = '';
   double numDouble;
   List<double> temp = [];
-  for(int i =0; i <points.length; i++){
-
-    if(points.substring(i, i+1) == '['){
-
-    } else if(points.substring(i, i+1) == ']'){
+  for (int i = 0; i < points.length; i++) {
+    if (points.substring(i, i + 1) == '[') {
+    } else if (points.substring(i, i + 1) == ']') {
       print(num);
       numDouble = double.parse(num);
       temp.add(numDouble);
-      num ='';
+      num = '';
       numDouble = 0;
       res.add(temp);
-      temp=[];
-    }
-    else if(points.substring(i, i+1) == ','){
+      temp = [];
+    } else if (points.substring(i, i + 1) == ',') {
       print(num);
       numDouble = double.parse(num);
       temp.add(numDouble);
-      num ='';
+      num = '';
       numDouble = 0;
-    }
-    else if(points.substring(i, i+1) == ' '){
-
-    }
-    else{
-      num = num + points.substring(i, i+1);
+    } else if (points.substring(i, i + 1) == ' ') {
+    } else {
+      num = num + points.substring(i, i + 1);
     }
   }
 
   return res;
-
 }

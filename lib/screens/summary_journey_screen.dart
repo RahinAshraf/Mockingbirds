@@ -7,8 +7,10 @@ import 'package:flutter/services.dart';
 import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import 'package:veloplan/helpers/database_manager.dart';
+import 'package:veloplan/models/itineraryManager.dart';
 import 'package:veloplan/models/path.dart';
-import 'package:veloplan/models/trip.dart';
+import '../helpers/navigation_helpers/navigation_conversions_helpers.dart';
+import '../models/itinerary.dart';
 import 'navigation/map_with_route_screen.dart';
 import 'dart:async';
 
@@ -18,13 +20,13 @@ import 'package:veloplan/navbar.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
 
 class SummaryJourneyScreen extends StatefulWidget {
-  final List<LatLng> points;
-  late Trip trip;
-  SummaryJourneyScreen(this.points, this.trip, {Key? key}) : super(key: key);
+  // final List<LatLng> points;
+  late Itinerary itinerary;
+  SummaryJourneyScreen(this.itinerary, {Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() =>
-      SummaryJourneyScreenState(this.points, this.trip);
+      SummaryJourneyScreenState(this.itinerary);
 }
 
 class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
@@ -32,19 +34,22 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
   bool isInGroup = false;
   late String groupID = "";
   late String organiser = "";
-  late List<List<double?>?> points;
-  final List<LatLng> _points;
-  late Trip trip;
+  late List<List<double?>?> pointsInDoubles;
+  late List<LatLng> pointsCoord;
+  late Itinerary _itinerary;
   late List<Path> paths;
-  List<Widget> _intStation = [];
 
-  SummaryJourneyScreenState(this._points, this.trip) {
+  SummaryJourneyScreenState(this._itinerary) {
+    //TODO: find the best place to call the itinerary manager
     // this.trip = Trip(this.points);
   }
 
   @override
   void initState() {
-    points = convertLatLngToDouble(widget.points)!;
+    print(widget.itinerary.docks!.length.toString() +
+        "000000000000000000000000000000000");
+    pointsInDoubles = convertDocksToDouble(widget.itinerary.docks!)!;
+    pointsCoord = convertDocksToLatLng(widget.itinerary.docks!)!;
     _setData();
     super.initState();
   }
@@ -66,11 +71,11 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
       var group = await _databaseManager.getByEquality(
           'group', 'code', user.data()!['group']);
       res = await _getGroupOwner(group);
-      points = [];
+      pointsInDoubles = [];
       group.docs.forEach((element) {
         var geoList = element.data()['points'];
         for (int i = 0; i < geoList.length; i++) {
-          points.add([geoList[i].latitude, geoList[i].longitude]);
+          pointsInDoubles.add([geoList[i].latitude, geoList[i].longitude]);
         }
       });
     }
@@ -106,8 +111,8 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
       x = await _databaseManager.getByEquality('group', 'code', code);
     }
     List<GeoPoint> geoList = [];
-    for (int i = 0; i < points.length; i++) {
-      geoList.add(GeoPoint(points[i]![0]!, points[i]![1]!));
+    for (int i = 0; i < pointsInDoubles.length; i++) {
+      geoList.add(GeoPoint(pointsInDoubles[i]![0]!, pointsInDoubles[i]![1]!));
     }
 
     try {
@@ -316,7 +321,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => MapRoutePage(_points)),
+                            builder: (context) => MapRoutePage(pointsCoord)),
                       );
                     },
                   )),
@@ -327,15 +332,16 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
 
   List<Widget> _generateStops() {
     List<Widget> smth = [];
-    paths = trip.getPaths();
-    for (var path in paths) {
-      print("-----------" + path.des2Name);
-      smth.add(StationTempWidget(content: path.des1Name));
+    ItineraryManager _itineraryManager = new ItineraryManager(_itinerary);
+    paths = _itineraryManager.getPaths();
+    for (var dock in _itinerary.docks!) {
+      print("-----------" + dock.name);
+      // print("-----------" + path.des2Name);
+      smth.add(StationTempWidget(content: dock.name));
+      // smth.add(StationTempWidget(content: path.des1Name));
     }
     return smth;
   }
-
-  convertLatLngToDouble(List<LatLng> points) {}
 }
 
 class StationTempWidget extends StatelessWidget {
