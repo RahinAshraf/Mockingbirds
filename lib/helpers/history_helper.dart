@@ -1,10 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import '../widgets/carousel/station_carousel.dart';
-import 'package:collection/collection.dart';
 import 'package:veloplan/models/docking_station.dart';
 import '../models/journey.dart';
-import 'package:intl/intl.dart';
+import 'database_manager.dart';
 
 ///Helper functions to add started journeys to data base.
 ///Started journeys include a list of docking stations and the time the journey began.
@@ -12,13 +9,10 @@ import 'package:intl/intl.dart';
 
 class HistoryHelper {
   late CollectionReference _journeys;
-  late final _user_id;
-  late FirebaseFirestore _db;
+  DatabaseManager databaseManager = DatabaseManager();
 
   HistoryHelper() {
-    _db = FirebaseFirestore.instance;
-    _user_id = FirebaseAuth.instance.currentUser!.uid;
-    _journeys = _db.collection('users').doc(_user_id).collection('journeys');
+    _journeys = databaseManager.getUserSubCollectionReference("journeys");
   }
 
   ///Creates a new journey entry and adds the time and docking stations

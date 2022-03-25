@@ -4,8 +4,8 @@ import 'package:veloplan/helpers/favourite_helper.dart';
 import 'package:veloplan/models/docking_station.dart';
 
 ///Creates a card for a docking station, to include its name, number of bikes and empty bikes.
-///Author: Tayyibah Uddin
-///Contributor: Fariha Choudhury
+///Author: Tayyibah
+///Contributor: Fariha
 class DockingStationCard extends StatefulWidget {
   late final String iD;
   late final String stationName;
@@ -34,13 +34,15 @@ class DockingStationCard extends StatefulWidget {
 class _DockingStationCardState extends State<DockingStationCard> {
   final _helper = FavouriteHelper(); //change name
   List<DockingStation> _favourites = [];
-  bool isFavouriteEnabled = true;
+  bool _isFavouriteButtonEnabled = true;
+   bool _isFavourited = false;
 
   @override
   void initState() {
     FavouriteHelper.getUserFavourites().then((data) {
       setState(() {
         _favourites = data;
+        _isFavourited = _helper.isFavouriteStation(widget.iD, _favourites);
       });
     });
     super.initState();
@@ -48,8 +50,8 @@ class _DockingStationCardState extends State<DockingStationCard> {
 
   ///Sets [isFavouriteEnabled] to false to disable favourite button for 3 seconds after button click
   void _disableFavButton() {
-    isFavouriteEnabled = false;
-    Timer(const Duration(seconds: 3), () => isFavouriteEnabled = true);
+    _isFavouriteButtonEnabled = false;
+    Timer(const Duration(seconds: 3), () => _isFavouriteButtonEnabled = true);
   }
 
   @override
@@ -65,34 +67,7 @@ class _DockingStationCardState extends State<DockingStationCard> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            IconButton(
-              icon: _helper.isFavouriteStation(widget.iD, _favourites)
-                  ? const Icon(
-                      Icons.favorite,
-                      color: Colors.red,
-                    )
-                  : const Icon(
-                      Icons.favorite,
-                      color: Colors.grey,
-                    ),
-              onPressed: () async {
-                if (isFavouriteEnabled) {
-                  _disableFavButton();
-                  List<DockingStation> updatedFavourites =
-                      await FavouriteHelper.getUserFavourites();
-                  _helper.toggleFavourite(
-                    widget.iD,
-                    widget.stationName,
-                    widget.numberOfBikes,
-                    widget.numberOfEmptyDocks,
-                  );
-
-                  setState(() {
-                    _favourites = updatedFavourites;
-                  });
-                }
-              },
-            ),
+            buildFaveButton(),
             const SizedBox(width: 10),
             Expanded(
               child: Column(
@@ -118,5 +93,42 @@ class _DockingStationCardState extends State<DockingStationCard> {
         ),
       ),
     );
+  }
+
+  IconButton buildFaveButton() {
+    return IconButton(
+      icon: getFaveButtonColour(),
+      onPressed: () async {
+        if (_isFavouriteButtonEnabled) {
+          _disableFavButton();
+
+          _helper.toggleFavourite(
+            widget.iD,
+            widget.stationName,
+            widget.numberOfBikes,
+            widget.numberOfEmptyDocks,
+          );
+
+          List<DockingStation> updatedFavourites =
+              await FavouriteHelper.getUserFavourites();
+          setState(() {
+            _favourites = updatedFavourites;
+            _isFavourited = !_isFavourited;
+          });
+        }
+      },
+    );
+  }
+
+  Icon getFaveButtonColour() {
+    return _isFavourited
+        ? const Icon(
+            Icons.favorite,
+            color: Colors.red,
+          )
+        : const Icon(
+            Icons.favorite,
+            color: Colors.grey,
+          );
   }
 }
