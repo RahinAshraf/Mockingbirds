@@ -25,11 +25,9 @@ class TurnByTurn extends StatefulWidget {
 }
 
 class _TurnByTurnState extends State<TurnByTurn> {
-  //late List<LatLng> points;
   late var wayPoints = <WayPoint>[];
 
   _TurnByTurnState(var points) {
-    // this.points = points;
     wayPoints = points;
   }
 
