@@ -81,7 +81,6 @@ class MyHomePageState extends State<MapPage2> {
     print(latLng.latitude);
     print(latLng.longitude);
     _cameraPosition = CameraPosition(target: currentLatLng, zoom: 12);
-    deleteOldGroup();
     // _initialCameraPosition = CameraPosition(target: latLng, zoom: zoom);
 
     //getRouteResponse();
@@ -96,23 +95,6 @@ class MyHomePageState extends State<MapPage2> {
     }
   }
 
-  Future<void> deleteOldGroup() async {
-    var user = await _databaseManager.getByKey(
-        'users', _databaseManager.getCurrentUser()!.uid);
-    var group = await _databaseManager.getByEquality(
-        'group', 'code', user.data()!['group']);
-    group.docs.forEach((element) {
-      Timestamp timestamp = element.data()['createdAt'];
-      if (DateTime.now().difference(timestamp.toDate()) > Duration(days: 1)) {
-        element.reference.delete();
-        _databaseManager.setByKey(
-            'users',
-            _databaseManager.getCurrentUser()!.uid,
-            {'group': null},
-            SetOptions(merge: true));
-      }
-    });
-  }
 
   _onMapCreated(MapboxMapController controller) async {
     this.controller = controller;
