@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:convert';
 import "package:http/http.dart" as http;
+import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart';
 
 ///Represents a docking station
 ///Author(s): Liliana, Nicole, Tayyibah
@@ -91,12 +92,17 @@ class DockingStation {
   double get lat => _lat;
   String? get documentId => _documentId;
 
+  ///Creates an instance of a docking station including its document id when added to firebase
   DockingStation.map(DocumentSnapshot document) {
     _documentId = document.id;
     _stationId = document.get('stationId');
     _name = document.get('name');
     _numberOfBikes = document.get('numberOfBikes');
     _numberOfEmptyDocks = document.get('numberOfEmptyDocks');
+  }
+
+  LatLng getLatlng() {
+    return new LatLng(this._lat, this._lon);
   }
 
   /// An empty constructor useful for initialisations

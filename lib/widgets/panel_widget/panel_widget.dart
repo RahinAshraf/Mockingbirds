@@ -1,14 +1,19 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:veloplan/helpers/schedule_helper.dart';
+import 'package:veloplan/models/itinerary.dart';
 import 'package:veloplan/screens/journey_planner_screen.dart';
 import 'package:veloplan/screens/navigation/map_with_route_screen.dart';
+import 'package:veloplan/screens/summary_journey_screen.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
 import 'package:veloplan/widgets/panel_widget/panel_widget_exts.dart';
 import 'package:veloplan/widgets/panel_widget/panel_widgets_base.dart';
 import '../../helpers/navigation_helpers/navigation_conversions_helpers.dart';
 import '../../models/docking_station.dart';
+import '../../models/itineraryManager.dart';
 import '../../providers/location_service.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
@@ -18,6 +23,7 @@ import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:veloplan/models/docking_station.dart';
 import '../../screens/navigation/polyline_turn_by_turn.dart';
 import '../dynamic_widget.dart';
+import 'package:veloplan/helpers/history_helper.dart';
 
 ///When rendered, the journey_planner_screen will have this panel_widget at the bottom. It is an interactive panel the user can
 ///slide up or down, when wanting to input their desired locations for the journey.
@@ -36,7 +42,9 @@ class PanelWidget extends PanelWidgetBase {
       required TextEditingController toTextEditController,
       required int numberOfCyclists,
       required TextEditingController fromTextEditController,
-      required PanelController panelController})
+      required PanelController panelController,
+      required bool isScheduled,
+      required DateTime journeyDate})
       : super(
             selectionMap: selectionMap,
             address: address,
@@ -48,7 +56,9 @@ class PanelWidget extends PanelWidgetBase {
             toTextEditController: toTextEditController,
             fromTextEditController: fromTextEditController,
             panelController: panelController,
-            numberOfCyclists: numberOfCyclists);
+            numberOfCyclists: numberOfCyclists,
+            isScheduled: isScheduled,
+            journeyDate: journeyDate);
   @override
   PanelWidgetState createState() {
     return PanelWidgetState();
@@ -106,6 +116,7 @@ class PanelWidgetState extends State<PanelWidget> {
     selectionMap = widget.selectionMap;
     print(
         "PanelWidgetState => ${widget.numberOfCyclists}"); //access number of cyclist like this
+    print("is scheduled: ${widget.isScheduled}");
     LatLng currentLocation = getLatLngFromSharedPrefs();
     locService
         .reverseGeoCode(currentLocation.latitude, currentLocation.longitude)
@@ -370,13 +381,44 @@ class PanelWidgetState extends State<PanelWidget> {
                 backgroundColor: Colors.green,
                 primary: Colors.white,
               ),
-              onPressed: _handleStartClick,
-              child: text("START"),
+              onPressed:
+                  widget.isScheduled ? _handleSaveClick : _handleStartClick,
+              child: widget.isScheduled ? text("SAVE") : text("START"),
             ),
           ),
         ],
       ),
     );
+  }
+
+  Future<void> _handleSaveClick() async {
+    final hasEmptyField = widget.listDynamic
+        .any((element) => element.placeTextController.text.isEmpty);
+
+    applyConstraints(
+        widget.fromTextEditController, widget.toTextEditController);
+
+    if (hasEmptyField) {
+      alert.showSnackBarErrorMessage(
+          context, alert.startPointMustBeDefinedMessage);
+      return;
+    } else if (areAdjacentCoords(widget.selectedCoords)) {
+      alert.showSnackBarErrorMessage(context, alert.noAdjacentLocationsAllowed);
+      return;
+    } else {
+      List<List<double?>?> tempList = [];
+      tempList.addAll(staticListMap.values);
+      tempList.addAll(widget.selectedCoords);
+
+      ScheduleHelper helper = ScheduleHelper();
+      helper.createScheduleEntry(
+          widget.journeyDate, tempList, widget.numberOfCyclists);
+    }
+    // Navigate back to the previous screen, useful for tbt
+    Navigator.of(context).pop(true);
+
+    // save the journey for the future
+    // popup warning station availability
   }
 
   ///The function to deal with the user pressing the START button. Applies the constraints for a journey.
@@ -405,21 +447,21 @@ class PanelWidgetState extends State<PanelWidget> {
       List<LatLng>? points = convertListDoubleToLatLng(tempList);
 
       List<LatLng> closestDockList = [];
-      List<DockingStation> _closestDocksList = [];
+      HistoryHelper historyHelper = new HistoryHelper();
+
+// TODO: change that method to include the selected docks by the user and not the default closest docks!
+      List<DockingStation> selectedDocks = [];
       if (points != null) {
         for (int i = 0; i < points.length; i++) {
           DockingStation closestDock = _stationManager
               .getClosestDock(LatLng(points[i].latitude, points[i].longitude));
-
-          //get the actual dock!
-          _closestDocksList.add(closestDock);
-
-          //get the actual dock coord
-          LatLng closetDockCoord = LatLng(closestDock.lat, closestDock.lon);
-          closestDockList.add(closetDockCoord);
+          //get the dock
+          selectedDocks.add(closestDock);
+          //get the coord
+          closestDockList.add(closestDock.getLatlng());
         }
         print("ALL_COORDINATES FOR CLOSEST DOCKS => $closestDockList");
-        print("ALL_DOCKS FOR CLOSEST DOCKS => $_closestDocksList");
+        print("ALL_DOCKS FOR CLOSEST DOCKS => $selectedDocks");
       }
 
       List<LatLng> closestDocksWithNoAdjancents = [];
@@ -446,15 +488,28 @@ class PanelWidgetState extends State<PanelWidget> {
       }
 
       if (points == null) {
-        //! show something went wrong allert
+        //! show something went wrong alert
         print("hello");
       } else {
-        // Navigate back to the previous screen, useful for tbt
-        final response =
-            await context.push(MapUpdatedRoutePage(_closestDocksList, points));
+        Itinerary _itinerary = new Itinerary.navigation(
+            selectedDocks, points, widget.numberOfCyclists);
+
+        //save the journey into the database
+        historyHelper.createJourneyEntry(selectedDocks);
+
+        //! TODO: if response = null, we dont want the pop to be true! talk with elisabeth
+
+        //go to the summary of journey screen
+        final response = await context.push(SummaryJourneyScreen(_itinerary));
         if (response) {
           Navigator.of(context).pop(true);
         }
+
+        // Navigator.of(context).push(MaterialPageRoute(
+        //   builder: (context) => SummaryJourneyScreen(points, trip),
+        // ));
+
+        //
       }
     }
   }

@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:veloplan/screens/my_journeys_screen.dart';
+import '../screens/schedule_screen.dart';
+import '../screens/favourite_screen.dart';
+import '../screens/help_screen.dart';
+import '../screens/my_journeys_screen.dart';
 import 'package:veloplan/screens/favourite_screen.dart';
 import 'package:veloplan/screens/help_screen.dart';
 import 'package:veloplan/screens/schedule_screen.dart';
@@ -33,23 +38,18 @@ class SideBar extends StatelessWidget {
               icon: Icons.favorite,
               onClicked: () => _renderScreen(context, 2),
             ),
-            _buildSidebarItem(
-              text: 'Statistics',
-              icon: Icons.assessment_outlined,
-              onClicked: () => _renderScreen(context, 3),
-            ),
             const SizedBox(height: 24),
             const Divider(color: Colors.grey),
             const SizedBox(height: 24),
             _buildSidebarItem(
               text: 'Help',
               icon: Icons.chat_bubble_outlined,
-              onClicked: () => _renderScreen(context, 4),
+              onClicked: () => _renderScreen(context, 3),
             ),
             _buildSidebarItem(
               text: 'Settings',
               icon: Icons.settings,
-              onClicked: () => _renderScreen(context, 5),
+              onClicked: () => _renderScreen(context, 4),
             ),
           ],
         ),
@@ -66,17 +66,16 @@ class SideBar extends StatelessWidget {
     );
   }
 
-  _renderScreen(BuildContext context, int i) {
+  _renderScreen(BuildContext context, int i) async {
     switch (i) {
       case 0:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => Schedule(),
+          builder: (context) => SchedulePage(),
         ));
         break;
       case 1:
-        // TODO: create 'My Journeys' screen
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => const Placeholder(),
+          builder: (context) => MyJourneys(),
         ));
         break;
       case 2:
@@ -85,21 +84,21 @@ class SideBar extends StatelessWidget {
         ));
         break;
       case 3:
-        // TODO: create 'Statistics' screen
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => const Placeholder(),
-        ));
-        break;
-      case 4:
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => HelpPage(),
         ));
         break;
-      case 5:
+      case 4:
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => const Settings(),
         ));
         break;
+      // case 7:
+      //   Navigator.of(context).push(MaterialPageRoute(
+      //     builder: (context) =>
+      //         dockingsStationCard(index, name, nb_bikes, nb_empty_docks),
+      //   ));
+      //   break;
     }
   }
 }

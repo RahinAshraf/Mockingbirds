@@ -1,29 +1,34 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_mapbox_navigation/library.dart';
-import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:veloplan/helpers/live_location_helper.dart';
 import 'package:veloplan/screens/navigation/map_screen.dart';
-import 'package:veloplan/helpers/navigation_helpers/navigation_conversions_helpers.dart';
+
+import '../../widgets/popup_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 /// A splash screen displaying turn by turn navigation for a journey.
 /// Author(s): Fariha Choudhury k20059723, Elisabeth Halvorsen k20077737,
 /// Reference: dormmom.com, Jul 20, 2021, flutter_mapbox_navigation 0.0.26, https://pub.dev/packages/flutter_mapbox_navigation
 
 class TurnByTurn extends StatefulWidget {
-  late List<LatLng> points;
-  TurnByTurn(List<LatLng> points) {
-    this.points = points;
+  //late List<LatLng> points;
+  late var wayPoints = <WayPoint>[];
+  TurnByTurn(var points) {
+    this.wayPoints = points;
   }
+
   @override
-  State<TurnByTurn> createState() => _TurnByTurnState(points);
+  State<TurnByTurn> createState() => _TurnByTurnState(this.wayPoints);
 }
 
 class _TurnByTurnState extends State<TurnByTurn> {
-  late List<LatLng> points;
   late var wayPoints = <WayPoint>[];
 
-  _TurnByTurnState(List<LatLng> points) {
-    this.points = points;
-    wayPoints = latLngs2WayPoints(points);
+  _TurnByTurnState(var points) {
+    wayPoints = points;
   }
 
   /// Configuration variables for Mapbox Navigation
@@ -36,6 +41,9 @@ class _TurnByTurnState extends State<TurnByTurn> {
   bool arrived = false;
   bool routeBuilt = false;
   bool isNavigating = false;
+  bool addThingy = true;
+  double? distance;
+  String userID = FirebaseAuth.instance.currentUser!.uid;
 
   @override
   void initState() {
@@ -65,8 +73,17 @@ class _TurnByTurnState extends State<TurnByTurn> {
     await directions.startNavigation(wayPoints: wayPoints, options: _options);
   }
 
+  Future updateDistanceOnServer() async {
+    await FirebaseFirestore.instance.collection('users').doc(userID).update({
+      'distance':
+          FieldValue.increment(sharedPreferences.getDouble('distance') ?? 0)
+    });
+    sharedPreferences.clear();
+  }
+
   @override
   Widget build(BuildContext context) {
+    Future.delayed(const Duration(seconds: 3));
     return const MapPage();
   }
 
@@ -74,6 +91,30 @@ class _TurnByTurnState extends State<TurnByTurn> {
   Future<void> _onRouteEvent(e) async {
     distanceRemaining = await directions.distanceRemaining;
     durationRemaining = await directions.durationRemaining;
+    if (distance == null) {
+      distance = distanceRemaining;
+      print('SHARED PREFERENCES total distance $distance');
+    } else {
+      sharedPreferences.setDouble(
+          'distance', distance! - (distanceRemaining ?? 0));
+    }
+    print(
+        'SHARED PREFERENCES DISTANCE WENT${sharedPreferences.getDouble('distance')}');
+
+    if (!addThingy) {
+      addThingy = false;
+      // routeBuilt = false;
+      // isNavigating = false;
+      wayPoints.add(
+          WayPoint(name: "new dest", latitude: 51.4946, longitude: 0.1003));
+      print("waypoint length in initialize: " +
+          wayPoints.length.toString() +
+          "------------------------------------------------------------------");
+//terminates the tbt screen
+      await directions.finishNavigation();
+      print(
+          "------------------------closing screen.... in the if-------------------");
+    }
 
     switch (e.eventType) {
       case MapBoxEvent.progress_change:
@@ -95,15 +136,26 @@ class _TurnByTurnState extends State<TurnByTurn> {
         break;
       case MapBoxEvent.on_arrival:
         arrived = true;
-        if (!isMultipleStop) {
-          await Future.delayed(const Duration(seconds: 3));
+        if (arrived) {
+          await Future.delayed(Duration(seconds: 3));
           await _controller.finishNavigation();
         } else {}
+        await updateDistanceOnServer();
+        directions.finishNavigation();
         break;
       case MapBoxEvent.navigation_finished:
+        print(
+            "----------------- finishing navigation...... ------------------");
+        wayPoints.removeAt(0);
+        print("waypoint length in initialize: after removal " +
+            wayPoints.length.toString() +
+            "------------------------------------------------------------------");
+        await Future.delayed(Duration(seconds: 15));
+        break;
       case MapBoxEvent.navigation_cancelled:
         routeBuilt = false;
         isNavigating = false;
+        await updateDistanceOnServer();
         break;
       default:
         break;

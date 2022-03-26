@@ -25,6 +25,7 @@ void main() async {
   runApp(ScopedModel<MapModel>(
       model: _model,
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         initialRoute: '/',
         routes: {
           '/': (context) => const MyApp(),

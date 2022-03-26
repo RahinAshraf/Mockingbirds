@@ -22,6 +22,8 @@ abstract class PanelWidgetBase extends StatefulWidget {
   final Map<String, List<double?>> selectionMap;
   final Map<String, List<double?>> staticListMap;
   final int numberOfCyclists;
+  final bool isScheduled;
+  final DateTime journeyDate;
 
   const PanelWidgetBase(
       {required this.selectionMap,
@@ -35,6 +37,8 @@ abstract class PanelWidgetBase extends StatefulWidget {
       required this.fromTextEditController,
       required this.panelController,
       required this.numberOfCyclists,
+      required this.isScheduled,
+      required this.journeyDate,
       Key? key})
       : super(key: key);
 
