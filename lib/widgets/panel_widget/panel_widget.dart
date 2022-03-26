@@ -70,6 +70,14 @@ class PanelWidgetState extends State<PanelWidget> {
 
   ///Adds a new dynamic widget to the list of destinations for the journey
   addDynamic() {
+    final hasEmptyField = widget.listDynamic
+        .any((element) => element.placeTextController.text.isEmpty);
+
+    if (hasEmptyField) {
+      alert.showSnackBarErrorMessage(context, alert.cannotHaveEmptySearchLocationsMessage);
+      return;
+    }
+
     widget.listDynamic.add(DynamicWidget(
       selectedCoords: widget.selectedCoords,
       coordDataMap: response,
@@ -264,7 +272,6 @@ class PanelWidgetState extends State<PanelWidget> {
         widget.dockList[newIndex] = oldCordList;
       }
 
-
     }
   }
 
@@ -370,7 +377,7 @@ class PanelWidgetState extends State<PanelWidget> {
         widget.fromTextEditController, widget.toTextEditController);
 
     if (hasEmptyField) {
-      alert.showSnackBarErrorMessage(context, alert.startPointMustBeDefinedMessage);
+      alert.showSnackBarErrorMessage(context, alert.cannotHaveEmptySearchLocationsMessage);
       return;
     } else if (areAdjacentCoords(widget.selectedCoords)) {
       alert.showSnackBarErrorMessage(context, alert.noAdjacentLocationsAllowed);
