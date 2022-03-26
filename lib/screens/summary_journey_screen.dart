@@ -21,22 +21,27 @@ import 'navigation/map_with_route_screen.dart';
 
 class SummaryJourneyScreen extends StatefulWidget {
   List<LatLng> points;
+  final DatabaseManager _databaseManager = DatabaseManager();
   SummaryJourneyScreen(this.points, {Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => SummaryJourneyScreenState();
+  State<StatefulWidget> createState() => SummaryJourneyScreenState(_databaseManager, points);
 }
 
 class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
-  final DatabaseManager _databaseManager = DatabaseManager();
+  late final DatabaseManager _databaseManager;
   bool isInGroup = false;
   late String groupID = "";
   late String organiser = "";
   late List<List<double?>?> points;
 
+  SummaryJourneyScreenState(this._databaseManager, points){
+    this.points = convertLatLngToDouble(points)!;
+  }
+
   @override
   void initState() {
-    points = convertLatLngToDouble(widget.points)!;
+
     _setData();
 
     super.initState();
@@ -87,12 +92,12 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
     return tempr;
   }
 
-  void _createGroup() async {
-    print("GDGGDG");
+
+  @visibleForTesting
+  Future<void> createGroup() async {
     var ownerID = _databaseManager.getCurrentUser()?.uid;
     List list = [];
     list.add(ownerID);
-    String destination = "";
     Random rng = Random();
     String code = rng.nextInt(999999).toString();
     var x = await _databaseManager.getByEquality('group', 'code', code);
@@ -108,7 +113,6 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
     try {
       await _databaseManager.addToCollection('group', {
         'code': code,
-        'destination': destination,
         'ownerID': ownerID,
         'memberList': list,
         'createdAt': Timestamp.fromDate(DateTime.now()),
@@ -277,7 +281,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
                         style: TextStyle(color: Colors.white)),
                     onPressed: () {
                       print("PUSHD");
-                      _createGroup();
+                      createGroup();
                     },
                   )),
             const SizedBox(height: 20),

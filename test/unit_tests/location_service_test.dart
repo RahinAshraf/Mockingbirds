@@ -4,7 +4,7 @@ import 'package:veloplan/providers/location_service.dart';
 void main(){
   final LocationService locationService = LocationService();
 
-  test('Calling method on London locations works', () async {
+  test('Calling method on London locations retrieves the correct coordinates', () async {
     expect(await locationService.getPlaceCoords('Buckingham Palace, London'), [51.499798999999996, -0.142345]);
     expect(await locationService.getPlaceCoords('Big Ben, London'), [51.50068575, -0.124592]);
     expect(await locationService.getPlaceCoords('Bush house'), [51.512238, -0.117272]);
