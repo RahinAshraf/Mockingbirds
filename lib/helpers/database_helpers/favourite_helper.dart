@@ -3,12 +3,15 @@ import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 import 'package:collection/collection.dart';
 import 'package:veloplan/models/docking_station.dart';
 
+import '../../providers/docking_station_manager.dart';
+
 ///Helper functions to favourite, unfavourite or retrieve favourited docking stations
 ///from and to the firestore database
 ///Author: Tayyibah
 class FavouriteHelper {
   late CollectionReference _favourites;
   DatabaseManager _databaseManager = DatabaseManager();
+  var _manager = dockingStationManager();
 
   FavouriteHelper() {
     _favourites = _favourites =
@@ -36,7 +39,10 @@ class FavouriteHelper {
     List<DockingStation> favourites = [];
     var docs = await DatabaseManager().getUserSubcollection('favourites');
     for (DocumentSnapshot doc in docs.docs) {
-      favourites.add(DockingStation.map(doc));
+      var dock =
+          await dockingStationManager().checkStationById(doc.get('stationId')).then((value) {
+        favourites.add(DockingStation.map(doc, value));
+      });
     }
     return favourites;
   }

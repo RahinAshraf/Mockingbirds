@@ -61,7 +61,7 @@ class HistoryHelper {
         .get();
 
     for (DocumentSnapshot doc in list.docs) {
-      stationsInJourney.add(DockingStation.map(doc));
+      stationsInJourney.add(DockingStation.mapHistory(doc));
     }
 
     return stationsInJourney;

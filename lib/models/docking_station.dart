@@ -38,7 +38,17 @@ class DockingStation {
   String? get documentId => _documentId;
 
   ///Creates an instance of a docking station including its document id when added to firebase
-  DockingStation.map(DocumentSnapshot document) {
+  DockingStation.map(DocumentSnapshot document, DockingStation tempDock) {
+    _documentId = document.id;
+    _stationId = document.get('stationId');
+    _name = document.get('name');
+    //dockmanager check station spaces
+    _numberOfBikes = tempDock.numberOfBikes;
+    _numberOfEmptyDocks = tempDock.numberOfEmptyDocks;
+  }
+
+  ///Creates an instance of a docking station including its document id when added to firebase
+  DockingStation.mapHistory(DocumentSnapshot document) {
     _documentId = document.id;
     _stationId = document.get('stationId');
     _name = document.get('name');
