@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:veloplan/screens/my_journeys_screen.dart';
-import '../screens/schedule_screen.dart';
-import '../screens/favourite_screen.dart';
-import '../screens/help_screen.dart';
-import '../screens/my_journeys_screen.dart';
 import 'package:veloplan/screens/favourite_screen.dart';
 import 'package:veloplan/screens/help_screen.dart';
 import 'package:veloplan/screens/schedule_screen.dart';
