@@ -46,20 +46,21 @@ class DockingStationCarousel {
         carouselData.add(
           {
             //    'index': index,
-            //  'station': station,
-            'stationId': station.stationId,
-            'name': station.name,
-            'numberOfBikes': station.numberOfBikes,
-            'numberOfEmptyDocks': station.numberOfEmptyDocks,
+            'station': station,
+            // 'stationId': station.stationId,
+            // 'name': station.name,
+            // 'numberOfBikes': station.numberOfBikes,
+            // 'numberOfEmptyDocks': station.numberOfEmptyDocks,
           },
         );
       }
     }
     dockingStationCards = List<Widget>.generate(
         docks.length,
-        (index) => DockingStationCard(
-              carouselData[index]['stationId'],
-              carouselData[index]['name'],
+        (index) => DockingStationCard.station(
+              carouselData[index]["station"],
+              // carouselData[index]['stationId'],
+              // carouselData[index]['name'],
             ));
 
     return dockingStationCards;

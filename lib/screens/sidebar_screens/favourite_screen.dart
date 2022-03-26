@@ -34,10 +34,7 @@ class _FavouriteState extends State<Favourite> {
               child: ListView.builder(
                 itemCount: favourites.length,
                 itemBuilder: (context, index) {
-                  return DockingStationCard(
-                    favourites[index].stationId,
-                    favourites[index].name,
-                  );
+                  return DockingStationCard.station(favourites[index]);
                 },
               ),
             ),
