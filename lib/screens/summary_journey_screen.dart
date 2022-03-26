@@ -47,7 +47,6 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
 
   SummaryJourneyScreenState(this._itinerary) {
     //TODO: find the best place to call the itinerary manager
-    // this.trip = Trip(this.points);
   }
 
   @override
@@ -316,8 +315,10 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
               //         return CircularProgressIndicator();
               //       }
               //     }),
-              Column(
-                children: _generateStops(),
+              SingleChildScrollView(
+                child: Column(
+                  children: _generateStops(),
+                ),
               ),
               //TODO: uncomment if you want the final stop
               // Container(
@@ -329,22 +330,12 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
               //     )),
               const SizedBox(height: 20),
               if (isInGroup)
-                Container(
-                    height: 40,
-                    padding: const EdgeInsets.fromLTRB(100, 5, 100, 5),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        elevation: 10.0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
-                      ),
-                      child: const Text('LEAVE GROUP',
-                          style: TextStyle(color: Colors.white)),
-                      onPressed: () {
-                        _leaveGroup();
-                      },
-                    )),
+                ElevatedButton(
+                  child: const Text('LEAVE GROUP'),
+                  onPressed: () {
+                    _leaveGroup();
+                  },
+                ),
               Container(
                   padding: const EdgeInsets.fromLTRB(70, 5, 70, 5),
                   child: ElevatedButton(
@@ -367,13 +358,14 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
 
   List<Widget> _generateStops() {
     List<Widget> smth = [];
-    ItineraryManager _itineraryManager = new ItineraryManager(_itinerary);
-    paths = _itineraryManager.getPaths();
+    ItineraryManager _itineraryManager = ItineraryManager(_itinerary);
+    // paths = _itineraryManager.getPaths();
+    // print("path ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + paths.length.toString());
     for (int i = 0; i < _itinerary.docks!.length; i++) {
       if (i == 0) {
         smth.add(StationTempWidget(
-          content: _itinerary.docks![i].name,
-          time: 0,
+          content: _itinerary.docks![i].name, time: 0,
+          // time: paths[i].duration,
         ));
       } else {
         smth.add(StationTempWidget(
@@ -385,15 +377,15 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
     return smth;
   }
 
-  Future<List<Widget>> _generateStopsFuture() async {
-    for (var path in paths) {
-      pathTime.add(StationTempWidget(
-        content: "",
-        time: path.duration,
-      ));
-    }
-    return pathTime;
-  }
+//   Future<List<Widget>> _generateStopsFuture() async {
+//     for (var path in paths) {
+//       pathTime.add(StationTempWidget(
+//         content: "",
+//         time: path.duration,
+//       ));
+//     }
+//     return pathTime;
+//   }
 }
 
 class StationTempWidget extends StatelessWidget {
@@ -445,10 +437,11 @@ class StationTempWidget extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              ImageIcon(
-                AssetImage("assets/images/logo.png"),
-                color: Color(0xFF99D2A9),
-                size: 24,
+              Text(
+                // AssetImage("assets/images/logo.png"),
+                '${time}',
+                // color: Color(0xFF99D2A9),
+                // size: 24,
               )
             ],
           ),

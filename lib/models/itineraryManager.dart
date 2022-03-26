@@ -47,8 +47,8 @@ class ItineraryManager {
 
         //added: cycling latlng to our list:
         _wholeTrip.add(Path.api(
-            DockingStation.empty(), //_docks[i - 1],
-            DockingStation.empty(), // _docks[i],
+            _itinerary.docks![i - 1], //_docks[i - 1],
+            _itinerary.docks![i], // _docks[i],
             _itinerary.docks![i].getLatlng(),
             _itinerary.docks![i + 1].getLatlng(),
             directions["distance"].toDouble(),

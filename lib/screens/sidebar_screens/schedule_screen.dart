@@ -133,6 +133,21 @@ class TimelineItem extends StatelessWidget {
   final int index;
   TimelineItem(this.journey, this.index);
 
+  List<String> months = [
+    'Jan',
+    'Feb',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'Aug',
+    'Sept',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
+
   @override
   Widget build(BuildContext context) {
     return TimelineTile(
@@ -146,9 +161,9 @@ class TimelineItem extends StatelessWidget {
         alignment: Alignment.topCenter,
         child: Column(
           children: [
-            Text(journey.date!.month.toString(),
-                style: timelineTileDayTextStyle),
-            // Text(month, style: timelineTileMonthTextStyle),
+            Text(journey.date!.day.toString(), style: timelineTileDayTextStyle),
+            Text(months[journey.date!.month + 1].toString(),
+                style: timelineTileMonthTextStyle),
           ],
         ),
       ),
