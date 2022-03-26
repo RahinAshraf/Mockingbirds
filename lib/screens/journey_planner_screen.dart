@@ -43,7 +43,7 @@ class _JourneyPlanner extends State<JourneyPlanner> {
 
   List<DynamicWidget> dynamicWidgetList = [];
   List<List<double?>> coordsList = [];
-  Map<int, LatLng> dockList = LinkedHashMap();
+  Map<int, LatLng> dockList = {};
 
   @override
   void initState() {

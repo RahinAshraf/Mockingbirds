@@ -66,7 +66,7 @@ class _MyAppState extends State<MyApp> {
 
     switch(status){ //LocationError
       case PermissionStatus.denied:
-        //  requestForPermission();
+          requestForPermission();
         break;
       case PermissionStatus.granted:
         //do nothing

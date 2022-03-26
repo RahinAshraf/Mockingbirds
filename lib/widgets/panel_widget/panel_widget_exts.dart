@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart'
     as LatLong;
 import 'package:veloplan/alerts.dart';
+import '../../helpers/closest_dock_cache.dart';
 import '../../models/docking_station.dart';
 import '../../providers/docking_station_manager.dart';
 import '../../providers/location_service.dart';
@@ -10,7 +11,7 @@ import 'package:mapbox_gl/mapbox_gl.dart';
 
 ///Class to create and display the closest docking station for every defined location of the journey.
 ///  int position = 0;
-int position = 0;
+
 class PanelExtensions {
   final locationService = LocationService();
   BuildContext? context;
@@ -26,7 +27,7 @@ class PanelExtensions {
   }
 
   void setPosition(int index){
-    position = position;
+   // position = position;
   }
 
 
@@ -124,6 +125,7 @@ class PanelExtensions {
     dockingStationManager _stationManager = dockingStationManager();
     await _stationManager.importStations();
     DockingStation closetDock = _stationManager.getClosestDock(latlngPlace);
+    ClosestDockCache.instance.cache(latlngPlace, LatLng(closetDock.lat, closetDock.lon));
     print("closet dock ${closetDock.name}");
     editDockTextEditController.text = closetDock.name;
     latLngMap[position] = LatLng(closetDock.lat, closetDock.lon);

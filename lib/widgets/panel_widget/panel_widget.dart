@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:veloplan/helpers/closest_dock_cache.dart';
 import 'package:veloplan/screens/journey_planner_screen.dart';
 import 'package:veloplan/screens/navigation/map_with_route_screen.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
@@ -229,7 +230,7 @@ class PanelWidgetState extends State<PanelWidget> {
   void addCordFrom(List<double?> newCord) {
     staticListMap[fromLabelKey] = newCord;
     final ext = PanelExtensions.of(context:context);
-    ext.setPosition(position);
+    //ext.setPosition(position);
     ext.getClosetDock(newCord[0],
         newCord[1], editDockTextEditController,  dockList, -1);
   }
@@ -254,6 +255,16 @@ class PanelWidgetState extends State<PanelWidget> {
       final itemCoords = widget.selectedCoords[oldIndex];
       widget.selectedCoords.removeAt(oldIndex);
       widget.selectedCoords.insert(newIndex, itemCoords);
+
+      final newLatLng = widget.dockList[newIndex];
+      final oldCordList = widget.dockList[oldIndex];
+
+      if(newLatLng != null && oldCordList != null){
+        widget.dockList[oldIndex] = newLatLng;
+        widget.dockList[newIndex] = oldCordList;
+      }
+
+
     }
   }
 
@@ -375,7 +386,6 @@ class PanelWidgetState extends State<PanelWidget> {
       ///REMOVE THIS TO USE EDIT DOCK CONTROLLERS - DO NOT RECALCULATE IT /////////////////////////////////////////
       List<LatLng> closestDockList = dockList.values.toList();
       print("ALREADY EXISTS ==> $closestDockList");
-      ///REMOVE THIS TO USE EDIT DOCK CONTROLLERS - DO NOT RECALCULATE IT /////////////////////////////////
       
       List<LatLng> closestDocksWithNoAdjancents = [];
       for(int i=0; i < closestDockList.length - 1; i++){
