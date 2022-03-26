@@ -5,6 +5,8 @@ import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:veloplan/widgets/carousel/custom_carousel.dart';
 import 'package:veloplan/widgets/docking_station_card.dart';
 
+import '../../helpers/database_helpers/favourite_helper.dart';
+
 ///Class that loads information of docking stations into cards and builds a carousel
 ///Author(s): Tayyibah, Nicole
 class DockingStationCarousel {
@@ -31,6 +33,17 @@ class DockingStationCarousel {
     var list = _stationManager.importStations().then((value) =>
         createDockingCards(
             _stationManager.get10ClosestDocks(userCoordinates!)));
+    return list;
+  }
+
+  /// Retrieve the filtered cards for edit dock. Get 10 cards that are the closest to the given location
+  Future<List<Widget>> retrieveFilteredFavCards() async {
+    List<DockingStation> favourites = [];
+    favourites = await FavouriteHelper.getUserFavourites();
+    final dockingStationManager _stationManager = dockingStationManager();
+    var list = _stationManager.importStations().then((value) =>
+        createDockingCards(_stationManager.get10ClosestDocksFav(
+            userCoordinates!, favourites)));
     return list;
   }
 

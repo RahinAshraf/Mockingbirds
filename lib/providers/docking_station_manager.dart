@@ -170,6 +170,20 @@ class dockingStationManager {
   }
 
   /** 
+   * Get the 10 closest docking stations by given location and stations
+   * */
+  List<DockingStation> get10ClosestDocksFav(
+      LatLong.LatLng userLocation, List<DockingStation> favDocks) {
+    List<DockingStation> filteredStations =
+        sortDocksByDistanceFromGivenLocation(userLocation, favDocks);
+    if (filteredStations.isNotEmpty && filteredStations.length > 4) {
+      return filteredStations.take(10).toList();
+    } else {
+      return filteredStations;
+    }
+  }
+
+  /** 
    *  Get the closest available docking stations by given docking station and stations, minimum of available bikes to get 
    * */
   DockingStation getClosestDockWithAvailableBikes(
