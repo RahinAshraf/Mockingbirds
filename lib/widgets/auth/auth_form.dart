@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +46,7 @@ class _AuthFormState extends State<AuthForm> {
     _userImageFile = image;
   }
 
-  void _trySubmit() {
+  Future _trySubmit() async {
     final isValid = _formKey.currentState!.validate();
     FocusScope.of(context).unfocus();
 
@@ -60,17 +61,29 @@ class _AuthFormState extends State<AuthForm> {
 
     if (isValid) {
       _formKey.currentState!.save();
-      widget.submitFn(
-        _userEmail.trim(),
-        _userPassword.trim(),
-        _userName.trim(),
-        _firstName,
-        _lastName,
-        _userImageFile,
-        _dateTime,
-        _isLogin,
-        context,
-      );
+      final query = await FirebaseFirestore.instance
+          .collection('users')
+          .where('username', isEqualTo: _userName.trim())
+          .get();
+      if (!query.docs.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("This username is already taken"),
+          ),
+        );
+      } else {
+        widget.submitFn(
+          _userEmail.trim(),
+          _userPassword.trim(),
+          _userName.trim(),
+          _firstName,
+          _lastName,
+          _userImageFile,
+          _dateTime,
+          _isLogin,
+          context,
+        );
+      }
     }
   }
 
