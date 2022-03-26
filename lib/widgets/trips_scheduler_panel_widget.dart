@@ -23,13 +23,13 @@ class _TripSchedulerPanelWidget extends State<TripSchedulerPanelWidget> {
   DateTime selectedDate = DateTime.now();
 
   @override
-  Widget build(BuildContext context) => ListView(
+  Widget build(BuildContext context) => Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Text(
             'Please fill in the following details of your trip.',
             style: infoTextStyle,
           ),
-          SizedBox(height: 16.0),
           Row(
             children: [
               SizedBox(
@@ -60,7 +60,6 @@ class _TripSchedulerPanelWidget extends State<TripSchedulerPanelWidget> {
               ),
             ],
           ),
-          SizedBox(height: 16.0),
           Row(
             children: [
               SizedBox(
@@ -115,6 +114,7 @@ class _TripSchedulerPanelWidget extends State<TripSchedulerPanelWidget> {
     });
   }
 
+  /// Displays date picker and saves users choice in [selectedDate].
   void _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
