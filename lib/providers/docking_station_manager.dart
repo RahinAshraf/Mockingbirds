@@ -250,4 +250,55 @@ class dockingStationManager {
       return filteredStations;
     }
   }
+
+  /* import the docking station from the tfl api and check its updated info*/
+  Future<DockingStation> checkStation(DockingStation dock) async {
+    var data = await http
+        .get(Uri.parse("https://api.tfl.gov.uk/BikePoint/${dock.stationId}"));
+    var station = json.decode(data.body);
+    try {
+      dock.setNumberOfBikes =
+          int.parse(station["additionalProperties"][6]["value"]);
+      dock.setNumberOfEmptyDocks =
+          int.parse(station["additionalProperties"][7]["value"]);
+      dock.setNumberOfAllDocks =
+          int.parse(station["additionalProperties"][8]["value"]);
+      dock.setIsInstalled = true;
+      dock.setisLocked = station["additionalProperties"][2]["value"] == "true";
+    } on FormatException {}
+    return dock;
+  }
+
+  /* import the docking station from the tfl api and check its updated info*/
+  Future<DockingStation> checkStationById(String dockId) async {
+    var data =
+        await http.get(Uri.parse("https://api.tfl.gov.uk/BikePoint/${dockId}"));
+    late DockingStation newStation;
+    var station = json.decode(data.body);
+    try {
+      newStation = DockingStation(
+          station["id"],
+          station["commonName"],
+          station["additionalProperties"][1]["value"] == "true",
+          station["additionalProperties"][2]["value"] == "true",
+          int.parse(station["additionalProperties"][6]["value"]),
+          int.parse(station["additionalProperties"][7]["value"]),
+          int.parse(station["additionalProperties"][8]["value"]),
+          station["lon"],
+          station["lat"]);
+    } on FormatException {}
+    return newStation;
+  }
+
+  Future<bool> checkDockWithAvailableSpace(
+      DockingStation dock, int numberOfBikes) async {
+    dock.assign(await checkStation(dock));
+    return (dock.numberOfEmptyDocks >= numberOfBikes);
+  }
+
+  Future<bool> checkDockWithAvailableBikes(
+      DockingStation dock, int numberOfBikes) async {
+    dock.assign(await checkStation(dock));
+    return (dock.numberOfBikes >= numberOfBikes);
+  }
 }

@@ -1,13 +1,16 @@
 import 'dart:developer';
 import 'dart:math' as math;
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+
+import 'package:mapbox_gl/mapbox_gl.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart';
 import 'package:timeline_tile/timeline_tile.dart';
-import 'package:veloplan/helpers/database_manager.dart';
 import 'package:veloplan/models/itineraryManager.dart';
 import 'package:veloplan/models/path.dart';
 import '../helpers/navigation_helpers/navigation_conversions_helpers.dart';
@@ -17,6 +20,7 @@ import 'dart:async';
 
 import 'package:mapbox_gl/mapbox_gl.dart';
 
+import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 import 'package:veloplan/navbar.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
 
@@ -104,9 +108,11 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
       x = await _databaseManager.getByEquality('group', 'code', code);
     }
     List<GeoPoint> geoList = [];
-    var destinationsIndouble = convertLatLngToDouble(_itinerary.myDestinations!);
+    var destinationsIndouble =
+        convertLatLngToDouble(_itinerary.myDestinations!);
     for (int i = 0; i < destinationsIndouble!.length; i++) {
-      geoList.add(GeoPoint(destinationsIndouble[i]![0]!, destinationsIndouble[i]![1]!));
+      geoList.add(
+          GeoPoint(destinationsIndouble[i]![0]!, destinationsIndouble[i]![1]!));
     }
 
     try {
@@ -127,24 +133,22 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
           'date': _itinerary.date,
           'numberOfCyclists': _itinerary.numberOfCyclists
         });
-        var journey = await element.reference.collection('itinerary')
-            .where('journeyID', isEqualTo: _itinerary.journeyDocumentId).get();
+        var journey = await element.reference
+            .collection('itinerary')
+            .where('journeyID', isEqualTo: _itinerary.journeyDocumentId)
+            .get();
         var dockingStationList = _itinerary.docks!;
-        for(int i =0; i< dockingStationList.length;i++){
+        for (int i = 0; i < dockingStationList.length; i++) {
           var station = dockingStationList[i];
           journey.docs.forEach((jour) {
             jour.reference.collection("dockingStations").add({
-              'id':station.stationId,
+              'id': station.stationId,
               'name': station.name,
-              'location': GeoPoint(station.lat,station.lon),
-            }
-            );
-          }) ;
-
-
+              'location': GeoPoint(station.lat, station.lon),
+            });
+          });
         }
-      }
-      );
+      });
 
       setState(() {
         isInGroup = true;
@@ -295,7 +299,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
                     TextSpan(
                         text: "Planned stops:",
                         style:
-                        TextStyle(color: Color(0xFF99D2A9), fontSize: 25)),
+                            TextStyle(color: Color(0xFF99D2A9), fontSize: 25)),
                   ],
                 ),
               ),
@@ -395,9 +399,9 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
 class StationTempWidget extends StatelessWidget {
   const StationTempWidget(
       {this.first = false,
-        this.last = false,
-        required this.content,
-        required this.time});
+      this.last = false,
+      required this.content,
+      required this.time});
 
   final bool first;
   final bool last;
@@ -424,10 +428,10 @@ class StationTempWidget extends StatelessWidget {
         margin: const EdgeInsets.fromLTRB(10.0, 15.0, 20.0, 15.0),
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(15.0),
-              bottomRight: Radius.circular(15.0),
-              topRight: Radius.circular(15.0),
-            )),
+          bottomLeft: Radius.circular(15.0),
+          bottomRight: Radius.circular(15.0),
+          topRight: Radius.circular(15.0),
+        )),
         child: Padding(
           padding: const EdgeInsets.all(15.0),
           child: Row(

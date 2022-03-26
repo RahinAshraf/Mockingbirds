@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:veloplan/helpers/favourite_helper.dart';
+import 'package:veloplan/helpers/database_helpers/favourite_helper.dart';
 import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/widgets/docking_station_card.dart';
 
@@ -34,12 +34,7 @@ class _FavouriteState extends State<Favourite> {
               child: ListView.builder(
                 itemCount: favourites.length,
                 itemBuilder: (context, index) {
-                  return DockingStationCard(
-                    favourites[index].stationId,
-                    favourites[index].name,
-                    favourites[index].numberOfBikes,
-                    favourites[index].numberOfEmptyDocks,
-                  );
+                  return DockingStationCard.station(favourites[index]);
                 },
               ),
             ),

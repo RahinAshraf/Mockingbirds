@@ -38,13 +38,78 @@ class DockingStation {
   double get lat => _lat;
   String? get documentId => _documentId;
 
+//TODO refactor
   ///Creates an instance of a docking station including its document id when added to firebase
-  DockingStation.map(DocumentSnapshot document) {
+  DockingStation.map(DocumentSnapshot document, DockingStation tempDock) {
     _documentId = document.id;
     _stationId = document.get('stationId');
     _name = document.get('name');
-    _numberOfBikes = document.get('numberOfBikes');
-    _numberOfEmptyDocks = document.get('numberOfEmptyDocks');
+    //dockmanager check station spaces
+    _numberOfBikes = tempDock.numberOfBikes;
+    _numberOfEmptyDocks = tempDock.numberOfEmptyDocks;
+    _isInstalled = tempDock._isInstalled;
+    _isLocked = tempDock._isLocked;
+    _numberOfAllDocks = tempDock._numberOfAllDocks;
+    _lon = tempDock.lon;
+    _lat = tempDock.lat;
+  }
+
+  ///Creates an instance of a docking station including its document id when added to firebase
+  DockingStation.mapHistory(DocumentSnapshot document) {
+    _documentId = document.id;
+    _stationId = document.get('stationId');
+    _name = document.get('name');
+  }
+  set setStationId(String temp) {
+    _stationId = temp;
+  }
+
+  set setName(String temp) {
+    _name = temp;
+  }
+
+  set setNumberOfBikes(int temp) {
+    _numberOfBikes = temp;
+  }
+
+  set setNumberOfEmptyDocks(int temp) {
+    _numberOfEmptyDocks = temp;
+  }
+
+  set setNumberOfAllDocks(int temp) {
+    _numberOfAllDocks = temp;
+  }
+
+  set setIsInstalled(bool temp) {
+    _isInstalled = temp;
+  }
+
+  set setisLocked(bool temp) {
+    _isLocked = temp;
+  }
+
+  set setLon(double temp) {
+    _lon = temp;
+  }
+
+  set setLat(double temp) {
+    _lat = temp;
+  }
+
+  set setDocumentId(String temp) {
+    _documentId = temp;
+  }
+
+  void assign(DockingStation other) {
+    this._stationId = other.stationId;
+    this._name = other.name;
+    this._numberOfBikes = other._numberOfBikes;
+    this._numberOfEmptyDocks = other.numberOfEmptyDocks + 10000000;
+    this._numberOfAllDocks = other._numberOfAllDocks;
+    this._isInstalled = other._isInstalled;
+    this._isLocked = other.isLocked;
+    this._lon = other.lon;
+    this._lat = other.lat;
   }
 
   LatLng getLatlng() {

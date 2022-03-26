@@ -1,19 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../models/itinerary.dart';
+import 'package:veloplan/helpers/database_helpers/database_manager.dart';
+
+import '../../models/itinerary.dart';
 
 ///Helper functions to add or remove a scheduled itinerary from the database.
 ///An itinerary includes a list of destinations and the time the trip should start.
 ///Author: Tayyibah
 class ScheduleHelper {
   late CollectionReference _schedules;
-  late final _user_id;
-  late FirebaseFirestore _db;
+  DatabaseManager databaseManager = DatabaseManager();
 
   ScheduleHelper() {
-    _db = FirebaseFirestore.instance;
-    _user_id = FirebaseAuth.instance.currentUser!.uid;
-    _schedules = _db.collection('users').doc(_user_id).collection('schedules');
+    _schedules = databaseManager.getUserSubCollectionReference("schedules");
   }
 
   void createScheduleEntry(DateTime scheduleDate, List<List<double?>?> points,

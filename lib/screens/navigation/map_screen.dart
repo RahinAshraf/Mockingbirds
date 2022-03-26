@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
-import 'package:veloplan/helpers/database_manager.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:veloplan/models/map_models/base_map_model.dart';
+import '../../helpers/database_helpers/database_manager.dart';
 import '../../models/map_models/base_map_with_route_model.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
@@ -27,14 +27,10 @@ class _MapPageState extends State<MapPage> {
   late BaseMapboxMap _baseMap;
   DatabaseManager _databaseManager = DatabaseManager();
 
-
-  void initState(){
+  void initState() {
     _deleteOldGroup();
     super.initState();
   }
-
-
-
 
   Future<void> _deleteOldGroup() async {
     var user = await _databaseManager.getByKey(

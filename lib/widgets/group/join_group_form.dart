@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:veloplan/helpers/database_manager.dart';
 
+import '../../helpers/database_helpers/database_manager.dart';
 import '../pickers/bottom_date_picker.dart';
 
 class GroupJoinForm extends StatefulWidget {

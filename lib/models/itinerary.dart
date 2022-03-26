@@ -16,9 +16,9 @@ class Itinerary {
   DateTime? _date; //time journey starts/is planned to start
   int? _numberOfCyclists;
   Itinerary.navigation(
-      this._docks, this._myDestinations, this._numberOfCyclists){
+      this._docks, this._myDestinations, this._numberOfCyclists) {
     Random rand = Random();
-    _date =DateTime.now();
+    _date = DateTime.now();
     _journeyDocumentId = rand.nextInt(100).toString();
   }
 

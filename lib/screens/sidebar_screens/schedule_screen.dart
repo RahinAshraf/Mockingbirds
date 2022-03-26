@@ -4,10 +4,9 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/screens/summary_journey_screen.dart';
-import '../helpers/schedule_helper.dart';
-import '../models/itinerary.dart';
-import '../providers/docking_station_manager.dart';
-import '../styles/styling.dart';
+import '../../models/itinerary.dart';
+import '../../helpers/database_helpers/schedule_helper.dart';
+import '../../styles/styling.dart';
 
 ///Author: Marija
 ///Contributor: Tayyibah
