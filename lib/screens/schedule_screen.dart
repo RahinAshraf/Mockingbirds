@@ -2,34 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:timeline_tile/timeline_tile.dart';
+import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/screens/summary_journey_screen.dart';
 import '../helpers/schedule_helper.dart';
 import '../models/itinerary.dart';
+import '../providers/docking_station_manager.dart';
 import '../styles/styling.dart';
 
 ///Author: Marija
 ///Contributor: Tayyibah
 class SchedulePage extends StatefulWidget {
-  late List<Itinerary> journeyList = [];
-  SchedulePage(this.journeyList);
-
   @override
-  _SchedulePageState createState() => _SchedulePageState(journeyList);
+  _SchedulePageState createState() => _SchedulePageState();
 }
 
 class _SchedulePageState extends State<SchedulePage> {
   late List<Itinerary> journeyList = [];
   var helper = ScheduleHelper();
 
-  _SchedulePageState(this.journeyList);
+  _SchedulePageState();
 
   @override
   initState() {
-    // helper.getAllScheduleDocuments().then((data) {
-    //   setState(() {
-    //     journeyList = data;
-    //   });
-    // });
+    helper.getAllScheduleDocuments().then((data) {
+      setState(() {
+        journeyList = data;
+      });
+    });
     //print("THE LENGTH IS:" + journeyList[.length.toString()]);
     super.initState();
   }
@@ -66,6 +65,21 @@ class _SchedulePageState extends State<SchedulePage> {
                 for (var item in journeyList)
                   TimelineItem(item, journeyList.indexOf(item))
               ],
+              // FutureBuilder(
+              // children: FutureBuilder(
+              // future: getJourneyFromDatabase(),
+              // builder: (context, snapshot) {
+              //   return Column(
+              //       mainAxisAlignment: MainAxisAlignment.center,
+              //       children: [
+              //         for (var item in journeyList)
+              //           TimelineItem(item, journeyList.indexOf(item))
+              //       ]);
+              // },
+              // <Widget>[
+              //   for (var item in  journeyList)
+              //     TimelineItem(item, journeyList.indexOf(item))
+              // ],
             ),
 
             //     itemCount: journeyList.length),
@@ -139,9 +153,7 @@ class TimelineItem extends StatelessWidget {
           ],
         ),
       ),
-      endChild: UpcomingEventCard(
-          title: journey.docks!.first.name + " to " + journey.docks!.last.name,
-          journey: journey),
+      endChild: UpcomingEventCard(title: "TRIP", journey: journey),
     );
   }
 }

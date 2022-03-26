@@ -77,11 +77,8 @@ class SideBar extends StatelessWidget {
   _renderScreen(BuildContext context, int i) async {
     switch (i) {
       case 0:
-        var helper = ScheduleHelper();
-        List<Itinerary> list = await helper.getAllScheduleDocuments();
-
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => SchedulePage(list),
+          builder: (context) => SchedulePage(),
         ));
         break;
       case 1:
