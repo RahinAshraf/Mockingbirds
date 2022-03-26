@@ -10,9 +10,12 @@ class Popups {
     List<PopupButtonWidget> children = [
       PopupButtonWidget(
         text: "Plan a journey",
-        onPressed: () {
-          Navigator.push(context,
+        onPressed: () async {
+          final response = await Navigator.push(context,
               MaterialPageRoute(builder: (context) => TripScheduler()));
+          if (response || response == null) {
+            Navigator.of(context).pop(true);
+          }
         },
       ),
       PopupButtonWidget(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:timeline_tile/timeline_tile.dart';
+import 'package:veloplan/screens/summary_journey_screen.dart';
 import '../helpers/schedule_helper.dart';
 import '../models/itinerary.dart';
 import '../styles/styling.dart';
@@ -9,21 +10,26 @@ import '../styles/styling.dart';
 ///Author: Marija
 ///Contributor: Tayyibah
 class SchedulePage extends StatefulWidget {
+  late List<Itinerary> journeyList = [];
+  SchedulePage(this.journeyList);
+
   @override
-  _SchedulePageState createState() => _SchedulePageState();
+  _SchedulePageState createState() => _SchedulePageState(journeyList);
 }
 
 class _SchedulePageState extends State<SchedulePage> {
-  List<Itinerary> journeyList = [];
+  late List<Itinerary> journeyList = [];
   var helper = ScheduleHelper();
 
+  _SchedulePageState(this.journeyList);
+
   @override
-  void initState() {
-    helper.getAllScheduleDocuments().then((data) {
-      setState(() {
-        journeyList = data;
-      });
-    });
+  initState() {
+    // helper.getAllScheduleDocuments().then((data) {
+    //   setState(() {
+    //     journeyList = data;
+    //   });
+    // });
     //print("THE LENGTH IS:" + journeyList[.length.toString()]);
     super.initState();
   }
@@ -133,7 +139,9 @@ class TimelineItem extends StatelessWidget {
           ],
         ),
       ),
-      endChild: UpcomingEventCard(title: 'TRIP:D'),
+      endChild: UpcomingEventCard(
+          title: journey.docks!.first.name + " to " + journey.docks!.last.name,
+          journey: journey),
     );
   }
 }
@@ -146,9 +154,10 @@ class TimelineItem extends StatelessWidget {
 /// takes place. At this stage, it is not concerned with the date
 /// of the trip. These cards were designed to be used with [TimelineItem].
 class UpcomingEventCard extends StatelessWidget {
-  const UpcomingEventCard({required this.title});
+  const UpcomingEventCard({required this.title, required this.journey});
 
   final String title;
+  final Itinerary journey;
 
   @override
   Widget build(BuildContext context) {
@@ -172,9 +181,15 @@ class UpcomingEventCard extends StatelessWidget {
             Row(
               children: [
                 const SizedBox(width: 15.0),
-                Text(
-                  "View journey itinerary",
-                  style: eventCardDetailsTextStyle,
+                TextButton(
+                  style: TextButton.styleFrom(
+                    textStyle: eventCardDetailsTextStyle,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => SummaryJourneyScreen(journey)));
+                  },
+                  child: const Text("View journey itinerary"),
                 ),
                 const Icon(
                   Icons.arrow_forward_ios_rounded,

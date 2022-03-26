@@ -75,14 +75,17 @@ class _PanelWidgetTripScheduler extends State<PanelWidgetTripScheduler> {
               Flexible(
                 fit: FlexFit.tight,
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
+                  onPressed: () async {
+                    final response = await Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => JourneyPlanner(
                                   numberOfCyclists: numberOfCyclists,
                                   journeyDate: DateTime.now(),
                                 )));
+                    if (response) {
+                      Navigator.of(context).pop(true);
+                    }
                   },
                   child: const Text('Now'),
                 ),
@@ -137,15 +140,22 @@ class _PanelWidgetTripScheduler extends State<PanelWidgetTripScheduler> {
     if (picked != null) {
       setState(() {
         selectedDate = picked;
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => JourneyPlanner(
-                      numberOfCyclists: numberOfCyclists,
-                      journeyDate: selectedDate,
-                      isScheduled: true,
-                    )));
+        navigate();
       });
+    }
+  }
+
+  void navigate() async {
+    final response = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => JourneyPlanner(
+                  numberOfCyclists: numberOfCyclists,
+                  journeyDate: selectedDate,
+                  isScheduled: true,
+                )));
+    if (response) {
+      Navigator.of(context).pop(true);
     }
   }
 }

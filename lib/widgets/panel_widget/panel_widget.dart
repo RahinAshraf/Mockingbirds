@@ -368,7 +368,7 @@ class PanelWidgetState extends State<PanelWidget> {
     );
   }
 
-  void _handleSaveClick() {
+  Future<void> _handleSaveClick() async {
     final hasEmptyField = widget.listDynamic
         .any((element) => element.placeTextController.text.isEmpty);
 
@@ -391,6 +391,8 @@ class PanelWidgetState extends State<PanelWidget> {
       helper.createScheduleEntry(
           widget.journeyDate, tempList, widget.numberOfCyclists);
     }
+    // Navigate back to the previous screen, useful for tbt
+    Navigator.of(context).pop(true);
 
     // save the journey for the future
     // popup warning station availability

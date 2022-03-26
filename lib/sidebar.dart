@@ -7,7 +7,10 @@ import '../screens/my_journeys_screen.dart';
 import 'package:veloplan/screens/favourite_screen.dart';
 import 'package:veloplan/screens/help_screen.dart';
 import 'package:veloplan/screens/schedule_screen.dart';
+import '../helpers/schedule_helper.dart';
 import 'package:veloplan/screens/settings_screen.dart';
+
+import 'models/itinerary.dart';
 
 /// Defines the sidebar
 /// @author Tayyibah
@@ -71,11 +74,14 @@ class SideBar extends StatelessWidget {
     );
   }
 
-  _renderScreen(BuildContext context, int i) {
+  _renderScreen(BuildContext context, int i) async {
     switch (i) {
       case 0:
+        var helper = ScheduleHelper();
+        List<Itinerary> list = await helper.getAllScheduleDocuments();
+
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => SchedulePage(),
+          builder: (context) => SchedulePage(list),
         ));
         break;
       case 1:
