@@ -254,17 +254,18 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
                           }
                         })),
               if (!isInGroup)
-                Container(
-                    height: 30,
-                    padding: const EdgeInsets.fromLTRB(75, 5, 75, 5),
-                    child: ElevatedButton(
-                      child: const Text('Share journey',
-                          style: TextStyle(color: Colors.white)),
-                      onPressed: () {
-                        print("PUSHD");
-                        _createGroup();
-                      },
-                    )),
+                if (_itinerary.date?.day == DateTime.now().day)
+                  Container(
+                      height: 30,
+                      padding: const EdgeInsets.fromLTRB(75, 5, 75, 5),
+                      child: ElevatedButton(
+                        child: const Text('Share journey',
+                            style: TextStyle(color: Colors.white)),
+                        onPressed: () {
+                          print("PUSHD");
+                          _createGroup();
+                        },
+                      )),
               const SizedBox(height: 20),
               RichText(
                 text: const TextSpan(
@@ -318,21 +319,22 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
                         _leaveGroup();
                       },
                     )),
-              Container(
-                  padding: const EdgeInsets.fromLTRB(70, 5, 70, 5),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        elevation: 10.0, shape: const StadiumBorder()),
-                    child: const Text('START JOURNEY',
-                        style: TextStyle(color: Colors.white)),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => MapRoutePage(_itinerary)),
-                      );
-                    },
-                  )),
+              if (_itinerary.date?.day == DateTime.now().day)
+                Container(
+                    padding: const EdgeInsets.fromLTRB(70, 5, 70, 5),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          elevation: 10.0, shape: const StadiumBorder()),
+                      child: const Text('START JOURNEY',
+                          style: TextStyle(color: Colors.white)),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MapRoutePage(_itinerary)),
+                        );
+                      },
+                    )),
             ],
           ),
         ));
