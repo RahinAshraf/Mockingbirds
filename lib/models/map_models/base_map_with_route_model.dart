@@ -1,6 +1,9 @@
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:tuple/tuple.dart';
+import 'package:veloplan/helpers/navigation_helpers/navigation_conversions_helpers.dart';
 import 'package:veloplan/helpers/navigation_helpers/navigation_helpers.dart';
+import 'package:veloplan/helpers/shared_prefs.dart';
+import 'package:veloplan/models/itinerary.dart';
 import 'package:veloplan/providers/route_manager.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:veloplan/models/map_models/base_map_model.dart';
@@ -11,15 +14,19 @@ import 'package:veloplan/utilities/travel_type.dart';
 /// Author(s): Fariha Choudhury k20059723, Elisabeth Koren Halvorsen k20077737
 
 class BaseMapboxRouteMap extends BaseMapboxMap {
-  late final List<LatLng> _journey;
+  late List<LatLng> _journey;
+  final Itinerary _itinerary;
   Map<String, Object> fills = {};
   final Set<Symbol> _polylineSymbols = {};
   String _totalDistanceAndTime = 'No route';
   final RouteManager manager = RouteManager();
   late Map _routeResponse;
+  LatLng startPosition = getLatLngFromSharedPrefs();
 
   // BaseMapboxRouteMap(this._journey, MapModel model) : super(model);
-  BaseMapboxRouteMap(this._journey, MapModel model) : super(model);
+  BaseMapboxRouteMap(this._itinerary, MapModel model) : super(model) {
+    _journey = convertDocksToLatLng(_itinerary.docks!)!;
+  }
 
   /// Initialise map features
   @override
@@ -61,7 +68,7 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
     if (journey.length > 1) {
       //WALKING:
       _routeResponse = await manager.getDirections(
-          journey[0], journey[1], NavigationType.walking);
+          startPosition, journey[0], NavigationType.walking);
 
       //update local vars ---
       totalDistance += await manager.getDistance() as num;
@@ -70,7 +77,7 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
         journeyPoints.add(a);
       }
 
-      for (int i = 1; i < journey.length - 1; ++i) {
+      for (int i = 0; i < journey.length - 1; ++i) {
         //CYCLING:
         var directions = await manager.getDirections(
             journey[i], journey[i + 1], NavigationType.cycling);

@@ -4,8 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:veloplan/helpers/navigation_helpers/map_drawings.dart';
+import 'package:veloplan/helpers/navigation_helpers/navigation_conversions_helpers.dart';
 import 'package:veloplan/helpers/navigation_helpers/navigation_helpers.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
+import 'package:veloplan/models/itinerary.dart';
 import 'package:veloplan/models/map_models/base_map_with_route_model.dart';
 import 'package:veloplan/navbar.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
@@ -23,11 +25,13 @@ import '../docking_station.dart';
 class MapWithRouteUpdated extends BaseMapboxRouteMap {
   late List<LatLng> _journey;
   late List<DockingStation> _docks;
+  final Itinerary _itinerary;
   final BuildContext context;
-  MapWithRouteUpdated(
-      List<LatLng> journey, this._docks, MapModel model, this.context)
-      : super(journey, model) {
-    this._journey = journey;
+  late int numberCyclists;
+  MapWithRouteUpdated(MapModel model, this.context, this._itinerary)
+      : super(_itinerary, model) {
+    this._journey = convertDocksToLatLng(_itinerary.docks!)!;
+    this.numberCyclists = _itinerary.numberOfCyclists!;
   }
 
   LatLng _target = getLatLngFromSharedPrefs();
@@ -44,7 +48,6 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
   dockingStationManager _dockManager = dockingStationManager();
 
   // change to one class with dock, people and destinations
-  int numberCyclists = 5;
 
   @override
   void updateCurrentLocation() async {

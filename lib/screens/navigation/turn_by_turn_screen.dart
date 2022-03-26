@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_mapbox_navigation/library.dart';
 import 'package:veloplan/helpers/live_location_helper.dart';
+import 'package:veloplan/navbar.dart';
 import 'package:veloplan/screens/navigation/map_screen.dart';
 
 import '../../widgets/popup_widget.dart';
@@ -84,7 +85,8 @@ class _TurnByTurnState extends State<TurnByTurn> {
   @override
   Widget build(BuildContext context) {
     Future.delayed(const Duration(seconds: 3));
-    return const MapPage();
+    // Navigator.of(context).pop(true);
+    return NavBar();
   }
 
   /// Turn by turn navigation
@@ -93,27 +95,9 @@ class _TurnByTurnState extends State<TurnByTurn> {
     durationRemaining = await directions.durationRemaining;
     if (distance == null) {
       distance = distanceRemaining;
-      print('SHARED PREFERENCES total distance $distance');
     } else {
       sharedPreferences.setDouble(
           'distance', distance! - (distanceRemaining ?? 0));
-    }
-    print(
-        'SHARED PREFERENCES DISTANCE WENT${sharedPreferences.getDouble('distance')}');
-
-    if (!addThingy) {
-      addThingy = false;
-      // routeBuilt = false;
-      // isNavigating = false;
-      wayPoints.add(
-          WayPoint(name: "new dest", latitude: 51.4946, longitude: 0.1003));
-      print("waypoint length in initialize: " +
-          wayPoints.length.toString() +
-          "------------------------------------------------------------------");
-//terminates the tbt screen
-      await directions.finishNavigation();
-      print(
-          "------------------------closing screen.... in the if-------------------");
     }
 
     switch (e.eventType) {
@@ -136,7 +120,7 @@ class _TurnByTurnState extends State<TurnByTurn> {
         break;
       case MapBoxEvent.on_arrival:
         arrived = true;
-        if (arrived) {
+        if (!isMultipleStop) {
           await Future.delayed(Duration(seconds: 3));
           await _controller.finishNavigation();
         } else {}
@@ -144,12 +128,7 @@ class _TurnByTurnState extends State<TurnByTurn> {
         directions.finishNavigation();
         break;
       case MapBoxEvent.navigation_finished:
-        print(
-            "----------------- finishing navigation...... ------------------");
         wayPoints.removeAt(0);
-        print("waypoint length in initialize: after removal " +
-            wayPoints.length.toString() +
-            "------------------------------------------------------------------");
         await Future.delayed(Duration(seconds: 15));
         break;
       case MapBoxEvent.navigation_cancelled:

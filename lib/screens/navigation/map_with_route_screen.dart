@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
-import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/models/itinerary.dart';
-import 'package:veloplan/models/map_models/base_map_model.dart';
-import 'package:veloplan/screens/navigation/turn_by_turn_screen.dart';
-import '../../helpers/navigation_helpers/navigation_conversions_helpers.dart';
 import '../../models/map_models/base_map_with_route_model.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
+
+import '../../popups.dart';
 
 /// Map screen showing and focusing on a a selected journey
 /// Author(s): Elisabeth Halvorsen k20077737,
@@ -32,18 +30,16 @@ class _MapRoutePageState extends State<MapRoutePage> {
   late List<LatLng> _journey;
   final Itinerary _itinerary;
 
-  _MapRoutePageState(this._itinerary) {
-    _journey = convertDocksToLatLng(_itinerary.docks!)!;
-  }
+  _MapRoutePageState(this._itinerary) {}
   // _MapRoutePageState(this._journey, this._journeyDocks);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: ScopedModelDescendant<MapModel>(
         builder: (BuildContext context, Widget? child, MapModel model) {
-      _baseMapWithRoute = BaseMapboxRouteMap(_journey, model);
+      _baseMapWithRoute = BaseMapboxRouteMap(_itinerary, model);
       addPositionZoom();
-      startTurnByTurn(context, _journey);
+      startTurnByTurn(context, _itinerary);
 
       return SafeArea(child: Stack(children: _baseMapWithRoute.getWidgets()));
     }));
@@ -65,18 +61,20 @@ class _MapRoutePageState extends State<MapRoutePage> {
   }
 
   /// adds turn a turn by turn to our list of widgets
-  void startTurnByTurn(BuildContext context, List<LatLng> subJourney) {
+  void startTurnByTurn(BuildContext context, Itinerary itinerary) {
+    Popups popup = new Popups();
     _baseMapWithRoute.addWidget(Container(
       alignment: Alignment(0, 0),
       child: FloatingActionButton(
-          heroTag: "start_turn_by_trun",
-          onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        TurnByTurn(latLngs2WayPoints(subJourney))));
-          }),
+        heroTag: "start_turn_by_trun",
+        onPressed: () {
+          showDialog(
+              useRootNavigator: false,
+              context: context,
+              builder: (BuildContext context) =>
+                  popup.buildPopupDialogredirect(context, itinerary));
+        },
+      ),
     ));
   }
 }
