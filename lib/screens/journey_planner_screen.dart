@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
@@ -42,7 +43,7 @@ class _JourneyPlanner extends State<JourneyPlanner> {
 
   List<DynamicWidget> dynamicWidgetList = [];
   List<List<double?>> coordsList = [];
-  List<LatLng> dockList = [];
+  Map<int, LatLng> dockList = LinkedHashMap();
 
   @override
   void initState() {

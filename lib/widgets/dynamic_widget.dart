@@ -18,7 +18,7 @@ class DynamicWidget extends StatelessWidget {
   int position = -1;
   final locationService = LocationService();
   final Map? coordDataMap;
-  late List<LatLng> latLngList;
+  late Map<int, LatLng> latLngMap;
 
   ///set the position of the selected coordinates list to the passed in index
   void setIndex(index) {
@@ -29,11 +29,11 @@ class DynamicWidget extends StatelessWidget {
   @override
   void initState() {
     placeTextController.addListener(() {
-      PanelExtensions.of().checkInputLocation(placeTextController, editDockTextEditController, latLngList);
+      PanelExtensions.of().checkInputLocation(placeTextController, editDockTextEditController, latLngMap, position);
     });
   }
 
-  DynamicWidget({Key? key, required this.selectedCoords, this.coordDataMap, required this.latLngList })
+  DynamicWidget({Key? key, required this.selectedCoords, this.coordDataMap, required this.latLngMap })
       : super(key: key);
 
   @override
@@ -47,6 +47,7 @@ class DynamicWidget extends StatelessWidget {
                 onPressed: () {
                   int len = selectedCoords?.length ?? 0;
                   if (position < len) {
+                    latLngMap.removeWhere((key, value) => key == position);
                     selectedCoords?.removeAt(position);
                   }
                   onDelete?.call(position);
@@ -66,7 +67,7 @@ class DynamicWidget extends StatelessWidget {
                       final ext = PanelExtensions.of(context:context);
                       ext.setPosition(position);
                       ext . checkInputLocation(placeTextController,
-                          editDockTextEditController, latLngList);
+                          editDockTextEditController, latLngMap, position);
                     },
                     readOnly: true,
                     onTap: () {
@@ -103,7 +104,8 @@ class DynamicWidget extends StatelessWidget {
             ],
           ),
         ),
-      PanelExtensions(context: context).buildDefaultClosestDock(editDockTextEditController, placeTextController, latLngList)
+      PanelExtensions(context: context).buildDefaultClosestDock(editDockTextEditController,
+          placeTextController, latLngMap)
       ],
     );
   }
@@ -125,7 +127,7 @@ class DynamicWidget extends StatelessWidget {
         selectedCoords?[position] = feature.geometry?.coordinates;
       }
       PanelExtensions.of(context: context).getClosetDock(feature.geometry?.coordinates.first,
-          feature.geometry?.coordinates.last, editDockTextEditController, latLngList);
+          feature.geometry?.coordinates.last, editDockTextEditController, latLngMap, position);
     }
     print("RESULT => $result");
   }
@@ -136,8 +138,8 @@ class DynamicWidget extends StatelessWidget {
   }
 
   ///Reacts to user input for the location TextField
-  void checkInputLocation(){
-    PanelExtensions.of().checkInputLocation(placeTextController, editDockTextEditController, latLngList);
+  void checkInputLocation({int? position}){
+    PanelExtensions.of().checkInputLocation(placeTextController, editDockTextEditController, latLngMap, position ?? this.position);
   }
 
   ///When called, this function sets location of a TextField to the users current location. The [controller] is filled in

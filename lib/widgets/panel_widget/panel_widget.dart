@@ -23,7 +23,7 @@ import '../dynamic_widget.dart';
 ///@author: Rahin Ashraf - k20034059
 
 class PanelWidget extends PanelWidgetBase {
-  late List<LatLng> dockList;
+  late Map<int, LatLng> dockList;
    PanelWidget({Key? key, required Map<String, List<double?>> selectionMap, required Stream<MapPlace> address,
      required ScrollController scrollController, required StreamController<List<DynamicWidget>> dynamicWidgets,
      required List<DynamicWidget> listDynamic, required List<List<double?>?> selectedCoords,
@@ -65,15 +65,14 @@ class PanelWidgetState extends State<PanelWidget> {
   static const String fromLabelKey = "From";
   static const String toLabelKey = "To";
   final Alerts alert = Alerts();
-  late List<LatLng> dockList;
+  late Map<int, LatLng> dockList;
 
   ///Adds a new dynamic widget to the list of destinations for the journey
   addDynamic() {
     widget.listDynamic.add(DynamicWidget(
       selectedCoords: widget.selectedCoords,
       coordDataMap: response,
-      latLngList: dockList,
-
+      latLngMap: dockList,
     ));
     widget.dynamicWidgets.sink.add(widget.listDynamic);
   }
@@ -112,7 +111,7 @@ class PanelWidgetState extends State<PanelWidget> {
     widget.address.listen((event) {
       final dynamicWidget = DynamicWidget(
         selectedCoords: selectedCoords,
-        coordDataMap: response,   latLngList: dockList,
+        coordDataMap: response,   latLngMap: dockList,
       );
 
       //Cannot add by click of the map if there exists non-specified locations
@@ -124,9 +123,9 @@ class PanelWidgetState extends State<PanelWidget> {
 
       //Set the location tapped on from the map, as the place specified in the destination TextController
       dynamicWidget.placeTextController.text = event.address ?? "";
-      dynamicWidget.checkInputLocation();
       dynamicWidget.position = widget.listDynamic.length;
       widget.listDynamic.add(dynamicWidget);
+
 
       if (dynamicWidget.position > selectedCoords.length) {
         selectedCoords.add([event.coords?.latitude, event.coords?.longitude]);
@@ -134,6 +133,8 @@ class PanelWidgetState extends State<PanelWidget> {
         selectedCoords.insert(dynamicWidget.position,
             [event.coords?.latitude, event.coords?.longitude]);
       }
+
+      dynamicWidget.checkInputLocation(position: dynamicWidget.position);
       widget.dynamicWidgets.sink.add(widget.listDynamic);
     });
   }
@@ -149,7 +150,7 @@ class PanelWidgetState extends State<PanelWidget> {
     controller.text = place;
     staticListMap[key] = currentLocationCoords;
 
-    PanelExtensions.of().checkInputLocation(controller, editDockTextEditController,  dockList,);
+    PanelExtensions.of().checkInputLocation(controller, editDockTextEditController,  dockList,-1);
   }
 
   ///Builds the static row of components which are displayed permanently. Statically built, as every journey
@@ -189,7 +190,7 @@ class PanelWidgetState extends State<PanelWidget> {
                         widget.handleOnSearchClick(context, controller, onAddressAdded);
                       },
                       onEditingComplete: () {
-                        PanelExtensions.of(context:context).checkInputLocation(controller, editDockTextEditController,   dockList,);
+                        PanelExtensions.of(context:context).checkInputLocation(controller, editDockTextEditController,   dockList,-1);
                       },
                       controller: controller,
                       decoration: InputDecoration(
@@ -230,7 +231,7 @@ class PanelWidgetState extends State<PanelWidget> {
     final ext = PanelExtensions.of(context:context);
     ext.setPosition(position);
     ext.getClosetDock(newCord[0],
-        newCord[1], editDockTextEditController,  dockList,);
+        newCord[1], editDockTextEditController,  dockList, -1);
   }
 
   ///Given a coordinate, [newCord], it sets the 'To' location as the place specified by the coordinates passed in
@@ -372,11 +373,10 @@ class PanelWidgetState extends State<PanelWidget> {
 
 
       ///REMOVE THIS TO USE EDIT DOCK CONTROLLERS - DO NOT RECALCULATE IT /////////////////////////////////////////
-      List<LatLng> closestDockList = dockList;
+      List<LatLng> closestDockList = dockList.values.toList();
       print("ALREADY EXISTS ==> $closestDockList");
       ///REMOVE THIS TO USE EDIT DOCK CONTROLLERS - DO NOT RECALCULATE IT /////////////////////////////////
-
-
+      
       List<LatLng> closestDocksWithNoAdjancents = [];
       for(int i=0; i < closestDockList.length - 1; i++){
         if(closestDockList[i].latitude == closestDockList[i+1].latitude && closestDockList[i].longitude == closestDockList[i+1].longitude){

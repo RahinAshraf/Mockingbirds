@@ -1,12 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:veloplan/main.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
 import 'package:veloplan/utilities/permissions.dart';
-import 'package:veloplan/widgets/auth/auth_form.dart';
-
 import '../screens/auth_screen.dart';
-import '../screens/splash_screen.dart';
+
 
 ///Widget to display a Location error
 ///@author: Rahin Ashraf k20034059
@@ -28,7 +26,7 @@ class LocationErrorState extends State<LocationError> with WidgetsBindingObserve
 
   }
 
-  void enable() async{
+  void goToSettings() async{
     await openAppSettings();
   }
 
@@ -38,7 +36,8 @@ class LocationErrorState extends State<LocationError> with WidgetsBindingObserve
     if(mounted && state == AppLifecycleState.resumed){
       PermissionUtils.instance.getLocation(context).listen((status) {
         if(status == Permissions.ALLOW_WHILE_USING_APP || status == Permissions.ALLOW_ALL_TIME){
-           context.pushAndRemoveUntil(SplashScreen());
+          FirebaseAuth.instance.signOut();
+           context.pushAndRemoveUntil(AuthScreen());
 
         }else {
           print("Permission is $status");
@@ -71,7 +70,9 @@ class LocationErrorState extends State<LocationError> with WidgetsBindingObserve
                 ),
               ),
               Text(
-                "Please enable your location permission access in order to use VeloPlan.",
+                "Please enable your location permission access in order to use VeloPlan. \n After "
+                    "enabling your locations permissions, please close and reopen the app to begin your visit \n"
+                    "London!",
                 textDirection: TextDirection.ltr,
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -81,7 +82,7 @@ class LocationErrorState extends State<LocationError> with WidgetsBindingObserve
                 key: Key('LocationErrorText'),
               ),
               ElevatedButton(
-                onPressed: enable,
+                onPressed: goToSettings,
                 child: Text(
                   "ENABLE",
                   textDirection: TextDirection.ltr,

@@ -34,7 +34,8 @@ class PanelExtensions {
   /// from the place specified in the location TextField [placeTextController] - if it has been specified.
   Widget buildDefaultClosestDock(
       TextEditingController editDockTextEditController,
-      TextEditingController placeTextController, List<LatLng> latLngList) {
+      TextEditingController placeTextController, Map<int, LatLng> latLngMap,
+      {int position = -1}) {
     return Row(
       mainAxisSize: MainAxisSize.max,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -68,7 +69,7 @@ class PanelExtensions {
 
                 List temp = await locationService.getPlaceCoords(placeTextController.text);
                 checkInputLocation(
-                    placeTextController, editDockTextEditController, latLngList);
+                    placeTextController, editDockTextEditController, latLngMap, position);
 
                 if(_dockingStation != null){
                   Navigator.push(
@@ -101,14 +102,14 @@ class PanelExtensions {
   ///The [editDockTextEditController] is where the TextField that specifies the closest docking station to the specified
   ///London destination - if it has been specified.
   void checkInputLocation(TextEditingController placeTextController,
-      TextEditingController editDockTextEditController, List<LatLng> latLngList) async {
+      TextEditingController editDockTextEditController, Map<int, LatLng> latLngMap, int position) async {
     if (placeTextController.text.isEmpty) {
       //do nothing
     } else {
       List coordPlace = await locationService.getPlaceCoords(
           placeTextController.text); //getting coordinates of the place specified as the destination to visit
       getClosetDock(
-          coordPlace.first, coordPlace.last, editDockTextEditController, latLngList);
+          coordPlace.first, coordPlace.last, editDockTextEditController, latLngMap, position);
     }
   }
 
@@ -116,21 +117,17 @@ class PanelExtensions {
   /// with the name of the docking station which is closest to the location specified by the user.
   /// The London destination the user specifies to visit, is given together by the [lat] and [lng] of the destination.
   void getClosetDock(double? lat, double? lng,
-      TextEditingController editDockTextEditController, List<LatLng> latLngList) async {
+      TextEditingController editDockTextEditController,
+      Map<int, LatLng>  latLngMap, int position) async {
     LatLong.LatLng latlngPlace =
         LatLong.LatLng(lat!, lng!);
     dockingStationManager _stationManager = dockingStationManager();
     await _stationManager.importStations();
-    print(latlngPlace);
     DockingStation closetDock = _stationManager.getClosestDock(latlngPlace);
     print("closet dock ${closetDock.name}");
     editDockTextEditController.text = closetDock.name;
-    if(position < latLngList.length){
-        latLngList[position] = LatLng(closetDock.lat, closetDock.lon);
-    }else{
-
-      latLngList.add(LatLng(closetDock.lat, closetDock.lon));
-    }
+    latLngMap[position] = LatLng(closetDock.lat, closetDock.lon);
+    print("PRIIIINTING => $position");
     this._dockingStation = closetDock;
 
   }
