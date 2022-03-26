@@ -1,4 +1,5 @@
-import 'dart:math';
+import 'dart:developer';
+import 'dart:math' as math;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -38,6 +39,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
   late List<LatLng> pointsCoord;
   late Itinerary _itinerary;
   late List<Path> paths;
+  late List<Widget> pathTime = [];
 
   SummaryJourneyScreenState(this._itinerary) {
     //TODO: find the best place to call the itinerary manager
@@ -103,7 +105,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
     List list = [];
     list.add(ownerID);
     String destination = "";
-    Random rng = Random();
+    math.Random rng = math.Random();
     String code = rng.nextInt(999999).toString();
     var x = await _databaseManager.getByEquality('group', 'code', code);
     while (x.size != 0) {
@@ -282,16 +284,28 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
               ),
               const SizedBox(height: 20),
               // MANO
+              // FutureBuilder<List<Widget>>(
+              //     future: _generateStopsFuture(),
+              //     builder: (context, AsyncSnapshot<List<Widget>> snapshot) {
+              //       if (snapshot.hasData) {
+              //         log(snapshot.data.toString());
+              //         //return snapshot.data!.first;
+              //         return pathTime[0];
+              //       } else {
+              //         return CircularProgressIndicator();
+              //       }
+              //     }),
               Column(
                 children: _generateStops(),
               ),
-              Container(
-                  alignment: Alignment.bottomLeft,
-                  padding: const EdgeInsets.all(10),
-                  child: const Text(
-                    'Final stop:',
-                    style: TextStyle(color: Color(0xFF99D2A9), fontSize: 18),
-                  )),
+              //TODO: uncomment if you want the final stop
+              // Container(
+              //     alignment: Alignment.bottomLeft,
+              //     padding: const EdgeInsets.all(10),
+              //     child: const Text(
+              //       'Final stop:',
+              //       style: TextStyle(color: Color(0xFF99D2A9), fontSize: 18),
+              //     )),
               const SizedBox(height: 20),
               if (isInGroup)
                 Container(
@@ -334,23 +348,44 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
     List<Widget> smth = [];
     ItineraryManager _itineraryManager = new ItineraryManager(_itinerary);
     paths = _itineraryManager.getPaths();
-    for (var dock in _itinerary.docks!) {
-      print("-----------" + dock.name);
-      // print("-----------" + path.des2Name);
-      smth.add(StationTempWidget(content: dock.name));
-      // smth.add(StationTempWidget(content: path.des1Name));
+    for (int i = 0; i < _itinerary.docks!.length; i++) {
+      if (i == 0) {
+        smth.add(StationTempWidget(
+          content: _itinerary.docks![i].name,
+          time: 0,
+        ));
+      } else {
+        smth.add(StationTempWidget(
+          content: _itinerary.docks![i].name,
+          time: 0,
+        ));
+      }
     }
     return smth;
+  }
+
+  Future<List<Widget>> _generateStopsFuture() async {
+    for (var path in paths) {
+      pathTime.add(StationTempWidget(
+        content: "",
+        time: path.duration,
+      ));
+    }
+    return pathTime;
   }
 }
 
 class StationTempWidget extends StatelessWidget {
   const StationTempWidget(
-      {this.first = false, this.last = false, required this.content});
+      {this.first = false,
+      this.last = false,
+      required this.content,
+      required this.time});
 
   final bool first;
   final bool last;
   final String content;
+  final double time;
 
   @override
   Widget build(BuildContext context) {
