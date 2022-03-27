@@ -34,36 +34,34 @@ class _HelpPageState extends State<HelpPage> {
       appBar: AppBar(
         title: const Text('HelpBot'),
       ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: ListView(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 10.0, vertical: 20.0),
-                children: UnmodifiableListView(_conversation),
-              ),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
+              children: UnmodifiableListView(_conversation),
             ),
-            Container(
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                border: Border(
-                  top: BorderSide(
-                    color: helpScreenBorderColor,
-                    width: 1.5,
-                  ),
-                ),
-              ),
-              padding: const EdgeInsets.fromLTRB(5.0, 10.0, 0.0, 10.0),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: choices,
+          ),
+          Container(
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                  color: helpScreenBorderColor,
+                  width: 1.5,
                 ),
               ),
             ),
-          ],
-        ),
+            padding: const EdgeInsets.fromLTRB(5.0, 10.0, 0.0, 10.0),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: choices,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
