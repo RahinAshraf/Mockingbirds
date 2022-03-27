@@ -12,23 +12,18 @@ import 'package:veloplan/.env.dart';
 /// Author(s): Fariha Choudhury k20059723, Elisabeth Koren Halvorsen k20077737
 class BaseMapboxMap {
   final String accessToken = MAPBOX_ACCESS_TOKEN;
-  LatLng _target = getLatLngFromSharedPrefs();
+  LatLng currentPosition = getLatLngFromSharedPrefs();
   late MapboxMap map;
   final List<Widget> _widgets = [];
   final MapModel model;
   late CameraPosition cameraPosition;
   late MapboxMapController? controller;
   late Symbol? _selectedSymbol;
-  Timer? timer;
+  // Timer? timer;
   bool recenter = true;
 
   BaseMapboxMap(this.model) {
-    cameraPosition = CameraPosition(target: _target, zoom: 15);
-    // if (_useLiveLocation) {
-    //   _setMapWithLiveLocation();
-    // } else {
-    //   _setMapWithoutLiveLocation();
-    // }
+    cameraPosition = CameraPosition(target: currentPosition, zoom: 15);
     setMap();
     addWidget(map);
   }
@@ -45,31 +40,37 @@ class BaseMapboxMap {
 
   /// Initialize map features
   void onMapCreated(MapboxMapController controller) async {
-    timer = Timer.periodic(
-        Duration(seconds: 2), (Timer t) => updateCurrentLocation());
     this.controller = controller;
     model.setController(controller);
     model.fetchDockingStations();
     controller.onSymbolTapped.add(onSymbolTapped);
   }
 
+  /// Updates the current location with the new one
   void updateCurrentLocation() async {
     Location newCurrentLocation = Location();
     LocationData _newLocationData = await newCurrentLocation.getLocation();
-    //sharedPreferences.clear();
+    sharedPreferences.clear();
     sharedPreferences.setDouble('latitude', _newLocationData.latitude!);
     sharedPreferences.setDouble('longitude', _newLocationData.longitude!);
-    // print("UPDATED");
-    // print(_newLocationData.latitude!);
-    // print(_newLocationData.longitude!);
+    currentPosition =
+        LatLng(_newLocationData.latitude!, _newLocationData.longitude!);
+  }
+
+  /// updates the [cameraposition]
+  void _updateCameraPosition() {
+    cameraPosition = CameraPosition(target: currentPosition, zoom: 15);
+  }
+
+  /// gets the new [cameraposition]
+  CameraPosition getNewCameraPosition() {
+    updateCurrentLocation();
+    _updateCameraPosition();
+    return cameraPosition;
   }
 
   /// Adds click functionality to map
-  void onMapClick(Point<double> point, LatLng coordinates) async {
-    recenter = false;
-    print("map tapped! --------------");
-    //print(coordinates);
-  }
+  void onMapClick(Point<double> point, LatLng coordinates) async {}
 
   /// Shows the on tapped docking station information
   Future<void> onSymbolTapped(Symbol symbol) async {
@@ -88,18 +89,6 @@ class BaseMapboxMap {
     print("Will call widget next");
   }
 
-  /// Initialises map without live location
-  // void _setMapWithoutLiveLocation() {
-  //   _map = MapboxMap(
-  //     accessToken: _accessToken,
-  //     initialCameraPosition: cameraPosition,
-  //     onMapCreated: onMapCreated,
-  //     myLocationEnabled: true,
-  //     annotationOrder: [AnnotationType.symbol],
-  //     onMapClick: onMapClick,
-  //   );
-  // }
-
   /// Initialises map with live location
   void setMap() {
     map = MapboxMap(
@@ -114,6 +103,7 @@ class BaseMapboxMap {
     );
   }
 
+  /// gets the [map]
   MapboxMap getMap() {
     return map;
   }

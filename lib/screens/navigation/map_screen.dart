@@ -21,7 +21,6 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  LatLng currentLatLng = getLatLngFromSharedPrefs();
   late BaseMapboxMap _baseMap;
   @override
   Widget build(BuildContext context) {
@@ -40,7 +39,7 @@ class _MapPageState extends State<MapPage> {
         heroTag: "center_to_current_loaction",
         onPressed: () {
           _baseMap.controller?.animateCamera(
-              CameraUpdate.newCameraPosition(_baseMap.cameraPosition));
+              CameraUpdate.newCameraPosition(_baseMap.getNewCameraPosition()));
         },
         child: const Icon(Icons.my_location),
       ),
