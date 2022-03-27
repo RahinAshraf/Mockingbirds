@@ -39,7 +39,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
   late List<LatLng> pointsCoord;
   late Itinerary _itinerary;
   late List<Path> paths;
-  late List<Widget> pathTime = [];
+  late ItineraryManager _itineraryManager;
 
   SummaryJourneyScreenState(this._itinerary) {}
 
@@ -279,13 +279,17 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
               ),
               const SizedBox(height: 20),
               // MANO
-              // FutureBuilder<List<Widget>>(
+              // FutureBuilder(
               //     future: _generateStopsFuture(),
-              //     builder: (context, AsyncSnapshot<List<Widget>> snapshot) {
+              //     builder: (context, snapshot) {
               //       if (snapshot.hasData) {
-              //         log(snapshot.data.toString());
-              //         //return snapshot.data!.first;
-              //         return pathTime[0];
+              //         return Column(children: [
+              //           for (int i = 0; i < _itinerary.docks!.length; i++)
+              //             StationTempWidget(
+              //               content: _itinerary.docks![i].name,
+              //               time: paths[i].duration,
+              //             )
+              //         ]);
               //       } else {
               //         return CircularProgressIndicator();
               //       }
@@ -342,32 +346,19 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
 
   List<Widget> _generateStops() {
     List<Widget> smth = [];
-    ItineraryManager _itineraryManager = new ItineraryManager(_itinerary);
-    paths = _itineraryManager.getPaths();
+
     for (int i = 0; i < _itinerary.docks!.length; i++) {
-      if (i == 0) {
-        smth.add(StationTempWidget(
-          content: _itinerary.docks![i].name,
-          time: 0,
-        ));
-      } else {
-        smth.add(StationTempWidget(
-          content: _itinerary.docks![i].name,
-          time: 0,
-        ));
-      }
+      smth.add(StationTempWidget(
+        content: _itinerary.docks![i].name,
+        time: paths[i].duration,
+      ));
     }
     return smth;
   }
 
-  Future<List<Widget>> _generateStopsFuture() async {
-    for (var path in paths) {
-      pathTime.add(StationTempWidget(
-        content: "",
-        time: path.duration,
-      ));
-    }
-    return pathTime;
+  _generateStopsFuture() async {
+    _itineraryManager = await new ItineraryManager(_itinerary);
+    paths = _itineraryManager.getPaths();
   }
 }
 
@@ -419,6 +410,9 @@ class StationTempWidget extends StatelessWidget {
                   color: Color(0xFF99D2A9),
                   fontWeight: FontWeight.bold,
                 ),
+              ),
+              Text(
+                '${time}',
               ),
               ImageIcon(
                 AssetImage("assets/images/logo.png"),

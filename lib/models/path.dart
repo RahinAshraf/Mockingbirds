@@ -71,9 +71,13 @@ class Path {
         " des2: " +
         des2.toString() +
         " dock1: " +
-        doc1.toString() +
+        doc1.name.toString() +
+        "   " +
+        doc1.getLatlng().toString() +
         " dock2: " +
-        doc2.toString() +
+        doc2.name.toString() +
+        "   " +
+        doc2.getLatlng().toString() +
         " distance: " +
         distance.toString() +
         " . duration:  " +

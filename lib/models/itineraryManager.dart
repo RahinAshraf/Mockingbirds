@@ -23,21 +23,22 @@ class ItineraryManager {
     if (_itinerary.docks!.length > 1) {
       //WALKING:
       _routeResponse = await _manager.getDirections(
-          _itinerary.docks![0].getLatlng(),
-          _itinerary.docks![1].getLatlng(),
+          _itinerary.myDestinations![
+              0], // takes the first myDestination that the user inputted
+          _itinerary.docks![0].getLatlng(), //takes the first dock location
           NavigationType.walking);
 
       //added: walking latlng to our list:
       _wholeTrip.add(Path.api(
-        DockingStation.empty(),
-        DockingStation.empty(), //_docks[0],
-        _itinerary.docks![0].getLatlng(),
-        _itinerary.docks![1].getLatlng(),
+        DockingStation.empty(), // empty because it is the user location
+        _itinerary.docks![0], // the first dock in the itinerary
+        _itinerary.myDestinations![0],
+        _itinerary.myDestinations![0],
         _routeResponse["distance"],
         _routeResponse["duration"],
       ));
 
-      for (int i = 1; i < _itinerary.docks!.length - 1; ++i) {
+      for (int i = 0; i < _itinerary.docks!.length - 1; ++i) {
         //CYCLING:
         var directions = await _manager.getDirections(
             _itinerary.docks![i].getLatlng(),
@@ -46,16 +47,16 @@ class ItineraryManager {
 
         //added: cycling latlng to our list:
         _wholeTrip.add(Path.api(
-            DockingStation.empty(), //_docks[i - 1],
-            DockingStation.empty(), // _docks[i],
-            _itinerary.docks![i].getLatlng(),
-            _itinerary.docks![i + 1].getLatlng(),
+            _itinerary.docks![i], //
+            _itinerary.docks![i + 1], //
+            _itinerary.myDestinations![i],
+            _itinerary.myDestinations![i + 1],
             directions["distance"].toDouble(),
             directions["duration"].toDouble()));
       }
     }
     //uncomment if you want to test it!
-    //printPaths();
+    printPaths();
   }
 
   List<Path> getPaths() {

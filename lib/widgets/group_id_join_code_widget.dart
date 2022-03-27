@@ -1,12 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
-import 'package:veloplan/utilities/dart_exts.dart';
 
 import '../helpers/database_manager.dart';
 import '../helpers/navigation_helpers/navigation_conversions_helpers.dart';
-import '../models/itineraryManager.dart';
-import '../screens/summary_journey_screen.dart';
 
 class GroupId extends StatefulWidget {
   const GroupId({Key? key}) : super(key: key);
