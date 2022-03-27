@@ -3,13 +3,18 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/helpers/live_location_helper.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:veloplan/.env.dart';
+import 'package:veloplan/widgets/docking_station_widget.dart';
 
 /// Class to display a mapbox map with other possible widgets on top
 /// Author(s): Fariha Choudhury k20059723, Elisabeth Koren Halvorsen k20077737
+/// Contributor: Hristina-Andreea Sararu k20036771
+final GlobalKey<DockStationState> dockingStationKey = GlobalKey();
+
 class BaseMapboxMap {
   final String _accessToken = MAPBOX_ACCESS_TOKEN;
   LatLng _target = getLatLngFromSharedPrefs();
@@ -72,18 +77,20 @@ class BaseMapboxMap {
   /// Shows the on tapped docking station information
   Future<void> onSymbolTapped(Symbol symbol) async {
     _selectedSymbol = symbol;
-    Future<LatLng> variable = controller!.getSymbolLatLng(symbol);
     if (_selectedSymbol != null) {
-      LatLng current = await variable;
-      displayDockCard(current);
+      Map<dynamic, dynamic>? stationData = symbol.data;
+      print("ONSYMBOLTAPPED");
+
+      displayDockCard(stationData);
     }
   }
 
   /// Shows the information about the pressed docking station
-  void displayDockCard(LatLng current) {
-    //CHANGE THIS TO CREATE CARD
-    //! CAN BE MOVED TO HELPER ONCE HRISTINA IS FINISHED WITH IT
-    print("Will call widget next");
+  void displayDockCard(Map<dynamic, dynamic>? stationData) {
+    DockingStation station = stationData!["station"];
+    dockingStationKey.currentState?.setState(() {
+      dockingStationKey.currentState?.setData(station, true);
+    });
   }
 
   /// Initialises map without live location
