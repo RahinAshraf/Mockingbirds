@@ -32,20 +32,6 @@ class Settings extends StatelessWidget {
               value: notifier.isDarkTheme,
             ),
           ),
-          // ListTile(
-          //   leading: const Icon(Icons.delete),
-          //   title: const Text('Delete account'),
-          //   onTap: () async {
-          //     try {
-          //       await FirebaseAuth.instance.currentUser!.delete();
-          //     } on FirebaseAuthException catch (e) {
-          //       if (e.code == 'requires-recent-login') {
-          //         print(
-          //             'The user must reauthenticate before this operation can be executed.');
-          //       }
-          //     }
-          //   },
-          // ),
         ],
       ),
     );

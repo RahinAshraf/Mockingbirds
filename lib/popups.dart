@@ -9,7 +9,9 @@ import 'package:veloplan/screens/trips_scheduler_screen.dart';
 import 'helpers/navigation_helpers/navigation_conversions_helpers.dart';
 import 'models/itinerary.dart';
 
-// Generic popups used thorough the app
+/// Generic popups used thorough the app
+/// Author(s) Marija
+/// Contributors: Nicole
 class Popups {
   // Questions
   PopupWidget buildPopupDialogNewJourney(BuildContext context) {
@@ -91,7 +93,7 @@ class Popups {
         type: AlertType.warning);
   }
 
-  PopupWidget buildPopupDialogredirect(
+  PopupWidget buildPopupDialogRedirect(
       BuildContext context, Itinerary itinerary) {
     List<LatLng> subJourney = convertDocksToLatLng(itinerary.docks!)!;
     List<PopupButtonWidget> children = [

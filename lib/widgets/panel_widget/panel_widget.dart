@@ -23,7 +23,8 @@ import 'package:veloplan/helpers/history_helper.dart';
 
 ///When rendered, the journey_planner_screen will have this panel_widget at the bottom. It is an interactive panel the user can
 ///slide up or down, when wanting to input their desired locations for the journey.
-///@author: Rahin Ashraf - k20034059
+///@author: Rahin Ashraf - k20034059,
+///Contributor: Nicole
 
 class PanelWidget extends PanelWidgetBase {
   PanelWidget(
@@ -452,12 +453,13 @@ class PanelWidgetState extends State<PanelWidget> {
           DockingStation closestDock = _stationManager
               .getClosestDock(LatLng(points[i].latitude, points[i].longitude));
           //get the dock
+          print("------------- adding dock" + closestDock.name);
           selectedDocks.add(closestDock);
           //get the coord
           closestDockList.add(closestDock.getLatlng());
         }
         print("ALL_COORDINATES FOR CLOSEST DOCKS => $closestDockList");
-        print("ALL_DOCKS FOR CLOSEST DOCKS => $selectedDocks");
+        print("ALL_DOCKS FOR CLOSEST DOCKS => ${selectedDocks.last.name}");
       }
 
       List<LatLng> closestDocksWithNoAdjancents = [];
@@ -500,12 +502,6 @@ class PanelWidgetState extends State<PanelWidget> {
         if (response) {
           Navigator.of(context).pop(true);
         }
-
-        // Navigator.of(context).push(MaterialPageRoute(
-        //   builder: (context) => SummaryJourneyScreen(points, trip),
-        // ));
-
-        //
       }
     }
   }

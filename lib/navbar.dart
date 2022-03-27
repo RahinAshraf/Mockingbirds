@@ -23,9 +23,8 @@ class _NavBarState extends State<NavBar> {
   final Popups popup = Popups();
 
   var screens = [
-    Placeholder(), // is this bad practise?
+    Placeholder(),
     MapPage(),
-    // MapUpdatedRoutePage(),
   ];
 
   @override

@@ -29,6 +29,38 @@ class DockingStation {
       this._lon,
       this._lat);
 
+  ///Creates an instance of a docking station including its document id when added to firebase
+  DockingStation.map(DocumentSnapshot document) {
+    _documentId = document.id;
+    _stationId = document.get('stationId');
+    _name = document.get('name');
+    _numberOfBikes = document.get('numberOfBikes');
+    _numberOfEmptyDocks = document.get('numberOfEmptyDocks');
+  }
+
+  /// An empty constructor useful for initialisations of Itinerary manager
+  DockingStation.empty()
+      : _stationId = "empty",
+        _name = "empty",
+        _isInstalled = false,
+        _isLocked = true,
+        _numberOfBikes = 0,
+        _numberOfEmptyDocks = 0,
+        _numberOfAllDocks = 0,
+        _lon = 0.0,
+        _lat = 0.0;
+
+  String get stationId => _stationId;
+  String get name => _name;
+  bool get isInstalled => _isInstalled;
+  bool get isLocked => _isLocked;
+  int get numberOfBikes => _numberOfBikes;
+  int get numberOfEmptyDocks => _numberOfEmptyDocks;
+  int get numberOfAllDocks => _numberOfAllDocks;
+  double get lon => _lon;
+  double get lat => _lat;
+  String? get documentId => _documentId;
+
   set setStationId(String temp) {
     _stationId = temp;
   }
@@ -69,6 +101,7 @@ class DockingStation {
     _documentId = temp;
   }
 
+// Overload function for assignment operator
   void assign(DockingStation other) {
     this._stationId = other.stationId;
     this._name = other.name;
@@ -81,39 +114,7 @@ class DockingStation {
     this._lat = other.lat;
   }
 
-  String get stationId => _stationId;
-  String get name => _name;
-  bool get isInstalled => _isInstalled;
-  bool get isLocked => _isLocked;
-  int get numberOfBikes => _numberOfBikes;
-  int get numberOfEmptyDocks => _numberOfEmptyDocks;
-  int get numberOfAllDocks => _numberOfAllDocks;
-  double get lon => _lon;
-  double get lat => _lat;
-  String? get documentId => _documentId;
-
-  ///Creates an instance of a docking station including its document id when added to firebase
-  DockingStation.map(DocumentSnapshot document) {
-    _documentId = document.id;
-    _stationId = document.get('stationId');
-    _name = document.get('name');
-    _numberOfBikes = document.get('numberOfBikes');
-    _numberOfEmptyDocks = document.get('numberOfEmptyDocks');
-  }
-
   LatLng getLatlng() {
     return new LatLng(this._lat, this._lon);
   }
-
-  /// An empty constructor useful for initialisations
-  DockingStation.empty()
-      : _stationId = "empty",
-        _name = "empty",
-        _isInstalled = false,
-        _isLocked = true,
-        _numberOfBikes = 0,
-        _numberOfEmptyDocks = 0,
-        _numberOfAllDocks = 0,
-        _lon = 0.0,
-        _lat = 0.0;
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:veloplan/screens/my_journeys_screen.dart';
+import 'package:veloplan/screens/suggested_journeys.dart';
 import '../screens/schedule_screen.dart';
 import '../screens/favourite_screen.dart';
 import '../screens/help_screen.dart';
@@ -38,18 +39,23 @@ class SideBar extends StatelessWidget {
               icon: Icons.favorite,
               onClicked: () => _renderScreen(context, 2),
             ),
+            _buildSidebarItem(
+              text: 'Suggested Trips',
+              icon: Icons.route,
+              onClicked: () => _renderScreen(context, 3),
+            ),
             const SizedBox(height: 24),
             const Divider(color: Colors.grey),
             const SizedBox(height: 24),
             _buildSidebarItem(
               text: 'Help',
               icon: Icons.chat_bubble_outlined,
-              onClicked: () => _renderScreen(context, 3),
+              onClicked: () => _renderScreen(context, 4),
             ),
             _buildSidebarItem(
               text: 'Settings',
               icon: Icons.settings,
-              onClicked: () => _renderScreen(context, 4),
+              onClicked: () => _renderScreen(context, 5),
             ),
           ],
         ),
@@ -85,20 +91,19 @@ class SideBar extends StatelessWidget {
         break;
       case 3:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => HelpPage(),
+          builder: (context) => SuggestedItinerary(),
         ));
         break;
       case 4:
         Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => HelpPage(),
+        ));
+        break;
+      case 5:
+        Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => const Settings(),
         ));
         break;
-      // case 7:
-      //   Navigator.of(context).push(MaterialPageRoute(
-      //     builder: (context) =>
-      //         dockingsStationCard(index, name, nb_bikes, nb_empty_docks),
-      //   ));
-      //   break;
     }
   }
 }

@@ -4,6 +4,8 @@ import 'package:veloplan/models/docking_station.dart';
 
 import '../providers/location_service.dart';
 
+/// A class useful for creating a common path between two points, a point and a docking station, docking station and a docking station. It stores the durations and distances
+/// and updates them when called with the path provider
 class Path {
   final DockingStation doc1;
   String des1Name;
@@ -14,10 +16,7 @@ class Path {
   double distance = 0.0;
   double duration = 0;
 
-/**
- * A constructor that is useful for dock sorting paths in edit dock screen
- * 
- */
+  /// A constructor that is useful for dock sorting paths in edit dock screen
   Path.dock_sorter(this.des1, this.doc1, this.distance, this.duration)
       : des2 = LatLong.LatLng(0.0, 0.0),
         doc2 = DockingStation.empty(),
@@ -47,21 +46,22 @@ class Path {
     return this.doc1;
   }
 
+  /// Generate the names of the paths from coordinates
   Future<void> _generateNames() async {
     LocationService service = LocationService();
     service
         .reverseGeoCode(des1.latitude, des1.longitude)
-        .then((value) => initialise1(value['place']));
+        .then((value) => initialiseDock1(value['place']));
     service
         .reverseGeoCode(des2.latitude, des2.longitude)
-        .then((value) => initialise2(value['place']));
+        .then((value) => initialiseDock2(value['place']));
   }
 
-  void initialise1(var place) {
+  void initialiseDock1(var place) {
     this.des1Name = place;
   }
 
-  void initialise2(var place) {
+  void initialiseDock2(var place) {
     this.des2Name = place;
   }
 

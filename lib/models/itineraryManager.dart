@@ -15,7 +15,6 @@ class ItineraryManager {
 
   ItineraryManager(this._itinerary) {
     _setJourney();
-    print("helooooo i am in itinerary manager class -------");
   }
 
   /// Sets the [journey] and paths
@@ -56,23 +55,26 @@ class ItineraryManager {
       }
     }
     //uncomment if you want to test it!
-    printPaths();
+    // printPaths();
   }
 
   List<Path> getPaths() {
     return _wholeTrip;
   }
 
+  /// Print the paths of the itinerary
   void printPaths() {
     for (var path in _wholeTrip) {
       path.printPath();
     }
   }
 
+  /// Update the current path that the user is on, useful for redirecting
   void updatePath(Path newPath) {
     _wholeTrip[_currentIndex] = newPath;
   }
 
+  /// Update the waypoint index of the itinerary
   void setIndex(int i) {
     _currentIndex = i;
   }

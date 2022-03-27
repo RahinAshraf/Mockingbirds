@@ -6,6 +6,9 @@ import 'package:veloplan/styles/styling.dart';
 import 'package:veloplan/utilities/help_bot_manager.dart';
 import 'package:veloplan/widgets/message_bubble_widget.dart';
 
+/// The Helpbot screen which builds everything related to helping the user navigate the app.
+///Author(s): Lilliana, Marija
+
 const String url =
     'mailto:k20070238@kcl.ac.uk?subject=Help%20with%20app&body=Help%20me!';
 HelpBotManager questions = HelpBotManager();

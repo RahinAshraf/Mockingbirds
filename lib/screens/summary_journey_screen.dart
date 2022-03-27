@@ -14,11 +14,12 @@ import '../helpers/navigation_helpers/navigation_conversions_helpers.dart';
 import '../models/itinerary.dart';
 import 'navigation/map_with_route_screen.dart';
 import 'dart:async';
-
 import 'package:mapbox_gl/mapbox_gl.dart';
-
 import 'package:veloplan/navbar.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
+
+/// Class useful to present the chosen docking stations and destinations by the user, distances and durations about their itinerary, a code for people to create a group
+///Author(s): Nicole, Marija, Lilliana, Hristina
 
 class SummaryJourneyScreen extends StatefulWidget {
   // final List<LatLng> points;
@@ -41,7 +42,10 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
   late List<Path> paths;
   late ItineraryManager _itineraryManager;
 
-  SummaryJourneyScreenState(this._itinerary) {}
+  SummaryJourneyScreenState(this._itinerary) {
+    _itineraryManager = new ItineraryManager(_itinerary);
+    paths = _itineraryManager.getPaths();
+  }
 
   @override
   void initState() {
@@ -285,10 +289,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
               //       if (snapshot.hasData) {
               //         return Column(children: [
               //           for (int i = 0; i < _itinerary.docks!.length; i++)
-              //             StationTempWidget(
-              //               content: _itinerary.docks![i].name,
-              //               time: paths[i].duration,
-              //             )
+              //             Text(paths[i].duration.toString()),
               //         ]);
               //       } else {
               //         return CircularProgressIndicator();
@@ -297,14 +298,6 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
               Column(
                 children: _generateStops(),
               ),
-              //TODO: uncomment if you want the final stop
-              // Container(
-              //     alignment: Alignment.bottomLeft,
-              //     padding: const EdgeInsets.all(10),
-              //     child: const Text(
-              //       'Final stop:',
-              //       style: TextStyle(color: Color(0xFF99D2A9), fontSize: 18),
-              //     )),
               const SizedBox(height: 20),
               if (isInGroup)
                 Container(
@@ -345,6 +338,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
         ));
   }
 
+  /// generate the distances and durations between the paths, generate station cards
   List<Widget> _generateStops() {
     List<Widget> smth = [];
 

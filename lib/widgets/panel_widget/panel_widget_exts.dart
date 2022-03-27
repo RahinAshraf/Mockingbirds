@@ -113,15 +113,19 @@ class PanelExtensions {
     print(latlngPlace);
     late DockingStation closestDock;
     if (isFrom) {
+      var temp = _stationManager.getClosestDockWithAvailableSpace(
+          latlngPlace, numberOfCyclists);
       closestDock = _stationManager.getClosestDockWithAvailableBikes(
           latlngPlace, numberOfCyclists);
       print(
-          "closest dock info  dock with available BIKES ${numberOfCyclists} ${closestDock.name}");
+          "closest dock info  dock with available BIKES ${closestDock.name} compared to SPACES ${temp.name} ---- num: ${numberOfCyclists}");
     } else {
+      var temp = _stationManager.getClosestDockWithAvailableBikes(
+          latlngPlace, numberOfCyclists);
       closestDock = _stationManager.getClosestDockWithAvailableSpace(
           latlngPlace, numberOfCyclists);
       print(
-          "closest dock info  dock with available SPACES ${numberOfCyclists} ${closestDock.name}");
+          "closest dock info  dock with available SPACES ${closestDock.name} compared to BIKES ${temp.name} ------ num: ${numberOfCyclists}");
     }
     print("closet dock ${closestDock.name}");
     editDockTextEditController.text = closestDock.name;

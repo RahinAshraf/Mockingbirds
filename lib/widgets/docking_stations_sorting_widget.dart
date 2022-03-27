@@ -23,7 +23,9 @@ class _DockSorter extends State<DockSorter> {
   ScrollController controller = ScrollController();
   late LatLng userCoordinates;
   late DockingStationCarousel _dockingStations;
-  List<String> dropdownItems = ['Distance', 'Favourites', 'Most Popular'];
+  List<String> dropdownItems = ['Distance', 'Favourites'];
+  // List<String> dropdownItems = ['Distance', 'Favourites', 'Most Popular'];
+  int setterDropdown = -1;
   String selectedFilter = 'Distance';
 
   @override
@@ -81,7 +83,7 @@ class _DockSorter extends State<DockSorter> {
             padding: EdgeInsets.only(bottom: 10.0),
             child: Divider(),
           ),
-          _dockingStations.build(),
+          _dockingStations.build(selectedFilter),
         ],
       );
 }

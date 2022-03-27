@@ -15,7 +15,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 /// Reference: dormmom.com, Jul 20, 2021, flutter_mapbox_navigation 0.0.26, https://pub.dev/packages/flutter_mapbox_navigation
 
 class TurnByTurn extends StatefulWidget {
-  //late List<LatLng> points;
   late var wayPoints = <WayPoint>[];
   TurnByTurn(var points) {
     this.wayPoints = points;

@@ -12,26 +12,20 @@ import '../../popups.dart';
 /// Author(s): Elisabeth Halvorsen k20077737,
 
 class MapRoutePage extends StatefulWidget {
-  // const MapPage({Key? key}) : super(key: key);
-  // final List<DockingStation> _journeyDocks;
   final Itinerary _itinerary;
   MapRoutePage(this._itinerary);
-  // MapRoutePage(this._journey, this._journeyDocks);
 
   @override
   _MapRoutePageState createState() => _MapRoutePageState(this._itinerary);
-  // _MapRoutePageState(_journey, _journeyDocks);
 }
 
 class _MapRoutePageState extends State<MapRoutePage> {
   LatLng currentLatLng = getLatLngFromSharedPrefs();
-  // late BaseMapboxMap _baseMap;
   late BaseMapboxRouteMap _baseMapWithRoute;
   late List<LatLng> _journey;
   final Itinerary _itinerary;
 
   _MapRoutePageState(this._itinerary) {}
-  // _MapRoutePageState(this._journey, this._journeyDocks);
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +66,7 @@ class _MapRoutePageState extends State<MapRoutePage> {
               useRootNavigator: false,
               context: context,
               builder: (BuildContext context) =>
-                  popup.buildPopupDialogredirect(context, itinerary));
+                  popup.buildPopupDialogRedirect(context, itinerary));
         },
       ),
     ));

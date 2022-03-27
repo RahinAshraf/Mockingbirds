@@ -24,16 +24,6 @@ import 'package:veloplan/scoped_models/map_model.dart';
 /// Author(s): Elisabeth Halvorsen k20077737
 
 class MapUpdatedRoutePage extends StatefulWidget {
-  // const MapPage({Key? key}) : super(key: key);
-  // final List<LatLng> _journey;
-  // final List<DockingStation> _journey;
-  // final List<LatLng> _points;
-  //   LatLng(51.514951, -0.112762),
-  //   LatLng(51.513146, -0.115256),
-  // LatLng(51.511407, -0.125497),
-  // LatLng(51.506053, -0.130310),
-  // LatLng(51.502254, -0.217760),
-  // ];
   late Itinerary _itinerary;
   MapUpdatedRoutePage(this._itinerary);
   @override
@@ -42,16 +32,11 @@ class MapUpdatedRoutePage extends StatefulWidget {
 }
 
 class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
-  // LatLng currentLatLng = getLatLngFromSharedPrefs();
   late MapWithRouteUpdated _baseMapWithUpdatedRoute;
-  // final List<LatLng> _journey;
-  // final List<DockingStation> _docks;
   Timer? timer;
-  // late BuildContext _context;
   bool finished = false;
   final Itinerary _itinerary;
 
-  // _MapUpdatedRoutePageState(this._journey) {
   _MapUpdatedRoutePageState(this._itinerary) {}
 
   @override

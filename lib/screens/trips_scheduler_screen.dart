@@ -4,10 +4,8 @@ import 'package:veloplan/.env.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import '../.env.dart';
-// import '../widgets/panel_widget/panel_widget.dart';
 import '../widgets/trips_scheduler_panel_widget.dart';
 import 'navigation/map_screen.dart';
-// import '../providers/location_service.dart';
 import 'package:veloplan/screens/navigation/map_screen.dart';
 
 class TripScheduler extends StatefulWidget {

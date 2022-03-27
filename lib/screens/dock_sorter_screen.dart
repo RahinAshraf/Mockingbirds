@@ -7,6 +7,9 @@ import '../.env.dart';
 import '../widgets/docking_stations_sorting_widget.dart';
 import 'navigation/map_screen.dart';
 
+/// The edit dock screen which is useful for selecting and favouriting docking station cards
+/// Author(s): Marija, Nicole Lehchevska
+
 class DockSorterScreen extends StatefulWidget {
   late final LatLng userCoord;
   DockSorterScreen(this.userCoord, {Key? key}) : super(key: key);

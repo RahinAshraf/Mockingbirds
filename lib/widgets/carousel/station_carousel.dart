@@ -5,6 +5,10 @@ import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:veloplan/widgets/carousel/custom_carousel.dart';
 import 'package:veloplan/widgets/docking_station_card.dart';
 
+import '../../helpers/favourite_helper.dart';
+import '../../helpers/shared_prefs.dart';
+import '../../providers/path_provider.dart';
+
 ///Class that loads information of docking stations into cards and builds a carousel
 ///Author(s): Tayyibah, Nicole
 class DockingStationCarousel {
@@ -17,6 +21,15 @@ class DockingStationCarousel {
     retrieveAllCards(); //just to initialise for now delete later
   }
 
+  void fetchPaths(List<DockingStation> docks) async {
+    final PathProvider dir = new PathProvider();
+    await dir.importPathsForDockSorter(getLatLngFromSharedPrefs(), docks);
+
+    print('---------------------');
+    dir.convertPathToSortedDocks(dir.sortPathsByDistanceFromGivenLocation(
+        getLatLngFromSharedPrefs(), dir.paths));
+  }
+
   Future<List<Widget>> retrieveAllCards() {
     final dockingStationManager _stationManager = dockingStationManager();
     var list = _stationManager
@@ -25,13 +38,49 @@ class DockingStationCarousel {
     return list;
   }
 
+  /// Retrieve filtered by distance cards that are using pathfinding sorting
+  Future<List<Widget>> retrieveFilteredByDistanceCards() {
+    final dockingStationManager _stationManager = dockingStationManager();
+    final PathProvider dir = new PathProvider();
+    var list = _stationManager
+        .importStationsByRadius(700, userCoordinates!)
+        .then((value) => createDockingCards(
+            dir.getSortedByPathDocks(userCoordinates!, value)));
+    return list;
+  }
+
   /// Retrieve the filtered cards for edit dock. Get 10 cards that are the closest to the given location
-  Future<List<Widget>> retrieveFilteredCards() {
+  Future<List<Widget>> retrieveFilteredByFavCards() async {
+    List<DockingStation> favourites = [];
+    final PathProvider dir = new PathProvider();
+    favourites = await FavouriteHelper.getUserFavourites();
+    final dockingStationManager _stationManager = dockingStationManager();
+    var list = _stationManager
+        .importStationsByRadius(700, userCoordinates!)
+        .then((value) => createDockingCards(_stationManager
+            .get10ClosestDocksFav(userCoordinates!, favourites)));
+    return list;
+  }
+
+  /// Retrieve the filtered cards for edit dock. Get 10 cards that are the closest to the given location
+  Future<List<Widget>> retrieve10FilteredByDistanceCards() async {
     final dockingStationManager _stationManager = dockingStationManager();
     var list = _stationManager.importStations().then((value) =>
         createDockingCards(
             _stationManager.get10ClosestDocks(userCoordinates!)));
     return list;
+  }
+
+  /// Retrieve the filtered cards for edit dock. Get 10 cards that are the closest to the given location
+  Future<List<Widget>> retrieve10FilteredFavouritesCards() async {
+    List<DockingStation> favourites = [];
+    favourites = await FavouriteHelper.getUserFavourites();
+    final dockingStationManager _stationManager = dockingStationManager();
+    // var list = _stationManager.importStations().then((value) =>
+    return createDockingCards(
+        _stationManager.get10ClosestDocksFav(userCoordinates!, favourites));
+    // ));
+    // return list;
   }
 
   // List<Widget> retrieveJourneyCards() {
@@ -67,9 +116,29 @@ class DockingStationCarousel {
     return dockingStationCards;
   }
 
-  FutureBuilder<List<Widget>> build() {
-    return FutureBuilder<List<Widget>>(
-        future: retrieveFilteredCards(),
+  Future<List<Widget>> selectFiltering(String filter) async {
+    // switch (filter) {
+    //   case 'Distance':
+    //     return retrieve10FilteredByDistanceCards();
+    //   case 'Favourites':
+    //     return retrieve10FilteredFavouritesCards();
+    //   case '':
+    //     return retrieve10FilteredByDistanceCards();
+
+    if (filter == "Distance") {
+      return retrieve10FilteredByDistanceCards();
+    } else {
+      return retrieve10FilteredFavouritesCards();
+    }
+
+    // case "Most Popular":
+    // }
+  }
+
+  FutureBuilder<List<Widget>> build(String selectedFilter) {
+    return FutureBuilder(
+        // future: retrieve10FilteredByDistanceCards(),
+        future: selectFiltering(selectedFilter),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Stack(

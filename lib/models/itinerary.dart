@@ -5,7 +5,7 @@ import '../providers/docking_station_manager.dart';
 import 'docking_station.dart';
 
 ///Represents a journey which is made up of list of docking stations and/or destinations.
-///Author: Tayyibah
+///Author: Tayyibah, Nicole
 
 class Itinerary {
   String? _journeyDocumentId;
@@ -29,6 +29,10 @@ class Itinerary {
     _journeyDocumentId = document.id;
     _date = (document.get('date')).toDate();
     _docks = stationList;
+  }
+  Itinerary.suggestedTrip(List<LatLng> _myDest, String str) {
+    _myDestinations = _myDest;
+    _journeyDocumentId = str;
   }
 
   ///Creates a scheduled journey from firebase to include its planned date, document id
