@@ -31,8 +31,7 @@ class ConnectionError extends StatelessWidget {
               alignment: Alignment.center,
               child: Padding(
                 padding: EdgeInsets.all(15.0),
-                child: CircularProgressIndicator(
-                    color: appBarColor, key: Key('internetErrorSpanner')),
+                child: CircularProgressIndicator(color: Color(0xFF99D2A9)),
               ),
             ),
             SizedBox(height: 20),
@@ -40,7 +39,7 @@ class ConnectionError extends StatelessWidget {
                 alignment: Alignment.center,
                 padding: const EdgeInsets.all(10),
                 child: const Text(
-                  'Ooops!',
+                  "Ooops!",
                   style: TextStyle(
                       color: Color(0xFF99D2A9),
                       fontWeight: FontWeight.w500,
@@ -54,7 +53,6 @@ class ConnectionError extends StatelessWidget {
                 color: Color(0xFF99D2A9),
                 fontSize: 15,
               ),
-              key: Key('internetErrorText'),
             ),
           ],
         )));

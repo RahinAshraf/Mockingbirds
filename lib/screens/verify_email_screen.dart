@@ -1,9 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
-import '../navbar.dart';
+import 'package:veloplan/helpers/database_manager.dart';
+import 'package:veloplan/navbar.dart';
 
 class VerifyEmailScreen extends StatefulWidget {
   const VerifyEmailScreen({Key? key}) : super(key: key);
@@ -13,6 +12,7 @@ class VerifyEmailScreen extends StatefulWidget {
 }
 
 class _VerifyEmailSCreenState extends State<VerifyEmailScreen> {
+  final DatabaseManager _databaseManager = DatabaseManager();
   bool isVerified = false;
   bool canResendEmail = false;
   Timer? timer;
@@ -20,7 +20,7 @@ class _VerifyEmailSCreenState extends State<VerifyEmailScreen> {
   @override
   void initState() {
     super.initState();
-    isVerified = FirebaseAuth.instance.currentUser!.emailVerified;
+    isVerified = _databaseManager.getCurrentUser()!.emailVerified;
 
     if (!isVerified) {
       sendVerification();
@@ -40,7 +40,7 @@ class _VerifyEmailSCreenState extends State<VerifyEmailScreen> {
 
   Future sendVerification() async {
     try {
-      final user = FirebaseAuth.instance.currentUser!;
+      final user = _databaseManager.getCurrentUser()!;
       await user.sendEmailVerification();
 
       setState(() => canResendEmail = false);
@@ -66,10 +66,10 @@ class _VerifyEmailSCreenState extends State<VerifyEmailScreen> {
   }
 
   Future checkEmailVerification() async {
-    await FirebaseAuth.instance.currentUser!.reload();
+    await _databaseManager.getCurrentUser()!.reload();
 
     setState(() {
-      isVerified = FirebaseAuth.instance.currentUser!.emailVerified;
+      isVerified = _databaseManager.getCurrentUser()!.emailVerified;
     });
 
     if (isVerified) timer?.cancel();
@@ -78,46 +78,66 @@ class _VerifyEmailSCreenState extends State<VerifyEmailScreen> {
   @override
   Widget build(BuildContext context) {
     return isVerified
-        ? Navbar()
+        ? NavBar()
         : Scaffold(
-            body: Padding(
-              padding: const EdgeInsets.all(16),
+            body: SafeArea(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
-                    'A verification email has been sent to your address.',
-                    style: TextStyle(fontSize: 20),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(
-                    height: 24,
-                  ),
-                  ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size.fromHeight(50),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: Image.asset(
+                      'assets/images/right_bubbles_shapes.png',
+                      width: 170,
+                      height: 170,
                     ),
-                    icon: const Icon(Icons.email, size: 32),
-                    label: canResendEmail
-                        ? const Text(
-                            'Resend Email',
-                            style: TextStyle(fontSize: 24),
-                          )
-                        : const Text(
-                            'Wait 1 minute to resend',
+                  ),
+                  const SizedBox(height: 30),
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/images/security_icon.png',
+                          width: 100,
+                          height: 100,
+                        ),
+                        const SizedBox(height: 24),
+                        const Text(
+                          'A verification email has been sent to your address.',
+                          style: TextStyle(fontSize: 20),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(
+                          height: 24,
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: ElevatedButton.icon(
+                            icon: const Icon(Icons.email, size: 32),
+                            label: canResendEmail
+                                ? const Text(
+                                    'Resend Email',
+                                    style: TextStyle(fontSize: 24),
+                                  )
+                                : const Text(
+                                    'Wait 1 minute to resend',
+                                    style: TextStyle(fontSize: 24),
+                                  ),
+                            onPressed: canResendEmail
+                                ? () => sendVerification()
+                                : null,
+                          ),
+                        ),
+                        TextButton(
+                          child: const Text(
+                            'Cancel',
                             style: TextStyle(fontSize: 24),
                           ),
-                    onPressed: canResendEmail ? () => sendVerification() : null,
-                  ),
-                  TextButton(
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size.fromHeight(50),
+                          onPressed: () => _databaseManager.signOut(),
+                        ),
+                      ],
                     ),
-                    child: const Text(
-                      'Cancel',
-                      style: TextStyle(fontSize: 24),
-                    ),
-                    onPressed: () => FirebaseAuth.instance.signOut(),
                   ),
                 ],
               ),
