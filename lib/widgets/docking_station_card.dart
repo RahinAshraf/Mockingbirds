@@ -5,7 +5,7 @@ import 'package:veloplan/models/docking_station.dart';
 
 ///Creates a card for a docking station, to include its name, number of bikes and empty bikes.
 ///Author: Tayyibah Uddin
-///Contributor: Fariha Choudhury
+///Contributor: Fariha Choudhury, Hristina-Andreea Sararu k20036771
 class DockingStationCard extends StatefulWidget {
   late final String iD;
   late final String stationName;
@@ -19,13 +19,13 @@ class DockingStationCard extends StatefulWidget {
     this.numberOfEmptyDocks,
   );
 
-//I have commented this for now but if you want to make a card by just passing a station:
-  // dockingStationCard.station(DockingStation station) {
-  //   this.iD = station.iD;
-  //   this.stationName = station.stationName;
-  //   this.numberOfBikes = station.numberOfBikes.toString();
-  //   this.numberOfEmptyDocks = station.numberOfEmptyDocks.toString();
-  // }
+  DockingStationCard.station(DockingStation station) {
+    iD = station.stationId;
+    stationName = station.name;
+    numberOfBikes = station.numberOfBikes;
+    numberOfEmptyDocks = station.numberOfEmptyDocks;
+    //print(this.iD);
+  }
 
   @override
   _DockingStationCardState createState() => _DockingStationCardState();
@@ -35,6 +35,7 @@ class _DockingStationCardState extends State<DockingStationCard> {
   final _helper = FavouriteHelper(); //change name
   List<DockingStation> _favourites = [];
   bool isFavouriteEnabled = true;
+  bool isVisible = true;
 
   @override
   void initState() {
@@ -93,7 +94,7 @@ class _DockingStationCardState extends State<DockingStationCard> {
                 }
               },
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: 30),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -102,15 +103,47 @@ class _DockingStationCardState extends State<DockingStationCard> {
                   Text(
                     widget.stationName,
                     style: const TextStyle(
-                      fontWeight: FontWeight.bold,
+                      fontSize: 25.0,
+                      color: Color(0xFF99D2A9),
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                   const Divider(
-                    color: Colors.black,
+                    color: Color(0xFF99D2A9),
+                    thickness: 5,
                   ),
-                  Text('Total bikes: ${widget.numberOfBikes.toString()}'),
-                  Text(
-                      'Available bikes: ${widget.numberOfEmptyDocks.toString()}'),
+                  Row(children: [
+                    SizedBox(width: 30.0),
+                    Icon(
+                      Icons.event_available,
+                      color: Color(0xFF99D2A9),
+                      size: 18.0,
+                    ),
+                    Text(
+                      'Total bikes: ${widget.numberOfBikes.toString()}',
+                      style: const TextStyle(
+                        fontSize: 18.0,
+                        color: Color(0xFF99D2A9),
+                        fontWeight: FontWeight.w700,
+                      ),
+                    )
+                  ]),
+                  Row(children: [
+                    SizedBox(width: 30.0),
+                    ImageIcon(
+                      AssetImage("assets/images/logo.png"),
+                      color: Color(0xFF99D2A9),
+                      size: 18,
+                    ),
+                    Text(
+                      'Available bikes: ${widget.numberOfEmptyDocks.toString()}',
+                      style: const TextStyle(
+                        fontSize: 18.0,
+                        color: Color(0xFF99D2A9),
+                        fontWeight: FontWeight.w700,
+                      ),
+                    )
+                  ]),
                 ],
               ),
             ),
