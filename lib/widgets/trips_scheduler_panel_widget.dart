@@ -11,10 +11,10 @@ class TripSchedulerPanelWidget extends StatefulWidget {
 /// Renders a panel widget used in [TripSchedulerScreen].
 ///
 /// A user is asked to input [numberOfCyclists], which is limited to
-/// [maximumNumberOfCyclists] due to the docking station constraints.
+/// [maximumNumberOfCyclists] due to live docking station constraints.
 ///
 /// It also asks whether the user wants to schedule trip immediately
-/// (in that case, the user is directed directly to the [JourneyPlanner]),
+/// (in that case, the user is directed straight to the [JourneyPlanner]),
 /// or later (a date picker shows up and a trip is scheduled
 /// for the future).
 class _TripSchedulerPanelWidget extends State<TripSchedulerPanelWidget> {
@@ -40,23 +40,14 @@ class _TripSchedulerPanelWidget extends State<TripSchedulerPanelWidget> {
               const SizedBox(width: 10),
               IconButton(
                 onPressed: _decrementCounter,
-                icon: const Icon(
-                  Icons.remove_rounded,
-                  color: Colors.black,
-                ),
+                icon: const Icon(Icons.remove_rounded, color: Colors.black),
               ),
               const Spacer(),
-              Text(
-                '$numberOfCyclists',
-                style: cyclistNumberTextStyle,
-              ),
+              Text('$numberOfCyclists', style: cyclistNumberTextStyle),
               const Spacer(),
               IconButton(
                 onPressed: _incrementCounter,
-                icon: const Icon(
-                  Icons.add_rounded,
-                  color: Colors.black,
-                ),
+                icon: const Icon(Icons.add_rounded, color: Colors.black),
               ),
             ],
           ),
@@ -98,6 +89,7 @@ class _TripSchedulerPanelWidget extends State<TripSchedulerPanelWidget> {
         ],
       );
 
+  /// Increments [numberOfCyclists] by one if doing so does not break any constraints.
   void _incrementCounter() {
     setState(() {
       if (numberOfCyclists < maximumNumberOfCyclists) {
@@ -106,6 +98,7 @@ class _TripSchedulerPanelWidget extends State<TripSchedulerPanelWidget> {
     });
   }
 
+  /// Decrements [numberOfCyclists] by one if doing so does not break any constraints.
   void _decrementCounter() {
     setState(() {
       if (numberOfCyclists > 1) {
@@ -114,19 +107,19 @@ class _TripSchedulerPanelWidget extends State<TripSchedulerPanelWidget> {
     });
   }
 
-  /// Displays date picker and saves users choice in [selectedDate].
+  /// Displays date picker and saves user's choice in [selectedDate].
   void _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
+    final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: selectedDate,
       firstDate: DateTime.now(), // users cannot plan a journey for past date
-      lastDate: DateTime(DateTime.now().year + 1, DateTime.now().month,
-          DateTime.now().day + 1),
+      lastDate: DateTime(
+          DateTime.now().year + 1, DateTime.now().month, DateTime.now().day),
       errorInvalidText: "Select future date no more than a year ahead.",
     );
-    if (picked != null) {
+    if (pickedDate != null) {
       setState(() {
-        selectedDate = picked;
+        selectedDate = pickedDate;
       });
     }
   }

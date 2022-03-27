@@ -30,7 +30,7 @@ class _TripSchedulerScreenState extends State<TripSchedulerScreen> {
     final panelHeightOpen = MediaQuery.of(context).size.height * 0.30;
     return Scaffold(
       body: SlidingUpPanel(
-        padding: const EdgeInsets.fromLTRB(24.0, 4.0, 24.0, 12.0),
+        padding: const EdgeInsets.fromLTRB(16.0, 4.0, 16.0, 4.0),
         minHeight: panelHeightClosed,
         maxHeight: panelHeightOpen,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
