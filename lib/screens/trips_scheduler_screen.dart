@@ -34,8 +34,6 @@ class _TripSchedulerScreenState extends State<TripSchedulerScreen> {
         minHeight: panelHeightClosed,
         maxHeight: panelHeightOpen,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-        parallaxEnabled: true,
-        parallaxOffset: .5,
         controller: panelController,
         body: SafeArea(
           child: Stack(

@@ -44,14 +44,12 @@ class GroupIdState extends State<GroupId> {
       });
 
       group.docs.forEach((element) {
-        print(element.data());
         var geoList = element.data()['points'];
         List<List<double>> tempList = [];
         for (int i = 0; i < geoList.length; i++) {
           tempList.add([geoList[i].latitude, geoList[i].longitude]);
         }
         points = convertListDoubleToLatLng(tempList);
-        print(points);
         id = element.id;
         list = element.data()['memberList'];
         list.add(_databaseManager.getCurrentUser()?.uid);
