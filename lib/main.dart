@@ -16,28 +16,28 @@ import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
 import 'package:veloplan/utilities/permissions.dart';
-import 'package:veloplan/widgets/locationPermissionError.dart';
+import 'package:veloplan/widgets/location_permission_error.dart';
 
-// void main(){
-//   runApp(LocationError());
-// }
-
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  LiveLocationHelper liveLocationHelper = LiveLocationHelper();
-  liveLocationHelper.initializeLocation();
-  sharedPreferences = await SharedPreferences.getInstance();
-  MapModel _model = MapModel();
-  runApp(ScopedModel<MapModel>(
-      model: _model,
-      child: MaterialApp(
-        initialRoute: '/',
-        routes: {
-          '/': (context) => const MyApp(),
-          '/map': (context) => NavBar()
-        },
-      )));
+void main() {
+  runApp(LocationError());
 }
+
+// void main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   LiveLocationHelper liveLocationHelper = LiveLocationHelper();
+//   liveLocationHelper.initializeLocation();
+//   sharedPreferences = await SharedPreferences.getInstance();
+//   MapModel _model = MapModel();
+//   runApp(ScopedModel<MapModel>(
+//       model: _model,
+//       child: MaterialApp(
+//         initialRoute: '/',
+//         routes: {
+//           '/': (context) => const MyApp(),
+//           '/map': (context) => NavBar()
+//         },
+//       )));
+// }
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -64,7 +64,8 @@ class _MyAppState extends State<MyApp> {
       permissionStatus = status;
     });
 
-    switch(status){ //LocationError
+    switch (status) {
+      //LocationError
       case PermissionStatus.denied:
         //  requestForPermission();
         break;
@@ -81,29 +82,27 @@ class _MyAppState extends State<MyApp> {
         Navigator.pop(context);
         break;
     }
-
   }
 
-  void requestPermission(){
-   if(mounted){
-     PermissionUtils.instance
-         .getLocation(context).listen((status) {
-       print("requestPermission => $status");
-       if(status == Permissions.DENY){
-         context.pushAndRemoveUntil(LocationError());
-       }else if(status == Permissions.ASK_EVERYTIME){
-         // Show permission
-         requestPermission();
-       }
-     });
-   }
+  void requestPermission() {
+    if (mounted) {
+      PermissionUtils.instance.getLocation(context).listen((status) {
+        print("requestPermission => $status");
+        if (status == Permissions.DENY) {
+          context.pushAndRemoveUntil(LocationError());
+        } else if (status == Permissions.ASK_EVERYTIME) {
+          // Show permission
+          requestPermission();
+        }
+      });
+    }
   }
 
   @override
   void initState() {
     requestPermission();
     super.initState();
-   }
+  }
 
   @override
   Widget build(BuildContext context) {
