@@ -66,7 +66,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
         builder: (BuildContext bc) {
           return SafeArea(
             child: Wrap(
-              children: <Widget>[
+              children: [
                 ListTile(
                     leading: const Icon(Icons.photo_library),
                     title: const Text('Photo Library'),
