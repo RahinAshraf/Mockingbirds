@@ -5,8 +5,9 @@ import 'package:favorite_button/favorite_button.dart';
 import 'package:veloplan/widgets/docking_station_card.dart';
 import '/models/docking_station.dart';
 
-///Author: Hristina
-///
+/// Creates a widget which displays the docking station card when a symbol is tapped.
+/// Author: Hristina-Andreea Sararu k20036771
+
 class DockStation extends StatefulWidget {
   DockStation({Key? key}) : super(key: key);
 

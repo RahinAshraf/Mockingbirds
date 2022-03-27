@@ -5,7 +5,7 @@ import 'package:veloplan/models/docking_station.dart';
 
 ///Creates a card for a docking station, to include its name, number of bikes and empty bikes.
 ///Author: Tayyibah Uddin
-///Contributor: Fariha Choudhury
+///Contributor: Fariha Choudhury, Hristina-Andreea Sararu k20036771
 class DockingStationCard extends StatefulWidget {
   late final String iD;
   late final String stationName;

@@ -12,6 +12,7 @@ import 'package:veloplan/widgets/docking_station_widget.dart';
 
 /// Class to display a mapbox map with other possible widgets on top
 /// Author(s): Fariha Choudhury k20059723, Elisabeth Koren Halvorsen k20077737
+/// Contributor: Hristina-Andreea Sararu k20036771
 final GlobalKey<DockStationState> dockingStationKey = GlobalKey();
 
 class BaseMapboxMap {
