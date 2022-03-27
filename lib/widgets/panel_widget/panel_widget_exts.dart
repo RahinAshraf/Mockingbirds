@@ -95,11 +95,13 @@ class PanelExtensions {
                                 convertDestinationLocationFromDoublesToLatLng(
                                     temp.first, temp.last),
                                 dockingStation: _dockingStation,
-                                selectedDockStation: DockingStation("ds1ID", "ds1", true, true, 10, 11, 12, 15.6, 89.0),
+                                selectedDockStation: DockingStation("ds1ID",
+                                    "ds1", true, true, 10, 11, 12, 15.6, 89.0),
                               )));
+
                   if (result != null) {
                     print("hey position => $position");
-                    latLngMap[position] = LatLng( result.lat, result.lon);
+                    latLngMap[position] = LatLng(result.lat, result.lon);
                     dockText.sink.add(result.name);
                   }
                 } else {
