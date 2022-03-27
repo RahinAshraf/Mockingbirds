@@ -12,10 +12,15 @@ class GroupId extends StatefulWidget {
   State<StatefulWidget> createState() => GroupIdState();
 }
 
+/// Renders a popup widget to join an existing journey with a 6-digit number.
+///
+/// A user is asked to input a 6-digit code, which is stored in [fullPin]
+/// variable. If the code is correct, user 'joins' the group and is then
+/// redirected to corresponding [SummaryJourneyScreen].
 class GroupIdState extends State<GroupId> {
-  String fullPin = "";
-  late List<LatLng>? points;
   final DatabaseManager _databaseManager = DatabaseManager();
+  late List<LatLng>? points;
+  String fullPin = ''; // user's entered pin code
   bool? exists = null;
 
   @override
@@ -23,9 +28,8 @@ class GroupIdState extends State<GroupId> {
     super.initState();
   }
 
+  /// Adds user to an group, if the given [code] is correct and sets that group [exists].
   _joinGroup(String code) async {
-    print(" CODE " + code);
-
     var group = await _databaseManager.getByEquality('group', 'code', code);
     var list = [];
     String id = "";
@@ -58,10 +62,12 @@ class GroupIdState extends State<GroupId> {
             SetOptions(merge: true));
       });
       await _databaseManager.updateByKey('group', id, {'memberList': list});
-      context.push(SummaryJourneyScreen(points!));
+      context.push(
+          SummaryJourneyScreen(points!)); // redirects to journey summary screen
     }
   }
 
+  /// Returns an error message if the entered code is incorrect.
   String? get _errorText {
     if (exists == false) {
       return "The entered code is incorrect.";

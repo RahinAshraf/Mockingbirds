@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:veloplan/screens/trips_scheduler_screen.dart';
 import 'package:veloplan/widgets/group_id_join_code_widget.dart';
 import 'package:veloplan/widgets/popup_widget.dart';
-import 'package:veloplan/screens/trips_scheduler_screen.dart';
+import 'package:veloplan/utilities/alert_type.dart';
 
-// Generic popups used thorough the app
+/// Generic popups used thorough the app
 class Popups {
   // Questions
   PopupWidget buildPopupDialogNewJourney(BuildContext context) {
