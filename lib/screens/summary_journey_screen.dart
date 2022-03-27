@@ -1,13 +1,16 @@
 import 'dart:developer';
 import 'dart:math' as math;
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+
+import 'package:mapbox_gl/mapbox_gl.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart';
 import 'package:timeline_tile/timeline_tile.dart';
-import 'package:veloplan/helpers/database_manager.dart';
 import 'package:veloplan/models/itineraryManager.dart';
 import 'package:veloplan/models/path.dart';
 import '../helpers/navigation_helpers/navigation_conversions_helpers.dart';
@@ -15,6 +18,8 @@ import '../models/itinerary.dart';
 import 'navigation/map_with_route_screen.dart';
 import 'dart:async';
 import 'package:mapbox_gl/mapbox_gl.dart';
+
+import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 import 'package:veloplan/navbar.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
 
@@ -62,7 +67,6 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
   }
 
   _setData() async {
-    print('1');
     var res;
     var user = await _databaseManager.getByKey(
         'users', _databaseManager.getCurrentUser()!.uid);
@@ -72,12 +76,6 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
           'group', 'code', user.data()!['group']);
       res = await _getGroupOwner(group);
       pointsInDoubles = [];
-      group.docs.forEach((element) {
-        var geoList = element.data()['points'];
-        for (int i = 0; i < geoList.length; i++) {
-          pointsInDoubles.add([geoList[i].latitude, geoList[i].longitude]);
-        }
-      });
     }
     setState(() {
       isInGroup = hasGroup;
@@ -98,11 +96,9 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
   }
 
   void _createGroup() async {
-    print("GDGGDG");
     var ownerID = _databaseManager.getCurrentUser()?.uid;
     List list = [];
     list.add(ownerID);
-    String destination = "";
     math.Random rng = math.Random();
     String code = rng.nextInt(999999).toString();
     var x = await _databaseManager.getByEquality('group', 'code', code);
@@ -111,21 +107,47 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
       x = await _databaseManager.getByEquality('group', 'code', code);
     }
     List<GeoPoint> geoList = [];
-    for (int i = 0; i < pointsInDoubles.length; i++) {
-      geoList.add(GeoPoint(pointsInDoubles[i]![0]!, pointsInDoubles[i]![1]!));
+    var destinationsIndouble =
+        convertLatLngToDouble(_itinerary.myDestinations!);
+    for (int i = 0; i < destinationsIndouble!.length; i++) {
+      geoList.add(
+          GeoPoint(destinationsIndouble[i]![0]!, destinationsIndouble[i]![1]!));
     }
 
     try {
       await _databaseManager.addToCollection('group', {
         'code': code,
-        'destination': destination,
         'ownerID': ownerID,
         'memberList': list,
         'createdAt': Timestamp.fromDate(DateTime.now()),
-        'points': geoList,
       });
       await _databaseManager.setByKey(
           'users', ownerID!, {'group': code}, SetOptions(merge: true));
+
+      var group = await _databaseManager.getByEquality('group', 'code', code);
+      group.docs.forEach((element) async {
+        element.reference.collection('itinerary').add({
+          'journeyID': _itinerary.journeyDocumentId,
+          'points': geoList,
+          'date': _itinerary.date,
+          'numberOfCyclists': _itinerary.numberOfCyclists
+        });
+        var journey = await element.reference
+            .collection('itinerary')
+            .where('journeyID', isEqualTo: _itinerary.journeyDocumentId)
+            .get();
+        var dockingStationList = _itinerary.docks!;
+        for (int i = 0; i < dockingStationList.length; i++) {
+          var station = dockingStationList[i];
+          journey.docs.forEach((jour) {
+            jour.reference.collection("dockingStations").add({
+              'id': station.stationId,
+              'name': station.name,
+              'location': GeoPoint(station.lat, station.lon),
+            });
+          });
+        }
+      });
 
       setState(() {
         isInGroup = true;
@@ -295,27 +317,19 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
               //         return CircularProgressIndicator();
               //       }
               //     }),
-              Column(
-                children: _generateStops(),
+              SingleChildScrollView(
+                child: Column(
+                  children: _generateStops(),
+                ),
               ),
               const SizedBox(height: 20),
               if (isInGroup)
-                Container(
-                    height: 40,
-                    padding: const EdgeInsets.fromLTRB(100, 5, 100, 5),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        elevation: 10.0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
-                      ),
-                      child: const Text('LEAVE GROUP',
-                          style: TextStyle(color: Colors.white)),
-                      onPressed: () {
-                        _leaveGroup();
-                      },
-                    )),
+                ElevatedButton(
+                  child: const Text('LEAVE GROUP'),
+                  onPressed: () {
+                    _leaveGroup();
+                  },
+                ),
               if (_itinerary.date?.day == DateTime.now().day ||
                   _itinerary.date?.day == null)
                 Container(
@@ -352,10 +366,20 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
     return smth;
   }
 
+//TODO: display duration and distance -> paths[i].distance
   _generateStopsFuture() async {
     _itineraryManager = await new ItineraryManager(_itinerary);
     paths = _itineraryManager.getPaths();
   }
+  // Future<List<Widget>> _generateStopsFuture() async {
+  //   for (var path in paths) {
+  //     pathTime.add(StationTempWidget(
+  //       content: "",
+  //       time: path.duration,
+  //     ));
+  //   }
+  //   return pathTime;
+  // }
 }
 
 class StationTempWidget extends StatelessWidget {
@@ -409,11 +433,6 @@ class StationTempWidget extends StatelessWidget {
               ),
               Text(
                 '${time}',
-              ),
-              ImageIcon(
-                AssetImage("assets/images/logo.png"),
-                color: Color(0xFF99D2A9),
-                size: 24,
               )
             ],
           ),

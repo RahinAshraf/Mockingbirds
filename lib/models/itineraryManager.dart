@@ -1,4 +1,3 @@
-import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/models/itinerary.dart';
 import 'package:veloplan/models/path.dart';
@@ -20,6 +19,7 @@ class ItineraryManager {
   /// Sets the [journey] and paths
   void _setJourney() async {
     if (_itinerary.docks!.length > 1) {
+      print(_itinerary.docks!.length);
       //WALKING:
       _routeResponse = await _manager.getDirections(
           _itinerary.myDestinations![

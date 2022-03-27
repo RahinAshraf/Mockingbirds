@@ -5,8 +5,6 @@ import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import '../.env.dart';
 import '../widgets/trips_scheduler_panel_widget.dart';
-import 'navigation/map_screen.dart';
-import 'package:veloplan/screens/navigation/map_screen.dart';
 
 class TripScheduler extends StatefulWidget {
   const TripScheduler({Key? key}) : super(key: key);
@@ -24,7 +22,7 @@ class _TripScheduler extends State<TripScheduler> {
   @override
   void initState() {
     super.initState();
-    _initialCameraPosition = CameraPosition(target: latLng, zoom: zoom);
+    _initialCameraPosition = CameraPosition(target: latLng, zoom: 16);
   }
 
   _onMapCreated(MapboxMapController controller) async {

@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:veloplan/helpers/schedule_helper.dart';
 import 'package:veloplan/models/itinerary.dart';
+import 'package:veloplan/helpers/database_helpers/schedule_helper.dart';
 import 'package:veloplan/screens/journey_planner_screen.dart';
 import 'package:veloplan/screens/summary_journey_screen.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
@@ -19,7 +19,7 @@ import 'package:veloplan/helpers/live_location_helper.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:veloplan/models/docking_station.dart';
 import '../dynamic_widget.dart';
-import 'package:veloplan/helpers/history_helper.dart';
+import 'package:veloplan/helpers/database_helpers/history_helper.dart';
 
 ///When rendered, the journey_planner_screen will have this panel_widget at the bottom. It is an interactive panel the user can
 ///slide up or down, when wanting to input their desired locations for the journey.

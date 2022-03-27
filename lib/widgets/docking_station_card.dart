@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:veloplan/helpers/favourite_helper.dart';
+import 'package:veloplan/helpers/database_helpers/favourite_helper.dart';
 import 'package:veloplan/models/docking_station.dart';
+import 'package:veloplan/providers/docking_station_manager.dart';
 
 import '../helpers/shared_prefs.dart';
 import '../providers/path_provider.dart';
@@ -9,26 +10,16 @@ import '../providers/path_provider.dart';
 ///Creates a card for a docking station, to include its name, number of bikes and empty bikes.
 ///Author: Tayyibah Uddin
 ///Contributor: Fariha Choudhury, Nicole Lehchevska
-class DockingStationCard extends StatefulWidget {
-  late final String iD;
-  late final String stationName;
-  late final int numberOfBikes;
-  late final int numberOfEmptyDocks;
 
-  DockingStationCard(
-    this.iD,
-    this.stationName,
-    this.numberOfBikes,
-    this.numberOfEmptyDocks,
-  );
+class DockingStationCard extends StatefulWidget {
+  late DockingStation dockTemp;
+
+  DockingStationCard();
 
 //I have commented this for now but if you want to make a card by just passing a station:
-  // dockingStationCard.station(DockingStation station) {
-  //   this.iD = station.iD;
-  //   this.stationName = station.stationName;
-  //   this.numberOfBikes = station.numberOfBikes.toString();
-  //   this.numberOfEmptyDocks = station.numberOfEmptyDocks.toString();
-  // }
+  DockingStationCard.station(DockingStation station) {
+    this.dockTemp = station;
+  }
 
   @override
   _DockingStationCardState createState() => _DockingStationCardState();
@@ -37,22 +28,29 @@ class DockingStationCard extends StatefulWidget {
 class _DockingStationCardState extends State<DockingStationCard> {
   final _helper = FavouriteHelper(); //change name
   List<DockingStation> _favourites = [];
-  bool isFavouriteEnabled = true;
+  bool _isFavouriteButtonEnabled = true;
+  bool _isFavourited = false;
+  var _manager = dockingStationManager();
 
   @override
   void initState() {
     FavouriteHelper.getUserFavourites().then((data) {
-      setState(() {
-        _favourites = data;
-      });
+      if (mounted)
+        setState(() {
+          _favourites = data;
+          _isFavourited = _helper.isFavouriteStation(
+              widget.dockTemp.stationId, _favourites);
+        });
+    });
+
+    //method that makes an api call with dock id and updates the info about the dock
+    _manager.checkStation(widget.dockTemp).then((value) {
+      if (mounted)
+        setState(() {
+          widget.dockTemp.assign(value);
+        });
     });
     super.initState();
-  }
-
-  ///Sets [isFavouriteEnabled] to false to disable favourite button for 3 seconds after button click
-  void _disableFavButton() {
-    isFavouriteEnabled = false;
-    Timer(const Duration(seconds: 3), () => isFavouriteEnabled = true);
   }
 
   @override
@@ -68,34 +66,7 @@ class _DockingStationCardState extends State<DockingStationCard> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            IconButton(
-              icon: _helper.isFavouriteStation(widget.iD, _favourites)
-                  ? const Icon(
-                      Icons.favorite,
-                      color: Colors.red,
-                    )
-                  : const Icon(
-                      Icons.favorite,
-                      color: Colors.grey,
-                    ),
-              onPressed: () async {
-                if (isFavouriteEnabled) {
-                  _disableFavButton();
-                  List<DockingStation> updatedFavourites =
-                      await FavouriteHelper.getUserFavourites();
-                  _helper.toggleFavourite(
-                    widget.iD,
-                    widget.stationName,
-                    widget.numberOfBikes,
-                    widget.numberOfEmptyDocks,
-                  );
-
-                  setState(() {
-                    _favourites = updatedFavourites;
-                  });
-                }
-              },
-            ),
+            buildFaveButton(),
             const SizedBox(width: 10),
             Expanded(
               child: Column(
@@ -103,7 +74,7 @@ class _DockingStationCardState extends State<DockingStationCard> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    widget.stationName,
+                    widget.dockTemp.name,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
@@ -111,9 +82,12 @@ class _DockingStationCardState extends State<DockingStationCard> {
                   const Divider(
                     color: Colors.black,
                   ),
-                  Text('Total bikes: ${widget.numberOfBikes.toString()}'),
-                  Text(
-                      'Available bikes: ${widget.numberOfEmptyDocks.toString()}'),
+                  if (widget.dockTemp.numberOfBikes != null)
+                    Text(
+                        'Total bikes: ${widget.dockTemp.numberOfBikes.toString()}'),
+                  if (widget.dockTemp.numberOfEmptyDocks != null)
+                    Text(
+                        'Available bikes: ${widget.dockTemp.numberOfEmptyDocks.toString()}'),
                 ],
               ),
             ),
@@ -121,5 +95,42 @@ class _DockingStationCardState extends State<DockingStationCard> {
         ),
       ),
     );
+  }
+
+  IconButton buildFaveButton() {
+    return IconButton(
+      icon: getFaveButton(),
+      onPressed: () async {
+        if (_isFavouriteButtonEnabled) {
+          _disableFavButton();
+
+          _helper.toggleFavourite(
+            widget.dockTemp.stationId,
+            widget.dockTemp.name,
+          );
+
+          List<DockingStation> updatedFavourites =
+              await FavouriteHelper.getUserFavourites();
+          setState(() {
+            _favourites = updatedFavourites;
+            _isFavourited = !_isFavourited;
+          });
+        }
+      },
+    );
+  }
+
+  Icon getFaveButton() {
+    return Icon(
+      Icons.favorite,
+      color: _isFavourited ? Colors.red : Colors.grey,
+    );
+  }
+
+  ///Disables favourite button for 3 seconds after button click
+  ///to prevent spamming the database
+  void _disableFavButton() {
+    _isFavouriteButtonEnabled = false;
+    Timer(const Duration(seconds: 3), () => _isFavouriteButtonEnabled = true);
   }
 }

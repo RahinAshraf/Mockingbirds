@@ -71,6 +71,7 @@ class _DockSorter extends State<DockSorter> {
                     onChanged: (String? newFilter) {
                       setState(() {
                         selectedFilter = newFilter!;
+                        _dockingStations.build(selectedFilter);
                         // TODO: reload sorted docks based on selected filter
                       });
                     },

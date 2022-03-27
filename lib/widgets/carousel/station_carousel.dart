@@ -5,9 +5,9 @@ import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:veloplan/widgets/carousel/custom_carousel.dart';
 import 'package:veloplan/widgets/docking_station_card.dart';
 
-import '../../helpers/favourite_helper.dart';
 import '../../helpers/shared_prefs.dart';
 import '../../providers/path_provider.dart';
+import '../../helpers/database_helpers/favourite_helper.dart';
 
 ///Class that loads information of docking stations into cards and builds a carousel
 ///Author(s): Tayyibah, Nicole
@@ -76,11 +76,8 @@ class DockingStationCarousel {
     List<DockingStation> favourites = [];
     favourites = await FavouriteHelper.getUserFavourites();
     final dockingStationManager _stationManager = dockingStationManager();
-    // var list = _stationManager.importStations().then((value) =>
     return createDockingCards(
         _stationManager.get10ClosestDocksFav(userCoordinates!, favourites));
-    // ));
-    // return list;
   }
 
   // List<Widget> retrieveJourneyCards() {
@@ -94,50 +91,31 @@ class DockingStationCarousel {
       for (var station in docks) {
         carouselData.add(
           {
-            //    'index': index,
-            //  'station': station,
-            'stationId': station.stationId,
-            'name': station.name,
-            'numberOfBikes': station.numberOfBikes,
-            'numberOfEmptyDocks': station.numberOfEmptyDocks,
+            'station': station,
           },
         );
       }
     }
     dockingStationCards = List<Widget>.generate(
         docks.length,
-        (index) => DockingStationCard(
-              carouselData[index]['stationId'],
-              carouselData[index]['name'],
-              carouselData[index]['numberOfBikes'],
-              carouselData[index]['numberOfEmptyDocks'],
+        (index) => DockingStationCard.station(
+              carouselData[index]["station"],
             ));
 
     return dockingStationCards;
   }
 
   Future<List<Widget>> selectFiltering(String filter) async {
-    // switch (filter) {
-    //   case 'Distance':
-    //     return retrieve10FilteredByDistanceCards();
-    //   case 'Favourites':
-    //     return retrieve10FilteredFavouritesCards();
-    //   case '':
-    //     return retrieve10FilteredByDistanceCards();
-
     if (filter == "Distance") {
       return retrieve10FilteredByDistanceCards();
     } else {
       return retrieve10FilteredFavouritesCards();
     }
-
-    // case "Most Popular":
-    // }
   }
 
+  /// TODOMARIJA
   FutureBuilder<List<Widget>> build(String selectedFilter) {
     return FutureBuilder(
-        // future: retrieve10FilteredByDistanceCards(),
         future: selectFiltering(selectedFilter),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
@@ -161,8 +139,6 @@ class DockingStationCarousel {
           }
         });
   }
-
-  //THIS MUST BE REFACTORED BY TAYYIBAH AND NIKKI:
 
   Container buildCarousel(List<Widget> cardsIn) {
     return Container(

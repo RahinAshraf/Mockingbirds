@@ -1,10 +1,11 @@
 import 'dart:convert';
 import "package:http/http.dart" as http;
 import 'package:mapbox_gl/mapbox_gl.dart';
-import '../models/docking_station.dart';
 import 'dart:math';
 import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart'
     as LatLong;
+
+import '../models/docking_station.dart';
 
 //Author: Nicole, Lilliana
 
@@ -153,7 +154,7 @@ class dockingStationManager {
     }
   }
 
-  /// Get the closest available docking stations by given docking station and stations, minimum of available bikes to get
+  ///  Get the closest available docking stations by given docking station and stations, minimum of available bikes to get
   DockingStation getClosestDockWithAvailableBikes(
       LatLong.LatLng userLocation, int numberOfBikeSpaces) {
     List<DockingStation> filteredStations =
@@ -239,6 +240,27 @@ class dockingStationManager {
       dock.setisLocked = station["additionalProperties"][2]["value"] == "true";
     } on FormatException {}
     return dock;
+  }
+
+  /* import the docking station from the tfl api and check its updated info*/
+  Future<DockingStation> checkStationById(String dockId) async {
+    var data =
+        await http.get(Uri.parse("https://api.tfl.gov.uk/BikePoint/${dockId}"));
+    late DockingStation newStation;
+    var station = json.decode(data.body);
+    try {
+      newStation = DockingStation(
+          station["id"],
+          station["commonName"],
+          station["additionalProperties"][1]["value"] == "true",
+          station["additionalProperties"][2]["value"] == "true",
+          int.parse(station["additionalProperties"][6]["value"]),
+          int.parse(station["additionalProperties"][7]["value"]),
+          int.parse(station["additionalProperties"][8]["value"]),
+          station["lon"],
+          station["lat"]);
+    } on FormatException {}
+    return newStation;
   }
 
   /// Update the docking station info and check for available spaces

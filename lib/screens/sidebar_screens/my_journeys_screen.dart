@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
-import '../helpers/history_helper.dart';
-import '../styles/styling.dart';
-import '../models/docking_station.dart';
-import '../models/itinerary.dart';
-import '../widgets/my_journey_card.dart';
+import '../../models/itinerary.dart';
+import '../../helpers/database_helpers/history_helper.dart';
+import '../../widgets/my_journey_card.dart';
 
-///Loads users favourited docking stations and displays them in a list view.
-///@author Tayyibah Uddin
+///Displays users started journeys
+///Author: Tayyibah
 
-//Loads cards of all of the users favourited docking station
 class MyJourneys extends StatefulWidget {
   @override
   _MyJourneysState createState() => _MyJourneysState();

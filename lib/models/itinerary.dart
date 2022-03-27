@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import '../helpers/navigation_helpers/navigation_conversions_helpers.dart';
@@ -14,7 +16,11 @@ class Itinerary {
   DateTime? _date; //time journey starts/is planned to start
   int? _numberOfCyclists;
   Itinerary.navigation(
-      this._docks, this._myDestinations, this._numberOfCyclists);
+      this._docks, this._myDestinations, this._numberOfCyclists) {
+    Random rand = Random();
+    _date = DateTime.now();
+    _journeyDocumentId = rand.nextInt(100).toString();
+  }
 
   DateTime? get date => _date;
   String? get journeyDocumentId => _journeyDocumentId;

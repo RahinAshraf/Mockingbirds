@@ -30,6 +30,7 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
   late int numberCyclists;
   MapWithRouteUpdated(MapModel model, this.context, this._itinerary)
       : super(_itinerary, model) {
+    _docks = _itinerary.docks!;
     this._journey = convertDocksToLatLng(_itinerary.docks!)!;
     this.numberCyclists = _itinerary.numberOfCyclists!;
   }
