@@ -18,9 +18,8 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
   final Itinerary _itinerary;
   Map<String, Object> fills = {};
   final Set<Symbol> _polylineSymbols = {};
-  String _totalDistanceAndTime = 'No route';
   final RouteManager manager = RouteManager();
-  late Map _routeResponse;
+  late Map<dynamic, dynamic> _routeResponse;
   LatLng _startPosition = getLatLngFromSharedPrefs();
 
   // BaseMapboxRouteMap(this._journey, MapModel model) : super(model);
@@ -31,12 +30,8 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
   /// Initialise map features
   @override
   void onMapCreated(MapboxMapController controller) async {
-    // this.controller = controller;
-    // model.setController(controller);
-    // model.fetchDockingStations();
     await baseMapCreated(controller);
     _displayJourneyAndRefocus(_journey);
-    // controller.onSymbolTapped.add(onSymbolTapped);
   }
 
   /// Display journey and refocus camera position
@@ -112,27 +107,6 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
         manager
             .getGeometry()); //_routeResponse['geometry']); - can use local var instead but i've set it anyway
     addFills(controller!, fills, model);
-    _setDistanceAndTime();
-  }
-
-  /// Sets distance and time
-  void _setDistanceAndTime() async {
-    try {
-      var distance = await manager.getDistance() as double; //meters
-      var duration = await manager.getDuration() as double; //sec
-
-      _totalDistanceAndTime = "distance: " +
-          (distance / 1000).toStringAsFixed(2) +
-          "km, duration: " +
-          (duration / 60).truncate().toString();
-      print(_totalDistanceAndTime);
-    } catch (e) {
-      _totalDistanceAndTime = "Route not available";
-    }
-  }
-
-  /// Gets the [_totalDistanceAndTime] of a journey
-  String _getTotalDistance() {
-    return _totalDistanceAndTime;
+    // _setDistanceAndTime();
   }
 }

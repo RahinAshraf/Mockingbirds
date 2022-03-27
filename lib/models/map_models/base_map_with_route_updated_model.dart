@@ -84,47 +84,54 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
   void onMapCreated(MapboxMapController controller) async {
     this.controller = controller;
     model.setController(controller);
-    print("map created");
+    _setTimers();
+    model.fetchDockingStations();
+    _displayJourney();
+    controller.onSymbolTapped.add(onSymbolTapped);
+  }
+
+  /// sets all our timers
+  void _setTimers() {
+    updateLocationAndCameraTimer();
+    updateRouteTimer();
+    updateDockTimer();
+  }
+
+  /// Initialize periodic timer for updating location and camera position
+  void updateLocationAndCameraTimer() {
     timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
       if (isAtGoal) {
         t.cancel();
       }
       updateCurrentLocation();
-    });
-    timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
-      if (isAtGoal) {
-        t.cancel();
-      }
       _updateCameraPosition();
-    });
-
-    timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
-      if (isAtGoal) {
-        t.cancel();
-      }
       _updateLiveCameraPosition();
     });
+  }
+
+  /// Initialize periodic timer to update the route displayed
+  void updateRouteTimer() {
     timer = Timer.periodic(Duration(seconds: 15), (Timer t) {
       if (isAtGoal) {
         t.cancel();
       }
       updateRoute();
     });
+  }
+
+  /// Initialize periodic timer to check if it's necessary to redirect to another docking station
+  void updateDockTimer() {
     timer = Timer.periodic(Duration(seconds: 15), (Timer t) {
       if (isAtGoal) {
         t.cancel();
       }
       checkAndUpdateDock();
     });
-    model.fetchDockingStations();
-    _displayJourney();
-    controller.onSymbolTapped.add(onSymbolTapped);
   }
 
   /// update cameraposition
   void _updateCameraPosition() {
     cameraPosition = CameraPosition(target: _target, zoom: 15, tilt: 5);
-    // print("camera position updated!");
   }
 
   /// update the live camera position
@@ -135,12 +142,6 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
   }
 
   void reRoute() {
-    //Navigator.popUntil(context, ModalRoute.withName('/map'));
-    // Navigator.pop(context, ModalRoute.withName('/map'));
-    // Navigator.of(context).pushReplacement(
-    //     new MaterialPageRoute(builder: (BuildContext context) => NavBar()));
-    // Navigator.of(context).pushAndRemoveUntil(
-    // MaterialPageRoute(builder: (c) => NavBar()), (route) => false);
     Navigator.of(context).pop(true);
   }
 
@@ -149,13 +150,11 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
     print(
         "---------------_______________------------------updating route to navbar _________________--------");
     if (isAtGoal) {
-      // timer?.cancel();
-
       reRoute();
       return;
     }
     double distance = calculateDistance(_target, _journey[_currentStation]);
-    if (distance < 1) {
+    if (distance < 0.01) {
       ++_currentStation;
       if (_currentStation >= _journey.length) {
         print("we got to the goal!!!");
@@ -221,10 +220,3 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
     recenter = false;
   }
 }
-
-/// DONE: if user has pressed button refocus on current location if user taps screen go back to follow
-/// DONE: split up walking and biking distance, check if you've been on the first goal
-/// DONE: check if we're at the last place
-/// DONE: if within 10m of target utdate integer
-/// TODO: Check endpoints if still avalible -> help Nicole/Lili
-/// TODO: Redirect

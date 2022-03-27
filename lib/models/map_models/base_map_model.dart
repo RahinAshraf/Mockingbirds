@@ -40,10 +40,6 @@ class BaseMapboxMap {
 
   /// Initialize map features
   void onMapCreated(MapboxMapController controller) async {
-    // this.controller = controller;
-    // model.setController(controller);
-    // model.fetchDockingStations();
-    // controller.onSymbolTapped.add(onSymbolTapped);
     await baseMapCreated(controller);
   }
 
