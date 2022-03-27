@@ -28,25 +28,29 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
   final Itinerary _itinerary;
   final BuildContext context;
   late int numberCyclists;
-  MapWithRouteUpdated(MapModel model, this.context, this._itinerary)
-      : super(_itinerary, model) {
-    _docks = _itinerary.docks!;
-    this._journey = convertDocksToLatLng(_itinerary.docks!)!;
-    this.numberCyclists = _itinerary.numberOfCyclists!;
-  }
-
   LatLng _target = getLatLngFromSharedPrefs();
   Timer? timer;
   final Set<Symbol> _polylineSymbols = {};
   bool isAtGoal = false;
   bool firstLoactionCompleted = true;
   late Map<dynamic, dynamic> _routeResponse;
+
+  //TODO: Marija attributes for distance, duration and dock name should be presented on the screen
   num distance = 0;
   num duration = 0;
+  String dockName = "";
+
   List<dynamic> _journeyPoints = [];
   int _currentStation = 0;
   bool buttonPressed = true;
   dockingStationManager _dockManager = dockingStationManager();
+  MapWithRouteUpdated(MapModel model, this.context, this._itinerary)
+      : super(_itinerary, model) {
+    _docks = _itinerary.docks!;
+    this.dockName = _itinerary.docks![_currentStation].name;
+    this._journey = convertDocksToLatLng(_itinerary.docks!)!;
+    this.numberCyclists = _itinerary.numberOfCyclists!;
+  }
 
   // change to one class with dock, people and destinations
 
@@ -162,6 +166,7 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
         isAtGoal = true;
         return;
       }
+      this.dockName = _itinerary.docks![_currentStation].name;
     }
     removePolylineMarkers(controller!, _journey, _polylineSymbols);
     removeFills(controller, _polylineSymbols, fills);

@@ -17,7 +17,6 @@ class _PanelWidgetTripScheduler extends State<PanelWidgetTripScheduler> {
   DateTime selectedDate = DateTime.now();
   DateFormat formatter = DateFormat('yyyy-MM-dd');
   late String formattedDate;
-
   @override
   Widget build(BuildContext context) => ListView(
         padding: const EdgeInsets.only(right: 24.0, left: 24.0),

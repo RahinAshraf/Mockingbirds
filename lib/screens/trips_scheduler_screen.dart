@@ -13,6 +13,7 @@ class TripScheduler extends StatefulWidget {
   _TripScheduler createState() => _TripScheduler();
 }
 
+//TODO: Marija extend the base map again
 class _TripScheduler extends State<TripScheduler> {
   late CameraPosition _initialCameraPosition;
   LatLng latLng = getLatLngFromSharedPrefs();

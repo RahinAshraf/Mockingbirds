@@ -33,6 +33,7 @@ class _DockSorterScreen extends State<DockSorterScreen> {
   _onMapCreated(MapboxMapController controller) async {
     this.controller = controller;
   }
+  // TODO: Marija refactor to use base map, example in screens/navigation/map_screen.dart
 
   @override
   Widget build(BuildContext context) {

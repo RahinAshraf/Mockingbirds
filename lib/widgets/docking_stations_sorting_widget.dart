@@ -72,7 +72,7 @@ class _DockSorter extends State<DockSorter> {
                       setState(() {
                         selectedFilter = newFilter!;
                         _dockingStations.build(selectedFilter);
-                        // TODO: reload sorted docks based on selected filter
+                        // TODO: Marija refactor to use the base map as well, maybe check up of Nicoles work and how she uses dropdown, may be incorrect
                       });
                     },
                   ),

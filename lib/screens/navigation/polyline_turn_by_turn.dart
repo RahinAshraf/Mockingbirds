@@ -38,7 +38,9 @@ class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
   final Itinerary _itinerary;
 
   _MapUpdatedRoutePageState(this._itinerary) {}
-
+  //TODO: Marija attributes for distance, duration and dock name should be presented on the screen, you can take them from
+  //_baseMapWithUpdatedRoute.duration _baseMapWithUpdatedRoute.distance _baseMapWithUpdatedRoute.dockName
+  //also Hristina has done some static widgets for that screen maybe you can reuse them if they are helpful -> journey_screen
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: ScopedModelDescendant<MapModel>(

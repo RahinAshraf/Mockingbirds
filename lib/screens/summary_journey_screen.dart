@@ -360,13 +360,15 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
       smth.add(StationTempWidget(
         content: _itinerary.docks![i].name,
         // time: paths[i].duration,
+        //TODO: Marija -> you can add the distance and duration here or in a seperate widget, whichever is easier for u :)
         time: 0.0,
       ));
     }
     return smth;
   }
 
-//TODO: display duration and distance -> paths[i].distance
+//TODO: Marija display duration and distance -> paths[i].distance, paths[i].duration, do them as you prefer, thats really important
+//also i have a commented out future builder, for me it did not work, hopefully it does for u
   _generateStopsFuture() async {
     _itineraryManager = await new ItineraryManager(_itinerary);
     paths = _itineraryManager.getPaths();
