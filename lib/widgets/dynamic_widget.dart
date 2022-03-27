@@ -21,10 +21,13 @@ class DynamicWidget extends StatelessWidget {
   final TextEditingController editDockTextEditController =
       TextEditingController();
   List<List<double?>?>? selectedCoords;
+  List<List<double?>?>? selectedDocks;
   Function(int)? onDelete;
   int position = -1;
   final locationService = LocationService();
   final Map? coordDataMap;
+
+  List<double?>? dock;
 
   ///set the position of the selected coordinates list to the passed in index
   void setIndex(index) {
@@ -131,10 +134,6 @@ class DynamicWidget extends StatelessWidget {
       } else {
         selectedCoords?[position] = feature.geometry?.coordinates;
       }
-      PanelExtensions.of(context: context).getClosetDock(
-          feature.geometry?.coordinates.first,
-          feature.geometry?.coordinates.last,
-          editDockTextEditController);
     }
     print("RESULT => $result");
   }

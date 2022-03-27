@@ -48,8 +48,6 @@ void removeFills(MapboxMapController? controller, Set<Symbol> polylineSymbols,
   fills.clear();
 }
 
-/// symbolssss
-
 /// DOCK DATA SYMBOLS -- docking station data
 
 /// Adds symbol layer to map for every docking station in London

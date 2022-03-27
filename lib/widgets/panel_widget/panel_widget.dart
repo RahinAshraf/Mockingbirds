@@ -72,6 +72,7 @@ class PanelWidgetState extends State<PanelWidget> {
   final locService = LocationService();
   late Map<String, List<double?>> selectionMap;
   late Map<String, List<double?>> staticListMap;
+  late Map<String, List<double?>> staticListDockMap; //added this
   late Map response;
   final dockingStationManager _stationManager = dockingStationManager();
   final TextEditingController editDockTextEditController =
@@ -133,7 +134,6 @@ class PanelWidgetState extends State<PanelWidget> {
       }
 
       dynamicWidget.placeTextController.text = event.address ?? "";
-      dynamicWidget.checkInputLocation();
       dynamicWidget.position = widget.listDynamic.length;
       widget.listDynamic.add(dynamicWidget);
       print(
@@ -159,9 +159,6 @@ class PanelWidgetState extends State<PanelWidget> {
     List<double?> currentLocationCoords = [latitudeOfPlace, longitudeOfPlace];
     controller.text = place;
     staticListMap[key] = currentLocationCoords;
-
-    PanelExtensions.of()
-        .checkInputLocation(controller, editDockTextEditController);
   }
 
   ///Function which builds the static row of components which are displayed permanently. Statically built, as every journey
@@ -377,6 +374,9 @@ class PanelWidgetState extends State<PanelWidget> {
       tempList.addAll(staticListMap.values);
       tempList.addAll(widget.selectedCoords);
       print("ALL_COORDINATES => $tempList");
+      print("\n ------ SEE IF DOCKS LATLNG CAME");
+      print(widget.selectedDocks); //added this
+      print(staticListDockMap.values); //added this
       List<LatLng>? points = convertListDoubleToLatLng(tempList);
 
       List<LatLng> closestDockList = [];

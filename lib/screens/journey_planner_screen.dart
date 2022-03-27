@@ -39,6 +39,7 @@ class _JourneyPlanner extends State<JourneyPlanner> {
 
   List<DynamicWidget> dynamicWidgetList = [];
   List<List<double?>> coordsList = [];
+  List<List<double?>> selectedDocksList = [];
 
   @override
   void initState() {
@@ -48,7 +49,7 @@ class _JourneyPlanner extends State<JourneyPlanner> {
   @override
   Widget build(BuildContext context) {
     Map<String, List<double?>> staticCordMap = {};
-
+    Map<String, List<double?>> staticDockMap = {};
     print("numberOfCyclists: ${widget.numberOfCyclists}");
 
     return Scaffold(

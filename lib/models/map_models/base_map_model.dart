@@ -18,13 +18,13 @@ import '../../screens/journey_planner_screen.dart';
 class BaseMapboxMap {
   final String _accessToken = MAPBOX_ACCESS_TOKEN;
   LatLng _target = getLatLngFromSharedPrefs();
-  late MapboxMap _map;
+  late MapboxMap map;
   final List<Widget> _widgets = [];
   final MapModel model;
   late CameraPosition cameraPosition;
   late MapboxMapController? controller;
   late Symbol? selectedSymbol;
-  late final bool _useLiveLocation;
+  // late final bool _useLiveLocation;
   Timer? timer;
 
   late final StreamController<MapPlace>? address;
@@ -38,7 +38,7 @@ class BaseMapboxMap {
     //   _setMapWithoutLiveLocation();
     // }
     _setMapWithLiveLocation();
-    addWidget(_map);
+    addWidget(map);
   }
 
   /// Adds a [widget] to [_widgets]
@@ -118,7 +118,7 @@ class BaseMapboxMap {
 
   /// Initialises map with live location
   void _setMapWithLiveLocation() {
-    _map = MapboxMap(
+    map = MapboxMap(
       accessToken: _accessToken,
       initialCameraPosition: cameraPosition,
       onMapCreated: onMapCreated,
@@ -130,7 +130,7 @@ class BaseMapboxMap {
   }
 
   MapboxMap getMap() {
-    return _map;
+    return map;
   }
 
   /// Refocus map on specified location [position]

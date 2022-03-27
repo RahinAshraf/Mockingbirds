@@ -17,7 +17,6 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
   String _totalDistanceAndTime = 'No route';
   final RouteManager _manager = RouteManager();
   late Map _routeResponse;
-  late bool _displayPolyline;
 
   // BaseMapboxRouteMap(this._journey, MapModel model) : super(model);
   BaseMapboxRouteMap(
