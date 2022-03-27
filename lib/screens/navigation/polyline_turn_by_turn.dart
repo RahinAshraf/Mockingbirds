@@ -1,24 +1,19 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
-import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/models/itinerary.dart';
-import 'package:veloplan/models/map_models/base_map_model.dart';
 import 'package:veloplan/models/map_models/base_map_with_route_updated_model.dart';
-import 'package:veloplan/navbar.dart';
-import 'package:veloplan/popups.dart';
-import 'package:veloplan/screens/navigation/map_screen.dart';
-import 'package:veloplan/screens/navigation/turn_by_turn_screen.dart';
-import 'package:veloplan/widgets/popup_widget.dart';
-import '../../models/map_models/base_map_with_route_model.dart';
 import 'package:scoped_model/scoped_model.dart';
 
+import '../../models/weather.dart';
 import '../../navbar.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
+
+import '../../providers/weather_manager.dart';
+import '../../widgets/weather_popup_card.dart';
 
 /// Map screen focused on a user's live location
 /// Author(s): Elisabeth Halvorsen k20077737
@@ -32,10 +27,38 @@ class MapUpdatedRoutePage extends StatefulWidget {
 }
 
 class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
+  LatLng currentPosition = getLatLngFromSharedPrefs();
   late MapWithRouteUpdated _baseMapWithUpdatedRoute;
   Timer? timer;
   bool finished = false;
   final Itinerary _itinerary;
+  Weather weather = Weather.defaultvalue();
+  String weatherIcon = "10n";
+  WeatherManager _weatherManager = WeatherManager();
+
+  @override
+  void initState() {
+    initWeatherTimer();
+    super.initState();
+  }
+
+  /// Starts a periodic timer to fetch the new wheather
+  void initWeatherTimer() {
+    timer = Timer.periodic(Duration(minutes: 15), (Timer t) {
+      if (_baseMapWithUpdatedRoute.isAtGoal) {
+        t.cancel();
+      }
+      _weatherManager
+          .importWeatherForecast(
+              currentPosition.latitude, currentPosition.longitude)
+          .then((value) {
+        setState(() {
+          this.weather = _weatherManager.all_weather_data;
+          this.weatherIcon = _weatherManager.all_weather_data.current_icon;
+        });
+      });
+    });
+  }
 
   _MapUpdatedRoutePageState(this._itinerary) {}
   //TODO: Marija attributes for distance, duration and dock name should be presented on the screen, you can take them from
@@ -52,6 +75,7 @@ class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
         _itinerary,
       );
       addPositionZoom();
+      addWeather(context, weather, weatherIcon);
       addStopTurnByTurn();
       return SafeArea(
           child: Stack(children: _baseMapWithUpdatedRoute.getWidgets()));
@@ -97,5 +121,11 @@ class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
         backgroundColor: Colors.red,
       ),
     ));
+  }
+
+  /// Adds the weather widget to the map
+  void addWeather(context, weather, weatherIcon) {
+    _baseMapWithUpdatedRoute
+        .addWidget(buildWeatherIcon(context, weather, weatherIcon));
   }
 }

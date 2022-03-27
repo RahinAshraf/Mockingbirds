@@ -19,9 +19,9 @@ class _FavouriteState extends State<Favourite> {
     FavouriteHelper.getUserFavourites().then((data) {
       setState(() {
         favourites = data;
+        super.initState();
       });
     });
-    super.initState();
   }
 
   @override

@@ -8,6 +8,8 @@ import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:veloplan/.env.dart';
 
+import '../../providers/weather_manager.dart';
+
 /// Class to display a mapbox map with other possible widgets on top
 /// Author(s): Fariha Choudhury k20059723, Elisabeth Koren Halvorsen k20077737
 class BaseMapboxMap {
@@ -19,7 +21,6 @@ class BaseMapboxMap {
   late CameraPosition cameraPosition;
   late MapboxMapController? controller;
   late Symbol? _selectedSymbol;
-  // Timer? timer;
   bool recenter = true;
 
   BaseMapboxMap(this.model) {

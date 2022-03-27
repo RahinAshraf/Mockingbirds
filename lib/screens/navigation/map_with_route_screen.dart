@@ -6,7 +6,10 @@ import '../../models/map_models/base_map_with_route_model.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 
+import '../../models/weather.dart';
 import '../../popups.dart';
+import '../../providers/weather_manager.dart';
+import '../../widgets/weather_popup_card.dart';
 
 /// Map screen showing and focusing on a a selected journey
 /// Author(s): Elisabeth Halvorsen k20077737,
@@ -24,8 +27,24 @@ class _MapRoutePageState extends State<MapRoutePage> {
   late BaseMapboxRouteMap _baseMapWithRoute;
   late List<LatLng> _journey;
   final Itinerary _itinerary;
+  Weather weather = Weather.defaultvalue();
+  String weatherIcon = "10n";
+  WeatherManager _weatherManager = WeatherManager();
 
   _MapRoutePageState(this._itinerary) {}
+
+  @override
+  void initState() {
+    _weatherManager
+        .importWeatherForecast(currentLatLng.latitude, currentLatLng.longitude)
+        .then((value) {
+      setState(() {
+        this.weather = _weatherManager.all_weather_data;
+        this.weatherIcon = _weatherManager.all_weather_data.current_icon;
+      });
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +52,7 @@ class _MapRoutePageState extends State<MapRoutePage> {
         builder: (BuildContext context, Widget? child, MapModel model) {
       _baseMapWithRoute = BaseMapboxRouteMap(_itinerary, model);
       addPositionZoom();
+      addWeather(context, weather, weatherIcon);
       startTurnByTurn(context, _itinerary);
 
       return SafeArea(child: Stack(children: _baseMapWithRoute.getWidgets()));
@@ -70,5 +90,11 @@ class _MapRoutePageState extends State<MapRoutePage> {
         },
       ),
     ));
+  }
+
+  /// Adds the weather widgetto the map
+  void addWeather(context, weather, weatherIcon) {
+    _baseMapWithRoute
+        .addWidget(buildWeatherIcon(context, weather, weatherIcon));
   }
 }
