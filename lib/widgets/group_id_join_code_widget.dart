@@ -1,60 +1,52 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:veloplan/helpers/database_manager.dart';
+import 'package:veloplan/helpers/navigation_helpers/navigation_conversion_helpers.dart';
+import 'package:veloplan/screens/summary_journey_screen.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
-
-import '../helpers/database_manager.dart';
-import '../helpers/navigation_helpers/navigation_conversion_helpers.dart';
-import '../screens/summary_journey_screen.dart';
-
 
 class GroupId extends StatefulWidget {
   const GroupId({Key? key}) : super(key: key);
-
   @override
   State<StatefulWidget> createState() => GroupIdState();
 }
 
 class GroupIdState extends State<GroupId> {
-  String fullPin = '';
-  bool? groupExists;
+  String fullPin = "";
   late List<LatLng>? points;
   final DatabaseManager _databaseManager = DatabaseManager();
   bool? exists = null;
 
-
   @override
-  void initState(){
+  void initState() {
     super.initState();
-
   }
 
   _joinGroup(String code) async {
-    print(" CODDD " + code);
-    var group = await _databaseManager.getByEquality('group', 'code', code);
+    print(" CODE " + code);
 
+    var group = await _databaseManager.getByEquality('group', 'code', code);
     var list = [];
     String id = "";
 
-    if(group.size == 0){
+    if (group.size == 0) {
       setState(() {
         exists = false;
       });
-    }
-    else{
-      print(4);
+    } else {
       setState(() {
         exists = true;
       });
+
       group.docs.forEach((element) {
         print(element.data());
         var geoList = element.data()['points'];
         List<List<double>> tempList = [];
-        for(int i =0; i<geoList.length;i++){
+        for (int i = 0; i < geoList.length; i++) {
           tempList.add([geoList[i].latitude, geoList[i].longitude]);
         }
         points = convertListDoubleToLatLng(tempList);
-
         print(points);
         id = element.id;
         list = element.data()['memberList'];
@@ -70,11 +62,16 @@ class GroupIdState extends State<GroupId> {
     }
   }
 
+  String? get _errorText {
+    if (exists == false) {
+      return "The entered code is incorrect.";
+    }
+    return null;
+  }
 
   Widget build(BuildContext context) {
     return AlertDialog(
-      contentPadding: const EdgeInsets.fromLTRB(0, 10.0, 0, 0.0),
-      titlePadding: const EdgeInsets.fromLTRB(24.0, 40.0, 24.0, 0.0),
+      titlePadding: const EdgeInsets.fromLTRB(18.0, 18.0, 18.0, 0.0),
       title: const Center(
         child: Text(
           "Enter PIN",
@@ -85,33 +82,37 @@ class GroupIdState extends State<GroupId> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
-            padding: const EdgeInsets.only(bottom: 10.0),
-            child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Column(
-                children: [
-                  TextField(
-                    maxLength: 6,
-                    onChanged: (pin) {
-                      // TODO: do something with the pin
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              children: [
+                TextField(
+                  maxLength: 6,
+                  decoration: InputDecoration(
+                    labelText: 'PIN Code',
+                    errorText: _errorText,
+                  ),
+                  onChanged: (pin) {
+                    setState(() {
+                      exists = null;
                       fullPin = pin;
-                      print("The pin: " + pin);
-                    },
+                    });
+                  },
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width / 0.5,
+                  child: ElevatedButton(
+                    onPressed: fullPin.length == 6
+                        ? () {
+                            _joinGroup(fullPin);
+                          }
+                        : null,
+                    child: const Text('Confirm'),
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width / 0.5,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        _joinGroup(fullPin);
-                      },
-                      child: const Text('Confirm'),
-                    ),
-                  )
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ],
