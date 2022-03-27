@@ -1,11 +1,9 @@
 import 'dart:io';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:veloplan/helpers/database_manager.dart';
-
 import 'package:veloplan/widgets/auth/auth_form.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -106,21 +104,23 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          AuthForm(
-            _submitAuthForm,
-            _isLoading,
-          ),
-          Align(
-            alignment: Alignment.topRight,
-            child: Container(
-                height: 170.0,
-                width: 170.0,
-                alignment: Alignment.topRight,
-                child: Image.asset('assets/images/right_bubbles_shapes.png')),
-          ),
-        ],
+      body: SafeArea(
+        child: Stack(
+          children: [
+            AuthForm(
+              _submitAuthForm,
+              _isLoading,
+            ),
+            Align(
+              alignment: Alignment.topRight,
+              child: Container(
+                  height: 170.0,
+                  width: 170.0,
+                  alignment: Alignment.topRight,
+                  child: Image.asset('assets/images/right_bubbles_shapes.png')),
+            ),
+          ],
+        ),
       ),
     );
   }
