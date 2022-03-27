@@ -323,7 +323,8 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
                         _leaveGroup();
                       },
                     )),
-              if (_itinerary.date?.day == DateTime.now().day)
+              if (_itinerary.date?.day == DateTime.now().day ||
+                  _itinerary.date?.day == null)
                 Container(
                     padding: const EdgeInsets.fromLTRB(70, 5, 70, 5),
                     child: ElevatedButton(
@@ -350,7 +351,8 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
     for (int i = 0; i < _itinerary.docks!.length; i++) {
       smth.add(StationTempWidget(
         content: _itinerary.docks![i].name,
-        time: paths[i].duration,
+        // time: paths[i].duration,
+        time: 0.0,
       ));
     }
     return smth;

@@ -21,7 +21,7 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
   String _totalDistanceAndTime = 'No route';
   final RouteManager manager = RouteManager();
   late Map _routeResponse;
-  LatLng startPosition = getLatLngFromSharedPrefs();
+  LatLng _startPosition = getLatLngFromSharedPrefs();
 
   // BaseMapboxRouteMap(this._journey, MapModel model) : super(model);
   BaseMapboxRouteMap(this._itinerary, MapModel model) : super(model) {
@@ -31,11 +31,12 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
   /// Initialise map features
   @override
   void onMapCreated(MapboxMapController controller) async {
-    this.controller = controller;
-    model.setController(controller);
-    model.fetchDockingStations();
+    // this.controller = controller;
+    // model.setController(controller);
+    // model.fetchDockingStations();
+    await baseMapCreated(controller);
     _displayJourneyAndRefocus(_journey);
-    controller.onSymbolTapped.add(onSymbolTapped);
+    // controller.onSymbolTapped.add(onSymbolTapped);
   }
 
   /// Display journey and refocus camera position
@@ -47,8 +48,10 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
 
   /// Refocus camera positioning to focus on the [journey] polyline
   void _refocusCamera(List<LatLng> journey) {
-    LatLng center = getCenter(journey);
-    Tuple2<LatLng, LatLng> corners = getCornerCoordinates(journey);
+    List<LatLng> points = journey;
+    points.add(_startPosition);
+    LatLng center = getCenter(points);
+    Tuple2<LatLng, LatLng> corners = getCornerCoordinates(points);
     double zoom = getZoom(calculateDistance(center, corners.item1));
 
     cameraPosition = CameraPosition(
@@ -68,7 +71,7 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
     if (journey.length > 1) {
       //WALKING:
       _routeResponse = await manager.getDirections(
-          startPosition, journey[0], NavigationType.walking);
+          _startPosition, journey[0], NavigationType.walking);
 
       //update local vars ---
       totalDistance += await manager.getDistance() as num;

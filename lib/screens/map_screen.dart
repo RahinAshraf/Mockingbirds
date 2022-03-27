@@ -19,7 +19,6 @@ import '../helpers/live_location_helper.dart';
 import '../screens/navigation/turn_by_turn_screen.dart';
 
 //import 'package:veloplan/widget/carousel/station_carousel.dart';
-const double zoom = 16;
 
 class MapPage2 extends StatefulWidget {
   const MapPage2({Key? key}) : super(key: key);
