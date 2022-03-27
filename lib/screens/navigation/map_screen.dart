@@ -8,6 +8,8 @@ import 'package:veloplan/models/map_models/base_map_model.dart';
 import '../../helpers/database_helpers/database_manager.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
+import 'package:veloplan/widgets/docking_station_widget.dart';
+import 'package:veloplan/models/map_models/base_map_model.dart';
 
 import '../../models/weather.dart';
 import '../../providers/weather_manager.dart';
@@ -83,7 +85,17 @@ class _MapPageState extends State<MapPage> {
       _baseMap = BaseMapboxMap(model);
       addPositionZoom();
       addWeather(context, weather, weatherIcon);
-      return SafeArea(child: Stack(children: _baseMap.getWidgets()));
+      return SafeArea(
+          child: Stack(
+              children: _baseMap.getWidgets() +
+                  [
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                          height: 200,
+                          child: DockStation(key: dockingStationKey)),
+                    )
+                  ]));
     }));
   }
 

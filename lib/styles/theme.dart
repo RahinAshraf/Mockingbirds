@@ -53,23 +53,4 @@ class CustomTheme {
       ),
     );
   }
-
-  static ThemeData get darkTheme {
-    return ThemeData(
-      canvasColor: CustomColors.darkModeScaffoldColour,
-      scaffoldBackgroundColor: CustomColors.darkModeScaffoldColour,
-      appBarTheme: AppBarTheme(color: CustomColors.darkModeScaffoldColour),
-      primarySwatch: Colors.grey,
-      colorScheme: ColorScheme.dark(
-        secondary: CustomColors.darkModeScaffoldColour,
-      ),
-      backgroundColor: CustomColors.darkModeScaffoldColour,
-      textTheme: ThemeData.dark().textTheme,
-      bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        backgroundColor: CustomColors.darkModeScaffoldColour,
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.white,
-      ),
-    );
-  }
 }

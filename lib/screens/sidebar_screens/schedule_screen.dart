@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:timeline_tile/timeline_tile.dart';
-import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/screens/summary_journey_screen.dart';
 import '../../models/itinerary.dart';
 import '../../helpers/database_helpers/schedule_helper.dart';
@@ -64,49 +62,7 @@ class _SchedulePageState extends State<SchedulePage> {
                 for (var item in journeyList)
                   TimelineItem(item, journeyList.indexOf(item))
               ],
-              // FutureBuilder(
-              // children: FutureBuilder(
-              // future: getJourneyFromDatabase(),
-              // builder: (context, snapshot) {
-              //   return Column(
-              //       mainAxisAlignment: MainAxisAlignment.center,
-              //       children: [
-              //         for (var item in journeyList)
-              //           TimelineItem(item, journeyList.indexOf(item))
-              //       ]);
-              // },
-              // <Widget>[
-              //   for (var item in  journeyList)
-              //     TimelineItem(item, journeyList.indexOf(item))
-              // ],
             ),
-
-            //     itemCount: journeyList.length),
-            // TODO: instead of manually generating timeline items, pass a list (map?) of upcoming journeys
-            //TimelineItem(journeyList[0], 0),
-
-            // const TimelineItem(month: "March", day: "3", upcomingEventCards: [
-            //   UpcomingEventCard(title: "Trip to London Bridge")
-            // ]),
-            // const TimelineItem(month: "May", day: "1", upcomingEventCards: [
-            //   UpcomingEventCard(title: "Cycle around Stratford")
-            // ]),
-            // const TimelineItem(
-            //   day: "16",
-            //   month: "Aug",
-            //   upcomingEventCards: [
-            //     UpcomingEventCard(
-            //         title: "Biking society's trip to Regent's Park")
-            //   ],
-            // ),
-            // const TimelineItem(
-            //   day: "31",
-            //   month: "Sept",
-            //   upcomingEventCards: [
-            //     UpcomingEventCard(title: "Trip to London Bridge"),
-            //     UpcomingEventCard(title: "Trip to Science Museum"),
-            //   ],
-            // )
           ],
         ),
       ),
