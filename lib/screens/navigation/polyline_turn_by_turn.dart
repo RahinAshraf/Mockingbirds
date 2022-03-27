@@ -76,7 +76,7 @@ class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
       );
       addPositionZoom();
       addWeather(context, weather, weatherIcon);
-      addStopTurnByTurn();
+      addStopTurnByTurn(context);
       return SafeArea(
           child: Stack(children: _baseMapWithUpdatedRoute.getWidgets()));
 
@@ -102,7 +102,7 @@ class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
   }
 
   /// add a reroute button to navbar
-  void addStopTurnByTurn() {
+  void addStopTurnByTurn(BuildContext context) {
     _baseMapWithUpdatedRoute.addWidget(Container(
       alignment: Alignment(0.9, -0.90),
       child: FloatingActionButton(
@@ -110,7 +110,7 @@ class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
         onPressed: () {
           try {
             _baseMapWithUpdatedRoute.isAtGoal = true;
-            _baseMapWithUpdatedRoute.reRoute();
+            Navigator.of(context).popUntil((route) => route.isFirst);
           } catch (e) {
             log("failed to push replacement");
           }

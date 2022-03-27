@@ -228,7 +228,16 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
     return Scaffold(
         appBar: AppBar(
           title: const Text('Summary of Journey'),
-          automaticallyImplyLeading: false,
+          leading: IconButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            icon: const Icon(
+              Icons.arrow_back_rounded,
+              size: 30,
+              color: Colors.white,
+            ),
+          ),
         ),
         body: SafeArea(
           child: ListView(
@@ -304,19 +313,6 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              // MANO
-              // FutureBuilder(
-              //     future: _generateStopsFuture(),
-              //     builder: (context, snapshot) {
-              //       if (snapshot.hasData) {
-              //         return Column(children: [
-              //           for (int i = 0; i < _itinerary.docks!.length; i++)
-              //             Text(paths[i].duration.toString()),
-              //         ]);
-              //       } else {
-              //         return CircularProgressIndicator();
-              //       }
-              //     }),
               SingleChildScrollView(
                 child: Column(
                   children: _generateStops(),

@@ -6,7 +6,7 @@ import '../styles/animation/hero_dialog_route.dart';
 Align buildWeatherIcon(context, weather, weatherIcon) {
   return Align(
     //EdgeInsets.only(left: 300, top: 150, right: 40, bottom: 550),
-    alignment: Alignment(0.9, -0.75),
+    alignment: Alignment(0.9, -0.9),
     child: SizedBox(
         height: MediaQuery.of(context).size.height / 15,
         width: MediaQuery.of(context).size.width / 7,

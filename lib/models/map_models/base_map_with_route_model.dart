@@ -107,6 +107,5 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
         manager
             .getGeometry()); //_routeResponse['geometry']); - can use local var instead but i've set it anyway
     addFills(controller!, fills, model);
-    // _setDistanceAndTime();
   }
 }

@@ -305,11 +305,27 @@ class PanelWidgetState extends State<PanelWidget> {
             height: 20,
           ),
           const SizedBox(height: 6),
-          const Center(
-            child: Text(
-              "Explore London",
-              style: TextStyle(fontWeight: FontWeight.normal, fontSize: 35),
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              IconButton(
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+                icon: const Icon(
+                  Icons.arrow_back,
+                  size: 30,
+                  color: Colors.green,
+                ),
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Text(
+                  "Explore London",
+                  style: TextStyle(fontWeight: FontWeight.normal, fontSize: 35),
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 8),
           _buildStatic(widget.fromTextEditController,
@@ -413,9 +429,6 @@ class PanelWidgetState extends State<PanelWidget> {
     }
     // Navigate back to the previous screen, useful for tbt
     Navigator.of(context).pop(true);
-
-    // save the journey for the future
-    // popup warning station availability
   }
 
   ///The function to deal with the user pressing the START button. Applies the constraints for a journey.
@@ -501,6 +514,8 @@ class PanelWidgetState extends State<PanelWidget> {
         final response = await context.push(SummaryJourneyScreen(_itinerary));
         if (response) {
           Navigator.of(context).pop(true);
+        } else {
+          Navigator.of(context).pop();
         }
       }
     }

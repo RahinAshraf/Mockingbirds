@@ -84,6 +84,8 @@ class _PanelWidgetTripScheduler extends State<PanelWidgetTripScheduler> {
                                 )));
                     if (response) {
                       Navigator.of(context).pop(true);
+                    } else {
+                      Navigator.of(context).pop();
                     }
                   },
                   child: const Text('Now'),
@@ -155,6 +157,8 @@ class _PanelWidgetTripScheduler extends State<PanelWidgetTripScheduler> {
                 )));
     if (response) {
       Navigator.of(context).pop(true);
+    } else {
+      Navigator.of(context).pop();
     }
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
@@ -52,6 +54,7 @@ class _MapRoutePageState extends State<MapRoutePage> {
         builder: (BuildContext context, Widget? child, MapModel model) {
       _baseMapWithRoute = BaseMapboxRouteMap(_itinerary, model);
       addPositionZoom();
+      addgoBackButton();
       addWeather(context, weather, weatherIcon);
       startTurnByTurn(context, _itinerary);
 
@@ -78,7 +81,7 @@ class _MapRoutePageState extends State<MapRoutePage> {
   void startTurnByTurn(BuildContext context, Itinerary itinerary) {
     Popups popup = new Popups();
     _baseMapWithRoute.addWidget(Container(
-      alignment: Alignment(0, 0),
+      alignment: Alignment(0.9, 0.7),
       child: FloatingActionButton(
         heroTag: "start_turn_by_trun",
         onPressed: () {
@@ -88,6 +91,8 @@ class _MapRoutePageState extends State<MapRoutePage> {
               builder: (BuildContext context) =>
                   popup.buildPopupDialogRedirect(context, itinerary));
         },
+        child: const Text("GO"),
+        backgroundColor: Colors.green,
       ),
     ));
   }
@@ -96,5 +101,26 @@ class _MapRoutePageState extends State<MapRoutePage> {
   void addWeather(context, weather, weatherIcon) {
     _baseMapWithRoute
         .addWidget(buildWeatherIcon(context, weather, weatherIcon));
+  }
+
+  /// add a reroute button to navbar
+  void addgoBackButton() {
+    _baseMapWithRoute.addWidget(Container(
+      alignment: Alignment(-0.9, -0.90),
+      child: FloatingActionButton(
+        heroTag: "back",
+        onPressed: () {
+          try {
+            Navigator.of(context).pop(true);
+          } catch (e) {
+            log("failed to push replacement");
+          }
+        },
+        child: const Icon(
+          Icons.arrow_back,
+        ),
+        backgroundColor: Colors.red,
+      ),
+    ));
   }
 }
