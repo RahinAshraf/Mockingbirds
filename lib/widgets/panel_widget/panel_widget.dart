@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:veloplan/helpers/closest_dock_cache.dart';
 import 'package:veloplan/screens/journey_planner_screen.dart';
 import 'package:veloplan/screens/navigation/map_with_route_screen.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
@@ -370,6 +369,9 @@ class PanelWidgetState extends State<PanelWidget> {
   ///closest docking stations for the locations the user specified. This new list is then passed onto MapRoutePage.
   ///THIS FUNCTION NEEDS TO BE REFACTORED FURTHER
   void _handleStartClick(){
+    List<LatLng> closestDockList = dockList.values.toList();
+    print("ALREADY EXISTS ==> $closestDockList");
+
     final hasEmptyField = widget.listDynamic
         .any((element) => element.placeTextController.text.isEmpty);
 

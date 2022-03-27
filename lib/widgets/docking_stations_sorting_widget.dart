@@ -1,6 +1,8 @@
+import 'package:latlong2/latlong.dart' as cords;
 import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:flutter/material.dart';
+import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/widgets/carousel/station_carousel.dart';
 
 /// Class that sorts docking stations based on a specific filter.
@@ -9,8 +11,28 @@ import 'package:veloplan/widgets/carousel/station_carousel.dart';
 /// based on given [userCoord]. It then displays the cards
 /// and can be sorted based on options given in [_DockSorter.dropdownItems].
 /// By default, cards are sorted by [_DockSorter.selectedFilter].
+
+class DockStationBus{
+  cords.LatLng? latLng;
+  int? key;
+  String? address;
+
+  DockStationBus({this.latLng, this.key, this.address});
+}
+
 class DockSorter extends StatefulWidget {
-  DockSorter(this.userCoord, {Key? key, required ScrollController controller})
+
+  DockingStation ds1 = DockingStation("ds1ID", "ds1", true, true, 10, 11, 12, 15.6, 89.0);
+  DockingStation ds2 = DockingStation("ds2ID", "ds2", true, true, 20, 21, 22, 15.6, 89.0);
+  DockingStation ds3 = DockingStation("ds3ID", "ds3", true, true, 30, 31, 32, 15.6, 89.0);
+  DockingStation ds4 = DockingStation("ds4ID", "ds4", true, true, 40, 41, 42, 15.6, 89.0);
+  DockingStation ds5 = DockingStation("ds5ID", "ds5", true, true, 50, 51, 52, 15.6, 89.0);
+  DockingStation ds6 = DockingStation("ds6ID", "ds6", true, true, 60, 61, 62, 15.6, 89.0);
+
+  final DockingStation? selectedDockStation;
+
+  DockSorter(this.userCoord, {Key? key, required ScrollController controller,
+    required this.selectedDockStation})
       : super(key: key);
 
   late final LatLng userCoord;
@@ -25,13 +47,27 @@ class _DockSorter extends State<DockSorter> {
   late DockingStationCarousel _dockingStations;
   List<String> dropdownItems = ['Distance', 'Favourites', 'Most Popular'];
   String selectedFilter = 'Distance';
+  cords.LatLng? selectedDockStation;
 
   @override
   void initState() {
+
+    selectedDockStation = cords.LatLng(widget.selectedDockStation?.lat ?? 0,
+        widget.selectedDockStation?.lon ?? 0);
+
     userCoordinates = super.widget.userCoord;
     super.initState();
     _dockingStations = DockingStationCarousel(userCoordinates);
   }
+
+  // void SetEditTextController(TextEditingController editDockTextController){
+  //   this._editDockTextEditController = editDockTextController;
+  // }
+  //
+  // void editChosenDockText(DockingStation chosenDock){
+  //   this._editDockTextEditController.text = chosenDock.name;
+  // }
+
 
   @override
   Widget build(BuildContext context) => ListView(
@@ -41,7 +77,7 @@ class _DockSorter extends State<DockSorter> {
             children: [
               TextButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.pop(context, widget.selectedDockStation);
                 },
                 child:
                     const Icon(Icons.arrow_back_rounded, color: Colors.green),

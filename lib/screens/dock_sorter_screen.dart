@@ -10,7 +10,9 @@ import '../widgets/docking_stations_sorting_widget.dart';
 class DockSorterScreen extends StatefulWidget {
   late final LatLng userCoord;
   final DockingStation? dockingStation;
-  DockSorterScreen(this.userCoord, {Key? key, this.dockingStation}) : super(key: key);
+  final DockingStation? selectedDockStation;
+  DockSorterScreen(this.userCoord, {Key? key, this.dockingStation,
+    this.selectedDockStation}) : super(key: key);
 
   @override
   _DockSorterScreen createState() => _DockSorterScreen();
@@ -66,7 +68,8 @@ class _DockSorterScreen extends State<DockSorterScreen> {
           ),
         ),
         panelBuilder: (controller) =>
-            DockSorter(userCoordinates, controller: controller),
+            DockSorter(userCoordinates,
+              controller: controller, selectedDockStation: widget.selectedDockStation,),
       ),
     );
   }

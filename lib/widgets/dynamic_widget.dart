@@ -105,7 +105,7 @@ class DynamicWidget extends StatelessWidget {
           ),
         ),
       PanelExtensions(context: context).buildDefaultClosestDock(editDockTextEditController,
-          placeTextController, latLngMap)
+          placeTextController, latLngMap, position: position)
       ],
     );
   }
