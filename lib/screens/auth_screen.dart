@@ -16,7 +16,7 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
-  final DatabaseManager _databaseManager = DatabaseManager();
+  // final DatabaseManager _databaseManager = DatabaseManager();
   final _auth = FirebaseAuth.instance;
   var _isLoading = false;
 
@@ -47,6 +47,8 @@ class _AuthScreenState extends State<AuthScreen> {
           email: email,
           password: password,
         );
+        
+        final DatabaseManager _databaseManager = DatabaseManager();
 
         var url =
             "https://firebasestorage.googleapis.com/v0/b/veloplan-b41d0.appspot.com/o/user_image%2Fdefault_profile_picture.jpg?alt=media&token=edc6abb8-3655-448c-84a0-7d34b02f0c73";
