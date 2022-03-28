@@ -69,7 +69,7 @@ class _DockSorter extends State<DockSorter> {
             children: [
               TextButton(
                 onPressed: () {
-                  Navigator.pop(context, widget.selectedDockStation);
+                  Navigator.pop(context, widget.selectedDockStation); //put what you want to send back to jp here instead of " widget.selectedDockStation"
                 },
                 child:
                     const Icon(Icons.arrow_back_rounded, color: Colors.green),

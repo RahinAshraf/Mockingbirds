@@ -9,9 +9,8 @@ import '../widgets/docking_stations_sorting_widget.dart';
 
 class DockSorterScreen extends StatefulWidget {
   late final LatLng userCoord;
-  final DockingStation? dockingStation;
   final DockingStation? selectedDockStation;
-  DockSorterScreen(this.userCoord, {Key? key, this.dockingStation,
+  DockSorterScreen(this.userCoord, {Key? key,
     this.selectedDockStation}) : super(key: key);
 
   @override
@@ -30,7 +29,7 @@ class _DockSorterScreen extends State<DockSorterScreen> {
     userCoordinates = super.widget.userCoord;
     super.initState();
     _initialCameraPosition = CameraPosition(target: latLng, zoom: zoom);
-    print("hello => ${widget.dockingStation?.name}");
+
   }
 
   _onMapCreated(MapboxMapController controller) async {

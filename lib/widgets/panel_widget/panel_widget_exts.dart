@@ -83,29 +83,24 @@ class PanelExtensions {
                 List temp = await locationService
                     .getPlaceCoords(placeTextController.text);
 
+
+                final LatLng? dockStationLatLng = latLngMap[position];
+                final result = await Navigator.push<DockingStation>(
+                    context!,
+                    MaterialPageRoute(
+                        builder: (context) => DockSorterScreen(
+                          convertDestinationLocationFromDoublesToLatLng(
+                              temp.first, temp.last),
+                          selectedDockStation: DockingStation("ds1ID",
+                              "ds1", true, true, 10, 11, 12, 15.6, 89.0),
+                        )));
+
+
+                print("hey result --=> ${result?.name}");
+
                 checkInputLocation(placeTextController,
-                    editDockTextEditController, latLngMap, position);
-
-                if (_dockingStation != null) {
-                  final LatLng? dockStationLatLng = latLngMap[position];
-                  final result = await Navigator.push<DockingStation>(
-                      context!,
-                      MaterialPageRoute(
-                          builder: (context) => DockSorterScreen(
-                                convertDestinationLocationFromDoublesToLatLng(
-                                    temp.first, temp.last),
-                                dockingStation: _dockingStation,
-                                selectedDockStation: DockingStation("ds1ID",
-                                    "ds1", true, true, 10, 11, 12, 15.6, 89.0),
-                              )));
-
-                  if (result != null) {
-                    print("hey position => $position __ $oldPosition");
-                    latLngMap[position] = LatLng(result.lat, result.lon);
-                    editDockTextEditController.text = result.name;
-                   dockText.sink.add("");
-                  }
-                } else {}
+                    editDockTextEditController, latLngMap, position,
+                    address: result?.name, closesDockLatLng: LatLng(result?.lat ?? 0, result?.lon ?? 0));
               },
               padding: const EdgeInsets.all(0),
               icon: const Icon(
@@ -130,14 +125,15 @@ class PanelExtensions {
       TextEditingController placeTextController,
       TextEditingController editDockTextEditController,
       Map<int, LatLng> latLngMap,
-      int position) async {
+      int position, {String? address, LatLng? closesDockLatLng}) async {
     if (placeTextController.text.isEmpty) {
       //do nothing
     } else {
       List coordPlace = await locationService.getPlaceCoords(placeTextController
           .text); //getting coordinates of the place specified as the destination to visit
-      getClosetDock(coordPlace.first, coordPlace.last,
-          editDockTextEditController, latLngMap, position);
+
+       getClosetDock(coordPlace.first, coordPlace.last,
+          editDockTextEditController, latLngMap, position, address: address, closesDockLatLng: closesDockLatLng);
     }
   }
 
@@ -149,15 +145,20 @@ class PanelExtensions {
       double? lng,
       TextEditingController editDockTextEditController,
       Map<int, LatLng> latLngMap,
-      int position) async {
+      int position, {String? address, LatLng? closesDockLatLng}) async {
     LatLong.LatLng latlngPlace = LatLong.LatLng(lat!, lng!);
     dockingStationManager _stationManager = dockingStationManager();
     await _stationManager.importStations();
-    DockingStation closetDock = _stationManager.getClosestDock(latlngPlace);
-    print("closet dock ${closetDock.name}");
-    editDockTextEditController.text = closetDock.name;
-    latLngMap[position] = LatLng(closetDock.lat, closetDock.lon);
-    print("PRIIIINTING => $position");
-    this._dockingStation = closetDock;
+    if(null == closesDockLatLng){
+      DockingStation closetDock = _stationManager.getClosestDock(latlngPlace);
+      editDockTextEditController.text =  closetDock.name;
+      latLngMap[position] = LatLng(closetDock.lat, closetDock.lon);
+      print("closet dock ${closetDock.name}");
+      print("PRIIIINTING => $position");
+      this._dockingStation = closetDock;
+    }else{
+      editDockTextEditController.text =  address!;
+      latLngMap[position] = closesDockLatLng;
+    }
   }
 }
