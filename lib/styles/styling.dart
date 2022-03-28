@@ -63,5 +63,12 @@ const timelineTileBeforeLineStyle =
 const upcomingJourneysTextStyle = TextStyle(
     fontSize: 30.0, color: Color(0xFF393939), fontWeight: FontWeight.w700);
 const scheduleScreenCalendarStyle = CalendarStyle(
-    todayDecoration:
-        BoxDecoration(color: Color(0xFF99D2A9), shape: BoxShape.circle));
+  todayDecoration:
+      BoxDecoration(color: Color(0x4D99D2A9), shape: BoxShape.circle),
+  selectedDecoration:
+      BoxDecoration(color: Color(0xFF99D2A9), shape: BoxShape.circle),
+  markerDecoration:
+      BoxDecoration(color: Color(0XFFFBAB4B), shape: BoxShape.circle),
+  // markerSize: 5,
+  markersMaxCount: 1,
+);
