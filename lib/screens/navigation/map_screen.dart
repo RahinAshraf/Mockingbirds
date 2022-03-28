@@ -100,14 +100,14 @@ class _MapPageState extends State<MapPage> {
   }
 
   void addPositionZoom() async {
-    CameraPosition newPos = _baseMap.getNewCameraPosition();
+    // CameraUpdate();
     _baseMap.addWidget(Container(
       alignment: Alignment(0.9, 0.90),
       child: FloatingActionButton(
         heroTag: "center_to_current_loaction",
         onPressed: () {
-          _baseMap.controller
-              ?.animateCamera(CameraUpdate.newCameraPosition(newPos));
+          _baseMap.controller?.animateCamera(
+              CameraUpdate.newCameraPosition(_baseMap.getNewCameraPosition()));
         },
         child: const Icon(Icons.my_location),
       ),
