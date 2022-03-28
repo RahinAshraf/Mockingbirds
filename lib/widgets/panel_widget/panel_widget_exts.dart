@@ -52,7 +52,7 @@ class PanelExtensions {
           child: StreamBuilder<String>(
             builder: (_, snapshot) {
               if (snapshot.hasData) {
-                editDockTextEditController.text = snapshot.requireData;
+              //  editDockTextEditController.text = snapshot.requireData;
               }
               return TextField(
                 enabled: false,
@@ -102,12 +102,10 @@ class PanelExtensions {
                   if (result != null) {
                     print("hey position => $position __ $oldPosition");
                     latLngMap[position] = LatLng(result.lat, result.lon);
-                   // dockText.sink.add("sgggggs");
+                    editDockTextEditController.text = result.name;
+                   dockText.sink.add("");
                   }
-                } else {
-                  // Display docking error message here
-                  print("DockingStation is null");
-                }
+                } else {}
               },
               padding: const EdgeInsets.all(0),
               icon: const Icon(

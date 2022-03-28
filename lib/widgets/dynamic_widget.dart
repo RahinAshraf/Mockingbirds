@@ -66,7 +66,7 @@ class DynamicWidget extends StatelessWidget {
                       print("ONCHANGED");
                       final ext = PanelExtensions.of(context:context);
                       ext.setPosition(position);
-                      ext . checkInputLocation(placeTextController,
+                      ext.checkInputLocation(placeTextController,
                           editDockTextEditController, latLngMap, position);
                     },
                     readOnly: true,

@@ -12,14 +12,6 @@ import 'package:veloplan/widgets/carousel/station_carousel.dart';
 /// and can be sorted based on options given in [_DockSorter.dropdownItems].
 /// By default, cards are sorted by [_DockSorter.selectedFilter].
 
-class DockStationBus{
-  cords.LatLng? latLng;
-  int? key;
-  String? address;
-
-  DockStationBus({this.latLng, this.key, this.address});
-}
-
 class DockSorter extends StatefulWidget {
 
   DockingStation ds1 = DockingStation("ds1ID", "ds1", true, true, 10, 11, 12, 15.6, 89.0);
