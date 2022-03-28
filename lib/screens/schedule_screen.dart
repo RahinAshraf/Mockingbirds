@@ -12,16 +12,16 @@ class ScheduleScreen extends StatefulWidget {
 
 class _ScheduleScreenState extends State<ScheduleScreen> {
   var helper = ScheduleHelper();
-  late CalendarFormat _calendarFormat;
+  CalendarFormat _calendarFormat = CalendarFormat.twoWeeks;
 
   /// All the upcoming journeys.
   List<Journey> upcomingJourneys = [];
 
   /// Journeys, but mapped to the date.
-  late Map<DateTime, List<Journey>> _events;
+  late Map<DateTime, List<Journey>> _events = {};
 
   /// Events on a selected day.
-  late List _selectedEvents;
+  late List _selectedEvents = [];
   DateTime _selectedDay =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
   DateTime _focusedDay =
@@ -29,7 +29,6 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
   @override
   void initState() {
-    _calendarFormat = CalendarFormat.twoWeeks;
     helper.getAllScheduleDocuments().then((data) {
       setState(() {
         upcomingJourneys = data;
