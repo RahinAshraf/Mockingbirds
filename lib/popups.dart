@@ -81,4 +81,20 @@ class Popups {
         children: children,
         type: AlertType.warning);
   }
+
+  PopupWidget buildPopupDialogJourneySaved(BuildContext context) {
+    List<PopupButtonWidget> children = [
+      PopupButtonWidget(
+          text: "Leave",
+          onPressed: () {
+            Navigator.pop(context);
+          }),
+    ];
+    return PopupWidget(
+        title: "Journey scheduled successfully!",
+        text:
+            "Your journey has been scheduled. Check the details in the calendar.",
+        children: children,
+        type: AlertType.warning);
+  }
 }

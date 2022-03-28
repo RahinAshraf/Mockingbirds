@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:veloplan/models/journey.dart';
+import 'package:veloplan/providers/location_service.dart';
 import 'package:veloplan/styles/styling.dart';
 
 /// Generates an event card for schedule screen.
@@ -8,12 +9,24 @@ import 'package:veloplan/styles/styling.dart';
 /// [SchedulePage], under upcoming journeys. It takes [journey] as
 /// argument and displays its information on a card.
 class UpcomingEventCard extends StatelessWidget {
-  const UpcomingEventCard({required this.journey});
+  UpcomingEventCard({required this.journey});
 
   final Journey journey;
+  var name;
+  String text = "";
+
+  /// Generate the names of the paths from coordinates
+  Future<void> _generateNames(double lat, double lon) async {
+    LocationService service = LocationService();
+    service.reverseGeoCode(lat, lon).then((value) {
+      text = value['place_name'];
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    _generateNames(journey.myDestinations[0].latitude,
+        journey.myDestinations[0].longitude);
     return Card(
       elevation: 2,
       margin: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
@@ -24,8 +37,7 @@ class UpcomingEventCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Trip ${journey.journeyDocumentId}',
-                style: eventCardTitleTextStyle),
+            Text('Trip ${text}', style: eventCardTitleTextStyle),
             SizedBox(height: 25.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

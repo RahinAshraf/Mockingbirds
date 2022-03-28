@@ -11,6 +11,7 @@ import 'package:veloplan/widgets/panel_widget/panel_widget_exts.dart';
 import 'package:veloplan/widgets/panel_widget/panel_widgets_base.dart';
 import '../../helpers/navigation_helpers/navigation_conversion_helpers.dart';
 import '../../models/docking_station.dart';
+import '../../popups.dart';
 import '../../providers/location_service.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
@@ -389,8 +390,16 @@ class PanelWidgetState extends State<PanelWidget> {
           widget.journeyDate, tempList, widget.numberOfCyclists);
     }
 
-    // save the journey for the future
-    // popup warning station availability
+    Navigator.pop(context);
+    Navigator.pop(context);
+    Navigator.pop(context);
+
+    var popup = Popups();
+    showDialog(
+        useRootNavigator: false,
+        context: context,
+        builder: (BuildContext context) =>
+            popup.buildPopupDialogJourneySaved(context));
   }
 
   ///The function to deal with the user pressing the START button. Applies the constraints for a journey.

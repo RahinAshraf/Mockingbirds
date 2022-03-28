@@ -19,6 +19,7 @@ class Journey {
   String? get journeyDocumentId => _journeyDocumentId;
   List<DockingStation>? get stationList => _stationList;
   int? get numberOfCyclists => _numberOfCyclists;
+  List<LatLng>? get myDestinations => _myDestinations;
 
   ///Creates a journey from firebase when a journey has started,
   ///to include its document id, list of docking stations and start time.
