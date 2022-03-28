@@ -1,31 +1,33 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 import 'package:veloplan/helpers/database_helpers/favourite_helper.dart';
-import 'package:veloplan/models/user.dart';
 import 'favourites_test.mocks.dart';
+import 'mock.dart';
 
 @GenerateMocks([DatabaseManager, User, CollectionReference<Object?>])
 main() {
-  // setUp(() {
-  //   var mockDBManager = MockDatabaseManager();
-  //   var user = MockUser();
-  //   var favouritesReference = MockCollectionReference();
-  //   FavouriteHelper helper = FavouriteHelper(mockDBManager);
-  // });
+  setUp(() {});
 
   test('Add favourite', () {
     var mockDBManager = MockDatabaseManager();
     var user = MockUser();
     var favouritesReference = MockCollectionReference();
+    when(mockDBManager.getUserSubCollectionReference("favourites"))
+        .thenAnswer((_) => favouritesReference);
+
     FavouriteHelper helper = FavouriteHelper(mockDBManager);
 
+    String testID = "name";
+
+    when(user.uid).thenReturn(testID);
+    when(mockDBManager.getCurrentUser()).thenReturn(user);
     String stationId = "id1";
     String name = "station1";
-    when(mockDBManager.getUserSubCollectionReference("favourites"))
-        .thenReturn(favouritesReference);
 
     helper.addFavourite(stationId, name);
     (verify(mockDBManager.addToSubCollection(favouritesReference, {

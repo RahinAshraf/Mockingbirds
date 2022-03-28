@@ -5,13 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 ///Author: Lilliana
 ///Contributor: Tayyibah
 class DatabaseManager {
-  late FirebaseFirestore _database;
-  late final _userId;
-
-  DatabaseManager() {
-    _database = FirebaseFirestore.instance;
-    _userId = FirebaseAuth.instance.currentUser!.uid;
-  }
+  DatabaseManager() {}
 
   User? getCurrentUser() {
     return FirebaseAuth.instance.currentUser;
@@ -19,17 +13,17 @@ class DatabaseManager {
 
   CollectionReference<Object?> getUserSubCollectionReference(
       String collectionName) {
-    return _database
+    return FirebaseFirestore.instance
         .collection('users')
-        .doc(_userId)
+        .doc(getCurrentUser()!.uid)
         .collection(collectionName);
   }
 
   Future<QuerySnapshot<Object?>> getUserSubcollection(
       String subcollection) async {
-    return await _database
+    return await FirebaseFirestore.instance
         .collection('users')
-        .doc(_userId)
+        .doc(FirebaseAuth.instance.currentUser!.uid)
         .collection(subcollection)
         .get();
   }
@@ -48,7 +42,7 @@ class DatabaseManager {
 
   Future<QuerySnapshot<Map<String, dynamic>>> getByEquality(
       String collection, String field, String equalTo) async {
-    return await _database
+    return await FirebaseFirestore.instance
         .collection(collection)
         .where(field, isEqualTo: equalTo)
         .get();
@@ -56,23 +50,32 @@ class DatabaseManager {
 
   Future<DocumentSnapshot<Map<String, dynamic>>> getByKey(
       String collection, String key) async {
-    return await _database.collection(collection).doc(key).get();
+    return await FirebaseFirestore.instance
+        .collection(collection)
+        .doc(key)
+        .get();
   }
 
   Future<void> setByKey(
       String collection, String key, Map<String, dynamic> value,
       [SetOptions? options]) async {
-    await _database.collection(collection).doc(key).set(value, options);
+    await FirebaseFirestore.instance
+        .collection(collection)
+        .doc(key)
+        .set(value, options);
   }
 
   Future<void> updateByKey(
       String collection, String key, Map<String, dynamic> value) async {
-    await _database.collection(collection).doc(key).update(value);
+    await FirebaseFirestore.instance
+        .collection(collection)
+        .doc(key)
+        .update(value);
   }
 
   Future<void> addToCollection(
       String collection, Map<String, dynamic> value) async {
-    await _database.collection(collection).add(value);
+    await FirebaseFirestore.instance.collection(collection).add(value);
   }
 
   Future<void> addToSubCollection(CollectionReference<Object?> subcollection,

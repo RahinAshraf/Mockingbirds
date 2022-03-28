@@ -10,12 +10,11 @@ import '../../providers/docking_station_manager.dart';
 ///Author: Tayyibah
 class FavouriteHelper {
   late CollectionReference _favourites;
-  DatabaseManager _databaseManager = DatabaseManager();
+  late final DatabaseManager _databaseManager;
   var _manager = dockingStationManager();
 
   FavouriteHelper(this._databaseManager) {
-    _favourites = _favourites =
-        _databaseManager.getUserSubCollectionReference("favourites");
+    _favourites = _databaseManager.getUserSubCollectionReference("favourites");
   }
 
   ///Adds a docking station to a users favourites
