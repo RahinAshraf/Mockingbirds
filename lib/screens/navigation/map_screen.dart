@@ -99,14 +99,15 @@ class _MapPageState extends State<MapPage> {
     }));
   }
 
-  void addPositionZoom() {
+  void addPositionZoom() async {
+    CameraPosition newPos = _baseMap.getNewCameraPosition();
     _baseMap.addWidget(Container(
       alignment: Alignment(0.9, 0.90),
       child: FloatingActionButton(
         heroTag: "center_to_current_loaction",
         onPressed: () {
-          _baseMap.controller?.animateCamera(
-              CameraUpdate.newCameraPosition(_baseMap.getNewCameraPosition()));
+          _baseMap.controller
+              ?.animateCamera(CameraUpdate.newCameraPosition(newPos));
         },
         child: const Icon(Icons.my_location),
       ),

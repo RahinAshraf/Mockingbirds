@@ -55,7 +55,7 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
   // change to one class with dock, people and destinations
 
   @override
-  void updateCurrentLocation() async {
+  Future<void> updateCurrentLocation() async {
     Location newCurrentLocation = Location();
     LocationData _newLocationData = await newCurrentLocation.getLocation();
     sharedPreferences.clear();

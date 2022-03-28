@@ -57,7 +57,7 @@ class BaseMapboxMap {
   }
 
   /// Updates the current location with the new one
-  void updateCurrentLocation() async {
+  Future<void> updateCurrentLocation() async {
     Location newCurrentLocation = Location();
     LocationData _newLocationData = await newCurrentLocation.getLocation();
     sharedPreferences.clear();
