@@ -15,8 +15,8 @@ void placeDockMarkers(
     controller.addSymbol(
         SymbolOptions(
             geometry: LatLng(station.lat, station.lon),
-            iconSize: 0.7,
-            iconImage: "assets/icon/bicycle.png"),
+            iconSize: 0.3,
+            iconImage: "assets/images/appicon.png"),
         {
           "station": station,
         });

@@ -120,44 +120,50 @@ class _DockingStationCardState extends State<DockingStationCard> {
                     thickness: 5,
                   ),
                   if (widget.dockTemp.numberOfBikes != null)
-                    Row(children: [
-                      SizedBox(width: 30.0),
-                      Icon(
-                        Icons.event_available,
-                        color: Color(0xFF99D2A9),
-                        size: 18.0,
-                      ),
-                      Text(
-                        'Total bikes: ${widget.dockTemp.numberOfBikes.toString()}',
-                        style: const TextStyle(
-                          fontSize: 18.0,
-                          color: Color(0xFF99D2A9),
-                          fontWeight: FontWeight.w700,
-                        ),
-                      )
-                    ]),
-                  // Text(
-                  // 'Total bikes: ${widget.dockTemp.numberOfBikes.toString()}'),
-                  if (widget.dockTemp.numberOfEmptyDocks != null)
-                    // Text(
-                    // 'Available bikes: ${widget.dockTemp.numberOfEmptyDocks.toString()}'),
-
-                    Row(children: [
-                      SizedBox(width: 30.0),
-                      ImageIcon(
-                        AssetImage("assets/images/logo.png"),
-                        color: Color(0xFF99D2A9),
-                        size: 18,
-                      ),
-                      Text(
-                        'Available bikes: ${widget.dockTemp.numberOfEmptyDocks.toString()}',
-                        style: const TextStyle(
-                          fontSize: 18.0,
-                          color: Color(0xFF99D2A9),
-                          fontWeight: FontWeight.w700,
-                        ),
-                      )
-                    ]),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Column(children: [
+                          Row(
+                            children: [
+                              ImageIcon(
+                                AssetImage("assets/images/dock.png"),
+                                color: Color(0xFF99D2A9),
+                                size: 30,
+                              ),
+                              Text(
+                                'Free bikes: ${widget.dockTemp.numberOfBikes.toString()}',
+                                style: const TextStyle(
+                                  fontSize: 15.0,
+                                  color: Color(0xFF99D2A9),
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ],
+                          )
+                        ]),
+                        if (widget.dockTemp.numberOfEmptyDocks != null)
+                          Column(children: [
+                            Row(
+                              children: [
+                                ImageIcon(
+                                  AssetImage("assets/images/logo.png"),
+                                  color: Color(0xFF99D2A9),
+                                  size: 30,
+                                ),
+                                Text(
+                                  'Free spaces: ${widget.dockTemp.numberOfEmptyDocks.toString()}',
+                                  style: const TextStyle(
+                                    fontSize: 15.0,
+                                    color: Color(0xFF99D2A9),
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ],
+                            )
+                          ]),
+                      ],
+                    ),
                 ],
               ),
             ),
