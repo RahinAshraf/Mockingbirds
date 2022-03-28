@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:veloplan/helpers/schedule_helper.dart';
 import 'package:veloplan/screens/journey_planner_screen.dart';
-import 'package:veloplan/screens/navigation/map_with_route_screen.dart';
 import 'package:veloplan/screens/summary_journey_screen.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
 import 'package:veloplan/widgets/panel_widget/panel_widget_exts.dart';

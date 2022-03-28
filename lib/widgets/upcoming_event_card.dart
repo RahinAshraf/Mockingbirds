@@ -6,7 +6,7 @@ import 'package:veloplan/styles/styling.dart';
 ///
 /// This widget generates a card of an event displayed in
 /// [SchedulePage], under upcoming journeys. It takes [journey] as
-/// argument and displays its information.
+/// argument and displays its information on a card.
 class UpcomingEventCard extends StatelessWidget {
   const UpcomingEventCard({required this.journey});
 

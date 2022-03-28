@@ -29,6 +29,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
   @override
   void initState() {
+    _calendarFormat = CalendarFormat.twoWeeks;
     helper.getAllScheduleDocuments().then((data) {
       setState(() {
         upcomingJourneys = data;
@@ -37,7 +38,6 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         });
         _events = _groupByDate(upcomingJourneys);
         _selectedEvents = _events[_selectedDay] ?? [];
-        _calendarFormat = CalendarFormat.twoWeeks;
       });
     });
     super.initState();
