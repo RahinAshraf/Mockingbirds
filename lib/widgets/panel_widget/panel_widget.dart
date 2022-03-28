@@ -270,6 +270,7 @@ class PanelWidgetState extends State<PanelWidget> {
         widget.dockList[oldIndex] = newLatLng;
         widget.dockList[newIndex] = oldCordList;
       }
+      print("dockList keys => ${widget.dockList.keys}");
 
     }
   }

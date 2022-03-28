@@ -12,7 +12,7 @@ import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:rxdart/rxdart.dart';
 
 ///Class to create and display the closest docking station for every defined location of the journey.
-///  int position = 0;
+  int oldPosition = 0;
 
 class PanelExtensions {
   final locationService = LocationService();
@@ -100,9 +100,9 @@ class PanelExtensions {
                               )));
 
                   if (result != null) {
-                    print("hey position => $position");
+                    print("hey position => $position __ $oldPosition");
                     latLngMap[position] = LatLng(result.lat, result.lon);
-                    dockText.sink.add(result.name);
+                   // dockText.sink.add("sgggggs");
                   }
                 } else {
                   // Display docking error message here
