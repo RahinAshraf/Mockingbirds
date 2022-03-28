@@ -80,6 +80,14 @@ class DatabaseManager {
     await subcollection.add(value);
   }
 
+  Future<void> addSubCollectiontoSubCollectionByDocumentId(
+      String documentId,
+      String newSubollection,
+      CollectionReference<Object?> subcollection,
+      Map<String, dynamic> value) {
+    return subcollection.doc(documentId).collection(newSubollection).add(value);
+  }
+
   Future<void> signOut() async {
     FirebaseAuth.instance.signOut();
   }

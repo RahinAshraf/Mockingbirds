@@ -10,10 +10,10 @@ import 'database_manager.dart';
 
 class HistoryHelper {
   late CollectionReference _journeys;
-  DatabaseManager databaseManager = DatabaseManager();
+  DatabaseManager _databaseManager = DatabaseManager();
 
   HistoryHelper() {
-    _journeys = databaseManager.getUserSubCollectionReference("journeys");
+    _journeys = _databaseManager.getUserSubCollectionReference("journeys");
   }
 
   ///Creates a new journey entry and adds the time and docking stations
@@ -26,20 +26,31 @@ class HistoryHelper {
   }
 
   ///Adds a docking station subcollection to a given journey
+  // Future<void> addDockingStation(
+  //   DockingStation station,
+  //   documentId,
+  // ) {
+  //   return _journeys
+  //       .doc(documentId)
+  //       .collection('docking_stations')
+  //       .add({
+  //         'stationId': station.stationId,
+  //         'name': station.name,
+  //       })
+  //       .then((value) => print("docking station Added"))
+  //       .catchError((error) =>
+  //           print("Failed to add docking station to journey: $error"));
+  // }
+
   Future<void> addDockingStation(
     DockingStation station,
     documentId,
   ) {
-    return _journeys
-        .doc(documentId)
-        .collection('docking_stations')
-        .add({
-          'stationId': station.stationId,
-          'name': station.name,
-        })
-        .then((value) => print("docking station Added"))
-        .catchError((error) =>
-            print("Failed to add docking station to journey: $error"));
+    return _databaseManager.addSubCollectiontoSubCollectionByDocumentId(
+        documentId, "docking_stations", _journeys, {
+      'stationId': station.stationId,
+      'name': station.name,
+    });
   }
 
   ///Calculates the current date and adds as a field to journey
@@ -104,6 +115,6 @@ class HistoryHelper {
 
   ///Deletes a given journey
   void deleteJourneyEntry(String journeyDocumentId) {
-    databaseManager.deleteDocument(_journeys, journeyDocumentId);
+    _databaseManager.deleteDocument(_journeys, journeyDocumentId);
   }
 }

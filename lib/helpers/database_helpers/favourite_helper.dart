@@ -13,7 +13,7 @@ class FavouriteHelper {
   DatabaseManager _databaseManager = DatabaseManager();
   var _manager = dockingStationManager();
 
-  FavouriteHelper() {
+  FavouriteHelper(this._databaseManager) {
     _favourites = _favourites =
         _databaseManager.getUserSubCollectionReference("favourites");
   }

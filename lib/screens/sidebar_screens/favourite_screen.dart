@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 import 'package:veloplan/helpers/database_helpers/favourite_helper.dart';
 import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/widgets/docking_station_card.dart';
+import '../../providers/docking_station_manager.dart';
 
 ///Loads users favourited docking stations and displays them in a list view.
 ///@author Tayyibah Uddin
@@ -12,7 +14,7 @@ class Favourite extends StatefulWidget {
 
 class _FavouriteState extends State<Favourite> {
   List<DockingStation> favourites = [];
-  var helper = FavouriteHelper();
+  var helper = FavouriteHelper(DatabaseManager());
 
   @override
   void initState() {
