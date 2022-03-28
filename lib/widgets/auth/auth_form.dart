@@ -50,15 +50,6 @@ class _AuthFormState extends State<AuthForm> {
     final isValid = _formKey.currentState!.validate();
     FocusScope.of(context).unfocus();
 
-    // if (_userImageFile == null && !_isLogin) {
-    //   Scaffold.of(context).showSnackBar(
-    //     SnackBar(
-    //       content: Text('Please pick an image.'),
-    //     ),
-    //   );
-    //   return;
-    // }
-
     if (isValid) {
       _formKey.currentState!.save();
       final query = await FirebaseFirestore.instance
