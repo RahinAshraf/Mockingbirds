@@ -77,6 +77,7 @@ class _DockingStationCardState extends State<DockingStationCard> {
                       color: Colors.grey,
                     ),
               onPressed: () async {
+                print("I CLCIKED");
                 if (isFavouriteEnabled) {
                   _disableFavButton();
                   List<DockingStation> updatedFavourites =
