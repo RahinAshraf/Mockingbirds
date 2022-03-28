@@ -76,6 +76,8 @@ class DynamicWidget extends StatelessWidget {
                           },
                           controller: placeTextController,
                           decoration: InputDecoration(
+                            contentPadding:
+                                EdgeInsets.only(left: 12.0, right: 12.0),
                             labelText: "TO",
                             floatingLabelBehavior: FloatingLabelBehavior.always,
                             suffixIcon: IconButton(

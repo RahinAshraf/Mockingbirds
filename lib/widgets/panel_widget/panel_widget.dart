@@ -272,6 +272,7 @@ class PanelWidgetState extends State<PanelWidget> {
         ),
         Expanded(
           child: ListView(
+            padding: EdgeInsets.only(top: 10.0),
             controller: widget.scrollController,
             children: [
               _buildStatic(widget.fromTextEditController,
