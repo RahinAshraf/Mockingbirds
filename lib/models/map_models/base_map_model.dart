@@ -57,7 +57,7 @@ class BaseMapboxMap {
   }
 
   /// Updates the current location with the new one
-  void updateCurrentLocation() async {
+  Future<void> updateCurrentLocation() async {
     Location newCurrentLocation = Location();
     LocationData _newLocationData = await newCurrentLocation.getLocation();
     sharedPreferences.clear();
@@ -73,11 +73,15 @@ class BaseMapboxMap {
   }
 
   /// gets the new [cameraposition]
-  CameraPosition getNewCameraPosition() {
-    print("before:" + cameraPosition.target.toString());
-    updateCurrentLocation();
+  Future<CameraPosition> getNewCameraPosition() async {
+    print("before:" +
+        cameraPosition.target.toString() +
+        "----------------------------------");
+    await updateCurrentLocation();
     _updateCameraPosition();
-    print("after:" + cameraPosition.target.toString());
+    print("after:" +
+        cameraPosition.target.toString() +
+        "----------------------------------");
     return cameraPosition;
   }
 

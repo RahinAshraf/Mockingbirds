@@ -7,11 +7,8 @@ import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:veloplan/models/itinerary.dart';
 import 'package:veloplan/models/map_models/base_map_with_route_updated_model.dart';
 import 'package:scoped_model/scoped_model.dart';
-
 import '../../models/weather.dart';
-import '../../navbar.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
-
 import '../../providers/weather_manager.dart';
 import '../../widgets/weather_popup_card.dart';
 
@@ -19,7 +16,7 @@ import '../../widgets/weather_popup_card.dart';
 /// Author(s): Elisabeth Halvorsen k20077737
 
 class MapUpdatedRoutePage extends StatefulWidget {
-  late Itinerary _itinerary;
+  final Itinerary _itinerary;
   MapUpdatedRoutePage(this._itinerary);
   @override
   _MapUpdatedRoutePageState createState() =>
@@ -104,7 +101,7 @@ class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
   /// add a reroute button to navbar
   void addStopTurnByTurn(BuildContext context) {
     _baseMapWithUpdatedRoute.addWidget(Container(
-      alignment: Alignment(0.9, -0.90),
+      alignment: Alignment(0.9, 0.90),
       child: FloatingActionButton(
         heroTag: "stop_journey",
         onPressed: () {

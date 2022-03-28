@@ -105,9 +105,9 @@ class _MapPageState extends State<MapPage> {
       alignment: Alignment(0.9, 0.90),
       child: FloatingActionButton(
         heroTag: "center_to_current_loaction",
-        onPressed: () {
-          _baseMap.controller?.animateCamera(
-              CameraUpdate.newCameraPosition(_baseMap.getNewCameraPosition()));
+        onPressed: () async {
+          _baseMap.controller?.animateCamera(CameraUpdate.newCameraPosition(
+              await _baseMap.getNewCameraPosition()));
         },
         child: const Icon(Icons.my_location),
       ),
