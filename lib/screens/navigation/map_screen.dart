@@ -37,8 +37,9 @@ class _MapPageState extends State<MapPage> {
   void initState() {
     _deleteOldGroup();
     fetchWeather();
+    print("--------------locaation---------" + currentPosition.toString());
 
-    timer = Timer.periodic(Duration(minutes: 15), (Timer t) {
+    timer = Timer.periodic(Duration(seconds: 5), (Timer t) {
       _weatherManager
           .importWeatherForecast(
               currentPosition.latitude, currentPosition.longitude)

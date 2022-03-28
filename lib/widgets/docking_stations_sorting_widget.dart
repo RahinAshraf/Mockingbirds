@@ -71,9 +71,9 @@ class _DockSorter extends State<DockSorter> {
                     onChanged: (String? newFilter) {
                       setState(() {
                         selectedFilter = newFilter!;
-                        _dockingStations.build(selectedFilter);
-                        // TODO: Marija refactor to use the base map as well, maybe check up of Nicoles work and how she uses dropdown, may be incorrect
+                        buildCarousel(newFilter);
                       });
+                      
                     },
                   ),
                 ],
@@ -84,7 +84,13 @@ class _DockSorter extends State<DockSorter> {
             padding: EdgeInsets.only(bottom: 10.0),
             child: Divider(),
           ),
-          _dockingStations.build(selectedFilter),
+          buildCarousel(selectedFilter)
+          // _dockingStations.build(selectedFilter),
         ],
       );
+
+  FutureBuilder<List> buildCarousel(var newSelectedFilter) {
+    var dockSt = DockingStationCarousel(userCoordinates);
+    return dockSt.build(newSelectedFilter);
+  }
 }

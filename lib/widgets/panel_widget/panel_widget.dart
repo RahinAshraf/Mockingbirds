@@ -512,7 +512,7 @@ class PanelWidgetState extends State<PanelWidget> {
 
         //go to the summary of journey screen
         final response = await context.push(SummaryJourneyScreen(_itinerary));
-        if (response) {
+        if (response || response == null) {
           Navigator.of(context).pop(true);
         } else {
           Navigator.of(context).pop();

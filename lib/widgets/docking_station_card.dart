@@ -110,7 +110,7 @@ class _DockingStationCardState extends State<DockingStationCard> {
                   Text(
                     widget.dockTemp.name,
                     style: const TextStyle(
-                      fontSize: 25.0,
+                      fontSize: 17.0,
                       color: Color(0xFF99D2A9),
                       fontWeight: FontWeight.w700,
                     ),
@@ -132,7 +132,7 @@ class _DockingStationCardState extends State<DockingStationCard> {
                                 size: 30,
                               ),
                               Text(
-                                'Free bikes: ${widget.dockTemp.numberOfBikes.toString()}',
+                                'Bikes: ${widget.dockTemp.numberOfBikes.toString()}',
                                 style: const TextStyle(
                                   fontSize: 15.0,
                                   color: Color(0xFF99D2A9),
@@ -152,7 +152,7 @@ class _DockingStationCardState extends State<DockingStationCard> {
                                   size: 30,
                                 ),
                                 Text(
-                                  'Free spaces: ${widget.dockTemp.numberOfEmptyDocks.toString()}',
+                                  'Spaces: ${widget.dockTemp.numberOfEmptyDocks.toString()}',
                                   style: const TextStyle(
                                     fontSize: 15.0,
                                     color: Color(0xFF99D2A9),

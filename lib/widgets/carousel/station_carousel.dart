@@ -12,7 +12,7 @@ import '../../helpers/database_helpers/favourite_helper.dart';
 ///Class that loads information of docking stations into cards and builds a carousel
 ///Author(s): Tayyibah, Nicole
 class DockingStationCarousel {
-  late List<Widget> dockingStationCards;
+  late List<Widget> dockingStationCards = [];
   List<Map> carouselData = [];
   LatLng? userCoordinates;
 
@@ -118,6 +118,10 @@ class DockingStationCarousel {
     return FutureBuilder(
         future: selectFiltering(selectedFilter),
         builder: (context, snapshot) {
+          print("------------------------------------" +
+              snapshot.hasData.toString() +
+              " dfjweofnwea" +
+              snapshot.toString());
           if (snapshot.hasData) {
             return Stack(
               children: [
@@ -130,12 +134,17 @@ class DockingStationCarousel {
               ],
             );
           } else {
-            return SizedBox(
-              height: MediaQuery.of(context).size.height / 1.3,
-              child: const Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
+            print("------------------------------------" +
+                snapshot.hasData.toString() +
+                "--------------" +
+                "i was here");
+            return Text(" you dont have any favourites");
+            // return SizedBox(
+            //   height: MediaQuery.of(context).size.height / 1.3,
+            //   child: const Center(
+            //     child: CircularProgressIndicator(),
+            //   ),
+            // );
           }
         });
   }
