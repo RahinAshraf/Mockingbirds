@@ -4,13 +4,13 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/models/map_models/base_map_with_on_click_model.dart';
-import '../widgets/panel_widget/panel_widget.dart';
-import '../providers/location_service.dart';
+import 'package:veloplan/widgets/panel_widget/panel_widget.dart';
+import 'package:veloplan/providers/location_service.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:veloplan/widgets/dynamic_widget.dart';
 
-///@author - Rahin Ashraf
+/// @author - Rahin Ashraf
 class MapPlace {
   String? address;
   LatLng? coords;
@@ -18,10 +18,9 @@ class MapPlace {
 }
 
 class JourneyPlanner extends StatefulWidget {
-
   final int? numberOfCyclists;
 
-   JourneyPlanner({Key? key, this.numberOfCyclists}) : super(key: key);
+  JourneyPlanner({Key? key, this.numberOfCyclists}) : super(key: key);
 
   @override
   _JourneyPlanner createState() => _JourneyPlanner();
