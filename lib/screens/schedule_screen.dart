@@ -11,17 +11,54 @@ class SchedulePage extends StatefulWidget {
 }
 
 class _SchedulePageState extends State<SchedulePage> {
-  List<Journey> journeys = [];
   var helper = ScheduleHelper();
+  List<Journey> upcomingJourneys = [];
+  late Map<DateTime, List<Journey>> _events;
+  late List _selectedEvents;
+  DateTime _selectedDay =
+      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  DateTime _focusedDay = DateTime.now();
+
+  Map<DateTime, List<Journey>> _groupByDate(List<Journey> allJourneys) {
+    Map<DateTime, List<Journey>> mappedJourneys = {};
+    for (Journey journey in upcomingJourneys) {
+      mappedJourneys.putIfAbsent(
+          journey.date!, () => _getAllJourneysByDate(journey.date!));
+    }
+    return mappedJourneys;
+  }
+
+  List<Journey> _getAllJourneysByDate(DateTime date) {
+    List<Journey> journeys = [];
+    for (Journey journey in upcomingJourneys) {
+      if (journey.date == date) {
+        journeys.add(journey);
+      }
+    }
+    return journeys;
+  }
 
   @override
   void initState() {
     helper.getAllScheduleDocuments().then((data) {
       setState(() {
-        journeys = data;
+        upcomingJourneys = data;
+        upcomingJourneys.sort((a, b) {
+          return a.date!.compareTo(b.date!);
+        });
+        _events = _groupByDate(upcomingJourneys);
+        print('events marija ${_events}');
+        print('selectedday marija ${_selectedDay}');
+
+        _selectedEvents = _events[_selectedDay] ?? [];
       });
     });
     super.initState();
+  }
+
+  List<dynamic> _getEventsForDay(DateTime day) {
+    DateTime diena = DateTime(day.year, day.month, day.day);
+    return _events[diena] ?? [];
   }
 
   @override
@@ -36,11 +73,21 @@ class _SchedulePageState extends State<SchedulePage> {
           Padding(
             padding: const EdgeInsets.all(15.0),
             child: TableCalendar(
-              calendarFormat: CalendarFormat.week,
-              firstDay: DateTime.utc(2022, 01, 01),
+              eventLoader: _getEventsForDay,
+              calendarFormat: CalendarFormat.month,
+              firstDay: DateTime.now(),
               lastDay: DateTime.utc(2023, 01, 01),
-              focusedDay: DateTime.now(),
+              focusedDay: _focusedDay,
+              selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
               calendarStyle: scheduleScreenCalendarStyle,
+              onDaySelected: (selectedDay, focusedDay) {
+                setState(() {
+                  _selectedDay = selectedDay;
+                  _focusedDay = focusedDay;
+                  _selectedEvents = _getEventsForDay(_focusedDay);
+                  print("MARIJA ${_selectedEvents}");
+                });
+              },
             ),
           ),
           const Padding(
@@ -49,8 +96,8 @@ class _SchedulePageState extends State<SchedulePage> {
           ),
           Column(
             children: [
-              for (var item in journeys)
-                TimelineItem(item, journeys.indexOf(item))
+              for (var item in _selectedEvents)
+                TimelineItem(item, _selectedEvents.indexOf(item))
             ],
           ),
         ],
