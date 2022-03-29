@@ -1,8 +1,11 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:veloplan/helpers/database_helpers/statistics_helper.dart';
 import 'package:veloplan/helpers/navigation_helpers/map_drawings.dart';
 import 'package:veloplan/helpers/navigation_helpers/navigation_conversions_helpers.dart';
 import 'package:veloplan/helpers/navigation_helpers/navigation_helpers.dart';
@@ -21,6 +24,7 @@ import '../docking_station.dart';
 
 /// Map screen focused on a user's live location
 /// Author(s): Elisabeth Halvorsen k20077737
+/// Contributor(s): Eduard Ragea k20067643
 
 class MapWithRouteUpdated extends BaseMapboxRouteMap {
   late List<LatLng> _journey;
@@ -38,6 +42,8 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
   num distance = 0;
   num duration = 0;
   String dockName = "";
+
+  final userID = FirebaseAuth.instance.currentUser!.uid;
 
   List<dynamic> _journeyPoints = [];
   int _currentStation = 0;
@@ -85,17 +91,24 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
   /// sets all our timers
   void _setTimers() {
     updateLocationAndCameraTimer();
+    createStatisticsTimer();
     updateRouteTimer();
     updateDockTimer();
   }
 
   /// Initialize periodic timer for updating location and camera position
+  /// Calculate and store the distance travelled between timer steps on the device
   void updateLocationAndCameraTimer() {
-    timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
+    timer = Timer.periodic(Duration(seconds: 10), (Timer t) async {
       if (isAtGoal) {
         t.cancel();
-      }
-      updateCurrentLocation();
+      }      
+      final oldLocation = getLatLngFromSharedPrefs();
+      await updateCurrentLocation();
+      final currentLocation = getLatLngFromSharedPrefs();
+      final distanceTravelled = calculateDistance(oldLocation, currentLocation);
+      sharedPreferences.setDouble(
+          'distance', distanceTravelled);
       _updateCameraPosition();
       _updateLiveCameraPosition();
     });
@@ -109,6 +122,13 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
       }
       updateRoute();
     });
+  }
+
+  /// Create a timer just for constantly updating the distance travelled to server.
+  void createStatisticsTimer() {
+    timer = Timer.periodic(Duration(minutes: 1), (Timer t) async { 
+      await updateDistanceOnServer(userID);
+     });
   }
 
   /// Initialize periodic timer to check if it's necessary to redirect to another docking station
