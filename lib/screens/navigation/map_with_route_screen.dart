@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:veloplan/helpers/navigation_helpers/navigation_helpers.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:veloplan/models/itinerary.dart';
 import '../../models/map_models/base_map_with_route_model.dart';
@@ -39,7 +40,10 @@ class _MapRoutePageState extends State<MapRoutePage> {
       _baseMapWithRoute = BaseMapboxRouteMap(_itinerary, model);
       addPositionZoom();
       addGoBackButton();
-      startTurnByTurn(context, _itinerary);
+      if (calculateDistance(currentLatLng, _itinerary.myDestinations![0]) <
+          0.02) {
+        startTurnByTurn(context, _itinerary);
+      }
 
       return SafeArea(child: Stack(children: _baseMapWithRoute.getWidgets()));
     }));

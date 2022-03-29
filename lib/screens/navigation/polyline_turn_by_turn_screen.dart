@@ -37,7 +37,6 @@ class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
   Widget build(BuildContext context) {
     return Scaffold(body: ScopedModelDescendant<MapModel>(
         builder: (BuildContext context, Widget? child, MapModel model) {
-      //jounrey to list<docks>
       _baseMapWithUpdatedRoute = MapWithRouteUpdated(
         model,
         context,
@@ -60,9 +59,6 @@ class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
         heroTag: "center_to_current_loaction",
         onPressed: () {
           _baseMapWithUpdatedRoute.recenter = true;
-          // _baseMapWithUpdatedRoute.controller?.animateCamera(
-          //     CameraUpdate.newCameraPosition(
-          //         _baseMapWithUpdatedRoute.cameraPosition));
         },
         child: const Icon(Icons.my_location),
       ),

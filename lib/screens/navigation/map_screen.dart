@@ -63,7 +63,6 @@ class _MapPageState extends State<MapPage> {
   }
 
   void addPositionZoom() async {
-    // CameraUpdate();
     _baseMap.addWidget(Container(
       alignment: Alignment(0.9, 0.90),
       child: FloatingActionButton(

@@ -30,6 +30,7 @@ class BaseMapboxMap {
     cameraPosition = CameraPosition(target: currentPosition, zoom: 15);
     setMap();
     addWidget(map);
+    // addDockingStationCard();
   }
 
   /// Adds a [widget] to [_widgets]
@@ -72,14 +73,8 @@ class BaseMapboxMap {
 
   /// gets the new [cameraposition]
   Future<CameraPosition> getNewCameraPosition() async {
-    // print("before:" +
-    //     cameraPosition.target.toString() +
-    //     "----------------------------------");
     await updateCurrentLocation();
     _updateCameraPosition();
-    // print("after:" +
-    //     cameraPosition.target.toString() +
-    //     "----------------------------------");
     return cameraPosition;
   }
 
@@ -123,4 +118,11 @@ class BaseMapboxMap {
   MapboxMap getMap() {
     return map;
   }
+
+  // void addDockingStationCard() {
+  //   addWidget(Align(
+  //     alignment: Alignment.bottomCenter,
+  //     child: Container(height: 200, child: DockStation(key: dockingStationKey)),
+  //   ));
+  // }
 }
