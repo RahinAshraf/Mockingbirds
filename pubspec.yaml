@@ -28,7 +28,6 @@ dependencies:
   location: ^4.3.0
   geocode: ^1.0.1
   search_map_location: ^0.0.5
-  flutter_google_places: ^0.3.0
   flutter_map: ^0.14.0
   latlong2: ^0.8.1
   geolocator: ^8.1.1
@@ -58,7 +57,9 @@ dependencies:
 
 dev_dependencies:
   code_builder: ^4.0.0
-  build_runner: ^2.0.0
+  firebase_auth_mocks: ^0.8.2
+  fake_cloud_firestore:	1.2.1
+  build_runner: ^2.1.7
   mockito: ^5.1.0
   flutter_test:
     sdk: flutter

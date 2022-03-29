@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:veloplan/helpers/database_manager.dart';
 import 'package:veloplan/navbar.dart';
@@ -134,7 +136,7 @@ class _VerifyEmailSCreenState extends State<VerifyEmailScreen> {
                             'Cancel',
                             style: TextStyle(fontSize: 24),
                           ),
-                          onPressed: () => _databaseManager.signOut(),
+                          onPressed: () =>  FirebaseAuth.instance.signOut(),
                         ),
                       ],
                     ),

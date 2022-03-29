@@ -10,24 +10,40 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:veloplan/helpers/database_manager.dart';
 import 'package:veloplan/screens/summary_journey_screen.dart';
-import 'create_group_test.mocks.dart';
-@GenerateMocks([DatabaseManager, User,QuerySnapshot<Map<String, dynamic>>])
+import 'leave_unit_test.mocks.dart';
+@GenerateMocks([
+  DatabaseManager,
+  User,
+  QuerySnapshot,
+  DocumentSnapshot
+], customMocks: [
+  MockSpec<QueryDocumentSnapshot>(unsupportedMembers:  {#data}),
+])
 void main(){
   var mockDBManagager = MockDatabaseManager();
   var points = [LatLng(20, 30),LatLng(10, 10)];
   var user = MockUser();
   QuerySnapshot<Map<String, dynamic>> groupResponse =MockQuerySnapshot();
+  QuerySnapshot groupDocs = MockQuerySnapshot();
   SummaryJourneyScreenState _summaryJourneyScreenState =  SummaryJourneyScreenState(mockDBManagager, points);
-  test('Creating group works', () async {
-    String testID = "testingID";
-    when(user.uid).thenReturn(testID);
+
+  test('Leave group works', () async {
+    String userID = "userID";
+    String groupID = "groupID";
+    when(user.uid).thenReturn(userID);
     when(mockDBManagager.getCurrentUser()).thenReturn(user);
-    when(mockDBManagager.getByEquality('group', 'code', any)).thenAnswer((_) async => groupResponse);
+    List<QueryDocumentSnapshot<Map<String,dynamic>>> temp = [];
+
+
+
+
+    when(mockDBManagager.getByEquality('group', 'code', groupID)).thenAnswer((_) async => groupResponse);
+    when(groupResponse.docs).thenReturn(temp);
     when(groupResponse.size).thenReturn(0);
-   await _summaryJourneyScreenState.createGroup();
+    await _summaryJourneyScreenState.createGroup();
     var Geopoints = [GeoPoint(20, 30),GeoPoint(10, 10)];
     verify(mockDBManagager.addToCollection('group', any)).called(1);
-   verify(mockDBManagager.setByKey('users', testID, any, any)).called(1);
+    verify(mockDBManagager.setByKey('users', userID, any, any)).called(1);
 
   });
 

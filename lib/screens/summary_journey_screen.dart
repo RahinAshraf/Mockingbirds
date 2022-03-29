@@ -142,19 +142,18 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
     }
   }
 
-  _leaveGroup() async {
+@visibleForTesting
+  leaveGroup() async {
     try {
       var temp = await _databaseManager.getByEquality('group', 'code', groupID);
       var userID = _databaseManager.getCurrentUser()?.uid;
       var ownerID;
       List list=[];
-      bool wasDeleted = false;
       for (var element in temp.docs) {
         ownerID = element.data()['ownerID'];
        list  = element.data()['memberList'];
         list.removeWhere((element) => (element == userID));
         if (list.isEmpty) {
-          wasDeleted = true;
           element.reference.delete();
         } else {
           if(ownerID == userID){
@@ -414,7 +413,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
                     child: const Text('LEAVE GROUP',
                         style: TextStyle(color: Colors.white)),
                     onPressed: () {
-                      _leaveGroup();
+                      leaveGroup();
                     },
                   )),
             Container(

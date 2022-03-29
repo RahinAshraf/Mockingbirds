@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 // import '../helpers/zoom_helper.dart';
@@ -103,13 +104,16 @@ class MyHomePageState extends State<MapPage2> {
         'group', 'code', user.data()!['group']);
     group.docs.forEach((element) {
       Timestamp timestamp = element.data()['createdAt'];
+      var memberList = element.data()['memberList'];
       if (DateTime.now().difference(timestamp.toDate()) > Duration(days: 1)) {
         element.reference.delete();
-        _databaseManager.setByKey(
-            'users',
-            _databaseManager.getCurrentUser()!.uid,
-            {'group': null},
-            SetOptions(merge: true));
+        for(String member in memberList) {
+          _databaseManager.setByKey(
+              'users',
+              member,
+              {'group': null},
+              SetOptions(merge: true));
+        }
       }
     });
   }

@@ -86,11 +86,6 @@ class MockDatabaseManager extends _i1.Mock implements _i4.DatabaseManager {
           Invocation.method(#addToCollection, [collection, value]),
           returnValue: Future<void>.value(),
           returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
-  @override
-  _i5.Future<void> signOut() =>
-      (super.noSuchMethod(Invocation.method(#signOut, []),
-          returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
 }
 
 /// A class which mocks [User].

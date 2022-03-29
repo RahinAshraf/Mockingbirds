@@ -1,11 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class DatabaseManager {
-  DatabaseManager();
+  static late FirebaseFirestore Firebase;
+  static late FirebaseAuth _auth;
+  DatabaseManager(){
+  }
 
   User? getCurrentUser() {
-    return FirebaseAuth.instance.currentUser;
+    return _auth.currentUser;
   }
 
   Future<QuerySnapshot<Map<String, dynamic>>> getByEquality(
@@ -43,10 +47,7 @@ class DatabaseManager {
 
   Future<void> addToCollection(
       String collection, Map<String, dynamic> value) async {
-    await FirebaseFirestore.instance.collection(collection).add(value);
+    await Firebase.collection(collection).add(value);
   }
 
-  Future<void> signOut() async {
-    FirebaseAuth.instance.signOut();
-  }
 }
