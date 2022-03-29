@@ -1,3 +1,4 @@
+import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:veloplan/helpers/database_helpers/schedule_helper.dart';
@@ -11,19 +12,22 @@ class ScheduleScreen extends StatefulWidget {
 }
 
 class _ScheduleScreenState extends State<ScheduleScreen> {
-  var helper = ScheduleHelper();
-  late List<Itinerary> upcomingJourneys = [];
+  ScheduleHelper helper = ScheduleHelper();
   CalendarFormat _calendarFormat = CalendarFormat.twoWeeks;
-  DateTime _selectedDay =
-      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-  DateTime _focusedDay =
-      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+
+  late List<Itinerary> upcomingJourneys = [];
+  late Map<DateTime, List<Itinerary>> _events = {};
+  late List _selectedEvents = [];
+  DateTime _selectedDay = DateUtils.dateOnly(DateTime.now());
+  DateTime _focusedDay = DateUtils.dateOnly(DateTime.now());
 
   @override
   initState() {
     helper.getAllScheduleDocuments().then((data) {
       setState(() {
         upcomingJourneys = data;
+        _events = _groupByDate(upcomingJourneys);
+        _selectedEvents = _events[_selectedDay] ?? [];
       });
     });
     super.initState();
@@ -41,6 +45,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           Padding(
             padding: const EdgeInsets.all(15.0),
             child: TableCalendar(
+              eventLoader: _getEventsForDay,
               calendarStyle: scheduleScreenCalendarStyle,
               calendarFormat: _calendarFormat,
               onFormatChanged: (format) {
@@ -48,8 +53,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                   _calendarFormat = format;
                 });
               },
-              firstDay: DateTime(DateTime.now().year, DateTime.now().month,
-                  DateTime.now().day),
+              firstDay: DateUtils.dateOnly(DateTime.now()),
               lastDay: DateTime(DateTime.now().year + 1, DateTime.now().month,
                   DateTime.now().day),
               focusedDay: _focusedDay,
@@ -59,6 +63,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                   setState(() {
                     _focusedDay = focusedDay;
                     _selectedDay = selectedDay;
+                    _selectedEvents = _getEventsForDay(selectedDay);
                   });
                 }
               },
@@ -72,9 +77,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             padding: const EdgeInsets.symmetric(vertical: 15.0),
             child: Column(
               children: [
-                for (var journey in upcomingJourneys)
+                for (var event in _selectedEvents)
                   UpcomingEventCard(
-                    event: journey,
+                    event: event,
                   )
               ],
             ),
@@ -82,5 +87,31 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         ],
       ),
     );
+  }
+
+  /// Gets all the events happening on a specified [date].
+  List<Itinerary> _getEventsForDay(DateTime date) {
+    return _events[DateUtils.dateOnly(date)] ?? [];
+  }
+
+  /// Groups [journeys] based on their date.
+  Map<DateTime, List<Itinerary>> _groupByDate(List<Itinerary> journeys) {
+    Map<DateTime, List<Itinerary>> mappedJourneys = {};
+    for (Itinerary journey in journeys) {
+      mappedJourneys.putIfAbsent(
+          journey.date!, () => _getAllJourneysByDate(journey.date!));
+    }
+    return mappedJourneys;
+  }
+
+  /// Retrieves all journeys for a specific [date].
+  List<Itinerary> _getAllJourneysByDate(DateTime date) {
+    List<Itinerary> journeys = [];
+    for (Itinerary journey in upcomingJourneys) {
+      if (journey.date == date) {
+        journeys.add(journey);
+      }
+    }
+    return journeys;
   }
 }
