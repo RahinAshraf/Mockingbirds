@@ -27,24 +27,11 @@ class MapRoutePage extends StatefulWidget {
 class _MapRoutePageState extends State<MapRoutePage> {
   LatLng currentLatLng = getLatLngFromSharedPrefs();
   late BaseMapboxRouteMap _baseMapWithRoute;
-  late List<LatLng> _journey;
   final Itinerary _itinerary;
-  // Weather weather = Weather.defaultvalue();
-  // String weatherIcon = "10n";
-  // WeatherManager _weatherManager = WeatherManager();
-
   _MapRoutePageState(this._itinerary) {}
 
   @override
   void initState() {
-    // _weatherManager
-    //     .importWeatherForecast(currentLatLng.latitude, currentLatLng.longitude)
-    //     .then((value) {
-    //   setState(() {
-    //     this.weather = _weatherManager.all_weather_data;
-    //     this.weatherIcon = _weatherManager.all_weather_data.current_icon;
-    //   });
-    // });
     super.initState();
   }
 
@@ -55,7 +42,6 @@ class _MapRoutePageState extends State<MapRoutePage> {
       _baseMapWithRoute = BaseMapboxRouteMap(_itinerary, model);
       addPositionZoom();
       addGoBackButton();
-      // addWeather(context, weather, weatherIcon);
       startTurnByTurn(context, _itinerary);
 
       return SafeArea(child: Stack(children: _baseMapWithRoute.getWidgets()));
@@ -96,12 +82,6 @@ class _MapRoutePageState extends State<MapRoutePage> {
       ),
     ));
   }
-
-  // /// Adds the weather widgetto the map
-  // void addWeather(context, weather, weatherIcon) {
-  //   _baseMapWithRoute
-  //       .addWidget(buildWeatherIcon(context, weather, weatherIcon));
-  // }
 
   /// add a reroute button to navbar
   void addGoBackButton() {

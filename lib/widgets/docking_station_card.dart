@@ -16,12 +16,6 @@ class DockingStationCard extends StatefulWidget {
 //I have commented this for now but if you want to make a card by just passing a station:
   DockingStationCard.station(DockingStation station) {
     this.dockTemp = station;
-    // DockingStationCard.station(DockingStation station) {
-    // iD = station.stationId;
-    // stationName = station.name;
-    // numberOfBikes = station.numberOfBikes;
-    // numberOfEmptyDocks = station.numberOfEmptyDocks;
-    // //print(this.iD);
   }
 
   @override
@@ -34,8 +28,6 @@ class _DockingStationCardState extends State<DockingStationCard> {
   bool _isFavouriteButtonEnabled = true;
   bool _isFavourited = false;
   var _manager = dockingStationManager();
-  // bool isFavouriteEnabled = true;
-  // bool isVisible = true;
 
   @override
   void initState() {
@@ -73,35 +65,6 @@ class _DockingStationCardState extends State<DockingStationCard> {
           children: [
             buildFaveButton(),
             const SizedBox(width: 10),
-            // IconButton(
-            //   icon: _helper.isFavouriteStation(widget.iD, _favourites)
-            //       ? const Icon(
-            //           Icons.favorite,
-            //           color: Colors.red,
-            //         )
-            //       : const Icon(
-            //           Icons.favorite,
-            //           color: Colors.grey,
-            //         ),
-            //   onPressed: () async {
-            //     if (isFavouriteEnabled) {
-            //       _disableFavButton();
-            //       List<DockingStation> updatedFavourites =
-            //           await FavouriteHelper.getUserFavourites();
-            //       _helper.toggleFavourite(
-            //         widget.iD,
-            //         widget.stationName,
-            //         widget.numberOfBikes,
-            //         widget.numberOfEmptyDocks,
-            //       );
-
-            //       setState(() {
-            //         _favourites = updatedFavourites;
-            //       });
-            //     }
-            //   },
-            // ),
-            // const SizedBox(width: 30),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,

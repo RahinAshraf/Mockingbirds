@@ -7,10 +7,7 @@ import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:veloplan/models/itinerary.dart';
 import 'package:veloplan/models/map_models/base_map_with_route_updated_model.dart';
 import 'package:scoped_model/scoped_model.dart';
-// import '../../models/weather.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
-// import '../../providers/weather_manager.dart';
-// import '../../widgets/weather_popup_card.dart';
 
 /// Map screen focused on a user's live location
 /// Author(s): Elisabeth Halvorsen k20077737
@@ -29,9 +26,6 @@ class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
   Timer? timer;
   bool finished = false;
   final Itinerary _itinerary;
-  // Weather weather = Weather.defaultvalue();
-  // String weatherIcon = "10n";
-  // WeatherManager _weatherManager = WeatherManager();
 
   @override
   void initState() {
@@ -45,15 +39,6 @@ class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
       if (_baseMapWithUpdatedRoute.isAtGoal) {
         t.cancel();
       }
-      // _weatherManager
-      //     .importWeatherForecast(
-      //         currentPosition.latitude, currentPosition.longitude)
-      //     .then((value) {
-      //   setState(() {
-      //     this.weather = _weatherManager.all_weather_data;
-      //     this.weatherIcon = _weatherManager.all_weather_data.current_icon;
-      //   });
-      // });
     });
   }
 
@@ -119,10 +104,4 @@ class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
       ),
     ));
   }
-
-  /// Adds the weather widget to the map
-  // void addWeather(context, weather, weatherIcon) {
-  //   _baseMapWithUpdatedRoute
-  //       .addWidget(buildWeatherIcon(context, weather, weatherIcon));
-  // }
 }
