@@ -88,7 +88,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                           height: MediaQuery.of(context).size.height / 3.5),
                       SizedBox(height: 15.0),
                       Text(
-                        'No journeys planned for today.',
+                        'No journeys planned for this day.',
                         style: authTextStyle,
                       ),
                     ],
