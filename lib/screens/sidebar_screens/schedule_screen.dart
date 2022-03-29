@@ -73,17 +73,31 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             padding: EdgeInsets.only(left: 15.0),
             child: Text('Upcoming journeys', style: upcomingJourneysTextStyle),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 15.0),
-            child: Column(
-              children: [
-                for (var event in _selectedEvents)
-                  UpcomingEventCard(
-                    event: event,
-                  )
-              ],
-            ),
-          ),
+          (!_selectedEvents.isEmpty)
+              ? Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 15.0),
+                  child: Column(
+                    children: [
+                      for (var event in _selectedEvents)
+                        UpcomingEventCard(
+                          event: event,
+                        )
+                    ],
+                  ),
+                )
+              : Container(
+                  child: Column(
+                    children: [
+                      Image.asset('assets/images/bike.png',
+                          height: MediaQuery.of(context).size.height / 3.5),
+                      SizedBox(height: 15.0),
+                      Text(
+                        'No journeys planned for today.',
+                        style: authTextStyle,
+                      ),
+                    ],
+                  ),
+                ),
         ],
       ),
     );
