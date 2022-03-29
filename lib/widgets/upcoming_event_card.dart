@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:veloplan/models/itinerary.dart';
+import 'package:veloplan/popups.dart';
 import 'package:veloplan/screens/summary_journey_screen.dart';
+import 'package:veloplan/styles/colors.dart';
 import 'package:veloplan/styles/styling.dart';
 
 /// Generates an event card for schedule screen.
@@ -9,9 +11,10 @@ import 'package:veloplan/styles/styling.dart';
 /// [ScheduleScreen], under upcoming journeys. It takes [event] as an
 /// argument and displays its information on a card.
 class UpcomingEventCard extends StatelessWidget {
-  UpcomingEventCard({required this.event});
+  UpcomingEventCard({required this.event, required this.onClick});
 
   final Itinerary event;
+  final VoidCallback onClick;
 
   @override
   Widget build(BuildContext context) {
@@ -20,47 +23,59 @@ class UpcomingEventCard extends StatelessWidget {
       margin: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(15.0))),
-      child: Padding(
-        padding: const EdgeInsets.all(30.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Trip title', style: eventCardTitleTextStyle),
-            SizedBox(height: 25.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    TextButton(
-                      style: TextButton.styleFrom(
-                        textStyle: eventCardDetailsTextStyle,
+      child: InkWell(
+        borderRadius: BorderRadius.all(Radius.circular(15.0)),
+        splashColor: CustomColors.green.withAlpha(30),
+        overlayColor: MaterialStateProperty.all(Colors.green.withAlpha(30)),
+        onTap: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+                builder: (context) => SummaryJourneyScreen(event)),
+          );
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(25.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Trip title', style: eventCardTitleTextStyle),
+              SizedBox(height: 20.0),
+              Text("Tap on the card to view journey itinerary.",
+                  style: eventCardDetailsTextStyle),
+              SizedBox(height: 20.0),
+              Row(
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        "${event.numberOfCyclists}",
+                        style: eventCardDetailsTextStyle,
                       ),
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  SummaryJourneyScreen(event)),
-                        );
-                      },
-                      child: const Text("View journey itinerary"),
-                    ),
-                    const Icon(Icons.arrow_forward_ios_rounded,
-                        color: Colors.black54, size: 15.0),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Text(
-                      "${event.numberOfCyclists}",
-                      style: eventCardDetailsTextStyle,
-                    ),
-                    const Icon(Icons.person, color: Colors.black54, size: 15.0),
-                  ],
-                ),
-              ],
-            ),
-          ],
+                      const Icon(Icons.person,
+                          color: Colors.black54, size: 15.0),
+                    ],
+                  ),
+                  Spacer(),
+                  IconButton(
+                    icon: Icon(Icons.cancel_outlined, size: 15.0),
+                    splashRadius: 16.0,
+                    onPressed: () {
+                      var popup = Popups();
+                      showDialog(
+                          useRootNavigator: false,
+                          context: context,
+                          builder: (BuildContext context) =>
+                              popup.buildPopupDialogDeleteScheduledJourney(
+                                  context, onClick));
+                    },
+                    constraints: BoxConstraints(),
+                    padding: EdgeInsets.all(0),
+                    color: Colors.black54,
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

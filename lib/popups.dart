@@ -160,4 +160,21 @@ class Popups {
         children: children,
         type: AlertType.warning);
   }
+
+  PopupWidget buildPopupDialogDeleteScheduledJourney(
+      BuildContext context, onClick) {
+    List<PopupButtonWidget> children = [
+      PopupButtonWidget(text: "Delete", onPressed: onClick),
+      PopupButtonWidget(
+          text: "Cancel",
+          onPressed: () {
+            Navigator.pop(context);
+          }),
+    ];
+    return PopupWidget(
+        title: "Confirmation required",
+        text: "Are you sure you want to delete this trip?",
+        children: children,
+        type: AlertType.question);
+  }
 }

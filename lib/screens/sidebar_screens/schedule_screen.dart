@@ -1,6 +1,7 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 import 'package:veloplan/helpers/database_helpers/schedule_helper.dart';
 import 'package:veloplan/models/itinerary.dart';
 import 'package:veloplan/styles/styling.dart';
@@ -13,8 +14,8 @@ class ScheduleScreen extends StatefulWidget {
 
 class _ScheduleScreenState extends State<ScheduleScreen> {
   ScheduleHelper helper = ScheduleHelper();
+  DatabaseManager _databaseManager = DatabaseManager();
   CalendarFormat _calendarFormat = CalendarFormat.twoWeeks;
-
   late List<Itinerary> upcomingJourneys = [];
   late Map<DateTime, List<Itinerary>> _events = {};
   late List _selectedEvents = [];
@@ -23,6 +24,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
   @override
   initState() {
+    _deleteOldScheduledTrips();
     helper.getAllScheduleDocuments().then((data) {
       setState(() {
         upcomingJourneys = data;
@@ -81,6 +83,22 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                       for (var event in _selectedEvents)
                         UpcomingEventCard(
                           event: event,
+                          onClick: () {
+                            var _schedulesReference = _databaseManager
+                                .getUserSubCollectionReference('schedules');
+                            _databaseManager.deleteDocument(
+                                _schedulesReference, event.journeyDocumentId!);
+                            setState(() {
+                              var journeyToRemove = upcomingJourneys.where(
+                                  (journey) =>
+                                      journey.journeyDocumentId ==
+                                      event.journeyDocumentId);
+                              upcomingJourneys.remove(journeyToRemove);
+                              _events = _groupByDate(upcomingJourneys);
+                              _selectedEvents = _events[_selectedDay] ?? [];
+                            });
+                            Navigator.pop(context);
+                          },
                         )
                     ],
                   ),
@@ -127,5 +145,17 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       }
     }
     return journeys;
+  }
+
+  /// Checks for and deletes user's expired trips from the database.
+  Future<void> _deleteOldScheduledTrips() async {
+    var scheduledJourneys =
+        await _databaseManager.getUserSubcollection('schedules');
+    scheduledJourneys.docs.forEach((element) {
+      DateTime date = element.get('date').toDate();
+      if (DateUtils.dateOnly(DateTime.now()).isAfter(date)) {
+        element.reference.delete();
+      }
+    });
   }
 }
