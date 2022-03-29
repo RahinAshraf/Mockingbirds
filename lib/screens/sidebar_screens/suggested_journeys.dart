@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:timeline_tile/timeline_tile.dart';
+import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:veloplan/screens/summary_journey_screen.dart';
-import '../models/itinerary.dart';
+import '../../models/itinerary.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
-import '../styles/styling.dart';
+import '../../styles/styling.dart';
 
 /// Suggester itineraries that contain biggest sights in London for under 30 min.
 /// from: https://londonblog.tfl.gov.uk/2019/11/05/santander-cycles-sightseeing/?intcmp=60245
+/// attributions to animators <a href="https://www.vecteezy.com/free-vector/london">London Vectors by Vecteezy</a>
+/// <a href="https://www.vecteezy.com/free-vector/london-bus">London Bus Vectors by Vecteezy</a>
 ///Author: Nicole
 ///TODO: Nicole to clean
 class SuggestedItinerary extends StatefulWidget {
@@ -16,11 +19,12 @@ class SuggestedItinerary extends StatefulWidget {
 
 class _SuggestedItineraryState extends State<SuggestedItinerary> {
   late Itinerary _hydeLoop;
+  dockingStationManager _manager = dockingStationManager();
   late Itinerary _royalLoop;
+  late Itinerary _thamesLoop;
   List<LatLng> _hydeParkLoopCoord = [
-    LatLng(51.5031, 0.1526),
+    LatLng(51.5031, -0.1526),
     LatLng(51.50883, -0.17166),
-    LatLng(51.5046, 51.5046),
     LatLng(51.5045099, -0.152706),
     LatLng(51.5121347, -0.1686248),
     LatLng(51.5066092, -0.1745202),
@@ -34,12 +38,55 @@ class _SuggestedItineraryState extends State<SuggestedItinerary> {
     LatLng(51.5057222, -0.1330674),
     LatLng(51.5018847, -0.1428112),
   ];
+  List<LatLng> _thamesLoopCoord = [
+    LatLng(51.5058442, -0.1647927),
+    LatLng(51.5025958, -0.1530432),
+    LatLng(51.501364, -0.14189),
+    LatLng(51.511853, -0.1986145),
+    LatLng(51.5021618, -0.1315459),
+    LatLng(51.5057222, -0.1330674),
+    LatLng(51.5018847, -0.1428112),
+  ];
+  @override
+  void initState() {
+    //asign itineraries
+    List<Itinerary> itineraries = [];
 
-  _SuggestedItineraryState() {
     this._hydeLoop =
         new Itinerary.suggestedTrip(_hydeParkLoopCoord, "Hyde Park Loop");
+
+    itineraries.add(_hydeLoop);
     this._royalLoop =
         new Itinerary.suggestedTrip(_royalLoopCoord, "Royal Loop");
+    itineraries.add(_royalLoop);
+
+    this._thamesLoop =
+        new Itinerary.suggestedTrip(_thamesLoopCoord, "Thames Loop");
+    itineraries.add(_thamesLoop);
+
+    //method that makes an api call wiroyalLopth dock id and updates the info about the dock
+    for (var itinerary in itineraries) {
+      for (int i = 0; i < itinerary.myDestinations!.length; i++) {
+        print("------------>>>>>>>>>>>>>>>>>-------" +
+            itinerary.myDestinations![i].toString() +
+            "---------<<<<<<<<<--------");
+        // for (var coord in _royalLoopCoord) {
+        _manager
+            .importStationsByRadius(800, itinerary.myDestinations![i])
+            .then((value) {
+          if (mounted)
+            setState(() {
+              itinerary.docks![i].assign(
+                  _manager.getClosestDockWithAvailableSpaceHandler(
+                      itinerary.myDestinations![i], 1, value));
+              print("suggested trips ->>>>>>>>>" +
+                  itinerary.docks![i].name +
+                  "   <<<<<<<<<<<<<<<<<");
+            });
+        });
+      }
+      super.initState();
+    }
   }
 
   @override
@@ -93,15 +140,15 @@ class TimelineItem extends StatelessWidget {
       indicatorStyle: timelineTileIndicatorStyle,
       alignment: TimelineAlign.manual,
       lineXY: 0.10,
-      endChild: UpcomingEventCard(
-          title: journey.journeyDocumentId!, journey: journey),
+      endChild:
+          ItineraryCard(title: journey.journeyDocumentId!, journey: journey),
     );
   }
 }
 
 /// Generates an event card for schedule screen.
-class UpcomingEventCard extends StatelessWidget {
-  const UpcomingEventCard({required this.title, required this.journey});
+class ItineraryCard extends StatelessWidget {
+  const ItineraryCard({required this.title, required this.journey});
 
   final String title;
   final Itinerary journey;
@@ -125,6 +172,24 @@ class UpcomingEventCard extends StatelessWidget {
             ListTile(
               title: Text(title, style: eventCardTitleTextStyle),
             ),
+            if (this.title == "Royal Loop")
+              SizedBox(
+                  height: 200.0,
+                  width: 200.0,
+                  child:
+                      Center(child: Image.asset('assets/images/bigBen.png'))),
+            if (this.title == "Hyde Park Loop")
+              SizedBox(
+                  height: 200.0,
+                  width: 200.0,
+                  child:
+                      Center(child: Image.asset('assets/images/hydePark.png'))),
+            if (this.title == "Thames Loop")
+              SizedBox(
+                  height: 200.0,
+                  width: 200.0,
+                  child: Center(
+                      child: Image.asset('assets/images/westminster.png'))),
             Row(
               children: [
                 const SizedBox(width: 15.0),
@@ -134,10 +199,10 @@ class UpcomingEventCard extends StatelessWidget {
                   ),
                   onPressed: () {
                     // TODO: change to call the summary of journey
-                    // Navigator.of(context).push(MaterialPageRoute(
-                    //     builder: (context) => SummaryJourneyScreen(journey)));
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => SummaryJourneyScreen(journey)));
                   },
-                  child: const Text("View journey itinerary"),
+                  child: const Text("View itinerary"),
                 ),
                 const Icon(
                   Icons.arrow_forward_ios_rounded,
