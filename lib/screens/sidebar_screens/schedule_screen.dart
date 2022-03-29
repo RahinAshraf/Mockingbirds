@@ -4,6 +4,7 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 import 'package:veloplan/helpers/database_helpers/schedule_helper.dart';
 import 'package:veloplan/models/itinerary.dart';
+import 'package:veloplan/splash_screen.dart';
 import 'package:veloplan/styles/styling.dart';
 import 'package:veloplan/widgets/upcoming_event_card.dart';
 
@@ -24,7 +25,6 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
   @override
   initState() {
-    _deleteOldScheduledTrips();
     helper.getAllScheduleDocuments().then((data) {
       setState(() {
         upcomingJourneys = data;
@@ -37,91 +37,110 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: whiteReplacement,
-      appBar: AppBar(
-        title: const Text('Schedule'),
-      ),
-      body: ListView(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: TableCalendar(
-              eventLoader: _getEventsForDay,
-              calendarStyle: scheduleScreenCalendarStyle,
-              calendarFormat: _calendarFormat,
-              onFormatChanged: (format) {
-                setState(() {
-                  _calendarFormat = format;
-                });
-              },
-              firstDay: DateUtils.dateOnly(DateTime.now()),
-              lastDay: DateTime(DateTime.now().year + 1, DateTime.now().month,
-                  DateTime.now().day),
-              focusedDay: _focusedDay,
-              selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-              onDaySelected: (selectedDay, focusedDay) {
-                if (!isSameDay(_selectedDay, selectedDay)) {
-                  setState(() {
-                    _focusedDay = focusedDay;
-                    _selectedDay = selectedDay;
-                    _selectedEvents = _getEventsForDay(selectedDay);
-                  });
-                }
-              },
+    return FutureBuilder(
+      future: _deleteOldScheduledTrips(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return SplashScreen();
+        } else {
+          return Scaffold(
+            backgroundColor: whiteReplacement,
+            appBar: AppBar(
+              title: const Text('Schedule'),
             ),
-          ),
-          const Padding(
-            padding: EdgeInsets.only(left: 15.0),
-            child: Text('Upcoming journeys', style: upcomingJourneysTextStyle),
-          ),
-          (!_selectedEvents.isEmpty)
-              ? Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  child: Column(
-                    children: [
-                      for (var event in _selectedEvents)
-                        UpcomingEventCard(
-                          event: event,
-                          onClick: () {
-                            var _schedulesReference = _databaseManager
-                                .getUserSubCollectionReference('schedules');
-                            _databaseManager.deleteDocument(
-                                _schedulesReference, event.journeyDocumentId!);
-                            setState(() {
-                              var journeyToRemove = upcomingJourneys.where(
-                                  (journey) =>
-                                      journey.journeyDocumentId ==
-                                      event.journeyDocumentId);
-                              upcomingJourneys.remove(journeyToRemove);
-                              _events = _groupByDate(upcomingJourneys);
-                              _selectedEvents = _events[_selectedDay] ?? [];
-                            });
-                            Navigator.pop(context);
-                          },
-                        )
-                    ],
-                  ),
-                )
-              : Container(
-                  child: Column(
-                    children: [
-                      Image.asset('assets/images/bike.png',
-                          height: MediaQuery.of(context).size.height / 3.5),
-                      SizedBox(height: 15.0),
-                      Text(
-                        'No journeys planned for today.',
-                        style: authTextStyle,
-                      ),
-                    ],
-                  ),
+            body: ListView(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: _buildCalendar(),
                 ),
-        ],
-      ),
+                const Padding(
+                  padding: EdgeInsets.only(left: 15.0),
+                  child: Text('Upcoming journeys',
+                      style: upcomingJourneysTextStyle),
+                ),
+                (!_selectedEvents.isEmpty)
+                    ? Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 15.0),
+                        child: Column(
+                          children: [
+                            for (var event in _selectedEvents)
+                              UpcomingEventCard(
+                                event: event,
+                                onClick: () {
+                                  var _schedulesReference = _databaseManager
+                                      .getUserSubCollectionReference(
+                                          'schedules');
+                                  _databaseManager.deleteDocument(
+                                      _schedulesReference,
+                                      event.journeyDocumentId!);
+                                  setState(() {
+                                    var journeyToRemove =
+                                        upcomingJourneys.where((journey) =>
+                                            journey.journeyDocumentId ==
+                                            event.journeyDocumentId);
+                                    upcomingJourneys.remove(journeyToRemove);
+                                    _events = _groupByDate(upcomingJourneys);
+                                    _selectedEvents =
+                                        _events[_selectedDay] ?? [];
+                                  });
+                                  Navigator.pop(context);
+                                },
+                              )
+                          ],
+                        ),
+                      )
+                    : Container(
+                        child: Column(
+                          children: [
+                            Image.asset('assets/images/bike.png',
+                                height:
+                                    MediaQuery.of(context).size.height / 3.5),
+                            SizedBox(height: 15.0),
+                            Text(
+                              'No journeys planned for today.',
+                              style: authTextStyle,
+                            ),
+                          ],
+                        ),
+                      ),
+              ],
+            ),
+          );
+        }
+      },
     );
   }
 
-  /// Gets all the events happening on a specified [date].
+  /// Builds calendar.
+  Widget _buildCalendar() {
+    return TableCalendar(
+      eventLoader: _getEventsForDay,
+      calendarStyle: scheduleScreenCalendarStyle,
+      calendarFormat: _calendarFormat,
+      onFormatChanged: (format) {
+        setState(() {
+          _calendarFormat = format;
+        });
+      },
+      firstDay: DateUtils.dateOnly(DateTime.now()),
+      lastDay: DateTime(
+          DateTime.now().year + 1, DateTime.now().month, DateTime.now().day),
+      focusedDay: _focusedDay,
+      selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+      onDaySelected: (selectedDay, focusedDay) {
+        if (!isSameDay(_selectedDay, selectedDay)) {
+          setState(() {
+            _focusedDay = focusedDay;
+            _selectedDay = selectedDay;
+            _selectedEvents = _getEventsForDay(selectedDay);
+          });
+        }
+      },
+    );
+  }
+
+  /// Retrieves all the events happening on a specified [date].
   List<Itinerary> _getEventsForDay(DateTime date) {
     return _events[DateUtils.dateOnly(date)] ?? [];
   }
