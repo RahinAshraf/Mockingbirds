@@ -18,10 +18,6 @@ import 'package:veloplan/utilities/dart_exts.dart';
 import 'package:veloplan/utilities/permissions.dart';
 import 'package:veloplan/widgets/locationPermissionError.dart';
 
-// void main(){
-//   runApp(LocationError());
-// }
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   LiveLocationHelper liveLocationHelper = LiveLocationHelper();
@@ -55,33 +51,6 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       permissionStatus = status;
     });
-  }
-
-  //APP IS ONLY WORKING WHEN "GRANTED" IS PRINTED OUT, FIX IT TO NOT CRASH AND REASK IN OTHER CASES
-  void checkPermissions() async {
-    final status = await Permission.location.status;
-    setState(() {
-      permissionStatus = status;
-    });
-
-    switch(status){ //LocationError
-      case PermissionStatus.denied:
-          requestForPermission();
-        break;
-      case PermissionStatus.granted:
-        //do nothing
-        break;
-      case PermissionStatus.limited:
-        Navigator.pop(context);
-        break;
-      case PermissionStatus.restricted:
-        Navigator.pop(context);
-        break;
-      case PermissionStatus.permanentlyDenied:
-        Navigator.pop(context);
-        break;
-    }
-
   }
 
   void requestPermission(){
