@@ -101,7 +101,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
     Random rng = Random();
     String code = rng.nextInt(999999).toString();
     var x = await _databaseManager.getByEquality('group', 'code', code);
-    while (x.size != 0) {
+    while (x.size != 0 || code.length <6) {
       code = rng.nextInt(999999).toString();
       x = await _databaseManager.getByEquality('group', 'code', code);
     }
