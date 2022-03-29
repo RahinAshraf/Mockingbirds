@@ -1,7 +1,6 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 import 'package:veloplan/helpers/database_helpers/schedule_helper.dart';
 import 'package:veloplan/models/itinerary.dart';
 import 'package:veloplan/styles/styling.dart';
@@ -19,7 +18,6 @@ class ScheduleScreen extends StatefulWidget {
 /// from [upcomingJourneys]. [_selectedEvents] are the events of [_selectedDay].
 class _ScheduleScreenState extends State<ScheduleScreen> {
   ScheduleHelper helper = ScheduleHelper();
-  DatabaseManager _databaseManager = DatabaseManager();
   CalendarFormat _calendarFormat = CalendarFormat.twoWeeks;
   DateTime _selectedDay = DateUtils.dateOnly(DateTime.now());
   DateTime _focusedDay = DateUtils.dateOnly(DateTime.now());
@@ -29,7 +27,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
   @override
   initState() {
-    _deleteOldScheduledTrips()
+    helper
+        .deleteOldScheduledEntries()
         .whenComplete(() => helper.getAllScheduleDocuments().then((data) {
               setState(() {
                 upcomingJourneys = data;
@@ -66,12 +65,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                         UpcomingEventCard(
                           event: event,
                           onClick: () {
-                            // Delete from database
-                            var _schedulesReference = _databaseManager
-                                .getUserSubCollectionReference('schedules');
-                            _databaseManager.deleteDocument(
-                                _schedulesReference, event.journeyDocumentId!);
-                            // Delete from cards
+                            helper.deleteSingleScheduledEntry(event);
                             setState(() {
                               var journeyToRemove = upcomingJourneys.where(
                                   (journey) =>
@@ -157,17 +151,5 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       }
     }
     return journeys;
-  }
-
-  /// Checks for and deletes user's expired trips from the database.
-  Future<void> _deleteOldScheduledTrips() async {
-    var scheduledJourneys =
-        await _databaseManager.getUserSubcollection('schedules');
-    scheduledJourneys.docs.forEach((element) {
-      DateTime date = element.get('date').toDate();
-      if (DateUtils.dateOnly(DateTime.now()).isAfter(date)) {
-        element.reference.delete();
-      }
-    });
   }
 }
