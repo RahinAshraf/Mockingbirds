@@ -101,7 +101,9 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    requestPermission();
+    Timer(Duration(seconds: 10),(){
+      requestPermission();
+    });
     super.initState();
    }
 

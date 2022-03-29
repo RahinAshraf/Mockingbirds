@@ -27,10 +27,6 @@ class PanelExtensions {
     return PanelExtensions(context: context);
   }
 
-  void setPosition(int index) {
-    // position = position;
-  }
-
   ///Builds the widget which displays the closest docking station with the [editDockTextEditController]
   /// from the place specified in the location TextField [placeTextController] - if it has been specified.
   Widget buildDefaultClosestDock(
