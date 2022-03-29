@@ -10,6 +10,9 @@ import 'package:veloplan/styles/styling.dart';
 /// This widget generates a card of an event displayed in
 /// [ScheduleScreen], under upcoming journeys. It takes [event] as an
 /// argument and displays its information on a card.
+///
+/// [onClick] is required to specify the function that should be executed
+/// when delete button is clicked.
 class UpcomingEventCard extends StatelessWidget {
   UpcomingEventCard({required this.event, required this.onClick});
 

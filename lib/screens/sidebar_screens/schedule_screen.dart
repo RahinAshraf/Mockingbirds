@@ -8,29 +8,35 @@ import 'package:veloplan/styles/styling.dart';
 import 'package:veloplan/widgets/upcoming_event_card.dart';
 
 class ScheduleScreen extends StatefulWidget {
+  const ScheduleScreen({Key? key}) : super(key: key);
   @override
   _ScheduleScreenState createState() => _ScheduleScreenState();
 }
 
+/// Renders a schedule screen.
+///
+/// It consists of [TableCalendar] with a collection of [_events] retrieved
+/// from [upcomingJourneys]. [_selectedEvents] are the events of [_selectedDay].
 class _ScheduleScreenState extends State<ScheduleScreen> {
   ScheduleHelper helper = ScheduleHelper();
   DatabaseManager _databaseManager = DatabaseManager();
   CalendarFormat _calendarFormat = CalendarFormat.twoWeeks;
+  DateTime _selectedDay = DateUtils.dateOnly(DateTime.now());
+  DateTime _focusedDay = DateUtils.dateOnly(DateTime.now());
   late List<Itinerary> upcomingJourneys = [];
   late Map<DateTime, List<Itinerary>> _events = {};
   late List _selectedEvents = [];
-  DateTime _selectedDay = DateUtils.dateOnly(DateTime.now());
-  DateTime _focusedDay = DateUtils.dateOnly(DateTime.now());
 
   @override
-  initState() async {
-    helper.getAllScheduleDocuments().then((data) {
-      setState(() {
-        upcomingJourneys = data;
-        _events = _groupByDate(upcomingJourneys);
-        _selectedEvents = _events[_selectedDay] ?? [];
-      });
-    });
+  initState() {
+    _deleteOldScheduledTrips()
+        .whenComplete(() => helper.getAllScheduleDocuments().then((data) {
+              setState(() {
+                upcomingJourneys = data;
+                _events = _groupByDate(upcomingJourneys);
+                _selectedEvents = _events[_selectedDay] ?? [];
+              });
+            }));
     super.initState();
   }
 
@@ -60,10 +66,12 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                         UpcomingEventCard(
                           event: event,
                           onClick: () {
+                            // Delete from database
                             var _schedulesReference = _databaseManager
                                 .getUserSubCollectionReference('schedules');
                             _databaseManager.deleteDocument(
                                 _schedulesReference, event.journeyDocumentId!);
+                            // Delete from cards
                             setState(() {
                               var journeyToRemove = upcomingJourneys.where(
                                   (journey) =>
@@ -97,32 +105,6 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     );
   }
 
-  /// Gets all the events happening on a specified [date].
-  List<Itinerary> _getEventsForDay(DateTime date) {
-    return _events[DateUtils.dateOnly(date)] ?? [];
-  }
-
-  /// Groups [journeys] based on their date.
-  Map<DateTime, List<Itinerary>> _groupByDate(List<Itinerary> journeys) {
-    Map<DateTime, List<Itinerary>> mappedJourneys = {};
-    for (Itinerary journey in journeys) {
-      mappedJourneys.putIfAbsent(
-          journey.date!, () => _getAllJourneysByDate(journey.date!));
-    }
-    return mappedJourneys;
-  }
-
-  /// Retrieves all journeys for a specific [date].
-  List<Itinerary> _getAllJourneysByDate(DateTime date) {
-    List<Itinerary> journeys = [];
-    for (Itinerary journey in upcomingJourneys) {
-      if (journey.date == date) {
-        journeys.add(journey);
-      }
-    }
-    return journeys;
-  }
-
   /// Builds calendar for the schedule page.
   Widget _buildCalendar() {
     return TableCalendar(
@@ -149,5 +131,43 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         }
       },
     );
+  }
+
+  /// Gets all the events happening on a specified [date].
+  List<Itinerary> _getEventsForDay(DateTime date) {
+    return _events[DateUtils.dateOnly(date)] ?? [];
+  }
+
+  /// Groups [journeys] based on their date.
+  Map<DateTime, List<Itinerary>> _groupByDate(List<Itinerary> journeys) {
+    Map<DateTime, List<Itinerary>> mappedJourneys = {};
+    for (Itinerary journey in journeys) {
+      mappedJourneys.putIfAbsent(
+          journey.date!, () => _getAllJourneysByDate(journey.date!));
+    }
+    return mappedJourneys;
+  }
+
+  /// Retrieves all journeys for a specific [date].
+  List<Itinerary> _getAllJourneysByDate(DateTime date) {
+    List<Itinerary> journeys = [];
+    for (Itinerary journey in upcomingJourneys) {
+      if (journey.date == date) {
+        journeys.add(journey);
+      }
+    }
+    return journeys;
+  }
+
+  /// Checks for and deletes user's expired trips from the database.
+  Future<void> _deleteOldScheduledTrips() async {
+    var scheduledJourneys =
+        await _databaseManager.getUserSubcollection('schedules');
+    scheduledJourneys.docs.forEach((element) {
+      DateTime date = element.get('date').toDate();
+      if (DateUtils.dateOnly(DateTime.now()).isAfter(date)) {
+        element.reference.delete();
+      }
+    });
   }
 }

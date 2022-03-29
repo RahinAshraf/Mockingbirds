@@ -26,7 +26,6 @@ class _MapPageState extends State<MapPage> {
   @override
   void initState() {
     _deleteOldGroup();
-    _deleteOldScheduledTrips();
     super.initState();
   }
 
@@ -49,18 +48,6 @@ class _MapPageState extends State<MapPage> {
         }
       });
     }
-  }
-
-  /// Checks for and deletes user's expired trips from the database.
-  Future<void> _deleteOldScheduledTrips() async {
-    var scheduledJourneys =
-        await _databaseManager.getUserSubcollection('schedules');
-    scheduledJourneys.docs.forEach((element) {
-      DateTime date = element.get('date').toDate();
-      if (DateUtils.dateOnly(DateTime.now()).isAfter(date)) {
-        element.reference.delete();
-      }
-    });
   }
 
   @override
