@@ -3,14 +3,12 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
-import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/helpers/live_location_helper.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
+import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:veloplan/.env.dart';
 import 'package:veloplan/widgets/docking_station_widget.dart';
-
-import '../../providers/weather_manager.dart';
 
 /// Class to display a mapbox map with other possible widgets on top
 /// Author(s): Fariha Choudhury k20059723, Elisabeth Koren Halvorsen k20077737
@@ -32,6 +30,7 @@ class BaseMapboxMap {
     cameraPosition = CameraPosition(target: currentPosition, zoom: 15);
     setMap();
     addWidget(map);
+    // addDockingStationCard();
   }
 
   /// Adds a [widget] to [_widgets]
@@ -57,10 +56,10 @@ class BaseMapboxMap {
   }
 
   /// Updates the current location with the new one
-  void updateCurrentLocation() async {
+  Future<void> updateCurrentLocation() async {
     Location newCurrentLocation = Location();
     LocationData _newLocationData = await newCurrentLocation.getLocation();
-    sharedPreferences.clear();
+    // sharedPreferences.clear();
     sharedPreferences.setDouble('latitude', _newLocationData.latitude!);
     sharedPreferences.setDouble('longitude', _newLocationData.longitude!);
     currentPosition =
@@ -73,8 +72,8 @@ class BaseMapboxMap {
   }
 
   /// gets the new [cameraposition]
-  CameraPosition getNewCameraPosition() {
-    updateCurrentLocation();
+  Future<CameraPosition> getNewCameraPosition() async {
+    await updateCurrentLocation();
     _updateCameraPosition();
     return cameraPosition;
   }
@@ -119,4 +118,11 @@ class BaseMapboxMap {
   MapboxMap getMap() {
     return map;
   }
+
+  // void addDockingStationCard() {
+  //   addWidget(Align(
+  //     alignment: Alignment.bottomCenter,
+  //     child: Container(height: 200, child: DockStation(key: dockingStationKey)),
+  //   ));
+  // }
 }

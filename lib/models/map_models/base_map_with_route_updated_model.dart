@@ -1,8 +1,11 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:veloplan/helpers/database_helpers/statistics_helper.dart';
 import 'package:veloplan/helpers/navigation_helpers/map_drawings.dart';
 import 'package:veloplan/helpers/navigation_helpers/navigation_conversions_helpers.dart';
 import 'package:veloplan/helpers/navigation_helpers/navigation_helpers.dart';
@@ -21,6 +24,7 @@ import '../docking_station.dart';
 
 /// Map screen focused on a user's live location
 /// Author(s): Elisabeth Halvorsen k20077737
+/// Contributor(s): Eduard Ragea k20067643
 
 class MapWithRouteUpdated extends BaseMapboxRouteMap {
   late List<LatLng> _journey;
@@ -28,7 +32,6 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
   final Itinerary _itinerary;
   final BuildContext context;
   late int numberCyclists;
-  LatLng _target = getLatLngFromSharedPrefs();
   Timer? timer;
   final Set<Symbol> _polylineSymbols = {};
   bool isAtGoal = false;
@@ -40,6 +43,8 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
   num duration = 0;
   String dockName = "";
 
+  final userID = FirebaseAuth.instance.currentUser!.uid;
+
   List<dynamic> _journeyPoints = [];
   int _currentStation = 0;
   bool buttonPressed = true;
@@ -50,18 +55,6 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
     this.dockName = _itinerary.docks![_currentStation].name;
     this._journey = convertDocksToLatLng(_itinerary.docks!)!;
     this.numberCyclists = _itinerary.numberOfCyclists!;
-  }
-
-  // change to one class with dock, people and destinations
-
-  @override
-  void updateCurrentLocation() async {
-    Location newCurrentLocation = Location();
-    LocationData _newLocationData = await newCurrentLocation.getLocation();
-    sharedPreferences.clear();
-    sharedPreferences.setDouble('latitude', _newLocationData.latitude!);
-    sharedPreferences.setDouble('longitude', _newLocationData.longitude!);
-    _target = LatLng(_newLocationData.latitude!, _newLocationData.longitude!);
   }
 
   void checkAndUpdateDock() async {
@@ -98,17 +91,24 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
   /// sets all our timers
   void _setTimers() {
     updateLocationAndCameraTimer();
+    createStatisticsTimer();
     updateRouteTimer();
     updateDockTimer();
   }
 
   /// Initialize periodic timer for updating location and camera position
+  /// Calculate and store the distance travelled between timer steps on the device
   void updateLocationAndCameraTimer() {
-    timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
+    timer = Timer.periodic(Duration(seconds: 10), (Timer t) async {
       if (isAtGoal) {
         t.cancel();
-      }
-      updateCurrentLocation();
+      }      
+      final oldLocation = getLatLngFromSharedPrefs();
+      await updateCurrentLocation();
+      final currentLocation = getLatLngFromSharedPrefs();
+      final distanceTravelled = calculateDistance(oldLocation, currentLocation);
+      sharedPreferences.setDouble(
+          'distance', distanceTravelled);
       _updateCameraPosition();
       _updateLiveCameraPosition();
     });
@@ -124,6 +124,13 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
     });
   }
 
+  /// Create a timer just for constantly updating the distance travelled to server.
+  void createStatisticsTimer() {
+    timer = Timer.periodic(Duration(minutes: 1), (Timer t) async { 
+      await updateDistanceOnServer(userID);
+     });
+  }
+
   /// Initialize periodic timer to check if it's necessary to redirect to another docking station
   void updateDockTimer() {
     timer = Timer.periodic(Duration(seconds: 15), (Timer t) {
@@ -136,7 +143,7 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
 
   /// update cameraposition
   void _updateCameraPosition() {
-    cameraPosition = CameraPosition(target: _target, zoom: 15, tilt: 5);
+    cameraPosition = CameraPosition(target: currentPosition, zoom: 15, tilt: 5);
   }
 
   /// update the live camera position
@@ -158,7 +165,8 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
       reRoute();
       return;
     }
-    double distance = calculateDistance(_target, _journey[_currentStation]);
+    double distance =
+        calculateDistance(currentPosition, _journey[_currentStation]);
     if (distance < 0.01) {
       ++_currentStation;
       if (_currentStation >= _journey.length) {
@@ -207,8 +215,8 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
   /// sets the route
   Future<void> _setInitRoute(NavigationType type) async {
     print("current station num:" + _currentStation.toString());
-    _routeResponse =
-        await manager.getDirections(_target, _journey[_currentStation], type);
+    _routeResponse = await manager.getDirections(
+        currentPosition, _journey[_currentStation], type);
     //update local vars ---
     num distance = await manager.getDistance() as num;
     num duration = await manager.getDuration() as num;

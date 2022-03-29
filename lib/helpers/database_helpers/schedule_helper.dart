@@ -9,10 +9,13 @@ import '../../models/itinerary.dart';
 ///Author: Tayyibah
 class ScheduleHelper {
   late CollectionReference _schedules;
-  DatabaseManager databaseManager = DatabaseManager();
+  late final _user_id;
+  late FirebaseFirestore _db;
 
   ScheduleHelper() {
-    _schedules = databaseManager.getUserSubCollectionReference("schedules");
+    _db = FirebaseFirestore.instance;
+    _user_id = FirebaseAuth.instance.currentUser!.uid;
+    _schedules = _db.collection('users').doc(_user_id).collection('schedules');
   }
 
   void createScheduleEntry(DateTime scheduleDate, List<List<double?>?> points,

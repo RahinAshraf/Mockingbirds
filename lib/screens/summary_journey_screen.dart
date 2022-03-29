@@ -27,7 +27,6 @@ import 'package:veloplan/utilities/dart_exts.dart';
 ///Author(s): Nicole, Marija, Lilliana, Hristina
 
 class SummaryJourneyScreen extends StatefulWidget {
-  // final List<LatLng> points;
   late Itinerary itinerary;
   SummaryJourneyScreen(this.itinerary, {Key? key}) : super(key: key);
 
@@ -212,9 +211,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
           backgroundColor: Theme.of(context).errorColor,
         ),
       );
-    } catch (err) {
-      //print(err);
-    }
+    } catch (err) {}
     var user = await _databaseManager.getByKey(
         'users', _databaseManager.getCurrentUser()!.uid);
     setState(() {
@@ -369,15 +366,6 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
     _itineraryManager = await new ItineraryManager(_itinerary);
     paths = _itineraryManager.getPaths();
   }
-  // Future<List<Widget>> _generateStopsFuture() async {
-  //   for (var path in paths) {
-  //     pathTime.add(StationTempWidget(
-  //       content: "",
-  //       time: path.duration,
-  //     ));
-  //   }
-  //   return pathTime;
-  // }
 }
 
 class StationTempWidget extends StatelessWidget {

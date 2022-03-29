@@ -9,11 +9,6 @@ import '../../helpers/database_helpers/database_manager.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:veloplan/widgets/docking_station_widget.dart';
-import 'package:veloplan/models/map_models/base_map_model.dart';
-
-import '../../models/weather.dart';
-import '../../providers/weather_manager.dart';
-import '../../widgets/weather_popup_card.dart';
 
 /// Map screen focused on a user's live location
 /// Author(s): Fariha Choudhury k20059723, Elisabeth Halvorsen k20077737,
@@ -28,33 +23,11 @@ class _MapPageState extends State<MapPage> {
   LatLng currentPosition = getLatLngFromSharedPrefs();
   late BaseMapboxMap _baseMap;
   DatabaseManager _databaseManager = DatabaseManager();
-  Weather weather = Weather.defaultvalue();
-  String weatherIcon = "10n";
-  WeatherManager _weatherManager = WeatherManager();
-  Timer? timer;
 
   @override
   void initState() {
     _deleteOldGroup();
-    fetchWeather();
-
-    timer = Timer.periodic(Duration(minutes: 15), (Timer t) {
-      _weatherManager
-          .importWeatherForecast(
-              currentPosition.latitude, currentPosition.longitude)
-          .then((value) {
-        setState(() {
-          this.weather = _weatherManager.all_weather_data;
-          this.weatherIcon = _weatherManager.all_weather_data.current_icon;
-        });
-      });
-    });
     super.initState();
-  }
-
-  Future<void> fetchWeather() async {
-    await _weatherManager.importWeatherForecast(
-        currentPosition.latitude, currentPosition.longitude);
   }
 
   Future<void> _deleteOldGroup() async {
@@ -66,13 +39,13 @@ class _MapPageState extends State<MapPage> {
           'group', 'code', user.data()!['group']);
       group.docs.forEach((element) {
         Timestamp timestamp = element.data()['createdAt'];
+        var memberList = element.data()['memberList'];
         if (DateTime.now().difference(timestamp.toDate()) > Duration(days: 1)) {
           element.reference.delete();
-          _databaseManager.setByKey(
-              'users',
-              _databaseManager.getCurrentUser()!.uid,
-              {'group': null},
-              SetOptions(merge: true));
+          for (String member in memberList) {
+            _databaseManager.setByKey(
+                'users', member, {'group': null}, SetOptions(merge: true));
+          }
         }
       });
     }
@@ -84,36 +57,28 @@ class _MapPageState extends State<MapPage> {
         builder: (BuildContext context, Widget? child, MapModel model) {
       _baseMap = BaseMapboxMap(model);
       addPositionZoom();
-      addWeather(context, weather, weatherIcon);
-      return SafeArea(
-          child: Stack(
-              children: _baseMap.getWidgets() +
-                  [
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Container(
-                          height: 200,
-                          child: DockStation(key: dockingStationKey)),
-                    )
-                  ]));
+      addDockingStationCard();
+      return SafeArea(child: Stack(children: _baseMap.getWidgets()));
     }));
   }
 
-  void addPositionZoom() {
+  void addPositionZoom() async {
     _baseMap.addWidget(Container(
       alignment: Alignment(0.9, 0.90),
       child: FloatingActionButton(
-        heroTag: "center_to_current_loaction",
-        onPressed: () {
-          _baseMap.controller?.animateCamera(
-              CameraUpdate.newCameraPosition(_baseMap.getNewCameraPosition()));
-        },
-        child: const Icon(Icons.my_location),
-      ),
+          heroTag: "center_to_current_loaction",
+          onPressed: () async {
+            _baseMap.controller?.animateCamera(CameraUpdate.newCameraPosition(
+                await _baseMap.getNewCameraPosition()));
+          },
+          child: const Icon(Icons.my_location)),
     ));
   }
 
-  void addWeather(context, weather, weatherIcon) {
-    _baseMap.addWidget(buildWeatherIcon(context, weather, weatherIcon));
+  void addDockingStationCard() {
+    _baseMap.addWidget(Align(
+      alignment: Alignment.bottomCenter,
+      child: Container(height: 200, child: DockStation(key: dockingStationKey)),
+    ));
   }
 }

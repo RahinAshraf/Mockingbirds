@@ -6,22 +6,27 @@ import 'package:veloplan/styles/styling.dart';
 import 'package:veloplan/utilities/help_bot_manager.dart';
 import 'package:veloplan/widgets/message_bubble_widget.dart';
 
-/// The Helpbot screen which builds everything related to helping the user navigate the app.
-///Author(s): Lilliana, Marija
-
-const String url =
-    'mailto:k20070238@kcl.ac.uk?subject=Help%20with%20app&body=Help%20me!';
 HelpBotManager questions = HelpBotManager();
 
-class HelpPage extends StatefulWidget {
+/// The default URL for sending enquiries.
+const String url =
+    'mailto:k20070238@kcl.ac.uk?subject=Help%20with%20app&body=Help%20me!';
+
+class HelpScreen extends StatefulWidget {
+  const HelpScreen({Key? key}) : super(key: key);
   @override
-  _HelpPageState createState() => _HelpPageState();
+  _HelpScreenState createState() => _HelpScreenState();
 }
 
-class _HelpPageState extends State<HelpPage> {
+/// Renders a chat-based help (FAQ) page.
+///
+/// It consists of [MessageBubble] widgets, stored in [_conversation],
+/// and [choices], which are the categories/topics that user can choose
+/// to ask questions from.
+class _HelpScreenState extends State<HelpScreen> {
   List<MessageBubble> _conversation = [
     MessageBubble(content: 'Hello. How can I help you?')
-  ];
+  ]; // conversation flow between a bot and a user
   List<Widget> choices = [];
   String selectedTopic = "";
 
@@ -37,40 +42,39 @@ class _HelpPageState extends State<HelpPage> {
       appBar: AppBar(
         title: const Text('HelpBot'),
       ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: ListView(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 10.0, vertical: 20.0),
-                children: UnmodifiableListView(_conversation),
-              ),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
+              children: UnmodifiableListView(_conversation),
             ),
-            Container(
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                border: Border(
-                  top: BorderSide(
-                    color: helpScreenBorderColor,
-                    width: 1.5,
-                  ),
-                ),
-              ),
-              padding: const EdgeInsets.fromLTRB(5.0, 10.0, 0.0, 10.0),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: choices,
+          ),
+          Container(
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                  color: helpScreenBorderColor,
+                  width: 1.5,
                 ),
               ),
             ),
-          ],
-        ),
+            padding: const EdgeInsets.fromLTRB(5.0, 10.0, 0.0, 10.0),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: choices,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 
+  /// Launches a given url (in our case, opens a mailing app).
   _sendMail() async {
     // Android and iOS
     try {
@@ -80,6 +84,7 @@ class _HelpPageState extends State<HelpPage> {
     }
   }
 
+  /// Displays generic topics/categories to choose questions from.
   List<Widget> _displayTopics() {
     List<Widget> topics = [];
     for (String topic in questions.getAllTopics()) {
@@ -99,6 +104,7 @@ class _HelpPageState extends State<HelpPage> {
     return topics;
   }
 
+  /// Displays a set of questions from a specific category.
   void _displayQuestions() {
     choices.add(
       _getOutlinedButton(
@@ -132,6 +138,7 @@ class _HelpPageState extends State<HelpPage> {
     }
   }
 
+  /// Generates an outlined button for the topics/categories and questions.
   Widget _getOutlinedButton(
       {required Widget content, required VoidCallback onPressed}) {
     return Padding(

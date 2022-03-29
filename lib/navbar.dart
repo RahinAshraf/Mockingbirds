@@ -1,10 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/popups.dart';
 import 'package:veloplan/screens/navigation/map_screen.dart';
-import 'package:veloplan/screens/navigation/polyline_turn_by_turn.dart';
 import 'package:veloplan/screens/profile_screen.dart';
 import 'package:veloplan/screens/summary_journey_screen.dart';
 import 'package:veloplan/sidebar.dart';

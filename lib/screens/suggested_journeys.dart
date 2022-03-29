@@ -8,6 +8,7 @@ import '../styles/styling.dart';
 /// Suggester itineraries that contain biggest sights in London for under 30 min.
 /// from: https://londonblog.tfl.gov.uk/2019/11/05/santander-cycles-sightseeing/?intcmp=60245
 ///Author: Nicole
+///TODO: Nicole to clean
 class SuggestedItinerary extends StatefulWidget {
   @override
   _SuggestedItineraryState createState() => _SuggestedItineraryState();
@@ -62,7 +63,7 @@ class _SuggestedItineraryState extends State<SuggestedItinerary> {
               child: Text('Explore London', style: upcomingJourneysTextStyle),
             ),
             Column(
-              //present some text if the length of journey list is 0 (e.g. 'you havent scheduled any journeys yet')
+              //TODO: Marija Hristina present some text if the length of journey list is 0 (e.g. 'you havent scheduled any journeys yet')
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 TimelineItem(_royalLoop, 1),

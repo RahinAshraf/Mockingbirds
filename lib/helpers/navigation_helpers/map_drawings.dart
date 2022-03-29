@@ -15,21 +15,13 @@ void placeDockMarkers(
     controller.addSymbol(
         SymbolOptions(
             geometry: LatLng(station.lat, station.lon),
-            iconSize: 0.7,
-            iconImage: "assets/icon/bicycle.png"),
+            iconSize: 0.3,
+            iconImage: "assets/images/appicon.png"),
         {
           "station": station,
         });
   }
 }
-
-// Widget displayDockCard(DockingStation station) {
-//   //CHANGE THIS TO CREATE CARD
-//   print("Will call widget next");
-//   // return _DockPopupCard(latlng: current,);
-//   dockingStationKey.currentState
-//       ?.setData(DockingStationCard.station(station), true);
-// }
 
 /// Creates a [fills] Map with the specified geometry for the chosen [routeResponse]
 Future<Map<String, Object>> setFills(Map fills, dynamic routeResponse) async {

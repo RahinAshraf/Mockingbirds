@@ -1,5 +1,3 @@
-// ignore_for_file: non_constant_identifier_names
-
 class Weather {
   final double current_temp;
   final double current_feels_like;
@@ -62,5 +60,10 @@ class Weather {
 
   double convertKelvinToCelsius(double kel) {
     return kel - 273.15;
+  }
+
+  void printWeather() {
+    print(
+        " $current_temp , $current_feels_like, $current_clouds , $current_visibility , $current_wind_speed , $current_description, $current_icon");
   }
 }

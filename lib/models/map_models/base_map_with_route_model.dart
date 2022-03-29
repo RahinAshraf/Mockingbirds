@@ -20,9 +20,8 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
   final Set<Symbol> _polylineSymbols = {};
   final RouteManager manager = RouteManager();
   late Map<dynamic, dynamic> _routeResponse;
-  LatLng _startPosition = getLatLngFromSharedPrefs();
+  // LatLng _startPosition = getLatLngFromSharedPrefs();
 
-  // BaseMapboxRouteMap(this._journey, MapModel model) : super(model);
   BaseMapboxRouteMap(this._itinerary, MapModel model) : super(model) {
     _journey = convertDocksToLatLng(_itinerary.docks!)!;
   }
@@ -44,7 +43,7 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
   /// Refocus camera positioning to focus on the [journey] polyline
   void _refocusCamera(List<LatLng> journey) {
     List<LatLng> points = journey;
-    points.add(_startPosition);
+    points.add(_itinerary.myDestinations![0]);
     LatLng center = getCenter(points);
     Tuple2<LatLng, LatLng> corners = getCornerCoordinates(points);
     double zoom = getZoom(calculateDistance(center, corners.item1));
@@ -58,7 +57,6 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
 
   /// Sets the [journey] geometry
   void setBaseJourney(List<LatLng> journey) async {
-    // vars used to collect data for WHOLE journey; incremented by vars of each sub journey AB, BC etc.
     List<dynamic> journeyPoints = [];
     double totalDistance = 0.0;
     double totalDuration = 0.0;
@@ -66,7 +64,9 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
     if (journey.length > 1) {
       //WALKING:
       _routeResponse = await manager.getDirections(
-          _startPosition, journey[0], NavigationType.walking);
+          _itinerary.myDestinations![0], journey[0], NavigationType.walking);
+      // _routeResponse = await manager.getDirections(
+      // _startPosition, journey[0], NavigationType.walking);
 
       //update local vars ---
       totalDistance += await manager.getDistance() as num;

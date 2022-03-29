@@ -21,15 +21,16 @@ class _FavouriteState extends State<Favourite> {
     FavouriteHelper.getUserFavourites().then((data) {
       setState(() {
         favourites = data;
-        super.initState();
       });
     });
+    super.initState();
   }
 
   @override
   Widget build(BuildContext build) {
     return Scaffold(
       body: favourites.isEmpty
+          //TODO: MARIJA HRISTINA-> make prettier if you haven't added any fav
           ? const Center(child: Text("You haven't added any favourites."))
           : Padding(
               padding: const EdgeInsets.only(top: 12.0),

@@ -56,6 +56,7 @@ class _SchedulePageState extends State<SchedulePage> {
                   Text('Upcoming journeys', style: upcomingJourneysTextStyle),
             ),
             Column(
+              //TODO: MARIJA HRISTINA-> make prettier if you haven't added any fav
               //present some text if the length of journey list is 0 (e.g. 'you havent scheduled any journeys yet')
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[

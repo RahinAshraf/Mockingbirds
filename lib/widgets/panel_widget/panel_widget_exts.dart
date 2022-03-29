@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart'
     as LatLong;
 import 'package:veloplan/alerts.dart';
-import '../../models/docking_station.dart';
-import '../../providers/docking_station_manager.dart';
-import '../../providers/location_service.dart';
-import '../../screens/dock_sorter_screen.dart';
+import 'package:veloplan/models/docking_station.dart';
+import 'package:veloplan/providers/docking_station_manager.dart';
+import 'package:veloplan/providers/location_service.dart';
+import 'package:veloplan/screens/dock_sorter_screen.dart';
 
-///helper class to build the bubble underneath every location TextField
+/// Helper class to build the bubble underneath every location TextField.
 class PanelExtensions {
   final locationService = LocationService();
   BuildContext? context;
@@ -19,20 +19,17 @@ class PanelExtensions {
     return PanelExtensions(context: context);
   }
 
-  ///builds the bubble which displays the closest docking station from the place specified in the location TextField
+  /// Builds the field displaying the closest docking station from the place specified in the location TextField.
   Widget buildDefaultClosestDock(
       TextEditingController editDockTextEditController,
       TextEditingController placeTextController,
       bool isFrom,
       int numberCyclists) {
     return Row(
-      mainAxisSize: MainAxisSize.max,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Expanded(
-          child: Icon(Icons.subdirectory_arrow_right),
-          flex: 0,
+        IconButton(
+          icon: Icon(Icons.subdirectory_arrow_right),
+          onPressed: () {},
         ),
         Expanded(
           child: TextField(
@@ -40,40 +37,30 @@ class PanelExtensions {
             controller: editDockTextEditController,
             decoration: InputDecoration(
               hintText: "Default closest dock",
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: Colors.black, width: 2.0),
-                borderRadius: BorderRadius.circular(10.0),
-              ),
             ),
           ),
         ),
-        Expanded(
-          child: IconButton(
-              onPressed: () async {
-                if (placeTextController.text.isEmpty) {
-                  alert.showSnackBarErrorMessage(
-                      context!, alert.fillInLocationBeforeEditingDockMesssage);
-                  print("hello");
-                  return;
-                }
-
-                List temp = await locationService
-                    .getPlaceCoords(placeTextController.text);
-                checkInputLocation(placeTextController,
-                    editDockTextEditController, isFrom, numberCyclists);
-
-                Navigator.push(
-                    context!,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            DockSorterScreen(_latLng(temp.first, temp.last))));
-              },
-              padding: const EdgeInsets.all(0),
-              icon: const Icon(
-                Icons.navigate_next_outlined,
-              )),
-          flex: 0,
-        ),
+        IconButton(
+            onPressed: () async {
+              if (placeTextController.text.isEmpty) {
+                alert.showSnackBarErrorMessage(
+                    context!, alert.fillInLocationBeforeEditingDockMesssage);
+                return;
+              }
+              List temp = await locationService
+                  .getPlaceCoords(placeTextController.text);
+              checkInputLocation(placeTextController,
+                  editDockTextEditController, isFrom, numberCyclists);
+              Navigator.push(
+                  context!,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          DockSorterScreen(_latLng(temp.first, temp.last))));
+            },
+            padding: const EdgeInsets.all(0),
+            icon: const Icon(
+              Icons.navigate_next_outlined,
+            )),
       ],
     );
   }
@@ -107,7 +94,7 @@ class PanelExtensions {
       bool isFrom,
       int numberOfCyclists) async {
     LatLong.LatLng latlngPlace =
-        LatLong.LatLng(lat!, lng!); //coverting list to latlng
+        LatLong.LatLng(lat!, lng!); // converting list to latlng
     dockingStationManager _stationManager = dockingStationManager();
     await _stationManager.importStations();
     print(latlngPlace);

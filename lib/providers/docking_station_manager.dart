@@ -169,7 +169,14 @@ class dockingStationManager {
     List<DockingStation> filtered_stations =
         sortDocksByDistanceFromGivenLocation(userLocation,
             getAllStationsWithAvailableSpace(number_of_empty_spaces));
-    return filtered_stations[0];
+    if (filtered_stations[0] != null)
+      return filtered_stations[0];
+    else {
+      //! TODO:turn to null or write a handler
+      print(
+          "----------------------------it was called on an empty docking station-------------------------------");
+      return DockingStation.empty();
+    }
   }
 
   ///  Get the 5 closest available docking stations by given location and stations, number of available bikes to get
@@ -288,8 +295,6 @@ class dockingStationManager {
       return filteredStations;
     }
   }
-
-//https://api.tfl.gov.uk/Place?lat=51.5&lon=-0.1&radius=700&type=BikePoint
 
   /// import the docking stations from the tfl api by a set radius and coordinates
   Future<List<DockingStation>> importStationsByRadius(

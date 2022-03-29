@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:veloplan/screens/suggested_journeys.dart';
 import 'package:veloplan/screens/sidebar_screens/my_journeys_screen.dart';
+import 'package:veloplan/screens/weather_screen.dart';
 import 'screens/sidebar_screens/schedule_screen.dart';
 import 'screens/sidebar_screens/favourite_screen.dart';
 import 'screens/sidebar_screens/help_screen.dart';
@@ -12,6 +13,7 @@ import 'package:veloplan/screens/sidebar_screens/settings_screen.dart';
 
 /// Defines the sidebar
 /// @author Tayyibah
+/// @contributor(s): Elisabeth, Nicole
 class SideBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -44,18 +46,23 @@ class SideBar extends StatelessWidget {
               icon: Icons.route,
               onClicked: () => _renderScreen(context, 3),
             ),
+            _buildSidebarItem(
+              text: 'Weather',
+              icon: Icons.sunny,
+              onClicked: () => _renderScreen(context, 4),
+            ),
             const SizedBox(height: 24),
             const Divider(color: Colors.grey),
             const SizedBox(height: 24),
             _buildSidebarItem(
               text: 'Help',
               icon: Icons.chat_bubble_outlined,
-              onClicked: () => _renderScreen(context, 4),
+              onClicked: () => _renderScreen(context, 5),
             ),
             _buildSidebarItem(
               text: 'Settings',
               icon: Icons.settings,
-              onClicked: () => _renderScreen(context, 5),
+              onClicked: () => _renderScreen(context, 6),
             ),
           ],
         ),
@@ -96,10 +103,15 @@ class SideBar extends StatelessWidget {
         break;
       case 4:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => HelpPage(),
+          builder: (context) => WeatherPage(),
         ));
         break;
       case 5:
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => HelpScreen(),
+        ));
+        break;
+      case 6:
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => const Settings(),
         ));

@@ -18,12 +18,6 @@ class DockingStationCard extends StatefulWidget {
 //I have commented this for now but if you want to make a card by just passing a station:
   DockingStationCard.station(DockingStation station) {
     this.dockTemp = station;
-    // DockingStationCard.station(DockingStation station) {
-    // iD = station.stationId;
-    // stationName = station.name;
-    // numberOfBikes = station.numberOfBikes;
-    // numberOfEmptyDocks = station.numberOfEmptyDocks;
-    // //print(this.iD);
   }
 
   @override
@@ -37,8 +31,6 @@ class _DockingStationCardState extends State<DockingStationCard> {
   bool _isFavouriteButtonEnabled = true;
   bool _isFavourited = false;
   var _manager = dockingStationManager();
-  // bool isFavouriteEnabled = true;
-  // bool isVisible = true;
 
   @override
   void initState() {
@@ -76,35 +68,6 @@ class _DockingStationCardState extends State<DockingStationCard> {
           children: [
             buildFaveButton(),
             const SizedBox(width: 10),
-            // IconButton(
-            //   icon: _helper.isFavouriteStation(widget.iD, _favourites)
-            //       ? const Icon(
-            //           Icons.favorite,
-            //           color: Colors.red,
-            //         )
-            //       : const Icon(
-            //           Icons.favorite,
-            //           color: Colors.grey,
-            //         ),
-            //   onPressed: () async {
-            //     if (isFavouriteEnabled) {
-            //       _disableFavButton();
-            //       List<DockingStation> updatedFavourites =
-            //           await FavouriteHelper.getUserFavourites();
-            //       _helper.toggleFavourite(
-            //         widget.iD,
-            //         widget.stationName,
-            //         widget.numberOfBikes,
-            //         widget.numberOfEmptyDocks,
-            //       );
-
-            //       setState(() {
-            //         _favourites = updatedFavourites;
-            //       });
-            //     }
-            //   },
-            // ),
-            // const SizedBox(width: 30),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -113,7 +76,7 @@ class _DockingStationCardState extends State<DockingStationCard> {
                   Text(
                     widget.dockTemp.name,
                     style: const TextStyle(
-                      fontSize: 25.0,
+                      fontSize: 17.0,
                       color: Color(0xFF99D2A9),
                       fontWeight: FontWeight.w700,
                     ),
@@ -123,44 +86,50 @@ class _DockingStationCardState extends State<DockingStationCard> {
                     thickness: 5,
                   ),
                   if (widget.dockTemp.numberOfBikes != null)
-                    Row(children: [
-                      SizedBox(width: 30.0),
-                      Icon(
-                        Icons.event_available,
-                        color: Color(0xFF99D2A9),
-                        size: 18.0,
-                      ),
-                      Text(
-                        'Total bikes: ${widget.dockTemp.numberOfBikes.toString()}',
-                        style: const TextStyle(
-                          fontSize: 18.0,
-                          color: Color(0xFF99D2A9),
-                          fontWeight: FontWeight.w700,
-                        ),
-                      )
-                    ]),
-                  // Text(
-                  // 'Total bikes: ${widget.dockTemp.numberOfBikes.toString()}'),
-                  if (widget.dockTemp.numberOfEmptyDocks != null)
-                    // Text(
-                    // 'Available bikes: ${widget.dockTemp.numberOfEmptyDocks.toString()}'),
-
-                    Row(children: [
-                      SizedBox(width: 30.0),
-                      ImageIcon(
-                        AssetImage("assets/images/logo.png"),
-                        color: Color(0xFF99D2A9),
-                        size: 18,
-                      ),
-                      Text(
-                        'Available bikes: ${widget.dockTemp.numberOfEmptyDocks.toString()}',
-                        style: const TextStyle(
-                          fontSize: 18.0,
-                          color: Color(0xFF99D2A9),
-                          fontWeight: FontWeight.w700,
-                        ),
-                      )
-                    ]),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Column(children: [
+                          Row(
+                            children: [
+                              ImageIcon(
+                                AssetImage("assets/images/dock.png"),
+                                color: Color(0xFF99D2A9),
+                                size: 30,
+                              ),
+                              Text(
+                                'Bikes: ${widget.dockTemp.numberOfBikes.toString()}',
+                                style: const TextStyle(
+                                  fontSize: 15.0,
+                                  color: Color(0xFF99D2A9),
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ],
+                          )
+                        ]),
+                        if (widget.dockTemp.numberOfEmptyDocks != null)
+                          Column(children: [
+                            Row(
+                              children: [
+                                ImageIcon(
+                                  AssetImage("assets/images/logo.png"),
+                                  color: Color(0xFF99D2A9),
+                                  size: 30,
+                                ),
+                                Text(
+                                  'Spaces: ${widget.dockTemp.numberOfEmptyDocks.toString()}',
+                                  style: const TextStyle(
+                                    fontSize: 15.0,
+                                    color: Color(0xFF99D2A9),
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ],
+                            )
+                          ]),
+                      ],
+                    ),
                 ],
               ),
             ),

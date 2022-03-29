@@ -8,7 +8,7 @@ import 'package:tuple/tuple.dart';
 const double earthRadiusInMeters = 6371000;
 const double earthRadiusInKm = 6371;
 
-/// Calculates the Eucelian distance between [pos1] and [pos2]
+/// Calculates the Eucelian distance in km between [pos1] and [pos2]
 double calculateDistance(LatLng pos1, LatLng pos2) {
   var p = 0.017453292519943295;
   var a = 0.5 -
