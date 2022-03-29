@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_mapbox_navigation/library.dart';
+import 'package:veloplan/helpers/database_helpers/statistics_helper.dart';
 import 'package:veloplan/helpers/live_location_helper.dart';
 import 'package:veloplan/navbar.dart';
 import 'package:veloplan/screens/navigation/map_screen.dart';
@@ -11,7 +12,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 /// A splash screen displaying turn by turn navigation for a journey.
-/// Author(s): Fariha Choudhury k20059723, Elisabeth Halvorsen k20077737,
+/// Author(s): Fariha Choudhury k20059723, Elisabeth Halvorsen k20077737, Eduard Ragea k20067643
 /// Reference: dormmom.com, Jul 20, 2021, flutter_mapbox_navigation 0.0.26, https://pub.dev/packages/flutter_mapbox_navigation
 
 class TurnByTurn extends StatefulWidget {
@@ -73,14 +74,6 @@ class _TurnByTurnState extends State<TurnByTurn> {
     await directions.startNavigation(wayPoints: wayPoints, options: _options);
   }
 
-  Future updateDistanceOnServer() async {
-    await FirebaseFirestore.instance.collection('users').doc(userID).update({
-      'distance':
-          FieldValue.increment(sharedPreferences.getDouble('distance') ?? 0)
-    });
-    sharedPreferences.clear();
-  }
-
   @override
   Widget build(BuildContext context) {
     Future.delayed(const Duration(seconds: 3));
@@ -123,7 +116,7 @@ class _TurnByTurnState extends State<TurnByTurn> {
           await Future.delayed(Duration(seconds: 3));
           await _controller.finishNavigation();
         } else {}
-        await updateDistanceOnServer();
+        await updateDistanceOnServer(userID);
         directions.finishNavigation();
         break;
       case MapBoxEvent.navigation_finished:
@@ -133,7 +126,7 @@ class _TurnByTurnState extends State<TurnByTurn> {
       case MapBoxEvent.navigation_cancelled:
         routeBuilt = false;
         isNavigating = false;
-        await updateDistanceOnServer();
+        await updateDistanceOnServer(userID);
         break;
       default:
         break;
