@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:veloplan/screens/journey_planner_screen.dart';
 import 'package:veloplan/screens/trips_scheduler_screen.dart';
@@ -21,7 +22,6 @@ class _TripSchedulerPanelWidget extends State<TripSchedulerPanelWidget> {
   final int maximumNumberOfCyclists = 6; // max number of cyclists allowed
   int numberOfCyclists = 1; // min one cyclist allowed
   DateTime selectedDate = DateTime.now();
-
   @override
   Widget build(BuildContext context) => Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -64,12 +64,19 @@ class _TripSchedulerPanelWidget extends State<TripSchedulerPanelWidget> {
               Flexible(
                 fit: FlexFit.tight,
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
+                  onPressed: () async {
+                    final response = await Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => JourneyPlanner(
-                                numberOfCyclists: numberOfCyclists)));
+                                  numberOfCyclists: numberOfCyclists,
+                                  journeyDate: DateTime.now(),
+                                )));
+                    if (response) {
+                      Navigator.of(context).pop(true);
+                    } else {
+                      Navigator.of(context).pop();
+                    }
                   },
                   child: const Text('Now'),
                 ),
@@ -120,7 +127,24 @@ class _TripSchedulerPanelWidget extends State<TripSchedulerPanelWidget> {
     if (pickedDate != null) {
       setState(() {
         selectedDate = pickedDate;
+        navigate();
       });
+    }
+  }
+
+  void navigate() async {
+    final response = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => JourneyPlanner(
+                  numberOfCyclists: numberOfCyclists,
+                  journeyDate: selectedDate,
+                  isScheduled: true,
+                )));
+    if (response) {
+      Navigator.of(context).pop(true);
+    } else {
+      Navigator.of(context).pop();
     }
   }
 }

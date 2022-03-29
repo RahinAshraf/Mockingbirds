@@ -1,10 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
-import 'package:veloplan/helpers/database_manager.dart';
-import 'package:veloplan/helpers/navigation_helpers/navigation_conversion_helpers.dart';
-import 'package:veloplan/screens/summary_journey_screen.dart';
+import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
+
+import '../helpers/database_helpers/database_manager.dart';
+import '../helpers/navigation_helpers/navigation_conversions_helpers.dart';
+import '../models/itinerary.dart';
+import 'package:veloplan/screens/summary_journey_screen.dart';
 
 class GroupId extends StatefulWidget {
   const GroupId({Key? key}) : super(key: key);
@@ -32,6 +35,7 @@ class GroupIdState extends State<GroupId> {
   _joinGroup(String code) async {
     var group = await _databaseManager.getByEquality('group', 'code', code);
     var list = [];
+    var geoList;
     String id = "";
 
     if (group.size == 0) {
@@ -43,13 +47,9 @@ class GroupIdState extends State<GroupId> {
         exists = true;
       });
 
-      group.docs.forEach((element) {
-        var geoList = element.data()['points'];
-        List<List<double>> tempList = [];
-        for (int i = 0; i < geoList.length; i++) {
-          tempList.add([geoList[i].latitude, geoList[i].longitude]);
-        }
-        points = convertListDoubleToLatLng(tempList);
+      var _itinerary = _getDataFromGroup(group);
+
+      group.docs.forEach((element) async {
         id = element.id;
         list = element.data()['memberList'];
         list.add(_databaseManager.getCurrentUser()?.uid);
@@ -60,9 +60,52 @@ class GroupIdState extends State<GroupId> {
             SetOptions(merge: true));
       });
       await _databaseManager.updateByKey('group', id, {'memberList': list});
-      context.push(
-          SummaryJourneyScreen(points!)); // redirects to journey summary screen
+
+      context.push(SummaryJourneyScreen(_itinerary));
     }
+  }
+
+  Itinerary _getDataFromGroup(QuerySnapshot<Map<String, dynamic>> group) {
+    List<DockingStation> _docks = [];
+    var geoList = [];
+    var _myDestinations;
+    var _numberOfCyclists;
+    group.docs.forEach((element) async {
+      var itinerary = await element.reference.collection('itinerary').get();
+      var journeyIDs = itinerary.docs.map((e) => e.id).toList();
+      journeyIDs.forEach((journeyID) async {
+        var journey = await element.reference
+            .collection('itinerary')
+            .doc(journeyID)
+            .get();
+        _numberOfCyclists = journey.data()!['numberOfCyclists'];
+        geoList = journey.data()!['points'];
+        var stationCollection =
+            await journey.reference.collection("dockingStations").get();
+        var stationMap = stationCollection.docs.map((e) => e.data());
+        stationMap.forEach((station) {
+          _docks.add(
+            DockingStation(
+              station['id'],
+              station['name'],
+              true,
+              false,
+              -1,
+              -1,
+              -1,
+              station['location'].longitude,
+              station['location'].latitude,
+            ),
+          );
+        });
+      });
+      List<List<double>> tempList = [];
+      for (int i = 0; i < geoList.length; i++) {
+        tempList.add([geoList[i].latitude, geoList[i].longitude]);
+      }
+      _myDestinations = convertListDoubleToLatLng(tempList);
+    });
+    return Itinerary.navigation(_docks, _myDestinations, _numberOfCyclists);
   }
 
   /// Returns an error message if the entered code is incorrect.

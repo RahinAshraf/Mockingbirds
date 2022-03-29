@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:flutter/material.dart';
-import 'package:veloplan/helpers/database_manager.dart';
-import 'package:veloplan/helpers/new_scroll_behavior.dart';
+import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 import 'package:veloplan/screens/edit_profile_screen.dart';
+
+import 'package:veloplan/helpers/new_scroll_behavior.dart';
 import 'package:veloplan/screens/splash_screen.dart';
 import 'package:veloplan/widgets/profile/profile_page_header.dart';
 

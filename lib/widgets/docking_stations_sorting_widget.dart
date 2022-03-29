@@ -22,6 +22,7 @@ class _DockSorter extends State<DockSorter> {
   late LatLng userCoordinates;
   late DockingStationCarousel _dockingStations;
   List<String> dropdownItems = ['Distance', 'Favourites'];
+  int setterDropdown = -1;
   String selectedFilter = 'Distance';
 
   @override
@@ -67,7 +68,7 @@ class _DockSorter extends State<DockSorter> {
                     onChanged: (String? newFilter) {
                       setState(() {
                         selectedFilter = newFilter!;
-                        // TODO: reload sorted docks based on selected filter
+                        buildCarousel(newFilter);
                       });
                     },
                   ),
@@ -79,7 +80,13 @@ class _DockSorter extends State<DockSorter> {
             padding: EdgeInsets.only(bottom: 10.0),
             child: Divider(),
           ),
-          _dockingStations.build(),
+          buildCarousel(selectedFilter)
+          // _dockingStations.build(selectedFilter),
         ],
       );
+
+  FutureBuilder<List> buildCarousel(var newSelectedFilter) {
+    var dockSt = DockingStationCarousel(userCoordinates);
+    return dockSt.build(newSelectedFilter);
+  }
 }
