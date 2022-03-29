@@ -4,7 +4,7 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 import 'package:veloplan/helpers/database_helpers/schedule_helper.dart';
 import 'package:veloplan/models/itinerary.dart';
-import 'package:veloplan/splash_screen.dart';
+import 'package:veloplan/screens/splash_screen.dart';
 import 'package:veloplan/styles/styling.dart';
 import 'package:veloplan/widgets/upcoming_event_card.dart';
 
