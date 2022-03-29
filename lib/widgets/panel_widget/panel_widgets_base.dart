@@ -2,14 +2,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:veloplan/alerts.dart';
+import 'package:veloplan/providers/location_service.dart';
+import 'package:veloplan/screens/journey_planner_screen.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
+import 'package:veloplan/widgets/dynamic_widget.dart';
 import 'package:veloplan/widgets/panel_widget/panel_widget.dart';
-import '../../providers/location_service.dart';
-import '../../screens/journey_planner_screen.dart';
-import '../dynamic_widget.dart';
 
-///the base for the panel widget which contains all necessary controllers, streams and data sets
-///@author: Rahin Ashraf - k20034059
+/// The base for the panel widget which contains all necessary controllers, streams and data sets.
+/// @author: Rahin Ashraf - k20034059
 abstract class PanelWidgetBase extends StatefulWidget {
   final ScrollController scrollController;
   final PanelController panelController;
@@ -42,8 +42,7 @@ abstract class PanelWidgetBase extends StatefulWidget {
       Key? key})
       : super(key: key);
 
-  ///When triggered, redirects the user to the place_search_Screen in order for them to specify a location to visit
-  ///for the journey
+  /// Redirects the user to the [PlaceSearchScreen] in order for them to specify a location to visit for the journey.
   void handleSearchClick(
       PanelWidget widget,
       BuildContext context,

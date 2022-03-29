@@ -169,7 +169,14 @@ class dockingStationManager {
     List<DockingStation> filtered_stations =
         sortDocksByDistanceFromGivenLocation(userLocation,
             getAllStationsWithAvailableSpace(number_of_empty_spaces));
-    return filtered_stations[0];
+    if (filtered_stations[0] != null)
+      return filtered_stations[0];
+    else {
+      //! TODO:turn to null or write a handler
+      print(
+          "----------------------------it was called on an empty docking station-------------------------------");
+      return DockingStation.empty();
+    }
   }
 
   ///  Get the 5 closest available docking stations by given location and stations, number of available bikes to get

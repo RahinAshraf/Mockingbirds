@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:veloplan/models/weather.dart';
 import 'package:veloplan/screens/navigation/polyline_turn_by_turn.dart';
 import 'package:veloplan/screens/navigation/turn_by_turn_screen.dart';
+import 'package:veloplan/screens/trips_scheduler_screen.dart';
 import 'package:veloplan/widgets/group_id_join_code_widget.dart';
 import 'package:veloplan/widgets/popup_widget.dart';
-import 'package:veloplan/screens/trips_scheduler_screen.dart';
+import 'package:veloplan/utilities/alert_type.dart';
 
 import 'helpers/navigation_helpers/navigation_conversions_helpers.dart';
 import 'models/itinerary.dart';
@@ -12,6 +14,7 @@ import 'models/itinerary.dart';
 /// Generic popups used thorough the app
 /// Author(s) Marija
 /// Contributors: Nicole
+
 class Popups {
   // Questions
   PopupWidget buildPopupDialogNewJourney(BuildContext context) {
@@ -20,7 +23,7 @@ class Popups {
         text: "Plan a journey",
         onPressed: () async {
           final response = await Navigator.push(context,
-              MaterialPageRoute(builder: (context) => TripScheduler()));
+              MaterialPageRoute(builder: (context) => TripSchedulerScreen()));
           if (response || response == null) {
             Navigator.of(context).pop(true);
           }
@@ -90,6 +93,17 @@ class Popups {
         title: "Journey starting soon!",
         text: "You will be redirected automatically.",
         children: children,
+        type: AlertType.warning);
+  }
+
+  PopupWidget buildWeather(BuildContext context, weather, weatherIcon) {
+    List<PopupButtonWidget> children = [
+      PopupButtonWidget(text: "Leave", onPressed: () {}),
+    ];
+    return PopupWidget(
+        title: "Weather",
+        text: "You will be redirected automatically.",
+        children: [],
         type: AlertType.warning);
   }
 

@@ -3,14 +3,12 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
-import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/helpers/live_location_helper.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
+import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:veloplan/.env.dart';
 import 'package:veloplan/widgets/docking_station_widget.dart';
-
-import '../../providers/weather_manager.dart';
 
 /// Class to display a mapbox map with other possible widgets on top
 /// Author(s): Fariha Choudhury k20059723, Elisabeth Koren Halvorsen k20077737
@@ -74,14 +72,14 @@ class BaseMapboxMap {
 
   /// gets the new [cameraposition]
   Future<CameraPosition> getNewCameraPosition() async {
-    print("before:" +
-        cameraPosition.target.toString() +
-        "----------------------------------");
+    // print("before:" +
+    //     cameraPosition.target.toString() +
+    //     "----------------------------------");
     await updateCurrentLocation();
     _updateCameraPosition();
-    print("after:" +
-        cameraPosition.target.toString() +
-        "----------------------------------");
+    // print("after:" +
+    //     cameraPosition.target.toString() +
+    //     "----------------------------------");
     return cameraPosition;
   }
 

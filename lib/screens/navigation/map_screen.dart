@@ -9,10 +9,10 @@ import '../../helpers/database_helpers/database_manager.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:veloplan/widgets/docking_station_widget.dart';
-import 'package:veloplan/models/map_models/base_map_model.dart';
+// import 'package:veloplan/models/map_models/base_map_model.dart';
 
-import '../../models/weather.dart';
-import '../../providers/weather_manager.dart';
+// import '../../models/weather.dart';
+// import '../../providers/weather_manager.dart';
 import '../../widgets/weather_popup_card.dart';
 
 /// Map screen focused on a user's live location
@@ -28,34 +28,17 @@ class _MapPageState extends State<MapPage> {
   LatLng currentPosition = getLatLngFromSharedPrefs();
   late BaseMapboxMap _baseMap;
   DatabaseManager _databaseManager = DatabaseManager();
-  Weather weather = Weather.defaultvalue();
-  String weatherIcon = "10n";
-  WeatherManager _weatherManager = WeatherManager();
+  // Weather weather = Weather.defaultvalue();
+  // String weatherIcon = "10n";
+  // WeatherManager _weatherManager = WeatherManager();
   Timer? timer;
 
   @override
   void initState() {
+    // startWeather();
     _deleteOldGroup();
-    fetchWeather();
-    print("--------------locaation---------" + currentPosition.toString());
-
-    timer = Timer.periodic(Duration(seconds: 5), (Timer t) {
-      _weatherManager
-          .importWeatherForecast(
-              currentPosition.latitude, currentPosition.longitude)
-          .then((value) {
-        setState(() {
-          this.weather = _weatherManager.all_weather_data;
-          this.weatherIcon = _weatherManager.all_weather_data.current_icon;
-        });
-      });
-    });
     super.initState();
-  }
-
-  Future<void> fetchWeather() async {
-    await _weatherManager.importWeatherForecast(
-        currentPosition.latitude, currentPosition.longitude);
+    // print("--------------locaation---------" + currentPosition.toString());
   }
 
   Future<void> _deleteOldGroup() async {
@@ -67,17 +50,31 @@ class _MapPageState extends State<MapPage> {
           'group', 'code', user.data()!['group']);
       group.docs.forEach((element) {
         Timestamp timestamp = element.data()['createdAt'];
+        var memberList = element.data()['memberList'];
         if (DateTime.now().difference(timestamp.toDate()) > Duration(days: 1)) {
           element.reference.delete();
-          _databaseManager.setByKey(
-              'users',
-              _databaseManager.getCurrentUser()!.uid,
-              {'group': null},
-              SetOptions(merge: true));
+          for (String member in memberList) {
+            _databaseManager.setByKey(
+                'users', member, {'group': null}, SetOptions(merge: true));
+          }
         }
       });
     }
   }
+
+  // Future<void> startWeather(_weatherManager, weatherIcon, weather) async {
+  //   timer = Timer.periodic(Duration(seconds: 30), (Timer t) {
+  //     _weatherManager
+  //         .importWeatherForecast(
+  //             currentPosition.latitude, currentPosition.longitude)
+  //         .then((value) {
+  //       setState(() {
+  //         weather = _weatherManager.all_weather_data;
+  //         weatherIcon = _weatherManager.all_weather_data.current_icon;
+  //       });
+  //     });
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -85,18 +82,22 @@ class _MapPageState extends State<MapPage> {
         builder: (BuildContext context, Widget? child, MapModel model) {
       _baseMap = BaseMapboxMap(model);
       addPositionZoom();
-      addWeather(context, weather, weatherIcon);
-      return SafeArea(
-          child: Stack(
-              children: _baseMap.getWidgets() +
-                  [
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Container(
-                          height: 200,
-                          child: DockStation(key: dockingStationKey)),
-                    )
-                  ]));
+
+      // timer = Timer.periodic(Duration(minutes: 10), (Timer t) {
+      //   _weatherManager
+      //       .importWeatherForecast(
+      //           currentPosition.latitude, currentPosition.longitude)
+      //       .then((value) {
+      //     setState(() {
+      //       this.weather = _weatherManager.all_weather_data;
+      //       this.weatherIcon = _weatherManager.all_weather_data.current_icon;
+      //     });
+      //   });
+      // });
+
+      // addWeather(context, weather, weatherIcon);
+      addDockingStationCard();
+      return SafeArea(child: Stack(children: _baseMap.getWidgets()));
     }));
   }
 
@@ -105,17 +106,23 @@ class _MapPageState extends State<MapPage> {
     _baseMap.addWidget(Container(
       alignment: Alignment(0.9, 0.90),
       child: FloatingActionButton(
-        heroTag: "center_to_current_loaction",
-        onPressed: () async {
-          _baseMap.controller?.animateCamera(CameraUpdate.newCameraPosition(
-              await _baseMap.getNewCameraPosition()));
-        },
-        child: const Icon(Icons.my_location),
-      ),
+          heroTag: "center_to_current_loaction",
+          onPressed: () async {
+            _baseMap.controller?.animateCamera(CameraUpdate.newCameraPosition(
+                await _baseMap.getNewCameraPosition()));
+          },
+          child: const Icon(Icons.my_location)),
     ));
   }
 
-  void addWeather(context, weather, weatherIcon) {
-    _baseMap.addWidget(buildWeatherIcon(context, weather, weatherIcon));
+  void addDockingStationCard() {
+    _baseMap.addWidget(Align(
+      alignment: Alignment.bottomCenter,
+      child: Container(height: 200, child: DockStation(key: dockingStationKey)),
+    ));
   }
+
+  // void addWeather(context, weather, weatherIcon) {
+  //   _baseMap.addWidget(buildWeatherIcon(context, weather, weatherIcon));
+  // }
 }

@@ -1,11 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:veloplan/popups.dart';
+import 'package:veloplan/styles/styling.dart';
 
 import '../models/weather.dart';
 import '../styles/animation/hero_dialog_route.dart';
 
 Align buildWeatherIcon(context, weather, weatherIcon) {
+  // final Popups popup = Popups();
+//   return FloatingActionButton(
+//       heroTag: "weather",
+//       onPressed: () async {
+//         Navigator.of(context).push(MaterialPageRoute(
+//             builder: (context) =>
+//                 popup.buildWeather(context, weather, weatherIcon)));
+//       });
+// }
+
   return Align(
     //EdgeInsets.only(left: 300, top: 150, right: 40, bottom: 550),
+
     alignment: Alignment(0.9, -0.9),
     child: SizedBox(
         height: MediaQuery.of(context).size.height / 15,
@@ -13,10 +26,9 @@ Align buildWeatherIcon(context, weather, weatherIcon) {
         child: GestureDetector(
           behavior: HitTestBehavior.translucent,
           onTap: () {
+            // popup.buildPopupDialogNewJourney(context);
             Navigator.of(context).push(HeroDialogRoute(builder: (context) {
-              return _WeatherPopupCard(
-                weather: weather,
-              );
+              return _WeatherPopupCard(weather: weather);
             }));
           },
           child: Hero(

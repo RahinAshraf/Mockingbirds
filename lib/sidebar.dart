@@ -96,7 +96,7 @@ class SideBar extends StatelessWidget {
         break;
       case 4:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => HelpPage(),
+          builder: (context) => HelpScreen(),
         ));
         break;
       case 5:

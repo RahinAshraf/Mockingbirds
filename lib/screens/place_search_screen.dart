@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:veloplan/providers/location_service.dart';
-import 'journey_planner_screen.dart';
+import 'package:veloplan/screens/journey_planner_screen.dart';
+import 'package:veloplan/styles/colors.dart';
 
-///@author - Rahin Ashraf
-
+/// @author: Rahin Ashraf - k20034059
 class PlaceSearchScreen extends StatefulWidget {
   late LocationService locService;
-
   bool? isPop;
 
   PlaceSearchScreen(this.locService, {Key? key, this.isPop = false})
       : super(key: key);
 
   @override
-  PlaceSearchState createState() {
-    return PlaceSearchState();
+  PlaceSearchScreenState createState() {
+    return PlaceSearchScreenState();
   }
 }
 
-class PlaceSearchState extends State<PlaceSearchScreen> {
+class PlaceSearchScreenState extends State<PlaceSearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,12 +27,12 @@ class PlaceSearchState extends State<PlaceSearchScreen> {
             Padding(
               padding: const EdgeInsets.only(left: 20, top: 30, right: 20),
               child: TextField(
+                autofocus: true,
                 decoration: InputDecoration(
                   prefixIcon: IconButton(
-                    icon: const Icon(Icons.arrow_back_rounded,
-                        color: Colors.green),
+                    icon: Icon(Icons.arrow_back_rounded,
+                        color: CustomColors.green),
                     onPressed: () {
-                      print("PREFIX");
                       if (widget.isPop ?? false) {
                         Navigator.pop(context);
                       } else {
@@ -45,41 +44,18 @@ class PlaceSearchState extends State<PlaceSearchScreen> {
                     },
                   ),
                   hintText: "Search for a London location",
-
-                  //Textfield front-end customization
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(30.0),
                     borderSide:
-                        const BorderSide(color: Colors.green, width: 2.0),
+                        BorderSide(color: CustomColors.green, width: 2.0),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(30.0),
                     borderSide:
-                        const BorderSide(color: Colors.green, width: 2.0),
-                  ),
-                  disabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30.0),
-                    borderSide:
-                        const BorderSide(color: Colors.green, width: 2.0),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30.0),
-                    borderSide:
-                        const BorderSide(color: Colors.green, width: 2.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30.0),
-                    borderSide:
-                        const BorderSide(color: Colors.green, width: 2.0),
-                  ),
-                  focusedErrorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30.0),
-                    borderSide:
-                        const BorderSide(color: Colors.green, width: 2.0),
+                        BorderSide(color: CustomColors.green, width: 2.0),
                   ),
                 ),
                 onChanged: (value) {
-                  // Call get place function
                   Future.delayed(const Duration(milliseconds: 100), () {
                     widget.locService.getPlaceFeatures(value);
                   });
@@ -101,20 +77,21 @@ class PlaceSearchState extends State<PlaceSearchScreen> {
                               width: 0,
                             )
                           : ListTile(
-                              leading: const SizedBox(
-                                  height: double.infinity,
-                                  child: CircleAvatar(
-                                      backgroundColor: Colors.green,
-                                      child: Icon(
-                                        Icons.location_pin,
-                                        color: Colors.white,
-                                      ))),
+                              leading: SizedBox(
+                                height: double.infinity,
+                                child: CircleAvatar(
+                                  backgroundColor: CustomColors.green,
+                                  child: Icon(Icons.location_pin,
+                                      color: Colors.white),
+                                ),
+                              ),
                               onTap: () {
                                 Navigator.of(context).pop(place);
                               },
                               title: Text(address,
                                   style: const TextStyle(
-                                      fontWeight: FontWeight.bold)),
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.black87)),
                             );
                     },
                     itemCount: placeModels == null ? 0 : placeModels.length,

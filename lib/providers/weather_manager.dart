@@ -8,7 +8,7 @@ class WeatherManager {
 
   Future<void> importWeatherForecast(double lat, double lon) async {
     var data = await http.get(Uri.parse(
-        "https://api.openweathermap.org/data/2.5/onecall?lat=$lat&lon=$lon&exclude=&appid=edc1b9c88e6614d17f879f55bf392a00"));
+        "https://api.openweathermap.org/data/2.5/onecall?lat=$lat&lon=$lon&exclude=&appid=1deadbe1ade3be3687e03a43894d48a5"));
     var jsonData = json.decode(data.body);
     try {
       Weather current_weather = Weather(
@@ -21,6 +21,8 @@ class WeatherManager {
           jsonData["current"]["weather"][0]["icon"]);
 
       all_weather_data = current_weather;
+
+      // all_weather_data.printWeather();
     } on FormatException {}
   }
 

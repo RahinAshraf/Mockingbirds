@@ -8,7 +8,7 @@ class JourneyScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         body: ListView(
-      children: <Widget>[
+      children: [
         Container(
             alignment: Alignment.center,
             padding: const EdgeInsets.all(10),
