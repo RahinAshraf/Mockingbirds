@@ -19,15 +19,8 @@ class MapPlace {
 
 class JourneyPlanner extends StatefulWidget {
   final int? numberOfCyclists;
-  final DateTime? journeyDate;
- final bool isScheduled;
 
-  JourneyPlanner({
-    Key? key,
-    this.numberOfCyclists,
-    this.journeyDate,
-    this.isScheduled = false,
-  }) : super(key: key);
+  JourneyPlanner({Key? key, this.numberOfCyclists}) : super(key: key);
 
   @override
   _JourneyPlanner createState() => _JourneyPlanner();
@@ -92,11 +85,9 @@ class _JourneyPlanner extends State<JourneyPlanner> {
             toTextEditController: toTextEditingController,
             dynamicWidgets: dynamicWidgets,
             panelController: panelController,
-            numberOfCyclists: widget.numberOfCyclists ?? 1,
+            numberOfCyclists: widget.numberOfCyclists ?? 0,
             selectedCoords: coordsList,
             staticListMap: staticCordMap,
-            isScheduled: widget.isScheduled,
-            journeyDate: widget.journeyDate!,
           ),
         ),
       ),

@@ -13,7 +13,6 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-late SharedPreferences sharedPreferences;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   checkPermissions();
@@ -24,7 +23,6 @@ void main() async {
   runApp(ScopedModel<MapModel>(
       model: _model,
       child: MaterialApp(
-        debugShowCheckedModeBanner: false,
         initialRoute: '/',
         routes: {
           '/': (context) => const MyApp(),

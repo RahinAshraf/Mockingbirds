@@ -3,26 +3,21 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:veloplan/models/itinerary.dart';
-import 'package:veloplan/helpers/database_helpers/schedule_helper.dart';
 import 'package:veloplan/alerts.dart';
 import 'package:veloplan/helpers/live_location_helper.dart';
+import 'package:veloplan/helpers/navigation_helpers/navigation_conversion_helpers.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:veloplan/providers/location_service.dart';
 import 'package:veloplan/screens/journey_planner_screen.dart';
+import 'package:veloplan/screens/navigation/map_with_route_screen.dart';
 import 'package:veloplan/screens/summary_journey_screen.dart';
 import 'package:veloplan/styles/colors.dart';
 import 'package:veloplan/styles/styling.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
 import 'package:veloplan/widgets/dynamic_widget.dart';
 import 'package:veloplan/widgets/panel_widget/panel_widgets_base.dart';
-import '../../helpers/navigation_helpers/navigation_conversions_helpers.dart';
-import '../../models/docking_station.dart';
-import '../../providers/location_service.dart';
-import '../dynamic_widget.dart';
-import 'package:veloplan/helpers/database_helpers/history_helper.dart';
 import 'package:veloplan/widgets/panel_widget/panel_widget_exts.dart';
 
 /// Renders [PanelWidget] used in [JourneyPlanner] screen.
@@ -30,7 +25,6 @@ import 'package:veloplan/widgets/panel_widget/panel_widget_exts.dart';
 /// It is an interactive panel the user can slide up or down,
 /// when wanting to input their desired locations for the journey.
 /// @author: Rahin Ashraf - k20034059
-///Contributor: Nicole
 class PanelWidget extends PanelWidgetBase {
   PanelWidget(
       {Key? key,
@@ -44,9 +38,7 @@ class PanelWidget extends PanelWidgetBase {
       required TextEditingController toTextEditController,
       required int numberOfCyclists,
       required TextEditingController fromTextEditController,
-      required PanelController panelController,
-      required bool isScheduled,
-      required DateTime journeyDate})
+      required PanelController panelController})
       : super(
             selectionMap: selectionMap,
             address: address,
@@ -58,9 +50,7 @@ class PanelWidget extends PanelWidgetBase {
             toTextEditController: toTextEditController,
             fromTextEditController: fromTextEditController,
             panelController: panelController,
-            numberOfCyclists: numberOfCyclists,
-            isScheduled: isScheduled,
-            journeyDate: journeyDate);
+            numberOfCyclists: numberOfCyclists);
   @override
   PanelWidgetState createState() {
     return PanelWidgetState();
@@ -98,8 +88,6 @@ class PanelWidgetState extends State<PanelWidget> {
     widget.listDynamic.add(DynamicWidget(
       selectedCoords: widget.selectedCoords,
       coordDataMap: response,
-      isFrom: false,
-      numberOfCyclists: widget.numberOfCyclists,
     ));
     widget.dynamicWidgets.sink.add(widget.listDynamic);
   }
@@ -133,7 +121,6 @@ class PanelWidgetState extends State<PanelWidget> {
     super.initState();
   }
 
-//TODO what do we do with isFrom here?
   void _listToMapClick() {
     final selectedCoords = widget.selectedCoords;
 
@@ -141,8 +128,6 @@ class PanelWidgetState extends State<PanelWidget> {
       final dynamicWidget = DynamicWidget(
         selectedCoords: selectedCoords,
         coordDataMap: response,
-        isFrom: false,
-        numberOfCyclists: widget.numberOfCyclists,
       );
 
       final list = widget.listDynamic;
@@ -169,9 +154,9 @@ class PanelWidgetState extends State<PanelWidget> {
     });
   }
 
-  ///When called, this function sets the first location of the journey to the users current location
-  _useCurrentLocationButtonHandler(TextEditingController controller, String key,
-      bool isFrom, int numberCyclists) async {
+  /// When called, this function sets the first location of the journey to the user's current location.
+  _useCurrentLocationButtonHandler(
+      TextEditingController controller, String key) async {
     sharedPreferences.setString('source', json.encode(response));
     String place = response['place'];
     double latitudeOfPlace = response['location'].latitude;
@@ -180,18 +165,16 @@ class PanelWidgetState extends State<PanelWidget> {
     controller.text = place;
     staticListMap[key] = currentLocationCoords;
 
-    PanelExtensions.of().checkInputLocation(
-        controller, editDockTextEditController, isFrom, numberCyclists);
+    PanelExtensions.of()
+        .checkInputLocation(controller, editDockTextEditController);
   }
 
-  ///Function which builds the static row of components which are displayed permanently. Statically built, as every journey
-  ///needs to specify a starting point
+  /// Builds the static row of components which are displayed permanently.
+  /// Statically built, as every journey needs to specify a starting point.
   Widget _buildStatic(TextEditingController controller,
       {String? hintText,
       required BuildContext context,
       required String label,
-      required bool isFrom,
-      required int numberCyclists,
       required Function(List<double?>) onAddressAdded}) {
     return Column(
       children: [
@@ -201,8 +184,8 @@ class PanelWidgetState extends State<PanelWidget> {
             widget.handleOnSearchClick(context, controller, onAddressAdded);
           },
           onEditingComplete: () {
-            PanelExtensions.of(context: context).checkInputLocation(controller,
-                editDockTextEditController, true, widget.numberOfCyclists);
+            PanelExtensions.of(context: context)
+                .checkInputLocation(controller, editDockTextEditController);
           },
           controller: controller,
           decoration: InputDecoration(
@@ -215,27 +198,23 @@ class PanelWidgetState extends State<PanelWidget> {
             disabledBorder: circularInputBorder(),
             suffixIcon: IconButton(
               onPressed: () {
-                _useCurrentLocationButtonHandler(
-                    controller, label, isFrom, numberCyclists);
+                _useCurrentLocationButtonHandler(controller, label);
               },
               icon:
                   Icon(Icons.my_location, size: 20, color: CustomColors.green),
             ),
           ),
         ),
-        PanelExtensions.of(context: context).buildDefaultClosestDock(
-            editDockTextEditController, controller, isFrom, numberCyclists),
+        PanelExtensions.of(context: context)
+            .buildDefaultClosestDock(editDockTextEditController, controller),
       ],
     );
   }
 
   void addCordFrom(List<double?> newCord) {
     staticListMap[fromLabelKey] = newCord;
-    //TODO: isFrom is true!!
-    print(
-        "ONCHANGED getting isFrom!!! ${widget.numberOfCyclists}  in addcoordfrom");
-    PanelExtensions.of(context: context).fillClosestDockBubble(newCord[0],
-        newCord[1], editDockTextEditController, true, widget.numberOfCyclists);
+    PanelExtensions.of(context: context)
+        .getClosetDock(newCord[0], newCord[1], editDockTextEditController);
   }
 
   void addCordTo(List<double?> newCord) {
@@ -268,18 +247,8 @@ class PanelWidgetState extends State<PanelWidget> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              IconButton(
-                onPressed: () {
-                  Navigator.of(context).pop(true);
-                },
-                icon: const Icon(
-                  Icons.arrow_back,
-                  size: 30,
-                  color: Colors.green,
-                ),
-              ),
               Text(
-                "Explore London",
+                'Please fill in the following trip details.',
                 style: infoTextStyle,
               ),
               SizedBox(width: 5.0),
@@ -308,11 +277,9 @@ class PanelWidgetState extends State<PanelWidget> {
             children: [
               _buildStatic(widget.fromTextEditController,
                   hintText: "Where from?",
-                  label: "From",
+                  label: "FROM",
                   context: context,
-                  onAddressAdded: addCordFrom,
-                  isFrom: true,
-                  numberCyclists: widget.numberOfCyclists),
+                  onAddressAdded: addCordFrom),
               Column(
                 children: [
                   StreamBuilder<List<DynamicWidget>>(
@@ -366,9 +333,8 @@ class PanelWidgetState extends State<PanelWidget> {
               SizedBox(
                 width: MediaQuery.of(context).size.width / 2,
                 child: ElevatedButton(
-                  onPressed:
-                      widget.isScheduled ? _handleSaveClick : _handleStartClick,
-                  child: widget.isScheduled ? text("SAVE") : text("START"),
+                  onPressed: _handleStartClick,
+                  child: text("START"),
                 ),
               ),
             ],
@@ -378,38 +344,11 @@ class PanelWidgetState extends State<PanelWidget> {
     );
   }
 
-  Future<void> _handleSaveClick() async {
-    final hasEmptyField = widget.listDynamic
-        .any((element) => element.placeTextController.text.isEmpty);
-
-    applyConstraints(
-        widget.fromTextEditController, widget.toTextEditController);
-
-    if (hasEmptyField) {
-      alert.showSnackBarErrorMessage(
-          context, alert.startPointMustBeDefinedMessage);
-      return;
-    } else if (areAdjacentCoords(widget.selectedCoords)) {
-      alert.showSnackBarErrorMessage(context, alert.noAdjacentLocationsAllowed);
-      return;
-    } else {
-      List<List<double?>?> tempList = [];
-      tempList.addAll(staticListMap.values);
-      tempList.addAll(widget.selectedCoords);
-
-      ScheduleHelper helper = ScheduleHelper();
-      helper.createScheduleEntry(
-          widget.journeyDate, tempList, widget.numberOfCyclists);
-    }
-    // Navigate back to the previous screen, useful for tbt
-    Navigator.of(context).pop(true);
-  }
-
   /// Deals with the user pressing the START button. Applies the constraints for a journey.
   /// For all the coordinates of the locations the user specified, creates a new list - this new list is a list of all the
   /// closest docking stations for the locations the user specified. This new list is then passed onto [MapRoutePage].
   /// THIS FUNCTION NEEDS TO BE REFACTORED FURTHER
-  Future<void> _handleStartClick() async {
+  void _handleStartClick() {
     final hasEmptyField = widget.listDynamic
         .any((element) => element.placeTextController.text.isEmpty);
 
@@ -431,21 +370,14 @@ class PanelWidgetState extends State<PanelWidget> {
       List<LatLng>? points = convertListDoubleToLatLng(tempList);
 
       List<LatLng> closestDockList = [];
-      HistoryHelper historyHelper = HistoryHelper();
-
-      List<DockingStation> selectedDocks = [];
       if (points != null) {
         for (int i = 0; i < points.length; i++) {
           DockingStation closestDock = _stationManager
               .getClosestDock(LatLng(points[i].latitude, points[i].longitude));
-          //get the dock
-          print("------------- adding dock" + closestDock.name);
-          selectedDocks.add(closestDock);
-          //get the coord
-          closestDockList.add(closestDock.getLatlng());
+          LatLng closetDockCoord = LatLng(closestDock.lat, closestDock.lon);
+          closestDockList.add(closetDockCoord);
         }
         print("ALL_COORDINATES FOR CLOSEST DOCKS => $closestDockList");
-        print("ALL_DOCKS FOR CLOSEST DOCKS => ${selectedDocks.last.name}");
       }
 
       List<LatLng> closestDocksWithNoAdjancents = [];
@@ -475,21 +407,7 @@ class PanelWidgetState extends State<PanelWidget> {
         //! show something went wrong alert
         print("hello");
       } else {
-        Itinerary _itinerary = new Itinerary.navigation(
-            selectedDocks, points, widget.numberOfCyclists);
-
-        //save the journey into the database
-        historyHelper.createJourneyEntry(selectedDocks);
-
-        //! TODO: if response = null, we dont want the pop to be true! talk with elisabeth
-
-        //go to the summary of journey screen
-        final response = await context.push(SummaryJourneyScreen(_itinerary));
-        if (response || response == null) {
-          Navigator.of(context).pop(true);
-        } else {
-          Navigator.of(context).pop();
-        }
+        context.push(SummaryJourneyScreen(closestDockList));
       }
     }
   }

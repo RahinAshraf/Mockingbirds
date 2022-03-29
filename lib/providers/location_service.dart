@@ -5,6 +5,8 @@ import 'dart:convert' as convert;
 import 'package:mapbox_gl/mapbox_gl.dart';
 import '../.env.dart';
 
+/*
+*/
 class LocationService {
   final String key = MAPBOX_ACCESS_TOKEN; //Mapbox api key
 
@@ -55,10 +57,12 @@ class LocationService {
         "https://api.mapbox.com/geocoding/v5/mapbox.places/$input.json?limit=1&proximity=-0.12542189962264239,51.50218910230291&bbox=-0.591614,51.265980,0.279053,51.707474&access_token=$key"; //geocoding Api url request for data based on the users input, only showing retrieving matching results that are in London
     var response = await http.get(Uri.parse(url));
     var json = convert.jsonDecode(response.body);
+    //print(json);
 
     List placeCoords = json['features'][0]['geometry']['coordinates'];
     List placeCoordsReversed = placeCoords.reversed
         .toList(); //switch (lng,lat) from server, to (lat,lng) to keep consistent with app
+    //print(placeCoordsReversed);
     return placeCoordsReversed;
   }
 
@@ -72,10 +76,12 @@ class LocationService {
         "https://api.mapbox.com/geocoding/v5/mapbox.places/$input.json?limit=1&access_token=$key"; //geocoding Api url request for data based on the users input, only showing retrieving matching results that are in London
     var response = await http.get(Uri.parse(url));
     var json = convert.jsonDecode(response.body);
+    //print(json);
 
     List placeCoords = json['features'][0]['geometry']['coordinates'];
     List placeCoordsReversed = placeCoords.reversed
         .toList(); //switch (lng,lat) from server, to (lat,lng) to keep consistent with app
+    //print(placeCoordsReversed);
     return placeCoordsReversed;
   }
 }

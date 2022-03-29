@@ -1,6 +1,8 @@
 import 'dart:math';
+// import 'package:latlong2/latlong.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:tuple/tuple.dart';
+import 'package:vector_math/vector_math.dart';
 
 /// Helper methods related to map navigation
 /// Author(s): Elisabeth Koren Halvorsen k20077737
@@ -8,7 +10,7 @@ import 'package:tuple/tuple.dart';
 const double earthRadiusInMeters = 6371000;
 const double earthRadiusInKm = 6371;
 
-/// Calculates the Eucelian distance in km between [pos1] and [pos2]
+/// Calculates the Eucelian distance between [pos1] and [pos2]
 double calculateDistance(LatLng pos1, LatLng pos2) {
   var p = 0.017453292519943295;
   var a = 0.5 -
@@ -51,16 +53,7 @@ LatLng getCenter(List<LatLng> points) {
 
 /// gets the zoom factor from [radius]
 double getZoom(double radius) {
-  if (radius <= 0) {
-    return -1;
-  }
   double x = (2 * pi * earthRadiusInKm) / (2 * radius);
   double log2 = log(x) / log(2);
-  double sol = log2 / 1.125;
-  if (sol > 20) {
-    return 20;
-  } else if (sol < 0) {
-    return 0;
-  }
   return log2 / 1.125;
 }
