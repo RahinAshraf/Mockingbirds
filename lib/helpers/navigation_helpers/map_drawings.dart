@@ -15,62 +15,62 @@ void placeDockMarkers(
     controller.addSymbol(
         SymbolOptions(
             geometry: LatLng(station.lat, station.lon),
-            iconSize: 0.7,
-            iconImage: "assets/icon/bicycle.png"),
+            iconSize: 0.3,
+            iconImage: "assets/images/appicon.png"),
         {
           "station": station,
         });
   }
 }
 
-// Widget displayDockCard(DockingStation station) {
-//   //CHANGE THIS TO CREATE CARD
-//   print("Will call widget next");
-//   // return _DockPopupCard(latlng: current,);
-//   dockingStationKey.currentState
-//       ?.setData(DockingStationCard.station(station), true);
-// }
-
 /// Creates a [fills] Map with the specified geometry for the chosen [routeResponse]
 Future<Map<String, Object>> setFills(Map fills, dynamic routeResponse) async {
-  return <String, Object>{
-    "type": "FeatureCollection",
-    "features": [
-      {
-        "type": "Feature",
-        "id": 0,
-        "geometry": routeResponse,
-      },
-    ],
-  };
+  try {
+    return <String, Object>{
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "id": 0,
+          "geometry": routeResponse,
+        },
+      ],
+    };
+  } catch (e) {
+    return {};
+  }
 }
 
 /// Adds the journey as a polyline layer to the map
 void addFills(MapboxMapController? controller, Map fills, _model) async {
-  await controller!.addSource(
-      "fills", GeojsonSourceProperties(data: fills)); //creates the line
-  await controller.addLineLayer(
-    "fills",
-    "lines",
-    LineLayerProperties(
-      lineColor: Color.fromARGB(255, 197, 23, 23).toHexStringRGB(),
-      lineCap: "round",
-      lineJoin: "round",
-      lineWidth: 5,
-    ),
-  );
-  _model.setController(controller); //MOVE THIS OUT OF ADDFILLS -----????
-  // await controller.addSymbolLayer(sourceId, layerId, properties)
+  try {
+    await controller!.addSource(
+        "fills", GeojsonSourceProperties(data: fills)); //creates the line
+    await controller.addLineLayer(
+      "fills",
+      "lines",
+      LineLayerProperties(
+        lineColor: Color.fromARGB(255, 197, 23, 23).toHexStringRGB(),
+        lineCap: "round",
+        lineJoin: "round",
+        lineWidth: 5,
+      ),
+    );
+    _model.setController(controller); //MOVE THIS OUT OF ADDFILLS -----????
+    // await controller.addSymbolLayer(sourceId, layerId, properties)
+  } catch (e) {}
 }
 
 /// Removes the currently displayed polyline layer and destination markers from the map
 void removeFills(MapboxMapController? controller, Set<Symbol> polylineSymbols,
     Map fills) async {
-  await controller!.removeLayer("lines");
-  await controller.removeSource("fills");
-  await controller.removeSymbols(polylineSymbols);
-  polylineSymbols.clear();
-  fills.clear();
+  try {
+    await controller!.removeLayer("lines");
+    await controller.removeSource("fills");
+    await controller.removeSymbols(polylineSymbols);
+    polylineSymbols.clear();
+    fills.clear();
+  } catch (e) {}
 }
 
 /// Adds marker symbols for each multistop destination of a [journey] to the map
@@ -90,7 +90,9 @@ void setPolylineMarkers(MapboxMapController controller, List<LatLng> journey,
 void removePolylineMarkers(MapboxMapController controller, List<LatLng> journey,
     Set<Symbol> polylineSymbols) async {
   if (polylineSymbols.isNotEmpty) {
-    await controller.removeSymbols(polylineSymbols);
-    polylineSymbols.clear();
+    try {
+      await controller.removeSymbols(polylineSymbols);
+      polylineSymbols.clear();
+    } catch (e) {}
   }
 }
