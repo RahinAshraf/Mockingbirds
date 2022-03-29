@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 import 'package:collection/collection.dart';
 import 'package:veloplan/models/docking_station.dart';
@@ -18,6 +19,7 @@ class FavouriteHelper {
   }
 
   ///Adds a docking station to a users favourites
+  @visibleForTesting
   Future<void> addFavourite(
     String stationId,
     String name,

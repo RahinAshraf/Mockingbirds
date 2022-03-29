@@ -50,6 +50,9 @@ class _FakeDocumentReference_9<T extends Object?> extends _i1.Fake
 class _FakeQuery_10<T extends Object?> extends _i1.Fake
     implements _i2.Query<T> {}
 
+class _FakeSnapshotMetadata_11 extends _i1.Fake
+    implements _i2.SnapshotMetadata {}
+
 /// A class which mocks [DatabaseManager].
 ///
 /// See the documentation for Mockito's code generation for more information.
@@ -420,4 +423,31 @@ class MockCollectionReference<T extends Object?> extends _i1.Mock
             #isNull: isNull
           }),
           returnValue: _FakeQuery_10<T>()) as _i2.Query<T>);
+}
+
+/// A class which mocks [QuerySnapshot].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockQuerySnapshot<T extends Object?> extends _i1.Mock
+    implements _i2.QuerySnapshot<T> {
+  MockQuerySnapshot() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  List<_i2.QueryDocumentSnapshot<T>> get docs =>
+      (super.noSuchMethod(Invocation.getter(#docs),
+              returnValue: <_i2.QueryDocumentSnapshot<T>>[])
+          as List<_i2.QueryDocumentSnapshot<T>>);
+  @override
+  List<_i2.DocumentChange<T>> get docChanges => (super.noSuchMethod(
+      Invocation.getter(#docChanges),
+      returnValue: <_i2.DocumentChange<T>>[]) as List<_i2.DocumentChange<T>>);
+  @override
+  _i2.SnapshotMetadata get metadata =>
+      (super.noSuchMethod(Invocation.getter(#metadata),
+          returnValue: _FakeSnapshotMetadata_11()) as _i2.SnapshotMetadata);
+  @override
+  int get size =>
+      (super.noSuchMethod(Invocation.getter(#size), returnValue: 0) as int);
 }
