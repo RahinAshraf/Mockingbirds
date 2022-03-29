@@ -246,7 +246,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
                   child: Center(
                       child: Image.asset('assets/images/summary_journey.png'))),
               Container(
-                  height: 30,
+                  height: 55,
                   padding: const EdgeInsets.fromLTRB(75, 5, 75, 5),
                   child: ElevatedButton(
                     child: Text('Organiser:' + organiser,
@@ -255,8 +255,9 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
                   )),
               if (isInGroup)
                 Container(
+                    height: 55,
                     alignment: Alignment.center,
-                    padding: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.fromLTRB(75, 5, 75, 5),
                     color: Theme.of(context).primaryColor,
                     child: FutureBuilder<String>(
                         future: _getGroup(),
@@ -299,14 +300,17 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
                         },
                       )),
               const SizedBox(height: 20),
-              RichText(
-                text: const TextSpan(
-                  children: [
-                    TextSpan(
-                        text: "Planned stops:",
-                        style:
-                            TextStyle(color: Color(0xFF99D2A9), fontSize: 25)),
-                  ],
+              Container(
+                padding: const EdgeInsets.fromLTRB(30, 5, 30, 5),
+                child: RichText(
+                  text: const TextSpan(
+                    children: [
+                      TextSpan(
+                          text: "Planned stops:",
+                          style: TextStyle(
+                              color: Color(0xFF99D2A9), fontSize: 25)),
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(height: 20),
@@ -317,12 +321,14 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
               ),
               const SizedBox(height: 20),
               if (isInGroup)
-                ElevatedButton(
-                  child: const Text('LEAVE GROUP'),
-                  onPressed: () {
-                    _leaveGroup();
-                  },
-                ),
+                Container(
+                    padding: const EdgeInsets.fromLTRB(75, 5, 75, 5),
+                    child: ElevatedButton(
+                      child: const Text('LEAVE GROUP'),
+                      onPressed: () {
+                        _leaveGroup();
+                      },
+                    )),
               if (_itinerary.date?.day == DateTime.now().day ||
                   _itinerary.date?.day == null)
                 Container(

@@ -8,9 +8,6 @@ import 'package:veloplan/models/itinerary.dart';
 import 'package:veloplan/models/map_models/base_map_with_route_updated_model.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
-
-import 'package:flutter/material.dart';
-
 import 'package:velocity_x/velocity_x.dart';
 
 /// Map screen focused on a user's live location
@@ -39,50 +36,20 @@ class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
   _MapUpdatedRoutePageState(this._itinerary) {}
   @override
   Widget build(BuildContext context) {
-    bool _expanded = false;
+    return Scaffold(body: ScopedModelDescendant<MapModel>(
+        builder: (BuildContext context, Widget? child, MapModel model) {
+      _baseMapWithUpdatedRoute = MapWithRouteUpdated(
+        model,
+        context,
+        _itinerary,
+      );
+      addPositionZoom();
+      addStopTurnByTurn(context);
+      return SafeArea(
+          child: Stack(children: _baseMapWithUpdatedRoute.getWidgets()));
 
-    return Stack(children: [
-      ScopedModelDescendant<MapModel>(
-          builder: (BuildContext context, Widget? child, MapModel model) {
-        _baseMapWithUpdatedRoute = MapWithRouteUpdated(
-          model,
-          context,
-          _itinerary,
-        );
-        addPositionZoom();
-        addStopTurnByTurn(context);
-        return SafeArea(
-            child: Stack(children: _baseMapWithUpdatedRoute.getWidgets()));
-
-        ///* listen to isAtGoal if is at goal redirect
-      }),
-      ExpansionPanelList(
-        animationDuration: Duration(milliseconds: 2000),
-        children: [
-          ExpansionPanel(
-            headerBuilder: (context, isExpanded) {
-              return ListTile(
-                title: Text(
-                  'Click To Expand',
-                  style: TextStyle(color: Colors.black),
-                ),
-              );
-            },
-            body: ListTile(
-              title: Text('Description text',
-                  style: TextStyle(color: Colors.black)),
-            ),
-            isExpanded: _expanded,
-            canTapOnHeader: true,
-          ),
-        ],
-        dividerColor: Colors.grey,
-        expansionCallback: (panelIndex, isExpanded) {
-          _expanded = !_expanded;
-          setState(() {});
-        },
-      ),
-    ]);
+      ///* listen to isAtGoal if is at goal redirect
+    }));
   }
 
   /// add positional zoom to our widgets
@@ -121,3 +88,50 @@ class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
     ));
   }
 }
+
+
+// bool _expanded = false;
+
+//     return Stack(children: [
+//       ScopedModelDescendant<MapModel>(
+//           builder: (BuildContext context, Widget? child, MapModel model) {
+//         _baseMapWithUpdatedRoute = MapWithRouteUpdated(
+//           model,
+//           context,
+//           _itinerary,
+//         );
+//         addPositionZoom();
+//         addStopTurnByTurn(context);
+//         return SafeArea(
+//             child: Stack(children: _baseMapWithUpdatedRoute.getWidgets()));
+
+//         ///* listen to isAtGoal if is at goal redirect
+//       }),
+//       // ExpansionPanelList(
+//       //   animationDuration: Duration(milliseconds: 2000),
+//       //   children: [
+//       //     ExpansionPanel(
+//       //       headerBuilder: (context, isExpanded) {
+//       //         return ListTile(
+//       //           title: Text(
+//       //             'Click To Expand',
+//       //             style: TextStyle(color: Colors.black),
+//       //           ),
+//       //         );
+//       //       },
+//       //       body: ListTile(
+//       //         title: Text('Description text',
+//       //             style: TextStyle(color: Colors.black)),
+//       //       ),
+//       //       isExpanded: _expanded,
+//       //       canTapOnHeader: true,
+//       //     ),
+//       //   ],
+//       //   dividerColor: Colors.grey,
+//       //   expansionCallback: (panelIndex, isExpanded) {
+//       //     _expanded = !_expanded;
+//       //     setState(() {});
+//       //   },
+//       // ),
+//     ]);
+//   }
