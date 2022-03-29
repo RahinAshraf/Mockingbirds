@@ -4,7 +4,6 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:veloplan/alerts.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
 import 'package:veloplan/widgets/panel_widget/panel_widget.dart';
-import '../../models/docking_station.dart';
 import '../../providers/location_service.dart';
 import '../../screens/journey_planner_screen.dart';
 import '../dynamic_widget.dart';
@@ -22,21 +21,21 @@ abstract class PanelWidgetBase extends StatefulWidget {
   final Stream<MapPlace> address;
   final Map<String, List<double?>> selectionMap;
   final Map<String, List<double?>> staticListMap;
-  final int numberOfCyclists ;
+  final int numberOfCyclists;
 
-     const PanelWidgetBase(
+  const PanelWidgetBase(
       {required this.selectionMap,
-        required this.address,
-        required this.scrollController,
-        required this.dynamicWidgets,
-        required this.listDynamic,
-        required this.selectedCoords,
-        required this.staticListMap,
-        required this.toTextEditController,
-        required this.fromTextEditController,
-        required this.panelController,
-        required this.numberOfCyclists,
-        Key? key})
+      required this.address,
+      required this.scrollController,
+      required this.dynamicWidgets,
+      required this.listDynamic,
+      required this.selectedCoords,
+      required this.staticListMap,
+      required this.toTextEditController,
+      required this.fromTextEditController,
+      required this.panelController,
+      required this.numberOfCyclists,
+      Key? key})
       : super(key: key);
 
   ///When triggered, redirects the user to the place_search_Screen in order for them to specify a location to visit
@@ -61,14 +60,13 @@ abstract class PanelWidgetBase extends StatefulWidget {
   }
 
   ///The logic to restrict the user from being able to start a journey without defining at least one destination for the journey
-  bool oneDestinationMustBeSpecified( PanelWidget widget,
-      BuildContext context, Alerts alert) {
+  bool oneDestinationMustBeSpecified(
+      PanelWidget widget, BuildContext context, Alerts alert) {
     if (widget.listDynamic.isEmpty) {
-      alert.showSnackBarErrorMessage(context, alert.chooseAtLeastOneDestinationMessage);
+      alert.showSnackBarErrorMessage(
+          context, alert.chooseAtLeastOneDestinationMessage);
       return true;
     }
     return false;
   }
-
 }
-

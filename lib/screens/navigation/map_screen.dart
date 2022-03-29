@@ -25,20 +25,19 @@ class _MapPageState extends State<MapPage> {
 
   // /// ! show usage of BaseMapboxRouteMap
 
-  // List<LatLng> points = [
-  //   LatLng(51.514951, -0.112762),
-  //   LatLng(51.513146, -0.115256),
-  //   LatLng(51.511407, -0.125497),
-  //   LatLng(51.506053, -0.130310),
-  //   LatLng(51.502254, -0.217760),
-  // ];
+  List<LatLng> points = [
+    LatLng(51.514951, -0.112762),
+    LatLng(51.513146, -0.115256),
+    LatLng(51.511407, -0.125497),
+    LatLng(51.506053, -0.130310),
+    LatLng(51.502254, -0.217760),
+  ];
 
   // @override
   // Widget build(BuildContext context) {
   //   return Scaffold(body: ScopedModelDescendant<MapModel>(
   //       builder: (BuildContext context, Widget? child, MapModel model) {
-  //     _baseMapWithRoute =
-  //         BaseMapboxRouteMap(points, model);
+  //     _baseMapWithRoute = BaseMapboxRouteMap(points, model, true);
   //     addPositionZoom();
   //     return SafeArea(child: Stack(children: _baseMapWithRoute.getWidgets()));
   //   }));
@@ -78,8 +77,8 @@ class _MapPageState extends State<MapPage> {
       child: FloatingActionButton(
         heroTag: "center_to_current_loaction",
         onPressed: () {
-          _baseMap.controller?.animateCamera(
-              CameraUpdate.newCameraPosition(_baseMap.cameraPosition));
+          _baseMap.controller?.animateCamera(CameraUpdate.newCameraPosition(
+              CameraPosition(target: getLatLngFromSharedPrefs(), zoom: 15)));
         },
         child: const Icon(Icons.my_location),
       ),

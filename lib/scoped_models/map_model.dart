@@ -8,12 +8,13 @@ import '../providers/docking_station_manager.dart';
 
 class MapModel extends Model {
   late MapboxMapController? controller;
+  final Set<Symbol> dockSymbols = {};
 
   /// Fetch all docking stations
   void fetchDockingStations() {
     final dockingStationManager _stationManager = dockingStationManager();
-    _stationManager.importStations().then(
-        (value) => placeDockMarkers(controller!, _stationManager.stations));
+    _stationManager.importStations().then((value) =>
+        placeDockMarkers(controller!, _stationManager.stations, dockSymbols));
   }
 
   /// Gets the Mapbox [controller]

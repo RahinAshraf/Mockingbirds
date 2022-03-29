@@ -45,7 +45,6 @@ class DockingStationCarousel {
               carouselData[index]['numberOfBikes'],
               carouselData[index]['numberOfEmptyDocks'],
             ));
-
     return dockingStationCards;
   }
 

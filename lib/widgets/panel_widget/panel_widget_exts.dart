@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:latlong2/latlong.dart' as latLng2;
 import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart'
     as LatLong;
 import 'package:veloplan/alerts.dart';
-import 'package:veloplan/widgets/docking_stations_sorting_widget.dart';
 import '../../models/docking_station.dart';
 import '../../providers/docking_station_manager.dart';
 import '../../providers/location_service.dart';
@@ -12,7 +10,7 @@ import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:rxdart/rxdart.dart';
 
 ///Class to create and display the closest docking station for every defined location of the journey.
-  int oldPosition = 0;
+int oldPosition = 0;
 
 class PanelExtensions {
   final locationService = LocationService();
@@ -48,7 +46,7 @@ class PanelExtensions {
           child: StreamBuilder<String>(
             builder: (_, snapshot) {
               if (snapshot.hasData) {
-              //  editDockTextEditController.text = snapshot.requireData;
+                //  editDockTextEditController.text = snapshot.requireData;
               }
               return TextField(
                 enabled: false,
@@ -75,28 +73,27 @@ class PanelExtensions {
                   print("hello");
                   return;
                 }
-
                 List temp = await locationService
                     .getPlaceCoords(placeTextController.text);
 
-
-                final LatLng? dockStationLatLng = latLngMap[position];
+                // final LatLng? dockStationLatLng = latLngMap[position];
                 final result = await Navigator.push<DockingStation>(
                     context!,
                     MaterialPageRoute(
                         builder: (context) => DockSorterScreen(
-                          convertDestinationLocationFromDoublesToLatLng(
-                              temp.first, temp.last),
-                          selectedDockStation: DockingStation("ds1ID",
-                              "ds1", true, true, 10, 11, 12, 15.6, 89.0),
-                        )));
-
+                              convertDestinationLocationFromDoublesToLatLng(
+                                  temp.first, temp.last),
+                              selectedDockStation: DockingStation("ds1ID",
+                                  "ds1", true, true, 10, 11, 12, 15.6, 89.0),
+                            )));
 
                 print("hey result --=> ${result?.name}");
 
                 checkInputLocation(placeTextController,
                     editDockTextEditController, latLngMap, position,
-                    address: result?.name, closesDockLatLng: LatLng(result?.lat ?? 0, result?.lon ?? 0));
+                    address: result?.name,
+                    closesDockLatLng:
+                        LatLng(result?.lat ?? 0, result?.lon ?? 0));
               },
               padding: const EdgeInsets.all(0),
               icon: const Icon(
@@ -121,15 +118,18 @@ class PanelExtensions {
       TextEditingController placeTextController,
       TextEditingController editDockTextEditController,
       Map<int, LatLng> latLngMap,
-      int position, {String? address, LatLng? closesDockLatLng}) async {
+      int position,
+      {String? address,
+      LatLng? closesDockLatLng}) async {
     if (placeTextController.text.isEmpty) {
       //do nothing
     } else {
       List coordPlace = await locationService.getPlaceCoords(placeTextController
           .text); //getting coordinates of the place specified as the destination to visit
 
-       getClosetDock(coordPlace.first, coordPlace.last,
-          editDockTextEditController, latLngMap, position, address: address, closesDockLatLng: closesDockLatLng);
+      getClosetDock(coordPlace.first, coordPlace.last,
+          editDockTextEditController, latLngMap, position,
+          address: address, closesDockLatLng: closesDockLatLng);
     }
   }
 
@@ -141,19 +141,21 @@ class PanelExtensions {
       double? lng,
       TextEditingController editDockTextEditController,
       Map<int, LatLng> latLngMap,
-      int position, {String? address, LatLng? closesDockLatLng}) async {
+      int position,
+      {String? address,
+      LatLng? closesDockLatLng}) async {
     LatLong.LatLng latlngPlace = LatLong.LatLng(lat!, lng!);
     dockingStationManager _stationManager = dockingStationManager();
     await _stationManager.importStations();
-    if(null == closesDockLatLng){
+    if (null == closesDockLatLng) {
       DockingStation closetDock = _stationManager.getClosestDock(latlngPlace);
-      editDockTextEditController.text =  closetDock.name;
+      editDockTextEditController.text = closetDock.name;
       latLngMap[position] = LatLng(closetDock.lat, closetDock.lon);
       print("closet dock ${closetDock.name}");
       print("PRIIIINTING => $position");
       this._dockingStation = closetDock;
-    }else{
-      editDockTextEditController.text =  address!;
+    } else {
+      editDockTextEditController.text = address!;
       latLngMap[position] = closesDockLatLng;
     }
   }
