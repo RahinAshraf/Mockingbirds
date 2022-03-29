@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/screens/navigation/polyline_turn_by_turn_screen.dart';
 import 'package:veloplan/screens/navigation/turn_by_turn_screen.dart';
+import 'package:veloplan/screens/sidebar_screens/schedule_screen.dart';
 import 'package:veloplan/screens/trips_scheduler_screen.dart';
 import 'package:veloplan/widgets/group_id_join_code_widget.dart';
 import 'package:veloplan/widgets/popup_widget.dart';
 import 'package:veloplan/utilities/alert_type.dart';
-
 import 'helpers/navigation_helpers/navigation_conversions_helpers.dart';
 import 'models/itinerary.dart';
 
@@ -136,6 +137,43 @@ class Popups {
         title:
             "Would you like to be automatically redirected to available stations?",
         text: "Only one way to find out.",
+        children: children,
+        type: AlertType.question);
+  }
+
+  PopupWidget buildPopupDialogJourneySaved(
+      BuildContext context, DateTime date) {
+    var formatter = DateFormat('yyyy-MM-dd');
+    var formattedDate = formatter.format(date);
+
+    List<PopupButtonWidget> children = [
+      PopupButtonWidget(
+          text: "Ok",
+          onPressed: () {
+            Navigator.pop(context);
+          }),
+    ];
+    return PopupWidget(
+        title: "Journey scheduled successfully!",
+        text:
+            "Your journey has been scheduled for ${formattedDate}. Check the details in the calendar.",
+        children: children,
+        type: AlertType.warning);
+  }
+
+  PopupWidget buildPopupDialogDeleteScheduledJourney(
+      BuildContext context, onClick) {
+    List<PopupButtonWidget> children = [
+      PopupButtonWidget(text: "Delete", onPressed: onClick),
+      PopupButtonWidget(
+          text: "Cancel",
+          onPressed: () {
+            Navigator.pop(context);
+          }),
+    ];
+    return PopupWidget(
+        title: "Confirmation required",
+        text: "Are you sure you want to delete this trip?",
         children: children,
         type: AlertType.question);
   }
