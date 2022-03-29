@@ -23,8 +23,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   DateTime _focusedDay = DateUtils.dateOnly(DateTime.now());
 
   @override
-  initState() {
-    _deleteOldScheduledTrips();
+  initState() async {
     helper.getAllScheduleDocuments().then((data) {
       setState(() {
         upcomingJourneys = data;
@@ -122,18 +121,6 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       }
     }
     return journeys;
-  }
-
-  /// Checks for and deletes user's expired trips from the database.
-  Future<void> _deleteOldScheduledTrips() async {
-    var scheduledJourneys =
-        await _databaseManager.getUserSubcollection('schedules');
-    scheduledJourneys.docs.forEach((element) {
-      DateTime date = element.get('date').toDate();
-      if (DateUtils.dateOnly(DateTime.now()).isAfter(date)) {
-        element.reference.delete();
-      }
-    });
   }
 
   /// Builds calendar for the schedule page.
