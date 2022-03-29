@@ -23,11 +23,6 @@ import '../../models/docking_station.dart';
 import '../../providers/location_service.dart';
 import '../dynamic_widget.dart';
 import 'package:veloplan/helpers/database_helpers/history_helper.dart';
-
-///When rendered, the journey_planner_screen will have this panel_widget at the bottom. It is an interactive panel the user can
-///slide up or down, when wanting to input their desired locations for the journey.
-///@author: Rahin Ashraf - k20034059,
-///Contributor: Nicole
 import 'package:veloplan/widgets/panel_widget/panel_widget_exts.dart';
 
 /// Renders [PanelWidget] used in [JourneyPlanner] screen.
@@ -35,6 +30,7 @@ import 'package:veloplan/widgets/panel_widget/panel_widget_exts.dart';
 /// It is an interactive panel the user can slide up or down,
 /// when wanting to input their desired locations for the journey.
 /// @author: Rahin Ashraf - k20034059
+///Contributor: Nicole
 class PanelWidget extends PanelWidgetBase {
   PanelWidget(
       {Key? key,

@@ -80,12 +80,6 @@ class DockingStationCarousel {
         _stationManager.get10ClosestDocksFav(userCoordinates!, favourites));
   }
 
-  // List<Widget> retrieveJourneyCards() {
-  //   HistoryHelper historyHelper = new HistoryHelper();
-  //   var list = historyHelper.getDockingStationListFromSingleJourney();
-  //   return createDockingCards(list);
-  // }
-
   List<Widget> createDockingCards(List<DockingStation> docks) {
     for (int index = 0; index < docks.length; index++) {
       for (var station in docks) {
@@ -138,7 +132,8 @@ class DockingStationCarousel {
                 snapshot.hasData.toString() +
                 "--------------" +
                 "i was here");
-            return Text(" you dont have any favourites");
+            // return Text(" you dont have any favourites");
+            return CircularProgressIndicator();
             // return SizedBox(
             //   height: MediaQuery.of(context).size.height / 1.3,
             //   child: const Center(

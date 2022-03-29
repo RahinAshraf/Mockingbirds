@@ -1,5 +1,3 @@
-// ignore_for_file: non_constant_identifier_names
-
 class Weather {
   final double current_temp;
   final double current_feels_like;

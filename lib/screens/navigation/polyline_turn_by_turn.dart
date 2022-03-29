@@ -29,23 +29,10 @@ class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
 
   @override
   void initState() {
-    initWeatherTimer();
     super.initState();
   }
 
-  /// Starts a periodic timer to fetch the new wheather
-  void initWeatherTimer() {
-    timer = Timer.periodic(Duration(minutes: 15), (Timer t) {
-      if (_baseMapWithUpdatedRoute.isAtGoal) {
-        t.cancel();
-      }
-    });
-  }
-
   _MapUpdatedRoutePageState(this._itinerary) {}
-  //TODO: Marija attributes for distance, duration and dock name should be presented on the screen, you can take them from
-  //_baseMapWithUpdatedRoute.duration _baseMapWithUpdatedRoute.distance _baseMapWithUpdatedRoute.dockName
-  //also Hristina has done some static widgets for that screen maybe you can reuse them if they are helpful -> journey_screen
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: ScopedModelDescendant<MapModel>(
@@ -57,7 +44,6 @@ class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
         _itinerary,
       );
       addPositionZoom();
-      // addWeather(context, weather, weatherIcon);
       addStopTurnByTurn(context);
       return SafeArea(
           child: Stack(children: _baseMapWithUpdatedRoute.getWidgets()));
@@ -73,10 +59,10 @@ class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
       child: FloatingActionButton(
         heroTag: "center_to_current_loaction",
         onPressed: () {
-          _baseMapWithUpdatedRoute.controller?.animateCamera(
-              CameraUpdate.newCameraPosition(
-                  _baseMapWithUpdatedRoute.cameraPosition));
           _baseMapWithUpdatedRoute.recenter = true;
+          // _baseMapWithUpdatedRoute.controller?.animateCamera(
+          //     CameraUpdate.newCameraPosition(
+          //         _baseMapWithUpdatedRoute.cameraPosition));
         },
         child: const Icon(Icons.my_location),
       ),

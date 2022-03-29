@@ -22,7 +22,6 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
   late Map<dynamic, dynamic> _routeResponse;
   LatLng _startPosition = getLatLngFromSharedPrefs();
 
-  // BaseMapboxRouteMap(this._journey, MapModel model) : super(model);
   BaseMapboxRouteMap(this._itinerary, MapModel model) : super(model) {
     _journey = convertDocksToLatLng(_itinerary.docks!)!;
   }
@@ -58,7 +57,6 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
 
   /// Sets the [journey] geometry
   void setBaseJourney(List<LatLng> journey) async {
-    // vars used to collect data for WHOLE journey; incremented by vars of each sub journey AB, BC etc.
     List<dynamic> journeyPoints = [];
     double totalDistance = 0.0;
     double totalDuration = 0.0;

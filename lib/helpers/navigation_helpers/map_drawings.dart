@@ -23,14 +23,6 @@ void placeDockMarkers(
   }
 }
 
-// Widget displayDockCard(DockingStation station) {
-//   //CHANGE THIS TO CREATE CARD
-//   print("Will call widget next");
-//   // return _DockPopupCard(latlng: current,);
-//   dockingStationKey.currentState
-//       ?.setData(DockingStationCard.station(station), true);
-// }
-
 /// Creates a [fills] Map with the specified geometry for the chosen [routeResponse]
 Future<Map<String, Object>> setFills(Map fills, dynamic routeResponse) async {
   try {

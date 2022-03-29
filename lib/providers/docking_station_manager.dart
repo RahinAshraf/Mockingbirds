@@ -296,8 +296,6 @@ class dockingStationManager {
     }
   }
 
-//https://api.tfl.gov.uk/Place?lat=51.5&lon=-0.1&radius=700&type=BikePoint
-
   /// import the docking stations from the tfl api by a set radius and coordinates
   Future<List<DockingStation>> importStationsByRadius(
       int radius, LatLng coord) async {

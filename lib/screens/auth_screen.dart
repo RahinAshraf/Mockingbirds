@@ -16,7 +16,6 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
-  // final DatabaseManager _databaseManager = DatabaseManager();
   final _auth = FirebaseAuth.instance;
   var _isLoading = false;
 

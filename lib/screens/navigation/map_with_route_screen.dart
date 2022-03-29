@@ -8,10 +8,7 @@ import '../../models/map_models/base_map_with_route_model.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 
-// import '../../models/weather.dart';
 import '../../popups.dart';
-// import '../../providers/weather_manager.dart';
-// import '../../widgets/weather_popup_card.dart';
 
 /// Map screen showing and focusing on a a selected journey
 /// Author(s): Elisabeth Halvorsen k20077737,

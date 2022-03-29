@@ -19,7 +19,6 @@ class _FavouriteState extends State<Favourite> {
     FavouriteHelper.getUserFavourites().then((data) {
       setState(() {
         favourites = data;
-        print("-----fsv length-------------" + favourites.length.toString());
       });
     });
     super.initState();

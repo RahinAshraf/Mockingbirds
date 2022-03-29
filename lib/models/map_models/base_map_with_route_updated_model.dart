@@ -28,7 +28,6 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
   final Itinerary _itinerary;
   final BuildContext context;
   late int numberCyclists;
-  // LatLng _target = getLatLngFromSharedPrefs();
   Timer? timer;
   final Set<Symbol> _polylineSymbols = {};
   bool isAtGoal = false;
@@ -51,19 +50,6 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
     this._journey = convertDocksToLatLng(_itinerary.docks!)!;
     this.numberCyclists = _itinerary.numberOfCyclists!;
   }
-
-  // change to one class with dock, people and destinations
-
-  // @override
-  // Future<void> updateCurrentLocation() async {
-  //   Location newCurrentLocation = Location();
-  //   LocationData _newLocationData = await newCurrentLocation.getLocation();
-  //   sharedPreferences.clear();
-  //   sharedPreferences.setDouble('latitude', _newLocationData.latitude!);
-  //   sharedPreferences.setDouble('longitude', _newLocationData.longitude!);
-  //   currentPosition =
-  //       LatLng(_newLocationData.latitude!, _newLocationData.longitude!);
-  // }
 
   void checkAndUpdateDock() async {
     if (_currentStation >= _journey.length) {
