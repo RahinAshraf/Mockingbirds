@@ -11,7 +11,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart';
 import 'package:timeline_tile/timeline_tile.dart';
-import 'package:veloplan/models/itineraryManager.dart';
+import 'package:veloplan/models/itinerary_manager.dart';
 import 'package:veloplan/models/path.dart';
 import '../helpers/navigation_helpers/navigation_conversions_helpers.dart';
 import '../models/itinerary.dart';

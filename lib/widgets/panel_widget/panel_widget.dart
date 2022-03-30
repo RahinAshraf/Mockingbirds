@@ -18,10 +18,8 @@ import 'package:veloplan/styles/styling.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
 import 'package:veloplan/widgets/dynamic_widget.dart';
 import 'package:veloplan/widgets/panel_widget/panel_widgets_base.dart';
-import '../../helpers/navigation_helpers/navigation_conversions_helpers.dart';
-import '../../models/docking_station.dart';
-import '../../providers/location_service.dart';
-import '../dynamic_widget.dart';
+import 'package:veloplan/helpers/navigation_helpers/navigation_conversions_helpers.dart';
+import 'package:veloplan/popups.dart';
 import 'package:veloplan/helpers/database_helpers/history_helper.dart';
 import 'package:veloplan/widgets/panel_widget/panel_widget_exts.dart';
 
@@ -261,20 +259,21 @@ class PanelWidgetState extends State<PanelWidget> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisSize: MainAxisSize.max,
       children: [
         Padding(
           padding: EdgeInsets.only(top: 24.0, left: 12.0, right: 12.0),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               IconButton(
                 onPressed: () {
                   Navigator.of(context).pop(true);
                 },
+                constraints: BoxConstraints(),
+                padding: EdgeInsets.all(0),
                 icon: const Icon(
                   Icons.arrow_back,
-                  size: 30,
+                  size: 25,
                   color: Colors.green,
                 ),
               ),
@@ -282,7 +281,6 @@ class PanelWidgetState extends State<PanelWidget> {
                 "Explore London",
                 style: infoTextStyle,
               ),
-              SizedBox(width: 5.0),
               Tooltip(
                 preferBelow: false,
                 margin: EdgeInsets.all(10.0),
@@ -293,14 +291,15 @@ class PanelWidgetState extends State<PanelWidget> {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 message:
-                    'Please specify the starting location of your trip and add destinations by clicking the + button. Tapping on the location in the map is another way of adding a stop to your trip! Ensure there are no blank destinations when you do so. When you are done, click START.',
+                    'Please specify the starting location of your trip and add destinations by clicking the + button. Tapping on the location in the map is another way of adding a stop to your trip! Ensure there are no blank destinations when you do so. You can also reorder your destinations. Simply hold and drag menu button. When you are done, click START.',
                 showDuration: const Duration(seconds: 3),
                 child: const Icon(Icons.info_outline_rounded,
-                    size: 20.0, color: Colors.green),
+                    size: 25.0, color: Colors.green),
               ),
             ],
           ),
         ),
+        SizedBox(height: 7.0),
         Expanded(
           child: ListView(
             padding: EdgeInsets.only(top: 10.0),
@@ -349,29 +348,23 @@ class PanelWidgetState extends State<PanelWidget> {
                   ),
                 ],
               ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                child: buildFloatingActionButton(onPressed: addDynamic),
+              ),
             ],
           ),
         ),
         SizedBox(child: Divider(), width: MediaQuery.of(context).size.width),
         Padding(
           padding: const EdgeInsets.only(bottom: 5.0, top: 5.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              buildFloatingActionButton(onPressed: addDynamic),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: const Text('OR'),
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width / 2,
-                child: ElevatedButton(
-                  onPressed:
-                      widget.isScheduled ? _handleSaveClick : _handleStartClick,
-                  child: widget.isScheduled ? text("SAVE") : text("START"),
-                ),
-              ),
-            ],
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width / 2,
+            child: ElevatedButton(
+              onPressed:
+                  widget.isScheduled ? _handleSaveClick : _handleStartClick,
+              child: widget.isScheduled ? text("SAVE") : text("START"),
+            ),
           ),
         ),
       ],
@@ -403,6 +396,12 @@ class PanelWidgetState extends State<PanelWidget> {
     }
     // Navigate back to the previous screen, useful for tbt
     Navigator.of(context).pop(true);
+
+    var popup = Popups();
+    showDialog(
+        context: context,
+        builder: (BuildContext context) =>
+            popup.buildPopupDialogJourneySaved(context, widget.journeyDate));
   }
 
   /// Deals with the user pressing the START button. Applies the constraints for a journey.

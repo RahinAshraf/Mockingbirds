@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:veloplan/helpers/live_location_helper.dart';
 import 'package:veloplan/navbar.dart';
@@ -21,9 +20,6 @@ void main() async {
   liveLocationHelper.initializeLocation();
   sharedPreferences = await SharedPreferences.getInstance();
   MapModel _model = MapModel();
-  WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(ScopedModel<MapModel>(
       model: _model,
       child: MaterialApp(
@@ -68,10 +64,6 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     //final Future<FirebaseApp> _initialization = Firebase.initializeApp();
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
     return FutureBuilder(
       future: Firebase.initializeApp(), // _initialization,
       builder: (context, appSnapshot) {
