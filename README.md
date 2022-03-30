@@ -29,3 +29,12 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter, view our
 [online documentation](https://flutter.dev/docs), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+
+
+## Design Decisions 
+- Mapbox Navigation Package has issues with turn by turn direction.
+    - A turn by turn navigation can only be used once in an app run and cannot edit the state of the journey.
+    - Could not do redirecting with flutter_mapbox_navigation as there is an open bug with the app ()
+    - Resorted to using polyline navigation 
+- 
