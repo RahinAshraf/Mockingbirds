@@ -82,11 +82,11 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                                               _groupByDate(upcomingJourneys);
                                         }));
                                 Navigator.pop(context);
-                                // Navigator.pushReplacement(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (BuildContext context) =>
-                                //             super.widget));
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            super.widget));
                               },
                             ))
                         .toList(),
