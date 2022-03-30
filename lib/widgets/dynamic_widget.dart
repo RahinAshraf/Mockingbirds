@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/helpers/live_location_helper.dart';
 import 'package:veloplan/providers/location_service.dart';

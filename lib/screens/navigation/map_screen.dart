@@ -12,7 +12,6 @@ import 'package:veloplan/widgets/docking_station_widget.dart';
 
 /// Map screen focused on a user's live location
 /// Author(s): Fariha Choudhury k20059723, Elisabeth Halvorsen k20077737,
-
 class MapPage extends StatefulWidget {
   const MapPage({Key? key}) : super(key: key);
   @override

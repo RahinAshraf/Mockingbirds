@@ -35,14 +35,7 @@ class _MapRoutePageState extends State<MapRoutePage> {
   Widget build(BuildContext context) {
     return Scaffold(body: ScopedModelDescendant<MapModel>(
         builder: (BuildContext context, Widget? child, MapModel model) {
-// <<<<<<< HEAD
-//       _baseMapWithRoute = BaseMapboxRouteMap(
-//         _journey,
-//         model,
-//       ); // true  //TRUE - DISPLAY POLYLINE AND MARKERS
-// =======
       _baseMapWithRoute = BaseMapboxRouteMap(_itinerary, model);
-// >>>>>>> main
       addPositionZoom();
       addGoBackButton();
       if (calculateDistance(currentLatLng, _itinerary.myDestinations![0]) <

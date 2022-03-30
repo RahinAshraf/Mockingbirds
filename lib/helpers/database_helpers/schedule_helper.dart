@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:veloplan/helpers/database_helpers/database_manager.dart';
-
+import 'package:flutter/material.dart';
 import '../../models/itinerary.dart';
 
 ///Helper functions to add or remove a scheduled itinerary from the database.
@@ -32,7 +32,23 @@ class ScheduleHelper {
     });
   }
 
-  ///Gets all of a users schedules
+  /// Checks for and deletes user's expired trips from the database.
+  Future<void> deleteOldScheduledEntries() async {
+    var entries = await _schedules.get();
+    entries.docs.forEach((element) {
+      DateTime date = element.get('date').toDate();
+      if (DateUtils.dateOnly(DateTime.now()).isAfter(date)) {
+        element.reference.delete();
+      }
+    });
+  }
+
+  /// Deletes a single scheduled entry from database.
+  Future<void> deleteSingleScheduledEntry(Itinerary entry) async {
+    _schedules.doc(entry.journeyDocumentId!).delete();
+  }
+
+  /// Retrieves all user's schedules.
   Future<List<Itinerary>> getAllScheduleDocuments() async {
     List<Itinerary> scheduleList = [];
     QuerySnapshot<Object?> journeys = await _schedules.get();

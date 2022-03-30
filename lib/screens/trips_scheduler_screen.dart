@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:scoped_model/scoped_model.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:veloplan/.env.dart';
-import 'package:veloplan/helpers/shared_prefs.dart';
+import 'package:veloplan/models/map_models/base_map_model.dart';
+import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:veloplan/widgets/trips_scheduler_panel_widget.dart';
 
+/// Trip scheduler screen displaying map with [TripSchedulerPanelWidget] panel.
 class TripSchedulerScreen extends StatefulWidget {
   const TripSchedulerScreen({Key? key}) : super(key: key);
   @override
@@ -12,16 +14,8 @@ class TripSchedulerScreen extends StatefulWidget {
 }
 
 class _TripSchedulerScreenState extends State<TripSchedulerScreen> {
-  late CameraPosition _initialCameraPosition;
-  late MapboxMapController controller;
   final panelController = PanelController();
-  LatLng latLng = getLatLngFromSharedPrefs();
-
-  @override
-  void initState() {
-    super.initState();
-    _initialCameraPosition = CameraPosition(target: latLng, zoom: 16);
-  }
+  late BaseMapboxMap _baseMap;
 
   @override
   Widget build(BuildContext context) {
@@ -34,29 +28,17 @@ class _TripSchedulerScreenState extends State<TripSchedulerScreen> {
         maxHeight: panelHeightOpen,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
         controller: panelController,
-        body: SafeArea(
-          child: Stack(
-            children: [
-              SizedBox(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
-                child: MapboxMap(
-                  accessToken: MAPBOX_ACCESS_TOKEN,
-                  initialCameraPosition: _initialCameraPosition,
-                  onMapCreated: _onMapCreated,
-                  myLocationEnabled: true,
-                  myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
-                ),
-              ),
-            ],
-          ),
-        ),
+        body: ScopedModelDescendant<MapModel>(
+            builder: (BuildContext context, Widget? child, MapModel model) {
+          _baseMap = BaseMapboxMap(model);
+          return Stack(children: _baseMap.getWidgets());
+        }),
         panelBuilder: (controller) => TripSchedulerPanelWidget(),
       ),
     );
   }
 
-  _onMapCreated(MapboxMapController controller) async {
-    this.controller = controller;
-  }
+  // _onMapCreated(MapboxMapController controller) async {
+  //   this.controller = controller;
+  // }
 }

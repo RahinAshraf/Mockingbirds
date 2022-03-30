@@ -1,13 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:veloplan/helpers/database_helpers/database_manager.dart';
+import 'package:veloplan/helpers/navigation_helpers/navigation_conversions_helpers.dart';
 import 'package:veloplan/models/docking_station.dart';
-import 'package:veloplan/utilities/dart_exts.dart';
-
-import '../helpers/database_helpers/database_manager.dart';
-import '../helpers/navigation_helpers/navigation_conversions_helpers.dart';
-import '../models/itinerary.dart';
+import 'package:veloplan/models/itinerary.dart';
 import 'package:veloplan/screens/summary_journey_screen.dart';
+import 'package:veloplan/utilities/dart_exts.dart';
 
 class GroupId extends StatefulWidget {
   const GroupId({Key? key}) : super(key: key);

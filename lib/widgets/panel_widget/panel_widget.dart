@@ -23,6 +23,8 @@ import '../../providers/location_service.dart';
 import '../../helpers/navigation_helpers/navigation_conversions_helpers.dart';
 import '../../models/docking_station.dart';
 import '../dynamic_widget.dart';
+import 'package:veloplan/helpers/navigation_helpers/navigation_conversions_helpers.dart';
+import 'package:veloplan/popups.dart';
 import 'package:veloplan/helpers/database_helpers/history_helper.dart';
 import 'package:veloplan/widgets/panel_widget/panel_widget_exts.dart';
 
@@ -133,7 +135,7 @@ class PanelWidgetState extends State<PanelWidget> {
     staticListMap = widget.staticListMap;
     selectionMap = widget.selectionMap;
     print(
-        "PanelWidgetState => ${widget.numberOfCyclists}"); //access number of cyclist like this
+        "PanelWidgetState => ${widget.numberOfCyclists}"); // access number of cyclists like this
     LatLng currentLocation = getLatLngFromSharedPrefs();
     locService
         .reverseGeoCode(currentLocation.latitude, currentLocation.longitude)
@@ -251,58 +253,6 @@ class PanelWidgetState extends State<PanelWidget> {
               icon:
                   Icon(Icons.my_location, size: 20, color: CustomColors.green),
             ),
-// <<<<<<< HEAD
-            // const SizedBox(width: 20),
-            // Expanded(
-            //   child: Column(
-            //     children: [
-            //       SizedBox(
-            //         child: TextField(
-            //           readOnly: true,
-            //           onTap: () {
-            //             widget.handleOnSearchClick(
-            //                 context, controller, onAddressAdded);
-            //           },
-            //           onEditingComplete: () {
-            //             PanelExtensions.of(context: context).checkInputLocation(
-            //                 controller,
-            //                 editDockTextEditController,
-            //                 dockList,
-            //                 -1);
-            //           },
-            //           controller: controller,
-            //           decoration: InputDecoration(
-            //             hintText: hintText,
-            //             focusedBorder: circularInputBorder(width: 2.0),
-            //             border: circularInputBorder(),
-            //             enabledBorder: circularInputBorder(),
-            //             disabledBorder: circularInputBorder(),
-            //             errorBorder: circularInputBorder(),
-            //             focusedErrorBorder: circularInputBorder(),
-            //             suffixIcon: IconButton(
-            //               onPressed: () {
-            //                 _useCurrentLocationButtonHandler(controller, label);
-            //               },
-            //                   icon: const Icon(
-            //                     Icons.my_location,
-            //                     size: 20,
-            //                     color: Colors.blue,
-            //                   ),
-            //                 ),
-            //               ),
-            //             ),
-            //           ),
-            //         ],
-            //       ),
-            //     ),
-            //   ],
-            // ),
-//         PanelExtensions.of(context: context).buildDefaultClosestDock(
-//           editDockTextEditController,
-//           controller,
-//           dockList,
-//         ),
-// =======
           ),
         ),
         PanelExtensions.of(context: context).buildDefaultClosestDock(
@@ -311,7 +261,6 @@ class PanelWidgetState extends State<PanelWidget> {
             dockList,
             isFrom,
             numberCyclists),
-// >>>>>>> main
       ],
     );
   }
@@ -323,7 +272,7 @@ class PanelWidgetState extends State<PanelWidget> {
     final ext = PanelExtensions.of(context: context);
     //ext.setPosition(position);
     ext.getClosetDock(newCord[0], newCord[1], editDockTextEditController,
-        dockList, -1, true, widget.numberOfCyclists);
+        dockList, -1, true, widget.numberOfCyclists); //fillClosestDockBubble
 // =======
 //     //TODO: isFrom is true!!
 //     print(
@@ -369,20 +318,21 @@ class PanelWidgetState extends State<PanelWidget> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisSize: MainAxisSize.max,
       children: [
         Padding(
           padding: EdgeInsets.only(top: 24.0, left: 12.0, right: 12.0),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               IconButton(
                 onPressed: () {
                   Navigator.of(context).pop(true);
                 },
+                constraints: BoxConstraints(),
+                padding: EdgeInsets.all(0),
                 icon: const Icon(
                   Icons.arrow_back,
-                  size: 30,
+                  size: 25,
                   color: Colors.green,
                 ),
               ),
@@ -390,7 +340,6 @@ class PanelWidgetState extends State<PanelWidget> {
                 "Explore London",
                 style: infoTextStyle,
               ),
-              SizedBox(width: 5.0),
               Tooltip(
                 preferBelow: false,
                 margin: EdgeInsets.all(10.0),
@@ -401,14 +350,15 @@ class PanelWidgetState extends State<PanelWidget> {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 message:
-                    'Please specify the starting location of your trip and add destinations by clicking the + button. Tapping on the location in the map is another way of adding a stop to your trip! Ensure there are no blank destinations when you do so. When you are done, click START.',
+                    'Please specify the starting location of your trip and add destinations by clicking the + button. Tapping on the location in the map is another way of adding a stop to your trip! Ensure there are no blank destinations when you do so. You can also reorder your destinations. Simply hold and drag menu button. When you are done, click START.',
                 showDuration: const Duration(seconds: 3),
                 child: const Icon(Icons.info_outline_rounded,
-                    size: 20.0, color: Colors.green),
+                    size: 25.0, color: Colors.green),
               ),
             ],
           ),
         ),
+        SizedBox(height: 7.0),
         Expanded(
           child: ListView(
             padding: EdgeInsets.only(top: 10.0),
@@ -431,7 +381,6 @@ class PanelWidgetState extends State<PanelWidget> {
                         width: MediaQuery.of(context).size.width,
                         child: ReorderableListView.builder(
                           itemExtent: 120,
-                          padding: EdgeInsets.zero,
                           shrinkWrap: true,
                           itemBuilder: (_, index) {
                             final dynamicWidget = listOfDynamics[index];
@@ -458,12 +407,17 @@ class PanelWidgetState extends State<PanelWidget> {
                   ),
                 ],
               ),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(vertical: 10.0),
+              //   child: buildFloatingActionButton(onPressed: addDynamic),
+              // ),
             ],
           ),
         ),
         SizedBox(child: Divider(), width: MediaQuery.of(context).size.width),
         Padding(
           padding: const EdgeInsets.only(bottom: 5.0, top: 5.0),
+// <<<<<<< HEAD
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -481,6 +435,17 @@ class PanelWidgetState extends State<PanelWidget> {
                 ),
               ),
             ],
+// =======
+            //   child: SizedBox(
+            //     width: MediaQuery.of(context).size.width / 2,
+            //     child: ElevatedButton(
+            //       onPressed:
+            //           widget.isScheduled ? _handleSaveClick : _handleStartClick,
+            //       child: widget.isScheduled ? text("SAVE") : text("START"),
+            //     ),
+            //   ),
+            // ),
+            // ],
           ),
         ),
       ],
@@ -519,6 +484,12 @@ class PanelWidgetState extends State<PanelWidget> {
     }
     // Navigate back to the previous screen, useful for tbt
     Navigator.of(context).pop(true);
+
+    var popup = Popups();
+    showDialog(
+        context: context,
+        builder: (BuildContext context) =>
+            popup.buildPopupDialogJourneySaved(context, widget.journeyDate));
   }
 
   /// Deals with the user pressing the START button. Applies the constraints for a journey.
@@ -553,13 +524,13 @@ class PanelWidgetState extends State<PanelWidget> {
       HistoryHelper historyHelper = HistoryHelper();
 
       List<DockingStation> selectedDocks = dockList.values.toList();
-      for(int i = 0; i < selectedDocks.length; i++){
+      for (int i = 0; i < selectedDocks.length; i++) {
         String dockName = selectedDocks[i].name;
         print("DOCK NAME => $dockName");
       }
       print("SELECTED DOCKS ==> $selectedDocks");
 
-   List<DockingStation> closestDocksWithNoAdjancents = [];
+      List<DockingStation> closestDocksWithNoAdjancents = [];
       for (int i = 0; i < closestDockList.length - 1; i++) {
         if (closestDockList[i].lat == closestDockList[i + 1].lat &&
             closestDockList[i].lon == closestDockList[i + 1].lon) {

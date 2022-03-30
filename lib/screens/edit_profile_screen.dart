@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../widgets/profile/profile_widget.dart';
 import '../widgets/textfield_widget.dart';
 import 'package:veloplan/helpers/database_helpers/database_manager.dart';
+import 'package:veloplan/widgets/profile/profile_widget.dart';
+import 'package:veloplan/widgets/textfield_widget.dart';
 
 class EditProfile extends StatefulWidget {
   final Map<String, dynamic> data;

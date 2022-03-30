@@ -1,24 +1,18 @@
 import 'dart:developer';
 import 'dart:math' as math;
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-
 import 'package:mapbox_gl/mapbox_gl.dart';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart';
 import 'package:timeline_tile/timeline_tile.dart';
-import 'package:veloplan/models/itineraryManager.dart';
+import 'package:veloplan/models/itinerary_manager.dart';
 import 'package:veloplan/models/path.dart';
 import '../helpers/navigation_helpers/navigation_conversions_helpers.dart';
 import '../models/itinerary.dart';
 import 'navigation/map_with_route_screen.dart';
-import 'dart:async';
-import 'package:mapbox_gl/mapbox_gl.dart';
-
 import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 import 'package:veloplan/navbar.dart';
 import 'package:veloplan/utilities/dart_exts.dart';

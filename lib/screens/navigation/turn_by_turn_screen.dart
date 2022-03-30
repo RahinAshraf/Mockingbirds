@@ -1,15 +1,10 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_mapbox_navigation/library.dart';
 import 'package:veloplan/helpers/database_helpers/statistics_helper.dart';
 import 'package:veloplan/helpers/live_location_helper.dart';
 import 'package:veloplan/navbar.dart';
-import 'package:veloplan/screens/navigation/map_screen.dart';
-
-import '../../widgets/popup_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 /// A splash screen displaying turn by turn navigation for a journey.
 /// Author(s): Fariha Choudhury k20059723, Elisabeth Halvorsen k20077737,

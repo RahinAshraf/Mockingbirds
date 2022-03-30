@@ -85,12 +85,8 @@ class BaseMapboxMap {
   Future<void> baseMapCreated(MapboxMapController controller) async {
     this.controller = controller;
     model.setController(controller);
-    timer = Timer.periodic(
-        Duration(seconds: 2), (Timer t) => updateCurrentLocation());
-    if (address == null) {
-      model.fetchDockingStations();
-      model.controller?.onSymbolTapped.add(onSymbolTapped);
-    }
+    await model.fetchDockingStations();
+    controller.onSymbolTapped.add(onSymbolTapped);
   }
 
   /// Updates the current location with the new one
@@ -122,11 +118,6 @@ class BaseMapboxMap {
     cameraPosition = CameraPosition(target: currentPosition, zoom: 15);
   }
   //print(coordinates);
-
-  /// Defines [onSymbolTapped] functionality for a docking station marker
-  // void onMarkerTapped(MapboxMapController controller) {
-  //   controller.onSymbolTapped.add(onSymbolTapped);
-  // }
 
   /// gets the new [cameraposition]
   Future<CameraPosition> getNewCameraPosition() async {
@@ -180,4 +171,11 @@ class BaseMapboxMap {
         tilt: cameraPosition.zoom);
     controller!.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
   }
+
+  // void addDockingStationCard() {
+  //   addWidget(Align(
+  //     alignment: Alignment.bottomCenter,
+  //     child: Container(height: 200, child: DockStation(key: dockingStationKey)),
+  //   ));
+  // }
 }
