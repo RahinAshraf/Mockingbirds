@@ -20,7 +20,7 @@ class MapPlace {
 class JourneyPlanner extends StatefulWidget {
   final int? numberOfCyclists;
   final DateTime? journeyDate;
- final bool isScheduled;
+  final bool isScheduled;
 
   JourneyPlanner({
     Key? key,

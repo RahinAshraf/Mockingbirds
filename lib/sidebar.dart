@@ -83,7 +83,7 @@ class SideBar extends StatelessWidget {
     switch (i) {
       case 0:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => SchedulePage(),
+          builder: (context) => ScheduleScreen(),
         ));
         break;
       case 1:

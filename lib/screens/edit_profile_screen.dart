@@ -1,10 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:veloplan/helpers/database_helpers/database_manager.dart';
-
-import '../widgets/profile/profile_widget.dart';
-import '../widgets/textfield_widget.dart';
-
+import 'package:veloplan/widgets/profile/profile_widget.dart';
+import 'package:veloplan/widgets/textfield_widget.dart';
 
 class EditProfile extends StatefulWidget {
   final Map<String, dynamic> data;
