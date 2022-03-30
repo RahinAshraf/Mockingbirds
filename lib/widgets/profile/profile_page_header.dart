@@ -16,6 +16,25 @@ class ProfilePageHeader extends StatefulWidget {
 
 class _ProfilePageHeaderState extends State<ProfilePageHeader> {
   final user = FirebaseAuth.instance.currentUser!.uid;
+  double distance = 0;
+  int journeys = 0;
+
+  Future getDistance() async {
+    final snapshot =
+        await FirebaseFirestore.instance.collection('users').doc(user).get();
+    final data = snapshot.data();
+    if (data != null && data['distance'] != null) {
+      distance = data['distance'] / 1000;
+    }
+  }
+
+  Future getJourneys() async {
+    final snapshot = await FirebaseFirestore.instance
+        .collection('journey')
+        .where('userid', isEqualTo: user)
+        .get();
+    journeys = snapshot.size;
+  }
 
   String calculateAge(Timestamp birthDateTimestamp) {
     DateTime currentDate = DateTime.now();
@@ -55,81 +74,71 @@ class _ProfilePageHeaderState extends State<ProfilePageHeader> {
         ],
       );
 
-  Widget buildCyclingHistory(Map<String, dynamic> data) => Padding(
-        padding: const EdgeInsets.only(top: 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Text(
-                  '10',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  'Kilometers',
-                  style: TextStyle(
-                    color: Colors.grey,
-                  ),
-                ),
-              ],
-            ),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 20),
-              height: 30,
-              width: 1,
-              color: Colors.grey,
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Text(
-                  '18',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  'Journeys',
-                  style: TextStyle(
-                    color: Colors.grey,
-                  ),
-                ),
-              ],
-            ),
-            Container(
-              width: 11,
-            ),
-          ],
-        ),
-      );
-
-  Widget buildButtons() => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20),
-        child: widget.isCurrentUser
-            ? ElevatedButton(
-                onPressed: () {},
-                child: const Text('Edit Profile'),
-              )
-            : Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {},
-                    child: const Text('Follow'),
-                  ),
-                  OutlinedButton(
-                    onPressed: () {},
-                    child: const Text('Message'),
-                  )
-                ],
+  Widget buildCyclingHistory(Map<String, dynamic> data) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              FutureBuilder(
+                  future: getDistance(),
+                  builder: (context, snapshot) {
+                    return Text(
+                      (distance).toStringAsFixed(2),
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    );
+                  }),
+              SizedBox(
+                height: 10,
               ),
-      );
+              Text(
+                'Kilometers',
+                style: TextStyle(
+                  color: Colors.grey,
+                ),
+              ),
+            ],
+          ),
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 20),
+            height: 30,
+            width: 1,
+            color: Colors.grey,
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              FutureBuilder(
+                  future: getJourneys(),
+                  builder: (context, snapshot) {
+                    return Text(
+                      '$journeys',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    );
+                  }),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                'Journeys',
+                style: TextStyle(
+                  color: Colors.grey,
+                ),
+              ),
+            ],
+          ),
+          Container(
+            width: 11,
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

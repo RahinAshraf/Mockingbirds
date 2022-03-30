@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:veloplan/helpers/live_location_helper.dart';
-import 'package:veloplan/helpers/theme_provider.dart';
 import 'package:veloplan/navbar.dart';
 import 'package:veloplan/screens/auth_screen.dart';
 import 'package:veloplan/screens/splash_screen.dart';
@@ -14,6 +13,7 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+late SharedPreferences sharedPreferences;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   checkPermissions();
@@ -24,6 +24,7 @@ void main() async {
   runApp(ScopedModel<MapModel>(
       model: _model,
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         initialRoute: '/',
         routes: {
           '/': (context) => const MyApp(),
@@ -59,44 +60,33 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    // currentTheme.addListener(() {
-    //   setState(() {});
-    // });
   }
 
   @override
   Widget build(BuildContext context) {
     //final Future<FirebaseApp> _initialization = Firebase.initializeApp();
     return FutureBuilder(
-        future: Firebase.initializeApp(), // _initialization,
-        builder: (context, appSnapshot) {
-          return ChangeNotifierProvider(
-              create: (_) => ThemeNotifier(),
-              child: Consumer<ThemeNotifier>(
-                builder: (context, ThemeNotifier notifier, child) {
-                  return MaterialApp(
-                    title: 'Veloplan',
-                    theme: notifier.isDarkTheme
-                        ? CustomTheme.darkTheme
-                        : CustomTheme.defaultTheme,
-                    home: appSnapshot.connectionState != ConnectionState.done
-                        ? const SplashScreen()
-                        : StreamBuilder(
-                            stream: FirebaseAuth.instance.authStateChanges(),
-                            builder: (ctx, userSnapshot) {
-                              if (userSnapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const SplashScreen();
-                              }
-                              if (userSnapshot.hasData) {
-                                return const VerifyEmailScreen();
-                              }
-                              return const AuthScreen();
-                            },
-                          ),
-                  );
-                },
-              ));
-        });
+      future: Firebase.initializeApp(), // _initialization,
+      builder: (context, appSnapshot) {
+        return MaterialApp(
+            title: 'Veloplan',
+            theme: CustomTheme.defaultTheme,
+            home: appSnapshot.connectionState != ConnectionState.done
+                ? const SplashScreen()
+                : StreamBuilder(
+                    stream: FirebaseAuth.instance.authStateChanges(),
+                    builder: (ctx, userSnapshot) {
+                      if (userSnapshot.connectionState ==
+                          ConnectionState.waiting) {
+                        return const SplashScreen();
+                      }
+                      if (userSnapshot.hasData) {
+                        return const VerifyEmailScreen();
+                      }
+                      return const AuthScreen();
+                    },
+                  ));
+      },
+    );
   }
 }

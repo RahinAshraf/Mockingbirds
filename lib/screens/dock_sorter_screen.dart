@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
-import 'package:veloplan/screens/navigation/map_screen.dart';
 import '../.env.dart';
 import '../widgets/docking_stations_sorting_widget.dart';
+
+/// The edit dock screen which is useful for selecting and favouriting docking station cards
+/// Author(s): Marija, Nicole Lehchevska
 
 class DockSorterScreen extends StatefulWidget {
   late final LatLng userCoord;
@@ -25,12 +27,13 @@ class _DockSorterScreen extends State<DockSorterScreen> {
   void initState() {
     userCoordinates = super.widget.userCoord;
     super.initState();
-    _initialCameraPosition = CameraPosition(target: latLng, zoom: zoom);
+    _initialCameraPosition = CameraPosition(target: latLng, zoom: 16);
   }
 
   _onMapCreated(MapboxMapController controller) async {
     this.controller = controller;
   }
+  // TODO: Marija refactor to use base map, example in screens/navigation/map_screen.dart
 
   @override
   Widget build(BuildContext context) {
@@ -42,8 +45,6 @@ class _DockSorterScreen extends State<DockSorterScreen> {
         minHeight: panelHeightClosed,
         maxHeight: panelHeightOpen,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-        parallaxEnabled: true,
-        parallaxOffset: .5,
         controller: panelController,
         body: SafeArea(
           child: Stack(
