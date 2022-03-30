@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/helpers/navigation_helpers/navigation_conversions_helpers.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
@@ -10,7 +9,7 @@ import 'package:veloplan/models/docking_station.dart';
 ///Represents a journey which is made up of list of docking stations and/or destinations.
 ///Author: Tayyibah, Nicole
 
-class Itinerary extends ChangeNotifier {
+class Itinerary {
   String? _journeyDocumentId;
   List<LatLng>? _myDestinations = [];
   List<DockingStation>? _docks = []; //list of docking stations in a journey
@@ -21,10 +20,6 @@ class Itinerary extends ChangeNotifier {
     Random rand = Random();
     _date = DateTime.now();
     _journeyDocumentId = rand.nextInt(100).toString();
-  }
-
-  void onChange() {
-    notifyListeners();
   }
 
   DateTime? get date => _date;
