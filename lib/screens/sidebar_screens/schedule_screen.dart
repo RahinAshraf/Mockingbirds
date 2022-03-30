@@ -65,16 +65,13 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                         UpcomingEventCard(
                           event: event,
                           onClick: () {
-                            helper.deleteSingleScheduledEntry(event);
-                            setState(() {
-                              var journeyToRemove = upcomingJourneys.where(
-                                  (journey) =>
-                                      journey.journeyDocumentId ==
-                                      event.journeyDocumentId);
-                              upcomingJourneys.remove(journeyToRemove);
-                              _events = _groupByDate(upcomingJourneys);
-                              _selectedEvents = _events[_selectedDay] ?? [];
-                            });
+                            helper
+                                .deleteSingleScheduledEntry(event)
+                                .whenComplete(() => setState(() {
+                                      _events = _groupByDate(upcomingJourneys);
+                                      _selectedEvents =
+                                          _events[_selectedDay] ?? [];
+                                    }));
                             Navigator.pop(context);
                           },
                         )
