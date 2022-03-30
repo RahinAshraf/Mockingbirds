@@ -30,7 +30,7 @@ class _DockSorter extends State<DockSorter> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
+    return Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -75,7 +75,7 @@ class _DockSorter extends State<DockSorter> {
           padding: EdgeInsets.only(bottom: 10.0),
           child: Divider(),
         ),
-        buildCarousel(selectedFilter)
+        buildCarousel(selectedFilter),
       ],
     );
   }

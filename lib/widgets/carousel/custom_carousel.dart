@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 /// Creates a custom carousel that must be populated with a list of cards on instantiation
-/// Author: Tayyiba
+/// Author: Tayyibah
 class CustomCarousel extends StatefulWidget {
   final List<Widget> cards;
 
@@ -34,6 +34,7 @@ class CustomCarouselState extends State<CustomCarousel>
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Flexible(
           child: PageView.builder(
@@ -61,7 +62,7 @@ class CustomCarouselState extends State<CustomCarousel>
       builder: (BuildContext context, widget) {
         return Center(child: widget);
       },
-      child: Container(child: cards[position]),
+      child: cards[position],
     );
   }
 

@@ -20,7 +20,7 @@ class MapPlace {
 class JourneyPlanner extends StatefulWidget {
   final int? numberOfCyclists;
   final DateTime? journeyDate;
- final bool isScheduled;
+  final bool isScheduled;
 
   JourneyPlanner({
     Key? key,
@@ -70,7 +70,7 @@ class _JourneyPlanner extends State<JourneyPlanner> {
         child: ScopedModelDescendant<MapModel>(
             builder: (BuildContext context, Widget? child, MapModel model) {
           _baseClickMap = BaseMapboxClickMap(model, address);
-          return SafeArea(child: Stack(children: _baseClickMap.getWidgets()));
+          return Stack(children: _baseClickMap.getWidgets());
         }),
       ),
       Positioned.fill(

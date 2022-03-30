@@ -34,7 +34,7 @@ class DockingStationCarousel {
             if (snapshot.hasData) {
               return Container(
                   alignment: Alignment.center,
-                  height: MediaQuery.of(context).size.height / 3,
+                  height: MediaQuery.of(context).size.height / 3.5,
                   width: MediaQuery.of(context).size.width,
                   child: snapshot.data!.length == 0
                       ? Text('This list is empty.')
@@ -47,7 +47,7 @@ class DockingStationCarousel {
             }
           } else {
             return SizedBox(
-                height: 100, width: 100, child: CircularProgressIndicator());
+                height: 50, width: 50, child: CircularProgressIndicator());
           }
         });
   }
