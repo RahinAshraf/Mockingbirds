@@ -17,26 +17,22 @@ class ScheduleScreen extends StatefulWidget {
 /// It consists of [TableCalendar] with a collection of [_events] retrieved
 /// from [upcomingJourneys]. [_selectedEvents] are the events of [_selectedDay].
 class _ScheduleScreenState extends State<ScheduleScreen> {
-  late ValueNotifier<List<Itinerary>> _selectedEvents = ValueNotifier([]);
   late List<Itinerary> upcomingJourneys = [];
   late Map<DateTime, List<Itinerary>> _events = {};
   ScheduleHelper helper = ScheduleHelper();
   CalendarFormat _calendarFormat = CalendarFormat.twoWeeks;
   DateTime _selectedDay = DateUtils.dateOnly(DateTime.now());
   DateTime _focusedDay = DateUtils.dateOnly(DateTime.now());
-  // late List _selectedEvents = [];
 
   @override
   initState() {
     super.initState();
-
     helper
         .deleteOldScheduledEntries()
         .whenComplete(() => helper.getAllScheduleDocuments().then((data) {
               setState(() {
                 upcomingJourneys = data;
                 _events = _groupByDate(upcomingJourneys);
-                _selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay));
               });
             }));
   }
@@ -58,30 +54,21 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             padding: EdgeInsets.only(left: 15.0),
             child: Text('Upcoming journeys', style: upcomingJourneysTextStyle),
           ),
-          Expanded(
-            child: ValueListenableBuilder<List<Itinerary>>(
-              valueListenable: _selectedEvents,
-              builder: (context, value, _) {
-                return Column(
-                  children: [
-                    for (var event in value)
-                      UpcomingEventCard(
-                        event: event,
-                        onClick: () {
-                          helper
-                              .deleteSingleScheduledEntry(event)
-                              .whenComplete(() => setState(() {
-                                    _events = _groupByDate(upcomingJourneys);
-                                  }));
-                          value = _events[_selectedDay] ?? [];
-                          Navigator.pop(context);
-                        },
-                      )
-                  ],
-                );
-              },
-            ),
-          )
+          Column(
+            children: _getEventsForDay(_selectedDay)
+                .map((Itinerary event) => UpcomingEventCard(
+                      event: event,
+                      onClick: () {
+                        helper
+                            .deleteSingleScheduledEntry(event)
+                            .whenComplete(() => setState(() {
+                                  _events = _groupByDate(upcomingJourneys);
+                                }));
+                        Navigator.pop(context);
+                      },
+                    ))
+                .toList(),
+          ),
         ],
       ),
     );
@@ -109,7 +96,6 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             _focusedDay = focusedDay;
             _selectedDay = selectedDay;
           });
-          _selectedEvents.value = _getEventsForDay(selectedDay);
         }
       },
     );
