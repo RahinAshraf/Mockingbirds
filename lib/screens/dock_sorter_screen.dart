@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
-import '../.env.dart';
-import '../widgets/docking_stations_sorting_widget.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:veloplan/.env.dart';
+import 'package:veloplan/helpers/shared_prefs.dart';
+import 'package:veloplan/widgets/docking_stations_sorting_widget.dart';
 
 /// The edit dock screen which is useful for selecting and favouriting docking station cards
 /// Author(s): Marija, Nicole Lehchevska

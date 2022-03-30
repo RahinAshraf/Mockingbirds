@@ -1,4 +1,3 @@
-import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:veloplan/screens/journey_planner_screen.dart';
 import 'package:veloplan/screens/trips_scheduler_screen.dart';
@@ -22,6 +21,7 @@ class _TripSchedulerPanelWidget extends State<TripSchedulerPanelWidget> {
   final int maximumNumberOfCyclists = 6; // max number of cyclists allowed
   int numberOfCyclists = 1; // min one cyclist allowed
   DateTime selectedDate = DateTime.now();
+
   @override
   Widget build(BuildContext context) => Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
