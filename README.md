@@ -15,7 +15,7 @@
 
 
 
-A new Flutter project.
+A Flutter project.
 
 ## Getting Started
 
@@ -31,10 +31,13 @@ For help getting started with Flutter, view our
 samples, guidance on mobile development, and a full API reference.
 
 
+## References:
+- lib/screens/navigation/turn_by_turn_screen.dart: 
+    * dormmom.com, Jul 20, 2021, flutter_mapbox_navigation 0.0.26, https://pub.dev/packages/flutter_mapbox_navigation
+    * AB Satyaprakash, Feb 20, 2022, https://github.com/Imperial-lord/mapbox-flutter
 
 ## Design Decisions 
 - Mapbox Navigation Package has issues with turn by turn direction.
     - A turn by turn navigation can only be used once in an app run and cannot edit the state of the journey.
-    - Could not do redirecting with flutter_mapbox_navigation as there is an open bug with the app ()
+    - Could not do redirecting with flutter_mapbox_navigation as there is an open bug with the app (https://github.com/eopeter/flutter_mapbox_navigation/issues/145)
     - Resorted to using polyline navigation 
-- 
