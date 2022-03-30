@@ -28,7 +28,7 @@ Future<void> main() async {
   final BaseMapboxMap baseMapWithClick =
       BaseMapboxMap(_model, address: address);
   // final BaseMapboxRouteMap baseRouteMap =
-  // BaseMapboxRouteMap(prettyCoords, _model);
+  //     BaseMapboxRouteMap(prettyCoords, _model);
   final BaseMapboxStationMap baseStationMap =
       BaseMapboxStationMap(prettyCoords, prettyCoords[1], _model);
 

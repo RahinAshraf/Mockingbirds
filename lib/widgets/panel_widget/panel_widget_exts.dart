@@ -33,7 +33,7 @@ class PanelExtensions {
   Widget buildDefaultClosestDock(
       TextEditingController editDockTextEditController,
       TextEditingController placeTextController,
-      Map<int, LatLng> latLngMap,
+      Map<int, DockingStation> latLngMap,
       bool isFrom,
       int numberCyclists,
       {int position = -1}) {
@@ -107,8 +107,8 @@ class PanelExtensions {
                     isFrom,
                     numberCyclists,
                     address: result?.name,
-                    closesDockLatLng:
-                        LatLng(result?.lat ?? 0, result?.lon ?? 0));
+                    closesDockLatLng: result);
+                        // LatLng(result?.lat ?? 0, result?.lon ?? 0));
               },
               padding: const EdgeInsets.all(0),
               icon: const Icon(
@@ -145,12 +145,12 @@ class PanelExtensions {
   void checkInputLocation(
       TextEditingController placeTextController,
       TextEditingController editDockTextEditController,
-      Map<int, LatLng> latLngMap,
+      Map<int, DockingStation> latLngMap,
       int position,
       bool isFrom,
       int numberCyclists,
       {String? address,
-      LatLng? closesDockLatLng}) async {
+      DockingStation? closesDockLatLng}) async {
     // void checkInputLocation(
     //     TextEditingController placeTextController,
     //     TextEditingController editDockTextEditController,
@@ -183,12 +183,12 @@ class PanelExtensions {
       double? lat,
       double? lng,
       TextEditingController editDockTextEditController,
-      Map<int, LatLng> latLngMap,
+      Map<int, DockingStation> latLngMap,
       int position,
       bool isFrom,
       int numberOfCyclists,
       {String? address,
-      LatLng? closesDockLatLng}) async {
+      DockingStation? closesDockLatLng}) async {
     LatLong.LatLng latlngPlace = LatLong.LatLng(lat!, lng!);
     dockingStationManager _stationManager = dockingStationManager();
     await _stationManager.importStations();
@@ -219,7 +219,8 @@ class PanelExtensions {
             "closest dock info  dock with available SPACES ${closestDock.name} compared to BIKES ${temp.name} ------ num: ${numberOfCyclists}");
       }
       editDockTextEditController.text = closestDock.name;
-      latLngMap[position] = LatLng(closestDock.lat, closestDock.lon);
+      //latLngMap[position] = LatLng(closestDock.lat, closestDock.lon);
+      latLngMap[position] = closestDock;
       print("closet dock ${closestDock.name}");
       print("PRIIIINTING => $position");
       this._dockingStation = closestDock;

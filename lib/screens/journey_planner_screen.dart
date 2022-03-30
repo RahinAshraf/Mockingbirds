@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/models/map_models/base_map_model.dart';
 import '../widgets/panel_widget/panel_widget.dart';
 import '../providers/location_service.dart';
@@ -52,7 +53,7 @@ class _JourneyPlanner extends State<JourneyPlanner> {
 
   List<DynamicWidget> dynamicWidgetList = [];
   List<List<double?>> coordsList = [];
-  Map<int, LatLng> dockList = {};
+  Map<int, DockingStation> dockList = {};
 
   @override
   void initState() {

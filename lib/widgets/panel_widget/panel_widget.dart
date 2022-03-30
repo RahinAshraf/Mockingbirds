@@ -33,7 +33,7 @@ import 'package:veloplan/widgets/panel_widget/panel_widget_exts.dart';
 /// @author: Rahin Ashraf - k20034059
 ///Contributor: Nicole
 class PanelWidget extends PanelWidgetBase {
-  late Map<int, LatLng> dockList;
+  late Map<int, DockingStation> dockList;
   PanelWidget(
       {Key? key,
       required Map<String, List<double?>> selectionMap,
@@ -98,7 +98,7 @@ class PanelWidgetState extends State<PanelWidget> {
   static const String fromLabelKey = "From";
   static const String toLabelKey = "To";
   final Alerts alert = Alerts();
-  late Map<int, LatLng> dockList;
+  late Map<int, DockingStation> dockList;
 
   ///Adds a new dynamic widget to the list of destinations for the journey
   addDynamic() {
@@ -492,7 +492,7 @@ class PanelWidgetState extends State<PanelWidget> {
   ///closest docking stations for the locations the user specified. This new list is then passed onto MapRoutePage.
   ///THIS FUNCTION NEEDS TO BE REFACTORED FURTHER
   Future<void> _handleSaveClick() async {
-    List<LatLng> closestDockList = dockList.values.toList();
+    List<DockingStation> closestDockList = dockList.values.toList();
     print("ALREADY EXISTS ==> $closestDockList");
     final hasEmptyField = widget.listDynamic
         .any((element) => element.placeTextController.text.isEmpty);
@@ -547,48 +547,22 @@ class PanelWidgetState extends State<PanelWidget> {
       print("\n ------ SEE IF DOCKS LATLNG CAME");
       List<LatLng>? points = convertListDoubleToLatLng(tempList);
 
-// <<<<<<< HEAD
-      List<LatLng> closestDockList = dockList.values.toList();
+      List<DockingStation> closestDockList = dockList.values.toList();
       print("ALREADY EXISTS ==> $closestDockList");
-// =======
-//       List<LatLng> closestDockList = [];
+
       HistoryHelper historyHelper = HistoryHelper();
 
-      // List<DockingStation> selectedDocks = [];
-      // if (points != null) {
-      //   for (int i = 0; i < points.length; i++) {
-      //     DockingStation closestDock = _stationManager
-      //         .getClosestDock(LatLng(points[i].latitude, points[i].longitude));
-      //     //get the dock
-      //     print("------------- adding dock" + closestDock.name);
-      //     selectedDocks.add(closestDock);
-      //     //get the coord
-      //     closestDockList.add(closestDock.getLatlng());
-      //   }
-      //   print("ALL_COORDINATES FOR CLOSEST DOCKS => $closestDockList");
-      //   print("ALL_DOCKS FOR CLOSEST DOCKS => ${selectedDocks.last.name}");
-      // }
-      List<DockingStation> selectedDocks = [];
-      if (points != null) {
-        for (int i = 0; i < closestDockList.length; i++) {
-          DockingStation closestDock = _stationManager.getClosestDock(LatLng(
-              closestDockList[i].latitude, closestDockList[i].longitude));
-          //get the dock
-          print("------------- adding dock" + closestDock.name);
-          selectedDocks.add(closestDock);
-          //get the coord
-          closestDockList.add(closestDock.getLatlng());
-        }
-        print("ALL_COORDINATES FOR CLOSEST DOCKS => $closestDockList");
-        print("ALL_DOCKS FOR CLOSEST DOCKS => ${selectedDocks.last.name}");
+      List<DockingStation> selectedDocks = dockList.values.toList();
+      for(int i = 0; i < selectedDocks.length; i++){
+        String dockName = selectedDocks[i].name;
+        print("DOCK NAME => $dockName");
       }
+      print("SELECTED DOCKS ==> $selectedDocks");
 
-// >>>>>>> main
-
-      List<LatLng> closestDocksWithNoAdjancents = [];
+   List<DockingStation> closestDocksWithNoAdjancents = [];
       for (int i = 0; i < closestDockList.length - 1; i++) {
-        if (closestDockList[i].latitude == closestDockList[i + 1].latitude &&
-            closestDockList[i].longitude == closestDockList[i + 1].longitude) {
+        if (closestDockList[i].lat == closestDockList[i + 1].lat &&
+            closestDockList[i].lon == closestDockList[i + 1].lon) {
           if (closestDocksWithNoAdjancents.contains(closestDockList[i])) {
             print("ALREADY EXISTS");
           } else {
@@ -640,11 +614,9 @@ class PanelWidgetState extends State<PanelWidget> {
         startLocationMustBeSpecified(toEditingController)) {
       return;
     }
-
     if (widget.hasSpecifiedOneDestination(context, alert)) {
       return;
     }
-
     if (aSearchBarCannotBeEmpty(widget.listDynamic)) {
       return;
     }
