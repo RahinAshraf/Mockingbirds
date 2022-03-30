@@ -198,7 +198,6 @@ class ItineraryCard extends StatelessWidget {
                     textStyle: eventCardDetailsTextStyle,
                   ),
                   onPressed: () {
-                    // TODO: change to call the summary of journey
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => SummaryJourneyScreen(journey)));
                   },
