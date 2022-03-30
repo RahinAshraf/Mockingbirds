@@ -205,12 +205,12 @@ class PanelWidgetState extends State<PanelWidget> {
         editDockTextEditController, dockList, -1, isFrom, numberCyclists);
   }
 
-//   ///Builds the static row of components which are displayed permanently. Statically built, as every journey
-//   ///needs to specify a starting point. [controller] is the TextField used to input and display the destination the user is
-//   ///to start their journey from. [hintText] is the text to describe the purpose of each TextField to the user.
+///Builds the static row of components which are displayed permanently. Statically built, as every journey
+///needs to specify a starting point. [controller] is the TextField used to input and display the destination the user is
+///to start their journey from. [hintText] is the text to describe the purpose of each TextField to the user.
 
-//   ///Function which builds the static row of components which are displayed permanently. Statically built, as every journey
-//   ///needs to specify a starting point
+///Function which builds the static row of components which are displayed permanently. Statically built, as every journey
+///needs to specify a starting point
   Widget _buildStatic(TextEditingController controller,
       {String? hintText,
       required BuildContext context,
@@ -273,13 +273,9 @@ class PanelWidgetState extends State<PanelWidget> {
     //ext.setPosition(position);
     ext.getClosetDock(newCord[0], newCord[1], editDockTextEditController,
         dockList, -1, true, widget.numberOfCyclists); //fillClosestDockBubble
-// =======
-//     //TODO: isFrom is true!!
-//     print(
-//         "ONCHANGED getting isFrom!!! ${widget.numberOfCyclists}  in addcoordfrom");
-//     PanelExtensions.of(context: context).fillClosestDockBubble(newCord[0],
-//         newCord[1], editDockTextEditController, true, widget.numberOfCyclists);
-// >>>>>>> main
+
+    //TODO: isFrom is true!!
+
   }
 
   ///Given a coordinate, [newCord], it sets the 'To' location as the place specified by the coordinates passed in
@@ -407,17 +403,12 @@ class PanelWidgetState extends State<PanelWidget> {
                   ),
                 ],
               ),
-              // Padding(
-              //   padding: const EdgeInsets.symmetric(vertical: 10.0),
-              //   child: buildFloatingActionButton(onPressed: addDynamic),
-              // ),
             ],
           ),
         ),
         SizedBox(child: Divider(), width: MediaQuery.of(context).size.width),
         Padding(
           padding: const EdgeInsets.only(bottom: 5.0, top: 5.0),
-// <<<<<<< HEAD
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -435,17 +426,6 @@ class PanelWidgetState extends State<PanelWidget> {
                 ),
               ),
             ],
-// =======
-            //   child: SizedBox(
-            //     width: MediaQuery.of(context).size.width / 2,
-            //     child: ElevatedButton(
-            //       onPressed:
-            //           widget.isScheduled ? _handleSaveClick : _handleStartClick,
-            //       child: widget.isScheduled ? text("SAVE") : text("START"),
-            //     ),
-            //   ),
-            // ),
-            // ],
           ),
         ),
       ],
@@ -497,6 +477,15 @@ class PanelWidgetState extends State<PanelWidget> {
   /// closest docking stations for the locations the user specified. This new list is then passed onto [MapRoutePage].
   /// THIS FUNCTION NEEDS TO BE REFACTORED FURTHER
   Future<void> _handleStartClick() async {
+
+    List<DockingStation> closestDockList = dockList.values.toList();
+    //print("ALREADY EXISTS ==> $closestDockList");
+    for (int i = 0; i < closestDockList.length; i++) {
+      LatLng closestDockLatLng = LatLng(closestDockList[i].lat,closestDockList[i].lon);
+      print("NAME => ${closestDockList[i].name}");
+      print("CLOSESTDOCKLATLNGLIST => $closestDockLatLng");
+    }
+
     final hasEmptyField = widget.listDynamic
         .any((element) => element.placeTextController.text.isEmpty);
 
