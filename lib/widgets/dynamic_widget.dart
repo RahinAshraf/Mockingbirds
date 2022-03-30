@@ -58,44 +58,6 @@ class DynamicWidget extends StatelessWidget {
   late DockingStation closetDockStation;
   @override
   Widget build(BuildContext context) {
-    // return Column(
-    //   children: [
-    //     Expanded(
-    //       child: Row(
-    //         children: [
-    //           TextButton(
-    //             onPressed: () {
-    //               int len = selectedCoords?.length ?? 0;
-    //               if (position < len) {
-    //                 latLngMap.removeWhere((key, value) => key == position);
-    //                 selectedCoords?.removeAt(position);
-    //               }
-    //               onDelete?.call(position);
-    //             },
-    //             child: const Icon(
-    //               Icons.close_outlined,
-    //               size: 35,
-    //               color: Colors.red,
-    //             ),
-    //           ),
-    //           Expanded(
-    //             child: SizedBox(
-    //               height: 35,
-    //               child: TextField(
-    //                 onEditingComplete: () {
-    //                   print("ONCHANGED");
-    //                   final ext = PanelExtensions.of(context: context);
-    //                   ext.checkInputLocation(placeTextController,
-    //                       editDockTextEditController, latLngMap, position);
-    //                 },
-    //                 readOnly: true,
-    //                 onTap: () {
-    //                   _handleSearchClick(context, position);
-    //                 },
-    //                 controller: placeTextController,
-    //                 decoration: InputDecoration(
-    //                   contentPadding: EdgeInsets.symmetric(vertical: 0),
-    //                   suffixIcon: IconButton(
     return Padding(
       padding: EdgeInsets.only(top: 12.0),
       child: Row(
@@ -175,18 +137,6 @@ class DynamicWidget extends StatelessWidget {
             ),
           ),
           const Icon(Icons.menu),
-          // IconButton(
-          //   onPressed: () {
-          //     int len = selectedCoords?.length ?? 0;
-          //     if (position < len) {
-          //       selectedCoords?.removeAt(position);
-          //     }
-          //     onDelete?.call(position);
-          //   },
-          //   padding: EdgeInsets.zero,
-          //   constraints: BoxConstraints(),
-          //   icon: const Icon(Icons.menu, size: 20),
-          // ),
         ],
       ),
     );
@@ -208,7 +158,7 @@ class DynamicWidget extends StatelessWidget {
       } else {
         selectedCoords?[position] = feature.geometry?.coordinates;
       }
-// <<<<<<< HEAD
+
       PanelExtensions.of(context: context).getClosetDock(
           feature.geometry?.coordinates.first,
           feature.geometry?.coordinates.last,
@@ -217,14 +167,6 @@ class DynamicWidget extends StatelessWidget {
           position,
           isFrom,
           numberOfCyclists);
-// =======
-//       PanelExtensions.of(context: context).fillClosestDockBubble(
-//           feature.geometry?.coordinates.first,
-//           feature.geometry?.coordinates.last,
-//           editDockTextEditController,
-//           isFrom,
-//           numberOfCyclists);
-// >>>>>>> main
     }
     print("RESULT => $result");
   }
