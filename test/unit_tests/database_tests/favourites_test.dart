@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -8,7 +7,6 @@ import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 import 'package:veloplan/helpers/database_helpers/favourite_helper.dart';
 import 'package:veloplan/models/docking_station.dart';
 import 'favourites_test.mocks.dart';
-import 'mock.dart';
 
 @GenerateMocks([
   DatabaseManager,
@@ -67,12 +65,12 @@ main() {
         .called(1));
   });
 
-  test('Get user favourites', () {
-    helper.deleteFavourite("favouriteDocumentId");
-    (verify(mockDBManager.deleteDocument(
-            favouritesReference, "favouriteDocumentId"))
-        .called(1));
-  });
+  // test('Get user favourites', () {
+  //   helper.deleteFavourite("favouriteDocumentId");
+  //   (verify(mockDBManager.deleteDocument(
+  //           favouritesReference, "favouriteDocumentId"))
+  //       .called(1));
+  // });
 
   test('Returns true if station is in users favourites', () {
     String stationId = "id1";
