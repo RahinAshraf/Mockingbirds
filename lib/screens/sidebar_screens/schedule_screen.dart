@@ -54,21 +54,39 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             padding: EdgeInsets.only(left: 15.0),
             child: Text('Upcoming journeys', style: upcomingJourneysTextStyle),
           ),
-          Column(
-            children: _getEventsForDay(_selectedDay)
-                .map((Itinerary event) => UpcomingEventCard(
-                      event: event,
-                      onClick: () {
-                        helper
-                            .deleteSingleScheduledEntry(event)
-                            .whenComplete(() => setState(() {
-                                  _events = _groupByDate(upcomingJourneys);
-                                }));
-                        Navigator.pop(context);
-                      },
-                    ))
-                .toList(),
-          ),
+          _getEventsForDay(_selectedDay).isEmpty
+              ? Container(
+                  child: Column(
+                    children: [
+                      Image.asset('assets/images/bike.png',
+                          height: MediaQuery.of(context).size.height / 3.5),
+                      SizedBox(height: 15.0),
+                      Text(
+                        'No journeys planned for this day.',
+                        style: authTextStyle,
+                      ),
+                    ],
+                  ),
+                )
+              : Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 15.0),
+                  child: Column(
+                    children: _getEventsForDay(_selectedDay)
+                        .map((Itinerary event) => UpcomingEventCard(
+                              event: event,
+                              onClick: () {
+                                helper
+                                    .deleteSingleScheduledEntry(event)
+                                    .whenComplete(() => setState(() {
+                                          _events =
+                                              _groupByDate(upcomingJourneys);
+                                        }));
+                                Navigator.pop(context);
+                              },
+                            ))
+                        .toList(),
+                  ),
+                ),
         ],
       ),
     );
