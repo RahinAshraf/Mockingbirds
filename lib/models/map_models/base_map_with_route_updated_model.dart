@@ -102,13 +102,12 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
     timer = Timer.periodic(Duration(seconds: 10), (Timer t) async {
       if (isAtGoal) {
         t.cancel();
-      }      
+      }
       final oldLocation = getLatLngFromSharedPrefs();
       await updateCurrentLocation();
       final currentLocation = getLatLngFromSharedPrefs();
       final distanceTravelled = calculateDistance(oldLocation, currentLocation);
-      sharedPreferences.setDouble(
-          'distance', distanceTravelled);
+      sharedPreferences.setDouble('distance', distanceTravelled);
       _updateCameraPosition();
       _updateLiveCameraPosition();
     });
@@ -126,9 +125,9 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
 
   /// Create a timer just for constantly updating the distance travelled to server.
   void createStatisticsTimer() {
-    timer = Timer.periodic(Duration(minutes: 1), (Timer t) async { 
+    timer = Timer.periodic(Duration(minutes: 1), (Timer t) async {
       await updateDistanceOnServer(userID);
-     });
+    });
   }
 
   /// Initialize periodic timer to check if it's necessary to redirect to another docking station
