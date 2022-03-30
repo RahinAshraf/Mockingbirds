@@ -24,7 +24,7 @@ class DynamicWidget extends StatelessWidget {
   int position = -1;
   final locationService = LocationService();
   final Map? coordDataMap;
-  late Map<int, LatLng> latLngMap;
+  late Map<int, DockingStation> latLngMap;
   List<double?>? dock;
   // TODO: isFrom is false because this is the dynamic widget which is not the from
   bool isFrom = false;

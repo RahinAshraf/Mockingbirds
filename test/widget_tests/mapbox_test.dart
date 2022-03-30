@@ -28,8 +28,8 @@ Future<void> main() async {
   final BaseMapboxMap baseMap = BaseMapboxMap(_model);
   final BaseMapboxMap baseMapWithClick =
       BaseMapboxMap(_model, address: address);
-  final BaseMapboxRouteMap baseRouteMap =
-      BaseMapboxRouteMap(prettyCoords, _model);
+  // final BaseMapboxRouteMap baseRouteMap =
+  //     BaseMapboxRouteMap(prettyCoords, _model);
   final BaseMapboxStationMap baseStationMap =
       BaseMapboxStationMap(prettyCoords, prettyCoords[1], _model);
 
@@ -62,16 +62,16 @@ Future<void> main() async {
     expect(find.byType(MapboxMap), findsOneWidget);
   });
 
-  testWidgets("Mapbox base route map", (WidgetTester tester) async {
-    await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
-      body: Center(
-          child: Stack(
-        children: [baseRouteMap.map],
-      )),
-    )));
-    expect(find.byType(MapboxMap), findsOneWidget);
-  });
+  // testWidgets("Mapbox base route map", (WidgetTester tester) async {
+  //   await tester.pumpWidget(MaterialApp(
+  //       home: Scaffold(
+  //     body: Center(
+  //         child: Stack(
+  //       children: [baseRouteMap.map],
+  //     )),
+  //   )));
+  //   expect(find.byType(MapboxMap), findsOneWidget);
+  // });
   testWidgets("Mapbox base station map", (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(
         home: Scaffold(
