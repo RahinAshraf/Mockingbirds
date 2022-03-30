@@ -33,11 +33,15 @@ class RouteManager {
     if (type.isEmpty) {
       return null;
     }
+    print("SOUR: " + source.toString());
+    print("DEST: " + destination.toString());
     String url =
         '$_baseUrl/$type/${source.longitude},${source.latitude};${destination.longitude},${destination.latitude}?alternatives=true&continue_straight=true&geometries=geojson&language=en&overview=full&steps=true&access_token=$_accessToken';
+    print(url);
     try {
       _dio.options.contentType = Headers.jsonContentType;
       final responseData = await _dio.get(url);
+      print(responseData);
       return responseData.data;
     } catch (e) {
       final errorMessage = e.toString();
@@ -70,5 +74,20 @@ class RouteManager {
     } else {
       return null;
     }
+  }
+
+  /// sets the [geometry] of the current route
+  void setGeometry(Object geometry) {
+    _directions['geometry'] = geometry;
+  }
+
+  /// sets the [duration] of the current route
+  void setDuration(double duration) async {
+    _directions['duration'] = duration;
+  }
+
+  /// sets the [distance] of the current route
+  void setDistance(double distance) async {
+    _directions['distance'] = distance;
   }
 }

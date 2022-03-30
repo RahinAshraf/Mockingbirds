@@ -22,6 +22,8 @@ abstract class PanelWidgetBase extends StatefulWidget {
   final Map<String, List<double?>> selectionMap;
   final Map<String, List<double?>> staticListMap;
   final int numberOfCyclists;
+  final bool isScheduled;
+  final DateTime journeyDate;
 
   const PanelWidgetBase(
       {required this.selectionMap,
@@ -35,6 +37,8 @@ abstract class PanelWidgetBase extends StatefulWidget {
       required this.fromTextEditController,
       required this.panelController,
       required this.numberOfCyclists,
+      required this.isScheduled,
+      required this.journeyDate,
       Key? key})
       : super(key: key);
 
@@ -58,7 +62,7 @@ abstract class PanelWidgetBase extends StatefulWidget {
     }
   }
 
-  /// Restricts the user from being able to start a journey without defining at least one destination for the journey.
+  ///The logic to restrict the user from being able to start a journey without defining at least one destination for the journey
   bool oneDestinationMustBeSpecified(
       PanelWidget widget, BuildContext context, Alerts alert) {
     if (widget.listDynamic.isEmpty) {

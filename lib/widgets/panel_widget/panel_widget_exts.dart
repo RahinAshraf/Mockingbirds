@@ -22,7 +22,9 @@ class PanelExtensions {
   /// Builds the field displaying the closest docking station from the place specified in the location TextField.
   Widget buildDefaultClosestDock(
       TextEditingController editDockTextEditController,
-      TextEditingController placeTextController) {
+      TextEditingController placeTextController,
+      bool isFrom,
+      int numberCyclists) {
     return Row(
       children: [
         IconButton(
@@ -47,8 +49,8 @@ class PanelExtensions {
               }
               List temp = await locationService
                   .getPlaceCoords(placeTextController.text);
-              checkInputLocation(
-                  placeTextController, editDockTextEditController);
+              checkInputLocation(placeTextController,
+                  editDockTextEditController, isFrom, numberCyclists);
               Navigator.push(
                   context!,
                   MaterialPageRoute(
@@ -65,32 +67,54 @@ class PanelExtensions {
 
   LatLong.LatLng _latLng(double lat, double lng) => LatLong.LatLng(lat, lng);
 
-  void checkInputLocation(TextEditingController placeTextController,
-      TextEditingController editDockTextEditController) async {
-    print("THIS IS CLOSET DOCK");
+  void checkInputLocation(
+      TextEditingController placeTextController,
+      TextEditingController editDockTextEditController,
+      bool isFrom,
+      int numberCyclists) async {
+    print("THIS IS CLOSEST DOCK");
     if (placeTextController.text.isEmpty) {
       print("Nothing specified");
     } else {
       print("REACHED METHOD GETCLOSETDOCK");
       List coordPlace = await locationService.getPlaceCoords(
-          placeTextController.text); // getting coord of the place [lat,lng]
-      getClosetDock(
-          coordPlace.first, coordPlace.last, editDockTextEditController);
-      //TODO: change to get closet dock with available bikes after getting num of cyclist
+          placeTextController.text); //getting coord of the place [lat,lng]
+
+      fillClosestDockBubble(coordPlace.first, coordPlace.last,
+          editDockTextEditController, isFrom, numberCyclists);
     }
   }
 
-  /// Fills in the bubble displayed under every TextField with the name of the docking station closest
-  /// to the location specified by the user.
-  void getClosetDock(double? lat, double? lng,
-      TextEditingController editDockTextEditController) async {
+  ///Fills in the bubble, which is displayed underneath every textfield, with the name of the docking station which is closest
+  ///to the location specfied by the user
+  void fillClosestDockBubble(
+      double? lat,
+      double? lng,
+      TextEditingController editDockTextEditController,
+      bool isFrom,
+      int numberOfCyclists) async {
     LatLong.LatLng latlngPlace =
         LatLong.LatLng(lat!, lng!); // converting list to latlng
     dockingStationManager _stationManager = dockingStationManager();
     await _stationManager.importStations();
     print(latlngPlace);
-    DockingStation closetDock = _stationManager.getClosestDock(latlngPlace);
-    print("closet dock ${closetDock.name}");
-    editDockTextEditController.text = closetDock.name;
+    late DockingStation closestDock;
+    if (isFrom) {
+      var temp = _stationManager.getClosestDockWithAvailableSpace(
+          latlngPlace, numberOfCyclists);
+      closestDock = _stationManager.getClosestDockWithAvailableBikes(
+          latlngPlace, numberOfCyclists);
+      print(
+          "closest dock info  dock with available BIKES ${closestDock.name} compared to SPACES ${temp.name} ---- num: ${numberOfCyclists}");
+    } else {
+      var temp = _stationManager.getClosestDockWithAvailableBikes(
+          latlngPlace, numberOfCyclists);
+      closestDock = _stationManager.getClosestDockWithAvailableSpace(
+          latlngPlace, numberOfCyclists);
+      print(
+          "closest dock info  dock with available SPACES ${closestDock.name} compared to BIKES ${temp.name} ------ num: ${numberOfCyclists}");
+    }
+    print("closet dock ${closestDock.name}");
+    editDockTextEditController.text = closestDock.name;
   }
 }
