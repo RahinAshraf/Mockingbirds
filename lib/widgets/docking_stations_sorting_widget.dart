@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/widgets/carousel/station_carousel.dart';
 
-/// Class that sorts docking stations based on a specific filter.
+/// Sorts docking stations based on a specific filter.
 ///
-/// This class fetches 10 closest stations from [DockingStationList]
-/// based on given [userCoord]. It then displays the cards
+/// This class fetches 10 closest stations to [userCoord] from
+/// [DockingStationCarousel]. It then displays the cards
 /// and can be sorted based on options given in [_DockSorter.dropdownItems].
 /// By default, cards are sorted by [_DockSorter.selectedFilter].
 
@@ -33,9 +33,7 @@ class DockSorter extends StatefulWidget {
       required ScrollController controller,
       required this.selectedDockStation})
       : super(key: key);
-
   late final LatLng userCoord;
-
   @override
   _DockSorter createState() => _DockSorter();
 }
@@ -44,7 +42,8 @@ class _DockSorter extends State<DockSorter> {
   ScrollController controller = ScrollController();
   late LatLng userCoordinates;
   late DockingStationCarousel _dockingStations;
-  List<String> dropdownItems = ['Distance', 'Favourites', 'Most Popular'];
+  List<String> dropdownItems = ['Distance', 'Favourites'];
+  int setterDropdown = -1;
   String selectedFilter = 'Distance';
   cords.LatLng? selectedDockStation;
 
@@ -97,7 +96,7 @@ class _DockSorter extends State<DockSorter> {
                     onChanged: (String? newFilter) {
                       setState(() {
                         selectedFilter = newFilter!;
-                        // TODO: reload sorted docks based on selected filter
+                        buildCarousel(newFilter);
                       });
                     },
                   ),
@@ -109,7 +108,13 @@ class _DockSorter extends State<DockSorter> {
             padding: EdgeInsets.only(bottom: 10.0),
             child: Divider(),
           ),
-          _dockingStations.build(),
+          buildCarousel(selectedFilter)
+          // _dockingStations.build(selectedFilter),
         ],
       );
+
+  FutureBuilder<List> buildCarousel(var newSelectedFilter) {
+    var dockSt = DockingStationCarousel(userCoordinates);
+    return dockSt.build(newSelectedFilter);
+  }
 }

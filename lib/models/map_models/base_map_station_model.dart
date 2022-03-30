@@ -3,6 +3,8 @@ import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:tuple/tuple.dart';
 import 'package:veloplan/helpers/navigation_helpers/navigation_helpers.dart';
 import 'package:veloplan/models/docking_station.dart';
+import 'package:veloplan/models/itinerary.dart';
+import 'package:veloplan/models/map_models/base_map_model.dart';
 import 'package:veloplan/models/map_models/base_map_with_route_model.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:veloplan/helpers/navigation_helpers/map_drawings.dart';
@@ -10,7 +12,7 @@ import 'package:veloplan/helpers/navigation_helpers/map_drawings.dart';
 /// Class to display a mapbox map with markers for a station and its surroudning stations, and other possible widgets
 /// Author(s): Fariha Choudhury k20059723
 
-class BaseMapboxStationMap extends BaseMapboxRouteMap {
+class BaseMapboxStationMap extends BaseMapboxMap {
   late final List<LatLng> _journey;
   LatLng _curentDock;
   final Set<Symbol> filteredDockSymbols = {};
@@ -20,7 +22,7 @@ class BaseMapboxStationMap extends BaseMapboxRouteMap {
     this._journey,
     this._curentDock,
     MapModel model,
-  ) : super(_journey, model); //false
+  ) : super(model); //false
 
   late DockingStation chosenDock; //= _chosenDock;
   late List<DockingStation> dockingStations;

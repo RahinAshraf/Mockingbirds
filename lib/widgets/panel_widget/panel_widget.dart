@@ -1,25 +1,37 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:veloplan/screens/journey_planner_screen.dart';
-import 'package:veloplan/screens/summary_journey_screen.dart';
-import 'package:veloplan/utilities/dart_exts.dart';
-import 'package:veloplan/widgets/panel_widget/panel_widget_exts.dart';
-import 'package:veloplan/widgets/panel_widget/panel_widgets_base.dart';
-import '../../helpers/navigation_helpers/navigation_conversion_helpers.dart';
-import '../../providers/location_service.dart';
-import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:veloplan/models/itinerary.dart';
+import 'package:veloplan/helpers/database_helpers/schedule_helper.dart';
 import 'package:veloplan/alerts.dart';
 import 'package:veloplan/helpers/live_location_helper.dart';
+import 'package:veloplan/helpers/shared_prefs.dart';
+import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
+import 'package:veloplan/providers/location_service.dart';
+import 'package:veloplan/screens/journey_planner_screen.dart';
+import 'package:veloplan/screens/summary_journey_screen.dart';
+import 'package:veloplan/styles/colors.dart';
+import 'package:veloplan/styles/styling.dart';
+import 'package:veloplan/utilities/dart_exts.dart';
+import 'package:veloplan/widgets/dynamic_widget.dart';
+import 'package:veloplan/widgets/panel_widget/panel_widgets_base.dart';
+// import '../../helpers/navigation_helpers/navigation_conversion_helpers.dart';
+import '../../providers/location_service.dart';
+import '../../helpers/navigation_helpers/navigation_conversions_helpers.dart';
+import '../../models/docking_station.dart';
 import '../dynamic_widget.dart';
+import 'package:veloplan/helpers/database_helpers/history_helper.dart';
+import 'package:veloplan/widgets/panel_widget/panel_widget_exts.dart';
 
-///When rendered, the journey_planner_screen will have this panel_widget at the bottom. It is an interactive panel the user can
-///slide up or down, when wanting to input their desired locations for the journey.
-///@author: Rahin Ashraf - k20034059
-
+/// Renders [PanelWidget] used in [JourneyPlanner] screen.
+///
+/// It is an interactive panel the user can slide up or down,
+/// when wanting to input their desired locations for the journey.
+/// @author: Rahin Ashraf - k20034059
+///Contributor: Nicole
 class PanelWidget extends PanelWidgetBase {
   late Map<int, LatLng> dockList;
   PanelWidget(
@@ -35,7 +47,9 @@ class PanelWidget extends PanelWidgetBase {
       required int numberOfCyclists,
       required TextEditingController fromTextEditController,
       required PanelController panelController,
-      required this.dockList})
+      required this.dockList,
+      required bool isScheduled,
+      required DateTime journeyDate})
       : super(
             selectionMap: selectionMap,
             address: address,
@@ -47,34 +61,9 @@ class PanelWidget extends PanelWidgetBase {
             toTextEditController: toTextEditController,
             fromTextEditController: fromTextEditController,
             panelController: panelController,
-            numberOfCyclists: numberOfCyclists);
-// =======
-//   PanelWidget(
-//       {Key? key,
-//       required Map<String, List<double?>> selectionMap,
-//       required Stream<MapPlace> address,
-//       required ScrollController scrollController,
-//       required StreamController<List<DynamicWidget>> dynamicWidgets,
-//       required List<DynamicWidget> listDynamic,
-//       required List<List<double?>?> selectedCoords,
-//       required Map<String, List<double?>> staticListMap,
-//       required TextEditingController toTextEditController,
-//       required int numberOfCyclists,
-//       required TextEditingController fromTextEditController,
-//       required PanelController panelController})
-//       : super(
-//             selectionMap: selectionMap,
-//             address: address,
-//             scrollController: scrollController,
-//             dynamicWidgets: dynamicWidgets,
-//             listDynamic: listDynamic,
-//             selectedCoords: selectedCoords,
-//             staticListMap: staticListMap,
-//             toTextEditController: toTextEditController,
-//             fromTextEditController: fromTextEditController,
-//             panelController: panelController,
-//             numberOfCyclists: numberOfCyclists);
-// >>>>>>> 44-sliding-card-markers
+            numberOfCyclists: numberOfCyclists,
+            isScheduled: isScheduled,
+            journeyDate: journeyDate);
   @override
   PanelWidgetState createState() {
     return PanelWidgetState();
@@ -126,16 +115,18 @@ class PanelWidgetState extends State<PanelWidget> {
       selectedCoords: widget.selectedCoords,
       coordDataMap: response,
       latLngMap: dockList,
+      isFrom: false,
+      numberOfCyclists: widget.numberOfCyclists,
     ));
     widget.dynamicWidgets.sink.add(widget.listDynamic);
   }
 
-  ///imports the docking stations from the TFL api
+  /// Imports the docking stations from the TFL API.
   void importDockStation() async {
     await _stationManager.importStations();
   }
 
-  ///Initialises variables and listens for user interaction to act on
+  /// Initialises variables and listens for user interaction to act on.
   @override
   void initState() {
     dockList = widget.dockList;
@@ -159,6 +150,7 @@ class PanelWidgetState extends State<PanelWidget> {
   }
 
   ///Listens to the map and adds the place that the user taps on the map, to the Journey Planner as a new location.
+//TODO what do we do with isFrom here?
   void _listToMapClick() {
     final selectedCoords = widget.selectedCoords;
 
@@ -167,6 +159,8 @@ class PanelWidgetState extends State<PanelWidget> {
         selectedCoords: selectedCoords,
         coordDataMap: response,
         latLngMap: dockList,
+        isFrom: false,
+        numberOfCyclists: widget.numberOfCyclists,
       );
 
       //Cannot add by click of the map if there exists non-specified locations
@@ -194,9 +188,9 @@ class PanelWidgetState extends State<PanelWidget> {
     });
   }
 
-  ///This function sets the [controller] to the users current location.
-  _useCurrentLocationButtonHandler(
-      TextEditingController controller, String key) async {
+  ///When called, this function sets the first location of the journey to the users current location
+  _useCurrentLocationButtonHandler(TextEditingController controller, String key,
+      bool isFrom, int numberCyclists) async {
     sharedPreferences.setString('source', json.encode(response));
     String place = response['place'];
     double latitudeOfPlace = response['location'].latitude;
@@ -205,86 +199,119 @@ class PanelWidgetState extends State<PanelWidget> {
     controller.text = place;
     staticListMap[key] = currentLocationCoords;
 
-    PanelExtensions.of().checkInputLocation(
-        controller, editDockTextEditController, dockList, -1);
+    PanelExtensions.of().checkInputLocation(controller,
+        editDockTextEditController, dockList, -1, isFrom, numberCyclists);
   }
 
-  ///Builds the static row of components which are displayed permanently. Statically built, as every journey
-  ///needs to specify a starting point. [controller] is the TextField used to input and display the destination the user is
-  ///to start their journey from. [hintText] is the text to describe the purpose of each TextField to the user.
+//   ///Builds the static row of components which are displayed permanently. Statically built, as every journey
+//   ///needs to specify a starting point. [controller] is the TextField used to input and display the destination the user is
+//   ///to start their journey from. [hintText] is the text to describe the purpose of each TextField to the user.
+
+//   ///Function which builds the static row of components which are displayed permanently. Statically built, as every journey
+//   ///needs to specify a starting point
   Widget _buildStatic(TextEditingController controller,
       {String? hintText,
       required BuildContext context,
       required String label,
+      required bool isFrom,
+      required int numberCyclists,
       required Function(List<double?>) onAddressAdded}) {
     return Column(
       children: [
-        Row(
-          children: [
-            const SizedBox(
-              width: 10,
+        TextField(
+          readOnly: true,
+          onTap: () {
+            widget.handleOnSearchClick(context, controller, onAddressAdded);
+          },
+          onEditingComplete: () {
+            PanelExtensions.of(context: context).checkInputLocation(
+                controller,
+                editDockTextEditController,
+                dockList,
+                -1,
+                true,
+                widget.numberOfCyclists);
+          },
+          controller: controller,
+          decoration: InputDecoration(
+            hintText: hintText,
+            labelText: label,
+            floatingLabelBehavior: FloatingLabelBehavior.always,
+            border: circularInputBorder(),
+            enabledBorder: circularInputBorder(),
+            disabledBorder: circularInputBorder(),
+            errorBorder: circularInputBorder(),
+            focusedBorder:
+                circularInputBorder(width: 2.0, color: CustomColors.green),
+            suffixIcon: IconButton(
+              onPressed: () {
+                _useCurrentLocationButtonHandler(
+                    controller, label, isFrom, numberCyclists);
+              },
+              icon:
+                  Icon(Icons.my_location, size: 20, color: CustomColors.green),
             ),
-            SizedBox(
-              width: 50,
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(label,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.normal,
-                      fontSize: 20,
-                    )),
-              ),
-            ),
-            const SizedBox(width: 20),
-            Expanded(
-              child: Column(
-                children: [
-                  SizedBox(
-                    child: TextField(
-                      readOnly: true,
-                      onTap: () {
-                        widget.handleOnSearchClick(
-                            context, controller, onAddressAdded);
-                      },
-                      onEditingComplete: () {
-                        PanelExtensions.of(context: context).checkInputLocation(
-                            controller,
-                            editDockTextEditController,
-                            dockList,
-                            -1);
-                      },
-                      controller: controller,
-                      decoration: InputDecoration(
-                        hintText: hintText,
-                        focusedBorder: circularInputBorder(width: 2.0),
-                        border: circularInputBorder(),
-                        enabledBorder: circularInputBorder(),
-                        disabledBorder: circularInputBorder(),
-                        errorBorder: circularInputBorder(),
-                        focusedErrorBorder: circularInputBorder(),
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            _useCurrentLocationButtonHandler(controller, label);
-                          },
-                          icon: const Icon(
-                            Icons.my_location,
-                            size: 20,
-                            color: Colors.blue,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
+// <<<<<<< HEAD
+            // const SizedBox(width: 20),
+            // Expanded(
+            //   child: Column(
+            //     children: [
+            //       SizedBox(
+            //         child: TextField(
+            //           readOnly: true,
+            //           onTap: () {
+            //             widget.handleOnSearchClick(
+            //                 context, controller, onAddressAdded);
+            //           },
+            //           onEditingComplete: () {
+            //             PanelExtensions.of(context: context).checkInputLocation(
+            //                 controller,
+            //                 editDockTextEditController,
+            //                 dockList,
+            //                 -1);
+            //           },
+            //           controller: controller,
+            //           decoration: InputDecoration(
+            //             hintText: hintText,
+            //             focusedBorder: circularInputBorder(width: 2.0),
+            //             border: circularInputBorder(),
+            //             enabledBorder: circularInputBorder(),
+            //             disabledBorder: circularInputBorder(),
+            //             errorBorder: circularInputBorder(),
+            //             focusedErrorBorder: circularInputBorder(),
+            //             suffixIcon: IconButton(
+            //               onPressed: () {
+            //                 _useCurrentLocationButtonHandler(controller, label);
+            //               },
+            //                   icon: const Icon(
+            //                     Icons.my_location,
+            //                     size: 20,
+            //                     color: Colors.blue,
+            //                   ),
+            //                 ),
+            //               ),
+            //             ),
+            //           ),
+            //         ],
+            //       ),
+            //     ),
+            //   ],
+            // ),
+//         PanelExtensions.of(context: context).buildDefaultClosestDock(
+//           editDockTextEditController,
+//           controller,
+//           dockList,
+//         ),
+// =======
+          ),
         ),
         PanelExtensions.of(context: context).buildDefaultClosestDock(
-          editDockTextEditController,
-          controller,
-          dockList,
-        ),
+            editDockTextEditController,
+            controller,
+            dockList,
+            isFrom,
+            numberCyclists),
+// >>>>>>> main
       ],
     );
   }
@@ -292,10 +319,18 @@ class PanelWidgetState extends State<PanelWidget> {
   ///Given a coordinate, [newCord], it sets the 'From' location as the place specified by the coordinates passed in
   void addCordFrom(List<double?> newCord) {
     staticListMap[fromLabelKey] = newCord;
+// <<<<<<< HEAD
     final ext = PanelExtensions.of(context: context);
     //ext.setPosition(position);
-    ext.getClosetDock(
-        newCord[0], newCord[1], editDockTextEditController, dockList, -1);
+    ext.getClosetDock(newCord[0], newCord[1], editDockTextEditController,
+        dockList, -1, true, widget.numberOfCyclists);
+// =======
+//     //TODO: isFrom is true!!
+//     print(
+//         "ONCHANGED getting isFrom!!! ${widget.numberOfCyclists}  in addcoordfrom");
+//     PanelExtensions.of(context: context).fillClosestDockBubble(newCord[0],
+//         newCord[1], editDockTextEditController, true, widget.numberOfCyclists);
+// >>>>>>> main
   }
 
   ///Given a coordinate, [newCord], it sets the 'To' location as the place specified by the coordinates passed in
@@ -330,45 +365,72 @@ class PanelWidgetState extends State<PanelWidget> {
     }
   }
 
+  /// Creates the panel itself.
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      controller: widget.scrollController,
-      child: Column(
-        children: [
-          const SizedBox(
-            height: 20,
-          ),
-          const SizedBox(height: 6),
-          const Center(
-            child: Text(
-              "Explore London",
-              style: TextStyle(fontWeight: FontWeight.normal, fontSize: 35),
-            ),
-          ),
-          const SizedBox(height: 8),
-          _buildStatic(widget.fromTextEditController,
-              hintText: "Where from?",
-              label: "From",
-              context: context,
-              onAddressAdded: addCordFrom),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(top: 24.0, left: 12.0, right: 12.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text('TO'),
+              IconButton(
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+                icon: const Icon(
+                  Icons.arrow_back,
+                  size: 30,
+                  color: Colors.green,
+                ),
+              ),
+              Text(
+                "Explore London",
+                style: infoTextStyle,
+              ),
+              SizedBox(width: 5.0),
+              Tooltip(
+                preferBelow: false,
+                margin: EdgeInsets.all(10.0),
+                padding: EdgeInsets.all(10.0),
+                textStyle: TextStyle(color: Colors.white),
+                decoration: BoxDecoration(
+                  color: CustomColors.green,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                message:
+                    'Please specify the starting location of your trip and add destinations by clicking the + button. Tapping on the location in the map is another way of adding a stop to your trip! Ensure there are no blank destinations when you do so. When you are done, click START.',
+                showDuration: const Duration(seconds: 3),
+                child: const Icon(Icons.info_outline_rounded,
+                    size: 20.0, color: Colors.green),
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: ListView(
+            padding: EdgeInsets.only(top: 10.0),
+            controller: widget.scrollController,
+            children: [
+              _buildStatic(widget.fromTextEditController,
+                  hintText: "Where from?",
+                  label: "From",
+                  context: context,
+                  onAddressAdded: addCordFrom,
+                  isFrom: true,
+                  numberCyclists: widget.numberOfCyclists),
               Column(
-                mainAxisSize: MainAxisSize.max,
                 children: [
                   StreamBuilder<List<DynamicWidget>>(
                     builder: (_, snapshot) {
                       List<DynamicWidget> listOfDynamics = snapshot.data ?? [];
 
                       return SizedBox(
-                        width: 300,
+                        width: MediaQuery.of(context).size.width,
                         child: ReorderableListView.builder(
-                          //user can reorder the listItems
-                          itemExtent: 74,
+                          itemExtent: 120,
                           padding: EdgeInsets.zero,
                           shrinkWrap: true,
                           itemBuilder: (_, index) {
@@ -394,29 +456,34 @@ class PanelWidgetState extends State<PanelWidget> {
                     },
                     stream: dynamicWidgetsStream,
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
                 ],
               ),
             ],
           ),
-          //The default is a + icon
-          buildFloatingActionButton(onPressed: addDynamic),
-          Padding(
-            padding:
-                const EdgeInsets.only(top: 20, bottom: 20, left: 10, right: 10),
-            child: TextButton(
-              style: TextButton.styleFrom(
-                backgroundColor: Colors.green,
-                primary: Colors.white,
+        ),
+        SizedBox(child: Divider(), width: MediaQuery.of(context).size.width),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 5.0, top: 5.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              buildFloatingActionButton(onPressed: addDynamic),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: const Text('OR'),
               ),
-              onPressed: _handleStartClick,
-              child: text("START"),
-            ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width / 2,
+                child: ElevatedButton(
+                  onPressed:
+                      widget.isScheduled ? _handleSaveClick : _handleStartClick,
+                  child: widget.isScheduled ? text("SAVE") : text("START"),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -424,10 +491,41 @@ class PanelWidgetState extends State<PanelWidget> {
   ///For all the coordinates of the locations the user specified, creates a new list - this new list is a list of all the
   ///closest docking stations for the locations the user specified. This new list is then passed onto MapRoutePage.
   ///THIS FUNCTION NEEDS TO BE REFACTORED FURTHER
-  void _handleStartClick() {
+  Future<void> _handleSaveClick() async {
     List<LatLng> closestDockList = dockList.values.toList();
     print("ALREADY EXISTS ==> $closestDockList");
+    final hasEmptyField = widget.listDynamic
+        .any((element) => element.placeTextController.text.isEmpty);
 
+    applyConstraints(
+        widget.fromTextEditController, widget.toTextEditController);
+
+    if (hasEmptyField) {
+      alert.showSnackBarErrorMessage(
+          context, alert.cannotHaveEmptySearchLocationsMessage);
+      // context, alert.startPointMustBeDefinedMessage);
+      return;
+    } else if (areAdjacentCoords(widget.selectedCoords)) {
+      alert.showSnackBarErrorMessage(context, alert.noAdjacentLocationsAllowed);
+      return;
+    } else {
+      List<List<double?>?> tempList = [];
+      tempList.addAll(staticListMap.values);
+      tempList.addAll(widget.selectedCoords);
+
+      ScheduleHelper helper = ScheduleHelper();
+      helper.createScheduleEntry(
+          widget.journeyDate, tempList, widget.numberOfCyclists);
+    }
+    // Navigate back to the previous screen, useful for tbt
+    Navigator.of(context).pop(true);
+  }
+
+  /// Deals with the user pressing the START button. Applies the constraints for a journey.
+  /// For all the coordinates of the locations the user specified, creates a new list - this new list is a list of all the
+  /// closest docking stations for the locations the user specified. This new list is then passed onto [MapRoutePage].
+  /// THIS FUNCTION NEEDS TO BE REFACTORED FURTHER
+  Future<void> _handleStartClick() async {
     final hasEmptyField = widget.listDynamic
         .any((element) => element.placeTextController.text.isEmpty);
 
@@ -449,8 +547,43 @@ class PanelWidgetState extends State<PanelWidget> {
       print("\n ------ SEE IF DOCKS LATLNG CAME");
       List<LatLng>? points = convertListDoubleToLatLng(tempList);
 
+// <<<<<<< HEAD
       List<LatLng> closestDockList = dockList.values.toList();
       print("ALREADY EXISTS ==> $closestDockList");
+// =======
+//       List<LatLng> closestDockList = [];
+      HistoryHelper historyHelper = HistoryHelper();
+
+      // List<DockingStation> selectedDocks = [];
+      // if (points != null) {
+      //   for (int i = 0; i < points.length; i++) {
+      //     DockingStation closestDock = _stationManager
+      //         .getClosestDock(LatLng(points[i].latitude, points[i].longitude));
+      //     //get the dock
+      //     print("------------- adding dock" + closestDock.name);
+      //     selectedDocks.add(closestDock);
+      //     //get the coord
+      //     closestDockList.add(closestDock.getLatlng());
+      //   }
+      //   print("ALL_COORDINATES FOR CLOSEST DOCKS => $closestDockList");
+      //   print("ALL_DOCKS FOR CLOSEST DOCKS => ${selectedDocks.last.name}");
+      // }
+      List<DockingStation> selectedDocks = [];
+      if (points != null) {
+        for (int i = 0; i < closestDockList.length; i++) {
+          DockingStation closestDock = _stationManager.getClosestDock(LatLng(
+              closestDockList[i].latitude, closestDockList[i].longitude));
+          //get the dock
+          print("------------- adding dock" + closestDock.name);
+          selectedDocks.add(closestDock);
+          //get the coord
+          closestDockList.add(closestDock.getLatlng());
+        }
+        print("ALL_COORDINATES FOR CLOSEST DOCKS => $closestDockList");
+        print("ALL_DOCKS FOR CLOSEST DOCKS => ${selectedDocks.last.name}");
+      }
+
+// >>>>>>> main
 
       List<LatLng> closestDocksWithNoAdjancents = [];
       for (int i = 0; i < closestDockList.length - 1; i++) {
@@ -476,10 +609,24 @@ class PanelWidgetState extends State<PanelWidget> {
       }
 
       if (points == null) {
-        //! show something went wrong allert
+        //! show something went wrong alert
         print("hello");
       } else {
-        context.push(SummaryJourneyScreen(closestDockList));
+        Itinerary _itinerary = new Itinerary.navigation(
+            selectedDocks, points, widget.numberOfCyclists);
+
+        //save the journey into the database
+        historyHelper.createJourneyEntry(selectedDocks);
+
+        //! TODO: if response = null, we dont want the pop to be true! talk with elisabeth
+
+        //go to the summary of journey screen
+        final response = await context.push(SummaryJourneyScreen(_itinerary));
+        if (response || response == null) {
+          Navigator.of(context).pop(true);
+        } else {
+          Navigator.of(context).pop();
+        }
       }
     }
   }
@@ -538,7 +685,7 @@ class PanelWidgetState extends State<PanelWidget> {
     for (var element in list) {
       if (element.placeTextController.text.isEmpty) {
         isFieldNotEmpty = false;
-        return true; //true if there is a textfield that is empty
+        return true; // true if there is a TextField that is empty
       }
     }
     if (!isFieldNotEmpty) {

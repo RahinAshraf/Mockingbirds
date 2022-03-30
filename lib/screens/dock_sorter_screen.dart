@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:veloplan/alerts.dart';
@@ -15,6 +13,9 @@ import 'package:scoped_model/scoped_model.dart';
 /// Screen displaying filtered stations around a chosen dock with functionality to sort stations
 /// and view on map
 /// Author(s): Nicole, Fariha Choudhury k20059723
+
+/// The edit dock screen which is useful for selecting and favouriting docking station cards
+/// Author(s): Marija, Nicole Lehchevska
 
 class DockSorterScreen extends StatefulWidget {
   late final LatLng userCoord;
@@ -58,6 +59,7 @@ class _DockSorterScreen extends State<DockSorterScreen> {
     setBaseMapFeatures();
     displayStations();
   }
+  // TODO: Marija refactor to use base map, example in screens/navigation/map_screen.dart
 
   @override
   Widget build(BuildContext context) {
@@ -71,14 +73,12 @@ class _DockSorterScreen extends State<DockSorterScreen> {
       minHeight: panelHeightClosed,
       maxHeight: panelHeightOpen,
       borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-      parallaxEnabled: true,
-      parallaxOffset: .5,
       controller: panelController,
       body: SafeArea(
         child: Stack(
           children: [
             SizedBox(
-                height: MediaQuery.of(context).size.height * 0.60,
+                height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
                 child: ScopedModelDescendant<MapModel>(builder:
                     (BuildContext context, Widget? child, MapModel model) {

@@ -8,10 +8,12 @@ import '../../providers/location_service.dart';
 import '../../screens/dock_sorter_screen.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:veloplan/models/docking_station.dart';
+import 'package:veloplan/providers/docking_station_manager.dart';
+import 'package:veloplan/providers/location_service.dart';
+import 'package:veloplan/screens/dock_sorter_screen.dart';
 
-///Class to create and display the closest docking station for every defined location of the journey.
-int oldPosition = 0;
-
+/// Helper class to build the bubble underneath every location TextField.
 class PanelExtensions {
   final locationService = LocationService();
   BuildContext? context;
@@ -25,22 +27,30 @@ class PanelExtensions {
     return PanelExtensions(context: context);
   }
 
+// <<<<<<< HEAD
   ///Builds the widget which displays the closest docking station with the [editDockTextEditController]
   /// from the place specified in the location TextField [placeTextController] - if it has been specified.
   Widget buildDefaultClosestDock(
       TextEditingController editDockTextEditController,
       TextEditingController placeTextController,
       Map<int, LatLng> latLngMap,
+      bool isFrom,
+      int numberCyclists,
       {int position = -1}) {
     BehaviorSubject<String> dockText = BehaviorSubject();
+// =======
+//   /// Builds the field displaying the closest docking station from the place specified in the location TextField.
+//   Widget buildDefaultClosestDock(
+//       TextEditingController editDockTextEditController,
+//       TextEditingController placeTextController,
+//       bool isFrom,
+//       int numberCyclists) {
+// >>>>>>> main
     return Row(
-      mainAxisSize: MainAxisSize.max,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Expanded(
-          child: Icon(Icons.subdirectory_arrow_right),
-          flex: 0,
+        IconButton(
+          icon: Icon(Icons.subdirectory_arrow_right),
+          onPressed: () {},
         ),
         Expanded(
           child: StreamBuilder<String>(
@@ -89,8 +99,13 @@ class PanelExtensions {
 
                 print("hey result --=> ${result?.name}");
 
-                checkInputLocation(placeTextController,
-                    editDockTextEditController, latLngMap, position,
+                checkInputLocation(
+                    placeTextController,
+                    editDockTextEditController,
+                    latLngMap,
+                    position,
+                    isFrom,
+                    numberCyclists,
                     address: result?.name,
                     closesDockLatLng:
                         LatLng(result?.lat ?? 0, result?.lon ?? 0));
@@ -101,6 +116,19 @@ class PanelExtensions {
               )),
           flex: 0,
         ),
+
+        // checkInputLocation(placeTextController,
+        //     editDockTextEditController, isFrom, numberCyclists);
+        //   Navigator.push(
+        //       context!,
+        //       MaterialPageRoute(
+        //           builder: (context) =>
+        //               DockSorterScreen(_latLng(temp.first, temp.last))));
+        // },
+        // padding: const EdgeInsets.all(0),
+        // icon: const Icon(
+        //   Icons.navigate_next_outlined,
+        // )),
       ],
     );
   }
@@ -119,17 +147,32 @@ class PanelExtensions {
       TextEditingController editDockTextEditController,
       Map<int, LatLng> latLngMap,
       int position,
+      bool isFrom,
+      int numberCyclists,
       {String? address,
       LatLng? closesDockLatLng}) async {
+    // void checkInputLocation(
+    //     TextEditingController placeTextController,
+    //     TextEditingController editDockTextEditController,
+    //     bool isFrom,
+    //     int numberCyclists) async {
+    //   print("THIS IS CLOSEST DOCK");
     if (placeTextController.text.isEmpty) {
       //do nothing
     } else {
       List coordPlace = await locationService.getPlaceCoords(placeTextController
           .text); //getting coordinates of the place specified as the destination to visit
 
-      getClosetDock(coordPlace.first, coordPlace.last,
-          editDockTextEditController, latLngMap, position,
-          address: address, closesDockLatLng: closesDockLatLng);
+      getClosetDock(
+          coordPlace.first,
+          coordPlace.last,
+          editDockTextEditController,
+          latLngMap,
+          position,
+          isFrom,
+          numberCyclists,
+          address: address,
+          closesDockLatLng: closesDockLatLng);
     }
   }
 
@@ -142,21 +185,88 @@ class PanelExtensions {
       TextEditingController editDockTextEditController,
       Map<int, LatLng> latLngMap,
       int position,
+      bool isFrom,
+      int numberOfCyclists,
       {String? address,
       LatLng? closesDockLatLng}) async {
     LatLong.LatLng latlngPlace = LatLong.LatLng(lat!, lng!);
     dockingStationManager _stationManager = dockingStationManager();
     await _stationManager.importStations();
+
+    late DockingStation closestDock;
+
     if (null == closesDockLatLng) {
-      DockingStation closetDock = _stationManager.getClosestDock(latlngPlace);
-      editDockTextEditController.text = closetDock.name;
-      latLngMap[position] = LatLng(closetDock.lat, closetDock.lon);
-      print("closet dock ${closetDock.name}");
+      //DockingStation closetDock = _stationManager.getClosestDock(latlngPlace);
+      // editDockTextEditController.text = closetDock.name;
+      // latLngMap[position] = LatLng(closetDock.lat, closetDock.lon);
+      // print("closet dock ${closetDock.name}");
+      // print("PRIIIINTING => $position");
+      // this._dockingStation = closetDock;
+
+      if (isFrom) {
+        var temp = _stationManager.getClosestDockWithAvailableSpace(
+            latlngPlace, numberOfCyclists);
+        closestDock = _stationManager.getClosestDockWithAvailableBikes(
+            latlngPlace, numberOfCyclists);
+        print(
+            "closest dock info  dock with available BIKES ${closestDock.name} compared to SPACES ${temp.name} ---- num: ${numberOfCyclists}");
+      } else {
+        var temp = _stationManager.getClosestDockWithAvailableBikes(
+            latlngPlace, numberOfCyclists);
+        closestDock = _stationManager.getClosestDockWithAvailableSpace(
+            latlngPlace, numberOfCyclists);
+        print(
+            "closest dock info  dock with available SPACES ${closestDock.name} compared to BIKES ${temp.name} ------ num: ${numberOfCyclists}");
+      }
+      editDockTextEditController.text = closestDock.name;
+      latLngMap[position] = LatLng(closestDock.lat, closestDock.lon);
+      print("closet dock ${closestDock.name}");
       print("PRIIIINTING => $position");
-      this._dockingStation = closetDock;
+      this._dockingStation = closestDock;
     } else {
       editDockTextEditController.text = address!;
       latLngMap[position] = closesDockLatLng;
     }
+
+    // print("closet dock ${closestDock.name}");
+    // editDockTextEditController.text = closestDock.name;
+
+    // fillClosestDockBubble(coordPlace.first, coordPlace.last,
+    //     editDockTextEditController, isFrom, numberCyclists);
   }
 }
+
+  ///Fills in the bubble, which is displayed underneath every textfield, with the name of the docking station which is closest
+  ///to the location specfied by the user
+  // void fillClosestDockBubble(
+  //     double? lat,
+  //     double? lng,
+  //     TextEditingController editDockTextEditController,
+  //     bool isFrom,
+  //     int numberOfCyclists) async {
+
+  //   LatLong.LatLng latlngPlace = LatLong.LatLng(lat!, lng!); // converting list to latlng
+  //   dockingStationManager _stationManager = dockingStationManager();
+  //   await _stationManager.importStations();
+
+  //   print(latlngPlace);
+  //   late DockingStation closestDock;
+  //   if (isFrom) {
+  //     var temp = _stationManager.getClosestDockWithAvailableSpace(
+  //         latlngPlace, numberOfCyclists);
+  //     closestDock = _stationManager.getClosestDockWithAvailableBikes(
+  //         latlngPlace, numberOfCyclists);
+  //     print(
+  //         "closest dock info  dock with available BIKES ${closestDock.name} compared to SPACES ${temp.name} ---- num: ${numberOfCyclists}");
+  //   } else {
+  //     var temp = _stationManager.getClosestDockWithAvailableBikes(
+  //         latlngPlace, numberOfCyclists);
+  //     closestDock = _stationManager.getClosestDockWithAvailableSpace(
+  //         latlngPlace, numberOfCyclists);
+  //     print(
+  //         "closest dock info  dock with available SPACES ${closestDock.name} compared to BIKES ${temp.name} ------ num: ${numberOfCyclists}");
+  //   }
+  //   print("closet dock ${closestDock.name}");
+  //   editDockTextEditController.text = closestDock.name;
+  // }
+

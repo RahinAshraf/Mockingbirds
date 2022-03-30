@@ -1,12 +1,12 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:veloplan/helpers/database_manager.dart';
+import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 
-import '../widgets/auth/auth_form.dart';
+import 'package:veloplan/widgets/auth/auth_form.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({Key? key}) : super(key: key);
@@ -16,7 +16,6 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
-  final DatabaseManager _databaseManager = DatabaseManager();
   final _auth = FirebaseAuth.instance;
   var _isLoading = false;
 
@@ -47,6 +46,8 @@ class _AuthScreenState extends State<AuthScreen> {
           email: email,
           password: password,
         );
+
+        final DatabaseManager _databaseManager = DatabaseManager();
 
         var url =
             "https://firebasestorage.googleapis.com/v0/b/veloplan-b41d0.appspot.com/o/user_image%2Fdefault_profile_picture.jpg?alt=media&token=edc6abb8-3655-448c-84a0-7d34b02f0c73";
@@ -97,7 +98,6 @@ class _AuthScreenState extends State<AuthScreen> {
         _isLoading = false;
       });
     } catch (err) {
-      // print(err);
       setState(() {
         _isLoading = false;
       });
@@ -107,19 +107,24 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Stack(children: <Widget>[
-      AuthForm(
-        _submitAuthForm,
-        _isLoading,
+      body: SafeArea(
+        child: Stack(
+          children: [
+            AuthForm(
+              _submitAuthForm,
+              _isLoading,
+            ),
+            Align(
+              alignment: Alignment.topRight,
+              child: Container(
+                  height: 170.0,
+                  width: 170.0,
+                  alignment: Alignment.topRight,
+                  child: Image.asset('assets/images/right_bubbles_shapes.png')),
+            ),
+          ],
+        ),
       ),
-      /*Align(
-        alignment: Alignment.topRight,
-        child: Container(
-            height: 170.0,
-            width: 170.0,
-            alignment: Alignment.topRight,
-            child: Image.asset('assets/images/right_bubbles_shapes.png')),
-      ),*/
-    ]));
+    );
   }
 }

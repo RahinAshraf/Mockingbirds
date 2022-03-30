@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:veloplan/widgets/profile/profile_widget.dart';
-import 'package:veloplan/helpers/live_location_helper.dart';
 
 class ProfilePageHeader extends StatefulWidget {
   final Map<String, dynamic> data;
@@ -140,28 +139,6 @@ class _ProfilePageHeaderState extends State<ProfilePageHeader> {
       ),
     );
   }
-
-  Widget buildButtons() => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20),
-        child: widget.isCurrentUser
-            ? ElevatedButton(
-                onPressed: () {},
-                child: const Text('Edit Profile'),
-              )
-            : Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {},
-                    child: const Text('Follow'),
-                  ),
-                  OutlinedButton(
-                    onPressed: () {},
-                    child: const Text('Message'),
-                  )
-                ],
-              ),
-      );
 
   @override
   Widget build(BuildContext context) {

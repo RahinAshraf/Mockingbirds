@@ -27,10 +27,13 @@
 //       "When clicked on a topic, a question (by user), followed with an answer (by bot) should appear",
 //       (WidgetTester tester) async {
 //     await tester.pumpWidget(MaterialApp(home: helpPage));
+
 //     // Ensure that at the beginning we only have one MessageBubble widget on the screen
 //     expect(find.byType(MessageBubble), findsOneWidget);
+
 //     await tester.tap(find.text(someExistingTopic));
 //     await tester.pump();
+
 //     expect(find.byType(MessageBubble), findsNWidgets(3));
 //     var testConversation = tester.allWidgets.whereType<MessageBubble>();
 //     // We know that the 0'th element is the initial welcoming message, so we do not check it

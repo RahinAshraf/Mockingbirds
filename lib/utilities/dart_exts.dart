@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import '../providers/location_service.dart';
 import '../screens/place_search_screen.dart';
+import '../styles/colors.dart';
 
-///helper extensions for panel widget
-///@author: Rahin Ashraf - k20034059
+/// Helper extensions for [PanelWidget].
+/// @author: Rahin Ashraf - k20034059
 extension BuildContextExt on BuildContext {
   Future<dynamic> openSearch() {
     return Navigator.of(this).push(MaterialPageRoute(
@@ -11,11 +12,12 @@ extension BuildContextExt on BuildContext {
             PlaceSearchScreen(LocationService(), isPop: true)));
   }
 
-  Future<R?> push<R>(Widget route){
-    return  Navigator.push<R>(
+  Future<R?> push<R>(Widget route) {
+    return Navigator.push<R>(
       this,
       MaterialPageRoute(
-          builder: (context) => route,),
+        builder: (context) => route,
+      ),
     );
   }
 
@@ -31,29 +33,30 @@ extension BuildContextExt on BuildContext {
   }
 }
 
-extension WidgetExts on dynamic{
-  Widget text(String text, {FontWeight fontWeight = FontWeight.normal, double fontSize = 20 }){
-    return  Text(
+extension WidgetExts on dynamic {
+  Widget text(String text,
+      {FontWeight fontWeight = FontWeight.normal, double fontSize = 20}) {
+    return Text(
       text,
       style: TextStyle(fontWeight: fontWeight, fontSize: fontSize),
     );
   }
 
-  FloatingActionButton buildFloatingActionButton({Function()? onPressed, IconData iconData = Icons.add}){
+  FloatingActionButton buildFloatingActionButton(
+      {Function()? onPressed, IconData iconData = Icons.add}) {
     return FloatingActionButton(
       onPressed: onPressed,
       backgroundColor: Colors.white,
-      child: Icon(
-        iconData,
-        color: Colors.black,
-      ),
+      elevation: 3,
+      child: Icon(iconData, color: CustomColors.green),
     );
   }
 
-  OutlineInputBorder circularInputBorder({double radius = 10.0, Color color = Colors.black, double width = 1.0}){
+  OutlineInputBorder circularInputBorder(
+      {double radius = 10.0, Color color = Colors.black, double width = 1.0}) {
     return OutlineInputBorder(
       borderRadius: BorderRadius.circular(radius),
-      borderSide:  BorderSide(color: color, width: width),
+      borderSide: BorderSide(color: color, width: width),
     );
   }
 }
