@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import '../models/itinerary.dart';
-import '../widgets/carousel/station_carousel.dart';
+import 'package:veloplan/models/itinerary.dart';
+import 'package:veloplan/widgets/carousel/station_carousel.dart';
 
-///Creates a card for a started journey, to include its start time and planned docking stations
-///Author: Tayyibah
+/// Creates a card for a started [journey], to include its start time and planned docking stations.
+/// Author: Tayyibah
 class MyJourneyCard extends StatefulWidget {
   late Itinerary journey;
-  DockingStationCarousel stationCarousel =
-      DockingStationCarousel.test(); //change this
+  DockingStationCarousel stationCarousel = DockingStationCarousel();
   late List<Widget> stationCards;
 
   MyJourneyCard(Itinerary journey) {
@@ -20,11 +19,6 @@ class MyJourneyCard extends StatefulWidget {
 }
 
 class _MyJourneyCardState extends State<MyJourneyCard> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Card(

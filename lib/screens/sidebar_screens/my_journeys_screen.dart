@@ -3,9 +3,8 @@ import '../../models/itinerary.dart';
 import '../../helpers/database_helpers/history_helper.dart';
 import '../../widgets/my_journey_card.dart';
 
-///Displays users started journeys
-///Author: Tayyibah
-
+/// Displays user's started journeys.
+/// Author: Tayyibah
 class MyJourneys extends StatefulWidget {
   @override
   _MyJourneysState createState() => _MyJourneysState();
