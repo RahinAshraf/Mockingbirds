@@ -51,7 +51,7 @@ class BaseMapboxMap {
   Future<void> baseMapCreated(MapboxMapController controller) async {
     this.controller = controller;
     model.setController(controller);
-    model.fetchDockingStations();
+    await model.fetchDockingStations();
     controller.onSymbolTapped.add(onSymbolTapped);
   }
 
