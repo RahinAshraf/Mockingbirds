@@ -17,26 +17,28 @@ class ScheduleScreen extends StatefulWidget {
 /// It consists of [TableCalendar] with a collection of [_events] retrieved
 /// from [upcomingJourneys]. [_selectedEvents] are the events of [_selectedDay].
 class _ScheduleScreenState extends State<ScheduleScreen> {
+  late ValueNotifier<List<Itinerary>> _selectedEvents = ValueNotifier([]);
+  late List<Itinerary> upcomingJourneys = [];
+  late Map<DateTime, List<Itinerary>> _events = {};
   ScheduleHelper helper = ScheduleHelper();
   CalendarFormat _calendarFormat = CalendarFormat.twoWeeks;
   DateTime _selectedDay = DateUtils.dateOnly(DateTime.now());
   DateTime _focusedDay = DateUtils.dateOnly(DateTime.now());
-  late List<Itinerary> upcomingJourneys = [];
-  late Map<DateTime, List<Itinerary>> _events = {};
-  late List _selectedEvents = [];
+  // late List _selectedEvents = [];
 
   @override
   initState() {
+    super.initState();
+
     helper
         .deleteOldScheduledEntries()
         .whenComplete(() => helper.getAllScheduleDocuments().then((data) {
               setState(() {
                 upcomingJourneys = data;
                 _events = _groupByDate(upcomingJourneys);
-                _selectedEvents = _events[_selectedDay] ?? [];
+                _selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay));
               });
             }));
-    super.initState();
   }
 
   @override
@@ -56,41 +58,30 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             padding: EdgeInsets.only(left: 15.0),
             child: Text('Upcoming journeys', style: upcomingJourneysTextStyle),
           ),
-          (!_selectedEvents.isEmpty)
-              ? Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  child: Column(
-                    children: [
-                      for (var event in _selectedEvents)
-                        UpcomingEventCard(
-                          event: event,
-                          onClick: () {
-                            helper
-                                .deleteSingleScheduledEntry(event)
-                                .whenComplete(() => setState(() {
-                                      _events = _groupByDate(upcomingJourneys);
-                                      _selectedEvents =
-                                          _events[_selectedDay] ?? [];
-                                    }));
-                            Navigator.pop(context);
-                          },
-                        )
-                    ],
-                  ),
-                )
-              : Container(
-                  child: Column(
-                    children: [
-                      Image.asset('assets/images/bike.png',
-                          height: MediaQuery.of(context).size.height / 3.5),
-                      SizedBox(height: 15.0),
-                      Text(
-                        'No journeys planned for this day.',
-                        style: authTextStyle,
-                      ),
-                    ],
-                  ),
-                ),
+          Expanded(
+            child: ValueListenableBuilder<List<Itinerary>>(
+              valueListenable: _selectedEvents,
+              builder: (context, value, _) {
+                return Column(
+                  children: [
+                    for (var event in value)
+                      UpcomingEventCard(
+                        event: event,
+                        onClick: () {
+                          helper
+                              .deleteSingleScheduledEntry(event)
+                              .whenComplete(() => setState(() {
+                                    _events = _groupByDate(upcomingJourneys);
+                                  }));
+                          value = _events[_selectedDay] ?? [];
+                          Navigator.pop(context);
+                        },
+                      )
+                  ],
+                );
+              },
+            ),
+          )
         ],
       ),
     );
@@ -117,8 +108,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           setState(() {
             _focusedDay = focusedDay;
             _selectedDay = selectedDay;
-            _selectedEvents = _getEventsForDay(selectedDay);
           });
+          _selectedEvents.value = _getEventsForDay(selectedDay);
         }
       },
     );
