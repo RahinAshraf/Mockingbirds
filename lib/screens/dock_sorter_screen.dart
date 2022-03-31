@@ -13,9 +13,6 @@ import 'package:scoped_model/scoped_model.dart';
 /// The edit dock screen which is useful for selecting docking stations and favouriting docking station cards
 /// Author(s): Nicole, Fariha Choudhury k20059723,  Marija,
 
-/// The edit dock screen which is useful for selecting and favouriting docking station cards
-/// Author(s): Marija, Nicole Lehchevska
-
 /// Edit dock screen displaying map with [DockSorter] panel.
 class DockSorterScreen extends StatefulWidget {
   late final LatLng userCoord;
@@ -59,7 +56,6 @@ class _DockSorterScreen extends State<DockSorterScreen> {
     setBaseMapFeatures();
     displayStations();
   }
-  // TODO: Marija refactor to use base map, example in screens/navigation/map_screen.dart
 
   @override
   Widget build(BuildContext context) {

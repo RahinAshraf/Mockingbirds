@@ -205,12 +205,12 @@ class PanelWidgetState extends State<PanelWidget> {
         editDockTextEditController, dockList, -1, isFrom, numberCyclists);
   }
 
-///Builds the static row of components which are displayed permanently. Statically built, as every journey
-///needs to specify a starting point. [controller] is the TextField used to input and display the destination the user is
-///to start their journey from. [hintText] is the text to describe the purpose of each TextField to the user.
+  ///Builds the static row of components which are displayed permanently. Statically built, as every journey
+  ///needs to specify a starting point. [controller] is the TextField used to input and display the destination the user is
+  ///to start their journey from. [hintText] is the text to describe the purpose of each TextField to the user.
 
-///Function which builds the static row of components which are displayed permanently. Statically built, as every journey
-///needs to specify a starting point
+  ///Function which builds the static row of components which are displayed permanently. Statically built, as every journey
+  ///needs to specify a starting point
   Widget _buildStatic(TextEditingController controller,
       {String? hintText,
       required BuildContext context,
@@ -268,14 +268,15 @@ class PanelWidgetState extends State<PanelWidget> {
   ///Given a coordinate, [newCord], it sets the 'From' location as the place specified by the coordinates passed in
   void addCordFrom(List<double?> newCord) {
     staticListMap[fromLabelKey] = newCord;
-// <<<<<<< HEAD
     final ext = PanelExtensions.of(context: context);
-    //ext.setPosition(position);
-    ext.getClosetDock(newCord[0], newCord[1], editDockTextEditController,
-        dockList, -1, true, widget.numberOfCyclists); //fillClosestDockBubble
-
-    //TODO: isFrom is true!!
-
+    ext.fillClosestDockBubble(
+        newCord[0],
+        newCord[1],
+        editDockTextEditController,
+        dockList,
+        -1,
+        true,
+        widget.numberOfCyclists);
   }
 
   ///Given a coordinate, [newCord], it sets the 'To' location as the place specified by the coordinates passed in
@@ -477,11 +478,10 @@ class PanelWidgetState extends State<PanelWidget> {
   /// closest docking stations for the locations the user specified. This new list is then passed onto [MapRoutePage].
   /// THIS FUNCTION NEEDS TO BE REFACTORED FURTHER
   Future<void> _handleStartClick() async {
-
     List<DockingStation> closestDockList = dockList.values.toList();
-    //print("ALREADY EXISTS ==> $closestDockList");
     for (int i = 0; i < closestDockList.length; i++) {
-      LatLng closestDockLatLng = LatLng(closestDockList[i].lat,closestDockList[i].lon);
+      LatLng closestDockLatLng =
+          LatLng(closestDockList[i].lat, closestDockList[i].lon);
       print("NAME => ${closestDockList[i].name}");
       print("CLOSESTDOCKLATLNGLIST => $closestDockLatLng");
     }
@@ -556,7 +556,7 @@ class PanelWidgetState extends State<PanelWidget> {
 
         //go to the summary of journey screen
         final response = await context.push(SummaryJourneyScreen(_itinerary));
-        if (response || response == null) {
+        if (response == null || response) {
           Navigator.of(context).pop(true);
         } else {
           Navigator.of(context).pop();

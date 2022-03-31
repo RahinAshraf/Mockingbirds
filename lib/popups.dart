@@ -23,7 +23,7 @@ class Popups {
         onPressed: () async {
           final response = await Navigator.push(context,
               MaterialPageRoute(builder: (context) => TripSchedulerScreen()));
-          if (response || response == null) {
+          if (response == null || response) {
             Navigator.of(context).pop(true);
           }
         },
@@ -117,7 +117,7 @@ class Popups {
               context,
               MaterialPageRoute(
                   builder: (context) => MapUpdatedRoutePage(itinerary)));
-          if (response || response == null || !response) {
+          if (response == null || response || !response) {
             Navigator.of(context).pop(true);
           }
         },

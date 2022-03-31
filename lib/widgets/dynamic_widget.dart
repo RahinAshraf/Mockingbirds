@@ -55,7 +55,7 @@ class DynamicWidget extends StatelessWidget {
       required this.isFrom,
       required this.numberOfCyclists})
       : super(key: key);
-  late DockingStation closetDockStation;
+  // late DockingStation closetDockStation;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -159,7 +159,7 @@ class DynamicWidget extends StatelessWidget {
         selectedCoords?[position] = feature.geometry?.coordinates;
       }
 
-      PanelExtensions.of(context: context).getClosetDock(
+      PanelExtensions.of(context: context).fillClosestDockBubble(
           feature.geometry?.coordinates.first,
           feature.geometry?.coordinates.last,
           editDockTextEditController,
