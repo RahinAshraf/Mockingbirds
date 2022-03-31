@@ -264,6 +264,7 @@ class _AuthFormState extends State<AuthForm> {
                   SizedBox(
                     width: MediaQuery.of(context).size.width / 1.5,
                     child: ElevatedButton(
+                      key: Key("logIn"),
                       child: Text(_isLogin ? 'Log In' : 'Sign Up'),
                       onPressed: _trySubmit,
                     ),
