@@ -38,8 +38,8 @@ class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
   _MapUpdatedRoutePageState(this._itinerary) {}
   @override
   Widget build(BuildContext context) {
-    final panelHeightClosed = MediaQuery.of(context).size.height * 0.30;
-    final panelHeightOpen = MediaQuery.of(context).size.height * 0.30;
+    final panelHeightClosed = MediaQuery.of(context).size.height * 0.1;
+    final panelHeightOpen = MediaQuery.of(context).size.height * 0.4;
     return Scaffold(
         body: SlidingUpPanel(
       padding: const EdgeInsets.fromLTRB(16.0, 4.0, 16.0, 4.0),
@@ -54,24 +54,26 @@ class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
           context,
           _itinerary,
         );
-        //__baseMapWithUpdatedRoute.distance
         addPositionZoom();
         addStopTurnByTurn(context);
-        return SafeArea(
-            child: Stack(children: _baseMapWithUpdatedRoute.getWidgets()));
+        return Stack(children: _baseMapWithUpdatedRoute.getWidgets());
 
         ///* listen to isAtGoal if is at goal redirect
       }),
-      panelBuilder: (panelController) => JourneyLandingPanelWidget(),
+      panelBuilder: (panelController) => JourneyLandingPanelWidget(
+        distance: _baseMapWithUpdatedRoute.distance,
+        duration: _baseMapWithUpdatedRoute.duration,
+        dockName: _baseMapWithUpdatedRoute.dockName,
+      ),
     ));
   }
 
-  /// add positional zoom to our widgets
+  /// Add positional zoom to our widgets.
   void addPositionZoom() {
     _baseMapWithUpdatedRoute.addWidget(Container(
-      alignment: Alignment(0.9, 0.90),
+      alignment: Alignment(0.9, -0.90),
       child: FloatingActionButton(
-        heroTag: "center_to_current_loaction",
+        heroTag: "center_to_current_location",
         onPressed: () {
           _baseMapWithUpdatedRoute.recenter = true;
         },
