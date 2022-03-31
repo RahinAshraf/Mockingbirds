@@ -71,9 +71,9 @@ class DatabaseManager {
     await _database.collection(collection).doc(key).update(value);
   }
 
-  Future<void> addToCollection(
+  Future<DocumentReference<Map<String, dynamic>>> addToCollection(
       String collection, Map<String, dynamic> value) async {
-    await _database.collection(collection).add(value);
+   return await _database.collection(collection).add(value);
   }
 
   Future<void> addToSubCollection(CollectionReference<Object?> subcollection,

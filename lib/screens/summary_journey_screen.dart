@@ -130,49 +130,39 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
     }
 
     try {
-      await _databaseManager.addToCollection('group', {
+      await _databaseManager.setByKey(
+          'users', ownerID!, {'group': code}, SetOptions(merge: true));
+     var group =  await _databaseManager.addToCollection('group', {
         'code': code,
         'ownerID': ownerID,
         'memberList': list,
         'createdAt': Timestamp.fromDate(DateTime.now()),
       });
-      await _databaseManager.setByKey(
-          'users', ownerID!, {'group': code}, SetOptions(merge: true));
-
-      var group = await _databaseManager.getByEquality('group', 'code', code);
-      group.docs.forEach((element) async {
-        element.reference.collection('itinerary').add({
-          'journeyID': _itinerary.journeyDocumentId,
-          'points': geoList,
-          'date': _itinerary.date,
-          'numberOfCyclists': _itinerary.numberOfCyclists
-        });
-        var journey = await element.reference
-            .collection('itinerary')
-            .where('journeyID', isEqualTo: _itinerary.journeyDocumentId)
-            .get();
-        var dockingStationList = _itinerary.docks!;
-        for(int j = 0; j< geoList.length; j++){
-          var geo = geoList[j];
-          journey.docs.forEach((jour) {
-            jour.reference.collection("coordinates").add({
-              'coordinate': geo,
-              'index': j,
-            });
+     var journey = await group.collection("itinerary").add({
+       'journeyID': _itinerary.journeyDocumentId,
+       'points': geoList,
+       'date': _itinerary.date,
+       'numberOfCyclists': _itinerary.numberOfCyclists
+     });
+      var dockingStationList = _itinerary.docks!;
+      for(int j = 0; j< geoList.length; j++){
+        var geo = geoList[j];
+        journey.collection("coordinates").add({
+            'coordinate': geo,
+            'index': j,
           });
-        }
+      }
+
+
         for (int i = 0; i < dockingStationList.length; i++) {
           var station = dockingStationList[i];
-          journey.docs.forEach((jour) {
-            jour.reference.collection("dockingStations").add({
+          journey.collection("dockingStations").add({
               'id': station.stationId,
               'name': station.name,
               'location': GeoPoint(station.lat, station.lon),
               'index':i,
             });
-          });
         }
-      });
 
       setState(() {
         isInGroup = true;
@@ -289,9 +279,8 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
                           future: _getGroup(),
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
-                              print("---------------------------zzzzz----");
                               return GestureDetector(
-                                child: Text(
+                                child: SelectableText(
                                   "Tap here to copy the code: " + groupID,
                                   style: const TextStyle(
                                       color: Colors.white,
