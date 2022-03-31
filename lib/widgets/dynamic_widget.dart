@@ -177,7 +177,6 @@ class DynamicWidget extends StatelessWidget {
   }
 
   ///Reacts to user input for the location TextField
-// <<<<<<< HEAD
   void checkInputLocation({int? position}) {
     PanelExtensions.of().checkInputLocation(
       placeTextController,
@@ -187,11 +186,6 @@ class DynamicWidget extends StatelessWidget {
       isFrom,
       numberOfCyclists,
     );
-// =======
-//   void checkInputLocation() {
-//     PanelExtensions.of().checkInputLocation(placeTextController,
-//         editDockTextEditController, isFrom, numberOfCyclists);
-// >>>>>>> main
   }
 
   ///When called, this function sets location of a TextField to the users current location. The [controller] is filled in

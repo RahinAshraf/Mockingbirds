@@ -18,7 +18,6 @@ import 'package:veloplan/styles/styling.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
 import 'package:veloplan/widgets/dynamic_widget.dart';
 import 'package:veloplan/widgets/panel_widget/panel_widgets_base.dart';
-// import '../../helpers/navigation_helpers/navigation_conversion_helpers.dart';
 import '../../providers/location_service.dart';
 import '../../helpers/navigation_helpers/navigation_conversions_helpers.dart';
 import '../../models/docking_station.dart';

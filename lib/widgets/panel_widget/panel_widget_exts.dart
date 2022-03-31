@@ -28,7 +28,6 @@ class PanelExtensions {
     return PanelExtensions(context: context);
   }
 
-// <<<<<<< HEAD
   ///Builds the widget which displays the closest docking station with the [editDockTextEditController]
   /// from the place specified in the location TextField [placeTextController] - if it has been specified.
   Widget buildDefaultClosestDock(
@@ -129,12 +128,6 @@ class PanelExtensions {
       int numberCyclists,
       {String? address,
       DockingStation? closesDockLatLng}) async {
-    // void checkInputLocation(
-    //     TextEditingController placeTextController,
-    //     TextEditingController editDockTextEditController,
-    //     bool isFrom,
-    //     int numberCyclists) async {
-    //   print("THIS IS CLOSEST DOCK");
     if (placeTextController.text.isEmpty) {
       //do nothing
     } else {
