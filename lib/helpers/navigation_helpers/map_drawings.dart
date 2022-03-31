@@ -80,7 +80,7 @@ void placeDockMarkers(MapboxMapController controller,
     List<DockingStation> docks, Set<Symbol> dockSymbols) async {
   for (var station in docks) {
     addDockSymbol(
-        controller, dockSymbols, station, "assets/icon/bicycle.png", 0.7);
+        controller, dockSymbols, station, "assets/images/appicon.png", 0.19);
   }
 }
 
