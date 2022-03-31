@@ -25,23 +25,6 @@ class HistoryHelper {
     }
   }
 
-  ///Adds a docking station subcollection to a given journey
-  // Future<void> addDockingStation(
-  //   DockingStation station,
-  //   documentId,
-  // ) {
-  //   return _journeys
-  //       .doc(documentId)
-  //       .collection('docking_stations')
-  //       .add({
-  //         'stationId': station.stationId,
-  //         'name': station.name,
-  //       })
-  //       .then((value) => print("docking station Added"))
-  //       .catchError((error) =>
-  //           print("Failed to add docking station to journey: $error"));
-  // }
-
   Future<void> addDockingStation(
     DockingStation station,
     documentId,
