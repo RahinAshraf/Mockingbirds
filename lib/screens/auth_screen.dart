@@ -90,6 +90,7 @@ class _AuthScreenState extends State<AuthScreen> {
     } on FirebaseAuthException catch (err) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
+          key: Key("firebase-auth-error"),
           content: Text(err.message!),
           backgroundColor: Theme.of(context).errorColor,
         ),
