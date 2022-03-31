@@ -18,7 +18,7 @@ import 'package:veloplan/navbar.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
 
 /// Class useful to present the chosen docking stations and destinations by the user, distances and durations about their itinerary, a code for people to create a group
-///Author(s): Nicole, Marija, Lilliana, Hristina
+///Author(s): Nicole, Marija, Liliana, Hristina
 
 class SummaryJourneyScreen extends StatefulWidget {
   late Itinerary itinerary;
@@ -88,15 +88,26 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
     return tempr;
   }
 
+  String _padWithZeroes(String textToPad){
+    while (textToPad.length<6){
+      textToPad = '0'+ textToPad;
+    }
+  return textToPad;
+  }
+
+
   void _createGroup() async {
     var ownerID = _databaseManager.getCurrentUser()?.uid;
     List list = [];
     list.add(ownerID);
     math.Random rng = math.Random();
     String code = rng.nextInt(999999).toString();
+    code = _padWithZeroes(code);
     var x = await _databaseManager.getByEquality('group', 'code', code);
     while (x.size != 0) {
       code = rng.nextInt(999999).toString();
+      code = _padWithZeroes(code);
+
       x = await _databaseManager.getByEquality('group', 'code', code);
     }
     List<GeoPoint> geoList = [];
