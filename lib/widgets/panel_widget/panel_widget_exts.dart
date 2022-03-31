@@ -14,6 +14,7 @@ import 'package:veloplan/providers/location_service.dart';
 import 'package:veloplan/screens/dock_sorter_screen.dart';
 
 /// Helper class to build the bubble underneath every location TextField.
+/// Author(s) : Rahin
 class PanelExtensions {
   final locationService = LocationService();
   BuildContext? context;
