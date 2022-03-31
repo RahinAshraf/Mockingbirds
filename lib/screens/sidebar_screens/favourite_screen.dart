@@ -40,6 +40,7 @@ class _FavouriteState extends State<Favourite> {
               ),
             ),
       appBar: AppBar(
+        leading: BackButton(key: Key("back"), color: Colors.red),
         title: const Text('My favourites'),
       ),
     );

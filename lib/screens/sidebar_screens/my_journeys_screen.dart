@@ -44,6 +44,7 @@ class _MyJourneysState extends State<MyJourneys> {
               ],
             ),
       appBar: AppBar(
+        leading: BackButton(key: Key("back"), color: Colors.red),
         title: const Text('My Journeys'),
       ),
     );

@@ -273,6 +273,7 @@ class PanelWidgetState extends State<PanelWidget> {
                 padding: EdgeInsets.all(0),
                 icon: const Icon(
                   Icons.arrow_back,
+                  key: Key("back"),
                   size: 25,
                   color: Colors.green,
                 ),

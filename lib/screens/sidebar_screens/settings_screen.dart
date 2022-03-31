@@ -7,8 +7,8 @@ import 'package:veloplan/screens/change_password_screen.dart';
 
 /// Settings screen where user can log out and change theme of the app.
 /// @author: Tayyibah
-class Settings extends StatelessWidget {
-  const Settings({Key? key}) : super(key: key);
+class SettingsScreen extends StatelessWidget {
+  const SettingsScreen({Key? key}) : super(key: key);
 
   void deleteAccount(BuildContext context) {
     final defaultProfilePictureURL =
@@ -64,8 +64,9 @@ class Settings extends StatelessWidget {
   }
 
   void changePassword(context) async {
-    var result = await Navigator.of(context).push(MaterialPageRoute(builder: ((context) => ChangePasswordScreen())));
-    if(result == true) {
+    var result = await Navigator.of(context).push(
+        MaterialPageRoute(builder: ((context) => ChangePasswordScreen())));
+    if (result == true) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Your password has been successfully updated"),
@@ -78,7 +79,9 @@ class Settings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
+      appBar: AppBar(
+          leading: BackButton(key: Key("back"), color: Colors.red),
+          title: const Text('Settings')),
       body: ListView(
         children: [
           const SizedBox(height: 10),

@@ -42,6 +42,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     return Scaffold(
       backgroundColor: whiteReplacement,
       appBar: AppBar(
+        leading: BackButton(key: Key("back"), color: Colors.red),
         title: const Text('Schedule'),
       ),
       body: ListView(

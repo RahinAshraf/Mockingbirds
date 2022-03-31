@@ -69,6 +69,7 @@ class _MyAppState extends State<MyApp> {
       future: Firebase.initializeApp(), // _initialization,
       builder: (context, appSnapshot) {
         return MaterialApp(
+            debugShowCheckedModeBanner: false,
             title: 'Veloplan',
             theme: CustomTheme.defaultTheme,
             home: appSnapshot.connectionState != ConnectionState.done

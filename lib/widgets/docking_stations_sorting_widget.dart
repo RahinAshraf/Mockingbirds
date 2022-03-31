@@ -42,8 +42,8 @@ class _DockSorter extends State<DockSorter> {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child:
-                    const Icon(Icons.arrow_back_rounded, color: Colors.green),
+                child: const Icon(Icons.arrow_back_rounded,
+                    key: Key("back"), color: Colors.green),
               ),
               Row(
                 children: [

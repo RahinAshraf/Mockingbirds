@@ -97,9 +97,7 @@ class _MapRoutePageState extends State<MapRoutePage> {
             log("failed to push replacement");
           }
         },
-        child: const Icon(
-          Icons.arrow_back,
-        ),
+        child: const Icon(Icons.arrow_back, key: Key("back")),
         backgroundColor: Colors.red,
       ),
     ));

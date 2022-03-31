@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:veloplan/screens/suggested_journeys.dart';
 import 'package:veloplan/screens/sidebar_screens/my_journeys_screen.dart';
-import 'package:veloplan/screens/weather_screen.dart';
+import 'package:veloplan/screens/sidebar_screens/suggested_journeys.dart';
+import 'package:veloplan/screens/sidebar_screens/weather_screen.dart';
 import 'screens/sidebar_screens/schedule_screen.dart';
 import 'screens/sidebar_screens/favourite_screen.dart';
 import 'screens/sidebar_screens/help_screen.dart';
@@ -74,6 +74,7 @@ class SideBar extends StatelessWidget {
       {required String text, required IconData icon, VoidCallback? onClicked}) {
     return ListTile(
       leading: Icon(icon),
+      key: Key(text),
       title: Text(text),
       onTap: onClicked,
     );
@@ -113,7 +114,7 @@ class SideBar extends StatelessWidget {
         break;
       case 6:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => const Settings(),
+          builder: (context) => const SettingsScreen(),
         ));
         break;
     }
