@@ -4,9 +4,9 @@ import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 import 'package:flutter/material.dart';
 import '../../models/itinerary.dart';
 
-///Helper functions to add or remove a scheduled itinerary from the database.
-///An itinerary includes a list of destinations and the time the trip should start.
-///Author: Tayyibah
+/// Helper functions to add or remove a scheduled itinerary from the database.
+/// An itinerary includes a list of destinations and the time the trip should start.
+/// Author: Tayyibah
 class ScheduleHelper {
   late CollectionReference _schedules;
   late final _user_id;
