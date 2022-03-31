@@ -438,13 +438,12 @@ class PanelWidgetState extends State<PanelWidget> {
   ///closest docking stations for the locations the user specified. This new list is then passed onto MapRoutePage.
   ///THIS FUNCTION NEEDS TO BE REFACTORED FURTHER
   Future<void> _handleSaveClick() async {
+
     List<DockingStation> closestDockList = dockList.values.toList();
     print("ALREADY EXISTS ==> $closestDockList");
+
     final hasEmptyField = widget.listDynamic
         .any((element) => element.placeTextController.text.isEmpty);
-
-    applyConstraints(
-        widget.fromTextEditController, widget.toTextEditController);
 
     if (hasEmptyField) {
       alert.showSnackBarErrorMessage(
@@ -455,6 +454,12 @@ class PanelWidgetState extends State<PanelWidget> {
       alert.showSnackBarErrorMessage(context, alert.noAdjacentLocationsAllowed);
       return;
     } else {
+
+      if(applyConstraints(
+          widget.fromTextEditController, widget.toTextEditController)){
+        return;
+      }
+
       List<List<double?>?> tempList = [];
       tempList.addAll(staticListMap.values);
       tempList.addAll(widget.selectedCoords);
@@ -489,9 +494,6 @@ class PanelWidgetState extends State<PanelWidget> {
     final hasEmptyField = widget.listDynamic
         .any((element) => element.placeTextController.text.isEmpty);
 
-    applyConstraints(
-        widget.fromTextEditController, widget.toTextEditController);
-
     if (hasEmptyField) {
       alert.showSnackBarErrorMessage(
           context, alert.cannotHaveEmptySearchLocationsMessage);
@@ -500,6 +502,12 @@ class PanelWidgetState extends State<PanelWidget> {
       alert.showSnackBarErrorMessage(context, alert.noAdjacentLocationsAllowed);
       return;
     } else {
+
+      if(applyConstraints(
+          widget.fromTextEditController, widget.toTextEditController)){
+        return;
+      }
+
       List<List<double?>?> tempList = [];
       tempList.addAll(staticListMap.values);
       tempList.addAll(widget.selectedCoords);
@@ -568,18 +576,19 @@ class PanelWidgetState extends State<PanelWidget> {
   ///Applies all the constraints needed for the panel widget. If any constraints are broken, program execution terminates
   ///and  displays necessary error message to the user. [fromEditingController] and the [toEditingController] are the
   ///controllers where the user specifies the destination to start their journey from and where to go respectively.
-  void applyConstraints(TextEditingController fromEditingController,
+  bool applyConstraints(TextEditingController fromEditingController,
       TextEditingController toEditingController) {
     if (startLocationMustBeSpecified(fromEditingController) ||
         startLocationMustBeSpecified(toEditingController)) {
-      return;
+      true;
     }
     if (widget.hasSpecifiedOneDestination(context, alert)) {
-      return;
+      true;
     }
     if (aSearchBarCannotBeEmpty(widget.listDynamic)) {
-      return;
+      true;
     }
+    return false;
   }
 
   ///The logic to restrict the user from being able to start a journey with 2 locations in the journey being
