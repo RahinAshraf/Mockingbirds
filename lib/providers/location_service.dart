@@ -26,7 +26,7 @@ class LocationService {
   //Given coordinates, it will return the name of the place of those coordinates
   Future<Map> reverseGeoCode(double lat, double lng) async {
     String token =
-        'pk.eyJ1IjoibW9ja2luZ2JpcmRzZWxpdGUiLCJhIjoiY2wwaTJ2em4wMDA0ZzNrcGtremZuM3czZyJ9.PDaTlZiPjDa7sGjF-aKnJQ';
+        'pk.eyJ1IjoibW9ja2luZ2JpcmRkZCIsImEiOiJjbDFkbGNidXEwYWR0M2NsbjZ4OWl4bHpuIn0.qKlsWhLo2SuKGzhceHM9KA';
     String url =
         "https://api.mapbox.com/geocoding/v5/mapbox.places/$lng,$lat.json?access_token=$token";
     var response = await http.get(Uri.parse(url));
