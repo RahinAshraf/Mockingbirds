@@ -31,7 +31,7 @@ class Weather {
         current_clouds = 100,
         current_visibility = 4300,
         current_wind_speed = 4.12,
-        current_description = "light intensity drizzle",
+        current_description = "Light intensity drizzle",
         current_icon = "04d";
 
   String getCurrentWeatherIcon() {

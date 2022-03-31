@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
+// Author: Marija
+// Contributor: Hristina-Andreea Sararu, K20036771
 // General
 const Color whiteReplacement =
     Color(0xFFf5f5f5); // replacement for bright white color
@@ -72,3 +74,17 @@ const scheduleScreenCalendarStyle = CalendarStyle(
   // markerSize: 5,
   markersMaxCount: 1,
 );
+
+// Styling for favourites and past journeys sidebar
+const TextStyle sidebarTextStyle = TextStyle(
+    fontSize: 20.0,
+    color: (Color(0xFF99D2A9)),
+    fontWeight: FontWeight.w700,
+    fontStyle: FontStyle.italic);
+
+// Styling for weather
+const TextStyle weatherTextStyle = TextStyle(
+    fontSize: 25.0,
+    color: (Color(0xFF99D2A9)),
+    fontWeight: FontWeight.w700,
+    fontStyle: FontStyle.italic);
