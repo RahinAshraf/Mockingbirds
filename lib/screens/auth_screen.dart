@@ -1,13 +1,13 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:veloplan/helpers/database_manager.dart';
+import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 
-import '../widgets/auth/auth_form.dart';
+import 'package:veloplan/widgets/auth/auth_form.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({Key? key}) : super(key: key);
@@ -109,19 +109,24 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Stack(children: <Widget>[
-      AuthForm(
-        _submitAuthForm,
-        _isLoading,
+      body: SafeArea(
+        child: Stack(
+          children: [
+            AuthForm(
+              _submitAuthForm,
+              _isLoading,
+            ),
+            Align(
+              alignment: Alignment.topRight,
+              child: Container(
+                  height: 170.0,
+                  width: 170.0,
+                  alignment: Alignment.topRight,
+                  child: Image.asset('assets/images/right_bubbles_shapes.png')),
+            ),
+          ],
+        ),
       ),
-      /*Align(
-        alignment: Alignment.topRight,
-        child: Container(
-            height: 170.0,
-            width: 170.0,
-            alignment: Alignment.topRight,
-            child: Image.asset('assets/images/right_bubbles_shapes.png')),
-      ),*/
-    ]));
+    );
   }
 }

@@ -1,18 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:veloplan/widgets/group_id_join_code_widget.dart';
-import 'package:veloplan/widgets/popup_widget.dart';
+import 'package:intl/intl.dart';
+import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:veloplan/screens/navigation/polyline_turn_by_turn_screen.dart';
+import 'package:veloplan/screens/navigation/turn_by_turn_screen.dart';
+import 'package:veloplan/screens/sidebar_screens/schedule_screen.dart';
 import 'package:veloplan/screens/trips_scheduler_screen.dart';
+import 'package:veloplan/widgets/group/group_id_join_code_widget.dart';
+import 'package:veloplan/widgets/popup_widget.dart';
+import 'package:veloplan/utilities/alert_type.dart';
+import 'helpers/navigation_helpers/navigation_conversions_helpers.dart';
+import 'models/itinerary.dart';
 
-// Generic popups used thorough the app
+/// Generic popups used thorough the app
+/// Author(s) Marija
+/// Contributors: Nicole
+
 class Popups {
   // Questions
   PopupWidget buildPopupDialogNewJourney(BuildContext context) {
     List<PopupButtonWidget> children = [
       PopupButtonWidget(
         text: "Plan a journey",
-        onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => TripScheduler()));
+        onPressed: () async {
+          final response = await Navigator.push(context,
+              MaterialPageRoute(builder: (context) => TripSchedulerScreen()));
+          if (response || response == null) {
+            Navigator.of(context).pop(true);
+          }
         },
       ),
       PopupButtonWidget(
@@ -80,5 +94,87 @@ class Popups {
         text: "You will be redirected automatically.",
         children: children,
         type: AlertType.warning);
+  }
+
+  PopupWidget buildWeather(BuildContext context, weather, weatherIcon) {
+    List<PopupButtonWidget> children = [
+      PopupButtonWidget(text: "Leave", onPressed: () {}),
+    ];
+    return PopupWidget(
+        title: "Weather",
+        text: "You will be redirected automatically.",
+        children: [],
+        type: AlertType.warning);
+  }
+
+  PopupWidget buildPopupDialogRedirect(
+      BuildContext context, Itinerary itinerary) {
+    List<LatLng> subJourney = convertDocksToLatLng(itinerary.docks!)!;
+    List<PopupButtonWidget> children = [
+      PopupButtonWidget(
+        text: "Yes, redirect me",
+        onPressed: () async {
+          final response = await Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => MapUpdatedRoutePage(itinerary)));
+          if (response || response == null || !response) {
+            Navigator.of(context).pop(true);
+          }
+        },
+      ),
+      PopupButtonWidget(
+          text: "No, don't redirect me",
+          onPressed: () async {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        TurnByTurn(latLngs2WayPoints(subJourney))));
+          }),
+    ];
+    return PopupWidget(
+        title:
+            "Would you like to be automatically redirected to available stations?",
+        text: "Only one way to find out.",
+        children: children,
+        type: AlertType.question);
+  }
+
+  PopupWidget buildPopupDialogJourneySaved(
+      BuildContext context, DateTime date) {
+    var formatter = DateFormat('yyyy-MM-dd');
+    var formattedDate = formatter.format(date);
+
+    List<PopupButtonWidget> children = [
+      PopupButtonWidget(
+          text: "Ok",
+          onPressed: () {
+            Navigator.pop(context);
+          }),
+    ];
+    return PopupWidget(
+        title: "Journey scheduled successfully!",
+        text:
+            "Your journey has been scheduled for ${formattedDate}. Check the details in the calendar.",
+        children: children,
+        type: AlertType.warning);
+  }
+
+  PopupWidget buildPopupDialogDeleteScheduledJourney(
+      BuildContext context, onClick) {
+    List<PopupButtonWidget> children = [
+      PopupButtonWidget(text: "Delete", onPressed: onClick),
+      PopupButtonWidget(
+          text: "Cancel",
+          onPressed: () {
+            Navigator.pop(context);
+          }),
+    ];
+    return PopupWidget(
+        title: "Confirmation required",
+        text: "Are you sure you want to delete this trip?",
+        children: children,
+        type: AlertType.question);
   }
 }

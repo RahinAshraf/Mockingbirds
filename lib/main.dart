@@ -2,7 +2,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:veloplan/helpers/live_location_helper.dart';
 import 'package:veloplan/navbar.dart';
@@ -14,6 +13,8 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+late SharedPreferences sharedPreferences;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   checkPermissions();
@@ -24,6 +25,7 @@ void main() async {
   runApp(ScopedModel<MapModel>(
       model: _model,
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         initialRoute: '/',
         routes: {
           '/': (context) => const MyApp(),
