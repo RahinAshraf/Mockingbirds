@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:veloplan/widgets/profile/profile_widget.dart';
 
+/// Widget for displayng the profile page header
+/// Author(s): Eduard Ragea k20067643
 class ProfilePageHeader extends StatefulWidget {
   final Map<String, dynamic> data;
   final bool isCurrentUser;
@@ -19,6 +21,8 @@ class _ProfilePageHeaderState extends State<ProfilePageHeader> {
   double distance = 0;
   int journeys = 0;
 
+  /// This function retrieves the distance from the users doccument on Firebase
+  /// and stores it in the distance variable in kilometers
   Future getDistance() async {
     final snapshot =
         await FirebaseFirestore.instance.collection('users').doc(user).get();
