@@ -30,9 +30,7 @@ class _ProfilePageHeaderState extends State<ProfilePageHeader> {
 
   Future getJourneys() async {
     final snapshot = await FirebaseFirestore.instance
-        .collection('journey')
-        .where('userid', isEqualTo: user)
-        .get();
+        .collection('users').doc(user).collection('journeys').get();
     journeys = snapshot.size;
   }
 
