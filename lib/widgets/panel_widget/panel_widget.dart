@@ -438,7 +438,6 @@ class PanelWidgetState extends State<PanelWidget> {
   ///closest docking stations for the locations the user specified. This new list is then passed onto MapRoutePage.
   ///THIS FUNCTION NEEDS TO BE REFACTORED FURTHER
   Future<void> _handleSaveClick() async {
-
     List<DockingStation> closestDockList = dockList.values.toList();
     print("ALREADY EXISTS ==> $closestDockList");
 
@@ -454,9 +453,8 @@ class PanelWidgetState extends State<PanelWidget> {
       alert.showSnackBarErrorMessage(context, alert.noAdjacentLocationsAllowed);
       return;
     } else {
-
-      if(applyConstraints(
-          widget.fromTextEditController, widget.toTextEditController)){
+      if (applyConstraints(
+          widget.fromTextEditController, widget.toTextEditController)) {
         return;
       }
 
@@ -502,9 +500,8 @@ class PanelWidgetState extends State<PanelWidget> {
       alert.showSnackBarErrorMessage(context, alert.noAdjacentLocationsAllowed);
       return;
     } else {
-
-      if(applyConstraints(
-          widget.fromTextEditController, widget.toTextEditController)){
+      if (applyConstraints(
+          widget.fromTextEditController, widget.toTextEditController)) {
         return;
       }
 
@@ -563,8 +560,9 @@ class PanelWidgetState extends State<PanelWidget> {
         //! TODO: if response = null, we dont want the pop to be true! talk with elisabeth
 
         //go to the summary of journey screen
-        final response = await context.push(SummaryJourneyScreen(_itinerary));
-        if (response == null || response) {
+        final response =
+            await context.push(SummaryJourneyScreen(_itinerary, false));
+        if (response || response == null) {
           Navigator.of(context).pop(true);
         } else {
           Navigator.of(context).pop();

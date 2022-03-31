@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
@@ -16,6 +17,8 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
+
+
   final _auth = FirebaseAuth.instance;
   var _isLoading = false;
 
@@ -47,8 +50,6 @@ class _AuthScreenState extends State<AuthScreen> {
           password: password,
         );
 
-        final DatabaseManager _databaseManager = DatabaseManager();
-
         var url =
             "https://firebasestorage.googleapis.com/v0/b/veloplan-b41d0.appspot.com/o/user_image%2Fdefault_profile_picture.jpg?alt=media&token=edc6abb8-3655-448c-84a0-7d34b02f0c73";
 
@@ -62,6 +63,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
           url = await ref.getDownloadURL();
         }
+        final DatabaseManager _databaseManager = DatabaseManager();
         await _databaseManager.setByKey('users', authResult.user!.uid, {
           'username': username,
           'email': email,
@@ -98,6 +100,7 @@ class _AuthScreenState extends State<AuthScreen> {
         _isLoading = false;
       });
     } catch (err) {
+      // print(err);
       setState(() {
         _isLoading = false;
       });

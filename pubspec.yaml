@@ -50,7 +50,6 @@ dependencies:
   flutter_polyline_points: ^1.0.0
   dio: ^4.0.4
   flutter_dotenv: ^5.0.2
-  mockito: ^5.1.0
   dartleaf: ^1.1.4
   tuple: ^2.0.0
   scoped_model: ^2.0.0-nullsafety.0
@@ -59,10 +58,15 @@ dependencies:
     sdk: flutter
     version: ^0.0.0
   table_calendar: ^3.0.5
-  fake_cloud_firestore: ^1.2.2
+
 
 
 dev_dependencies:
+  code_builder: ^4.0.0
+  firebase_auth_mocks: ^0.8.2
+  fake_cloud_firestore:	1.2.2
+  build_runner: ^2.1.7
+  mockito: ^5.1.0
   flutter_test:
     sdk: flutter
   test:
