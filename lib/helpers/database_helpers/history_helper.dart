@@ -12,7 +12,7 @@ class HistoryHelper {
   late CollectionReference _journeys;
   DatabaseManager _databaseManager = DatabaseManager();
 
-  HistoryHelper() {
+  HistoryHelper(this._databaseManager) {
     _journeys = _databaseManager.getUserSubCollectionReference("journeys");
   }
 
@@ -37,9 +37,18 @@ class HistoryHelper {
   }
 
   ///Calculates the current date and adds as a field to journey
+  // Future<void> addJourneyTime(journeyDocumentId) {
+  //   final DateTime timeNow = DateTime.now();
+  //   return _journeys.doc(journeyDocumentId).set({'date': timeNow});
+  // }
+
   Future<void> addJourneyTime(journeyDocumentId) {
     final DateTime timeNow = DateTime.now();
-    return _journeys.doc(journeyDocumentId).set({'date': timeNow});
+    return _databaseManager.setSubCollectionByDocumentId(
+      journeyDocumentId,
+      _journeys,
+      {'date': timeNow},
+    );
   }
 
   ///Gets all of the docking station information from a given journey

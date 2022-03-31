@@ -23,6 +23,8 @@ import 'package:veloplan/popups.dart';
 import 'package:veloplan/helpers/database_helpers/history_helper.dart';
 import 'package:veloplan/widgets/panel_widget/panel_widget_exts.dart';
 
+import '../../helpers/database_helpers/database_manager.dart';
+
 /// Renders [PanelWidget] used in [JourneyPlanner] screen.
 ///
 /// It is an interactive panel the user can slide up or down,
@@ -430,7 +432,8 @@ class PanelWidgetState extends State<PanelWidget> {
       List<LatLng>? points = convertListDoubleToLatLng(tempList);
 
       List<LatLng> closestDockList = [];
-      HistoryHelper historyHelper = HistoryHelper();
+
+      HistoryHelper historyHelper = HistoryHelper(DatabaseManager());
 
       List<DockingStation> selectedDocks = [];
       if (points != null) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../helpers/database_helpers/database_manager.dart';
 import '../../models/itinerary.dart';
 import '../../helpers/database_helpers/history_helper.dart';
 import '../../widgets/my_journey_card.dart';
@@ -14,7 +15,7 @@ class MyJourneys extends StatefulWidget {
 class _MyJourneysState extends State<MyJourneys> {
   List<Itinerary> journeyList = [];
 
-  var helper = HistoryHelper();
+  var helper = HistoryHelper(DatabaseManager());
 
   @override
   void initState() {
