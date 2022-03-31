@@ -60,9 +60,11 @@ dependencies:
 
 
 dev_dependencies:
+  flutter_driver:
+    sdk: flutter
+  test: any
   flutter_test:
     sdk: flutter
-  test:
 
 flutter_icons:
   image_path: "assets/images/logo.png"
