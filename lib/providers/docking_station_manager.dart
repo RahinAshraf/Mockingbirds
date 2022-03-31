@@ -268,12 +268,20 @@ class dockingStationManager {
   }
 
   /* import the docking station from the tfl api and check its updated info*/
-  Future<DockingStation> checkStationById(String dockId) async {
+  //TODO: refactor code -> shitty code
+  Future<DockingStation?> checkStationById(String dockId) async {
     var data =
         await http.get(Uri.parse("https://api.tfl.gov.uk/BikePoint/${dockId}"));
+    if (data == null) {
+      await Future.delayed(const Duration(seconds: 20));
+    }
     late DockingStation newStation;
     var station = json.decode(data.body);
     try {
+      print(station["id"] +
+          "      " +
+          station["commonName"] +
+          "-----------------__________-debug stations__________--------");
       newStation = DockingStation(
           station["id"],
           station["commonName"],
