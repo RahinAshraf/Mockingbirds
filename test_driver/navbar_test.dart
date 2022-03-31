@@ -7,6 +7,9 @@ Future<void> main() async {
   final profilePageButton = find.byValueKey("profile");
   final bikePageButton = find.byValueKey("bike");
   final sideBarPageButton = find.byValueKey("sideBar");
+  final navBarPage = find.byType("NavBar");
+
+  final profileScreen = find.byType("Profile");
 
   /// connect flutter driver to the app before executing the runs
 
@@ -39,6 +42,8 @@ Future<void> main() async {
     final settingsButton = find.byValueKey('Settings');
     final favouritesButton = find.byValueKey("Favourites");
     final helpBotButton = find.byValueKey("Help");
+
+    final sidebar = find.byType("SideBar");
 
     final scheduleScreen = find.byType("ScheduleScreen");
     final myJourneysScreen = find.byType("MyJourneys");
@@ -147,6 +152,18 @@ Future<void> main() async {
       await driver?.tap(backButton);
     });
     //! login with account with info
+    test("test and navigate to profile page", () async {
+      await driver?.waitUntilNoTransientCallbacks();
+      assert(sidebar != null);
+      await driver?.scroll(sidebar, -500, 0, Duration(seconds: 2));
+      await driver?.waitUntilNoTransientCallbacks();
+      assert(navBarPage != null);
+      assert(profilePageButton != null);
+      await driver?.tap(profilePageButton);
+      await driver?.waitUntilNoTransientCallbacks();
+      assert(profileScreen != null);
+      assert(navBarPage == null);
+    });
   });
 
   //! make another group with information inside of the different screens
