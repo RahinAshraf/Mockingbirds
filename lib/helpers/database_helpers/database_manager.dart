@@ -16,7 +16,7 @@ class DatabaseManager {
   User? getCurrentUser() {
     return FirebaseAuth.instance.currentUser;
   }
-
+@deprecated
   CollectionReference<Object?> getUserSubCollectionReference(
       String collectionName) {
     return _database
@@ -24,6 +24,7 @@ class DatabaseManager {
         .doc(_userId)
         .collection(collectionName);
   }
+
 
   Future<QuerySnapshot<Object?>> getUserSubcollection(
       String subcollection) async {

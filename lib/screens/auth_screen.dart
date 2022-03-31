@@ -18,7 +18,7 @@ class AuthScreen extends StatefulWidget {
 
 class _AuthScreenState extends State<AuthScreen> {
 
-  final DatabaseManager _databaseManager = DatabaseManager();
+
   final _auth = FirebaseAuth.instance;
   var _isLoading = false;
 
@@ -63,6 +63,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
           url = await ref.getDownloadURL();
         }
+        final DatabaseManager _databaseManager = DatabaseManager();
         await _databaseManager.setByKey('users', authResult.user!.uid, {
           'username': username,
           'email': email,

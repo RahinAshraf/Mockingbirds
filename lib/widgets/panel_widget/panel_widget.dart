@@ -483,7 +483,7 @@ class PanelWidgetState extends State<PanelWidget> {
         //! TODO: if response = null, we dont want the pop to be true! talk with elisabeth
 
         //go to the summary of journey screen
-        final response = await context.push(SummaryJourneyScreen(_itinerary));
+        final response = await context.push(SummaryJourneyScreen(_itinerary, false));
         if (response || response == null) {
           Navigator.of(context).pop(true);
         } else {

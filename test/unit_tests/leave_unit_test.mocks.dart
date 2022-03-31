@@ -9,7 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart' as _i3;
 import 'package:firebase_auth_platform_interface/firebase_auth_platform_interface.dart'
     as _i6;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:veloplan/helpers/database_manager.dart' as _i4;
+import 'package:veloplan/helpers/database_helpers/database_manager.dart' as _i4;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -21,27 +21,30 @@ import 'package:veloplan/helpers/database_manager.dart' as _i4;
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
 
-class _FakeQuerySnapshot_0<T extends Object?> extends _i1.Fake
+class _FakeCollectionReference_0<T extends Object?> extends _i1.Fake
+    implements _i2.CollectionReference<T> {}
+
+class _FakeQuerySnapshot_1<T extends Object?> extends _i1.Fake
     implements _i2.QuerySnapshot<T> {}
 
-class _FakeDocumentSnapshot_1<T extends Object?> extends _i1.Fake
+class _FakeDocumentSnapshot_2<T extends Object?> extends _i1.Fake
     implements _i2.DocumentSnapshot<T> {}
 
-class _FakeUserMetadata_2 extends _i1.Fake implements _i3.UserMetadata {}
+class _FakeUserMetadata_3 extends _i1.Fake implements _i3.UserMetadata {}
 
-class _FakeIdTokenResult_3 extends _i1.Fake implements _i3.IdTokenResult {}
+class _FakeIdTokenResult_4 extends _i1.Fake implements _i3.IdTokenResult {}
 
-class _FakeUserCredential_4 extends _i1.Fake implements _i3.UserCredential {}
+class _FakeUserCredential_5 extends _i1.Fake implements _i3.UserCredential {}
 
-class _FakeConfirmationResult_5 extends _i1.Fake
+class _FakeConfirmationResult_6 extends _i1.Fake
     implements _i3.ConfirmationResult {}
 
-class _FakeUser_6 extends _i1.Fake implements _i3.User {}
+class _FakeUser_7 extends _i1.Fake implements _i3.User {}
 
-class _FakeSnapshotMetadata_7 extends _i1.Fake implements _i2.SnapshotMetadata {
+class _FakeSnapshotMetadata_8 extends _i1.Fake implements _i2.SnapshotMetadata {
 }
 
-class _FakeDocumentReference_8<T extends Object?> extends _i1.Fake
+class _FakeDocumentReference_9<T extends Object?> extends _i1.Fake
     implements _i2.DocumentReference<T> {}
 
 /// A class which mocks [DatabaseManager].
@@ -53,19 +56,47 @@ class MockDatabaseManager extends _i1.Mock implements _i4.DatabaseManager {
   }
 
   @override
+  _i2.CollectionReference<Object?> getUserSubCollectionReference(
+          String? collectionName) =>
+      (super.noSuchMethod(
+          Invocation.method(#getUserSubCollectionReference, [collectionName]),
+          returnValue:
+              _FakeCollectionReference_0<Object?>()) as _i2
+          .CollectionReference<Object?>);
+  @override
+  _i5.Future<_i2.QuerySnapshot<Object?>> getUserSubcollection(
+          String? subcollection) =>
+      (super.noSuchMethod(
+              Invocation.method(#getUserSubcollection, [subcollection]),
+              returnValue: Future<_i2.QuerySnapshot<Object?>>.value(
+                  _FakeQuerySnapshot_1<Object?>()))
+          as _i5.Future<_i2.QuerySnapshot<Object?>>);
+  @override
+  _i5.Future<dynamic> deleteCollection(
+          _i2.CollectionReference<Object?>? collection) =>
+      (super.noSuchMethod(Invocation.method(#deleteCollection, [collection]),
+          returnValue: Future<dynamic>.value()) as _i5.Future<dynamic>);
+  @override
+  _i5.Future<void> deleteDocument(
+          _i2.CollectionReference<Object?>? collection, String? documentId) =>
+      (super.noSuchMethod(
+          Invocation.method(#deleteDocument, [collection, documentId]),
+          returnValue: Future<void>.value(),
+          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
+  @override
   _i5.Future<_i2.QuerySnapshot<Map<String, dynamic>>> getByEquality(
           String? collection, String? field, String? equalTo) =>
       (super.noSuchMethod(
           Invocation.method(#getByEquality, [collection, field, equalTo]),
           returnValue: Future<_i2.QuerySnapshot<Map<String, dynamic>>>.value(
-              _FakeQuerySnapshot_0<Map<String, dynamic>>())) as _i5
+              _FakeQuerySnapshot_1<Map<String, dynamic>>())) as _i5
           .Future<_i2.QuerySnapshot<Map<String, dynamic>>>);
   @override
   _i5.Future<_i2.DocumentSnapshot<Map<String, dynamic>>> getByKey(
           String? collection, String? key) =>
       (super.noSuchMethod(Invocation.method(#getByKey, [collection, key]),
           returnValue: Future<_i2.DocumentSnapshot<Map<String, dynamic>>>.value(
-              _FakeDocumentSnapshot_1<Map<String, dynamic>>())) as _i5
+              _FakeDocumentSnapshot_2<Map<String, dynamic>>())) as _i5
           .Future<_i2.DocumentSnapshot<Map<String, dynamic>>>);
   @override
   _i5.Future<void> setByKey(
@@ -89,6 +120,19 @@ class MockDatabaseManager extends _i1.Mock implements _i4.DatabaseManager {
           Invocation.method(#addToCollection, [collection, value]),
           returnValue: Future<void>.value(),
           returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
+  @override
+  _i5.Future<void> addToSubCollection(
+          _i2.CollectionReference<Object?>? subcollection,
+          Map<String, dynamic>? value) =>
+      (super.noSuchMethod(
+          Invocation.method(#addToSubCollection, [subcollection, value]),
+          returnValue: Future<void>.value(),
+          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
+  @override
+  _i5.Future<void> signOut() =>
+      (super.noSuchMethod(Invocation.method(#signOut, []),
+          returnValue: Future<void>.value(),
+          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
 }
 
 /// A class which mocks [User].
@@ -110,7 +154,7 @@ class MockUser extends _i1.Mock implements _i3.User {
   @override
   _i3.UserMetadata get metadata =>
       (super.noSuchMethod(Invocation.getter(#metadata),
-          returnValue: _FakeUserMetadata_2()) as _i3.UserMetadata);
+          returnValue: _FakeUserMetadata_3()) as _i3.UserMetadata);
   @override
   List<_i3.UserInfo> get providerData =>
       (super.noSuchMethod(Invocation.getter(#providerData),
@@ -132,20 +176,20 @@ class MockUser extends _i1.Mock implements _i3.User {
           [bool? forceRefresh = false]) =>
       (super.noSuchMethod(Invocation.method(#getIdTokenResult, [forceRefresh]),
               returnValue:
-                  Future<_i3.IdTokenResult>.value(_FakeIdTokenResult_3()))
+                  Future<_i3.IdTokenResult>.value(_FakeIdTokenResult_4()))
           as _i5.Future<_i3.IdTokenResult>);
   @override
   _i5.Future<_i3.UserCredential> linkWithCredential(
           _i3.AuthCredential? credential) =>
       (super.noSuchMethod(Invocation.method(#linkWithCredential, [credential]),
               returnValue:
-                  Future<_i3.UserCredential>.value(_FakeUserCredential_4()))
+                  Future<_i3.UserCredential>.value(_FakeUserCredential_5()))
           as _i5.Future<_i3.UserCredential>);
   @override
   _i5.Future<_i3.UserCredential> linkWithPopup(_i6.AuthProvider? provider) =>
       (super.noSuchMethod(Invocation.method(#linkWithPopup, [provider]),
               returnValue:
-                  Future<_i3.UserCredential>.value(_FakeUserCredential_4()))
+                  Future<_i3.UserCredential>.value(_FakeUserCredential_5()))
           as _i5.Future<_i3.UserCredential>);
   @override
   _i5.Future<_i3.ConfirmationResult> linkWithPhoneNumber(String? phoneNumber,
@@ -153,7 +197,7 @@ class MockUser extends _i1.Mock implements _i3.User {
       (super.noSuchMethod(
               Invocation.method(#linkWithPhoneNumber, [phoneNumber, verifier]),
               returnValue: Future<_i3.ConfirmationResult>.value(
-                  _FakeConfirmationResult_5()))
+                  _FakeConfirmationResult_6()))
           as _i5.Future<_i3.ConfirmationResult>);
   @override
   _i5.Future<_i3.UserCredential> reauthenticateWithCredential(
@@ -161,7 +205,7 @@ class MockUser extends _i1.Mock implements _i3.User {
       (super.noSuchMethod(
               Invocation.method(#reauthenticateWithCredential, [credential]),
               returnValue:
-                  Future<_i3.UserCredential>.value(_FakeUserCredential_4()))
+                  Future<_i3.UserCredential>.value(_FakeUserCredential_5()))
           as _i5.Future<_i3.UserCredential>);
   @override
   _i5.Future<void> reload() =>
@@ -178,7 +222,7 @@ class MockUser extends _i1.Mock implements _i3.User {
   @override
   _i5.Future<_i3.User> unlink(String? providerId) =>
       (super.noSuchMethod(Invocation.method(#unlink, [providerId]),
-              returnValue: Future<_i3.User>.value(_FakeUser_6()))
+              returnValue: Future<_i3.User>.value(_FakeUser_7()))
           as _i5.Future<_i3.User>);
   @override
   _i5.Future<void> updateEmail(String? newEmail) =>
@@ -245,7 +289,7 @@ class MockQuerySnapshot<T extends Object?> extends _i1.Mock
   @override
   _i2.SnapshotMetadata get metadata =>
       (super.noSuchMethod(Invocation.getter(#metadata),
-          returnValue: _FakeSnapshotMetadata_7()) as _i2.SnapshotMetadata);
+          returnValue: _FakeSnapshotMetadata_8()) as _i2.SnapshotMetadata);
   @override
   int get size =>
       (super.noSuchMethod(Invocation.getter(#size), returnValue: 0) as int);
@@ -266,11 +310,11 @@ class MockDocumentSnapshot<T extends Object?> extends _i1.Mock
   @override
   _i2.DocumentReference<T> get reference => (super.noSuchMethod(
       Invocation.getter(#reference),
-      returnValue: _FakeDocumentReference_8<T>()) as _i2.DocumentReference<T>);
+      returnValue: _FakeDocumentReference_9<T>()) as _i2.DocumentReference<T>);
   @override
   _i2.SnapshotMetadata get metadata =>
       (super.noSuchMethod(Invocation.getter(#metadata),
-          returnValue: _FakeSnapshotMetadata_7()) as _i2.SnapshotMetadata);
+          returnValue: _FakeSnapshotMetadata_8()) as _i2.SnapshotMetadata);
   @override
   bool get exists =>
       (super.noSuchMethod(Invocation.getter(#exists), returnValue: false)
@@ -298,11 +342,11 @@ class MockQueryDocumentSnapshot<T extends Object?> extends _i1.Mock
   @override
   _i2.DocumentReference<T> get reference => (super.noSuchMethod(
       Invocation.getter(#reference),
-      returnValue: _FakeDocumentReference_8<T>()) as _i2.DocumentReference<T>);
+      returnValue: _FakeDocumentReference_9<T>()) as _i2.DocumentReference<T>);
   @override
   _i2.SnapshotMetadata get metadata =>
       (super.noSuchMethod(Invocation.getter(#metadata),
-          returnValue: _FakeSnapshotMetadata_7()) as _i2.SnapshotMetadata);
+          returnValue: _FakeSnapshotMetadata_8()) as _i2.SnapshotMetadata);
   @override
   bool get exists =>
       (super.noSuchMethod(Invocation.getter(#exists), returnValue: false)
