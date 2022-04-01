@@ -70,7 +70,6 @@ class _ProfilePageHeaderState extends State<ProfilePageHeader> {
             calculateAge(data['birthDate']),
             style: const TextStyle(color: Colors.grey),
           ),
-          // const SizedBox(height: 24),
         ],
       );
 

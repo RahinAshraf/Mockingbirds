@@ -67,6 +67,7 @@ class DockingStationCarousel {
     return FutureBuilder(
         future: selectFiltering(selectedFilter),
         builder: (context, snapshot) {
+          var height = MediaQuery.of(context).size.height * 0.23;
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
               if (snapshot.data!.length == 0) {
@@ -82,21 +83,23 @@ class DockingStationCarousel {
               }
               return Container(
                 alignment: Alignment.center,
-                height: MediaQuery.of(context).size.height * 0.23,
-                width: MediaQuery.of(context).size.width,
+                height: height,
                 child: CustomCarousel(cards: dockingStationCards),
               );
             } else {
               return Container(
                 alignment: Alignment.center,
-                height: MediaQuery.of(context).size.height * 0.23,
-                width: MediaQuery.of(context).size.width,
+                height: height,
                 child: Text(
-                    'snapshot.hasError: ${snapshot.hasError}. The error: ${snapshot.error}'),
+                    'snapshot.hasError: ${snapshot.hasError}.\nThe error: ${snapshot.error}'),
               );
             }
           } else {
-            return CircularProgressIndicator();
+            return Container(
+              alignment: Alignment.center,
+              height: height,
+              child: CircularProgressIndicator(),
+            );
           }
         });
   }

@@ -124,7 +124,7 @@ class UpcomingEventCard extends StatelessWidget {
         child: Column(
           children: <Widget>[
             ListTile(
-              title: Text(title, style: Theme.of(context).textTheme.headline2),
+              title: Text(title, style: CustomTextStyles.placeholderText),
             ),
             Row(
               children: [

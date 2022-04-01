@@ -18,7 +18,6 @@ class CustomTheme {
       textTheme: TextTheme(
         headline1: CustomTextStyles.headline1,
         headline2: CustomTextStyles.headline2,
-        headline5: CustomTextStyles.headline5,
       ),
       snackBarTheme: const SnackBarThemeData(
         backgroundColor: Colors.red,

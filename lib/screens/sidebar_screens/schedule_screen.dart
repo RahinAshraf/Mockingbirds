@@ -5,6 +5,7 @@ import 'package:veloplan/helpers/database_helpers/schedule_helper.dart';
 import 'package:veloplan/models/itinerary.dart';
 import 'package:veloplan/styles/styling.dart';
 import 'package:veloplan/styles/colors.dart';
+import 'package:veloplan/styles/texts.dart';
 import 'package:veloplan/widgets/upcoming_event_card.dart';
 
 class ScheduleScreen extends StatefulWidget {
@@ -65,7 +66,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                       SizedBox(height: 15.0),
                       Text(
                         'No journeys planned for this day.',
-                        style: Theme.of(context).textTheme.headline5,
+                        style: CustomTextStyles.placeholderText,
                       ),
                     ],
                   ),
