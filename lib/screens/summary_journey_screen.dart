@@ -19,6 +19,7 @@ import 'package:veloplan/utilities/dart_exts.dart';
 
 import '../models/docking_station.dart';
 import '../styles/colors.dart';
+import '../styles/texts.dart';
 
 /// Displays the summary of journey screen.
 ///
@@ -296,7 +297,9 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
                       },
                     )),
           if (cameFromSchedule)
-            Center(child: Text('You can\'t share prescheduled trips.')),
+            Center(
+                child: Text('You can\'t share scheduled trips.',
+                    style: CustomTextStyles.placeholderText)),
           Padding(
             padding: EdgeInsets.only(left: 15.0, top: 15.0),
             child: Text('Planned Stops',
@@ -309,10 +312,8 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasData) {
-                    print('MARIJAA');
                     _itineraryManager.printPaths();
                     return Column(
-                      // children: [Text('data ${paths}')],
                       children: _generateStops(),
                     );
                   } else {
@@ -377,17 +378,15 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
               children: [
                 Text(
                   '${organiser}',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25),
+                  style: Theme.of(context).textTheme.headline2,
                 ),
                 Text(
                   'Organiser',
                   style: TextStyle(
                       color: Colors.black54,
                       fontWeight: FontWeight.bold,
-                      fontSize: 20),
+                      fontSize: 16,
+                      fontFamily: 'Montserrat'),
                 ),
               ],
             ),
@@ -401,7 +400,6 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
   /// Generates station cards for the stops.
   List<Widget> _generateStops() {
     List<Widget> stops = [];
-
     for (int i = 0; i < _itinerary.docks!.length; i++) {
       stops.add(
         TimelineItem(
@@ -417,6 +415,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
   }
 }
 
+/// Generates an item in timeline.
 class TimelineItem extends StatelessWidget {
   const TimelineItem(
       {this.first = false,
@@ -447,7 +446,7 @@ class TimelineItem extends StatelessWidget {
         color: Color(0xFF99D2A9),
       ),
       alignment: TimelineAlign.manual,
-      lineXY: 0.75,
+      lineXY: 0.69,
       endChild: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
@@ -462,7 +461,14 @@ class TimelineItem extends StatelessWidget {
                       )
                     : Icon(Icons.directions_bike, color: CustomColors.green),
                 SizedBox(width: 2.0),
-                Text('${distance}'),
+                Text(
+                  '${distance}',
+                  style: TextStyle(
+                    fontSize: 15.0,
+                    color: Colors.black54,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ],
             ),
             SizedBox(height: 5.0),
@@ -470,15 +476,22 @@ class TimelineItem extends StatelessWidget {
               children: [
                 Icon(Icons.access_time, color: CustomColors.green),
                 SizedBox(width: 2.0),
-                Text('${duration}'),
+                Text(
+                  '${duration}',
+                  style: TextStyle(
+                    fontSize: 15.0,
+                    color: Colors.black54,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ],
             ),
           ],
         ),
       ),
       startChild: Card(
-        elevation: 1,
-        // margin: const EdgeInsets.fromLTRB(10.0, 15.0, 20.0, 15.0),
+        elevation: 3,
+        margin: const EdgeInsets.fromLTRB(10.0, 15.0, 20.0, 15.0),
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(
           Radius.circular(15.0),
@@ -490,7 +503,7 @@ class TimelineItem extends StatelessWidget {
               content,
               style: TextStyle(
                 fontSize: 15.0,
-                color: Color(0xFF99D2A9),
+                color: Colors.black54,
                 fontWeight: FontWeight.bold,
               ),
             ),
