@@ -49,6 +49,7 @@ samples, guidance on mobile development, and a full API reference.
 ## Bugs 
 - journey_planner_screen.dart and panel_widget.dart
     - Journey planning produces the list of chosen docking stations in an incorrect order on very rare occassions (bug could not be recreated during testing but presence is speculated)
+    - Due to API calls 
 
 
 ## Drawbacks faced during development
