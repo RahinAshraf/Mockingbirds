@@ -9,6 +9,8 @@ import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:veloplan/helpers/database_helpers/database_manager.dart';
+import 'package:veloplan/models/docking_station.dart';
+import 'package:veloplan/models/itinerary.dart';
 import 'package:veloplan/screens/summary_journey_screen.dart';
 import 'leave_unit_test.mocks.dart';
 @GenerateMocks([
@@ -22,10 +24,13 @@ import 'leave_unit_test.mocks.dart';
 void main(){
   var mockDBManagager = MockDatabaseManager();
   var points = [LatLng(20, 30),LatLng(10, 10)];
+  var docks = [DockingStation("test1", 'test1', true, false, 2, 2, 4, 20, 30),DockingStation("test2", 'test2', true, false, 2, 2, 4, 10, 10) ];
   var user = MockUser();
+  var numberOfCyclists = 2;
+  var it = Itinerary.navigation(docks, points,numberOfCyclists);
   QuerySnapshot<Map<String, dynamic>> groupResponse =MockQuerySnapshot();
   QuerySnapshot groupDocs = MockQuerySnapshot();
-  SummaryJourneyScreenState _summaryJourneyScreenState =  SummaryJourneyScreenState(mockDBManagager, points);
+  SummaryJourneyScreenState _summaryJourneyScreenState =  SummaryJourneyScreenState(it, false, mockDBManagager);
 
   test('Leave group works', () async {
     String userID = "userID";
@@ -33,10 +38,6 @@ void main(){
     when(user.uid).thenReturn(userID);
     when(mockDBManagager.getCurrentUser()).thenReturn(user);
     List<QueryDocumentSnapshot<Map<String,dynamic>>> temp = [];
-
-
-
-
     when(mockDBManagager.getByEquality('group', 'code', groupID)).thenAnswer((_) async => groupResponse);
     when(groupResponse.docs).thenReturn(temp);
     when(groupResponse.size).thenReturn(0);
