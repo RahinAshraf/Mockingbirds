@@ -11,7 +11,6 @@ import '../../styles/styling.dart';
 /// attributions to animators <a href="https://www.vecteezy.com/free-vector/london">London Vectors by Vecteezy</a>
 /// <a href="https://www.vecteezy.com/free-vector/london-bus">London Bus Vectors by Vecteezy</a>
 ///Author: Nicole
-///TODO: Nicole to clean
 class SuggestedItinerary extends StatefulWidget {
   @override
   _SuggestedItineraryState createState() => _SuggestedItineraryState();
@@ -53,27 +52,29 @@ class _SuggestedItineraryState extends State<SuggestedItinerary> {
     List<Itinerary> itineraries = [];
 
     this._hydeLoop = new Itinerary.suggestedTrip(
-        _hydeParkLoopCoord.keys.toList(), "Hyde Park Loop", _hydeParkLoopCoord.values.toList() );
-
+        _hydeParkLoopCoord.keys.toList(),
+        "Hyde Park Loop",
+        _hydeParkLoopCoord.values.toList());
 
     itineraries.add(_hydeLoop);
-    this._royalLoop = new Itinerary.suggestedTrip(
-        _royalLoopCoord.keys.toList(), "Royal Loop",   _royalLoopCoord.values.toList()  );
+    this._royalLoop = new Itinerary.suggestedTrip(_royalLoopCoord.keys.toList(),
+        "Royal Loop", _royalLoopCoord.values.toList());
     itineraries.add(_royalLoop);
 
     this._thamesLoop = new Itinerary.suggestedTrip(
-        _thamesLoopCoord.keys.toList(), "Thames Loop", _thamesLoopCoord.values.toList() );
+        _thamesLoopCoord.keys.toList(),
+        "Thames Loop",
+        _thamesLoopCoord.values.toList());
     itineraries.add(_thamesLoop);
 
     //method that makes an api call wiroyalLopth dock id and updates the info about the dock
     for (var itinerary in itineraries) {
-    for (int i = 0; i < itinerary.myDestinations!.length; i++) {
-
-      print("------------>>>>>>>>>>>>>>>>>-------" +
-          itinerary.myDestinations![i].toString() +
-          "---------<<<<<<<<<--------");
+      for (int i = 0; i < itinerary.myDestinations!.length; i++) {
+        print("------------>>>>>>>>>>>>>>>>>-------" +
+            itinerary.myDestinations![i].toString() +
+            "---------<<<<<<<<<--------");
+      }
     }
-  }
   }
 
   @override
@@ -248,3 +249,34 @@ class ItineraryCard extends StatelessWidget {
 //     LatLng(51.5031122, -0.1211524):
 //         "Lambeth Palace Road, Waterloo" // "BikePoints_815"
 //   };
+
+
+
+
+
+//  @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       backgroundColor: whiteReplacement,
+//       appBar: AppBar(
+//         title: const Text('Suggested Journeys'),
+//       ),
+//       body: PageView.builder(
+//           scrollDirection: Axis.vertical,
+//           itemCount: itineraries.length,
+//           itemBuilder: (_, index) {
+//             return Container(
+//               width: double.maxFinite,
+//               height: double.maxFinite,
+//               decoration: BoxDecoration(
+//                   image: DecorationImage(
+//                       image: AssetImage('assets/images/' +
+//                           itineraries[index].journeyDocumentId! +
+//                           '.png'),
+//                       fit: BoxFit.cover)),
+//               child: Container(),
+//             );
+//           }),
+//     );
+//   }
+// }
