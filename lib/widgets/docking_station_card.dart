@@ -68,10 +68,11 @@ class _DockingStationCardState extends State<DockingStationCard> {
                   Text(
                     widget.dockTemp.name,
                     style: CustomTextStyles.dockingStationCardNameStyle,
+                    textAlign: TextAlign.center,
                   ),
                   Divider(
                     color: CustomColors.green,
-                    thickness: 4,
+                    thickness: 3,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,

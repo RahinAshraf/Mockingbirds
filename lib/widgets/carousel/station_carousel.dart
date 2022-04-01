@@ -3,6 +3,7 @@ import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart';
 import 'package:veloplan/helpers/database_helpers/favourite_helper.dart';
 import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
+import 'package:veloplan/styles/texts.dart';
 import 'package:veloplan/widgets/carousel/custom_carousel.dart';
 import 'package:veloplan/widgets/docking_station_card.dart';
 
@@ -75,7 +76,7 @@ class DockingStationCarousel {
                     Image.asset('assets/images/bike.png', height: 100),
                     SizedBox(height: 10),
                     Text('Nothing to see here.',
-                        style: Theme.of(context).textTheme.headline5),
+                        style: CustomTextStyles.placeholderText),
                   ],
                 );
               }
@@ -86,7 +87,13 @@ class DockingStationCarousel {
                 child: CustomCarousel(cards: dockingStationCards),
               );
             } else {
-              return Text('Error: ${snapshot.hasError}');
+              return Container(
+                alignment: Alignment.center,
+                height: MediaQuery.of(context).size.height * 0.23,
+                width: MediaQuery.of(context).size.width,
+                child: Text(
+                    'snapshot.hasError: ${snapshot.hasError}. The error: ${snapshot.error}'),
+              );
             }
           } else {
             return CircularProgressIndicator();

@@ -8,9 +8,12 @@ class CustomTextStyles {
       fontFamily: 'Montserrat');
 
   static TextStyle headline2 = TextStyle(
-      fontSize: 20.0, color: Color(0xFF393939), fontWeight: FontWeight.w700);
+      fontSize: 20.0,
+      color: Color(0xFF393939),
+      fontWeight: FontWeight.w700,
+      fontFamily: 'Montserrat');
 
-  static TextStyle headline5 = TextStyle(
+  static TextStyle placeholderText = TextStyle(
       color: Colors.black,
       fontStyle: FontStyle.italic,
       fontSize: 15,
@@ -27,11 +30,11 @@ class CustomTextStyles {
   );
 
   static TextStyle dockingStationCardNameStyle = TextStyle(
-      fontSize: 17.0, color: Color(0xFF99D2A9), fontWeight: FontWeight.w700);
+      fontSize: 16.0, color: Color(0xFF99D2A9), fontWeight: FontWeight.w500);
 
   // Popups
   static TextStyle popupDialogTextStyle = TextStyle(
-      color: Color(0xffD3DAE0), fontWeight: FontWeight.w600, fontSize: 15.0);
+      color: Color(0xffD3DAE0), fontWeight: FontWeight.w600, fontSize: 18.0);
 
   static TextStyle popupDialogTitleTextStyle = TextStyle(
     fontWeight: FontWeight.bold,

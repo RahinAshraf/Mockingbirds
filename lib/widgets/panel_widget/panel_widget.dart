@@ -363,7 +363,7 @@ class PanelWidgetState extends State<PanelWidget> {
             child: ElevatedButton(
               onPressed:
                   widget.isScheduled ? _handleSaveClick : _handleStartClick,
-              child: widget.isScheduled ? text("SAVE") : text("START"),
+              child: widget.isScheduled ? Text("SAVE") : Text("START"),
             ),
           ),
         ),
