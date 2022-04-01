@@ -53,8 +53,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
 
   SummaryJourneyScreenState(
       this._itinerary, this.cameFromSchedule, this._databaseManager) {
-    _itineraryManager = new ItineraryManager(_itinerary);
-    paths = _itineraryManager.getPaths();
+    _itineraryManager = ItineraryManager(_itinerary);
   }
 
   @override
@@ -62,6 +61,11 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
     pointsInDoubles = convertDocksToDouble(widget.itinerary.docks!)!;
     _setData();
     super.initState();
+  }
+
+  Future<List<Path>> lmao() async {
+    paths = await _itineraryManager.getPaths();
+    return paths;
   }
 
   Future<String> _getGroup() async {
@@ -297,8 +301,27 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
                 style: Theme.of(context).textTheme.headline1),
           ),
           const SizedBox(height: 20),
-          Column(
-            children: _generateStops(),
+          Container(
+            child: FutureBuilder<List<Path>>(
+              future: lmao(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasData) {
+                    print('MARIJAA');
+                    _itineraryManager.printPaths();
+                    return Column(
+                      // children: [Text('data ${paths}')],
+                      children: _generateStops(),
+                    );
+                  } else {
+                    return Text(
+                        'Snapshot has error: ${snapshot.hasError}, and ${snapshot.data}.');
+                  }
+                } else {
+                  return CircularProgressIndicator();
+                }
+              },
+            ),
           ),
           const SizedBox(height: 20),
           Row(
