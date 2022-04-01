@@ -39,9 +39,9 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
   late Map<dynamic, dynamic> _routeResponse;
 
   //TODO: Marija attributes for distance, duration and dock name should be presented on the screen
-  num distance = 0;
-  num duration = 0;
-  String dockName = "";
+  ValueNotifier<num> distance = ValueNotifier(0);
+  ValueNotifier<num> duration = ValueNotifier(0);
+  ValueNotifier<String> dockName = ValueNotifier("");
 
   final userID = FirebaseAuth.instance.currentUser!.uid;
 
@@ -52,7 +52,7 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
   MapWithRouteUpdated(MapModel model, this.context, this._itinerary)
       : super(_itinerary, model) {
     _docks = _itinerary.docks!;
-    this.dockName = _itinerary.docks![_currentStation].name;
+    this.dockName.value = _itinerary.docks![_currentStation].name;
     this._journey = convertDocksToLatLng(_itinerary.docks!)!;
     this.numberCyclists = _itinerary.numberOfCyclists!;
   }
@@ -115,11 +115,11 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
 
   /// Initialize periodic timer to update the route displayed
   void updateRouteTimer() {
-    timer = Timer.periodic(Duration(seconds: 15), (Timer t) {
+    timer = Timer.periodic(Duration(seconds: 15), (Timer t) async {
       if (isAtGoal) {
         t.cancel();
       }
-      updateRoute();
+      await updateRoute();
     });
   }
 
@@ -157,7 +157,7 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
   }
 
   /// Update route
-  void updateRoute() {
+  Future updateRoute() async {
     print(
         "---------------_______________------------------updating route to navbar _________________--------");
     if (isAtGoal) {
@@ -166,28 +166,28 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
     }
     double distance =
         calculateDistance(currentPosition, _journey[_currentStation]);
-    if (distance < 0.01) {
+    if (distance < 0.02) {
       ++_currentStation;
       if (_currentStation >= _journey.length) {
         print("we got to the goal!!!");
         isAtGoal = true;
         return;
       }
-      this.dockName = _itinerary.docks![_currentStation].name;
+      this.dockName.value = _itinerary.docks![_currentStation].name;
     }
     removePolylineMarkers(controller!, _journey, _polylineSymbols);
     removeFills(controller, _polylineSymbols, fills);
-    _displayJourney();
+    await _displayJourney();
   }
 
   /// display route
-  void _displayJourney() {
-    setRoute();
+  Future _displayJourney() async {
+    await setRoute();
     setPolylineMarkers(controller!, _journey, _polylineSymbols);
   }
 
   /// set the route
-  void setRoute() async {
+  Future setRoute() async {
     _journeyPoints = [];
     await _setRouteType();
     manager.setDistance(_routeResponse['distance'].toDouble());
@@ -222,8 +222,8 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
     for (dynamic a in _routeResponse['geometry']!['coordinates']) {
       _journeyPoints.add(a);
     }
-    this.distance = distance;
-    this.duration = duration;
+    this.distance.value = distance;
+    this.duration.value = duration;
     _routeResponse['geometry'].update("coordinates", (value) => _journeyPoints);
   }
 
