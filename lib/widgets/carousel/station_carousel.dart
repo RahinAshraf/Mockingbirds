@@ -89,8 +89,9 @@ class DockingStationCarousel {
 
   /// Retrieves 10 filtered by distance cards closest to given [userCoordinates].
   Future<List<Widget>> _retrieve10FilteredByDistanceCards() async {
-    return _stationManager.importStations().then((value) => createDockingCards(
-        _stationManager.get10ClosestDocks(userCoordinates!)));
+    return _stationManager.importStationsByRadius(1000, userCoordinates!).then(
+        (value) => createDockingCards(
+            _stationManager.get10ClosestDocks(userCoordinates!)));
   }
 
   /// Retrieves 10 (or less) favourited cards closest to given [userCoordinates].

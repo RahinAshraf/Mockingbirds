@@ -13,11 +13,11 @@ class ItineraryManager {
   final RouteManager _manager = RouteManager();
 
   ItineraryManager(this._itinerary) {
-    _setJourney();
+    // _setJourney();
   }
 
   /// Sets the [journey] and paths
-  void _setJourney() async {
+  Future<List<Path>> setJourney() async {
     if (_itinerary.docks!.length > 1) {
       print(_itinerary.docks!.length);
       //WALKING:
@@ -54,6 +54,7 @@ class ItineraryManager {
             directions["duration"].toDouble()));
       }
     }
+    return _wholeTrip;
     //uncomment if you want to test it!
     // printPaths();
   }

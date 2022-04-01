@@ -64,7 +64,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
   }
 
   Future<List<Path>> lmao() async {
-    paths = await _itineraryManager.getPaths();
+    paths = await _itineraryManager.setJourney();
     return paths;
   }
 
@@ -412,11 +412,6 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
     }
     return stops;
   }
-
-  // void _generateStopsFuture() async {
-  //   _itineraryManager = await ItineraryManager(_itinerary);
-  //   paths = _itineraryManager.getPaths();
-  // }
 }
 
 class TimelineItem extends StatelessWidget {
