@@ -47,30 +47,18 @@ class BaseMapboxStationMap extends BaseMapboxMap {
     if (selectedSymbol != null) {
       Map<dynamic, dynamic>? stationData = symbol.data;
       DockingStation station = stationData!["station"];
-
       _curentDock = LatLng(station.lat, station.lon);
-      print("SELECTED SYMBOL IS..............: ");
-      print(station.name.toString());
-
       if (station != chosenDock) {
         super.resetCameraPosition(
             _curentDock, cameraPosition.zoom); //refocus on selected dock.
-
-        // REMOVE ALL MARKERS:
         removeMarkers(controller!, filteredDockSymbols);
-        // filteredDockSymbols.clear(); //clear set ??
         // assign index 1 as red:
         dockingStations.remove(station);
         dockingStations.insert(0, station);
-
-        displayFeaturesAndRefocus(
-            dockingStations, dockingStations[0]); //1st = red, rest = yellow
-
+        // redisplay marker symbols:
+        displayFeaturesAndRefocus(dockingStations, dockingStations[0]);
         chosenDock = station;
-        print("should be same as ^^ :" + chosenDock.name.toString());
       }
-
-      print(filteredDockSymbols.length);
     }
   }
 
@@ -84,13 +72,10 @@ class BaseMapboxStationMap extends BaseMapboxMap {
   void displayFeaturesAndRefocus(
       List<DockingStation> stations, DockingStation focus) {
     stations.remove(focus); //remove index 0 - will be red
-    print("After removing symbol clicked on :   " + stations.length.toString());
-    setRedMarkers(
-        controller!, [focus], filteredDockSymbols); //add red and remove
+    setRedMarkers(controller!, [focus], filteredDockSymbols); //add red
     setYellowMarkers(
         controller!, stations, filteredDockSymbols); //add rest as yellow
     stations.insert(0, focus); //put red back into first index
-    print("put red back in :   " + stations.length.toString());
   }
 
   /// Refocus camera positioning to focus on the [journey] polyline
