@@ -284,17 +284,21 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
                         }
                       })),
           if (!isInGroup)
-            if (_itinerary.date?.day == DateTime.now().day)
-              Container(
-                  height: 30,
-                  padding: const EdgeInsets.fromLTRB(75, 5, 75, 5),
-                  child: ElevatedButton(
-                    child: const Text('Share journey',
-                        style: TextStyle(color: Colors.white)),
-                    onPressed: () {
-                      createGroup();
-                    },
-                  )),
+            if (_itinerary.date?.day == DateTime.now().day &&
+                _itinerary.date?.month == DateTime.now().month &&
+                _itinerary.date?.year == DateTime.now().year)
+              if (!cameFromSchedule)
+                Container(
+                    height: 100,
+                    padding: const EdgeInsets.fromLTRB(75, 5, 75, 5),
+                    child: ElevatedButton(
+                      child: const Text('Share journey'),
+                      onPressed: () {
+                        createGroup();
+                      },
+                    )),
+          if (cameFromSchedule)
+            Center(child: Text('You can\'t share prescheduled trips.')),
           Padding(
             padding: EdgeInsets.only(left: 15.0, top: 15.0),
             child: Text('Planned Stops',
@@ -327,7 +331,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (isInGroup)
+              if (isInGroup && !cameFromSchedule)
                 ElevatedButton(
                   child: const Text('LEAVE GROUP'),
                   onPressed: () {
@@ -335,8 +339,9 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
                   },
                 ),
               SizedBox(width: 10.0),
-              if (_itinerary.date?.day == DateTime.now().day ||
-                  _itinerary.date?.day == null)
+              if (_itinerary.date?.day == DateTime.now().day &&
+                  _itinerary.date?.month == DateTime.now().month &&
+                  _itinerary.date?.year == DateTime.now().year)
                 ElevatedButton(
                   child: const Text('START JOURNEY'),
                   onPressed: () {
@@ -443,31 +448,39 @@ class TimelineItem extends StatelessWidget {
         color: Color(0xFF99D2A9),
       ),
       alignment: TimelineAlign.start,
-      endChild: Row(
+      endChild: Column(
         children: [
-          Card(
-            elevation: 1,
-            // margin: const EdgeInsets.fromLTRB(10.0, 15.0, 20.0, 15.0),
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(15.0),
-              bottomRight: Radius.circular(15.0),
-              topRight: Radius.circular(15.0),
-            )),
-            child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Expanded(
-                child: Text(
-                  content,
-                  style: TextStyle(
-                    fontSize: 15.0,
-                    color: Color(0xFF99D2A9),
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+          Text(
+            content,
+            style: TextStyle(
+              fontSize: 15.0,
+              color: Color(0xFF99D2A9),
+              fontWeight: FontWeight.bold,
             ),
           ),
+          // Card(
+          //   elevation: 1,
+          //   // margin: const EdgeInsets.fromLTRB(10.0, 15.0, 20.0, 15.0),
+          //   shape: const RoundedRectangleBorder(
+          //       borderRadius: BorderRadius.only(
+          //     bottomLeft: Radius.circular(15.0),
+          //     bottomRight: Radius.circular(15.0),
+          //     topRight: Radius.circular(15.0),
+          //   )),
+          //   child: Padding(
+          //     padding: const EdgeInsets.all(15.0),
+          //     child: Expanded(
+          //       child: Text(
+          //         content,
+          //         style: TextStyle(
+          //           fontSize: 15.0,
+          //           color: Color(0xFF99D2A9),
+          //           fontWeight: FontWeight.bold,
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          // ),
           Text('Dur: ${duration}'),
           Text('Dis: ${distance}'),
         ],
