@@ -156,6 +156,22 @@ class MockDatabaseManager extends _i1.Mock implements _i4.DatabaseManager {
           returnValue: Future<void>.value(),
           returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
   @override
+  _i5.Future<_i2.QuerySnapshot<Map<String, dynamic>>>
+      getDocumentsFromSubCollection(
+              _i2.CollectionReference<Object?>? collection,
+              dynamic documentId,
+              String? subcollection) =>
+          (super.noSuchMethod(
+                  Invocation.method(#getDocumentsFromSubCollection, [
+                    collection,
+                    documentId,
+                    subcollection
+                  ]),
+                  returnValue:
+                      Future<_i2.QuerySnapshot<Map<String, dynamic>>>.value(
+                          _FakeQuerySnapshot_1<Map<String, dynamic>>()))
+              as _i5.Future<_i2.QuerySnapshot<Map<String, dynamic>>>);
+  @override
   _i5.Future<void> signOut() =>
       (super.noSuchMethod(Invocation.method(#signOut, []),
           returnValue: Future<void>.value(),

@@ -56,10 +56,16 @@ class HistoryHelper {
       journeyDocumentId) async {
     List<DockingStation> stationsInJourney = [];
 
-    var list = await _journeys
-        .doc(journeyDocumentId)
-        .collection('docking_stations')
-        .get();
+    // var list = await _journeys
+    //     .doc(journeyDocumentId)
+    //     .collection('docking_stations')
+    //     .get();
+
+    var list = await _databaseManager.getDocumentsFromSubCollection(
+      _journeys,
+      journeyDocumentId,
+      'docking_stations',
+    );
 
     for (DocumentSnapshot doc in list.docs) {
       var dock = await dockingStationManager()

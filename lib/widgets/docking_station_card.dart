@@ -5,7 +5,6 @@ import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 
-
 ///Creates a card for a docking station, to include its name, number of bikes and empty bikes.
 ///Author: Tayyibah Uddin
 ///Contributor: Fariha Choudhury, Nicole Lehchevska, Hristina-Andreea Sararu k20036771
@@ -25,7 +24,6 @@ class DockingStationCard extends StatefulWidget {
 }
 
 class _DockingStationCardState extends State<DockingStationCard> {
-  DatabaseManager _databaseManager = DatabaseManager();
   final _helper = FavouriteHelper(DatabaseManager()); //change name
   List<DockingStation> _favourites = [];
   bool _isFavouriteButtonEnabled = true;
@@ -34,7 +32,7 @@ class _DockingStationCardState extends State<DockingStationCard> {
 
   @override
   void initState() {
-    FavouriteHelper.getUserFavourites().then((data) {
+    _helper.getUserFavourites().then((data) {
       if (mounted)
         setState(() {
           _favourites = data;
@@ -152,7 +150,7 @@ class _DockingStationCardState extends State<DockingStationCard> {
           );
 
           List<DockingStation> updatedFavourites =
-              await FavouriteHelper.getUserFavourites();
+              await _helper.getUserFavourites();
           setState(() {
             _favourites = updatedFavourites;
             _isFavourited = !_isFavourited;

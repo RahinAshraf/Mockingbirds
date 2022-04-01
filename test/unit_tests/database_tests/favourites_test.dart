@@ -12,7 +12,8 @@ import 'favourites_test.mocks.dart';
   DatabaseManager,
   User,
   CollectionReference<Object?>,
-  QuerySnapshot<Object?>
+  QuerySnapshot<Object?>,
+  QueryDocumentSnapshot<Object?>
 ])
 main() {
   var mockDBManager = MockDatabaseManager();
@@ -44,11 +45,16 @@ main() {
     when(mockDBManager.getCurrentUser()).thenReturn(user);
   });
 
-  // test('Get user favourites', () async {
-  //   when(mockDBManager.getUserSubcollection("favourites"))
-  //       .thenAnswer((_) async => favouriteDocs);
+  test('Get user favourites', () async {
+    // when(mockDBManager.getUserSubcollection("favourites"))
+    //     .thenAnswer((_) async => favouriteDocs);
+    //var list = MockQueryDocumentSnapshot<Object?>();
 
-  // });
+    //when(favouriteDocs.docs).thenReturn();
+
+    // helper.addFavourite(stationId, name);
+    // helper.getUserFavourites();
+  });
 
   test('Add to favourites', () {
     helper.addFavourite(stationId, name);

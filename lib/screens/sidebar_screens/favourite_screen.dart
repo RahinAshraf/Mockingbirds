@@ -14,13 +14,14 @@ class Favourite extends StatefulWidget {
 
 class _FavouriteState extends State<Favourite> {
   List<DockingStation> favourites = [];
-  var helper = FavouriteHelper(DatabaseManager());
+  var _helper = FavouriteHelper(DatabaseManager());
 
   @override
   void initState() {
-    FavouriteHelper.getUserFavourites().then((data) {
+    _helper.getUserFavourites().then((data) {
       setState(() {
         favourites = data;
+        print("lengthoflist" + favourites.length.toString());
       });
     });
     super.initState();

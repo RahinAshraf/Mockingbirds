@@ -84,7 +84,7 @@ class DatabaseManager {
   }
 
   Future<void> addSubCollectiontoSubCollectionByDocumentId(
-       documentId,
+      documentId,
       String newSubollection,
       CollectionReference<Object?> subcollection,
       Map<String, dynamic> value) {
@@ -94,6 +94,13 @@ class DatabaseManager {
   Future<void> setSubCollectionByDocumentId(String documentId,
       CollectionReference<Object?> subcollection, Map<String, dynamic> value) {
     return subcollection.doc(documentId).set(value);
+  }
+
+  Future<QuerySnapshot<Map<String, dynamic>>> getDocumentsFromSubCollection(
+      CollectionReference<Object?> collection,
+      documentId,
+      String subcollection) async {
+    return await collection.doc(documentId).collection(subcollection).get();
   }
 
   Future<void> signOut() async {

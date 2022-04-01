@@ -36,7 +36,7 @@ class FavouriteHelper {
   }
 
   ///Gets a list of a users favourited docking station
-  static Future<List<DockingStation>> getUserFavourites() async {
+  Future<List<DockingStation>> getUserFavourites() async {
     List<DockingStation> favourites = [];
     var docs = await DatabaseManager().getUserSubcollection('favourites');
     for (DocumentSnapshot doc in docs.docs) {
