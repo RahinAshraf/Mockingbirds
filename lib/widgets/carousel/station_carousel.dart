@@ -12,27 +12,10 @@ import 'package:veloplan/widgets/docking_station_card.dart';
 class DockingStationCarousel {
   DockingStationCarousel([this.userCoordinates]);
 
+  final dockingStationManager _stationManager = dockingStationManager();
   late List<Widget> dockingStationCards = [];
   List<Map> carouselData = [];
   LatLng? userCoordinates;
-
-  final dockingStationManager _stationManager = dockingStationManager();
-
-  /// Retrieves 10 filtered by distance cards closest to given [userCoordinates].
-  Future<List<Widget>> retrieve10FilteredByDistanceCards() async {
-    var cards = _stationManager.importStations().then((value) =>
-        createDockingCards(
-            _stationManager.get10ClosestDocks(userCoordinates!)));
-    return cards;
-  }
-
-  /// Retrieves 10 (or less) favourited cards closest to given [userCoordinates].
-  Future<List<Widget>> retrieve10FilteredFavouritesCards() async {
-    List<DockingStation> favourites = [];
-    favourites = await FavouriteHelper.getUserFavourites();
-    return createDockingCards(
-        _stationManager.get10ClosestDocksFav(userCoordinates!, favourites));
-  }
 
   /// Generates [dockingStationCards] from the data in [docks].
   List<Widget> createDockingCards(List<DockingStation> docks) {
@@ -48,24 +31,15 @@ class DockingStationCarousel {
     return dockingStationCards;
   }
 
-  /// Based on [filter], selects what cards should be fetched.
-  Future<List<Widget>> selectFiltering(String filter) {
-    if (filter == "Distance") {
-      return retrieve10FilteredByDistanceCards();
-    } else {
-      return retrieve10FilteredFavouritesCards();
-    }
-  }
-
   /// Builds a carousel out of given [cards].
   Widget buildCarousel(List<Widget> cards) {
     return CustomCarousel(cards: cards);
   }
 
-  /// Builds filtered carousel consisting of cards filtered by [selectedFilter].
-  FutureBuilder<List<Widget>> buildFilteredCarousel(String selectedFilter) {
+  /// Builds filtered carousel consisting of cards filtered by [filter].
+  FutureBuilder<List<Widget>> buildFilteredCarousel(String filter) {
     return FutureBuilder(
-        future: selectFiltering(selectedFilter),
+        future: _selectFiltering(filter),
         builder: (context, snapshot) {
           var height = MediaQuery.of(context).size.height * 0.23;
           if (snapshot.connectionState == ConnectionState.done) {
@@ -102,5 +76,27 @@ class DockingStationCarousel {
             );
           }
         });
+  }
+
+  /// Based on [filter], selects what cards should be fetched.
+  Future<List<Widget>> _selectFiltering(String filter) {
+    if (filter == "Distance") {
+      return _retrieve10FilteredByDistanceCards();
+    } else {
+      return _retrieve10FilteredFavouritesCards();
+    }
+  }
+
+  /// Retrieves 10 filtered by distance cards closest to given [userCoordinates].
+  Future<List<Widget>> _retrieve10FilteredByDistanceCards() async {
+    return _stationManager.importStations().then((value) => createDockingCards(
+        _stationManager.get10ClosestDocks(userCoordinates!)));
+  }
+
+  /// Retrieves 10 (or less) favourited cards closest to given [userCoordinates].
+  Future<List<Widget>> _retrieve10FilteredFavouritesCards() async {
+    return await FavouriteHelper.getUserFavourites().then((value) =>
+        createDockingCards(
+            _stationManager.get10ClosestDocksFav(userCoordinates!, value)));
   }
 }
