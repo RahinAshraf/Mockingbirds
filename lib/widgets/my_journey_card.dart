@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:veloplan/models/itinerary.dart';
+import 'package:veloplan/styles/colors.dart';
 import 'package:veloplan/widgets/carousel/station_carousel.dart';
 
 /// Creates a card for a started journey, to include its start time and planned docking stations
@@ -23,9 +24,8 @@ class _MyJourneyCardState extends State<MyJourneyCard> {
   Widget build(BuildContext context) {
     return Card(
       elevation: 1.0,
-      shadowColor: Colors.green[200],
+      shadowColor: CustomColors.green,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-      clipBehavior: Clip.antiAlias,
       child: Column(
         children: [
           Text(
@@ -34,7 +34,9 @@ class _MyJourneyCardState extends State<MyJourneyCard> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          widget.stationCarousel.buildCarousel(widget.stationCards),
+          Container(
+              height: MediaQuery.of(context).size.height * 0.23,
+              child: widget.stationCarousel.buildCarousel(widget.stationCards)),
         ],
       ),
     );

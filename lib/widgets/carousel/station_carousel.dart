@@ -32,7 +32,7 @@ class DockingStationCarousel {
   }
 
   /// Builds a carousel out of given [cards].
-  Widget buildCarousel(List<Widget> cards) {
+  Widget buildCarousel(cards) {
     return CustomCarousel(cards: cards);
   }
 
