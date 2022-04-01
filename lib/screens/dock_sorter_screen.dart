@@ -11,7 +11,8 @@ import '../widgets/docking_stations_sorting_widget.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 /// The edit dock screen which is useful for selecting docking stations and favouriting docking station cards
-/// Author(s): Nicole, Fariha Choudhury k20059723,  Marija,
+/// Author(s): Nicole, Fariha Choudhury
+/// Contributor: Marija
 
 /// Edit dock screen displaying map with [DockSorter] panel.
 class DockSorterScreen extends StatefulWidget {
@@ -70,26 +71,16 @@ class _DockSorterScreen extends State<DockSorterScreen> {
       maxHeight: panelHeightOpen,
       borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
       controller: panelController,
-      body: SafeArea(
-        child: Stack(
-          children: [
-            SizedBox(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
-                child: ScopedModelDescendant<MapModel>(builder:
-                    (BuildContext context, Widget? child, MapModel model) {
-                  _baseMapWithStation = BaseMapboxStationMap(
-                    _docks,
-                    userCoordinates,
-                    model,
-                  );
-                  addBackButton();
-                  return SafeArea(
-                      child: Stack(children: _baseMapWithStation.getWidgets()));
-                })),
-          ],
-        ),
-      ),
+      body: ScopedModelDescendant<MapModel>(
+          builder: (BuildContext context, Widget? child, MapModel model) {
+        _baseMapWithStation = BaseMapboxStationMap(
+          _docks,
+          userCoordinates,
+          model,
+        );
+        addBackButton();
+        return Stack(children: _baseMapWithStation.getWidgets());
+      }),
       panelBuilder: (controller) => DockSorter(
         userCoordinates,
         controller: controller,
@@ -113,13 +104,13 @@ class _DockSorterScreen extends State<DockSorterScreen> {
         .add(_baseMapWithStation.onSymbolTapped);
   }
 
+  ///Redirects user back to the Journey Planner with [chosenDock].
   void addBackButton() {
     _baseMapWithStation.addWidget(Container(
       padding: EdgeInsets.all(50),
       child: TextButton(
         onPressed: () {
           try {
-            //Navigator.pop(context, widget.selectedDockStation); //put what you want to send back to jp here instead of " widget.selectedDockStation"
             Navigator.pop(context, _baseMapWithStation.chosenDock);
           } catch (e) {
             alert.showSnackBarErrorMessage(

@@ -18,7 +18,6 @@ import 'package:veloplan/styles/styling.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
 import 'package:veloplan/widgets/dynamic_widget.dart';
 import 'package:veloplan/widgets/panel_widget/panel_widgets_base.dart';
-// import '../../helpers/navigation_helpers/navigation_conversion_helpers.dart';
 import '../../providers/location_service.dart';
 import '../../helpers/navigation_helpers/navigation_conversions_helpers.dart';
 import '../../models/docking_station.dart';
@@ -32,8 +31,8 @@ import 'package:veloplan/widgets/panel_widget/panel_widget_exts.dart';
 ///
 /// It is an interactive panel the user can slide up or down,
 /// when wanting to input their desired locations for the journey.
-/// @author: Rahin Ashraf - k20034059
-///Contributor: Nicole
+/// Author(s) : Rahin
+/// Contributor: Nicole, Eduard
 class PanelWidget extends PanelWidgetBase {
   late Map<int, DockingStation> dockList;
   PanelWidget(
@@ -594,7 +593,7 @@ class PanelWidgetState extends State<PanelWidget> {
   ///the user selects to visit.
   bool areAdjacentCoords(List<List<double?>?> myList) {
     if (myList.isEmpty) {
-      return true;
+      return false;
     }
     for (int i = 0; i < myList.length - 1; i++) {
       if (myList[i]?.first == myList[i + 1]?.first &&
