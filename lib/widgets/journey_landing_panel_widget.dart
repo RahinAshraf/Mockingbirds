@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:veloplan/models/map_models/base_map_with_route_updated_model.dart';
 import 'package:veloplan/styles/styling.dart';
 
 class JourneyLandingPanelWidget extends StatefulWidget {
-  // late final num duration;
-  // late final num distance;
-  // late final String dockName;
+  MapWithRouteUpdated baseMapWithUpdatedRoute;
 
-  // JourneyLandingPanelWidget(
-  //     {//required this.duration, required this.distance, required this.dockName
-  //     });
+  JourneyLandingPanelWidget(this.baseMapWithUpdatedRoute, {Key? key})
+      : super(key: key);
 
   @override
   _JourneyLandingPanelWidget createState() => _JourneyLandingPanelWidget();
@@ -16,34 +14,30 @@ class JourneyLandingPanelWidget extends StatefulWidget {
 
 class _JourneyLandingPanelWidget extends State<JourneyLandingPanelWidget> {
   @override
-  Widget build(BuildContext context) => Padding(
-      padding: const EdgeInsets.all(26),
-      child:
-          Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        Column(
-          children: [
-            Text('Journey', style: infoTextStyle),
-            const Divider(
-              color: Color(0xFF99D2A9),
-              thickness: 5,
-            ),
-            Row(children: [
-              Text("Next stop: ", style: JourneyLandingTextStyle),
-              SizedBox(
-                width: 50,
-              ),
-              Text("Time:", style: JourneyLandingTextStyle)
-            ]),
-            Row(children: [
-              Text("Stop 1", style: JourneyLandingTextStyle),
-              SizedBox(
-                width: 50,
-              ),
-              Text("Distance:", style: JourneyLandingTextStyle)
-            ]),
-          ],
-        )
-      ]));
+  Widget build(BuildContext context) => Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Text('Journey', style: infoTextStyle),
+          ValueListenableBuilder(
+              valueListenable: widget.baseMapWithUpdatedRoute.dockName,
+              builder: (BuildContext context, String dockName, Widget? child) {
+                return Text("Next stop: ${dockName}",
+                    style: tripSchedulerTextStyle);
+              }),
+          ValueListenableBuilder(
+              valueListenable: widget.baseMapWithUpdatedRoute.duration,
+              builder: (BuildContext context, num time, Widget? child) {
+                String t = (time.toDouble()/60.0).toStringAsFixed(0);
+                return Text("Time: ${t} minutes", style: tripSchedulerTextStyle);
+              }),
+          ValueListenableBuilder(
+              valueListenable: widget.baseMapWithUpdatedRoute.distance,
+              builder: (BuildContext context, num distance, Widget? child) {
+                return Text("Distance: ${distance}m",
+                    style: tripSchedulerTextStyle);
+              }),
+        ],
+      );
 }
 
 

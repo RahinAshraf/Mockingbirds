@@ -40,32 +40,28 @@ class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
   Widget build(BuildContext context) {
     final panelHeightClosed = MediaQuery.of(context).size.height * 0.1;
     final panelHeightOpen = MediaQuery.of(context).size.height * 0.4;
-    return Scaffold(
-        body: SlidingUpPanel(
-      padding: const EdgeInsets.fromLTRB(16.0, 4.0, 16.0, 4.0),
-      minHeight: panelHeightClosed,
-      maxHeight: panelHeightOpen,
-      borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-      controller: panelController,
-      body: ScopedModelDescendant<MapModel>(
-          builder: (BuildContext context, Widget? child, MapModel model) {
-        _baseMapWithUpdatedRoute = MapWithRouteUpdated(
-          model,
-          context,
-          _itinerary,
-        );
-        addPositionZoom();
-        addStopTurnByTurn(context);
-        return Stack(children: _baseMapWithUpdatedRoute.getWidgets());
-
-        ///* listen to isAtGoal if is at goal redirect
-      }),
-      panelBuilder: (panelController) => JourneyLandingPanelWidget(
-          // distance: _baseMapWithUpdatedRoute.distance,
-          // duration: _baseMapWithUpdatedRoute.duration,
-          // dockName: _baseMapWithUpdatedRoute.dockName,
-          ),
-    ));
+    return Scaffold(body: ScopedModelDescendant<MapModel>(
+        builder: (BuildContext context, Widget? child, MapModel model) {
+      _baseMapWithUpdatedRoute = MapWithRouteUpdated(
+        model,
+        context,
+        _itinerary,
+      );
+      addPositionZoom();
+      addStopTurnByTurn(context);
+      return SlidingUpPanel(
+        padding: const EdgeInsets.fromLTRB(16.0, 4.0, 16.0, 4.0),
+        minHeight: panelHeightClosed,
+        maxHeight: panelHeightOpen,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        controller: panelController,
+        body: Stack(children: _baseMapWithUpdatedRoute.getWidgets()),
+        panelBuilder: (panelController) => JourneyLandingPanelWidget(
+          _baseMapWithUpdatedRoute,
+        ),
+      );
+      ///* listen to isAtGoal if is at goal redirect
+    }));
   }
 
   /// Add positional zoom to our widgets.
