@@ -26,10 +26,7 @@ class _MyJourneyCardState extends State<MyJourneyCard> {
   Widget build(BuildContext context) {
     DateTime date = widget.journey.date!;
     _addDateCard(date);
-    return Container(
-        padding: EdgeInsets.symmetric(vertical: 5.0),
-        height: MediaQuery.of(context).size.height * 0.23,
-        child: widget.stationCarousel.buildCarousel(widget.stationCards));
+    return widget.stationCarousel.buildCarousel(widget.stationCards);
   }
 
   /// Generates and adds card with a [date] to the carousel.

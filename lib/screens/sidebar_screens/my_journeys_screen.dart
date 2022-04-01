@@ -36,7 +36,10 @@ class _MyJourneysState extends State<MyJourneys> {
               child: ListView.builder(
                 itemCount: journeyList.length,
                 itemBuilder: (context, index) {
-                  return MyJourneyCard(journeyList[index]);
+                  return Container(
+                      padding: EdgeInsets.symmetric(vertical: 5.0),
+                      height: MediaQuery.of(context).size.height * 0.23,
+                      child: MyJourneyCard(journeyList[index]));
                 },
               ),
             ),
