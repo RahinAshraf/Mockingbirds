@@ -15,6 +15,7 @@ import 'package:veloplan/models/itinerary_manager.dart';
 import 'package:veloplan/models/path.dart';
 import '../helpers/navigation_helpers/navigation_conversions_helpers.dart';
 import '../models/itinerary.dart';
+import '../styles/colors.dart';
 import 'navigation/map_with_route_screen.dart';
 import 'dart:async';
 import 'package:mapbox_gl/mapbox_gl.dart';
@@ -238,115 +239,96 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Summary of Journey'),
-          leading: IconButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            icon: const Icon(
-              Icons.arrow_back_rounded,
-              size: 30,
-              color: Colors.white,
+      body: ListView(
+        children: [
+          const SizedBox(height: 30),
+          Center(
+              child: Image.asset('assets/images/summary_journey.png',
+                  height: 140.0)),
+          _buildOrganiser(),
+          if (isInGroup)
+            if (!cameFromSchedule)
+              Container(
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.all(10),
+                  color: Theme.of(context).primaryColor,
+                  child: FutureBuilder<String>(
+                      future: _getGroup(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return GestureDetector(
+                            child: SelectableText(
+                              "Tap here to copy the code: " + groupID,
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 13),
+                            ),
+                            onTap: () {
+                              Clipboard.setData(
+                                ClipboardData(text: groupID),
+                              );
+                            },
+                          );
+                        } else {
+                          return SizedBox(
+                            height: MediaQuery.of(context).size.height / 1.3,
+                            child: const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          );
+                        }
+                      })),
+          if (!isInGroup)
+            if (_itinerary.date?.day == DateTime.now().day)
+              Container(
+                  height: 30,
+                  padding: const EdgeInsets.fromLTRB(75, 5, 75, 5),
+                  child: ElevatedButton(
+                    child: const Text('Share journey',
+                        style: TextStyle(color: Colors.white)),
+                    onPressed: () {
+                      createGroup();
+                    },
+                  )),
+          Padding(
+            padding: EdgeInsets.only(left: 15.0, top: 15.0),
+            child: Text('Planned Stops',
+                style: Theme.of(context).textTheme.headline1),
+          ),
+          const SizedBox(height: 20),
+          Column(
+            children: _generateStops(),
+          ),
+          const SizedBox(height: 20),
+          if (isInGroup)
+            ElevatedButton(
+              child: const Text('LEAVE GROUP'),
+              onPressed: () {
+                _leaveGroup();
+              },
             ),
-          ),
-        ),
-        body: SafeArea(
-          child: ListView(
-            children: [
-              const SizedBox(height: 30),
-              SizedBox(
-                  height: 120.0,
-                  width: 120.0,
-                  child: Center(
-                      child: Image.asset('assets/images/summary_journey.png'))),
-              _buildOrganiser(),
-              if (isInGroup)
-                if (!cameFromSchedule)
-                  Container(
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.all(10),
-                      color: Theme.of(context).primaryColor,
-                      child: FutureBuilder<String>(
-                          future: _getGroup(),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return GestureDetector(
-                                child: SelectableText(
-                                  "Tap here to copy the code: " + groupID,
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 13),
-                                ),
-                                onTap: () {
-                                  Clipboard.setData(
-                                    ClipboardData(text: groupID),
-                                  );
-                                },
-                              );
-                            } else {
-                              return SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height / 1.3,
-                                child: const Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                              );
-                            }
-                          })),
-              if (!isInGroup)
-                if (_itinerary.date?.day == DateTime.now().day)
-                  Container(
-                      height: 30,
-                      padding: const EdgeInsets.fromLTRB(75, 5, 75, 5),
-                      child: ElevatedButton(
-                        child: const Text('Share journey',
-                            style: TextStyle(color: Colors.white)),
-                        onPressed: () {
-                          createGroup();
-                        },
-                      )),
-              const SizedBox(height: 20),
-              Padding(
-                padding: EdgeInsets.only(left: 15.0),
-                child: Text('Planned Stops',
-                    style: Theme.of(context).textTheme.headline1),
-              ),
-              const SizedBox(height: 20),
-              Column(
-                children: _generateStops(),
-              ),
-              const SizedBox(height: 20),
-              if (isInGroup)
-                ElevatedButton(
-                  child: const Text('LEAVE GROUP'),
-                  onPressed: () {
-                    _leaveGroup();
-                  },
-                ),
-              if (_itinerary.date?.day == DateTime.now().day ||
-                  _itinerary.date?.day == null)
-                Container(
-                    padding: const EdgeInsets.fromLTRB(70, 5, 70, 5),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          elevation: 10.0, shape: const StadiumBorder()),
-                      child: const Text('START JOURNEY',
-                          style: TextStyle(color: Colors.white)),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => MapRoutePage(_itinerary)),
-                        );
-                      },
-                    )),
-            ],
-          ),
-        ));
+          if (_itinerary.date?.day == DateTime.now().day ||
+              _itinerary.date?.day == null)
+            ElevatedButton(
+              child: const Text('START JOURNEY'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MapRoutePage(_itinerary)),
+                );
+              },
+            ),
+        ],
+      ),
+      appBar: AppBar(
+        title: const Text('Summary of Journey'),
+      ),
+    );
   }
 
+  /// Creates the container for organiser.
   Widget _buildOrganiser() {
     return Padding(
       padding: EdgeInsets.all(15),
@@ -384,40 +366,43 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
     );
   }
 
-  /// generate the distances and durations between the paths, generate station cards
+  /// Generates station cards for the stops.
   List<Widget> _generateStops() {
-    List<Widget> smth = [];
+    List<Widget> stops = [];
 
     for (int i = 0; i < _itinerary.docks!.length; i++) {
-      smth.add(StationTempWidget(
-        content: _itinerary.docks![i].name,
-        // time: paths[i].duration,
-        //TODO: Marija -> you can add the distance and duration here or in a seperate widget, whichever is easier for u :)
-        time: 0.0,
-      ));
+      stops.add(
+        TimelineItem(
+          first: i == 0 ? true : false,
+          last: i == _itinerary.docks!.length - 1 ? true : false,
+          content: _itinerary.docks![i].name,
+          duration: paths[i].duration,
+          distance: paths[i].distance,
+        ),
+      );
     }
-    return smth;
+    return stops;
   }
 
-//TODO: Marija display duration and distance -> paths[i].distance, paths[i].duration, do them as you prefer, thats really important
-//also i have a commented out future builder, for me it did not work, hopefully it does for u
-  _generateStopsFuture() async {
-    _itineraryManager = await new ItineraryManager(_itinerary);
-    paths = _itineraryManager.getPaths();
-  }
+//   _generateStopsFuture() async {
+//     _itineraryManager = await new ItineraryManager(_itinerary);
+//     paths = _itineraryManager.getPaths();
+//   }
 }
 
-class StationTempWidget extends StatelessWidget {
-  const StationTempWidget(
+class TimelineItem extends StatelessWidget {
+  const TimelineItem(
       {this.first = false,
       this.last = false,
       required this.content,
-      required this.time});
+      required this.duration,
+      required this.distance});
 
   final bool first;
   final bool last;
   final String content;
-  final double time;
+  final double distance;
+  final double duration;
 
   @override
   Widget build(BuildContext context) {
@@ -434,34 +419,34 @@ class StationTempWidget extends StatelessWidget {
         color: Color(0xFF99D2A9),
       ),
       alignment: TimelineAlign.start,
-      endChild: Card(
-        elevation: 1,
-        margin: const EdgeInsets.fromLTRB(10.0, 15.0, 20.0, 15.0),
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(15.0),
-          bottomRight: Radius.circular(15.0),
-          topRight: Radius.circular(15.0),
-        )),
-        child: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                content,
-                style: TextStyle(
-                  fontSize: 15.0,
-                  color: Color(0xFF99D2A9),
-                  fontWeight: FontWeight.bold,
+      endChild: Row(
+        children: [
+          Card(
+            elevation: 1,
+            // margin: const EdgeInsets.fromLTRB(10.0, 15.0, 20.0, 15.0),
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(15.0),
+              bottomRight: Radius.circular(15.0),
+              topRight: Radius.circular(15.0),
+            )),
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Expanded(
+                child: Text(
+                  content,
+                  style: TextStyle(
+                    fontSize: 15.0,
+                    color: Color(0xFF99D2A9),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-              Text(
-                '${time}',
-              )
-            ],
+            ),
           ),
-        ),
+          Text('Dur: ${duration}'),
+          Text('Dis: ${distance}'),
+        ],
       ),
     );
   }
