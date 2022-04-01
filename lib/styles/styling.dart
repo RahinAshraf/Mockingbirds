@@ -88,3 +88,6 @@ const TextStyle weatherTextStyle = TextStyle(
     color: (Color(0xFF99D2A9)),
     fontWeight: FontWeight.w700,
     fontStyle: FontStyle.italic);
+
+// Styling for forgot password screen
+const TextStyle forgotPasswordTextStyle = TextStyle(fontSize: 20);

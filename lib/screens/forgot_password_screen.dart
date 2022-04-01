@@ -1,6 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:veloplan/styles/styling.dart';
+
+// Contains forgot password feature.
+// Author: Eduard, Hristina
 
 class ForgotPasswordScreen extends StatelessWidget {
   TextEditingController emailController = new TextEditingController();
@@ -51,7 +55,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                   children: [
                     const Text(
                       'Please enter your email address to  request a password reset:',
-                      style: TextStyle(fontSize: 20),
+                      style: forgotPasswordTextStyle,
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 25),
