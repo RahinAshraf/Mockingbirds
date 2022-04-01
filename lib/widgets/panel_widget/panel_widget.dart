@@ -440,6 +440,10 @@ class PanelWidgetState extends State<PanelWidget> {
     List<DockingStation> closestDockList = dockList.values.toList();
     print("ALREADY EXISTS ==> $closestDockList");
 
+    if(applyConstraints(widget.fromTextEditController, widget.toTextEditController)){
+      return;
+    }
+
     final hasEmptyField = widget.listDynamic
         .any((element) => element.placeTextController.text.isEmpty);
 
@@ -475,34 +479,22 @@ class PanelWidgetState extends State<PanelWidget> {
   /// closest docking stations for the locations the user specified. This new list is then passed onto [MapRoutePage].
   /// THIS FUNCTION NEEDS TO BE REFACTORED FURTHER
   Future<void> _handleStartClick() async {
-    List<DockingStation> closestDockList = dockList.values.toList();
-    for(int i = 0; i < closestDockList.length ; i++){
-      print(closestDockList[i].name);
-      print("lat => ${closestDockList[i].lat} , lon => ${closestDockList[i].lon}");
-    }
-    print(closestDockList);
-
 
     if(applyConstraints(widget.fromTextEditController, widget.toTextEditController)){
-      print("DID NOT COME BACK FROM APPLYCONSTRAINTS");
       return;
     }
 
-    print("CAME BACK FROM APPLYCONSTRAINTS");
     final hasEmptyField = widget.listDynamic
         .any((element) => element.placeTextController.text.isEmpty);
 
     if (hasEmptyField) {
       alert.showSnackBarErrorMessage(
           context, alert.cannotHaveEmptySearchLocationsMessage);
-      print("HERE1");
       return;
     } else if (areAdjacentCoords(widget.selectedCoords)) {
       alert.showSnackBarErrorMessage(context, alert.noAdjacentLocationsAllowed);
       return;
     } else {
-
-      print("HERE2");
       List<List<double?>?> tempList = [];
       tempList.addAll(staticListMap.values);
       tempList.addAll(widget.selectedCoords);
@@ -530,8 +522,7 @@ class PanelWidgetState extends State<PanelWidget> {
       }
 
       if (points == null) {
-        //! show something went wrong alert
-        print("hello");
+
       } else {
         Itinerary _itinerary = new Itinerary.navigation(
             selectedDocks, points, widget.numberOfCyclists);
@@ -562,7 +553,6 @@ class PanelWidgetState extends State<PanelWidget> {
         startLocationMustBeSpecified(toEditingController)) {
       alert.showSnackBarErrorMessage(context, alert.startPointMustBeDefinedMessage);
       return true;
-      //return;
     }
     if (widget.hasSpecifiedOneDestination(context, alert)) {
       alert.showSnackBarErrorMessage(context, alert.chooseAtLeastOneDestinationMessage);
@@ -573,7 +563,6 @@ class PanelWidgetState extends State<PanelWidget> {
       return true;
     }
     return false;
-    //return;
   }
 
   ///The logic to restrict the user from being able to start a journey with 2 locations in the journey being
@@ -586,16 +575,13 @@ class PanelWidgetState extends State<PanelWidget> {
     for (int i = 0; i < myList.length - 1; i++) {
       if (myList[i]?.first == myList[i + 1]?.first &&
           myList[i]?.last == myList[i + 1]?.last) {
-        print("Adjacents exist");
         return true;
       }
     }
     if (myList[0]?.first == staticListMap[fromLabelKey]?.first &&
         myList[0]?.last == staticListMap[fromLabelKey]?.last) {
-      print("Adjacents exist2");
       return true;
     }
-    print("Adjacents do not exist");
     return false;
   }
 
