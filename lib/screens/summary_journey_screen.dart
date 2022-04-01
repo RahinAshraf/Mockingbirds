@@ -288,7 +288,6 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
                 _itinerary.date?.year == DateTime.now().year)
               if (!cameFromSchedule)
                 Container(
-                    height: 100,
                     padding: const EdgeInsets.fromLTRB(75, 5, 75, 5),
                     child: ElevatedButton(
                       child: const Text('Share journey'),
