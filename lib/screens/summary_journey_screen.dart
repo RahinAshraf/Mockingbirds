@@ -275,8 +275,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
                             },
                           );
                         } else {
-                          return SizedBox(
-                            height: MediaQuery.of(context).size.height / 1.3,
+                          return Container(
                             child: const Center(
                               child: CircularProgressIndicator(),
                             ),
