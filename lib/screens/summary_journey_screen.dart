@@ -1,32 +1,27 @@
-import 'dart:developer';
 import 'dart:math' as math;
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-
 import 'package:mapbox_gl/mapbox_gl.dart';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart';
-import 'package:timeline_tile/timeline_tile.dart';
+// import 'package:timeline_tile/timeline_tile.dart';
+import 'package:timelines/timelines.dart';
+import 'package:veloplan/helpers/database_helpers/database_manager.dart';
+import 'package:veloplan/helpers/navigation_helpers/navigation_conversions_helpers.dart';
 import 'package:veloplan/models/itinerary_manager.dart';
 import 'package:veloplan/models/path.dart';
-import '../helpers/navigation_helpers/navigation_conversions_helpers.dart';
-import '../models/itinerary.dart';
-import '../styles/colors.dart';
-import 'navigation/map_with_route_screen.dart';
-import 'dart:async';
-import 'package:mapbox_gl/mapbox_gl.dart';
-
-import 'package:veloplan/helpers/database_helpers/database_manager.dart';
+import 'package:veloplan/models/itinerary.dart';
 import 'package:veloplan/navbar.dart';
+import 'package:veloplan/screens/navigation/map_with_route_screen.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
 
-/// Class useful to present the chosen docking stations and destinations by the user, distances and durations about their itinerary, a code for people to create a group
-///Author(s): Nicole, Marija, Liliana, Hristina
-
+/// Displays the summary of journey screen.
+///
+/// Presents the chosen docking stations and destinations by the user,
+/// distances and durations in their [itinerary], and a code for people to create a group.
+/// Author(s): Nicole, Marija, Liliana, Hristina
 class SummaryJourneyScreen extends StatefulWidget {
   late Itinerary itinerary;
   bool cameFromSchedule;
@@ -63,11 +58,13 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
     super.initState();
   }
 
-  Future<List<Path>> lmao() async {
+  /// Returns [paths] from user's [itinerary].
+  Future<List<Path>> _loadPaths() async {
     paths = await _itineraryManager.setJourney();
     return paths;
   }
 
+  /// Returns user's group.
   Future<String> _getGroup() async {
     var user = await _databaseManager.getByKey(
         'users', _databaseManager.getCurrentUser()!.uid);
@@ -306,7 +303,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
           const SizedBox(height: 20),
           Container(
             child: FutureBuilder<List<Path>>(
-              future: lmao(),
+              future: _loadPaths(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasData) {
