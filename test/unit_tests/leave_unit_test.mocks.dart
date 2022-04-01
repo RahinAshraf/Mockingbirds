@@ -123,13 +123,14 @@ class MockDatabaseManager extends _i1.Mock implements _i4.DatabaseManager {
                       _FakeDocumentReference_3<Map<String, dynamic>>()))
           as _i5.Future<_i2.DocumentReference<Map<String, dynamic>>>);
   @override
-  _i5.Future<void> addToSubCollection(
+  _i5.Future<_i2.DocumentReference<Object?>> addToSubCollection(
           _i2.CollectionReference<Object?>? subcollection,
           Map<String, dynamic>? value) =>
       (super.noSuchMethod(
-          Invocation.method(#addToSubCollection, [subcollection, value]),
-          returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
+              Invocation.method(#addToSubCollection, [subcollection, value]),
+              returnValue: Future<_i2.DocumentReference<Object?>>.value(
+                  _FakeDocumentReference_3<Object?>()))
+          as _i5.Future<_i2.DocumentReference<Object?>>);
   @override
   _i5.Future<void> signOut() =>
       (super.noSuchMethod(Invocation.method(#signOut, []),

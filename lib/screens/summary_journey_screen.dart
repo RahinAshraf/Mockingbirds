@@ -23,12 +23,16 @@ import 'package:veloplan/utilities/dart_exts.dart';
 class SummaryJourneyScreen extends StatefulWidget {
   late Itinerary itinerary;
   bool cameFromSchedule;
+  var _itineraryManager;
+
   final DatabaseManager _databaseManager = DatabaseManager();
-  SummaryJourneyScreen(this.itinerary,this.cameFromSchedule,{Key? key}) : super(key: key);
+  SummaryJourneyScreen(this.itinerary,this.cameFromSchedule,{Key? key}) : super(key: key){
+    _itineraryManager = new ItineraryManager(itinerary);
+  }
 
   @override
   State<StatefulWidget> createState() =>
-      SummaryJourneyScreenState(this.itinerary, this.cameFromSchedule, this._databaseManager);
+      SummaryJourneyScreenState(_itineraryManager , this.cameFromSchedule, this._databaseManager);
 }
 
 class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
@@ -44,9 +48,9 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
   late List<Path> paths;
   late ItineraryManager _itineraryManager;
 
-  SummaryJourneyScreenState(this._itinerary, this.cameFromSchedule, this._databaseManager) {
-    _itineraryManager = new ItineraryManager(_itinerary);
+  SummaryJourneyScreenState(this._itineraryManager, this.cameFromSchedule, this._databaseManager) {
     paths = _itineraryManager.getPaths();
+    _itinerary = _itineraryManager.getItinerary();
   }
 
   @override
@@ -141,21 +145,22 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
       var dockingStationList = _itinerary.docks!;
       for(int j = 0; j< geoList.length; j++){
         var geo = geoList[j];
-        journey.collection("coordinates").add({
-            'coordinate': geo,
-            'index': j,
-          });
+        _databaseManager.addToSubCollection(journey.collection("coordinates"),{
+          'coordinate': geo,
+          'index': j,
+        });
       }
 
 
         for (int i = 0; i < dockingStationList.length; i++) {
           var station = dockingStationList[i];
-          journey.collection("dockingStations").add({
-              'id': station.stationId,
-              'name': station.name,
-              'location': GeoPoint(station.lat, station.lon),
-              'index':i,
-            });
+          _databaseManager.addToSubCollection(journey.collection("dockingStations"),{
+            'id': station.stationId,
+            'name': station.name,
+            'location': GeoPoint(station.lat, station.lon),
+            'index':i,
+          });
+
         }
 
       setState(() {

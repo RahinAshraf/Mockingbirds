@@ -76,10 +76,13 @@ class DatabaseManager {
    return await _database.collection(collection).add(value);
   }
 
-  Future<void> addToSubCollection(CollectionReference<Object?> subcollection,
+
+
+  Future<DocumentReference<Object?>> addToSubCollection(CollectionReference<Object?> subcollection,
       Map<String, dynamic> value) async {
-    await subcollection.add(value);
+   return await subcollection.add(value);
   }
+
 
   Future<void> signOut() async {
     FirebaseAuth.instance.signOut();

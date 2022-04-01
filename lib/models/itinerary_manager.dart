@@ -62,6 +62,10 @@ class ItineraryManager {
     return _wholeTrip;
   }
 
+  Itinerary getItinerary(){
+    return _itinerary;
+  }
+
   /// Print the paths of the itinerary
   void printPaths() {
     for (var path in _wholeTrip) {
