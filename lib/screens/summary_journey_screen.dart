@@ -301,25 +301,31 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
             children: _generateStops(),
           ),
           const SizedBox(height: 20),
-          if (isInGroup)
-            ElevatedButton(
-              child: const Text('LEAVE GROUP'),
-              onPressed: () {
-                _leaveGroup();
-              },
-            ),
-          if (_itinerary.date?.day == DateTime.now().day ||
-              _itinerary.date?.day == null)
-            ElevatedButton(
-              child: const Text('START JOURNEY'),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => MapRoutePage(_itinerary)),
-                );
-              },
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (isInGroup)
+                ElevatedButton(
+                  child: const Text('LEAVE GROUP'),
+                  onPressed: () {
+                    _leaveGroup();
+                  },
+                ),
+              SizedBox(width: 10.0),
+              if (_itinerary.date?.day == DateTime.now().day ||
+                  _itinerary.date?.day == null)
+                ElevatedButton(
+                  child: const Text('START JOURNEY'),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MapRoutePage(_itinerary)),
+                    );
+                  },
+                ),
+            ],
+          )
         ],
       ),
       appBar: AppBar(
@@ -384,10 +390,10 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
     return stops;
   }
 
-//   _generateStopsFuture() async {
-//     _itineraryManager = await new ItineraryManager(_itinerary);
-//     paths = _itineraryManager.getPaths();
-//   }
+  // void _generateStopsFuture() async {
+  //   _itineraryManager = await ItineraryManager(_itinerary);
+  //   paths = _itineraryManager.getPaths();
+  // }
 }
 
 class TimelineItem extends StatelessWidget {
