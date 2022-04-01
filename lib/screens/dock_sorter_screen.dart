@@ -88,40 +88,6 @@ class _DockSorterScreen extends State<DockSorterScreen> {
       ),
     ));
   }
-  //   return Scaffold(
-  //       body: SlidingUpPanel(
-  //     padding: const EdgeInsets.only(left: 10, right: 10),
-  //     minHeight: panelHeightClosed,
-  //     maxHeight: panelHeightOpen,
-  //     borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-  //     controller: panelController,
-  //     body: SafeArea(
-  //       child: Stack(
-  //         children: [
-  //           SizedBox(
-  //               height: MediaQuery.of(context).size.height,
-  //               width: MediaQuery.of(context).size.width,
-  //               child: ScopedModelDescendant<MapModel>(builder:
-  //                   (BuildContext context, Widget? child, MapModel model) {
-  //                 _baseMapWithStation = BaseMapboxStationMap(
-  //                   _docks,
-  //                   userCoordinates,
-  //                   model,
-  //                 );
-  //                 addBackButton();
-  //                 return SafeArea(
-  //                     child: Stack(children: _baseMapWithStation.getWidgets()));
-  //               })),
-  //         ],
-  //       ),
-  //     ),
-  //     panelBuilder: (controller) => DockSorter(
-  //       userCoordinates,
-  //       controller: controller,
-  //       selectedDockStation: widget.selectedDockStation,
-  //     ),
-  //   ));
-  // }
 
   /// Set the [filteredDockingStations] list and [editDockTextEditController] to base map
   void setBaseMapFeatures() {

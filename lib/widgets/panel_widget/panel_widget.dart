@@ -593,7 +593,7 @@ class PanelWidgetState extends State<PanelWidget> {
   ///the user selects to visit.
   bool areAdjacentCoords(List<List<double?>?> myList) {
     if (myList.isEmpty) {
-      return true;
+      return false;
     }
     for (int i = 0; i < myList.length - 1; i++) {
       if (myList[i]?.first == myList[i + 1]?.first &&
