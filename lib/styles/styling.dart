@@ -72,3 +72,8 @@ const scheduleScreenCalendarStyle = CalendarStyle(
   // markerSize: 5,
   markersMaxCount: 1,
 );
+
+// Styling for journey landing screen
+
+const TextStyle JourneyLandingTextStyle = TextStyle(
+    color: Color(0xFF99D2A9), fontWeight: FontWeight.normal, fontSize: 20);

@@ -39,3 +39,8 @@ class _JourneyLandingPanelWidget extends State<JourneyLandingPanelWidget> {
         ],
       );
 }
+
+
+//  Text("Next stop: ${widget.dockName}", style: tripSchedulerTextStyle),
+//  Text("Time: ${widget.duration}", style: tripSchedulerTextStyle),
+//  Text("Distance: ${widget.distance}", style: tripSchedulerTextStyle),
