@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:veloplan/helpers/database_helpers/favourite_helper.dart';
 import 'package:veloplan/models/docking_station.dart';
+import 'package:veloplan/styles/colors.dart';
 import 'package:veloplan/widgets/docking_station_card.dart';
 
-///Loads users favourited docking stations and displays them in a list view.
-///@author Tayyibah Uddin
+/// Loads user's favourited docking stations and displays them in a list view.
+/// @author Tayyibah Uddin
 class Favourite extends StatefulWidget {
   @override
   _FavouriteState createState() => _FavouriteState();
@@ -41,6 +42,7 @@ class _FavouriteState extends State<Favourite> {
       appBar: AppBar(
         title: const Text('My favourites'),
       ),
+      backgroundColor: CustomColors.whiteReplacement,
     );
   }
 }
