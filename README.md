@@ -44,7 +44,8 @@ samples, guidance on mobile development, and a full API reference.
     - A turn by turn navigation can only be used once in an app run and cannot edit the state of the journey.
     - Could not do redirecting with flutter_mapbox_navigation as there is an open bug with the app (https://github.com/eopeter/flutter_mapbox_navigation/issues/145)
     - Resorted to using polyline navigation for redirecting
-
+- Mapbox did not support clustering symbols
+    - https://github.com/flutter-mapbox-gl/maps/pull/797
 
 ## Bugs 
 - journey_planner_screen.dart and panel_widget.dart
