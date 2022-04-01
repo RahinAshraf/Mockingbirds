@@ -109,13 +109,6 @@ void setLocationMarkers(MapboxMapController controller, List<LatLng> journey,
   }
 }
 
-/// Adds marker symbol for a single [point] to the map and the [currentSymbol] set
-// void setMarker(MapboxMapController controller, LatLng point,
-//     Set<Symbol> currentSymbol) async {
-//   addSymbol(
-//       controller, currentSymbol, point, "assets/icon/yellow_marker.png", 0.1);
-// }
-
 /// Adds a symbol to the [MapBoxController] and [symbolsSet] with the given [marker] and [iconSize]
 void addSymbol(MapboxMapController controller, Set<Symbol> symbolsSet,
     LatLng location, String marker, double iconSize) async {
@@ -123,15 +116,6 @@ void addSymbol(MapboxMapController controller, Set<Symbol> symbolsSet,
     SymbolOptions(geometry: location, iconSize: iconSize, iconImage: marker),
   ));
 }
-
-/// Removes the specified location markers [polylineSymbols] from the map
-// void removePolylineMarkers(
-//     MapboxMapController controller, Set<Symbol> polylineSymbols) async {
-//   if (polylineSymbols.isNotEmpty) {
-//     await controller.removeSymbols(polylineSymbols);
-//     polylineSymbols.clear();
-//   }
-// }
 
 ///Removes all markers from the map that are in [removeMarkerSet] and clears the set
 void removeMarkers(

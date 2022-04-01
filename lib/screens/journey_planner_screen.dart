@@ -14,8 +14,8 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:veloplan/widgets/dynamic_widget.dart';
 
-///@author - Rahin Ashraf
-///The place on the Map
+/// Author(s): Rahin Ashraf
+/// The place on the Map
 class MapPlace {
   String? address;
   LatLng? coords;

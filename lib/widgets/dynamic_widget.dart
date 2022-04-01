@@ -146,7 +146,6 @@ class DynamicWidget extends StatelessWidget {
   ///respect to the other SearchBars in the Journey Planner
   void _handleSearchClick(BuildContext context, int position) async {
     final result = await context.openSearch();
-    print("Navigator_Navigator_Navigator => $position");
     final feature = result as Feature?;
     if (feature != null) {
       final len = selectedCoords?.length ?? 0;
@@ -168,7 +167,6 @@ class DynamicWidget extends StatelessWidget {
           isFrom,
           numberOfCyclists);
     }
-    print("RESULT => $result");
   }
 
   ///Handler for when the user removes a dynamic widget from the list

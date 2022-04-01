@@ -106,10 +106,6 @@ class BaseMapboxMap {
       Map s = await locService.reverseGeoCode(
           coordinates.latitude, coordinates.longitude);
       address!.sink.add(MapPlace(s['place'], s['location']));
-      print(s['place']);
-      print("Latitdue");
-      print(s['location'].latitude);
-      print(coordinates);
     }
   }
 
@@ -117,7 +113,6 @@ class BaseMapboxMap {
   void _updateCameraPosition() {
     cameraPosition = CameraPosition(target: currentPosition, zoom: 15);
   }
-  //print(coordinates);
 
   /// gets the new [cameraposition]
   Future<CameraPosition> getNewCameraPosition() async {
@@ -131,7 +126,6 @@ class BaseMapboxMap {
     selectedSymbol = symbol;
     if (selectedSymbol != null) {
       Map<dynamic, dynamic>? stationData = symbol.data;
-      print("ON SYMBOL TAPPED");
       displayDockCard(stationData);
     }
   }
@@ -171,11 +165,4 @@ class BaseMapboxMap {
         tilt: cameraPosition.zoom);
     controller!.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
   }
-
-  // void addDockingStationCard() {
-  //   addWidget(Align(
-  //     alignment: Alignment.bottomCenter,
-  //     child: Container(height: 200, child: DockStation(key: dockingStationKey)),
-  //   ));
-  // }
 }
