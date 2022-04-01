@@ -22,71 +22,58 @@ class _SuggestedItineraryState extends State<SuggestedItinerary> {
   dockingStationManager _manager = dockingStationManager();
   late Itinerary _royalLoop;
   late Itinerary _thamesLoop;
-  List<LatLng> _hydeParkLoopCoord = [
-    LatLng(51.5031, -0.1526),
-    LatLng(51.50883, -0.17166),
-    LatLng(51.5045099, -0.152706),
-    LatLng(51.5121347, -0.1686248),
-    LatLng(51.5066092, -0.1745202),
-  ];
-  List<LatLng> _royalLoopCoord = [
-    LatLng(51.5058442, -0.1647927),
-    LatLng(51.5025958, -0.1530432),
-    LatLng(51.501364, -0.14189),
-    LatLng(51.511853, -0.1986145),
-    LatLng(51.5021618, -0.1315459),
-    LatLng(51.5057222, -0.1330674),
-    LatLng(51.5018847, -0.1428112),
-  ];
-  List<LatLng> _thamesLoopCoord = [
-    LatLng(51.5058442, -0.1647927),
-    LatLng(51.5025958, -0.1530432),
-    LatLng(51.501364, -0.14189),
-    LatLng(51.511853, -0.1986145),
-    LatLng(51.5021618, -0.1315459),
-    LatLng(51.5057222, -0.1330674),
-    LatLng(51.5018847, -0.1428112),
-  ];
+  Map<LatLng, String> _hydeParkLoopCoord = {
+    LatLng(51.5031, -0.1526): "BikePoints_191",
+    LatLng(51.50883, -0.17166): "BikePoints_248",
+    LatLng(51.5045099, -0.152706): "BikePoints_733",
+    LatLng(51.5121347, -0.1686248): "BikePoints_153",
+    LatLng(51.5066092, -0.1745202): "BikePoints_300"
+  };
+  Map<LatLng, String> _royalLoopCoord = {
+    LatLng(51.5058442, -0.1647927): "BikePoints_248",
+    LatLng(51.5025958, -0.1530432): "BikePoints_191",
+    LatLng(51.501364, -0.14189): "BikePoints_213",
+    LatLng(51.5021618, -0.1315459): "BikePoints_762",
+    LatLng(51.5057222, -0.1330674): "BikePoints_160",
+    LatLng(51.5018847, -0.1428112): "BikePoints_213"
+  };
+  Map<LatLng, String> _thamesLoopCoord = {
+    LatLng(51.4993832, -0.1286692): "BikePoints_762",
+    LatLng(51.4994827, -0.1269979): "BikePoints_818",
+    LatLng(51.5110623, -0.1193367): "BikePoints_309",
+    LatLng(51.5138486, -0.1005393): "BikePoints_48",
+    LatLng(51.5081157, -0.078138): "BikePoints_130",
+    LatLng(51.505455, -0.0753537): "BikePoints_278",
+    LatLng(51.5075986, -0.101545): "BikePoints_839",
+    LatLng(51.5031122, -0.1211524): "BikePoints_815"
+  };
   @override
   void initState() {
     //asign itineraries
     List<Itinerary> itineraries = [];
 
-    this._hydeLoop =
-        new Itinerary.suggestedTrip(_hydeParkLoopCoord, "Hyde Park Loop");
+    this._hydeLoop = new Itinerary.suggestedTrip(
+        _hydeParkLoopCoord.keys.toList(), "Hyde Park Loop", _hydeParkLoopCoord.values.toList() );
+
 
     itineraries.add(_hydeLoop);
-    this._royalLoop =
-        new Itinerary.suggestedTrip(_royalLoopCoord, "Royal Loop");
+    this._royalLoop = new Itinerary.suggestedTrip(
+        _royalLoopCoord.keys.toList(), "Royal Loop",   _royalLoopCoord.values.toList()  );
     itineraries.add(_royalLoop);
 
-    this._thamesLoop =
-        new Itinerary.suggestedTrip(_thamesLoopCoord, "Thames Loop");
+    this._thamesLoop = new Itinerary.suggestedTrip(
+        _thamesLoopCoord.keys.toList(), "Thames Loop", _thamesLoopCoord.values.toList() );
     itineraries.add(_thamesLoop);
 
     //method that makes an api call wiroyalLopth dock id and updates the info about the dock
     for (var itinerary in itineraries) {
-      for (int i = 0; i < itinerary.myDestinations!.length; i++) {
-        print("------------>>>>>>>>>>>>>>>>>-------" +
-            itinerary.myDestinations![i].toString() +
-            "---------<<<<<<<<<--------");
-        // for (var coord in _royalLoopCoord) {
-        _manager
-            .importStationsByRadius(800, itinerary.myDestinations![i])
-            .then((value) {
-          if (mounted)
-            setState(() {
-              itinerary.docks![i].assign(
-                  _manager.getClosestDockWithAvailableSpaceHandler(
-                      itinerary.myDestinations![i], 1, value));
-              print("suggested trips ->>>>>>>>>" +
-                  itinerary.docks![i].name +
-                  "   <<<<<<<<<<<<<<<<<");
-            });
-        });
-      }
-      super.initState();
+    for (int i = 0; i < itinerary.myDestinations!.length; i++) {
+
+      print("------------>>>>>>>>>>>>>>>>>-------" +
+          itinerary.myDestinations![i].toString() +
+          "---------<<<<<<<<<--------");
     }
+  }
   }
 
   @override
@@ -100,21 +87,16 @@ class _SuggestedItineraryState extends State<SuggestedItinerary> {
         child: ListView(
           children: [
             const SizedBox(height: 30),
-            SizedBox(
-                height: 150.0,
-                width: 150.0,
-                child: Center(
-                    child: Image.asset('assets/images/suggested_trips.png'))),
             const Padding(
               padding: EdgeInsets.only(left: 15.0, bottom: 15.0, top: 15.0),
               child: Text('Explore London', style: upcomingJourneysTextStyle),
             ),
             Column(
-              //TODO: Marija Hristina present some text if the length of journey list is 0 (e.g. 'you havent scheduled any journeys yet')
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 TimelineItem(_royalLoop, 1),
-                TimelineItem(_hydeLoop, 2)
+                TimelineItem(_hydeLoop, 2),
+                TimelineItem(_thamesLoop, 3)
               ],
             ),
           ],
@@ -198,8 +180,13 @@ class ItineraryCard extends StatelessWidget {
                     textStyle: eventCardDetailsTextStyle,
                   ),
                   onPressed: () {
+                    print("ininerary -> >>>>>>>>>>" +
+                        journey.myDestinations!.length.toString() +
+                        " ------- " +
+                        journey.docks!.length.toString());
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => SummaryJourneyScreen(journey)));
+                        builder: (context) =>
+                            SummaryJourneyScreen(journey, true)));
                   },
                   child: const Text("View itinerary"),
                 ),
@@ -216,3 +203,48 @@ class ItineraryCard extends StatelessWidget {
     );
   }
 }
+
+
+
+
+// Map<LatLng, String> _hydeParkLoopCoord = {
+//     LatLng(51.5031, -0.1526): "Hyde Park Corner, Hyde Park", // "BikePoints_191"
+//     LatLng(51.50883, -0.17166):
+//         "Triangle Car Park, Hyde Park", // "BikePoints_248"
+//     LatLng(51.5045099, -0.152706): "Park Lane, Mayfair",
+//     LatLng(51.5121347, -0.1686248): // "BikePoints_733"
+//         "Bayswater Road, Hyde Park", // "BikePoints_153"
+//     LatLng(51.5066092, -0.1745202):
+//         "Serpentine Car Park, Hyde Park" // 	"BikePoints_300"
+//   };
+//   Map<LatLng, String> _royalLoopCoord = {
+//     LatLng(51.5058442, -0.1647927):
+//         "Triangle Car Park, Hyde Park", // "BikePoints_248"
+//     LatLng(51.5025958, -0.1530432):
+//         "Hyde Park Corner, Hyde Park", // "BikePoints_191"
+//     LatLng(51.501364, -0.14189):
+//         "Wellington Arch, Hyde Park", // "BikePoints_213"
+//     LatLng(51.5021618, -0.1315459):
+//         "Storey's Gate, Westminster", // 	"BikePoints_762"
+//     LatLng(51.5057222, -0.1330674):
+//         "Waterloo Place, St. James's", // Pall Mall East, West End", "BikePoints_160"
+//     LatLng(51.5018847, -0.1428112):
+//         "Wellington Arch, Hyde Park" // "BikePoints_213"
+//   };
+//   Map<LatLng, String> _thamesLoopCoord = {
+//     LatLng(51.4993832, -0.1286692):
+//         " Storey's Gate, Westminster, Abingdon Green, Westminster", //	"BikePoints_762"
+//     LatLng(51.4994827, -0.1269979):
+//         "Westminster Pier, Westminster", // 	"BikePoints_818"
+//     LatLng(51.5110623, -0.1193367):
+//         "Embankment (Savoy), Strand", // , Somerset House, Strand", "BikePoints_309"
+//     LatLng(51.5138486, -0.1005393):
+//         "Godliman Street, St. Paul's", // "BikePoints_48"
+//     LatLng(51.5081157, -0.078138): "Tower Gardens , Tower", // "BikePoints_130"
+//     LatLng(51.505455, -0.0753537):
+//         "Tooley Street, Bermondsey", // "BikePoints_278"
+//     LatLng(51.5075986, -0.101545):
+//         "Sea Containers, South Bank", // "BikePoints_839"
+//     LatLng(51.5031122, -0.1211524):
+//         "Lambeth Palace Road, Waterloo" // "BikePoints_815"
+//   };

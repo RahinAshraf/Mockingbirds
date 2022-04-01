@@ -334,7 +334,10 @@ class dockingStationManager {
     // var jsonDataMap = jsonData;
     // print("station manager ->>>>>>>>>>>>>>>>" + jsonData.toString());
     // if ((jsonDataMap as Map<String, dynamic>).length > 1) {
-    // for (var station in jsonData) {
+    // for (var station in jsonData) {false
+    if (data == null) {
+      await Future.delayed(const Duration(seconds: 20));
+    }
     try {
       DockingStation newStation = DockingStation(
           station["id"],
