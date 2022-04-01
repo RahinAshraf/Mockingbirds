@@ -61,10 +61,10 @@ class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
         ///* listen to isAtGoal if is at goal redirect
       }),
       panelBuilder: (panelController) => JourneyLandingPanelWidget(
-        distance: _baseMapWithUpdatedRoute.distance,
-        duration: _baseMapWithUpdatedRoute.duration,
-        dockName: _baseMapWithUpdatedRoute.dockName,
-      ),
+          // distance: _baseMapWithUpdatedRoute.distance,
+          // duration: _baseMapWithUpdatedRoute.duration,
+          // dockName: _baseMapWithUpdatedRoute.dockName,
+          ),
     ));
   }
 
