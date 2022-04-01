@@ -20,6 +20,18 @@ extension BuildContextExt on BuildContext {
       ),
     );
   }
+
+  Future<R?> pushAndRemoveUntil<R>(Widget route) {
+    return Navigator.of(this).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (context) => route,
+        ),
+        (route) => route.isCurrent);
+  }
+
+  void pop() {
+    Navigator.of(this).pop();
+  }
 }
 
 extension WidgetExts on dynamic {
