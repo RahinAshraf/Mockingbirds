@@ -18,6 +18,7 @@ import 'package:veloplan/screens/navigation/map_with_route_screen.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
 
 import '../models/docking_station.dart';
+import '../styles/colors.dart';
 
 /// Displays the summary of journey screen.
 ///
@@ -447,30 +448,35 @@ class TimelineItem extends StatelessWidget {
         color: Color(0xFF99D2A9),
       ),
       alignment: TimelineAlign.manual,
-      lineXY: 0.25,
-      startChild: Padding(
+      lineXY: 0.75,
+      endChild: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
           children: [
             Row(
               children: [
                 first
-                    ? Icon(Icons.directions_walk)
-                    : Icon(Icons.directions_bike),
+                    ? Icon(
+                        Icons.directions_walk,
+                        color: CustomColors.green,
+                      )
+                    : Icon(Icons.directions_bike, color: CustomColors.green),
+                SizedBox(width: 2.0),
                 Text('${distance}'),
               ],
             ),
             SizedBox(height: 5.0),
             Row(
               children: [
-                Icon(Icons.access_time),
+                Icon(Icons.access_time, color: CustomColors.green),
+                SizedBox(width: 2.0),
                 Text('${duration}'),
               ],
             ),
           ],
         ),
       ),
-      endChild: Card(
+      startChild: Card(
         elevation: 1,
         // margin: const EdgeInsets.fromLTRB(10.0, 15.0, 20.0, 15.0),
         shape: const RoundedRectangleBorder(
