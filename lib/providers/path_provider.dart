@@ -1,11 +1,10 @@
 import 'dart:convert';
 import 'dart:developer';
-
 import "package:http/http.dart" as http;
 import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart'
     as LatLong;
+import 'package:veloplan/.env.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
-
 import '../models/docking_station.dart';
 import '../models/path.dart';
 
@@ -13,8 +12,6 @@ import '../models/path.dart';
 class PathProvider {
   String matrixUrl = 'https://api.mapbox.com/directions-matrix/v1/mapbox';
   final String routingProfile = 'cycling';
-  final String YOUR_MAPBOX_ACCESS_TOKEN =
-      'pk.eyJ1Ijoia2lraS1raWtpIiwiYSI6ImNsMHBkZmFwZDA2YnczbHBlZ2N4NGtlYmcifQ.5kF9hN-2zTBd1cj4e45PFg';
 
   LatLong.LatLng currentUserLoc = getLatLngFromSharedPrefs();
   List<Path> paths = [];
@@ -50,7 +47,7 @@ class PathProvider {
     String destinationsNumberStr = produceDestinationNumberString(docks);
 
     var data = await http.get(Uri.parse(
-        '$matrixUrl/$routingProfile/${currentUserLoc.longitude},${currentUserLoc.latitude};${destinationsStr}?sources=0&destinations=${destinationsNumberStr}&annotations=distance,duration&access_token=$YOUR_MAPBOX_ACCESS_TOKEN'));
+        '$matrixUrl/$routingProfile/${currentUserLoc.longitude},${currentUserLoc.latitude};${destinationsStr}?sources=0&destinations=${destinationsNumberStr}&annotations=distance,duration&access_token=$MAPBOX_ACCESS_TOKEN'));
     var jsonData = json.decode(data.body);
     this.paths.clear();
     //for (var i = 0; i <= 2; i++) {

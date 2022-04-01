@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:tuple/tuple.dart';
 import 'package:veloplan/helpers/navigation_helpers/navigation_conversions_helpers.dart';
@@ -17,7 +19,7 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
   late List<LatLng> _journey;
   final Itinerary _itinerary;
   Map<String, Object> fills = {};
-  final Set<Symbol> _polylineSymbols = {};
+  final Set<Symbol> polylineSymbols = {};
   final RouteManager manager = RouteManager();
   late Map<dynamic, dynamic> _routeResponse;
   // LatLng _startPosition = getLatLngFromSharedPrefs();
@@ -31,13 +33,23 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
   void onMapCreated(MapboxMapController controller) async {
     await baseMapCreated(controller);
     _displayJourneyAndRefocus(_journey);
+    onMarkerTapped(controller);
+    //controller.onSymbolTapped.add(onSymbolTapped);  --- no tapping functionality for route model
   }
+
+  /// Calls [onSymbolTapped] functionality for docking station markers on maps that do not [_displayPolyline]
+  void onMarkerTapped(MapboxMapController controller) {}
+
+  /// Retrieves the [stationData] of the docking station [symbol] that was tapped
+  @override
+  Future<void> onSymbolTapped(Symbol symbol) async {}
 
   /// Display journey and refocus camera position
   void _displayJourneyAndRefocus(List<LatLng> journey) {
     setBaseJourney(journey);
     _refocusCamera(journey);
-    setPolylineMarkers(controller!, journey, _polylineSymbols);
+    //setPolylineMarkers(controller!, journey, polylineSymbols); - renamed
+    setLocationMarkers(controller!, journey, polylineSymbols);
   }
 
   /// Refocus camera positioning to focus on the [journey] polyline
@@ -92,6 +104,7 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
         _routeResponse.update("duration", (value) => totalDuration);
       }
       //set distance and duration of whole journey: don't do this if you will reuse distance and duration within this class
+
       manager.setDistance(_routeResponse['distance']);
       manager.setDuration(_routeResponse['duration']);
       manager.setGeometry(_routeResponse['geometry']);
@@ -108,4 +121,28 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
             .getGeometry()); //_routeResponse['geometry']); - can use local var instead but i've set it anyway
     addFills(controller!, fills, model);
   }
+
+  // /// Sets distance and time
+  // void _setDistanceAndTime() async {
+  //   try {
+  //     var distance = await _manager.getDistance() as double; //meters
+  //     var duration = await _manager.getDuration() as double; //sec
+
+  //     _totalDistanceAndTime = "distance: " +
+  //         (distance / 1000).truncate().toString() +
+  //         "km, duration: " +
+  //         (duration / 60).truncate().toString();
+  //     print(_totalDistanceAndTime);
+  //   } catch (e) {
+  //     _totalDistanceAndTime = "Route not available";
+  //   }}
+
+  // /// Draws out the journey onto map
+  // void displayJourney() async {
+  //   fills = await setFills(
+  //       fills,
+  //       manager
+  //           .getGeometry()); //_routeResponse['geometry']); - can use local var instead but i've set it anyway
+  //   addFills(controller!, fills, model);
+  // }
 }
