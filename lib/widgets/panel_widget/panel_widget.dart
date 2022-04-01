@@ -475,6 +475,13 @@ class PanelWidgetState extends State<PanelWidget> {
   /// closest docking stations for the locations the user specified. This new list is then passed onto [MapRoutePage].
   /// THIS FUNCTION NEEDS TO BE REFACTORED FURTHER
   Future<void> _handleStartClick() async {
+    List<DockingStation> closestDockList = dockList.values.toList();
+    for(int i = 0; i < closestDockList.length ; i++){
+      print(closestDockList[i].name);
+      print("lat => ${closestDockList[i].lat} , lon => ${closestDockList[i].lon}");
+    }
+    print(closestDockList);
+
 
     if(applyConstraints(widget.fromTextEditController, widget.toTextEditController)){
       print("DID NOT COME BACK FROM APPLYCONSTRAINTS");
