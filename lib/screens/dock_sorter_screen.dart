@@ -27,8 +27,8 @@ class _DockSorterScreen extends State<DockSorterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final panelHeightClosed = MediaQuery.of(context).size.height * 0.4;
-    final panelHeightOpen = MediaQuery.of(context).size.height * 0.4;
+    final panelHeightClosed = MediaQuery.of(context).size.height * 0.35;
+    final panelHeightOpen = MediaQuery.of(context).size.height * 0.35;
     return Scaffold(
       body: SlidingUpPanel(
         padding: const EdgeInsets.only(left: 10, right: 10),

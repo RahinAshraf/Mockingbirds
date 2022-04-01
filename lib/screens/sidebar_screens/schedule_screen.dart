@@ -4,6 +4,7 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:veloplan/helpers/database_helpers/schedule_helper.dart';
 import 'package:veloplan/models/itinerary.dart';
 import 'package:veloplan/styles/styling.dart';
+import 'package:veloplan/styles/colors.dart';
 import 'package:veloplan/widgets/upcoming_event_card.dart';
 
 class ScheduleScreen extends StatefulWidget {
@@ -40,7 +41,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: whiteReplacement,
+      backgroundColor: CustomColors.whiteReplacement,
       appBar: AppBar(
         title: const Text('Schedule'),
       ),
@@ -50,9 +51,10 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             padding: const EdgeInsets.all(15.0),
             child: _buildCalendar(),
           ),
-          const Padding(
+          Padding(
             padding: EdgeInsets.only(left: 15.0),
-            child: Text('Upcoming journeys', style: upcomingJourneysTextStyle),
+            child: Text('Upcoming journeys',
+                style: Theme.of(context).textTheme.headline1),
           ),
           _getEventsForDay(_selectedDay).isEmpty
               ? Container(
@@ -63,7 +65,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                       SizedBox(height: 15.0),
                       Text(
                         'No journeys planned for this day.',
-                        style: authTextStyle,
+                        style: Theme.of(context).textTheme.headline5,
                       ),
                     ],
                   ),

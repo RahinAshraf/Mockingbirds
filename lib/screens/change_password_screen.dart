@@ -10,12 +10,11 @@ class ChangePasswordScreen extends StatefulWidget {
 }
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
+  TextEditingController _currentPassword = TextEditingController();
 
-  TextEditingController _currentPassword = new TextEditingController();
+  TextEditingController _newPassword = TextEditingController();
 
-  TextEditingController _newPassword = new TextEditingController();
-
-  TextEditingController _confirmPassword = new TextEditingController();
+  TextEditingController _confirmPassword = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 

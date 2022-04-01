@@ -38,11 +38,11 @@ class ForgotPasswordScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          const SizedBox(height: 35),
+          SizedBox(height: MediaQuery.of(context).size.height / 6),
           Container(
               height: 170.0,
               width: 170.0,
-              alignment: Alignment.topRight,
+              alignment: Alignment.center,
               child: Image.asset('assets/images/forgot_password_icon.png')),
           Padding(
               padding: const EdgeInsets.all(16),

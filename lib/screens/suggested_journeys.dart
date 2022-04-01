@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:timeline_tile/timeline_tile.dart';
-import 'package:veloplan/screens/summary_journey_screen.dart';
 import '../models/itinerary.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+import '../styles/colors.dart';
 import '../styles/styling.dart';
+import '../styles/texts.dart';
 
 /// Suggester itineraries that contain biggest sights in London for under 30 min.
 /// from: https://londonblog.tfl.gov.uk/2019/11/05/santander-cycles-sightseeing/?intcmp=60245
@@ -45,7 +46,7 @@ class _SuggestedItineraryState extends State<SuggestedItinerary> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: whiteReplacement,
+      backgroundColor: CustomColors.whiteReplacement,
       appBar: AppBar(
         title: const Text('Suggested Journeys'),
       ),
@@ -58,12 +59,12 @@ class _SuggestedItineraryState extends State<SuggestedItinerary> {
                 width: 150.0,
                 child: Center(
                     child: Image.asset('assets/images/suggested_trips.png'))),
-            const Padding(
+            Padding(
               padding: EdgeInsets.only(left: 15.0, bottom: 15.0, top: 15.0),
-              child: Text('Explore London', style: upcomingJourneysTextStyle),
+              child: Text('Explore London',
+                  style: Theme.of(context).textTheme.headline1),
             ),
             Column(
-              //TODO: Marija Hristina present some text if the length of journey list is 0 (e.g. 'you havent scheduled any journeys yet')
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 TimelineItem(_royalLoop, 1),
@@ -123,14 +124,14 @@ class UpcomingEventCard extends StatelessWidget {
         child: Column(
           children: <Widget>[
             ListTile(
-              title: Text(title, style: eventCardTitleTextStyle),
+              title: Text(title, style: Theme.of(context).textTheme.headline2),
             ),
             Row(
               children: [
                 const SizedBox(width: 15.0),
                 TextButton(
                   style: TextButton.styleFrom(
-                    textStyle: eventCardDetailsTextStyle,
+                    textStyle: CustomTextStyles.eventCardDetailsTextStyle,
                   ),
                   onPressed: () {
                     // TODO: change to call the summary of journey

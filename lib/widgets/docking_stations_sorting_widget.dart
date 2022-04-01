@@ -18,75 +18,68 @@ class DockSorter extends StatefulWidget {
 }
 
 class _DockSorter extends State<DockSorter> {
-  ScrollController controller = ScrollController();
   late LatLng userCoordinates;
-  late DockingStationCarousel _dockingStations;
   List<String> dropdownItems = ['Distance', 'Favourites'];
-  int setterDropdown = -1;
   String selectedFilter = 'Distance';
 
   @override
   void initState() {
     userCoordinates = super.widget.userCoord;
     super.initState();
-    _dockingStations = DockingStationCarousel(userCoordinates);
   }
 
   @override
-  Widget build(BuildContext context) => ListView(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child:
-                    const Icon(Icons.arrow_back_rounded, color: Colors.green),
-              ),
-              Row(
-                children: [
-                  const Text("Sort by: "),
-                  const SizedBox(width: 10),
-                  DropdownButton(
-                    enableFeedback: true,
-                    underline: Container(height: 1, color: Colors.green),
-                    elevation: 16,
-                    style: const TextStyle(
-                      color: Colors.green,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    value: selectedFilter,
-                    items: dropdownItems
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                    onChanged: (String? newFilter) {
-                      setState(() {
-                        selectedFilter = newFilter!;
-                        buildCarousel(newFilter);
-                      });
-                    },
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(height: 10.0),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Icon(Icons.arrow_back_rounded, color: Colors.green),
+            ),
+            Row(
+              children: [
+                const Text("Sort by: "),
+                const SizedBox(width: 10),
+                DropdownButton(
+                  enableFeedback: true,
+                  underline: Container(height: 1, color: Colors.green),
+                  elevation: 16,
+                  style: const TextStyle(
+                    color: Colors.green,
+                    fontWeight: FontWeight.w500,
                   ),
-                ],
-              ),
-            ],
-          ),
-          const Padding(
-            padding: EdgeInsets.only(bottom: 10.0),
-            child: Divider(),
-          ),
-          buildCarousel(selectedFilter)
-          // _dockingStations.build(selectedFilter),
-        ],
-      );
+                  value: selectedFilter,
+                  items: dropdownItems
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (String? newFilter) {
+                    setState(() {
+                      selectedFilter = newFilter!;
+                    });
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
+        Divider(),
+        buildCarousel(selectedFilter),
+      ],
+    );
+  }
 
-  FutureBuilder<List> buildCarousel(var newSelectedFilter) {
-    var dockSt = DockingStationCarousel(userCoordinates);
-    return dockSt.build(newSelectedFilter);
+  FutureBuilder<List> buildCarousel(String filter) {
+    return DockingStationCarousel(userCoordinates)
+        .buildFilteredCarousel(filter);
   }
 }

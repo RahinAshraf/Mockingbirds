@@ -53,10 +53,10 @@ class _HelpScreenState extends State<HelpScreen> {
           ),
           Container(
             width: double.infinity,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               border: Border(
                 top: BorderSide(
-                  color: helpScreenBorderColor,
+                  color: Theme.of(context).dividerColor,
                   width: 1.5,
                 ),
               ),

@@ -52,7 +52,7 @@ class SideBar extends StatelessWidget {
               onClicked: () => _renderScreen(context, 4),
             ),
             const SizedBox(height: 24),
-            const Divider(color: Colors.grey),
+            const Divider(thickness: 1.5),
             const SizedBox(height: 24),
             _buildSidebarItem(
               text: 'Help',
@@ -103,7 +103,7 @@ class SideBar extends StatelessWidget {
         break;
       case 4:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => WeatherPage(),
+          builder: (context) => WeatherScreen(),
         ));
         break;
       case 5:

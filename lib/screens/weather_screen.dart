@@ -1,19 +1,16 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:veloplan/models/weather.dart';
 import 'package:veloplan/providers/weather_manager.dart';
-import 'package:veloplan/styles/styling.dart';
-// import 'package:veloplan/widgets/weather_popup_card.dart';
+import '../styles/colors.dart';
 
-class WeatherPage extends StatefulWidget {
+class WeatherScreen extends StatefulWidget {
   @override
-  _WeatherPageState createState() => _WeatherPageState();
+  _WeatherScreenState createState() => _WeatherScreenState();
 }
 
-class _WeatherPageState extends State<WeatherPage> {
+class _WeatherScreenState extends State<WeatherScreen> {
   Weather weather = Weather.defaultvalue();
   String weatherIcon = "10n";
   WeatherManager _weatherManager = WeatherManager();
@@ -39,7 +36,7 @@ class _WeatherPageState extends State<WeatherPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: whiteReplacement,
+      backgroundColor: CustomColors.whiteReplacement,
       appBar: AppBar(
         title: const Text('Weather'),
       ),

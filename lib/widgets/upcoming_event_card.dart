@@ -3,7 +3,7 @@ import 'package:veloplan/models/itinerary.dart';
 import 'package:veloplan/popups.dart';
 import 'package:veloplan/screens/summary_journey_screen.dart';
 import 'package:veloplan/styles/colors.dart';
-import 'package:veloplan/styles/styling.dart';
+import 'package:veloplan/styles/texts.dart';
 
 /// Generates an event card for schedule screen.
 ///
@@ -41,10 +41,10 @@ class UpcomingEventCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Trip title', style: eventCardTitleTextStyle),
+              Text('Trip title', style: Theme.of(context).textTheme.headline2),
               SizedBox(height: 20.0),
               Text("Tap on the card to view journey itinerary.",
-                  style: eventCardDetailsTextStyle),
+                  style: CustomTextStyles.eventCardDetailsTextStyle),
               SizedBox(height: 20.0),
               Row(
                 children: [
@@ -52,7 +52,7 @@ class UpcomingEventCard extends StatelessWidget {
                     children: [
                       Text(
                         "${event.numberOfCyclists}",
-                        style: eventCardDetailsTextStyle,
+                        style: CustomTextStyles.eventCardDetailsTextStyle,
                       ),
                       const Icon(Icons.person,
                           color: Colors.black54, size: 15.0),

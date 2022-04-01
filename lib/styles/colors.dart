@@ -4,6 +4,10 @@ class CustomColors {
   static Color green = const Color(0xFF99D2A9);
   static Color appBarTextColor = Colors.white;
   static Color lightModeScaffoldColour = Colors.white;
+  static Color whiteReplacement =
+      Color(0xFFf5f5f5); // replacement for too bright Colors.white
+  static Color userMessageBubbleColor = Color(0xFF99D2A9);
+  static Color botMessageBubbleColor = Colors.white;
 
   static MaterialColor lightGreen = const MaterialColor(
     0xff99d2a9, // 0%

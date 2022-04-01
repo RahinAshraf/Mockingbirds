@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:veloplan/screens/journey_planner_screen.dart';
 import 'package:veloplan/screens/trips_scheduler_screen.dart';
-import 'package:veloplan/styles/styling.dart';
+import 'package:veloplan/styles/texts.dart';
 
 class TripSchedulerPanelWidget extends StatefulWidget {
   @override
@@ -28,14 +28,14 @@ class _TripSchedulerPanelWidget extends State<TripSchedulerPanelWidget> {
         children: [
           Text(
             'Please fill in the following details of your trip.',
-            style: infoTextStyle,
+            style: CustomTextStyles.infoTextStyle,
           ),
           Row(
             children: [
               SizedBox(
                 width: (MediaQuery.of(context).size.width / 2) - 24,
-                child: const Text("Number of cyclists in the group:",
-                    style: tripSchedulerTextStyle),
+                child: Text("Number of cyclists in the group:",
+                    style: CustomTextStyles.tripSchedulerTextStyle),
               ),
               const SizedBox(width: 10),
               IconButton(
@@ -43,7 +43,8 @@ class _TripSchedulerPanelWidget extends State<TripSchedulerPanelWidget> {
                 icon: const Icon(Icons.remove_rounded, color: Colors.black),
               ),
               const Spacer(),
-              Text('$numberOfCyclists', style: cyclistNumberTextStyle),
+              Text('$numberOfCyclists',
+                  style: CustomTextStyles.cyclistNumberTextStyle),
               const Spacer(),
               IconButton(
                 onPressed: _incrementCounter,
@@ -55,9 +56,9 @@ class _TripSchedulerPanelWidget extends State<TripSchedulerPanelWidget> {
             children: [
               SizedBox(
                 width: (MediaQuery.of(context).size.width / 2) - 24,
-                child: const Text(
+                child: Text(
                   "When would you like to cycle?",
-                  style: tripSchedulerTextStyle,
+                  style: CustomTextStyles.tripSchedulerTextStyle,
                 ),
               ),
               const SizedBox(width: 10),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:veloplan/styles/styling.dart';
+import 'package:veloplan/styles/colors.dart';
+import 'package:veloplan/styles/texts.dart';
 
 const String botName = 'HelpBot';
 const String userName = 'You';
@@ -32,7 +33,7 @@ class MessageBubble extends StatelessWidget {
         children: [
           Text(
             isSentByBot ? botName : userName,
-            style: messageAuthorTextStyle,
+            style: CustomTextStyles.messageAuthorTextStyle,
           ),
           Material(
             borderRadius: isSentByBot
@@ -47,13 +48,17 @@ class MessageBubble extends StatelessWidget {
                     bottomRight: Radius.circular(30.0),
                   ),
             elevation: 5.0,
-            color: isSentByBot ? botMessageBubbleColor : userMessageBubbleColor,
+            color: isSentByBot
+                ? CustomColors.botMessageBubbleColor
+                : CustomColors.userMessageBubbleColor,
             child: Padding(
               padding:
                   const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
               child: Text(
                 content,
-                style: isSentByBot ? botMessageTextStyle : userMessageTextStyle,
+                style: isSentByBot
+                    ? CustomTextStyles.botMessageTextStyle
+                    : CustomTextStyles.userMessageTextStyle,
               ),
             ),
           ),

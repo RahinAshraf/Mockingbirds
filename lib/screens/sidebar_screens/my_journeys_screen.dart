@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import '../../models/itinerary.dart';
 import '../../helpers/database_helpers/history_helper.dart';
+import '../../models/itinerary.dart';
+import '../../styles/colors.dart';
 import '../../widgets/my_journey_card.dart';
 
-///Displays users started journeys
-///Author: Tayyibah
-
+/// Displays user's started (past) journeys.
+/// Author: Tayyibah
 class MyJourneys extends StatefulWidget {
   @override
   _MyJourneysState createState() => _MyJourneysState();
@@ -30,22 +30,20 @@ class _MyJourneysState extends State<MyJourneys> {
   Widget build(BuildContext build) {
     return Scaffold(
       body: journeyList.isEmpty
-          ? const SafeArea(
-              child: Center(child: Text("You haven't made any journeys yet.")),
-            )
-          : Stack(
-              children: [
-                ListView.builder(
-                  itemCount: journeyList.length,
-                  itemBuilder: (context, index) {
-                    return MyJourneyCard(journeyList[index]);
-                  },
-                ),
-              ],
+          ? Center(child: Text("You haven't made any journeys yet."))
+          : Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListView.builder(
+                itemCount: journeyList.length,
+                itemBuilder: (context, index) {
+                  return MyJourneyCard(journeyList[index]);
+                },
+              ),
             ),
       appBar: AppBar(
         title: const Text('My Journeys'),
       ),
+      backgroundColor: CustomColors.whiteReplacement,
     );
   }
 }

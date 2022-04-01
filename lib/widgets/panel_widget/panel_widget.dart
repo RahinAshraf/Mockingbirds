@@ -14,7 +14,7 @@ import 'package:veloplan/providers/location_service.dart';
 import 'package:veloplan/screens/journey_planner_screen.dart';
 import 'package:veloplan/screens/summary_journey_screen.dart';
 import 'package:veloplan/styles/colors.dart';
-import 'package:veloplan/styles/styling.dart';
+import 'package:veloplan/styles/texts.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
 import 'package:veloplan/widgets/dynamic_widget.dart';
 import 'package:veloplan/widgets/panel_widget/panel_widgets_base.dart';
@@ -279,7 +279,7 @@ class PanelWidgetState extends State<PanelWidget> {
               ),
               Text(
                 "Explore London",
-                style: infoTextStyle,
+                style: CustomTextStyles.infoTextStyle,
               ),
               Tooltip(
                 preferBelow: false,
