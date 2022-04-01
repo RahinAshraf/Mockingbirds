@@ -97,7 +97,7 @@ void setRedMarkers(MapboxMapController controller, List<DockingStation> docks,
     Set<Symbol> symbolsSet) async {
   for (var station in docks) {
     addDockSymbol(
-        controller, symbolsSet, station, "assets/icon/red_marker.png", 0.1);
+        controller, symbolsSet, station, "assets/images/red_marker.png", 0.1);
   }
 }
 
