@@ -447,16 +447,11 @@ class PanelWidgetState extends State<PanelWidget> {
     if (hasEmptyField) {
       alert.showSnackBarErrorMessage(
           context, alert.cannotHaveEmptySearchLocationsMessage);
-      // context, alert.startPointMustBeDefinedMessage);
       return;
     } else if (areAdjacentCoords(widget.selectedCoords)) {
       alert.showSnackBarErrorMessage(context, alert.noAdjacentLocationsAllowed);
       return;
     } else {
-      if (applyConstraints(
-          widget.fromTextEditController, widget.toTextEditController)) {
-        return;
-      }
 
       List<List<double?>?> tempList = [];
       tempList.addAll(staticListMap.values);
@@ -481,49 +476,35 @@ class PanelWidgetState extends State<PanelWidget> {
   /// closest docking stations for the locations the user specified. This new list is then passed onto [MapRoutePage].
   /// THIS FUNCTION NEEDS TO BE REFACTORED FURTHER
   Future<void> _handleStartClick() async {
-    List<DockingStation> closestDockList = dockList.values.toList();
-    for (int i = 0; i < closestDockList.length; i++) {
-      LatLng closestDockLatLng =
-          LatLng(closestDockList[i].lat, closestDockList[i].lon);
-      print("NAME => ${closestDockList[i].name}");
-      print("CLOSESTDOCKLATLNGLIST => $closestDockLatLng");
+
+    if(applyConstraints(widget.fromTextEditController, widget.toTextEditController)){
+      print("DID NOT COME BACK FROM APPLYCONSTRAINTS");
+      return;
     }
 
+    print("CAME BACK FROM APPLYCONSTRAINTS");
     final hasEmptyField = widget.listDynamic
         .any((element) => element.placeTextController.text.isEmpty);
 
     if (hasEmptyField) {
       alert.showSnackBarErrorMessage(
           context, alert.cannotHaveEmptySearchLocationsMessage);
+      print("HERE1");
       return;
     } else if (areAdjacentCoords(widget.selectedCoords)) {
       alert.showSnackBarErrorMessage(context, alert.noAdjacentLocationsAllowed);
       return;
     } else {
-      if (applyConstraints(
-          widget.fromTextEditController, widget.toTextEditController)) {
-        return;
-      }
 
+      print("HERE2");
       List<List<double?>?> tempList = [];
       tempList.addAll(staticListMap.values);
       tempList.addAll(widget.selectedCoords);
-      print("ALL_COORDINATES => $tempList");
-      print("\n ------ SEE IF DOCKS LATLNG CAME");
       List<LatLng>? points = convertListDoubleToLatLng(tempList);
 
       List<DockingStation> closestDockList = dockList.values.toList();
-      print("ALREADY EXISTS ==> $closestDockList");
-
       HistoryHelper historyHelper = HistoryHelper();
-
       List<DockingStation> selectedDocks = dockList.values.toList();
-      for (int i = 0; i < selectedDocks.length; i++) {
-        String dockName = selectedDocks[i].name;
-        print("DOCK NAME => $dockName");
-      }
-      print("SELECTED DOCKS ==> $selectedDocks");
-
       List<DockingStation> closestDocksWithNoAdjancents = [];
       for (int i = 0; i < closestDockList.length - 1; i++) {
         if (closestDockList[i].lat == closestDockList[i + 1].lat &&
@@ -535,11 +516,6 @@ class PanelWidgetState extends State<PanelWidget> {
           }
         }
       }
-      print("CLOSESTDOCKS WITH NO ADJACENTS");
-      print(closestDocksWithNoAdjancents);
-
-      print("CLOSESTDOCKLIST");
-      print(closestDockList);
 
       if (closestDocksWithNoAdjancents.length == 1) {
         alert.showSnackBarErrorMessage(
@@ -578,15 +554,20 @@ class PanelWidgetState extends State<PanelWidget> {
       TextEditingController toEditingController) {
     if (startLocationMustBeSpecified(fromEditingController) ||
         startLocationMustBeSpecified(toEditingController)) {
-      true;
+      alert.showSnackBarErrorMessage(context, alert.startPointMustBeDefinedMessage);
+      return true;
+      //return;
     }
     if (widget.hasSpecifiedOneDestination(context, alert)) {
-      true;
+      alert.showSnackBarErrorMessage(context, alert.chooseAtLeastOneDestinationMessage);
+      return true;
     }
     if (aSearchBarCannotBeEmpty(widget.listDynamic)) {
-      true;
+      alert.showSnackBarErrorMessage(context, alert.cannotHaveEmptySearchLocationsMessage);
+      return true;
     }
     return false;
+    //return;
   }
 
   ///The logic to restrict the user from being able to start a journey with 2 locations in the journey being
@@ -594,7 +575,7 @@ class PanelWidgetState extends State<PanelWidget> {
   ///the user selects to visit.
   bool areAdjacentCoords(List<List<double?>?> myList) {
     if (myList.isEmpty) {
-      return true;
+      return false;
     }
     for (int i = 0; i < myList.length - 1; i++) {
       if (myList[i]?.first == myList[i + 1]?.first &&
