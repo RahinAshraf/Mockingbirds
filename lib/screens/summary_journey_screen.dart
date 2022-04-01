@@ -6,8 +6,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart';
-// import 'package:timeline_tile/timeline_tile.dart';
-import 'package:timelines/timelines.dart';
+import 'package:timeline_tile/timeline_tile.dart';
+// import 'package:timelines/timelines.dart';
 import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 import 'package:veloplan/helpers/navigation_helpers/navigation_conversions_helpers.dart';
 import 'package:veloplan/models/itinerary_manager.dart';
@@ -16,6 +16,8 @@ import 'package:veloplan/models/itinerary.dart';
 import 'package:veloplan/navbar.dart';
 import 'package:veloplan/screens/navigation/map_with_route_screen.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
+
+import '../models/docking_station.dart';
 
 /// Displays the summary of journey screen.
 ///
@@ -432,54 +434,62 @@ class TimelineItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TimelineTile(
-      isFirst: true,
+      isFirst: first,
+      isLast: last,
       beforeLineStyle: const LineStyle(
         thickness: 1.0,
         color: Color(0XFFe1e1e1),
       ),
       indicatorStyle: const IndicatorStyle(
-        padding: EdgeInsets.all(5),
+        padding: EdgeInsets.all(0),
         width: 10,
-        indicatorXY: 0.0,
+        indicatorXY: 0.5,
         color: Color(0xFF99D2A9),
       ),
-      alignment: TimelineAlign.start,
-      endChild: Column(
-        children: [
-          Text(
-            content,
-            style: TextStyle(
-              fontSize: 15.0,
-              color: Color(0xFF99D2A9),
-              fontWeight: FontWeight.bold,
+      alignment: TimelineAlign.manual,
+      lineXY: 0.25,
+      startChild: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                first
+                    ? Icon(Icons.directions_walk)
+                    : Icon(Icons.directions_bike),
+                Text('${distance}'),
+              ],
+            ),
+            SizedBox(height: 5.0),
+            Row(
+              children: [
+                Icon(Icons.access_time),
+                Text('${duration}'),
+              ],
+            ),
+          ],
+        ),
+      ),
+      endChild: Card(
+        elevation: 1,
+        // margin: const EdgeInsets.fromLTRB(10.0, 15.0, 20.0, 15.0),
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+          Radius.circular(15.0),
+        )),
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Expanded(
+            child: Text(
+              content,
+              style: TextStyle(
+                fontSize: 15.0,
+                color: Color(0xFF99D2A9),
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
-          // Card(
-          //   elevation: 1,
-          //   // margin: const EdgeInsets.fromLTRB(10.0, 15.0, 20.0, 15.0),
-          //   shape: const RoundedRectangleBorder(
-          //       borderRadius: BorderRadius.only(
-          //     bottomLeft: Radius.circular(15.0),
-          //     bottomRight: Radius.circular(15.0),
-          //     topRight: Radius.circular(15.0),
-          //   )),
-          //   child: Padding(
-          //     padding: const EdgeInsets.all(15.0),
-          //     child: Expanded(
-          //       child: Text(
-          //         content,
-          //         style: TextStyle(
-          //           fontSize: 15.0,
-          //           color: Color(0xFF99D2A9),
-          //           fontWeight: FontWeight.bold,
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          Text('Dur: ${duration}'),
-          Text('Dis: ${distance}'),
-        ],
+        ),
       ),
     );
   }
