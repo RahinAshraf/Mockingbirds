@@ -25,16 +25,15 @@ class _MyJourneyCardState extends State<MyJourneyCard> {
   @override
   Widget build(BuildContext context) {
     DateTime date = widget.journey.date!;
-    String formattedDate = DateFormat.MMMMEEEEd().format(date);
-    _addDateCard(date, formattedDate);
+    _addDateCard(date);
     return Container(
         padding: EdgeInsets.symmetric(vertical: 5.0),
         height: MediaQuery.of(context).size.height * 0.23,
         child: widget.stationCarousel.buildCarousel(widget.stationCards));
   }
 
-  /// Adds a date card to the carousel.
-  void _addDateCard(date, formattedDate) {
+  /// Generates and adds card with a [date] to the carousel.
+  void _addDateCard(date) {
     var cardToAdd = Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
@@ -48,7 +47,7 @@ class _MyJourneyCardState extends State<MyJourneyCard> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                '${formattedDate}, ${date.year}',
+                '${DateFormat.MMMMEEEEd().format(widget.journey.date!)}, ${date.year}',
                 style: CustomTextStyles.headline2,
               ),
               Text(
