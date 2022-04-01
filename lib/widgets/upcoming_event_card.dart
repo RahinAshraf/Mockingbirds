@@ -33,7 +33,7 @@ class UpcomingEventCard extends StatelessWidget {
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-                builder: (context) => SummaryJourneyScreen(event)),
+                builder: (context) => SummaryJourneyScreen(event, true)),
           );
         },
         child: Padding(

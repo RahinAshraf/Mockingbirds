@@ -28,25 +28,29 @@ import 'package:veloplan/utilities/dart_exts.dart';
 
 class SummaryJourneyScreen extends StatefulWidget {
   late Itinerary itinerary;
-  SummaryJourneyScreen(this.itinerary, {Key? key}) : super(key: key);
+  bool cameFromSchedule;
+  final DatabaseManager _databaseManager = DatabaseManager();
+  SummaryJourneyScreen(this.itinerary,this.cameFromSchedule,{Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() =>
-      SummaryJourneyScreenState(this.itinerary);
+      SummaryJourneyScreenState(this.itinerary, this.cameFromSchedule, this._databaseManager);
 }
 
 class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
-  final DatabaseManager _databaseManager = DatabaseManager();
+
+  bool cameFromSchedule;
   bool isInGroup = false;
   late String groupID = "";
   late String organiser = "";
   late List<List<double?>?> pointsInDoubles;
   late List<LatLng> pointsCoord;
   late Itinerary _itinerary;
+  final DatabaseManager _databaseManager;
   late List<Path> paths;
   late ItineraryManager _itineraryManager;
 
-  SummaryJourneyScreenState(this._itinerary) {
+  SummaryJourneyScreenState(this._itinerary, this.cameFromSchedule, this._databaseManager) {
     _itineraryManager = new ItineraryManager(_itinerary);
     paths = _itineraryManager.getPaths();
   }
@@ -75,11 +79,12 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
           'group', 'code', user.data()!['group']);
       res = await _getGroupOwner(group);
       pointsInDoubles = [];
+
     }
     setState(() {
       isInGroup = hasGroup;
       organiser = user.data()!['username'];
-      if (isInGroup) {
+      if (isInGroup && !cameFromSchedule) {
         organiser = res.data()!['username'];
       }
     });
@@ -98,11 +103,11 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
     while (textToPad.length<6){
       textToPad = '0'+ textToPad;
     }
-  return textToPad;
+    return textToPad;
   }
 
-
-  void _createGroup() async {
+@visibleForTesting
+  void createGroup() async {
     var ownerID = _databaseManager.getCurrentUser()?.uid;
     List list = [];
     list.add(ownerID);
@@ -118,46 +123,46 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
     }
     List<GeoPoint> geoList = [];
     var destinationsIndouble =
-        convertLatLngToDouble(_itinerary.myDestinations!);
+    convertLatLngToDouble(_itinerary.myDestinations!);
     for (int i = 0; i < destinationsIndouble!.length; i++) {
       geoList.add(
           GeoPoint(destinationsIndouble[i]![0]!, destinationsIndouble[i]![1]!));
     }
 
     try {
-      await _databaseManager.addToCollection('group', {
+      await _databaseManager.setByKey(
+          'users', ownerID!, {'group': code}, SetOptions(merge: true));
+     var group =  await _databaseManager.addToCollection('group', {
         'code': code,
         'ownerID': ownerID,
         'memberList': list,
         'createdAt': Timestamp.fromDate(DateTime.now()),
       });
-      await _databaseManager.setByKey(
-          'users', ownerID!, {'group': code}, SetOptions(merge: true));
+     var journey = await group.collection("itinerary").add({
+       'journeyID': _itinerary.journeyDocumentId,
+       'points': geoList,
+       'date': _itinerary.date,
+       'numberOfCyclists': _itinerary.numberOfCyclists
+     });
+      var dockingStationList = _itinerary.docks!;
+      for(int j = 0; j< geoList.length; j++){
+        var geo = geoList[j];
+        journey.collection("coordinates").add({
+            'coordinate': geo,
+            'index': j,
+          });
+      }
 
-      var group = await _databaseManager.getByEquality('group', 'code', code);
-      group.docs.forEach((element) async {
-        element.reference.collection('itinerary').add({
-          'journeyID': _itinerary.journeyDocumentId,
-          'points': geoList,
-          'date': _itinerary.date,
-          'numberOfCyclists': _itinerary.numberOfCyclists
-        });
-        var journey = await element.reference
-            .collection('itinerary')
-            .where('journeyID', isEqualTo: _itinerary.journeyDocumentId)
-            .get();
-        var dockingStationList = _itinerary.docks!;
+
         for (int i = 0; i < dockingStationList.length; i++) {
           var station = dockingStationList[i];
-          journey.docs.forEach((jour) {
-            jour.reference.collection("dockingStations").add({
+          journey.collection("dockingStations").add({
               'id': station.stationId,
               'name': station.name,
               'location': GeoPoint(station.lat, station.lon),
+              'index':i,
             });
-          });
         }
-      });
 
       setState(() {
         isInGroup = true;
@@ -265,37 +270,38 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
                     onPressed: () {},
                   )),
               if (isInGroup)
-                Container(
-                    alignment: Alignment.center,
-                    padding: const EdgeInsets.all(10),
-                    color: Theme.of(context).primaryColor,
-                    child: FutureBuilder<String>(
-                        future: _getGroup(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return GestureDetector(
-                              child: Text(
-                                "Tap here to copy the code: " + groupID,
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 13),
-                              ),
-                              onTap: () {
-                                Clipboard.setData(
-                                  ClipboardData(text: groupID),
-                                );
-                              },
-                            );
-                          } else {
-                            return SizedBox(
-                              height: MediaQuery.of(context).size.height / 1.3,
-                              child: const Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                            );
-                          }
-                        })),
+                if(!cameFromSchedule)
+                  Container(
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.all(10),
+                      color: Theme.of(context).primaryColor,
+                      child: FutureBuilder<String>(
+                          future: _getGroup(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return GestureDetector(
+                                child: SelectableText(
+                                  "Tap here to copy the code: " + groupID,
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 13),
+                                ),
+                                onTap: () {
+                                  Clipboard.setData(
+                                    ClipboardData(text: groupID),
+                                  );
+                                },
+                              );
+                            } else {
+                              return SizedBox(
+                                height: MediaQuery.of(context).size.height / 1.3,
+                                child: const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              );
+                            }
+                          })),
               if (!isInGroup)
                 if (_itinerary.date?.day == DateTime.now().day)
                   Container(
@@ -305,8 +311,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
                         child: const Text('Share journey',
                             style: TextStyle(color: Colors.white)),
                         onPressed: () {
-                          print("PUSHD");
-                          _createGroup();
+                          createGroup();
                         },
                       )),
               const SizedBox(height: 20),
@@ -316,7 +321,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
                     TextSpan(
                         text: "Planned stops:",
                         style:
-                            TextStyle(color: Color(0xFF99D2A9), fontSize: 25)),
+                        TextStyle(color: Color(0xFF99D2A9), fontSize: 25)),
                   ],
                 ),
               ),
@@ -382,9 +387,9 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
 class StationTempWidget extends StatelessWidget {
   const StationTempWidget(
       {this.first = false,
-      this.last = false,
-      required this.content,
-      required this.time});
+        this.last = false,
+        required this.content,
+        required this.time});
 
   final bool first;
   final bool last;
@@ -411,10 +416,10 @@ class StationTempWidget extends StatelessWidget {
         margin: const EdgeInsets.fromLTRB(10.0, 15.0, 20.0, 15.0),
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(15.0),
-          bottomRight: Radius.circular(15.0),
-          topRight: Radius.circular(15.0),
-        )),
+              bottomLeft: Radius.circular(15.0),
+              bottomRight: Radius.circular(15.0),
+              topRight: Radius.circular(15.0),
+            )),
         child: Padding(
           padding: const EdgeInsets.all(15.0),
           child: Row(
