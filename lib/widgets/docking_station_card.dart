@@ -51,7 +51,8 @@ class _DockingStationCardState extends State<DockingStationCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 1.0,
+      elevation: 1,
+      color: Colors.white,
       shadowColor: CustomColors.green,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       child: Padding(

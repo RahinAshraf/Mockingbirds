@@ -32,7 +32,7 @@ class _MyJourneysState extends State<MyJourneys> {
       body: journeyList.isEmpty
           ? Center(child: Text("You haven't made any journeys yet."))
           : Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.symmetric(vertical: 15.0),
               child: ListView.builder(
                 itemCount: journeyList.length,
                 itemBuilder: (context, index) {
