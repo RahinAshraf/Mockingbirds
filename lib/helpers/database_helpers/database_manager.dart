@@ -84,7 +84,7 @@ class DatabaseManager {
   }
 
   Future<void> addSubCollectiontoSubCollectionByDocumentId(
-      String documentId,
+       documentId,
       String newSubollection,
       CollectionReference<Object?> subcollection,
       Map<String, dynamic> value) {

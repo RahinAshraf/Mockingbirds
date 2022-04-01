@@ -136,13 +136,23 @@ class MockDatabaseManager extends _i1.Mock implements _i4.DatabaseManager {
           returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
   @override
   _i5.Future<void> addSubCollectiontoSubCollectionByDocumentId(
-          String? documentId,
+          dynamic documentId,
           String? newSubollection,
           _i2.CollectionReference<Object?>? subcollection,
           Map<String, dynamic>? value) =>
       (super.noSuchMethod(
           Invocation.method(#addSubCollectiontoSubCollectionByDocumentId,
               [documentId, newSubollection, subcollection, value]),
+          returnValue: Future<void>.value(),
+          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
+  @override
+  _i5.Future<void> setSubCollectionByDocumentId(
+          String? documentId,
+          _i2.CollectionReference<Object?>? subcollection,
+          Map<String, dynamic>? value) =>
+      (super.noSuchMethod(
+          Invocation.method(#setSubCollectionByDocumentId,
+              [documentId, subcollection, value]),
           returnValue: Future<void>.value(),
           returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
   @override
@@ -450,4 +460,75 @@ class MockQuerySnapshot<T extends Object?> extends _i1.Mock
   @override
   int get size =>
       (super.noSuchMethod(Invocation.getter(#size), returnValue: 0) as int);
+}
+
+/// A class which mocks [DocumentReference].
+///
+/// See the documentation for Mockito's code generation for more information.
+// ignore: must_be_immutable
+class MockDocumentReference<T extends Object?> extends _i1.Mock
+    implements _i2.DocumentReference<T> {
+  MockDocumentReference() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i2.FirebaseFirestore get firestore =>
+      (super.noSuchMethod(Invocation.getter(#firestore),
+          returnValue: _FakeFirebaseFirestore_8()) as _i2.FirebaseFirestore);
+  @override
+  String get id =>
+      (super.noSuchMethod(Invocation.getter(#id), returnValue: '') as String);
+  @override
+  _i2.CollectionReference<T> get parent =>
+      (super.noSuchMethod(Invocation.getter(#parent),
+              returnValue: _FakeCollectionReference_0<T>())
+          as _i2.CollectionReference<T>);
+  @override
+  String get path =>
+      (super.noSuchMethod(Invocation.getter(#path), returnValue: '') as String);
+  @override
+  _i2.CollectionReference<Map<String, dynamic>> collection(
+          String? collectionPath) =>
+      (super.noSuchMethod(Invocation.method(#collection, [collectionPath]),
+              returnValue: _FakeCollectionReference_0<Map<String, dynamic>>())
+          as _i2.CollectionReference<Map<String, dynamic>>);
+  @override
+  _i5.Future<void> delete() =>
+      (super.noSuchMethod(Invocation.method(#delete, []),
+          returnValue: Future<void>.value(),
+          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
+  @override
+  _i5.Future<void> update(Map<String, Object?>? data) =>
+      (super.noSuchMethod(Invocation.method(#update, [data]),
+          returnValue: Future<void>.value(),
+          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
+  @override
+  _i5.Future<_i2.DocumentSnapshot<T>> get([_i2.GetOptions? options]) =>
+      (super.noSuchMethod(Invocation.method(#get, [options]),
+              returnValue: Future<_i2.DocumentSnapshot<T>>.value(
+                  _FakeDocumentSnapshot_2<T>()))
+          as _i5.Future<_i2.DocumentSnapshot<T>>);
+  @override
+  _i5.Stream<_i2.DocumentSnapshot<T>> snapshots(
+          {bool? includeMetadataChanges = false}) =>
+      (super.noSuchMethod(
+              Invocation.method(#snapshots, [],
+                  {#includeMetadataChanges: includeMetadataChanges}),
+              returnValue: Stream<_i2.DocumentSnapshot<T>>.empty())
+          as _i5.Stream<_i2.DocumentSnapshot<T>>);
+  @override
+  _i5.Future<void> set(T? data, [_i2.SetOptions? options]) =>
+      (super.noSuchMethod(Invocation.method(#set, [data, options]),
+          returnValue: Future<void>.value(),
+          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
+  @override
+  _i2.DocumentReference<R> withConverter<R>(
+          {_i2.FromFirestore<R>? fromFirestore,
+          _i2.ToFirestore<R>? toFirestore}) =>
+      (super.noSuchMethod(
+              Invocation.method(#withConverter, [],
+                  {#fromFirestore: fromFirestore, #toFirestore: toFirestore}),
+              returnValue: _FakeDocumentReference_9<R>())
+          as _i2.DocumentReference<R>);
 }
