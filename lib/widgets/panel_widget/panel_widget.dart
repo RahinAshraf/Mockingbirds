@@ -440,22 +440,21 @@ class PanelWidgetState extends State<PanelWidget> {
     List<DockingStation> closestDockList = dockList.values.toList();
     print("ALREADY EXISTS ==> $closestDockList");
 
+    if(applyConstraints(widget.fromTextEditController, widget.toTextEditController)){
+      return;
+    }
+
     final hasEmptyField = widget.listDynamic
         .any((element) => element.placeTextController.text.isEmpty);
 
     if (hasEmptyField) {
       alert.showSnackBarErrorMessage(
           context, alert.cannotHaveEmptySearchLocationsMessage);
-      // context, alert.startPointMustBeDefinedMessage);
       return;
     } else if (areAdjacentCoords(widget.selectedCoords)) {
       alert.showSnackBarErrorMessage(context, alert.noAdjacentLocationsAllowed);
       return;
     } else {
-      if (applyConstraints(
-          widget.fromTextEditController, widget.toTextEditController)) {
-        return;
-      }
 
       List<List<double?>?> tempList = [];
       tempList.addAll(staticListMap.values);
@@ -480,12 +479,9 @@ class PanelWidgetState extends State<PanelWidget> {
   /// closest docking stations for the locations the user specified. This new list is then passed onto [MapRoutePage].
   /// THIS FUNCTION NEEDS TO BE REFACTORED FURTHER
   Future<void> _handleStartClick() async {
-    List<DockingStation> closestDockList = dockList.values.toList();
-    for (int i = 0; i < closestDockList.length; i++) {
-      LatLng closestDockLatLng =
-          LatLng(closestDockList[i].lat, closestDockList[i].lon);
-      print("NAME => ${closestDockList[i].name}");
-      print("CLOSESTDOCKLATLNGLIST => $closestDockLatLng");
+
+    if(applyConstraints(widget.fromTextEditController, widget.toTextEditController)){
+      return;
     }
 
     final hasEmptyField = widget.listDynamic
@@ -499,30 +495,14 @@ class PanelWidgetState extends State<PanelWidget> {
       alert.showSnackBarErrorMessage(context, alert.noAdjacentLocationsAllowed);
       return;
     } else {
-      if (applyConstraints(
-          widget.fromTextEditController, widget.toTextEditController)) {
-        return;
-      }
-
       List<List<double?>?> tempList = [];
       tempList.addAll(staticListMap.values);
       tempList.addAll(widget.selectedCoords);
-      print("ALL_COORDINATES => $tempList");
-      print("\n ------ SEE IF DOCKS LATLNG CAME");
       List<LatLng>? points = convertListDoubleToLatLng(tempList);
 
       List<DockingStation> closestDockList = dockList.values.toList();
-      print("ALREADY EXISTS ==> $closestDockList");
-
       HistoryHelper historyHelper = HistoryHelper();
-
       List<DockingStation> selectedDocks = dockList.values.toList();
-      for (int i = 0; i < selectedDocks.length; i++) {
-        String dockName = selectedDocks[i].name;
-        print("DOCK NAME => $dockName");
-      }
-      print("SELECTED DOCKS ==> $selectedDocks");
-
       List<DockingStation> closestDocksWithNoAdjancents = [];
       for (int i = 0; i < closestDockList.length - 1; i++) {
         if (closestDockList[i].lat == closestDockList[i + 1].lat &&
@@ -534,11 +514,6 @@ class PanelWidgetState extends State<PanelWidget> {
           }
         }
       }
-      print("CLOSESTDOCKS WITH NO ADJACENTS");
-      print(closestDocksWithNoAdjancents);
-
-      print("CLOSESTDOCKLIST");
-      print(closestDockList);
 
       if (closestDocksWithNoAdjancents.length == 1) {
         alert.showSnackBarErrorMessage(
@@ -547,8 +522,7 @@ class PanelWidgetState extends State<PanelWidget> {
       }
 
       if (points == null) {
-        //! show something went wrong alert
-        print("hello");
+
       } else {
         Itinerary _itinerary = new Itinerary.navigation(
             selectedDocks, points, widget.numberOfCyclists);
@@ -577,13 +551,16 @@ class PanelWidgetState extends State<PanelWidget> {
       TextEditingController toEditingController) {
     if (startLocationMustBeSpecified(fromEditingController) ||
         startLocationMustBeSpecified(toEditingController)) {
-      true;
+      alert.showSnackBarErrorMessage(context, alert.startPointMustBeDefinedMessage);
+      return true;
     }
     if (widget.hasSpecifiedOneDestination(context, alert)) {
-      true;
+      alert.showSnackBarErrorMessage(context, alert.chooseAtLeastOneDestinationMessage);
+      return true;
     }
     if (aSearchBarCannotBeEmpty(widget.listDynamic)) {
-      true;
+      alert.showSnackBarErrorMessage(context, alert.cannotHaveEmptySearchLocationsMessage);
+      return true;
     }
     return false;
   }
@@ -598,16 +575,13 @@ class PanelWidgetState extends State<PanelWidget> {
     for (int i = 0; i < myList.length - 1; i++) {
       if (myList[i]?.first == myList[i + 1]?.first &&
           myList[i]?.last == myList[i + 1]?.last) {
-        print("Adjacents exist");
         return true;
       }
     }
     if (myList[0]?.first == staticListMap[fromLabelKey]?.first &&
         myList[0]?.last == staticListMap[fromLabelKey]?.last) {
-      print("Adjacents exist2");
       return true;
     }
-    print("Adjacents do not exist");
     return false;
   }
 

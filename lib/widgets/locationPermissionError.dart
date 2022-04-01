@@ -5,41 +5,36 @@ import 'package:veloplan/utilities/dart_exts.dart';
 import 'package:veloplan/utilities/permissions.dart';
 import '../screens/auth_screen.dart';
 
-
 ///Widget to display a Location error
 ///@author: Rahin Ashraf k20034059
 
 /// Builds a widget displaying a circular progression indicator and an error message
 /// for when the live location is not enabled.
-class LocationError extends StatefulWidget{
-
+class LocationError extends StatefulWidget {
   @override
   LocationErrorState createState() {
     return LocationErrorState();
   }
-
 }
 
-class LocationErrorState extends State<LocationError> with WidgetsBindingObserver{
+class LocationErrorState extends State<LocationError>
+    with WidgetsBindingObserver {
+  LocationErrorState() {}
 
-  LocationErrorState(){
-
-  }
-
-  void goToSettings() async{
+  void goToSettings() async {
     await openAppSettings();
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     print("BuildContextrrr_isGranted => $state");
-    if(mounted && state == AppLifecycleState.resumed){
+    if (mounted && state == AppLifecycleState.resumed) {
       PermissionUtils.instance.getLocation(context).listen((status) {
-        if(status == Permissions.ALLOW_WHILE_USING_APP || status == Permissions.ALLOW_ALL_TIME){
+        if (status == Permissions.ALLOW_WHILE_USING_APP ||
+            status == Permissions.ALLOW_ALL_TIME) {
           FirebaseAuth.instance.signOut();
-           context.pushAndRemoveUntil(AuthScreen());
-
-        }else {
+          context.pushAndRemoveUntil(AuthScreen());
+        } else {
           print("Permission is $status");
         }
       });
@@ -57,6 +52,7 @@ class LocationErrorState extends State<LocationError> with WidgetsBindingObserve
   Widget build(BuildContext context) {
     print("BuildContext => $context");
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Center(
         child: Container(
           color: Colors.white,
@@ -71,8 +67,8 @@ class LocationErrorState extends State<LocationError> with WidgetsBindingObserve
               ),
               Text(
                 "Please enable your location permission access in order to use VeloPlan. \n After "
-                    "enabling your locations permissions, please close and reopen the app to begin your visit \n"
-                    "London!",
+                "enabling your locations permissions, please close and reopen the app to begin your visit \n"
+                "London!",
                 textDirection: TextDirection.ltr,
                 textAlign: TextAlign.center,
                 style: TextStyle(

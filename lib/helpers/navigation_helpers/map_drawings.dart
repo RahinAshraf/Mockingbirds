@@ -8,21 +8,6 @@ import 'package:veloplan/widgets/docking_station_widget.dart';
 /// Author(s): Fariha Choudhury k20059723, Elisabeth Koren Halvorsen k20077737
 final GlobalKey<DockStationState> dockingStationKey = GlobalKey();
 
-/// Adds symbol layer to map for every docking station in London
-// void placeDockMarkers(
-//     MapboxMapController controller, List<DockingStation> docks) {
-//   for (var station in docks) {
-//     controller.addSymbol(
-//         SymbolOptions(
-//             geometry: LatLng(station.lat, station.lon),
-//             iconSize: 0.3,
-//             iconImage: "assets/images/appicon.png"),
-//         {
-//           "station": station,
-//         });
-//   }
-// }
-
 /// Creates a [fills] Map with the specified geometry for the chosen [routeResponse]
 Future<Map<String, Object>> setFills(Map fills, dynamic routeResponse) async {
   try {
@@ -88,8 +73,8 @@ void placeDockMarkers(MapboxMapController controller,
 void setYellowMarkers(MapboxMapController controller,
     List<DockingStation> docks, Set<Symbol> symbolsSet) async {
   for (var station in docks) {
-    addDockSymbol(
-        controller, symbolsSet, station, "assets/icon/yellow_marker.png", 0.1);
+    addDockSymbol(controller, symbolsSet, station,
+        "assets/images/yellow_marker.png", 0.1);
   }
 }
 
@@ -97,7 +82,7 @@ void setRedMarkers(MapboxMapController controller, List<DockingStation> docks,
     Set<Symbol> symbolsSet) async {
   for (var station in docks) {
     addDockSymbol(
-        controller, symbolsSet, station, "assets/icon/red_marker.png", 0.1);
+        controller, symbolsSet, station, "assets/images/red_marker.png", 0.1);
   }
 }
 
@@ -120,7 +105,7 @@ void setLocationMarkers(MapboxMapController controller, List<LatLng> journey,
     Set<Symbol> polylineSymbols) async {
   for (var stop in journey) {
     addSymbol(controller, polylineSymbols, stop,
-        "assets/icon/yellow_marker.png", 0.1);
+        "assets/images/yellow_marker.png", 0.1);
   }
 }
 
