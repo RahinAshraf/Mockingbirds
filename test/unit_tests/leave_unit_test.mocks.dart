@@ -2,14 +2,17 @@
 // in veloplan/test/unit_tests/leave_unit_test.dart.
 // Do not manually edit this file.
 
-import 'dart:async' as _i5;
+import 'dart:async' as _i6;
 
 import 'package:cloud_firestore/cloud_firestore.dart' as _i2;
 import 'package:firebase_auth/firebase_auth.dart' as _i3;
 import 'package:firebase_auth_platform_interface/firebase_auth_platform_interface.dart'
-    as _i6;
+    as _i7;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:veloplan/helpers/database_helpers/database_manager.dart' as _i4;
+import 'package:veloplan/helpers/database_helpers/database_manager.dart' as _i5;
+import 'package:veloplan/models/itinerary.dart' as _i4;
+import 'package:veloplan/models/itinerary_manager.dart' as _i8;
+import 'package:veloplan/models/path.dart' as _i9;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -47,10 +50,15 @@ class _FakeUser_8 extends _i1.Fake implements _i3.User {}
 class _FakeSnapshotMetadata_9 extends _i1.Fake implements _i2.SnapshotMetadata {
 }
 
+class _FakeItinerary_10 extends _i1.Fake implements _i4.Itinerary {}
+
+class _FakeFirebaseFirestore_11 extends _i1.Fake
+    implements _i2.FirebaseFirestore {}
+
 /// A class which mocks [DatabaseManager].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockDatabaseManager extends _i1.Mock implements _i4.DatabaseManager {
+class MockDatabaseManager extends _i1.Mock implements _i5.DatabaseManager {
   MockDatabaseManager() {
     _i1.throwOnMissingStub(this);
   }
@@ -64,78 +72,78 @@ class MockDatabaseManager extends _i1.Mock implements _i4.DatabaseManager {
               _FakeCollectionReference_0<Object?>()) as _i2
           .CollectionReference<Object?>);
   @override
-  _i5.Future<_i2.QuerySnapshot<Object?>> getUserSubcollection(
+  _i6.Future<_i2.QuerySnapshot<Object?>> getUserSubcollection(
           String? subcollection) =>
       (super.noSuchMethod(
               Invocation.method(#getUserSubcollection, [subcollection]),
               returnValue: Future<_i2.QuerySnapshot<Object?>>.value(
                   _FakeQuerySnapshot_1<Object?>()))
-          as _i5.Future<_i2.QuerySnapshot<Object?>>);
+          as _i6.Future<_i2.QuerySnapshot<Object?>>);
   @override
-  _i5.Future<dynamic> deleteCollection(
+  _i6.Future<dynamic> deleteCollection(
           _i2.CollectionReference<Object?>? collection) =>
       (super.noSuchMethod(Invocation.method(#deleteCollection, [collection]),
-          returnValue: Future<dynamic>.value()) as _i5.Future<dynamic>);
+          returnValue: Future<dynamic>.value()) as _i6.Future<dynamic>);
   @override
-  _i5.Future<void> deleteDocument(
+  _i6.Future<void> deleteDocument(
           _i2.CollectionReference<Object?>? collection, String? documentId) =>
       (super.noSuchMethod(
           Invocation.method(#deleteDocument, [collection, documentId]),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
   @override
-  _i5.Future<_i2.QuerySnapshot<Map<String, dynamic>>> getByEquality(
+  _i6.Future<_i2.QuerySnapshot<Map<String, dynamic>>> getByEquality(
           String? collection, String? field, String? equalTo) =>
       (super.noSuchMethod(
           Invocation.method(#getByEquality, [collection, field, equalTo]),
           returnValue: Future<_i2.QuerySnapshot<Map<String, dynamic>>>.value(
-              _FakeQuerySnapshot_1<Map<String, dynamic>>())) as _i5
+              _FakeQuerySnapshot_1<Map<String, dynamic>>())) as _i6
           .Future<_i2.QuerySnapshot<Map<String, dynamic>>>);
   @override
-  _i5.Future<_i2.DocumentSnapshot<Map<String, dynamic>>> getByKey(
+  _i6.Future<_i2.DocumentSnapshot<Map<String, dynamic>>> getByKey(
           String? collection, String? key) =>
       (super.noSuchMethod(Invocation.method(#getByKey, [collection, key]),
           returnValue: Future<_i2.DocumentSnapshot<Map<String, dynamic>>>.value(
-              _FakeDocumentSnapshot_2<Map<String, dynamic>>())) as _i5
+              _FakeDocumentSnapshot_2<Map<String, dynamic>>())) as _i6
           .Future<_i2.DocumentSnapshot<Map<String, dynamic>>>);
   @override
-  _i5.Future<void> setByKey(
+  _i6.Future<void> setByKey(
           String? collection, String? key, Map<String, dynamic>? value,
           [_i2.SetOptions? options]) =>
       (super.noSuchMethod(
           Invocation.method(#setByKey, [collection, key, value, options]),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
   @override
-  _i5.Future<void> updateByKey(
+  _i6.Future<void> updateByKey(
           String? collection, String? key, Map<String, dynamic>? value) =>
       (super.noSuchMethod(
           Invocation.method(#updateByKey, [collection, key, value]),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
   @override
-  _i5.Future<_i2.DocumentReference<Map<String, dynamic>>> addToCollection(
+  _i6.Future<_i2.DocumentReference<Map<String, dynamic>>> addToCollection(
           String? collection, Map<String, dynamic>? value) =>
       (super.noSuchMethod(
               Invocation.method(#addToCollection, [collection, value]),
               returnValue:
                   Future<_i2.DocumentReference<Map<String, dynamic>>>.value(
                       _FakeDocumentReference_3<Map<String, dynamic>>()))
-          as _i5.Future<_i2.DocumentReference<Map<String, dynamic>>>);
+          as _i6.Future<_i2.DocumentReference<Map<String, dynamic>>>);
   @override
-  _i5.Future<_i2.DocumentReference<Object?>> addToSubCollection(
+  _i6.Future<_i2.DocumentReference<Object?>> addToSubCollection(
           _i2.CollectionReference<Object?>? subcollection,
           Map<String, dynamic>? value) =>
       (super.noSuchMethod(
               Invocation.method(#addToSubCollection, [subcollection, value]),
               returnValue: Future<_i2.DocumentReference<Object?>>.value(
                   _FakeDocumentReference_3<Object?>()))
-          as _i5.Future<_i2.DocumentReference<Object?>>);
+          as _i6.Future<_i2.DocumentReference<Object?>>);
   @override
-  _i5.Future<void> signOut() =>
+  _i6.Future<void> signOut() =>
       (super.noSuchMethod(Invocation.method(#signOut, []),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
 }
 
 /// A class which mocks [User].
@@ -166,109 +174,109 @@ class MockUser extends _i1.Mock implements _i3.User {
   String get uid =>
       (super.noSuchMethod(Invocation.getter(#uid), returnValue: '') as String);
   @override
-  _i5.Future<void> delete() =>
+  _i6.Future<void> delete() =>
       (super.noSuchMethod(Invocation.method(#delete, []),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
   @override
-  _i5.Future<String> getIdToken([bool? forceRefresh = false]) =>
+  _i6.Future<String> getIdToken([bool? forceRefresh = false]) =>
       (super.noSuchMethod(Invocation.method(#getIdToken, [forceRefresh]),
-          returnValue: Future<String>.value('')) as _i5.Future<String>);
+          returnValue: Future<String>.value('')) as _i6.Future<String>);
   @override
-  _i5.Future<_i3.IdTokenResult> getIdTokenResult(
+  _i6.Future<_i3.IdTokenResult> getIdTokenResult(
           [bool? forceRefresh = false]) =>
       (super.noSuchMethod(Invocation.method(#getIdTokenResult, [forceRefresh]),
               returnValue:
                   Future<_i3.IdTokenResult>.value(_FakeIdTokenResult_5()))
-          as _i5.Future<_i3.IdTokenResult>);
+          as _i6.Future<_i3.IdTokenResult>);
   @override
-  _i5.Future<_i3.UserCredential> linkWithCredential(
+  _i6.Future<_i3.UserCredential> linkWithCredential(
           _i3.AuthCredential? credential) =>
       (super.noSuchMethod(Invocation.method(#linkWithCredential, [credential]),
               returnValue:
                   Future<_i3.UserCredential>.value(_FakeUserCredential_6()))
-          as _i5.Future<_i3.UserCredential>);
+          as _i6.Future<_i3.UserCredential>);
   @override
-  _i5.Future<_i3.UserCredential> linkWithPopup(_i6.AuthProvider? provider) =>
+  _i6.Future<_i3.UserCredential> linkWithPopup(_i7.AuthProvider? provider) =>
       (super.noSuchMethod(Invocation.method(#linkWithPopup, [provider]),
               returnValue:
                   Future<_i3.UserCredential>.value(_FakeUserCredential_6()))
-          as _i5.Future<_i3.UserCredential>);
+          as _i6.Future<_i3.UserCredential>);
   @override
-  _i5.Future<_i3.ConfirmationResult> linkWithPhoneNumber(String? phoneNumber,
+  _i6.Future<_i3.ConfirmationResult> linkWithPhoneNumber(String? phoneNumber,
           [_i3.RecaptchaVerifier? verifier]) =>
       (super.noSuchMethod(
               Invocation.method(#linkWithPhoneNumber, [phoneNumber, verifier]),
               returnValue: Future<_i3.ConfirmationResult>.value(
                   _FakeConfirmationResult_7()))
-          as _i5.Future<_i3.ConfirmationResult>);
+          as _i6.Future<_i3.ConfirmationResult>);
   @override
-  _i5.Future<_i3.UserCredential> reauthenticateWithCredential(
+  _i6.Future<_i3.UserCredential> reauthenticateWithCredential(
           _i3.AuthCredential? credential) =>
       (super.noSuchMethod(
               Invocation.method(#reauthenticateWithCredential, [credential]),
               returnValue:
                   Future<_i3.UserCredential>.value(_FakeUserCredential_6()))
-          as _i5.Future<_i3.UserCredential>);
+          as _i6.Future<_i3.UserCredential>);
   @override
-  _i5.Future<void> reload() =>
+  _i6.Future<void> reload() =>
       (super.noSuchMethod(Invocation.method(#reload, []),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
   @override
-  _i5.Future<void> sendEmailVerification(
+  _i6.Future<void> sendEmailVerification(
           [_i3.ActionCodeSettings? actionCodeSettings]) =>
       (super.noSuchMethod(
           Invocation.method(#sendEmailVerification, [actionCodeSettings]),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
   @override
-  _i5.Future<_i3.User> unlink(String? providerId) =>
+  _i6.Future<_i3.User> unlink(String? providerId) =>
       (super.noSuchMethod(Invocation.method(#unlink, [providerId]),
               returnValue: Future<_i3.User>.value(_FakeUser_8()))
-          as _i5.Future<_i3.User>);
+          as _i6.Future<_i3.User>);
   @override
-  _i5.Future<void> updateEmail(String? newEmail) =>
+  _i6.Future<void> updateEmail(String? newEmail) =>
       (super.noSuchMethod(Invocation.method(#updateEmail, [newEmail]),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
   @override
-  _i5.Future<void> updatePassword(String? newPassword) =>
+  _i6.Future<void> updatePassword(String? newPassword) =>
       (super.noSuchMethod(Invocation.method(#updatePassword, [newPassword]),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
   @override
-  _i5.Future<void> updatePhoneNumber(
+  _i6.Future<void> updatePhoneNumber(
           _i3.PhoneAuthCredential? phoneCredential) =>
       (super.noSuchMethod(
           Invocation.method(#updatePhoneNumber, [phoneCredential]),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
   @override
-  _i5.Future<void> updateDisplayName(String? displayName) =>
+  _i6.Future<void> updateDisplayName(String? displayName) =>
       (super.noSuchMethod(Invocation.method(#updateDisplayName, [displayName]),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
   @override
-  _i5.Future<void> updatePhotoURL(String? photoURL) =>
+  _i6.Future<void> updatePhotoURL(String? photoURL) =>
       (super.noSuchMethod(Invocation.method(#updatePhotoURL, [photoURL]),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
   @override
-  _i5.Future<void> updateProfile({String? displayName, String? photoURL}) =>
+  _i6.Future<void> updateProfile({String? displayName, String? photoURL}) =>
       (super.noSuchMethod(
           Invocation.method(#updateProfile, [],
               {#displayName: displayName, #photoURL: photoURL}),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
   @override
-  _i5.Future<void> verifyBeforeUpdateEmail(String? newEmail,
+  _i6.Future<void> verifyBeforeUpdateEmail(String? newEmail,
           [_i3.ActionCodeSettings? actionCodeSettings]) =>
       (super.noSuchMethod(
           Invocation.method(
               #verifyBeforeUpdateEmail, [newEmail, actionCodeSettings]),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
 }
 
 /// A class which mocks [QuerySnapshot].
@@ -330,11 +338,114 @@ class MockDocumentSnapshot<T extends Object?> extends _i1.Mock
       super.noSuchMethod(Invocation.method(#[], [field]));
 }
 
+/// A class which mocks [ItineraryManager].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockItineraryManager extends _i1.Mock implements _i8.ItineraryManager {
+  MockItineraryManager() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  List<_i9.Path> getPaths() =>
+      (super.noSuchMethod(Invocation.method(#getPaths, []),
+          returnValue: <_i9.Path>[]) as List<_i9.Path>);
+  @override
+  _i4.Itinerary getItinerary() =>
+      (super.noSuchMethod(Invocation.method(#getItinerary, []),
+          returnValue: _FakeItinerary_10()) as _i4.Itinerary);
+  @override
+  void printPaths() => super.noSuchMethod(Invocation.method(#printPaths, []),
+      returnValueForMissingStub: null);
+  @override
+  void updatePath(_i9.Path? newPath) =>
+      super.noSuchMethod(Invocation.method(#updatePath, [newPath]),
+          returnValueForMissingStub: null);
+  @override
+  void setIndex(int? i) => super.noSuchMethod(Invocation.method(#setIndex, [i]),
+      returnValueForMissingStub: null);
+  @override
+  int getIndex() =>
+      (super.noSuchMethod(Invocation.method(#getIndex, []), returnValue: 0)
+          as int);
+}
+
+/// A class which mocks [DocumentReference].
+///
+/// See the documentation for Mockito's code generation for more information.
+// ignore: must_be_immutable
+class MockDocumentReference<T extends Object?> extends _i1.Mock
+    implements _i2.DocumentReference<T> {
+  MockDocumentReference() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i2.FirebaseFirestore get firestore =>
+      (super.noSuchMethod(Invocation.getter(#firestore),
+          returnValue: _FakeFirebaseFirestore_11()) as _i2.FirebaseFirestore);
+  @override
+  String get id =>
+      (super.noSuchMethod(Invocation.getter(#id), returnValue: '') as String);
+  @override
+  _i2.CollectionReference<T> get parent =>
+      (super.noSuchMethod(Invocation.getter(#parent),
+              returnValue: _FakeCollectionReference_0<T>())
+          as _i2.CollectionReference<T>);
+  @override
+  String get path =>
+      (super.noSuchMethod(Invocation.getter(#path), returnValue: '') as String);
+  @override
+  _i2.CollectionReference<Map<String, dynamic>> collection(
+          String? collectionPath) =>
+      (super.noSuchMethod(Invocation.method(#collection, [collectionPath]),
+              returnValue: _FakeCollectionReference_0<Map<String, dynamic>>())
+          as _i2.CollectionReference<Map<String, dynamic>>);
+  @override
+  _i6.Future<void> delete() =>
+      (super.noSuchMethod(Invocation.method(#delete, []),
+          returnValue: Future<void>.value(),
+          returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
+  @override
+  _i6.Future<void> update(Map<String, Object?>? data) =>
+      (super.noSuchMethod(Invocation.method(#update, [data]),
+          returnValue: Future<void>.value(),
+          returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
+  @override
+  _i6.Future<_i2.DocumentSnapshot<T>> get([_i2.GetOptions? options]) =>
+      (super.noSuchMethod(Invocation.method(#get, [options]),
+              returnValue: Future<_i2.DocumentSnapshot<T>>.value(
+                  _FakeDocumentSnapshot_2<T>()))
+          as _i6.Future<_i2.DocumentSnapshot<T>>);
+  @override
+  _i6.Stream<_i2.DocumentSnapshot<T>> snapshots(
+          {bool? includeMetadataChanges = false}) =>
+      (super.noSuchMethod(
+              Invocation.method(#snapshots, [],
+                  {#includeMetadataChanges: includeMetadataChanges}),
+              returnValue: Stream<_i2.DocumentSnapshot<T>>.empty())
+          as _i6.Stream<_i2.DocumentSnapshot<T>>);
+  @override
+  _i6.Future<void> set(T? data, [_i2.SetOptions? options]) =>
+      (super.noSuchMethod(Invocation.method(#set, [data, options]),
+          returnValue: Future<void>.value(),
+          returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
+  @override
+  _i2.DocumentReference<R> withConverter<R>(
+          {_i2.FromFirestore<R>? fromFirestore,
+          _i2.ToFirestore<R>? toFirestore}) =>
+      (super.noSuchMethod(
+              Invocation.method(#withConverter, [],
+                  {#fromFirestore: fromFirestore, #toFirestore: toFirestore}),
+              returnValue: _FakeDocumentReference_3<R>())
+          as _i2.DocumentReference<R>);
+}
+
 /// A class which mocks [QueryDocumentSnapshot].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockQueryDocumentSnapshot<T extends Object?> extends _i1.Mock
-    implements _i2.QueryDocumentSnapshot<T> {
+class MockQueryDocumentSnapshot extends _i1.Mock
+    implements _i2.QueryDocumentSnapshot<Map<String, dynamic>> {
   MockQueryDocumentSnapshot() {
     _i1.throwOnMissingStub(this);
   }
@@ -343,9 +454,10 @@ class MockQueryDocumentSnapshot<T extends Object?> extends _i1.Mock
   String get id =>
       (super.noSuchMethod(Invocation.getter(#id), returnValue: '') as String);
   @override
-  _i2.DocumentReference<T> get reference => (super.noSuchMethod(
-      Invocation.getter(#reference),
-      returnValue: _FakeDocumentReference_3<T>()) as _i2.DocumentReference<T>);
+  _i2.DocumentReference<Map<String, dynamic>> get reference =>
+      (super.noSuchMethod(Invocation.getter(#reference),
+              returnValue: _FakeDocumentReference_3<Map<String, dynamic>>())
+          as _i2.DocumentReference<Map<String, dynamic>>);
   @override
   _i2.SnapshotMetadata get metadata =>
       (super.noSuchMethod(Invocation.getter(#metadata),
@@ -355,8 +467,9 @@ class MockQueryDocumentSnapshot<T extends Object?> extends _i1.Mock
       (super.noSuchMethod(Invocation.getter(#exists), returnValue: false)
           as bool);
   @override
-  T data() => throw UnsupportedError(
-      '\'data\' cannot be used without a mockito fallback generator.');
+  Map<String, dynamic> data() =>
+      (super.noSuchMethod(Invocation.method(#data, []),
+          returnValue: <String, dynamic>{}) as Map<String, dynamic>);
   @override
   dynamic get(Object? field) =>
       super.noSuchMethod(Invocation.method(#get, [field]));

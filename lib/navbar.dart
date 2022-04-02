@@ -136,7 +136,6 @@ class _NavBarState extends State<NavBar> {
                     builder: (BuildContext context) =>
                         popup.buildPopupDialogNewJourney(context));
                 if (_isInGroup) {
-                  //_onTabTapped(1);
                   _getGroupInfo();
                 }
               },

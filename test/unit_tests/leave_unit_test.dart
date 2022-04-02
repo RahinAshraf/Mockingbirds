@@ -1,8 +1,11 @@
 
 import 'dart:collection';
 
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:veloplan/models/itinerary_manager.dart';
+import 'package:veloplan/models/path.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
@@ -12,39 +15,63 @@ import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/models/itinerary.dart';
 import 'package:veloplan/screens/summary_journey_screen.dart';
+import 'package:veloplan/widgets/message_bubble_widget.dart';
 import 'leave_unit_test.mocks.dart';
 @GenerateMocks([
   DatabaseManager,
   User,
   QuerySnapshot,
-  DocumentSnapshot
+  DocumentSnapshot,
+  ItineraryManager,
+  DocumentReference<Map<String,dynamic>>,
 ], customMocks: [
-  MockSpec<QueryDocumentSnapshot>(unsupportedMembers:  {#data}),
+  MockSpec<QueryDocumentSnapshot<Map<String,dynamic>>>(unsupportedMembers:  {#data}),
 ])
 void main(){
+
+  //TODO: rendetrakni, owner is currentuser but not alone, current is just participant empty/non-empty
   var mockDBManagager = MockDatabaseManager();
+  var itManager = MockItineraryManager();
   var points = [LatLng(20, 30),LatLng(10, 10)];
+  var path = [Path(DockingStation("test1", 'test1', true, false, 2, 2, 4, 20, 30), DockingStation("test2", 'test2', true, false, 2, 2, 4, 10, 10), LatLng(20, 30), LatLng(10, 10))];
   var docks = [DockingStation("test1", 'test1', true, false, 2, 2, 4, 20, 30),DockingStation("test2", 'test2', true, false, 2, 2, 4, 10, 10) ];
   var user = MockUser();
+  DocumentSnapshot<Map<String,dynamic>> userResponse = MockDocumentSnapshot();
+  DocumentReference<Map<String,dynamic>> reference = MockDocumentReference();
   var numberOfCyclists = 2;
-  var it = Itinerary.navigation(docks, points,numberOfCyclists);
+  var _itinerary = Itinerary.navigation(docks, points,numberOfCyclists);
   QuerySnapshot<Map<String, dynamic>> groupResponse =MockQuerySnapshot();
-  QuerySnapshot groupDocs = MockQuerySnapshot();
-  SummaryJourneyScreenState _summaryJourneyScreenState =  SummaryJourneyScreenState(it, false, mockDBManagager);
+  var groupDoc = MockQueryDocumentSnapshot();
 
-  test('Leave group works', () async {
+
+  test('Leave group works when the current user is owner and is alone', () async {
     String userID = "userID";
+    String username = "test";
     String groupID = "groupID";
+    List<String> memberList=[userID];
     when(user.uid).thenReturn(userID);
+    when(itManager.getPaths()).thenReturn(path);
     when(mockDBManagager.getCurrentUser()).thenReturn(user);
     List<QueryDocumentSnapshot<Map<String,dynamic>>> temp = [];
+    temp.add(groupDoc);
+    Map<String,dynamic> map = {'ownerID': userID,'memberList': memberList };
     when(mockDBManagager.getByEquality('group', 'code', groupID)).thenAnswer((_) async => groupResponse);
     when(groupResponse.docs).thenReturn(temp);
+
+    Map<String,dynamic> userMap = {'username': username};
+    when(mockDBManagager.getByKey(
+        'users', userID)).thenAnswer((_) async=> userResponse);
     when(groupResponse.size).thenReturn(0);
-     _summaryJourneyScreenState.createGroup();
-    var Geopoints = [GeoPoint(20, 30),GeoPoint(10, 10)];
-    verify(mockDBManagager.addToCollection('group', any)).called(1);
-    verify(mockDBManagager.setByKey('users', userID, any, any)).called(1);
+    when(groupDoc.data()).thenReturn(map);
+    when(userResponse.data()).thenReturn(userMap);
+    when(groupDoc.reference).thenReturn(reference);
+    when(itManager.getItinerary()).thenReturn(_itinerary);
+    SummaryJourneyScreenState _summaryJourneyScreenState =  SummaryJourneyScreenState(itManager, false, mockDBManagager);
+    _summaryJourneyScreenState.groupID = groupID;
+    await  _summaryJourneyScreenState.leaveGroup();
+    verify(reference.delete()).called(1);
+    verify(mockDBManagager
+        .updateByKey('users', userID, {'group': FieldValue.delete()})).called(1);
 
   });
 

@@ -54,6 +54,7 @@ void main(){
     when(mockDBManagager.addToSubCollection(coordinatesRef, any)).thenAnswer((_) async => journey);
     when(mockDBManagager.addToCollection('group', any)).thenAnswer((_) async => group);
     when (group.collection("itinerary")).thenAnswer((_) => groupRef);
+    when(mockDBManagager.setByKey('users', testID, any, any)).thenAnswer((_)async => null);
     when(groupRef.add({
       'journeyID': _itinerary.journeyDocumentId,
       'points': geoList,
@@ -64,7 +65,7 @@ void main(){
     when(journey.collection('dockingStations')).thenAnswer((_) => dockingRef);
     when(itManager.getItinerary()).thenReturn(_itinerary);
     SummaryJourneyScreenState _summaryJourneyScreenState =  SummaryJourneyScreenState(itManager,false, mockDBManagager);
-    _summaryJourneyScreenState.createGroup();
+    await _summaryJourneyScreenState.createGroup();
     verify(mockDBManagager.addToCollection('group', any)).called(1);
     verify(mockDBManagager.addToSubCollection(coordinatesRef, any)).called(geoList.length);
     verify(mockDBManagager.addToSubCollection(dockingRef, any)).called(docks.length);

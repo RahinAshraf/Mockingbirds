@@ -104,8 +104,8 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
     return textToPad;
   }
 
-@visibleForTesting
-  void createGroup() async {
+  @visibleForTesting
+  Future<void> createGroup() async {
     var ownerID = _databaseManager.getCurrentUser()?.uid;
     List list = [];
     list.add(ownerID);
@@ -126,22 +126,21 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
       geoList.add(
           GeoPoint(destinationsIndouble[i]![0]!, destinationsIndouble[i]![1]!));
     }
-
     try {
       await _databaseManager.setByKey(
           'users', ownerID!, {'group': code}, SetOptions(merge: true));
-     var group =  await _databaseManager.addToCollection('group', {
+      var group =  await _databaseManager.addToCollection('group', {
         'code': code,
         'ownerID': ownerID,
         'memberList': list,
         'createdAt': Timestamp.fromDate(DateTime.now()),
       });
-     var journey = await group.collection("itinerary").add({
-       'journeyID': _itinerary.journeyDocumentId,
-       'points': geoList,
-       'date': _itinerary.date,
-       'numberOfCyclists': _itinerary.numberOfCyclists
-     });
+      var journey = await group.collection("itinerary").add({
+        'journeyID': _itinerary.journeyDocumentId,
+        'points': geoList,
+        'date': _itinerary.date,
+        'numberOfCyclists': _itinerary.numberOfCyclists
+      });
       var dockingStationList = _itinerary.docks!;
       for(int j = 0; j< geoList.length; j++){
         var geo = geoList[j];
@@ -150,18 +149,15 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
           'index': j,
         });
       }
-
-
-        for (int i = 0; i < dockingStationList.length; i++) {
-          var station = dockingStationList[i];
-          _databaseManager.addToSubCollection(journey.collection("dockingStations"),{
-            'id': station.stationId,
-            'name': station.name,
-            'location': GeoPoint(station.lat, station.lon),
-            'index':i,
-          });
-
-        }
+      for (int i = 0; i < dockingStationList.length; i++) {
+        var station = dockingStationList[i];
+        _databaseManager.addToSubCollection(journey.collection("dockingStations"),{
+          'id': station.stationId,
+          'name': station.name,
+          'location': GeoPoint(station.lat, station.lon),
+          'index':i,
+        });
+      }
 
       setState(() {
         isInGroup = true;
@@ -172,25 +168,18 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
       if (err.message != null) {
         message = err.message!;
       }
-    } on FirebaseAuthException catch (err) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(err.message!),
-          backgroundColor: Theme.of(context).errorColor,
-        ),
-      );
-    } catch (err) {
+    }  catch (err) {
       print(err);
     }
   }
 
-  _leaveGroup() async {
+  Future<void> leaveGroup() async {
     try {
-      var temp = await _databaseManager.getByEquality('group', 'code', groupID);
+      var groupResponse = await _databaseManager.getByEquality('group', 'code', groupID);
       var userID = _databaseManager.getCurrentUser()?.uid;
       var ownerID;
       List list = [];
-      for (var element in temp.docs) {
+      for (var element in groupResponse.docs) {
         ownerID = element.data()['ownerID'];
         list = element.data()['memberList'];
         list.removeWhere((element) => (element == userID));
@@ -211,6 +200,14 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
       } else {
         context.push(NavBar());
       }
+      var user = await _databaseManager.getByKey(
+          'users', _databaseManager.getCurrentUser()!.uid);
+      setState(() {
+        isInGroup = false;
+        organiser = user.data()!['username'];
+
+      });
+
     } on PlatformException catch (err) {
       var message = 'An error occurred, please check your credentials!';
 
@@ -225,12 +222,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
         ),
       );
     } catch (err) {}
-    var user = await _databaseManager.getByKey(
-        'users', _databaseManager.getCurrentUser()!.uid);
-    setState(() {
-      isInGroup = false;
-      organiser = user.data()!['username'];
-    });
+
   }
 
   @override
@@ -333,7 +325,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
                 ElevatedButton(
                   child: const Text('LEAVE GROUP'),
                   onPressed: () {
-                    _leaveGroup();
+                    leaveGroup();
                   },
                 ),
               if (_itinerary.date?.day == DateTime.now().day ||
