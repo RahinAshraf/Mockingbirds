@@ -5,9 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:veloplan/models/map_models/base_map_model.dart';
-import '../../helpers/database_helpers/database_manager.dart';
+import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
+import 'package:veloplan/styles/colors.dart';
 import 'package:veloplan/widgets/docking_station_widget.dart';
 
 /// Map screen focused on a user's live location
@@ -52,25 +53,30 @@ class _MapPageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: ScopedModelDescendant<MapModel>(
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: ScopedModelDescendant<MapModel>(
         builder: (BuildContext context, Widget? child, MapModel model) {
-      _baseMap = BaseMapboxMap(model);
-      addPositionZoom();
-      addDockingStationCard();
-      return Stack(children: _baseMap.getWidgets());
-    }));
+          _baseMap = BaseMapboxMap(model);
+          addPositionZoom();
+          addDockingStationCard();
+          return Stack(children: _baseMap.getWidgets());
+        },
+      ),
+    );
   }
 
   void addPositionZoom() async {
     _baseMap.addWidget(Container(
       alignment: Alignment(0.9, 0.90),
       child: FloatingActionButton(
-          heroTag: "center_to_current_loaction",
+          elevation: 8.0,
+          heroTag: "center_to_current_location",
           onPressed: () async {
             _baseMap.controller?.animateCamera(CameraUpdate.newCameraPosition(
                 await _baseMap.getNewCameraPosition()));
           },
-          child: const Icon(Icons.my_location)),
+          child: Icon(Icons.my_location)),
     ));
   }
 

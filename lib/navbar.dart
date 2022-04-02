@@ -8,14 +8,13 @@ import 'package:veloplan/screens/summary_journey_screen.dart';
 import 'package:veloplan/sidebar.dart';
 import 'package:veloplan/styles/colors.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
-
 import 'helpers/database_helpers/database_manager.dart';
 import 'helpers/navigation_helpers/navigation_conversions_helpers.dart';
 import 'models/docking_station.dart';
 import 'models/itinerary.dart';
 
 /// Defines the bottom navigation bar, allows you to move between the map, profile and sidebar.
-/// @author  Elisabeth, Rahin, Tayyibah
+/// Authors:  Elisabeth, Rahin, Tayyibah
 class NavBar extends StatefulWidget {
   @override
   _NavBarState createState() => _NavBarState();
@@ -118,6 +117,7 @@ class _NavBarState extends State<NavBar> {
   Widget build(BuildContext context) {
     screens.add(Profile(_currentUser));
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         body: IndexedStack(
           index: currentIndex,
           children: screens, // keeps the screens alive
@@ -172,7 +172,7 @@ class _NavBarState extends State<NavBar> {
         label: '',
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.add_link_rounded, color: CustomColors.green),
+        icon: Icon(Icons.add_link_rounded),
         label: '',
       ),
       BottomNavigationBarItem(
