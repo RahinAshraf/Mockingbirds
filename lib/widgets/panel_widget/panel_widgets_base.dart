@@ -9,7 +9,7 @@ import 'package:veloplan/widgets/dynamic_widget.dart';
 import 'package:veloplan/widgets/panel_widget/panel_widget.dart';
 
 /// The base for the panel widget which contains all necessary controllers, streams and data sets.
-/// Author(s): Rahin Ashraf k20034059
+/// @author: Rahin
 abstract class PanelWidgetBase extends StatefulWidget {
   final ScrollController scrollController;
   final PanelController panelController;
@@ -51,7 +51,6 @@ abstract class PanelWidgetBase extends StatefulWidget {
     final selectedCoords = widget.selectedCoords;
     final tempPosition = selectedCoords.length;
     final result = await context.openSearch();
-    print("Navigator_Navigator_Navigator => $tempPosition");
     final feature = result as Feature?;
     if (feature != null) {
       textEditingController.text = feature.placeName ?? "N/A";
@@ -60,16 +59,5 @@ abstract class PanelWidgetBase extends StatefulWidget {
         onAddressAdded.call(featureCord);
       }
     }
-  }
-
-  ///The logic to restrict the user from being able to start a journey without defining at least one destination for the journey
-  bool oneDestinationMustBeSpecified(
-      PanelWidget widget, BuildContext context, Alerts alert) {
-    if (widget.listDynamic.isEmpty) {
-      alert.showSnackBarErrorMessage(
-          context, alert.chooseAtLeastOneDestinationMessage);
-      return true;
-    }
-    return false;
   }
 }

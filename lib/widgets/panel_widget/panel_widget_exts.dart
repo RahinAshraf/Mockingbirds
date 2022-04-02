@@ -14,8 +14,7 @@ import 'package:veloplan/providers/location_service.dart';
 import 'package:veloplan/screens/dock_sorter_screen.dart';
 
 /// Helper class to build the bubble underneath every location TextField.
-/// Author(s): Rahin Ashraf k20034059
-/// Contributor(s): Nicole, Fariha
+/// Author(s) : Rahin
 class PanelExtensions {
   final locationService = LocationService();
   BuildContext? context;
@@ -48,7 +47,9 @@ class PanelExtensions {
         Expanded(
           child: StreamBuilder<String>(
             builder: (_, snapshot) {
-              if (snapshot.hasData) {}
+              if (snapshot.hasData) {
+                //  editDockTextEditController.text = snapshot.requireData;
+              }
               return TextField(
                 enabled: false,
                 controller: editDockTextEditController,
@@ -71,13 +72,11 @@ class PanelExtensions {
                 if (placeTextController.text.isEmpty) {
                   alert.showSnackBarErrorMessage(
                       context!, alert.fillInLocationBeforeEditingDockMesssage);
-                  print("hello");
                   return;
                 }
                 List temp = await locationService
                     .getPlaceCoords(placeTextController.text);
 
-                // final LatLng? dockStationLatLng = latLngMap[position];
                 final result = await Navigator.push<DockingStation>(
                     context!,
                     MaterialPageRoute(
@@ -88,8 +87,6 @@ class PanelExtensions {
                                   "ds1", true, true, 10, 11, 12, 15.6, 89.0),
                             )));
 
-                print("hey result --=> ${result?.name}");
-
                 checkInputLocation(
                     placeTextController,
                     editDockTextEditController,
@@ -99,7 +96,6 @@ class PanelExtensions {
                     numberCyclists,
                     address: result?.name,
                     closesDockLatLng: result);
-                // LatLng(result?.lat ?? 0, result?.lon ?? 0));
               },
               padding: const EdgeInsets.all(0),
               icon: const Icon(
@@ -135,7 +131,7 @@ class PanelExtensions {
       List coordPlace = await locationService.getPlaceCoords(placeTextController
           .text); //getting coordinates of the place specified as the destination to visit
 
-      getClosetDock(
+      fillClosestDockBubble(
           coordPlace.first,
           coordPlace.last,
           editDockTextEditController,
@@ -151,7 +147,7 @@ class PanelExtensions {
   ///Fills in the [editDockTextEditController] which is displayed underneath every TextField for destinations,
   /// with the name of the docking station which is closest to the location specified by the user.
   /// The London destination the user specifies to visit, is given together by the [lat] and [lng] of the destination.
-  void getClosetDock(
+  void fillClosestDockBubble(
       double? lat,
       double? lng,
       TextEditingController editDockTextEditController,
@@ -169,25 +165,14 @@ class PanelExtensions {
 
     if (null == closesDockLatLng) {
       if (isFrom) {
-        var temp = _stationManager.getClosestDockWithAvailableSpace(
-            latlngPlace, numberOfCyclists);
         closestDock = _stationManager.getClosestDockWithAvailableBikes(
             latlngPlace, numberOfCyclists);
-        print(
-            "closest dock info  dock with available BIKES ${closestDock.name} compared to SPACES ${temp.name} ---- num: ${numberOfCyclists}");
       } else {
-        var temp = _stationManager.getClosestDockWithAvailableBikes(
-            latlngPlace, numberOfCyclists);
         closestDock = _stationManager.getClosestDockWithAvailableSpace(
             latlngPlace, numberOfCyclists);
-        print(
-            "closest dock info  dock with available SPACES ${closestDock.name} compared to BIKES ${temp.name} ------ num: ${numberOfCyclists}");
       }
       editDockTextEditController.text = closestDock.name;
-      //latLngMap[position] = LatLng(closestDock.lat, closestDock.lon);
       latLngMap[position] = closestDock;
-      print("closet dock ${closestDock.name}");
-      print("PRIIIINTING => $position");
       this._dockingStation = closestDock;
     } else {
       editDockTextEditController.text = address!;

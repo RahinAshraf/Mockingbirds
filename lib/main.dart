@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -57,7 +56,6 @@ class _MyAppState extends State<MyApp> {
   void requestPermission() {
     if (mounted) {
       PermissionUtils.instance.getLocation(context).listen((status) {
-        print("requestPermission => $status");
         if (status == Permissions.DENY) {
           context.pushAndRemoveUntil(LocationError());
         } else if (status == Permissions.ASK_EVERYTIME) {
@@ -83,6 +81,7 @@ class _MyAppState extends State<MyApp> {
       future: Firebase.initializeApp(), // _initialization,
       builder: (context, appSnapshot) {
         return MaterialApp(
+            debugShowCheckedModeBanner: false,
             title: 'Veloplan',
             theme: CustomTheme.defaultTheme,
             home: appSnapshot.connectionState != ConnectionState.done
