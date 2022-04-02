@@ -12,8 +12,10 @@ import 'favourites_test.mocks.dart';
   DatabaseManager,
   User,
   CollectionReference<Object?>,
-  QuerySnapshot<Object?>,
-  QueryDocumentSnapshot<Object?>
+  DocumentSnapshot,
+  QuerySnapshot<Object?>
+], customMocks: [
+  MockSpec<QueryDocumentSnapshot>(unsupportedMembers: {#data}),
 ])
 main() {
   var mockDBManager = MockDatabaseManager();
@@ -45,15 +47,21 @@ main() {
     when(mockDBManager.getCurrentUser()).thenReturn(user);
   });
 
-  test('Get user favourites', () async {
-    // when(mockDBManager.getUserSubcollection("favourites"))
-    //     .thenAnswer((_) async => favouriteDocs);
-    //var list = MockQueryDocumentSnapshot<Object?>();
+  // test('Get user favourites', () async {
+  //   List<QueryDocumentSnapshot<Map<String, dynamic>>> temp = [];
+  //   helper.addFavourite(stationId, name);
+  //   helper.addFavourite("id2", "name2");
+  //   when(mockDBManager.getUserSubcollection("favourites"))
+  //       .thenAnswer((_) async => favouriteDocs);
+  //   when(favouriteDocs.docs).thenReturn(temp);
+  //   var list = await helper.getUserFavourites();
+  //   expect(list.length, 2);
+  // });
 
-    //when(favouriteDocs.docs).thenReturn();
-
-    // helper.addFavourite(stationId, name);
-    // helper.getUserFavourites();
+  test('Toggling new docking station adds to database', () async {
+    when(helper.getUserFavourites()).thenAnswer((_) async => favouriteList);
+    helper.toggleFavourite("id1", "station1");
+    verify()
   });
 
   test('Add to favourites', () {

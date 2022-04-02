@@ -47,7 +47,7 @@ main() {
   test('Time of journey is saved', () {
     helper.addJourneyTime("journeyDocumentId");
     verify(mockDBManager.setSubCollectionByDocumentId(
-            "journeyDocumentId", historyReference, {'date': DateTime.now()}))
+            "journeyDocumentId", historyReference, any))
         .called(1);
   });
 

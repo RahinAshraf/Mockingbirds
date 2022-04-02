@@ -38,8 +38,8 @@ class FavouriteHelper {
   ///Gets a list of a users favourited docking station
   Future<List<DockingStation>> getUserFavourites() async {
     List<DockingStation> favourites = [];
-    var docs = await DatabaseManager().getUserSubcollection('favourites');
-    for (DocumentSnapshot doc in docs.docs) {
+    var docs = await _databaseManager.getUserSubcollection('favourites');
+    for (var doc in docs.docs) {
       var dock = await dockingStationManager()
           .checkStationById(doc.get('stationId'))
           .then((value) {
