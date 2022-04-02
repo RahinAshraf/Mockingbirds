@@ -1,7 +1,6 @@
 import "package:http/http.dart" as http;
 import '../models/weather.dart';
 import 'dart:convert';
-import 'dart:developer';
 
 class WeatherManager {
   Weather all_weather_data = Weather.defaultvalue();

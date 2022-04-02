@@ -3,8 +3,6 @@ import 'package:veloplan/styles/styling.dart';
 import 'package:veloplan/styles/texts.dart';
 import 'package:veloplan/utilities/alert_type.dart';
 
-import '../models/weather.dart';
-
 /// Creates a generic popup widget.
 ///
 /// To avoid distorting the widget, there should be no more than

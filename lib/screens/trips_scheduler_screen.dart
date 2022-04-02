@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:veloplan/models/map_models/base_map_model.dart';
