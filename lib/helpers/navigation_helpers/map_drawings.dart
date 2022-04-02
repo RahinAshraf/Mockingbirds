@@ -121,19 +121,9 @@ void addSymbol(MapboxMapController controller, Set<Symbol> symbolsSet,
 void removeMarkers(
     MapboxMapController controller, Set<Symbol> removeMarkerSet) async {
   if (removeMarkerSet.isNotEmpty) {
-    await controller.removeSymbols(removeMarkerSet);
-    removeMarkerSet.clear();
-  }
-}
-
-///REMOVE THIS
-/// Removes the multistop destination markers of a [journey] from the map
-void removePolylineMarkers(MapboxMapController controller, List<LatLng> journey,
-    Set<Symbol> polylineSymbols) async {
-  if (polylineSymbols.isNotEmpty) {
     try {
-      await controller.removeSymbols(polylineSymbols);
-      polylineSymbols.clear();
+      await controller.removeSymbols(removeMarkerSet);
+      removeMarkerSet.clear();
     } catch (e) {}
   }
 }
