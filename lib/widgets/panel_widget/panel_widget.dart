@@ -408,11 +408,6 @@ class PanelWidgetState extends State<PanelWidget> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              buildFloatingActionButton(onPressed: addDynamic),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: const Text('OR'),
-              ),
               SizedBox(
                 width: MediaQuery.of(context).size.width / 2,
                 child: ElevatedButton(
