@@ -245,6 +245,7 @@ class PanelWidgetState extends State<PanelWidget> {
             focusedBorder:
                 circularInputBorder(width: 2.0, color: CustomColors.green),
             suffixIcon: IconButton(
+              key: Key("myLocation"),
               onPressed: () {
                 _useCurrentLocationButtonHandler(
                     controller, label, isFrom, numberCyclists);
@@ -421,6 +422,7 @@ class PanelWidgetState extends State<PanelWidget> {
               SizedBox(
                 width: MediaQuery.of(context).size.width / 2,
                 child: ElevatedButton(
+                  key: Key("start"),
                   onPressed:
                       widget.isScheduled ? _handleSaveClick : _handleStartClick,
                   child: widget.isScheduled ? text("SAVE") : text("START"),
@@ -441,7 +443,8 @@ class PanelWidgetState extends State<PanelWidget> {
     List<DockingStation> closestDockList = dockList.values.toList();
     print("ALREADY EXISTS ==> $closestDockList");
 
-    if(applyConstraints(widget.fromTextEditController, widget.toTextEditController)){
+    if (applyConstraints(
+        widget.fromTextEditController, widget.toTextEditController)) {
       return;
     }
 
@@ -456,7 +459,6 @@ class PanelWidgetState extends State<PanelWidget> {
       alert.showSnackBarErrorMessage(context, alert.noAdjacentLocationsAllowed);
       return;
     } else {
-
       List<List<double?>?> tempList = [];
       tempList.addAll(staticListMap.values);
       tempList.addAll(widget.selectedCoords);
@@ -480,8 +482,8 @@ class PanelWidgetState extends State<PanelWidget> {
   /// closest docking stations for the locations the user specified. This new list is then passed onto [MapRoutePage].
   /// THIS FUNCTION NEEDS TO BE REFACTORED FURTHER
   Future<void> _handleStartClick() async {
-
-    if(applyConstraints(widget.fromTextEditController, widget.toTextEditController)){
+    if (applyConstraints(
+        widget.fromTextEditController, widget.toTextEditController)) {
       return;
     }
 
@@ -523,7 +525,6 @@ class PanelWidgetState extends State<PanelWidget> {
       }
 
       if (points == null) {
-
       } else {
         Itinerary _itinerary = new Itinerary.navigation(
             selectedDocks, points, widget.numberOfCyclists);
@@ -552,15 +553,18 @@ class PanelWidgetState extends State<PanelWidget> {
       TextEditingController toEditingController) {
     if (startLocationMustBeSpecified(fromEditingController) ||
         startLocationMustBeSpecified(toEditingController)) {
-      alert.showSnackBarErrorMessage(context, alert.startPointMustBeDefinedMessage);
+      alert.showSnackBarErrorMessage(
+          context, alert.startPointMustBeDefinedMessage);
       return true;
     }
     if (widget.hasSpecifiedOneDestination(context, alert)) {
-      alert.showSnackBarErrorMessage(context, alert.chooseAtLeastOneDestinationMessage);
+      alert.showSnackBarErrorMessage(
+          context, alert.chooseAtLeastOneDestinationMessage);
       return true;
     }
     if (aSearchBarCannotBeEmpty(widget.listDynamic)) {
-      alert.showSnackBarErrorMessage(context, alert.cannotHaveEmptySearchLocationsMessage);
+      alert.showSnackBarErrorMessage(
+          context, alert.cannotHaveEmptySearchLocationsMessage);
       return true;
     }
     return false;

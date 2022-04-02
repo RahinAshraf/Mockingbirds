@@ -68,14 +68,14 @@ Future<void> main() async {
     test("login succeeded", () async {
       await driver?.waitForAbsent(snackbar);
       await driver?.tap(emailField);
-      await driver?.enterText("elisabeth.koren.halvorsen@gmail.com");
+      // await driver?.enterText("elisabeth.koren.halvorsen@gmail.com");
+      await driver?.enterText("elisabeth1999@sf-nett.no");
       await driver?.tap(passwordField);
       await driver?.enterText("Password123");
       await driver?.tap(loginButton);
       assert(snackbar == null);
       await driver?.waitFor(find.byType("NavBar"));
       assert(navBarPage == null);
-      // driver?.close();
     });
   });
 }

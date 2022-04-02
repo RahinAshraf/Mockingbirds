@@ -217,22 +217,22 @@ Future<void> main() async {
       await testSidebar();
     });
 
-    test("test nonempty scheduled journeys", () async {
-      await driver?.waitUntilNoTransientCallbacks();
-      await driver?.tap(scheduleButton);
-      await driver?.waitUntilNoTransientCallbacks();
-      assert(scheduleScreen != null);
+    // test("test nonempty scheduled journeys", () async {
+    //   await driver?.waitUntilNoTransientCallbacks();
+    //   await driver?.tap(scheduleButton);
+    //   await driver?.waitUntilNoTransientCallbacks();
+    //   assert(scheduleScreen != null);
 
-      final events = find.byValueKey("eventCards");
-      await driver?.waitFor(events);
-      assert(find.byValueKey("calendar") != null);
-      assert(find.byValueKey("noJourneys") == null);
-      assert(find.byValueKey("eventCard") != null);
-      assert(events != null);
+    //   // final events = find.byValueKey("eventCards");
+    //   // await driver?.waitFor(events);
+    //   // assert(find.byValueKey("calendar") != null);
+    //   // assert(find.byValueKey("noJourneys") == null);
+    //   // assert(find.byValueKey("eventCard") != null);
+    //   // assert(events != null);
 
-      assert(backButton != null);
-      await driver?.tap(backButton);
-    });
+    //   assert(backButton != null);
+    //   await driver?.tap(backButton);
+    // });
 
     test("test nonempty my journeys", () async {
       await driver?.waitUntilNoTransientCallbacks();
@@ -272,14 +272,13 @@ Future<void> main() async {
       await driver?.scroll(sidebar, -500, 0, Duration(seconds: 2));
       await driver?.waitUntilNoTransientCallbacks();
       assert(navBarPage != null);
-      assert(profilePageButton != null);
-      await driver?.tap(profilePageButton);
-      await driver?.waitUntilNoTransientCallbacks();
-      assert(profileScreen != null);
-      assert(navBarPage == null);
+      // assert(profilePageButton != null);
+      // await driver?.tap(profilePageButton);
+      // await driver?.waitUntilNoTransientCallbacks();
+      // assert(profileScreen != null);
+      // assert(navBarPage == null);
     });
   });
-
   //! make another group with information inside of the different screens
 }
 
