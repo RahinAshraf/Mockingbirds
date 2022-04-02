@@ -9,7 +9,7 @@ HelpBotManager questions = HelpBotManager();
 
 /// The default URL for sending enquiries.
 const String url =
-    'mailto:k20070238@kcl.ac.uk?subject=Help%20with%20app&body=Help%20me!';
+    'mailto:k20082541@kcl.ac.uk?subject=Help%20with%20app&body=Help%20me!';
 
 class HelpScreen extends StatefulWidget {
   const HelpScreen({Key? key}) : super(key: key);
@@ -22,6 +22,7 @@ class HelpScreen extends StatefulWidget {
 /// It consists of [MessageBubble] widgets, stored in [_conversation],
 /// and [choices], which are the categories/topics that user can choose
 /// to ask questions from.
+/// Authors: Lilianna, Marija
 class _HelpScreenState extends State<HelpScreen> {
   List<MessageBubble> _conversation = [
     MessageBubble(content: 'Hello. How can I help you?')

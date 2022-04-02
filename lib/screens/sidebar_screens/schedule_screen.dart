@@ -18,6 +18,7 @@ class ScheduleScreen extends StatefulWidget {
 ///
 /// It consists of [TableCalendar] with a collection of [_events] retrieved
 /// from [upcomingJourneys]. [_selectedEvents] are the events of [_selectedDay].
+/// Author: Marija
 class _ScheduleScreenState extends State<ScheduleScreen> {
   late List<Itinerary> upcomingJourneys = [];
   late Map<DateTime, List<Itinerary>> _events = {};

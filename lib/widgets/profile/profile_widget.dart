@@ -4,21 +4,42 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:veloplan/styles/colors.dart';
 
 class ProfileWidget extends StatefulWidget {
   String imagePath;
   final VoidCallback onClicked;
-  final bool isEdit;
 
-  ProfileWidget(this.imagePath, this.onClicked, this.isEdit, {Key? key})
-      : super(key: key);
+  ProfileWidget(this.imagePath, this.onClicked, {Key? key}) : super(key: key);
 
   @override
   State<ProfileWidget> createState() => _ProfileWidgetState();
 }
 
 class _ProfileWidgetState extends State<ProfileWidget> {
-  Widget buildImage() {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: _buildImage(),
+          ),
+          Positioned(
+            bottom: 0,
+            right: 6,
+            child: GestureDetector(
+              onTap: _showPicker,
+              child: _buildEditIcon(CustomColors.green),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildImage() {
     final image = NetworkImage(widget.imagePath);
     return ClipOval(
       child: Material(
@@ -33,34 +54,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
     );
   }
 
-  Widget buildEditIcon(Color color) => buildCircle(
-        color: Colors.white,
-        all: 3,
-        child: buildCircle(
-          color: color,
-          all: 8,
-          child: Icon(
-            widget.isEdit ? Icons.add_a_photo : Icons.edit,
-            color: Colors.white,
-            size: 20,
-          ),
-        ),
-      );
-
-  Widget buildCircle({
-    required Widget child,
-    required double all,
-    required Color color,
-  }) =>
-      ClipOval(
-        child: Container(
-          padding: EdgeInsets.all(all),
-          color: color,
-          child: child,
-        ),
-      );
-
-  void showPicker() {
+  void _showPicker() {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext bc) {
@@ -71,14 +65,14 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                     leading: const Icon(Icons.photo_library),
                     title: const Text('Photo Library'),
                     onTap: () {
-                      setPicture(false);
+                      _setPicture(false);
                       Navigator.of(context).pop();
                     }),
                 ListTile(
                   leading: const Icon(Icons.photo_camera),
                   title: const Text('Camera'),
                   onTap: () {
-                    setPicture(true);
+                    _setPicture(true);
                     Navigator.of(context).pop();
                   },
                 ),
@@ -88,7 +82,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
         });
   }
 
-  Future setPicture(bool isCamera) async {
+  Future _setPicture(bool isCamera) async {
     final _userID = FirebaseAuth.instance.currentUser!.uid;
     final _pickedImageFile = await ImagePicker().pickImage(
       source: isCamera ? ImageSource.camera : ImageSource.gallery,
@@ -118,29 +112,30 @@ class _ProfileWidgetState extends State<ProfileWidget> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final color = Theme.of(context).colorScheme.primary;
+  Widget _buildEditIcon(Color color) => _buildCircle(
+        color: Colors.white,
+        all: 3,
+        child: _buildCircle(
+          color: color,
+          all: 8,
+          child: Icon(
+            Icons.add_a_photo,
+            color: Colors.white,
+            size: 20,
+          ),
+        ),
+      );
 
-    return Center(
-      child: widget.isEdit
-          ? Stack(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: buildImage(),
-                ),
-                Positioned(
-                  bottom: 0,
-                  right: 6,
-                  child: GestureDetector(
-                    onTap: showPicker,
-                    child: buildEditIcon(color),
-                  ),
-                ),
-              ],
-            )
-          : Padding(padding: const EdgeInsets.all(15.0), child: buildImage()),
-    );
-  }
+  Widget _buildCircle({
+    required Widget child,
+    required double all,
+    required Color color,
+  }) =>
+      ClipOval(
+        child: Container(
+          padding: EdgeInsets.all(all),
+          color: color,
+          child: child,
+        ),
+      );
 }

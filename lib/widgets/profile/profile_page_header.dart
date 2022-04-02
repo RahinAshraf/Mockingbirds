@@ -148,7 +148,6 @@ class _ProfilePageHeaderState extends State<ProfilePageHeader> {
           ProfileWidget(
             widget.data['image_url'],
             () async {},
-            widget.isCurrentUser,
           ),
           const SizedBox(height: 24),
           buildName(widget.data),

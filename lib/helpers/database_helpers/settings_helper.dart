@@ -4,17 +4,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
 Future<bool> checkCurrentPassword(String password) async {
-    final currentUser = FirebaseAuth.instance.currentUser;
+  final currentUser = FirebaseAuth.instance.currentUser;
 
-    final authCredential = EmailAuthProvider.credential(
-        email: currentUser!.email!, password: password);
+  final authCredential = EmailAuthProvider.credential(
+      email: currentUser!.email!, password: password);
 
-    try {
-      final authResult =
-          await currentUser.reauthenticateWithCredential(authCredential);
+  try {
+    final authResult =
+        await currentUser.reauthenticateWithCredential(authCredential);
 
-      return authResult.user != null;
-    } catch (e) {
-      return false;
-    }
+    return authResult.user != null;
+  } catch (e) {
+    return false;
   }
+}

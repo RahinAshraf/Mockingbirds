@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import '../../helpers/database_helpers/history_helper.dart';
-import '../../models/itinerary.dart';
-import '../../styles/colors.dart';
-import '../../widgets/my_journey_card.dart';
+import 'package:veloplan/helpers/database_helpers/history_helper.dart';
+import 'package:veloplan/models/itinerary.dart';
+import 'package:veloplan/styles/colors.dart';
+import 'package:veloplan/styles/texts.dart';
+import 'package:veloplan/widgets/my_journey_card.dart';
 
-/// Displays user's started (past) journeys.
+/// Displays user's started/past journeys.
 /// Author: Tayyibah
 class MyJourneys extends StatefulWidget {
   @override
@@ -13,8 +14,7 @@ class MyJourneys extends StatefulWidget {
 
 class _MyJourneysState extends State<MyJourneys> {
   List<Itinerary> journeyList = [];
-
-  var helper = HistoryHelper();
+  HistoryHelper helper = HistoryHelper();
 
   @override
   void initState() {
@@ -30,7 +30,9 @@ class _MyJourneysState extends State<MyJourneys> {
   Widget build(BuildContext build) {
     return Scaffold(
       body: journeyList.isEmpty
-          ? Center(child: Text("You haven't made any journeys yet."))
+          ? Center(
+              child: Text("You haven't made any journeys yet.",
+                  style: CustomTextStyles.placeholderText))
           : Padding(
               padding: const EdgeInsets.symmetric(vertical: 15.0),
               child: ListView.builder(
@@ -38,7 +40,7 @@ class _MyJourneysState extends State<MyJourneys> {
                 itemBuilder: (context, index) {
                   return Container(
                       padding: EdgeInsets.symmetric(vertical: 5.0),
-                      height: MediaQuery.of(context).size.height * 0.23,
+                      height: MediaQuery.of(context).size.height * 0.30,
                       child: MyJourneyCard(journeyList[index]));
                 },
               ),

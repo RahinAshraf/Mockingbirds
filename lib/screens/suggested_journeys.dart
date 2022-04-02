@@ -9,7 +9,6 @@ import '../styles/texts.dart';
 /// Suggester itineraries that contain biggest sights in London for under 30 min.
 /// from: https://londonblog.tfl.gov.uk/2019/11/05/santander-cycles-sightseeing/?intcmp=60245
 ///Author: Nicole
-///TODO: Nicole to clean
 class SuggestedItinerary extends StatefulWidget {
   @override
   _SuggestedItineraryState createState() => _SuggestedItineraryState();

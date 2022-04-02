@@ -37,15 +37,14 @@ class ForgotPasswordScreen extends StatelessWidget {
         title: Text('Reset Password'),
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(height: MediaQuery.of(context).size.height / 6),
           Container(
               height: 170.0,
               width: 170.0,
-              alignment: Alignment.center,
               child: Image.asset('assets/images/forgot_password_icon.png')),
           Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -54,7 +53,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                       style: TextStyle(fontSize: 20),
                       textAlign: TextAlign.center,
                     ),
-                    const SizedBox(height: 25),
+                    const SizedBox(height: 15),
                     TextFormField(
                       key: ValueKey('email'),
                       controller: emailController,
@@ -75,9 +74,9 @@ class ForgotPasswordScreen extends StatelessWidget {
                         labelText: 'Email Address',
                       ),
                     ),
-                    const SizedBox(height: 25),
+                    const SizedBox(height: 10),
                     ElevatedButton(
-                      child: Text('Send password reset email'),
+                      child: Text('Send email'),
                       onPressed: () =>
                           sendPasswordResetEmail(emailController.text, context),
                     ),

@@ -330,17 +330,8 @@ class PanelWidgetState extends State<PanelWidget> {
                 style: CustomTextStyles.infoTextStyle,
               ),
               Tooltip(
-                preferBelow: false,
-                margin: EdgeInsets.all(10.0),
-                padding: EdgeInsets.all(10.0),
-                textStyle: TextStyle(color: Colors.white),
-                decoration: BoxDecoration(
-                  color: CustomColors.green,
-                  borderRadius: BorderRadius.circular(20),
-                ),
                 message:
                     'Please specify the starting location of your trip and add destinations by clicking the + button. Tapping on the location in the map is another way of adding a stop to your trip! Ensure there are no blank destinations when you do so. You can also reorder your destinations. Simply hold and drag menu button. When you are done, click START.',
-                showDuration: const Duration(seconds: 3),
                 child: const Icon(Icons.info_outline_rounded,
                     size: 25.0, color: Colors.green),
               ),

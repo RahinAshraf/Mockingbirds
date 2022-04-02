@@ -58,7 +58,6 @@ class _EditProfileState extends State<EditProfile> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(error.toString()),
-          backgroundColor: Theme.of(context).errorColor,
         ),
       );
     }
@@ -115,7 +114,7 @@ class _EditProfileState extends State<EditProfile> {
           padding: const EdgeInsets.symmetric(horizontal: 32),
           physics: const BouncingScrollPhysics(),
           children: [
-            ProfileWidget(widget.data['image_url'], () async {}, true),
+            ProfileWidget(widget.data['image_url'], () async {}),
             const SizedBox(height: 24),
             TextFieldWidget(
               label: 'First Name',

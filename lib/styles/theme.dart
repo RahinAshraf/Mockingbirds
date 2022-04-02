@@ -19,6 +19,17 @@ class CustomTheme {
         headline1: CustomTextStyles.headline1,
         headline2: CustomTextStyles.headline2,
       ),
+      tooltipTheme: TooltipThemeData(
+        decoration: BoxDecoration(
+          color: CustomColors.green,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        preferBelow: false,
+        margin: EdgeInsets.all(10.0),
+        padding: EdgeInsets.all(10.0),
+        textStyle: TextStyle(color: Colors.white),
+        showDuration: const Duration(seconds: 3),
+      ),
       snackBarTheme: const SnackBarThemeData(
         backgroundColor: Colors.red,
         contentTextStyle: TextStyle(fontSize: 17),
@@ -57,6 +68,12 @@ class CustomTheme {
         backgroundColor: CustomColors.green,
         selectedItemColor: Colors.black,
         unselectedItemColor: Colors.grey[10],
+      ),
+      tabBarTheme: TabBarTheme(
+        labelPadding: const EdgeInsets.symmetric(horizontal: 22.0),
+        labelColor: Colors.green,
+        unselectedLabelColor: Colors.grey[400],
+        indicatorSize: TabBarIndicatorSize.label,
       ),
     );
   }
