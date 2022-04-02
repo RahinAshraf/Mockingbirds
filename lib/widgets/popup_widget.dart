@@ -1,33 +1,23 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:veloplan/styles/styling.dart';
+import 'package:veloplan/utilities/alert_type.dart';
 
-enum AlertType { warning, question }
-
-extension AlertTypeString on AlertType {
-  String get imagePath {
-    switch (this) {
-      case AlertType.warning:
-        return "assets/images/popup_warning.png";
-      case AlertType.question:
-        return "assets/images/popup_question.png";
-    }
-  }
-}
+import '../models/weather.dart';
 
 /// Creates a generic popup widget.
 ///
 /// To avoid distorting the widget, there should be no more than
 /// two [PopupButtonWidget]s passed in [PopupWidget.children] property.
 ///
-/// This widget has [PopupWidget.type] property of [AlertType]. It determines the
+/// This widget has [type] property of [AlertType]. It determines the
 /// image that should be rendered for the widget.
 class PopupWidget extends StatelessWidget {
   PopupWidget(
       {required this.title,
       required this.text,
       required this.children,
-      required this.type});
+      required this.type,
+      });
 
   final String title;
   final String text;

@@ -4,6 +4,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:veloplan/screens/forgot_password_screen.dart';
 import 'package:veloplan/styles/styling.dart';
 import 'package:veloplan/widgets/pickers/bottom_date_picker.dart';
 import 'package:veloplan/widgets/pickers/image_picker.dart';
@@ -295,6 +296,17 @@ class _AuthFormState extends State<AuthForm> {
                         },
                       ),
                     ],
+                  ),
+                if (_isLogin)
+                  TextButton(
+                    child: Text('Forgot my password'),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => ForgotPasswordScreen(),
+                        ),
+                      );
+                    },
                   ),
               ],
             ),

@@ -1,9 +1,11 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
-import 'package:veloplan/helpers/new_scroll_behavior.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 import 'package:veloplan/screens/edit_profile_screen.dart';
+
+import 'package:veloplan/helpers/new_scroll_behavior.dart';
 import 'package:veloplan/screens/splash_screen.dart';
 import 'package:veloplan/widgets/profile/profile_page_header.dart';
 
@@ -18,6 +20,8 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  final DatabaseManager _databaseManager = DatabaseManager();
+
   PreferredSizeWidget _buildAppBar(context, data) {
     return AppBar(
       centerTitle: true,
@@ -28,7 +32,7 @@ class _ProfileState extends State<Profile> {
           style: const TextStyle(fontSize: 20, color: Colors.black),
         ),
       ),
-      actions: <Widget>[
+      actions: [
         Padding(
           padding: const EdgeInsets.only(right: 20.0),
           child: GestureDetector(
@@ -52,12 +56,9 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-    final _currentUser = FirebaseAuth.instance.currentUser!.uid;
+    final _currentUser = _databaseManager.getCurrentUser()!.uid;
     return FutureBuilder<DocumentSnapshot>(
-      future: FirebaseFirestore.instance
-          .collection('users')
-          .doc(widget.userID)
-          .get(),
+      future: _databaseManager.getByKey('users', widget.userID),
       builder:
           (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         if (snapshot.hasError) {
@@ -72,7 +73,6 @@ class _ProfileState extends State<Profile> {
           Map<String, dynamic> data =
               snapshot.data!.data() as Map<String, dynamic>;
           return Scaffold(
-            backgroundColor: Theme.of(context).backgroundColor,
             appBar: _buildAppBar(context, data),
             body: RefreshIndicator(
               onRefresh: () async {

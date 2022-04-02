@@ -1,27 +1,40 @@
 import 'dart:async';
+import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
-import 'package:veloplan/models/map_models/base_map_with_on_click_model.dart';
+import 'package:veloplan/models/docking_station.dart';
+import 'package:veloplan/models/map_models/base_map_model.dart';
 import '../widgets/panel_widget/panel_widget.dart';
 import '../providers/location_service.dart';
+import 'package:veloplan/widgets/panel_widget/panel_widget.dart';
+import 'package:veloplan/providers/location_service.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:veloplan/widgets/dynamic_widget.dart';
 
-///@author - Rahin Ashraf
+/// Author(s): Rahin Ashraf
+/// The place on the Map
 class MapPlace {
   String? address;
   LatLng? coords;
+
   MapPlace(this.address, this.coords);
 }
 
+///The screen in the app where the user specifies the locations they wish to visit in London on their trip
 class JourneyPlanner extends StatefulWidget {
-
   final int? numberOfCyclists;
+  final DateTime? journeyDate;
+  final bool isScheduled;
 
-   JourneyPlanner({Key? key, this.numberOfCyclists}) : super(key: key);
+  JourneyPlanner({
+    Key? key,
+    this.numberOfCyclists,
+    this.journeyDate,
+    this.isScheduled = false,
+  }) : super(key: key);
 
   @override
   _JourneyPlanner createState() => _JourneyPlanner();
@@ -36,10 +49,11 @@ class _JourneyPlanner extends State<JourneyPlanner> {
   final StreamController<List<DynamicWidget>> dynamicWidgets =
       StreamController.broadcast();
   final locService = LocationService();
-  late BaseMapboxClickMap _baseClickMap;
+  late BaseMapboxMap _baseMap;
 
   List<DynamicWidget> dynamicWidgetList = [];
   List<List<double?>> coordsList = [];
+  Map<int, DockingStation> dockList = {};
 
   @override
   void initState() {
@@ -49,7 +63,7 @@ class _JourneyPlanner extends State<JourneyPlanner> {
   @override
   Widget build(BuildContext context) {
     Map<String, List<double?>> staticCordMap = {};
-
+    Map<String, List<double?>> staticDockMap = {};
     print("numberOfCyclists: ${widget.numberOfCyclists}");
 
     return Scaffold(
@@ -63,8 +77,8 @@ class _JourneyPlanner extends State<JourneyPlanner> {
         width: MediaQuery.of(context).size.width,
         child: ScopedModelDescendant<MapModel>(
             builder: (BuildContext context, Widget? child, MapModel model) {
-          _baseClickMap = BaseMapboxClickMap(model, address);
-          return SafeArea(child: Stack(children: _baseClickMap.getWidgets()));
+          _baseMap = BaseMapboxMap(model, address: address);
+          return SafeArea(child: Stack(children: _baseMap.getWidgets()));
         }),
       ),
       Positioned.fill(
@@ -86,9 +100,12 @@ class _JourneyPlanner extends State<JourneyPlanner> {
             toTextEditController: toTextEditingController,
             dynamicWidgets: dynamicWidgets,
             panelController: panelController,
-            numberOfCyclists: widget.numberOfCyclists ?? 0,
+            numberOfCyclists: widget.numberOfCyclists ?? 1,
             selectedCoords: coordsList,
             staticListMap: staticCordMap,
+            dockList: dockList,
+            isScheduled: widget.isScheduled,
+            journeyDate: widget.journeyDate!,
           ),
         ),
       ),
