@@ -1,4 +1,4 @@
-
+import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -12,12 +12,13 @@ import 'package:veloplan/styles/theme.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:veloplan/utilities/dart_exts.dart';
+import 'package:veloplan/utilities/permissions.dart';
+import 'package:veloplan/widgets/locationPermissionError.dart';
 
 late SharedPreferences sharedPreferences;
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  checkPermissions();
   LiveLocationHelper liveLocationHelper = LiveLocationHelper();
   liveLocationHelper.initializeLocation();
   sharedPreferences = await SharedPreferences.getInstance();
@@ -34,22 +35,6 @@ void main() async {
       )));
 }
 
-//APP IS ONLY WORKING WHEN "GRANTED" IS PRINTED OUT, FIX IT TO NOT CRASH AND REASK IN OTHER CASES
-void checkPermissions() async {
-  var locationStatus = await Permission.location.status;
-
-  if (locationStatus.isGranted) {
-    print("GRANTED");
-  } else if (locationStatus.isDenied) {
-    await Permission.location.request();
-    print("ISDENIED HAPPENED");
-  } else if (locationStatus.isPermanentlyDenied) {
-    print("TELL USERS TO GO TO SETTINGS TO ALLOW LOCATION");
-  } else if (locationStatus.isLimited) {
-    print("ISLIMITED WAS SELECTED");
-  }
-}
-
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -58,8 +43,35 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  late Permission permission;
+  PermissionStatus permissionStatus = PermissionStatus.denied;
+
+  Future<void> requestForPermission() async {
+    final status = await Permission.location.request();
+    setState(() {
+      permissionStatus = status;
+    });
+  }
+
+  void requestPermission() {
+    if (mounted) {
+      PermissionUtils.instance.getLocation(context).listen((status) {
+        print("requestPermission => $status");
+        if (status == Permissions.DENY) {
+          context.pushAndRemoveUntil(LocationError());
+        } else if (status == Permissions.ASK_EVERYTIME) {
+          // Show permission
+          requestPermission();
+        }
+      });
+    }
+  }
+
   @override
   void initState() {
+    Timer(Duration(seconds: 10), () {
+      requestPermission();
+    });
     super.initState();
   }
 

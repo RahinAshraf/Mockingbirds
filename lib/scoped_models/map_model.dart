@@ -7,12 +7,13 @@ import 'package:veloplan/providers/docking_station_manager.dart';
 /// Author(s): Fariha Choudhury k20059723, Elisabeth Halvorsen k20077737,
 class MapModel extends Model {
   late MapboxMapController? controller;
+  final Set<Symbol> dockSymbols = {};
 
   /// Fetch all docking stations.
   Future<void> fetchDockingStations() async {
     final dockingStationManager _stationManager = dockingStationManager();
-    await _stationManager.importStations().then(
-        (value) => placeDockMarkers(controller!, _stationManager.stations));
+    _stationManager.importStations().then((value) =>
+        placeDockMarkers(controller!, _stationManager.stations, dockSymbols));
   }
 
   /// Gets the Mapbox [controller].
