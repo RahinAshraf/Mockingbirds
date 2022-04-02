@@ -53,6 +53,9 @@ dependencies:
   timelines: ^0.1.0
   scoped_model: ^2.0.0-nullsafety.0
   flutter_spinkit: ^5.1.0
+  integration_test: 
+    sdk: flutter
+    version: ^0.0.0
   table_calendar: ^3.0.5
 
 
@@ -86,8 +89,6 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/config/
-    - assets/icon/
     - assets/images/
 
   fonts:

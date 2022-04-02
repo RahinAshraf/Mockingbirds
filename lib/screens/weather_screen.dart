@@ -3,7 +3,7 @@ import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:veloplan/models/weather.dart';
 import 'package:veloplan/providers/weather_manager.dart';
-import '../styles/colors.dart';
+import 'package:veloplan/styles/colors.dart';
 
 class WeatherScreen extends StatefulWidget {
   @override
