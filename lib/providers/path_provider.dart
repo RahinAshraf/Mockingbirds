@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import "package:http/http.dart" as http;
 import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart'

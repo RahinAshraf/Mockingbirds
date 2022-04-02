@@ -1,10 +1,8 @@
 import 'dart:async';
 import 'dart:math';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:veloplan/helpers/database_helpers/statistics_helper.dart';
 import 'package:veloplan/helpers/navigation_helpers/map_drawings.dart';
 import 'package:veloplan/helpers/navigation_helpers/navigation_conversions_helpers.dart';
@@ -12,10 +10,8 @@ import 'package:veloplan/helpers/navigation_helpers/navigation_helpers.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:veloplan/models/itinerary.dart';
 import 'package:veloplan/models/map_models/base_map_with_route_model.dart';
-import 'package:veloplan/navbar.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
-import 'package:location/location.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/helpers/live_location_helper.dart';
 import 'package:veloplan/utilities/travel_type.dart';
@@ -38,7 +34,6 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
   bool firstLoactionCompleted = true;
   late Map<dynamic, dynamic> _routeResponse;
 
-  //TODO: Marija attributes for distance, duration and dock name should be presented on the screen
   ValueNotifier<num> distance = ValueNotifier(0);
   ValueNotifier<num> duration = ValueNotifier(0);
   ValueNotifier<String> dockName = ValueNotifier("");

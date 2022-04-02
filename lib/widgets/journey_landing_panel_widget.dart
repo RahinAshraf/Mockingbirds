@@ -17,30 +17,38 @@ class _JourneyLandingPanelWidget extends State<JourneyLandingPanelWidget> {
   Widget build(BuildContext context) => Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Text('Journey', style: infoTextStyle),
-          ValueListenableBuilder(
-              valueListenable: widget.baseMapWithUpdatedRoute.dockName,
-              builder: (BuildContext context, String dockName, Widget? child) {
-                return Text("Next stop: ${dockName}",
-                    style: tripSchedulerTextStyle);
-              }),
-          ValueListenableBuilder(
-              valueListenable: widget.baseMapWithUpdatedRoute.duration,
-              builder: (BuildContext context, num time, Widget? child) {
-                String t = (time.toDouble()/60.0).toStringAsFixed(0);
-                return Text("Time: ${t} minutes", style: tripSchedulerTextStyle);
-              }),
-          ValueListenableBuilder(
-              valueListenable: widget.baseMapWithUpdatedRoute.distance,
-              builder: (BuildContext context, num distance, Widget? child) {
-                return Text("Distance: ${distance}m",
-                    style: tripSchedulerTextStyle);
-              }),
+          Column(
+            children: [
+              Text('Journey', style: infoTextStyle),
+              const Divider(
+                color: Color(0xFF99D2A9),
+                thickness: 5,
+              ),
+              ValueListenableBuilder(
+                  valueListenable: widget.baseMapWithUpdatedRoute.dockName,
+                  builder:
+                      (BuildContext context, String dockName, Widget? child) {
+                    return Text("Next stop: ${dockName}",
+                        style: JourneyLandingTextStyle);
+                  }),
+              Row(children: [
+                ValueListenableBuilder(
+                    valueListenable: widget.baseMapWithUpdatedRoute.duration,
+                    builder: (BuildContext context, num time, Widget? child) {
+                      String t = (time.toDouble() / 60.0).toStringAsFixed(0);
+                      return Text("Time: ${t} minutes",
+                          style: JourneyLandingTextStyle);
+                    }),
+                ValueListenableBuilder(
+                    valueListenable: widget.baseMapWithUpdatedRoute.distance,
+                    builder:
+                        (BuildContext context, num distance, Widget? child) {
+                      return Text("Distance: ${distance}m",
+                          style: JourneyLandingTextStyle);
+                    }),
+              ])
+            ],
+          )
         ],
       );
 }
-
-
-//  Text("Next stop: ${widget.dockName}", style: tripSchedulerTextStyle),
-//  Text("Time: ${widget.duration}", style: tripSchedulerTextStyle),
-//  Text("Distance: ${widget.distance}", style: tripSchedulerTextStyle),

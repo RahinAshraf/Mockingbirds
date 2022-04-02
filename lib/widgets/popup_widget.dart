@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:veloplan/styles/styling.dart';
 import 'package:veloplan/utilities/alert_type.dart';
 
-import '../models/weather.dart';
-
 /// Creates a generic popup widget.
 ///
 /// To avoid distorting the widget, there should be no more than
@@ -12,12 +10,12 @@ import '../models/weather.dart';
 /// This widget has [type] property of [AlertType]. It determines the
 /// image that should be rendered for the widget.
 class PopupWidget extends StatelessWidget {
-  PopupWidget(
-      {required this.title,
-      required this.text,
-      required this.children,
-      required this.type,
-      });
+  PopupWidget({
+    required this.title,
+    required this.text,
+    required this.children,
+    required this.type,
+  });
 
   final String title;
   final String text;
