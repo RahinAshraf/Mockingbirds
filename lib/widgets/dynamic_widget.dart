@@ -18,15 +18,11 @@ class DynamicWidget extends StatelessWidget {
   final TextEditingController editDockTextEditController =
       TextEditingController();
   List<List<double?>?>? selectedCoords;
-  List<List<double?>?>? selectedDocks;
   Function(int)? onDelete;
   int position = -1;
-  final locationService = LocationService();
   final Map? coordDataMap;
   late Map<int, DockingStation> latLngMap;
-  List<double?>? dock;
-  // TODO: isFrom is false because this is the dynamic widget which is not the from
-  bool isFrom = false;
+  bool isFrom = false; //isFrom is false because this is the dynamic widget which is not the from
   int numberOfCyclists = 1;
 
   /// Set the position of the selected coordinates list to the passed in index.
@@ -196,9 +192,7 @@ class DynamicWidget extends StatelessWidget {
     double longitudeOfPlace = response['location'].longitude;
     List<double?> currentLocationCoords = [latitudeOfPlace, longitudeOfPlace];
     controller.text = place;
-
     checkInputLocation();
-
     if (position > ((selectedCoords?.length) ?? 0) - 1 ||
         (selectedCoords?.isEmpty ?? true)) {
       selectedCoords?.add(currentLocationCoords);

@@ -279,10 +279,10 @@ class PanelWidgetState extends State<PanelWidget> {
       newIndex -= 1;
     }
 
-    if (oldIndex < widget.selectedCoords.length) {
-      final item = widget.listDynamic.removeAt(oldIndex);
-      widget.listDynamic.insert(newIndex, item);
+    final item = widget.listDynamic.removeAt(oldIndex);
+    widget.listDynamic.insert(newIndex, item);
 
+    if (oldIndex < widget.selectedCoords.length) {
       final itemCoords = widget.selectedCoords[oldIndex];
       widget.selectedCoords.removeAt(oldIndex);
       widget.selectedCoords.insert(newIndex, itemCoords);
@@ -430,6 +430,7 @@ class PanelWidgetState extends State<PanelWidget> {
     tempList.addAll(staticListMap.values);
     tempList.addAll(widget.selectedCoords);
     ScheduleHelper helper = ScheduleHelper();
+    print("Templist => ${tempList}");
     helper.createScheduleEntry(
         widget.journeyDate, tempList, widget.numberOfCyclists);
     // Navigate back to the previous screen, useful for tbt
@@ -509,6 +510,27 @@ class PanelWidgetState extends State<PanelWidget> {
     return false;
   }
 
+  ///The logic to restrict the user from being able to start a journey without a starting point in the
+  ///[textEditingController].
+  bool startLocationMustBeSpecified() {
+    if (widget.fromTextEditController.text.isEmpty) {
+      alert.showSnackBarErrorMessage(
+          context, alert.startPointMustBeDefinedMessage);
+      return true;
+    }
+    return false;
+  }
+
+  ///The logic to restrict the user from being able to start a journey without defining at least one destination for the journey
+  bool oneDestinationMustBeSpecified() {
+    if (widget.listDynamic.isEmpty) {
+      alert.showSnackBarErrorMessage(
+          context, alert.chooseAtLeastOneDestinationMessage);
+      return true;
+    }
+    return false;
+  }
+
   ///Applies all the constraints needed for the panel widget. If any constraints are broken, program execution terminates
   ///and  displays necessary error message to the user. [fromEditingController] and the [toEditingController] are the
   ///controllers where the user specifies the destination to start their journey from and where to go respectively.
@@ -534,27 +556,6 @@ class PanelWidgetState extends State<PanelWidget> {
     if(hasAdjacentDocks()){
       alert.showSnackBarErrorMessage(
           context, alert.adjacentClosestDocksMessage);
-      return true;
-    }
-    return false;
-  }
-
-  ///The logic to restrict the user from being able to start a journey without a starting point in the
-  ///[textEditingController].
-  bool startLocationMustBeSpecified() {
-    if (widget.fromTextEditController.text.isEmpty) {
-      alert.showSnackBarErrorMessage(
-          context, alert.startPointMustBeDefinedMessage);
-      return true;
-    }
-    return false;
-  }
-
-  ///The logic to restrict the user from being able to start a journey without defining at least one destination for the journey
-  bool oneDestinationMustBeSpecified() {
-    if (widget.listDynamic.isEmpty) {
-      alert.showSnackBarErrorMessage(
-          context, alert.chooseAtLeastOneDestinationMessage);
       return true;
     }
     return false;
