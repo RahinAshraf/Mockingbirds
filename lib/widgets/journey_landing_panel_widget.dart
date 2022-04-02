@@ -36,8 +36,13 @@ class _JourneyLandingPanelWidget extends State<JourneyLandingPanelWidget> {
                     valueListenable: widget.baseMapWithUpdatedRoute.duration,
                     builder: (BuildContext context, num time, Widget? child) {
                       String t = (time.toDouble() / 60.0).toStringAsFixed(0);
-                      return Text("Time: ${t} minutes",
-                          style: JourneyLandingTextStyle);
+                      return Row(children: [
+                        Icon(
+                          Icons.timelapse,
+                        ),
+                        Text("Time: ${t} minutes",
+                            style: JourneyLandingTextStyle)
+                      ]);
                     }),
                 SizedBox(height: 15),
                 ValueListenableBuilder(
