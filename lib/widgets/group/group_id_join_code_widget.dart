@@ -1,13 +1,14 @@
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:veloplan/helpers/database_helpers/database_manager.dart';
+import 'package:veloplan/helpers/navigation_helpers/navigation_conversions_helpers.dart';
 import 'package:veloplan/models/docking_station.dart';
-import 'package:veloplan/utilities/dart_exts.dart';
-
-import '../helpers/database_helpers/database_manager.dart';
-import '../helpers/navigation_helpers/navigation_conversions_helpers.dart';
-import '../models/itinerary.dart';
+import 'package:veloplan/models/itinerary.dart';
 import 'package:veloplan/screens/summary_journey_screen.dart';
+import 'package:veloplan/utilities/dart_exts.dart';
 
 class GroupId extends StatefulWidget {
   const GroupId({Key? key}) : super(key: key);
@@ -35,7 +36,6 @@ class GroupIdState extends State<GroupId> {
   _joinGroup(String code) async {
     var group = await _databaseManager.getByEquality('group', 'code', code);
     var list = [];
-    var geoList;
     String id = "";
 
     if (group.size == 0) {
@@ -47,7 +47,7 @@ class GroupIdState extends State<GroupId> {
         exists = true;
       });
 
-      var _itinerary = _getDataFromGroup(group);
+      var _itinerary = await _getDataFromGroup(group);
 
       group.docs.forEach((element) async {
         id = element.id;
@@ -61,19 +61,19 @@ class GroupIdState extends State<GroupId> {
       });
       await _databaseManager.updateByKey('group', id, {'memberList': list});
 
-      context.push(SummaryJourneyScreen(_itinerary));
+      context.push(SummaryJourneyScreen(_itinerary, false));
     }
   }
 
-  Itinerary _getDataFromGroup(QuerySnapshot<Map<String, dynamic>> group) {
+  Future<Itinerary> _getDataFromGroup(QuerySnapshot<Map<String, dynamic>> group) async {
     List<DockingStation> _docks = [];
     var geoList = [];
     var _myDestinations;
     var _numberOfCyclists;
-    group.docs.forEach((element) async {
+    for(var element in group.docs ){
       var itinerary = await element.reference.collection('itinerary').get();
       var journeyIDs = itinerary.docs.map((e) => e.id).toList();
-      journeyIDs.forEach((journeyID) async {
+      for( var journeyID in journeyIDs){
         var journey = await element.reference
             .collection('itinerary')
             .doc(journeyID)
@@ -81,30 +81,40 @@ class GroupIdState extends State<GroupId> {
         _numberOfCyclists = journey.data()!['numberOfCyclists'];
         geoList = journey.data()!['points'];
         var stationCollection =
-            await journey.reference.collection("dockingStations").get();
-        var stationMap = stationCollection.docs.map((e) => e.data());
-        stationMap.forEach((station) {
-          _docks.add(
+        await journey.reference.collection("dockingStations").get();
+        var stationMap = stationCollection.docs;
+        _docks = List.filled(stationMap.length, DockingStation("fill","fill",true,false,-1,-1,-1,10,20), growable: false);
+        for(var station in stationMap)({
+          _docks[station.data()['index']] = (
             DockingStation(
-              station['id'],
-              station['name'],
+              station.data()['id'],
+              station.data()['name'],
               true,
               false,
               -1,
               -1,
               -1,
-              station['location'].longitude,
-              station['location'].latitude,
-            ),
-          );
+              station.data()['location'].longitude,
+              station.data()['location'].latitude,
+            )
+          )
         });
-      });
+        var coordinateCollection = await journey.reference.collection("coordinates").get();
+        var coordMap = coordinateCollection.docs;
+        geoList = List.filled(coordMap.length, GeoPoint(10,20));
+        for (var value in coordMap) {
+          geoList[value.data()['index']]= value.data()['coordinate'];
+        }
+      }
       List<List<double>> tempList = [];
       for (int i = 0; i < geoList.length; i++) {
         tempList.add([geoList[i].latitude, geoList[i].longitude]);
+
       }
+
       _myDestinations = convertListDoubleToLatLng(tempList);
-    });
+
+    }
     return Itinerary.navigation(_docks, _myDestinations, _numberOfCyclists);
   }
 

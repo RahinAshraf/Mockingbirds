@@ -9,6 +9,8 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import '../../popups.dart';
 
+import '../../popups.dart';
+
 /// Map screen showing and focusing on a a selected journey
 /// Author(s): Elisabeth Halvorsen k20077737,
 
@@ -35,16 +37,10 @@ class _MapRoutePageState extends State<MapRoutePage> {
   Widget build(BuildContext context) {
     return Scaffold(body: ScopedModelDescendant<MapModel>(
         builder: (BuildContext context, Widget? child, MapModel model) {
-// <<<<<<< HEAD
-//       _baseMapWithRoute = BaseMapboxRouteMap(
-//         _journey,
-//         model,
-//       ); // true  //TRUE - DISPLAY POLYLINE AND MARKERS
-// =======
       _baseMapWithRoute = BaseMapboxRouteMap(_itinerary, model);
-// >>>>>>> main
       addPositionZoom();
       addGoBackButton();
+      print("---------------" + _itinerary.myDestinations.toString());
       if (calculateDistance(currentLatLng, _itinerary.myDestinations![0]) <
           0.02) {
         startTurnByTurn(context, _itinerary);

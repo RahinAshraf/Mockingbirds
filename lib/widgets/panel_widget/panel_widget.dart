@@ -23,6 +23,7 @@ import '../../providers/location_service.dart';
 import '../../helpers/navigation_helpers/navigation_conversions_helpers.dart';
 import '../../models/docking_station.dart';
 import '../dynamic_widget.dart';
+import 'package:veloplan/helpers/navigation_helpers/navigation_conversions_helpers.dart';
 import 'package:veloplan/helpers/database_helpers/history_helper.dart';
 import 'package:veloplan/widgets/panel_widget/panel_widget_exts.dart';
 
@@ -458,6 +459,10 @@ class PanelWidgetState extends State<PanelWidget> {
                   ),
                 ],
               ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                child: buildFloatingActionButton(onPressed: addDynamic),
+              ),
             ],
           ),
         ),
@@ -553,13 +558,13 @@ class PanelWidgetState extends State<PanelWidget> {
       HistoryHelper historyHelper = HistoryHelper();
 
       List<DockingStation> selectedDocks = dockList.values.toList();
-      for(int i = 0; i < selectedDocks.length; i++){
+      for (int i = 0; i < selectedDocks.length; i++) {
         String dockName = selectedDocks[i].name;
         print("DOCK NAME => $dockName");
       }
       print("SELECTED DOCKS ==> $selectedDocks");
 
-   List<DockingStation> closestDocksWithNoAdjancents = [];
+      List<DockingStation> closestDocksWithNoAdjancents = [];
       for (int i = 0; i < closestDockList.length - 1; i++) {
         if (closestDockList[i].lat == closestDockList[i + 1].lat &&
             closestDockList[i].lon == closestDockList[i + 1].lon) {
@@ -595,7 +600,8 @@ class PanelWidgetState extends State<PanelWidget> {
         //! TODO: if response = null, we dont want the pop to be true! talk with elisabeth
 
         //go to the summary of journey screen
-        final response = await context.push(SummaryJourneyScreen(_itinerary));
+        final response =
+            await context.push(SummaryJourneyScreen(_itinerary, false));
         if (response || response == null) {
           Navigator.of(context).pop(true);
         } else {

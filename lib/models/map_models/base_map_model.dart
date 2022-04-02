@@ -10,6 +10,8 @@ import 'package:veloplan/providers/location_service.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:veloplan/.env.dart';
 import '../../screens/journey_planner_screen.dart';
+import 'package:veloplan/scoped_models/map_model.dart';
+import 'package:veloplan/.env.dart';
 import 'package:veloplan/widgets/docking_station_widget.dart';
 
 /// Class to display a mapbox map with other possible widgets on top
@@ -74,11 +76,6 @@ class BaseMapboxMap {
 
   /// Initialize map features
   void onMapCreated(MapboxMapController controller) async {
-// <<<<<<< HEAD
-//     timer = Timer.periodic(
-//         Duration(seconds: 40), (Timer t) => updateCurrentLocation());
-//     updateCurrentLocation();
-// =======
     await baseMapCreated(controller);
   }
 
@@ -122,11 +119,6 @@ class BaseMapboxMap {
     cameraPosition = CameraPosition(target: currentPosition, zoom: 15);
   }
   //print(coordinates);
-
-  /// Defines [onSymbolTapped] functionality for a docking station marker
-  // void onMarkerTapped(MapboxMapController controller) {
-  //   controller.onSymbolTapped.add(onSymbolTapped);
-  // }
 
   /// gets the new [cameraposition]
   Future<CameraPosition> getNewCameraPosition() async {
@@ -180,4 +172,11 @@ class BaseMapboxMap {
         tilt: cameraPosition.zoom);
     controller!.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
   }
+
+  // void addDockingStationCard() {
+  //   addWidget(Align(
+  //     alignment: Alignment.bottomCenter,
+  //     child: Container(height: 200, child: DockStation(key: dockingStationKey)),
+  //   ));
+  // }
 }

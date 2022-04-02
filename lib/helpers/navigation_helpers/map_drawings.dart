@@ -80,7 +80,7 @@ void placeDockMarkers(MapboxMapController controller,
     List<DockingStation> docks, Set<Symbol> dockSymbols) async {
   for (var station in docks) {
     addDockSymbol(
-        controller, dockSymbols, station, "assets/icon/bicycle.png", 0.7);
+        controller, dockSymbols, station, "assets/images/appicon.png", 0.2);
   }
 }
 
@@ -88,8 +88,8 @@ void placeDockMarkers(MapboxMapController controller,
 void setYellowMarkers(MapboxMapController controller,
     List<DockingStation> docks, Set<Symbol> symbolsSet) async {
   for (var station in docks) {
-    addDockSymbol(
-        controller, symbolsSet, station, "assets/icon/yellow_marker.png", 0.1);
+    addDockSymbol(controller, symbolsSet, station,
+        "assets/images/yellow_marker.png", 0.1);
   }
 }
 
@@ -97,7 +97,7 @@ void setRedMarkers(MapboxMapController controller, List<DockingStation> docks,
     Set<Symbol> symbolsSet) async {
   for (var station in docks) {
     addDockSymbol(
-        controller, symbolsSet, station, "assets/icon/red_marker.png", 0.1);
+        controller, symbolsSet, station, "assets/images/red_marker.png", 0.1);
   }
 }
 
@@ -120,7 +120,7 @@ void setLocationMarkers(MapboxMapController controller, List<LatLng> journey,
     Set<Symbol> polylineSymbols) async {
   for (var stop in journey) {
     addSymbol(controller, polylineSymbols, stop,
-        "assets/icon/yellow_marker.png", 0.1);
+        "assets/images/yellow_marker.png", 0.1);
   }
 }
 
