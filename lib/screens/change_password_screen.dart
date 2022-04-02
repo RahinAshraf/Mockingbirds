@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:veloplan/helpers/database_helpers/settings_helper.dart';
 
 /// Screen  where the use can change their password.
 /// Author(s): Eduard Ragea k20067643

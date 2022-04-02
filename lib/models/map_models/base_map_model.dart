@@ -6,8 +6,10 @@ import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/helpers/live_location_helper.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:veloplan/models/docking_station.dart';
+import 'package:veloplan/providers/location_service.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:veloplan/.env.dart';
+import '../../screens/journey_planner_screen.dart';
 import 'package:veloplan/widgets/docking_station_widget.dart';
 
 /// Class to display a mapbox map with other possible widgets on top
@@ -23,14 +25,35 @@ class BaseMapboxMap {
   final MapModel model;
   late CameraPosition cameraPosition;
   late MapboxMapController? controller;
-  late Symbol? _selectedSymbol;
+  late Symbol? selectedSymbol;
   bool recenter = true;
+  late Timer timer;
+  // late final bool _useLiveLocation;
 
-  BaseMapboxMap(this.model) {
+  late final StreamController<MapPlace>? address;
+  final locService = LocationService();
+
+  BaseMapboxMap(this.model, {this.address}) {
     cameraPosition = CameraPosition(target: currentPosition, zoom: 15);
     setMap();
     addWidget(map);
-    // addDockingStationCard();
+    // if (_useLiveLocation) {
+    //   _setMapWithLiveLocation();
+    // } else {
+    //   _setMapWithoutLiveLocation();
+    // }
+    // _setMapWithLiveLocation();
+    // addWidget(map);
+// =======
+//   late Symbol? _selectedSymbol;
+//   bool recenter = true;
+
+//   BaseMapboxMap(this.model) {
+//     cameraPosition = CameraPosition(target: currentPosition, zoom: 15);
+//     setMap();
+//     addWidget(map);
+//     // addDockingStationCard();
+// >>>>>>> main
   }
 
   /// Adds a [widget] to [_widgets]
@@ -43,8 +66,19 @@ class BaseMapboxMap {
     return _widgets;
   }
 
+  // @override
+  // void onMapCreated(MapboxMapController controller) async {
+  //   this.controller = controller;
+  //   model.setController(controller);
+  // }
+
   /// Initialize map features
   void onMapCreated(MapboxMapController controller) async {
+// <<<<<<< HEAD
+//     timer = Timer.periodic(
+//         Duration(seconds: 40), (Timer t) => updateCurrentLocation());
+//     updateCurrentLocation();
+// =======
     await baseMapCreated(controller);
   }
 
@@ -66,6 +100,15 @@ class BaseMapboxMap {
         LatLng(_newLocationData.latitude!, _newLocationData.longitude!);
   }
 
+  /// Adds click functionality to map
+  void onMapClick(Point<double> point, LatLng coordinates) async {
+    if (address != null) {
+      Map s = await locService.reverseGeoCode(
+          coordinates.latitude, coordinates.longitude);
+      address!.sink.add(MapPlace(s['place'], s['location']));
+    }
+  }
+
   /// updates the [cameraposition]
   void _updateCameraPosition() {
     cameraPosition = CameraPosition(target: currentPosition, zoom: 15);
@@ -78,16 +121,11 @@ class BaseMapboxMap {
     return cameraPosition;
   }
 
-  /// Adds click functionality to map
-  void onMapClick(Point<double> point, LatLng coordinates) async {}
-
-  /// Shows the on tapped docking station information
+  /// Retrieves the [stationData] of the docking station [symbol] that was tapped
   Future<void> onSymbolTapped(Symbol symbol) async {
-    _selectedSymbol = symbol;
-    if (_selectedSymbol != null) {
+    selectedSymbol = symbol;
+    if (selectedSymbol != null) {
       Map<dynamic, dynamic>? stationData = symbol.data;
-      print("ONSYMBOLTAPPED");
-
       displayDockCard(stationData);
     }
   }
@@ -119,10 +157,12 @@ class BaseMapboxMap {
     return map;
   }
 
-  // void addDockingStationCard() {
-  //   addWidget(Align(
-  //     alignment: Alignment.bottomCenter,
-  //     child: Container(height: 200, child: DockStation(key: dockingStationKey)),
-  //   ));
-  // }
+  /// Refocus map on specified location [position]
+  void resetCameraPosition(LatLng position, double zoom) {
+    cameraPosition = CameraPosition(
+        target: position, //target, //center,
+        zoom: zoom,
+        tilt: cameraPosition.zoom);
+    controller!.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+  }
 }
