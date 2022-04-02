@@ -5,11 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:veloplan/screens/change_password_screen.dart';
 
-/// Settings screen where user can log out and change theme of the app.
-/// @author: Tayyibah
+/// Settings screen where user can log out, change their password or delete their account.
+/// @Author(s): Tayyibah, Eduard Ragea k20067643
 class Settings extends StatelessWidget {
   const Settings({Key? key}) : super(key: key);
 
+  /// This function deletes the current user's account by
+  /// deleting first the documents in the journeys and schedules 
+  /// subcollections.
+  /// Show a popup to confirm deleting by reentering the password
+  /// to avoid deleting it by input mistake.
   void deleteAccount(BuildContext context) {
     final defaultProfilePictureURL =
         'https://firebasestorage.googleapis.com/v0/b/veloplan-b41d0.appspot.com/o/user_image%2Fdefault_profile_picture.jpg?alt=media&token=edc6abb8-3655-448c-84a0-7d34b02f0c73';
@@ -63,6 +68,9 @@ class Settings extends StatelessWidget {
         });
   }
 
+  /// Push the ChangePasswordScreen on top of the widget stack
+  /// and show a confirmation snackbar in case the password was
+  /// succesfully changed.
   void changePassword(context) async {
     var result = await Navigator.of(context).push(MaterialPageRoute(builder: ((context) => ChangePasswordScreen())));
     if(result == true) {

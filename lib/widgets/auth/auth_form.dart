@@ -8,6 +8,8 @@ import 'package:veloplan/styles/styling.dart';
 import 'package:veloplan/widgets/pickers/bottom_date_picker.dart';
 import 'package:veloplan/widgets/pickers/image_picker.dart';
 
+/// Widget which displays and operates the Authentication Form for Log In and Sign Up
+/// Author(s): Eduard Ragea k20067643
 class AuthForm extends StatefulWidget {
   const AuthForm(this.submitFn, this.isLoading, {Key? key}) : super(key: key);
 
@@ -42,22 +44,16 @@ class _AuthFormState extends State<AuthForm> {
   final TextEditingController _dateController = TextEditingController();
   DateTime _dateTime = DateTime.now();
 
+  /// Pass the currently choosen [image] to the [_userImageFile] variable.
   void _pickedImage(File image) {
     _userImageFile = image;
   }
 
+  /// Check if the form is valid and if so, save it and call
+  /// the function passed through the constructor.
   void _trySubmit() {
     final isValid = _formKey.currentState!.validate();
     FocusScope.of(context).unfocus();
-
-    // if (_userImageFile == null && !_isLogin) {
-    //   Scaffold.of(context).showSnackBar(
-    //     SnackBar(
-    //       content: Text('Please pick an image.'),
-    //     ),
-    //   );
-    //   return;
-    // }
 
     if (isValid) {
       _formKey.currentState!.save();
@@ -230,7 +226,6 @@ class _AuthFormState extends State<AuthForm> {
                     },
                     onTap: () {
                       FocusScope.of(context).requestFocus(FocusNode());
-                      //_selectDate();
                       showCupertinoModalPopup<void>(
                         context: context,
                         builder: (BuildContext context) {
