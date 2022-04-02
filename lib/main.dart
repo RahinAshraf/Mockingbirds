@@ -56,7 +56,6 @@ class _MyAppState extends State<MyApp> {
   void requestPermission() {
     if (mounted) {
       PermissionUtils.instance.getLocation(context).listen((status) {
-        print("requestPermission => $status");
         if (status == Permissions.DENY) {
           context.pushAndRemoveUntil(LocationError());
         } else if (status == Permissions.ASK_EVERYTIME) {

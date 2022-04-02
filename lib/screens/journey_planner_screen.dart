@@ -103,7 +103,7 @@ class _JourneyPlanner extends State<JourneyPlanner> {
             numberOfCyclists: widget.numberOfCyclists ?? 1,
             selectedCoords: coordsList,
             staticListMap: staticCordMap,
-            dockList: dockList,
+            dockingStationMap: dockList,
             isScheduled: widget.isScheduled,
             journeyDate: widget.journeyDate!,
           ),

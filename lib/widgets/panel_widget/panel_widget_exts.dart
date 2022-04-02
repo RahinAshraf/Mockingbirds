@@ -72,7 +72,6 @@ class PanelExtensions {
                 if (placeTextController.text.isEmpty) {
                   alert.showSnackBarErrorMessage(
                       context!, alert.fillInLocationBeforeEditingDockMesssage);
-                  print("hello");
                   return;
                 }
                 List temp = await locationService
@@ -87,8 +86,6 @@ class PanelExtensions {
                               selectedDockStation: DockingStation("ds1ID",
                                   "ds1", true, true, 10, 11, 12, 15.6, 89.0),
                             )));
-
-                print("hey result --=> ${result?.name}");
 
                 checkInputLocation(
                     placeTextController,
@@ -168,24 +165,14 @@ class PanelExtensions {
 
     if (null == closesDockLatLng) {
       if (isFrom) {
-        var temp = _stationManager.getClosestDockWithAvailableSpace(
-            latlngPlace, numberOfCyclists);
         closestDock = _stationManager.getClosestDockWithAvailableBikes(
             latlngPlace, numberOfCyclists);
-        print(
-            "closest dock info  dock with available BIKES ${closestDock.name} compared to SPACES ${temp.name} ---- num: ${numberOfCyclists}");
       } else {
-        var temp = _stationManager.getClosestDockWithAvailableBikes(
-            latlngPlace, numberOfCyclists);
         closestDock = _stationManager.getClosestDockWithAvailableSpace(
             latlngPlace, numberOfCyclists);
-        print(
-            "closest dock info  dock with available SPACES ${closestDock.name} compared to BIKES ${temp.name} ------ num: ${numberOfCyclists}");
       }
       editDockTextEditController.text = closestDock.name;
       latLngMap[position] = closestDock;
-      print("closet dock ${closestDock.name}");
-      print("PRIIIINTING => $position");
       this._dockingStation = closestDock;
     } else {
       editDockTextEditController.text = address!;
