@@ -9,7 +9,7 @@ import 'package:veloplan/widgets/dynamic_widget.dart';
 import 'package:veloplan/widgets/panel_widget/panel_widget.dart';
 
 /// The base for the panel widget which contains all necessary controllers, streams and data sets.
-/// @author: Rahin Ashraf - k20034059
+/// Author(s): Rahin Ashraf k20034059
 abstract class PanelWidgetBase extends StatefulWidget {
   final ScrollController scrollController;
   final PanelController panelController;

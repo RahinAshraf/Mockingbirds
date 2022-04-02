@@ -18,7 +18,6 @@ import 'package:veloplan/styles/styling.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
 import 'package:veloplan/widgets/dynamic_widget.dart';
 import 'package:veloplan/widgets/panel_widget/panel_widgets_base.dart';
-// import '../../helpers/navigation_helpers/navigation_conversion_helpers.dart';
 import '../../providers/location_service.dart';
 import '../../helpers/navigation_helpers/navigation_conversions_helpers.dart';
 import '../../models/docking_station.dart';
@@ -28,11 +27,11 @@ import 'package:veloplan/helpers/database_helpers/history_helper.dart';
 import 'package:veloplan/widgets/panel_widget/panel_widget_exts.dart';
 
 /// Renders [PanelWidget] used in [JourneyPlanner] screen.
-///
-/// It is an interactive panel the user can slide up or down,
+
+/// An interactive panel the user can slide up or down,
 /// when wanting to input their desired locations for the journey.
-/// @author: Rahin Ashraf - k20034059
-///Contributor: Nicole
+/// Author(s): Rahin Ashraf k20034059
+/// Contributor: Nicole
 class PanelWidget extends PanelWidgetBase {
   late Map<int, DockingStation> dockList;
   PanelWidget(
@@ -151,7 +150,6 @@ class PanelWidgetState extends State<PanelWidget> {
   }
 
   ///Listens to the map and adds the place that the user taps on the map, to the Journey Planner as a new location.
-//TODO what do we do with isFrom here?
   void _listToMapClick() {
     final selectedCoords = widget.selectedCoords;
 
@@ -204,12 +202,12 @@ class PanelWidgetState extends State<PanelWidget> {
         editDockTextEditController, dockList, -1, isFrom, numberCyclists);
   }
 
-//   ///Builds the static row of components which are displayed permanently. Statically built, as every journey
-//   ///needs to specify a starting point. [controller] is the TextField used to input and display the destination the user is
-//   ///to start their journey from. [hintText] is the text to describe the purpose of each TextField to the user.
+  ///Builds the static row of components which are displayed permanently. Statically built, as every journey
+  ///needs to specify a starting point. [controller] is the TextField used to input and display the destination the user is
+  ///to start their journey from. [hintText] is the text to describe the purpose of each TextField to the user.
 
-//   ///Function which builds the static row of components which are displayed permanently. Statically built, as every journey
-//   ///needs to specify a starting point
+  ///Function which builds the static row of components which are displayed permanently. Statically built, as every journey
+  ///needs to specify a starting point
   Widget _buildStatic(TextEditingController controller,
       {String? hintText,
       required BuildContext context,
@@ -252,58 +250,6 @@ class PanelWidgetState extends State<PanelWidget> {
               icon:
                   Icon(Icons.my_location, size: 20, color: CustomColors.green),
             ),
-// <<<<<<< HEAD
-            // const SizedBox(width: 20),
-            // Expanded(
-            //   child: Column(
-            //     children: [
-            //       SizedBox(
-            //         child: TextField(
-            //           readOnly: true,
-            //           onTap: () {
-            //             widget.handleOnSearchClick(
-            //                 context, controller, onAddressAdded);
-            //           },
-            //           onEditingComplete: () {
-            //             PanelExtensions.of(context: context).checkInputLocation(
-            //                 controller,
-            //                 editDockTextEditController,
-            //                 dockList,
-            //                 -1);
-            //           },
-            //           controller: controller,
-            //           decoration: InputDecoration(
-            //             hintText: hintText,
-            //             focusedBorder: circularInputBorder(width: 2.0),
-            //             border: circularInputBorder(),
-            //             enabledBorder: circularInputBorder(),
-            //             disabledBorder: circularInputBorder(),
-            //             errorBorder: circularInputBorder(),
-            //             focusedErrorBorder: circularInputBorder(),
-            //             suffixIcon: IconButton(
-            //               onPressed: () {
-            //                 _useCurrentLocationButtonHandler(controller, label);
-            //               },
-            //                   icon: const Icon(
-            //                     Icons.my_location,
-            //                     size: 20,
-            //                     color: Colors.blue,
-            //                   ),
-            //                 ),
-            //               ),
-            //             ),
-            //           ),
-            //         ],
-            //       ),
-            //     ),
-            //   ],
-            // ),
-//         PanelExtensions.of(context: context).buildDefaultClosestDock(
-//           editDockTextEditController,
-//           controller,
-//           dockList,
-//         ),
-// =======
           ),
         ),
         PanelExtensions.of(context: context).buildDefaultClosestDock(
@@ -312,7 +258,6 @@ class PanelWidgetState extends State<PanelWidget> {
             dockList,
             isFrom,
             numberCyclists),
-// >>>>>>> main
       ],
     );
   }
@@ -320,18 +265,9 @@ class PanelWidgetState extends State<PanelWidget> {
   ///Given a coordinate, [newCord], it sets the 'From' location as the place specified by the coordinates passed in
   void addCordFrom(List<double?> newCord) {
     staticListMap[fromLabelKey] = newCord;
-// <<<<<<< HEAD
     final ext = PanelExtensions.of(context: context);
-    //ext.setPosition(position);
     ext.getClosetDock(newCord[0], newCord[1], editDockTextEditController,
         dockList, -1, true, widget.numberOfCyclists);
-// =======
-//     //TODO: isFrom is true!!
-//     print(
-//         "ONCHANGED getting isFrom!!! ${widget.numberOfCyclists}  in addcoordfrom");
-//     PanelExtensions.of(context: context).fillClosestDockBubble(newCord[0],
-//         newCord[1], editDockTextEditController, true, widget.numberOfCyclists);
-// >>>>>>> main
   }
 
   ///Given a coordinate, [newCord], it sets the 'To' location as the place specified by the coordinates passed in

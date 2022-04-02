@@ -13,19 +13,6 @@ import 'package:veloplan/widgets/carousel/station_carousel.dart';
 /// By default, cards are sorted by [_DockSorter.selectedFilter].
 
 class DockSorter extends StatefulWidget {
-  DockingStation ds1 =
-      DockingStation("ds1ID", "ds1", true, true, 10, 11, 12, 15.6, 89.0);
-  DockingStation ds2 =
-      DockingStation("ds2ID", "ds2", true, true, 20, 21, 22, 15.6, 99.1);
-  DockingStation ds3 =
-      DockingStation("ds3ID", "ds3", true, true, 30, 31, 32, 15.6, 89.0);
-  DockingStation ds4 =
-      DockingStation("ds4ID", "ds4", true, true, 40, 41, 42, 15.6, 89.0);
-  DockingStation ds5 =
-      DockingStation("ds5ID", "ds5", true, true, 50, 51, 52, 15.6, 89.0);
-  DockingStation ds6 =
-      DockingStation("ds6ID", "ds6", true, true, 60, 61, 62, 15.6, 89.0);
-
   final DockingStation? selectedDockStation;
 
   DockSorter(this.userCoord,
@@ -63,16 +50,6 @@ class _DockSorter extends State<DockSorter> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // TextButton(
-              //   onPressed: () {
-              //     //Navigator.pop(context, widget.selectedDockStation); //put what you want to send back to jp here instead of " widget.selectedDockStation"
-              //     Navigator.pop(context, widget.ds2);
-              //     //Navigator.pop(context, soft-coded-dock);
-
-              //   },
-              //   child:
-              //       const Icon(Icons.arrow_back_rounded, color: Colors.green),
-              // ),
               Row(
                 children: [
                   const Text("Sort by: "),
