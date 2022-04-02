@@ -279,9 +279,6 @@ class PanelWidgetState extends State<PanelWidget> {
       newIndex -= 1;
     }
 
-    // final item = widget.listDynamic.removeAt(oldIndex);
-    // widget.listDynamic.insert(newIndex, item);
-
     if (oldIndex < widget.selectedCoords.length) {
       final item = widget.listDynamic.removeAt(oldIndex);
       widget.listDynamic.insert(newIndex, item);
