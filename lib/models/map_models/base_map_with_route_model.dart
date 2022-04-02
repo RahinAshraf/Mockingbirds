@@ -33,12 +33,7 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
   void onMapCreated(MapboxMapController controller) async {
     await baseMapCreated(controller);
     _displayJourneyAndRefocus(_journey);
-    onMarkerTapped(controller);
-    //controller.onSymbolTapped.add(onSymbolTapped);  --- no tapping functionality for route model
   }
-
-  /// Calls [onSymbolTapped] functionality for docking station markers on maps that do not [_displayPolyline]
-  void onMarkerTapped(MapboxMapController controller) {}
 
   /// Retrieves the [stationData] of the docking station [symbol] that was tapped
   @override
@@ -77,8 +72,6 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
       //WALKING:
       _routeResponse = await manager.getDirections(
           _itinerary.myDestinations![0], journey[0], NavigationType.walking);
-      // _routeResponse = await manager.getDirections(
-      // _startPosition, journey[0], NavigationType.walking);
 
       //update local vars ---
       totalDistance += await manager.getDistance() as num;
@@ -121,28 +114,4 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
             .getGeometry()); //_routeResponse['geometry']); - can use local var instead but i've set it anyway
     addFills(controller!, fills, model);
   }
-
-  // /// Sets distance and time
-  // void _setDistanceAndTime() async {
-  //   try {
-  //     var distance = await _manager.getDistance() as double; //meters
-  //     var duration = await _manager.getDuration() as double; //sec
-
-  //     _totalDistanceAndTime = "distance: " +
-  //         (distance / 1000).truncate().toString() +
-  //         "km, duration: " +
-  //         (duration / 60).truncate().toString();
-  //     print(_totalDistanceAndTime);
-  //   } catch (e) {
-  //     _totalDistanceAndTime = "Route not available";
-  //   }}
-
-  // /// Draws out the journey onto map
-  // void displayJourney() async {
-  //   fills = await setFills(
-  //       fills,
-  //       manager
-  //           .getGeometry()); //_routeResponse['geometry']); - can use local var instead but i've set it anyway
-  //   addFills(controller!, fills, model);
-  // }
 }

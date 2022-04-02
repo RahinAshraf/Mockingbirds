@@ -22,9 +22,9 @@ class BaseMapboxStationMap extends BaseMapboxMap {
     this._journey,
     this._curentDock,
     MapModel model,
-  ) : super(model); //false
+  ) : super(model);
 
-  late DockingStation chosenDock; //= _chosenDock;
+  late DockingStation chosenDock;
   late List<DockingStation> dockingStations;
 
   /// Initialise map features
@@ -35,7 +35,6 @@ class BaseMapboxStationMap extends BaseMapboxMap {
   }
 
   /// Calls [onSymbolTapped] functionality for docking station markers on maps that do not [_displayPolyline]
-  @override
   void onMarkerTapped(MapboxMapController controller) {
     controller.onSymbolTapped.add(onSymbolTapped);
   }
@@ -55,22 +54,14 @@ class BaseMapboxStationMap extends BaseMapboxMap {
       if (station != chosenDock) {
         super.resetCameraPosition(
             _curentDock, cameraPosition.zoom); //refocus on selected dock.
-
-        // REMOVE ALL MARKERS:
         removeMarkers(controller!, filteredDockSymbols);
-        // filteredDockSymbols.clear(); //clear set ??
-        // assign index 1 as red:
         dockingStations.remove(station);
         dockingStations.insert(0, station);
-
         displayFeaturesAndRefocus(
-            dockingStations, dockingStations[0]); //1st = red, rest = yellow
+            dockingStations, dockingStations[0]); //1st=red, rest=yellow
 
         chosenDock = station;
-        print("should be same as ^^ :" + chosenDock.name.toString());
       }
-
-      print(filteredDockSymbols.length);
     }
   }
 
@@ -84,13 +75,9 @@ class BaseMapboxStationMap extends BaseMapboxMap {
   void displayFeaturesAndRefocus(
       List<DockingStation> stations, DockingStation focus) {
     stations.remove(focus); //remove index 0 - will be red
-    print("After removing symbol clicked on :   " + stations.length.toString());
-    setRedMarkers(
-        controller!, [focus], filteredDockSymbols); //add red and remove
-    setYellowMarkers(
-        controller!, stations, filteredDockSymbols); //add rest as yellow
+    setRedMarkers(controller!, [focus], filteredDockSymbols); //add red
+    setYellowMarkers(controller!, stations, filteredDockSymbols); //adds yellows
     stations.insert(0, focus); //put red back into first index
-    print("put red back in :   " + stations.length.toString());
   }
 
   /// Refocus camera positioning to focus on the [journey] polyline

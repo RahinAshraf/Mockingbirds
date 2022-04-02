@@ -8,21 +8,6 @@ import 'package:veloplan/widgets/docking_station_widget.dart';
 /// Author(s): Fariha Choudhury k20059723, Elisabeth Koren Halvorsen k20077737
 final GlobalKey<DockStationState> dockingStationKey = GlobalKey();
 
-/// Adds symbol layer to map for every docking station in London
-// void placeDockMarkers(
-//     MapboxMapController controller, List<DockingStation> docks) {
-//   for (var station in docks) {
-//     controller.addSymbol(
-//         SymbolOptions(
-//             geometry: LatLng(station.lat, station.lon),
-//             iconSize: 0.3,
-//             iconImage: "assets/images/appicon.png"),
-//         {
-//           "station": station,
-//         });
-//   }
-// }
-
 /// Creates a [fills] Map with the specified geometry for the chosen [routeResponse]
 Future<Map<String, Object>> setFills(Map fills, dynamic routeResponse) async {
   try {
@@ -80,7 +65,7 @@ void placeDockMarkers(MapboxMapController controller,
     List<DockingStation> docks, Set<Symbol> dockSymbols) async {
   for (var station in docks) {
     addDockSymbol(
-        controller, dockSymbols, station, "assets/images/appicon.png", 0.2);
+        controller, dockSymbols, station, "assets/images/appicon.png", 0.19);
   }
 }
 
@@ -124,13 +109,6 @@ void setLocationMarkers(MapboxMapController controller, List<LatLng> journey,
   }
 }
 
-/// Adds marker symbol for a single [point] to the map and the [currentSymbol] set
-// void setMarker(MapboxMapController controller, LatLng point,
-//     Set<Symbol> currentSymbol) async {
-//   addSymbol(
-//       controller, currentSymbol, point, "assets/icon/yellow_marker.png", 0.1);
-// }
-
 /// Adds a symbol to the [MapBoxController] and [symbolsSet] with the given [marker] and [iconSize]
 void addSymbol(MapboxMapController controller, Set<Symbol> symbolsSet,
     LatLng location, String marker, double iconSize) async {
@@ -138,15 +116,6 @@ void addSymbol(MapboxMapController controller, Set<Symbol> symbolsSet,
     SymbolOptions(geometry: location, iconSize: iconSize, iconImage: marker),
   ));
 }
-
-/// Removes the specified location markers [polylineSymbols] from the map
-// void removePolylineMarkers(
-//     MapboxMapController controller, Set<Symbol> polylineSymbols) async {
-//   if (polylineSymbols.isNotEmpty) {
-//     await controller.removeSymbols(polylineSymbols);
-//     polylineSymbols.clear();
-//   }
-// }
 
 ///Removes all markers from the map that are in [removeMarkerSet] and clears the set
 void removeMarkers(
