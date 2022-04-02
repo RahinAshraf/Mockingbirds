@@ -73,9 +73,9 @@ Future<void> main() async {
       await driver?.enterText("Password123");
       await driver?.tap(loginButton);
       assert(snackbar == null);
-      await driver?.waitUntilNoTransientCallbacks();
+      await driver?.waitFor(find.byType("NavBar"));
       assert(navBarPage == null);
-      driver?.close();
+      // driver?.close();
     });
   });
 }

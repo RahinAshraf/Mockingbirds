@@ -47,16 +47,16 @@ class _WeatherPageState extends State<WeatherPage> {
           children: [
             const SizedBox(height: 30),
             SizedBox(
-                // height: 150.0,
-                // width: 150.0,
+                key: Key("weatherIcon"),
                 child: Center(
-              child: Image.network(
-                //late problem sort it
-                'http://openweathermap.org/img/w/${weather.current_icon}.png',
-                scale: 0.3,
-              ),
-            )),
+                  child: Image.network(
+                    //late problem sort it
+                    'http://openweathermap.org/img/w/${weather.current_icon}.png',
+                    scale: 0.3,
+                  ),
+                )),
             Column(
+                key: Key("weatnerInfo"),
 
                 /// TODO: MARIJA AND HRISTINA: Make this look prettier
                 //present some text if the length of journey list is 0 (e.g. 'you havent scheduled any journeys yet')

@@ -31,11 +31,14 @@ class _MyJourneysState extends State<MyJourneys> {
     return Scaffold(
       body: journeyList.isEmpty
           ? const SafeArea(
-              child: Center(child: Text("You haven't made any journeys yet.")),
+              child: Center(
+                  key: Key("noJourneys"),
+                  child: Text("You haven't made any journeys yet.")),
             )
           : Stack(
               children: [
                 ListView.builder(
+                  key: Key("allJourneys"),
                   itemCount: journeyList.length,
                   itemBuilder: (context, index) {
                     return MyJourneyCard(journeyList[index]);

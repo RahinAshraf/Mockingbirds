@@ -29,10 +29,13 @@ class _FavouriteState extends State<Favourite> {
     return Scaffold(
       body: favourites.isEmpty
           //TODO: MARIJA HRISTINA-> make prettier if you haven't added any fav
-          ? const Center(child: Text("You haven't added any favourites."))
+          ? const Center(
+              key: Key("noFavourites"),
+              child: Text("You haven't added any favourites."))
           : Padding(
               padding: const EdgeInsets.only(top: 12.0),
               child: ListView.builder(
+                key: Key("allFavourites"),
                 itemCount: favourites.length,
                 itemBuilder: (context, index) {
                   return DockingStationCard.station(favourites[index]);

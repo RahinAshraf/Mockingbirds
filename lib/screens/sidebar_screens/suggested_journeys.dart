@@ -90,6 +90,7 @@ class TimelineItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TimelineTile(
+      key: Key("timelineTile"),
       isFirst: index == 0 ? true : false,
       beforeLineStyle: timelineTileBeforeLineStyle,
       indicatorStyle: timelineTileIndicatorStyle,

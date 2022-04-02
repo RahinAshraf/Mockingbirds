@@ -132,6 +132,7 @@ class SettingsScreen extends StatelessWidget {
         children: [
           const SizedBox(height: 10),
           ListTile(
+            key: Key("logOut"),
             leading: const Icon(Icons.logout),
             title: const Text('Log Out'),
             onTap: () {
@@ -140,11 +141,13 @@ class SettingsScreen extends StatelessWidget {
             },
           ),
           ListTile(
+            key: Key("changePassword"),
             leading: const Icon(Icons.password),
             title: const Text('Change password'),
             onTap: () => changePassword(context),
           ),
           ListTile(
+            key: Key("deleteAccount"),
             leading: const Icon(Icons.delete),
             title: const Text('Delete account'),
             onTap: () => deleteAccount(context),

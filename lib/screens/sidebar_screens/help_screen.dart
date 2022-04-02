@@ -64,6 +64,7 @@ class _HelpScreenState extends State<HelpScreen> {
             ),
             padding: const EdgeInsets.fromLTRB(5.0, 10.0, 0.0, 10.0),
             child: SingleChildScrollView(
+              key: Key("questions"),
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: choices,
