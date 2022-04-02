@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:veloplan/screens/sidebar_screens/suggested_journeys.dart';
 import 'package:veloplan/screens/sidebar_screens/my_journeys_screen.dart';
 import 'package:veloplan/screens/weather_screen.dart';
-import 'screens/sidebar_screens/schedule_screen.dart';
 import 'screens/sidebar_screens/favourite_screen.dart';
 import 'screens/sidebar_screens/help_screen.dart';
 import 'screens/sidebar_screens/my_journeys_screen.dart';

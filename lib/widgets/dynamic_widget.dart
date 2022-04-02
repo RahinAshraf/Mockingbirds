@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/helpers/live_location_helper.dart';
 import 'package:veloplan/providers/location_service.dart';
 import 'package:veloplan/styles/colors.dart';
@@ -17,10 +18,13 @@ class DynamicWidget extends StatelessWidget {
   final TextEditingController editDockTextEditController =
       TextEditingController();
   List<List<double?>?>? selectedCoords;
+  List<List<double?>?>? selectedDocks;
   Function(int)? onDelete;
   int position = -1;
   final locationService = LocationService();
   final Map? coordDataMap;
+  late Map<int, DockingStation> latLngMap;
+  List<double?>? dock;
   // TODO: isFrom is false because this is the dynamic widget which is not the from
   bool isFrom = false;
   int numberOfCyclists = 1;
@@ -33,8 +37,13 @@ class DynamicWidget extends StatelessWidget {
   /// Listen to changes for user input on the location specified in the location textfield.
   void initState() {
     placeTextController.addListener(() {
-      PanelExtensions.of().checkInputLocation(placeTextController,
-          editDockTextEditController, isFrom, numberOfCyclists);
+      PanelExtensions.of().checkInputLocation(
+          placeTextController,
+          editDockTextEditController,
+          latLngMap,
+          position,
+          isFrom,
+          numberOfCyclists);
     });
   }
 
@@ -42,10 +51,11 @@ class DynamicWidget extends StatelessWidget {
       {Key? key,
       required this.selectedCoords,
       this.coordDataMap,
+      required this.latLngMap,
       required this.isFrom,
       required this.numberOfCyclists})
       : super(key: key);
-
+  // late DockingStation closetDockStation;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -62,6 +72,8 @@ class DynamicWidget extends StatelessWidget {
                         onPressed: () {
                           int len = selectedCoords?.length ?? 0;
                           if (position < len) {
+                            latLngMap
+                                .removeWhere((key, value) => key == position);
                             selectedCoords?.removeAt(position);
                           }
                           onDelete?.call(position);
@@ -74,11 +86,14 @@ class DynamicWidget extends StatelessWidget {
                       Expanded(
                         child: TextField(
                           onEditingComplete: () {
-                            PanelExtensions.of(context: context).checkInputLocation(
-                          placeTextController,
-                          editDockTextEditController,
-                          isFrom,
-                          numberOfCyclists);
+                            PanelExtensions.of(context: context)
+                                .checkInputLocation(
+                                    placeTextController,
+                                    editDockTextEditController,
+                                    latLngMap,
+                                    position,
+                                    isFrom,
+                                    numberOfCyclists);
                           },
                           readOnly: true,
                           onTap: () {
@@ -111,34 +126,26 @@ class DynamicWidget extends StatelessWidget {
                   ),
                 ),
                 PanelExtensions(context: context).buildDefaultClosestDock(
-            editDockTextEditController,
-            placeTextController,
-            isFrom,
-            numberOfCyclists)
+                  editDockTextEditController,
+                  placeTextController,
+                  latLngMap,
+                  isFrom,
+                  numberOfCyclists,
+                  position: position,
+                )
               ],
             ),
           ),
-          IconButton(
-            onPressed: () {
-              int len = selectedCoords?.length ?? 0;
-              if (position < len) {
-                selectedCoords?.removeAt(position);
-              }
-              onDelete?.call(position);
-            },
-            padding: EdgeInsets.zero,
-            constraints: BoxConstraints(),
-            icon: const Icon(Icons.menu, size: 20),
-          ),
+          const Icon(Icons.menu),
         ],
       ),
     );
   }
 
-  ///Executed when the user presses on a location TextField
+  ///Executed when the user presses on a location TextField. The [position] is the position of the SearchBar of destinations
+  ///respect to the other SearchBars in the Journey Planner
   void _handleSearchClick(BuildContext context, int position) async {
     final result = await context.openSearch();
-    print("Navigator_Navigator_Navigator => $position");
     final feature = result as Feature?;
     if (feature != null) {
       final len = selectedCoords?.length ?? 0;
@@ -150,14 +157,16 @@ class DynamicWidget extends StatelessWidget {
       } else {
         selectedCoords?[position] = feature.geometry?.coordinates;
       }
+
       PanelExtensions.of(context: context).fillClosestDockBubble(
           feature.geometry?.coordinates.first,
           feature.geometry?.coordinates.last,
           editDockTextEditController,
+          latLngMap,
+          position,
           isFrom,
           numberOfCyclists);
     }
-    print("RESULT => $result");
   }
 
   ///Handler for when the user removes a dynamic widget from the list
@@ -166,12 +175,19 @@ class DynamicWidget extends StatelessWidget {
   }
 
   ///Reacts to user input for the location TextField
-  void checkInputLocation() {
-    PanelExtensions.of().checkInputLocation(placeTextController,
-        editDockTextEditController, isFrom, numberOfCyclists);
+  void checkInputLocation({int? position}) {
+    PanelExtensions.of().checkInputLocation(
+      placeTextController,
+      editDockTextEditController,
+      latLngMap,
+      position ?? this.position,
+      isFrom,
+      numberOfCyclists,
+    );
   }
 
-  ///When called, this function sets location of a TextField to the users current location
+  ///When called, this function sets location of a TextField to the users current location. The [controller] is filled in
+  ///with the current location of the user.
   _useCurrentLocationButtonHandler(
       Map response, TextEditingController controller) async {
     sharedPreferences.setString('source', json.encode(response));

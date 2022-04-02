@@ -2,6 +2,9 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+import '../helpers/navigation_helpers/navigation_conversions_helpers.dart';
+import '../providers/docking_station_manager.dart';
+import 'docking_station.dart';
 import 'package:veloplan/helpers/navigation_helpers/navigation_conversions_helpers.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:veloplan/models/docking_station.dart';
