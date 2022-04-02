@@ -21,8 +21,8 @@ class _JourneyLandingPanelWidget extends State<JourneyLandingPanelWidget> {
             children: [
               Text('Journey', style: infoTextStyle),
               const Divider(
-                color: Color(0xFF99D2A9),
-                thickness: 5,
+                color: Colors.black,
+                thickness: 3,
               ),
               ValueListenableBuilder(
                   valueListenable: widget.baseMapWithUpdatedRoute.dockName,
@@ -39,6 +39,7 @@ class _JourneyLandingPanelWidget extends State<JourneyLandingPanelWidget> {
                       return Text("Time: ${t} minutes",
                           style: JourneyLandingTextStyle);
                     }),
+                SizedBox(height: 15),
                 ValueListenableBuilder(
                     valueListenable: widget.baseMapWithUpdatedRoute.distance,
                     builder:

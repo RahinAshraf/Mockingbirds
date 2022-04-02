@@ -75,8 +75,8 @@ const scheduleScreenCalendarStyle = CalendarStyle(
 
 // Styling for journey landing screen
 
-const TextStyle JourneyLandingTextStyle = TextStyle(
-    color: Color(0xFF99D2A9), fontWeight: FontWeight.normal, fontSize: 20);
+const TextStyle JourneyLandingTextStyle =
+    TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20);
 
 // Styling for favourites and past journeys sidebar
 const TextStyle sidebarTextStyle = TextStyle(
