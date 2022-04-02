@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-///Helper functions for database usage
-///Author: Lilliana
-///Contributor: Tayyibah
+/// Helper functions for database usage
+/// Author: Lilianna
+/// Contributor: Tayyibah
 class DatabaseManager {
   late FirebaseFirestore _database;
   late final _userId;
@@ -16,7 +16,8 @@ class DatabaseManager {
   User? getCurrentUser() {
     return FirebaseAuth.instance.currentUser;
   }
-@deprecated
+
+  @deprecated
   CollectionReference<Object?> getUserSubCollectionReference(
       String collectionName) {
     return _database
@@ -24,7 +25,6 @@ class DatabaseManager {
         .doc(_userId)
         .collection(collectionName);
   }
-
 
   Future<QuerySnapshot<Object?>> getUserSubcollection(
       String subcollection) async {
@@ -73,7 +73,7 @@ class DatabaseManager {
 
   Future<DocumentReference<Map<String, dynamic>>> addToCollection(
       String collection, Map<String, dynamic> value) async {
-   return await _database.collection(collection).add(value);
+    return await _database.collection(collection).add(value);
   }
 
   Future<void> addToSubCollection(CollectionReference<Object?> subcollection,

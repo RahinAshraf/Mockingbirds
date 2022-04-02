@@ -6,7 +6,7 @@ import 'package:veloplan/screens/change_password_screen.dart';
 import 'package:veloplan/helpers/database_helpers/settings_helper.dart';
 
 /// Settings screen where user can log out and change theme of the app.
-/// @author: Tayyibah
+/// Author: Tayyibah
 class Settings extends StatelessWidget {
   const Settings({Key? key}) : super(key: key);
 

@@ -28,7 +28,7 @@ import 'package:veloplan/widgets/panel_widget/panel_widget_exts.dart';
 /// It is an interactive panel the user can slide up or down,
 /// when wanting to input their desired locations for the journey.
 /// Author(s) : Rahin
-/// Contributor: Nicole, Eduard
+/// Contributors: Nicole, Eduard, Marija
 class PanelWidget extends PanelWidgetBase {
   late Map<int, DockingStation> dockList;
   PanelWidget(

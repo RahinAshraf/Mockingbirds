@@ -6,7 +6,7 @@ import 'package:veloplan/styles/texts.dart';
 import 'package:veloplan/widgets/docking_station_card.dart';
 
 /// Loads user's [favourites] and displays them in a list view.
-/// @author Tayyibah Uddin
+/// Author: Tayyibah Uddin
 class Favourite extends StatefulWidget {
   @override
   _FavouriteState createState() => _FavouriteState();

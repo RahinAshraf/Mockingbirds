@@ -17,6 +17,7 @@ class TripSchedulerPanelWidget extends StatefulWidget {
 /// (in that case, the user is directed straight to the [JourneyPlanner]),
 /// or later (a date picker shows up and a trip is scheduled
 /// for the future).
+/// Authors: Rahin, Marija
 class _TripSchedulerPanelWidget extends State<TripSchedulerPanelWidget> {
   final int maximumNumberOfCyclists = 6; // max number of cyclists allowed
   int numberOfCyclists = 1; // min one cyclist allowed

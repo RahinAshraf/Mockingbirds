@@ -6,7 +6,6 @@ import 'package:veloplan/screens/navigation/map_screen.dart';
 import 'package:veloplan/screens/profile_screen.dart';
 import 'package:veloplan/screens/summary_journey_screen.dart';
 import 'package:veloplan/sidebar.dart';
-import 'package:veloplan/styles/colors.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
 import 'helpers/database_helpers/database_manager.dart';
 import 'helpers/navigation_helpers/navigation_conversions_helpers.dart';

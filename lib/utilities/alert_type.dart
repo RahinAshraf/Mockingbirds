@@ -1,4 +1,5 @@
 /// Alert enumerated types
+/// Author: Marija
 
 enum AlertType { warning, question }
 

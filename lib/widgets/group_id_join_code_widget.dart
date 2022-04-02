@@ -19,6 +19,7 @@ class GroupId extends StatefulWidget {
 /// A user is asked to input a 6-digit code, which is stored in [fullPin]
 /// variable. If the code is correct, user 'joins' the group and is then
 /// redirected to corresponding [SummaryJourneyScreen].
+/// Authors: Lilianna, Marija
 class GroupIdState extends State<GroupId> {
   final DatabaseManager _databaseManager = DatabaseManager();
   late List<LatLng>? points;

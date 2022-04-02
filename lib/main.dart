@@ -14,7 +14,7 @@ import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
 import 'package:veloplan/utilities/permissions.dart';
-import 'package:veloplan/widgets/locationPermissionError.dart';
+import 'package:veloplan/widgets/location_permission_error.dart';
 
 late SharedPreferences sharedPreferences;
 void main() async {

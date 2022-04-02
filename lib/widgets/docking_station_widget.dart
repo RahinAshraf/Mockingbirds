@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:veloplan/models/docking_station.dart';
+import 'package:veloplan/styles/colors.dart';
 import 'package:veloplan/widgets/docking_station_card.dart';
-import '/models/docking_station.dart';
 
 /// Creates a widget which displays the docking station card when a symbol is tapped.
 /// Author: Hristina-Andreea Sararu k20036771
@@ -38,7 +39,7 @@ class DockStationState extends State<DockStation> {
                     child: IconButton(
                       icon: Icon(
                         Icons.close,
-                        color: Color(0xFF99D2A9),
+                        color: CustomColors.green,
                         size: 25,
                       ),
                       onPressed: () => setState(() => isVisible = false),

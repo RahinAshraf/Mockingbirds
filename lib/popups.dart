@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:veloplan/helpers/navigation_helpers/navigation_conversions_helpers.dart';
+import 'package:veloplan/models/itinerary.dart';
 import 'package:veloplan/screens/navigation/polyline_turn_by_turn_screen.dart';
 import 'package:veloplan/screens/navigation/turn_by_turn_screen.dart';
 import 'package:veloplan/screens/trips_scheduler_screen.dart';
@@ -7,15 +9,11 @@ import 'package:veloplan/widgets/group_id_join_code_widget.dart';
 import 'package:veloplan/widgets/popup_widget.dart';
 import 'package:veloplan/utilities/alert_type.dart';
 import 'package:intl/intl.dart';
-import 'helpers/navigation_helpers/navigation_conversions_helpers.dart';
-import 'models/itinerary.dart';
 
-/// Generic popups used thorough the app
-/// Author(s) Marija
+/// Generic popups used thorough the app.
+/// Author: Marija
 /// Contributors: Nicole
-
 class Popups {
-  // Questions
   PopupWidget buildPopupDialogNewJourney(BuildContext context) {
     List<PopupButtonWidget> children = [
       PopupButtonWidget(
@@ -45,32 +43,6 @@ class Popups {
         type: AlertType.question);
   }
 
-  PopupWidget buildPopupDialogTripExceedsTime(BuildContext context) {
-    List<PopupButtonWidget> children = [
-      PopupButtonWidget(text: "Edit Journey", onPressed: () {}),
-      PopupButtonWidget(text: "Continue", onPressed: () {}),
-    ];
-    return PopupWidget(
-        title: "Are you sure you want to proceed?",
-        text: "Your trip exceeds 30 minutes.",
-        children: children,
-        type: AlertType.question);
-  }
-
-  PopupWidget buildPopupDialogIntermediateTripExceedsTime(
-      BuildContext context) {
-    List<PopupButtonWidget> children = [
-      PopupButtonWidget(text: "Edit Journey", onPressed: () {}),
-      PopupButtonWidget(text: "Continue", onPressed: () {}),
-    ];
-    return PopupWidget(
-        title: "Are you sure you want to proceed?",
-        text: "Your intermediate trip exceeds 30 minutes.",
-        children: children,
-        type: AlertType.question);
-  }
-
-  // Warnings
   PopupWidget buildPopupDialogStationAvailabilityIsPredicted(
       BuildContext context) {
     List<PopupButtonWidget> children = [
@@ -81,28 +53,6 @@ class Popups {
         title: "The docking station availability is predicted!",
         text: "It may not be accurate the day of the journey.",
         children: children,
-        type: AlertType.warning);
-  }
-
-  PopupWidget buildPopupDialogJourneyStartingSoon(BuildContext context) {
-    List<PopupButtonWidget> children = [
-      PopupButtonWidget(text: "Leave", onPressed: () {}),
-    ];
-    return PopupWidget(
-        title: "Journey starting soon!",
-        text: "You will be redirected automatically.",
-        children: children,
-        type: AlertType.warning);
-  }
-
-  PopupWidget buildWeather(BuildContext context, weather, weatherIcon) {
-    List<PopupButtonWidget> children = [
-      PopupButtonWidget(text: "Leave", onPressed: () {}),
-    ];
-    return PopupWidget(
-        title: "Weather",
-        text: "You will be redirected automatically.",
-        children: [],
         type: AlertType.warning);
   }
 

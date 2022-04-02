@@ -13,6 +13,7 @@ import 'package:veloplan/styles/texts.dart';
 ///
 /// [onClick] is required to specify the function that should be executed
 /// when delete button is clicked.
+/// Author: Marija
 class UpcomingEventCard extends StatelessWidget {
   UpcomingEventCard({required this.event, required this.onClick});
 

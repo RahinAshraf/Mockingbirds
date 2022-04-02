@@ -9,6 +9,7 @@ import 'package:veloplan/widgets/docking_station_card.dart';
 
 /// Class that loads information of docking stations into cards and builds a carousel.
 /// Author(s): Tayyibah, Nicole
+/// Contributor: Marija
 class DockingStationCarousel {
   DockingStationCarousel([this.userCoordinates]);
 

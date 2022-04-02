@@ -16,6 +16,7 @@ const String userName = 'You';
 /// By default, the chat bubble is created for bots' messages, therefore
 /// [isSentByBot] equals to true. If [isSentByBot] is set to false,
 /// the chat bubble is created for the user.
+/// Author: Marija
 class MessageBubble extends StatelessWidget {
   const MessageBubble({required this.content, this.isSentByBot = true});
 

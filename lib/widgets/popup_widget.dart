@@ -10,6 +10,7 @@ import 'package:veloplan/utilities/alert_type.dart';
 ///
 /// This widget has [type] property of [AlertType]. It determines the
 /// image that should be rendered for the widget.
+/// Author: Marija
 class PopupWidget extends StatelessWidget {
   PopupWidget({
     required this.title,

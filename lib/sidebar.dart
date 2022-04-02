@@ -11,8 +11,8 @@ import 'package:veloplan/screens/sidebar_screens/schedule_screen.dart';
 import 'package:veloplan/screens/sidebar_screens/settings_screen.dart';
 
 /// Defines the sidebar.
-/// @author Tayyibah
-/// @contributor(s): Elisabeth, Nicole
+/// Author: Tayyibah
+/// Contributor(s): Elisabeth, Nicole
 class SideBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

@@ -8,7 +8,7 @@ import 'package:veloplan/providers/docking_station_manager.dart';
 
 /// Creates a card for a docking station, to include its name, number of bikes and empty bikes.
 /// Author: Tayyibah Uddin
-/// Contributor: Fariha Choudhury, Nicole Lehchevska, Hristina-Andreea Sararu
+/// Contributors: Fariha, Nicole, Hristina, Marija
 class DockingStationCard extends StatefulWidget {
   late DockingStation dockTemp;
 
@@ -115,9 +115,11 @@ class _DockingStationCardState extends State<DockingStationCard> {
     );
   }
 
+  /// Returns favourite button.
   IconButton _buildFaveButton() {
     return IconButton(
-      icon: _getFaveButton(),
+      icon:
+          Icon(Icons.favorite, color: _isFavourited ? Colors.red : Colors.grey),
       onPressed: () async {
         if (_isFavouriteButtonEnabled) {
           _disableFavButton();
@@ -135,13 +137,6 @@ class _DockingStationCardState extends State<DockingStationCard> {
           });
         }
       },
-    );
-  }
-
-  Icon _getFaveButton() {
-    return Icon(
-      Icons.favorite,
-      color: _isFavourited ? Colors.red : Colors.grey,
     );
   }
 
