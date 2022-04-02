@@ -11,9 +11,10 @@ import 'package:veloplan/screens/summary_journey_screen.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
 
 class GroupId extends StatefulWidget {
-  const GroupId({Key? key}) : super(key: key);
+  GroupId({Key? key}) : super(key: key);
+  final DatabaseManager _databaseManager = DatabaseManager();
   @override
-  State<StatefulWidget> createState() => GroupIdState();
+  State<StatefulWidget> createState() => GroupIdState( _databaseManager);
 }
 
 /// Renders a popup widget to join an existing journey with a 6-digit number.
@@ -22,10 +23,13 @@ class GroupId extends StatefulWidget {
 /// variable. If the code is correct, user 'joins' the group and is then
 /// redirected to corresponding [SummaryJourneyScreen].
 class GroupIdState extends State<GroupId> {
-  final DatabaseManager _databaseManager = DatabaseManager();
+
   late List<LatLng>? points;
   String fullPin = ''; // user's entered pin code
   bool? exists = null;
+  DatabaseManager _databaseManager;
+  late Itinerary _itinerary;
+  GroupIdState(this._databaseManager);
 
   @override
   void initState() {
@@ -33,7 +37,8 @@ class GroupIdState extends State<GroupId> {
   }
 
   /// Adds user to an group, if the given [code] is correct and sets that group [exists].
-  _joinGroup(String code) async {
+  @visibleForTesting
+  joinGroup(String code) async {
     var group = await _databaseManager.getByEquality('group', 'code', code);
     var list = [];
     String id = "";
@@ -43,11 +48,9 @@ class GroupIdState extends State<GroupId> {
         exists = false;
       });
     } else {
-      setState(() {
-        exists = true;
-      });
 
-      var _itinerary = await _getDataFromGroup(group);
+
+      _itinerary = await _getDataFromGroup(group);
 
       group.docs.forEach((element) async {
         id = element.id;
@@ -61,7 +64,11 @@ class GroupIdState extends State<GroupId> {
       });
       await _databaseManager.updateByKey('group', id, {'memberList': list});
 
-      context.push(SummaryJourneyScreen(_itinerary, false));
+      setState(() {
+        exists = true;
+      });
+
+
     }
   }
 
@@ -82,21 +89,21 @@ class GroupIdState extends State<GroupId> {
         geoList = journey.data()!['points'];
         var stationCollection =
         await journey.reference.collection("dockingStations").get();
-        var stationMap = stationCollection.docs;
-        _docks = List.filled(stationMap.length, DockingStation("fill","fill",true,false,-1,-1,-1,10,20), growable: false);
-        for(var station in stationMap)({
+        var stationList = stationCollection.docs;
+        _docks = List.filled(stationList.length, DockingStation("fill","fill",true,false,-1,-1,-1,10,20), growable: false);
+        for(var station in stationList)({
           _docks[station.data()['index']] = (
-            DockingStation(
-              station.data()['id'],
-              station.data()['name'],
-              true,
-              false,
-              -1,
-              -1,
-              -1,
-              station.data()['location'].longitude,
-              station.data()['location'].latitude,
-            )
+              DockingStation(
+                station.data()['id'],
+                station.data()['name'],
+                true,
+                false,
+                -1,
+                -1,
+                -1,
+                station.data()['location'].longitude,
+                station.data()['location'].latitude,
+              )
           )
         });
         var coordinateCollection = await journey.reference.collection("coordinates").get();
@@ -162,9 +169,12 @@ class GroupIdState extends State<GroupId> {
                   width: MediaQuery.of(context).size.width / 0.5,
                   child: ElevatedButton(
                     onPressed: fullPin.length == 6
-                        ? () {
-                            _joinGroup(fullPin);
-                          }
+                        ? () async {
+                      await joinGroup(fullPin);
+                      if(exists!=null && exists!) {
+                        context.push(SummaryJourneyScreen(_itinerary, false));
+                      }
+                    }
                         : null,
                     child: const Text('Confirm'),
                   ),
