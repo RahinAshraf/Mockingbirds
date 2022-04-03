@@ -7,6 +7,8 @@ import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 
 import 'package:veloplan/widgets/auth/auth_form.dart';
 
+/// Screen for the user authentication - Signing Up and Logging In
+/// Author(s): Eduard Ragea k20067643
 class AuthScreen extends StatefulWidget {
   const AuthScreen({Key? key}) : super(key: key);
 
@@ -18,23 +20,15 @@ class _AuthScreenState extends State<AuthScreen> {
   final _auth = FirebaseAuth.instance;
   var _isLoading = false;
 
-  // Function logs in or signs up with the
-  // data passed.
-  // In the case of sign up a document for 
-  // the new user and a photo are created 
-  // and uploaded to the server.
-  // When no picture is passed the 
-  // document will create a link to the 
-  // default profile picture.
-  // Throws FirebaseAuthException if there
-  // is a Problem with the serverside part 
-  // like user tries to sign up with an 
-  // already used email.
-  // Throws error in case of user failing to 
-  // interact with the platform
-  // In the case of any other error the app
-  // creates a new state so the user can try 
-  // authentication again.
+  /// Authenticate the user with Firebase.
+  /// Log in with [email] and [password] if [isLogin] is true. In the case
+  /// of signing up, vreate a user on Firebase Authentication. 
+  /// Set url to default profile pictore if 
+  /// none is choosen, otherwise save it to Firebase Storage.
+  /// Create a document for the user in the Cloud Firestore with their details.
+  /// Set state in order to deactivate and activate the Log In/Sign Up button, 
+  /// so the user can't perform this action twice in the same time.
+  /// Handle errors by showing snackbars with the message.
   void _submitAuthForm(
     String email,
     String password,
