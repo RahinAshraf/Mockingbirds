@@ -26,7 +26,6 @@ class _DockingStationCardState extends State<DockingStationCard> {
   final _helper = FavouriteHelper(DatabaseManager());
   List<DockingStation> _favourites = [];
   bool _isFavouriteButtonEnabled = true;
-  // bool _isFavourited = false;
   var _manager = dockingStationManager();
 
   @override
@@ -35,12 +34,10 @@ class _DockingStationCardState extends State<DockingStationCard> {
       if (mounted)
         setState(() {
           _favourites = data;
-          // _isFavourited = _helper.isFavouriteStation(
-          //     widget.dockTemp.stationId, _favourites);
         });
     });
 
-    //method that makes an api call with dock id and updates the info about the dock
+    //Method that makes an api call with dock id and updates the info about the dock
     _manager.checkStation(widget.dockTemp).then((value) {
       if (mounted)
         setState(() {
@@ -81,51 +78,49 @@ class _DockingStationCardState extends State<DockingStationCard> {
                   const Divider(
                     thickness: 3,
                   ),
-                  if (widget.dockTemp.numberOfBikes != null)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Column(children: [
-                          Row(
-                            children: [
-                              ImageIcon(
-                                AssetImage("assets/images/logo.png"),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Column(children: [
+                        Row(
+                          children: [
+                            ImageIcon(
+                              AssetImage("assets/images/logo.png"),
+                              color: Color(0xFF99D2A9),
+                              size: 30,
+                            ),
+                            Text(
+                              'Bikes: ${widget.dockTemp.numberOfBikes.toString()}',
+                              style: const TextStyle(
+                                fontSize: 15.0,
                                 color: Color(0xFF99D2A9),
-                                size: 30,
+                                fontWeight: FontWeight.w700,
                               ),
-                              Text(
-                                'Bikes: ${widget.dockTemp.numberOfBikes.toString()}',
-                                style: const TextStyle(
-                                  fontSize: 15.0,
-                                  color: Color(0xFF99D2A9),
-                                  fontWeight: FontWeight.w700,
-                                ),
+                            ),
+                          ],
+                        )
+                      ]),
+                      Column(children: [
+                        Row(
+                          children: [
+                            ImageIcon(
+                              AssetImage("assets/images/dock.png"),
+                              color: Color(0xFF99D2A9),
+                              size: 30,
+                            ),
+                            Text(
+                              'Spaces: ${widget.dockTemp.numberOfEmptyDocks.toString()}',
+                              style: const TextStyle(
+                                fontSize: 15.0,
+                                color: Color(0xFF99D2A9),
+                                fontWeight: FontWeight.w700,
                               ),
-                            ],
-                          )
-                        ]),
-                        if (widget.dockTemp.numberOfEmptyDocks != null)
-                          Column(children: [
-                            Row(
-                              children: [
-                                ImageIcon(
-                                  AssetImage("assets/images/dock.png"),
-                                  color: Color(0xFF99D2A9),
-                                  size: 30,
-                                ),
-                                Text(
-                                  'Spaces: ${widget.dockTemp.numberOfEmptyDocks.toString()}',
-                                  style: const TextStyle(
-                                    fontSize: 15.0,
-                                    color: Color(0xFF99D2A9),
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                              ],
-                            )
-                          ]),
-                      ],
-                    ),
+                            ),
+                          ],
+                        )
+                      ]),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -137,7 +132,7 @@ class _DockingStationCardState extends State<DockingStationCard> {
 
   IconButton buildFaveButton() {
     return IconButton(
-      icon: getFaveButton(),
+      icon: getFaveButtonColours(),
       onPressed: () async {
         if (_isFavouriteButtonEnabled) {
           _disableFavButton();
@@ -151,18 +146,17 @@ class _DockingStationCardState extends State<DockingStationCard> {
               await _helper.getUserFavourites();
           setState(() {
             _favourites = updatedFavourites;
-            // _isFavourited = !_isFavourited;
           });
         }
       },
     );
   }
 
-  Icon getFaveButton() {
+  Icon getFaveButtonColours() {
     return Icon(
       Icons.favorite,
       color: _helper.isFavouriteStation(widget.dockTemp.stationId, _favourites)
-          ? Colors.red
+          ? Color.fromARGB(255, 214, 93, 77)
           : Colors.grey,
     );
   }
