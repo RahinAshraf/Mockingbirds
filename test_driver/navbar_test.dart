@@ -128,16 +128,8 @@ Future<void> main() async {
     test("test suggested trips screen", () async {
       await driver?.waitUntilNoTransientCallbacks();
       await driver?.tap(suggestedJourneyButton);
-      await driver?.waitUntilNoTransientCallbacks();
+      await driver?.waitFor(suggestedTripScreen);
       assert(suggestedTripScreen != null);
-      // var a = find.byValueKey("timelineTile");
-      // print(a.toString());
-      // var c = await driver?.getText(find.byValueKey("noSuggested"));
-      // final c = await driver?.getChildrenCount(find.byValueKey("timelineTile"));
-      // expect(c, 2);
-      // expect(
-      //   find.byValueKey("timelineTile"),
-      // );
       assert(find.byValueKey("timelineTile") != null);
 
       //! when you tap on cards you are taken to sumamry of journey

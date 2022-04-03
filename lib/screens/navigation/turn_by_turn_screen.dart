@@ -81,6 +81,7 @@ class _TurnByTurnState extends State<TurnByTurn> {
   Future<void> _onRouteEvent(e) async {
     distanceRemaining = await directions.distanceRemaining;
     durationRemaining = await directions.durationRemaining;
+    /// Update the distance went at every navigation update in shared preferences.
     if (distance == null) {
       distance = distanceRemaining;
     } else {

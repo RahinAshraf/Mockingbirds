@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:veloplan/helpers/database_helpers/settings_helper.dart';
 
+/// Screen  where the use can change their password.
+/// Author(s): Eduard Ragea k20067643
 class ChangePasswordScreen extends StatefulWidget {
   ChangePasswordScreen({Key? key}) : super(key: key);
 
@@ -21,6 +23,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
   bool currentPasswordIsValid = true;
 
+  /// Validate the form and check if the current password is valid.
+  /// Update the password afterwards.
   void trySubmit(context) async {
     final isValid = _formKey.currentState!.validate();
 
@@ -31,7 +35,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     FocusScope.of(context).unfocus();
 
     if (isValid && currentPasswordIsValid) {
-      // _formKey.currentState!.save();
 
       await updateUserPassword(_newPassword.text);
 
@@ -39,10 +42,30 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     }
   }
 
+  /// Update the current user's password on Firebase
   Future updateUserPassword(String password) async {
     final currentUser = FirebaseAuth.instance.currentUser;
 
     await currentUser!.updatePassword(password);
+  }
+
+  /// Check if the current password is valid by reauthenicating
+  /// the user. 
+  /// Return false in case the reauthentication does not succeed.
+  Future<bool> checkCurrentPassword(String password) async {
+    final currentUser = FirebaseAuth.instance.currentUser;
+
+    final authCredential = EmailAuthProvider.credential(
+        email: currentUser!.email!, password: password);
+
+    try {
+      final authResult =
+          await currentUser.reauthenticateWithCredential(authCredential);
+
+      return authResult.user != null;
+    } catch (e) {
+      return false;
+    }
   }
 
   @override
@@ -110,9 +133,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       : "Your password is incorrect",
                 ),
                 obscureText: true,
-                // onSaved: (value) {
-                //   currentPassword = value!;
-                // },
               ),
               const SizedBox(
                 height: 15,
@@ -124,18 +144,23 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   if (value!.isEmpty) {
                     return 'This field can not be empty';
                   }
-                  // _confirmPassword = value;
                   if (value.length < 7) {
                     return 'Password must be at least 7 characters long.';
+                  }
+                  String pattern =
+                      r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{7,}$';
+                  RegExp regExp = new RegExp(pattern);
+                  if (!regExp.hasMatch(value)) {
+                    return 'Your password must have at least 1 Upper Case, 1 Lower Case and 1 Number.';
+                  }
+                  if (value == _currentPassword.text) {
+                    return 'The new password cannot be your current password';
                   }
                   return null;
                 },
                 decoration: const InputDecoration(
                     border: OutlineInputBorder(), labelText: 'New Password'),
                 obscureText: true,
-                // onSaved: (value) {
-                //   newPassword = value!;
-                // },
               ),
               const SizedBox(
                 height: 15,

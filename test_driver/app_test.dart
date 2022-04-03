@@ -4,7 +4,7 @@ import 'profile_test.dart' as profile;
 import 'signup_test.dart' as signup;
 
 void main() async {
-  await signup.main();
+  // await signup.main();
   await login.main();
   await navbar.main();
   await profile.main();

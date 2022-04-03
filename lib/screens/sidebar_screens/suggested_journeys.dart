@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:timeline_tile/timeline_tile.dart';
+import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:veloplan/screens/summary_journey_screen.dart';
+import '../../models/itinerary.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
-import 'package:veloplan/models/itinerary.dart';
-import 'package:veloplan/models/itinerary.dart';
-import 'package:veloplan/styles/styling.dart';
+import '../../styles/styling.dart';
 
 /// Suggester itineraries that contain biggest sights in London for under 30 min.
 /// from: https://londonblog.tfl.gov.uk/2019/11/05/santander-cycles-sightseeing/?intcmp=60245
-///Author: Nicole
-///TODO: Nicole to clean
+/// attributions to animators <a href="https://www.vecteezy.com/free-vector/london">London Vectors by Vecteezy</a>
+/// <a href="https://www.vecteezy.com/free-vector/london-bus">London Bus Vectors by Vecteezy</a>
+///Author: Nicole Lehchevska
+///
 class SuggestedItinerary extends StatefulWidget {
   @override
   _SuggestedItineraryState createState() => _SuggestedItineraryState();
@@ -17,30 +19,54 @@ class SuggestedItinerary extends StatefulWidget {
 
 class _SuggestedItineraryState extends State<SuggestedItinerary> {
   late Itinerary _hydeLoop;
+  dockingStationManager _manager = dockingStationManager();
   late Itinerary _royalLoop;
-  List<LatLng> _hydeParkLoopCoord = [
-    LatLng(51.5031, 0.1526),
-    LatLng(51.50883, -0.17166),
-    LatLng(51.5046, 51.5046),
-    LatLng(51.5045099, -0.152706),
-    LatLng(51.5121347, -0.1686248),
-    LatLng(51.5066092, -0.1745202),
-  ];
-  List<LatLng> _royalLoopCoord = [
-    LatLng(51.5058442, -0.1647927),
-    LatLng(51.5025958, -0.1530432),
-    LatLng(51.501364, -0.14189),
-    LatLng(51.511853, -0.1986145),
-    LatLng(51.5021618, -0.1315459),
-    LatLng(51.5057222, -0.1330674),
-    LatLng(51.5018847, -0.1428112),
-  ];
+  late Itinerary _thamesLoop;
+  Map<LatLng, String> _hydeParkLoopCoord = {
+    LatLng(51.5031, -0.1526): "BikePoints_191",
+    LatLng(51.50883, -0.17166): "BikePoints_248",
+    LatLng(51.5045099, -0.152706): "BikePoints_733",
+    LatLng(51.5121347, -0.1686248): "BikePoints_153",
+    LatLng(51.5066092, -0.1745202): "BikePoints_300"
+  };
+  Map<LatLng, String> _royalLoopCoord = {
+    LatLng(51.5058442, -0.1647927): "BikePoints_248",
+    LatLng(51.5025958, -0.1530432): "BikePoints_191",
+    LatLng(51.501364, -0.14189): "BikePoints_213",
+    LatLng(51.5021618, -0.1315459): "BikePoints_762",
+    LatLng(51.5057222, -0.1330674): "BikePoints_160",
+    LatLng(51.5018847, -0.1428112): "BikePoints_213"
+  };
+  Map<LatLng, String> _thamesLoopCoord = {
+    LatLng(51.4993832, -0.1286692): "BikePoints_762",
+    LatLng(51.4994827, -0.1269979): "BikePoints_818",
+    LatLng(51.5110623, -0.1193367): "BikePoints_309",
+    LatLng(51.5138486, -0.1005393): "BikePoints_48",
+    LatLng(51.5081157, -0.078138): "BikePoints_130",
+    LatLng(51.505455, -0.0753537): "BikePoints_278",
+    LatLng(51.5075986, -0.101545): "BikePoints_839",
+    LatLng(51.5031122, -0.1211524): "BikePoints_815"
+  };
+  @override
+  void initState() {
+    //asign itineraries
+    List<Itinerary> itineraries = [];
 
-  _SuggestedItineraryState() {
-    this._hydeLoop =
-        new Itinerary.suggestedTrip(_hydeParkLoopCoord, "Hyde Park Loop");
-    this._royalLoop =
-        new Itinerary.suggestedTrip(_royalLoopCoord, "Royal Loop");
+    this._hydeLoop = new Itinerary.suggestedTrip(
+        _hydeParkLoopCoord.keys.toList(),
+        "Hyde Park Loop",
+        _hydeParkLoopCoord.values.toList());
+
+    itineraries.add(_hydeLoop);
+    this._royalLoop = new Itinerary.suggestedTrip(_royalLoopCoord.keys.toList(),
+        "Royal Loop", _royalLoopCoord.values.toList());
+    itineraries.add(_royalLoop);
+
+    this._thamesLoop = new Itinerary.suggestedTrip(
+        _thamesLoopCoord.keys.toList(),
+        "Thames Loop",
+        _thamesLoopCoord.values.toList());
+    itineraries.add(_thamesLoop);
   }
 
   @override
@@ -48,28 +74,23 @@ class _SuggestedItineraryState extends State<SuggestedItinerary> {
     return Scaffold(
       backgroundColor: whiteReplacement,
       appBar: AppBar(
-        leading: BackButton(key: Key("back"), color: Colors.red),
         title: const Text('Suggested Journeys'),
+        leading: BackButton(key: Key("back"), color: Colors.white),
       ),
       body: SafeArea(
         child: ListView(
           children: [
             const SizedBox(height: 30),
-            SizedBox(
-                height: 150.0,
-                width: 150.0,
-                child: Center(
-                    child: Image.asset('assets/images/suggested_trips.png'))),
             const Padding(
               padding: EdgeInsets.only(left: 15.0, bottom: 15.0, top: 15.0),
               child: Text('Explore London', style: upcomingJourneysTextStyle),
             ),
             Column(
-              //TODO: Marija Hristina present some text if the length of journey list is 0 (e.g. 'you havent scheduled any journeys yet')
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 TimelineItem(_royalLoop, 1),
-                TimelineItem(_hydeLoop, 2)
+                TimelineItem(_hydeLoop, 2),
+                TimelineItem(_thamesLoop, 3)
               ],
             ),
           ],
@@ -90,21 +111,20 @@ class TimelineItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TimelineTile(
-      key: Key("timelineTile"),
       isFirst: index == 0 ? true : false,
       beforeLineStyle: timelineTileBeforeLineStyle,
       indicatorStyle: timelineTileIndicatorStyle,
       alignment: TimelineAlign.manual,
       lineXY: 0.10,
-      endChild: UpcomingEventCard(
-          title: journey.journeyDocumentId!, journey: journey),
+      endChild:
+          ItineraryCard(title: journey.journeyDocumentId!, journey: journey),
     );
   }
 }
 
 /// Generates an event card for schedule screen.
-class UpcomingEventCard extends StatelessWidget {
-  const UpcomingEventCard({required this.title, required this.journey});
+class ItineraryCard extends StatelessWidget {
+  const ItineraryCard({required this.title, required this.journey});
 
   final String title;
   final Itinerary journey;
@@ -128,6 +148,24 @@ class UpcomingEventCard extends StatelessWidget {
             ListTile(
               title: Text(title, style: eventCardTitleTextStyle),
             ),
+            if (this.title == "Royal Loop")
+              SizedBox(
+                  height: 200.0,
+                  width: 200.0,
+                  child:
+                      Center(child: Image.asset('assets/images/bigBen.png'))),
+            if (this.title == "Hyde Park Loop")
+              SizedBox(
+                  height: 200.0,
+                  width: 200.0,
+                  child:
+                      Center(child: Image.asset('assets/images/hydePark.png'))),
+            if (this.title == "Thames Loop")
+              SizedBox(
+                  height: 200.0,
+                  width: 200.0,
+                  child: Center(
+                      child: Image.asset('assets/images/westminster.png'))),
             Row(
               children: [
                 const SizedBox(width: 15.0),
@@ -136,11 +174,11 @@ class UpcomingEventCard extends StatelessWidget {
                     textStyle: eventCardDetailsTextStyle,
                   ),
                   onPressed: () {
-                    // TODO: change to call the summary of journey
-                    // Navigator.of(context).push(MaterialPageRoute(
-                    //     builder: (context) => SummaryJourneyScreen(journey)));
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) =>
+                            SummaryJourneyScreen(journey, true)));
                   },
-                  child: const Text("View journey itinerary"),
+                  child: const Text("View itinerary"),
                 ),
                 const Icon(
                   Icons.arrow_forward_ios_rounded,
