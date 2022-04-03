@@ -327,8 +327,8 @@ class PanelWidgetState extends State<PanelWidget> {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 message: widget.isScheduled
-                    ? 'Please specify the starting location of your trip and add destinations by clicking the + button. Tapping on the location in the map is another way of adding a stop to your trip! Ensure there are no blank destinations when you do so. You can also reorder your destinations. Simply hold and drag menu button. When you are done, click SAVE.'
-                    : 'Please specify the starting location of your trip and add destinations by clicking the + button. Tapping on the location in the map is another way of adding a stop to your trip! Ensure there are no blank destinations when you do so. You can also reorder your destinations. You can edit your closest dock if you wish. Simply hold and drag menu button. When you are done, click START.',
+                    ? 'Please specify the starting location of your trip and add destinations by clicking +. Tap the map to add another location, ensure there are no blank destinations when you do so! You can reorder your destinations, hold and drag menu buttons. SAVE when finished.'
+                    : 'Please specify the starting location of your trip and add destinations by clicking +. Tap the map to add another location, ensure there are no blank destinations when you do so! You can reorder your destinations, hold and drag menu buttons. You can edit your closest dock using >. START when finished.',
                 showDuration: const Duration(seconds: 3),
                 child: const Icon(Icons.info_outline_rounded,
                     size: 25.0, color: Colors.green),
