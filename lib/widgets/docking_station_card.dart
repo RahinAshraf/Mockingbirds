@@ -79,7 +79,6 @@ class _DockingStationCardState extends State<DockingStationCard> {
                     ),
                   ),
                   const Divider(
-                    color: Color(0xFF99D2A9),
                     thickness: 3,
                   ),
                   if (widget.dockTemp.numberOfBikes != null)
@@ -90,7 +89,7 @@ class _DockingStationCardState extends State<DockingStationCard> {
                           Row(
                             children: [
                               ImageIcon(
-                                AssetImage("assets/images/dock.png"),
+                                AssetImage("assets/images/logo.png"),
                                 color: Color(0xFF99D2A9),
                                 size: 30,
                               ),
@@ -110,7 +109,7 @@ class _DockingStationCardState extends State<DockingStationCard> {
                             Row(
                               children: [
                                 ImageIcon(
-                                  AssetImage("assets/images/logo.png"),
+                                  AssetImage("assets/images/dock.png"),
                                   color: Color(0xFF99D2A9),
                                   size: 30,
                                 ),
