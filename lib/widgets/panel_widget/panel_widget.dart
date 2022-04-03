@@ -111,6 +111,7 @@ class PanelWidgetState extends State<PanelWidget> {
       coordDataMap: response,
       latLngMap: dockMap,
       isFrom: false,
+      isScheduled: widget.isScheduled,
       numberOfCyclists: widget.numberOfCyclists,
     ));
     widget.dynamicWidgets.sink.add(widget.listDynamic);
@@ -153,6 +154,7 @@ class PanelWidgetState extends State<PanelWidget> {
         coordDataMap: response,
         latLngMap: dockMap,
         isFrom: false,
+        isScheduled: widget.isScheduled,
         numberOfCyclists: widget.numberOfCyclists,
       );
 
@@ -251,7 +253,8 @@ class PanelWidgetState extends State<PanelWidget> {
             controller,
             dockMap,
             isFrom,
-            numberCyclists),
+            numberCyclists,
+            widget.isScheduled),
       ],
     );
   }
