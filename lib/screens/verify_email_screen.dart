@@ -1,22 +1,26 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:veloplan/helpers/database_manager.dart';
+import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 import 'package:veloplan/navbar.dart';
 
+/// Screen for the email verification UI
+/// Author(s): Eduard Ragea k20067643
 class VerifyEmailScreen extends StatefulWidget {
   const VerifyEmailScreen({Key? key}) : super(key: key);
 
   @override
-  _VerifyEmailSCreenState createState() => _VerifyEmailSCreenState();
+  _VerifyEmailScreenState createState() => _VerifyEmailScreenState();
 }
 
-class _VerifyEmailSCreenState extends State<VerifyEmailScreen> {
+class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
   final DatabaseManager _databaseManager = DatabaseManager();
   bool isVerified = false;
   bool canResendEmail = false;
   Timer? timer;
 
+  /// First verification is sent when the screen is loaded and
+  /// a timer is initialised to check if the user verified it
+  /// every 3 seconds.
   @override
   void initState() {
     super.initState();
@@ -24,7 +28,6 @@ class _VerifyEmailSCreenState extends State<VerifyEmailScreen> {
 
     if (!isVerified) {
       sendVerification();
-
       timer = Timer.periodic(
         const Duration(seconds: 3),
         (_) => checkEmailVerification(),
@@ -32,12 +35,17 @@ class _VerifyEmailSCreenState extends State<VerifyEmailScreen> {
     }
   }
 
+  /// Delete the timer when the screen is closed so it will 
+  /// not continue run in the background of other screens.
   @override
   void dispose() {
     timer?.cancel();
     super.dispose();
   }
 
+  /// Send the verification email to the current user. Block
+  /// the button for 60 seconds to avoid Firebase spamming error.
+  /// Release the button after the minute has passed.
   Future sendVerification() async {
     try {
       final user = _databaseManager.getCurrentUser()!;
@@ -48,7 +56,7 @@ class _VerifyEmailSCreenState extends State<VerifyEmailScreen> {
       await user.reload();
       if (!user.emailVerified && mounted) setState(() => canResendEmail = true);
     } catch (error) {
-      var message = 'An error occurred, pelase try again later!';
+      var message = 'An error occurred, please try again later!';
 
       if (error.toString() != "") {
         message = error.toString();
@@ -58,13 +66,15 @@ class _VerifyEmailSCreenState extends State<VerifyEmailScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(message),
-            backgroundColor: Theme.of(context).errorColor,
           ),
         );
       }
     }
   }
 
+  /// Checks if the user has verified their email and store
+  /// it in [isVerified]. Stop the process from repeating if
+  /// that happens by cancelling the timer.
   Future checkEmailVerification() async {
     await _databaseManager.getCurrentUser()!.reload();
 

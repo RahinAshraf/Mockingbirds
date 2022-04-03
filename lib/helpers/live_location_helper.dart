@@ -18,13 +18,8 @@ class LiveLocationHelper {
 
     _permissionGranted = await _location.hasPermission();
     if (_permissionGranted == PermissionStatus.denied) {
-      _permissionGranted = await _location.requestPermission();
+      //_permissionGranted = await _location.requestPermission();
     }
-
-    // do{
-    //   await _location.requestPermission();
-    // }
-    // while(_permissionGranted != PermissionStatus.granted);
 
     LocationData _locationData = await _location.getLocation();
     LatLng currentLatLng =

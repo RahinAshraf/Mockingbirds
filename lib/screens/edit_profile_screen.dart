@@ -1,12 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:veloplan/helpers/database_manager.dart';
-
 import '../widgets/profile/profile_widget.dart';
 import '../widgets/textfield_widget.dart';
+import 'package:veloplan/helpers/database_helpers/database_manager.dart';
+import 'package:veloplan/widgets/profile/profile_widget.dart';
+import 'package:veloplan/widgets/textfield_widget.dart';
 
-//import 'package:user_profile_example/widget/button_widget.dart';
-
+/// Screen for the editing current users's profile
+/// Author(s): Eduard Ragea k20067643
 class EditProfile extends StatefulWidget {
   final Map<String, dynamic> data;
   const EditProfile(this.data, {Key? key}) : super(key: key);
@@ -22,6 +23,8 @@ class _EditProfileState extends State<EditProfile> {
   var _lastName = '';
   var _username = '';
 
+  /// Check with Firebase if the chosen username
+  /// is not taken.
   Future<bool> _checkUsernameIsFree() async {
     if (_username == widget.data['username']) {
       return true;
@@ -32,6 +35,9 @@ class _EditProfileState extends State<EditProfile> {
         .isEmpty;
   }
 
+  /// Check for already used username. If it is not valid show
+  /// snackbar, otherwise update the user's document on Firebase.
+  /// Handle error by showing a snackbar with the message.
   void _submitChanges() {
     try {
       _checkUsernameIsFree().then((value) async {
@@ -69,6 +75,7 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
+    /// Show a dialog to rpevent losing progress on accidental exit.
     return WillPopScope(
       onWillPop: () async {
         bool willLeave = false;

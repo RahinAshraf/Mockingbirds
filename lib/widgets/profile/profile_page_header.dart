@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:veloplan/widgets/profile/profile_widget.dart';
-import 'package:veloplan/helpers/live_location_helper.dart';
 
+/// Widget for displaying the profile page header
+/// Author(s): Eduard Ragea k20067643
 class ProfilePageHeader extends StatefulWidget {
   final Map<String, dynamic> data;
   final bool isCurrentUser;
@@ -20,6 +21,8 @@ class _ProfilePageHeaderState extends State<ProfilePageHeader> {
   double distance = 0;
   int journeys = 0;
 
+  /// This function retrieves the distance from the users document on Firebase
+  /// and stores it in the distance variable in kilometers.
   Future getDistance() async {
     final snapshot =
         await FirebaseFirestore.instance.collection('users').doc(user).get();
@@ -29,14 +32,15 @@ class _ProfilePageHeaderState extends State<ProfilePageHeader> {
     }
   }
 
+  /// This function retrieves the number of journeys from the users document on Firebase
+  /// and stores it in the journeys variable.
   Future getJourneys() async {
     final snapshot = await FirebaseFirestore.instance
-        .collection('journey')
-        .where('userid', isEqualTo: user)
-        .get();
+        .collection('users').doc(user).collection('journeys').get();
     journeys = snapshot.size;
   }
 
+  /// Calculate the age of the user by inputing a Timestamp object.
   String calculateAge(Timestamp birthDateTimestamp) {
     DateTime currentDate = DateTime.now();
     DateTime birthDate = birthDateTimestamp.toDate();
@@ -55,6 +59,8 @@ class _ProfilePageHeaderState extends State<ProfilePageHeader> {
     return age.toString();
   }
 
+  /// Show a short description of the profile which includes
+  /// full name, email and age.
   Widget buildName(Map<String, dynamic> data) => Column(
         children: [
           Text(
@@ -71,10 +77,11 @@ class _ProfilePageHeaderState extends State<ProfilePageHeader> {
             calculateAge(data['birthDate']),
             style: const TextStyle(color: Colors.grey),
           ),
-          // const SizedBox(height: 24),
         ],
       );
 
+  /// Show the account statistics(number of kilometers done
+  /// and the number of journeys)
   Widget buildCyclingHistory(Map<String, dynamic> data) {
     return Padding(
       padding: const EdgeInsets.only(top: 10),
@@ -141,28 +148,6 @@ class _ProfilePageHeaderState extends State<ProfilePageHeader> {
     );
   }
 
-  Widget buildButtons() => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20),
-        child: widget.isCurrentUser
-            ? ElevatedButton(
-                onPressed: () {},
-                child: const Text('Edit Profile'),
-              )
-            : Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {},
-                    child: const Text('Follow'),
-                  ),
-                  OutlinedButton(
-                    onPressed: () {},
-                    child: const Text('Message'),
-                  )
-                ],
-              ),
-      );
-
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -177,7 +162,6 @@ class _ProfilePageHeaderState extends State<ProfilePageHeader> {
           const SizedBox(height: 24),
           buildName(widget.data),
           buildCyclingHistory(widget.data),
-          // buildButtons(),
         ],
       ),
     );

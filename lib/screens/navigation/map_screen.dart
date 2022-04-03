@@ -1,16 +1,17 @@
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:veloplan/models/map_models/base_map_model.dart';
-import '../../models/map_models/base_map_with_route_model.dart';
+import '../../helpers/database_helpers/database_manager.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
+import 'package:veloplan/widgets/docking_station_widget.dart';
 
 /// Map screen focused on a user's live location
 /// Author(s): Fariha Choudhury k20059723, Elisabeth Halvorsen k20077737,
-
-const double zoom = 16; //! REMOVE
-
 class MapPage extends StatefulWidget {
   const MapPage({Key? key}) : super(key: key);
   @override
@@ -18,48 +19,36 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  LatLng currentLatLng = getLatLngFromSharedPrefs();
+  LatLng currentPosition = getLatLngFromSharedPrefs();
   late BaseMapboxMap _baseMap;
-  late BaseMapboxRouteMap _baseMapWithRoute;
-  // var _dockingStationCarousel = dockingStationCarousel();
+  DatabaseManager _databaseManager = DatabaseManager();
 
-  // /// ! show usage of BaseMapboxRouteMap
+  @override
+  void initState() {
+    _deleteOldGroup();
+    super.initState();
+  }
 
-  // List<LatLng> points = [
-  //   LatLng(51.514951, -0.112762),
-  //   LatLng(51.513146, -0.115256),
-  //   LatLng(51.511407, -0.125497),
-  //   LatLng(51.506053, -0.130310),
-  //   LatLng(51.502254, -0.217760),
-  // ];
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(body: ScopedModelDescendant<MapModel>(
-  //       builder: (BuildContext context, Widget? child, MapModel model) {
-  //     _baseMapWithRoute =
-  //         BaseMapboxRouteMap(points, model);
-  //     addPositionZoom();
-  //     return SafeArea(child: Stack(children: _baseMapWithRoute.getWidgets()));
-  //   }));
-  // }
-
-  // /// add positional zoom to our widgets
-  // void addPositionZoom() {
-  //   _baseMapWithRoute.addWidget(Container(
-  //     alignment: Alignment(0.9, 0.90),
-  //     child: FloatingActionButton(
-  //       heroTag: "center_to_current_loaction",
-  //       onPressed: () {
-  //         _baseMapWithRoute.controller?.animateCamera(
-  //             CameraUpdate.newCameraPosition(_baseMapWithRoute.cameraPosition));
-  //       },
-  //       child: const Icon(Icons.my_location),
-  //     ),
-  //   ));
-  // }
-
-  // /// ! show usage of BaseMapboxMap
+  Future<void> _deleteOldGroup() async {
+    var user = await _databaseManager.getByKey(
+        'users', _databaseManager.getCurrentUser()!.uid);
+    var hasGroup = user.data()!.keys.contains('group');
+    if (hasGroup) {
+      var group = await _databaseManager.getByEquality(
+          'group', 'code', user.data()!['group']);
+      group.docs.forEach((element) {
+        Timestamp timestamp = element.data()['createdAt'];
+        var memberList = element.data()['memberList'];
+        if (DateTime.now().difference(timestamp.toDate()) > Duration(days: 2)) {
+          element.reference.delete();
+          for (String member in memberList) {
+            _databaseManager.setByKey('users', member,
+                {'group': FieldValue.delete()}, SetOptions(merge: true));
+          }
+        }
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,28 +56,28 @@ class _MapPageState extends State<MapPage> {
         builder: (BuildContext context, Widget? child, MapModel model) {
       _baseMap = BaseMapboxMap(model);
       addPositionZoom();
-      // addFavouritesCarousel();
+      addDockingStationCard();
       return SafeArea(child: Stack(children: _baseMap.getWidgets()));
     }));
   }
 
-  void addPositionZoom() {
+  void addPositionZoom() async {
     _baseMap.addWidget(Container(
       alignment: Alignment(0.9, 0.90),
       child: FloatingActionButton(
-        heroTag: "center_to_current_loaction",
-        onPressed: () {
-          _baseMap.controller?.animateCamera(
-              CameraUpdate.newCameraPosition(_baseMap.cameraPosition));
-        },
-        child: const Icon(Icons.my_location),
-      ),
+          heroTag: "center_to_current_loaction",
+          onPressed: () async {
+            _baseMap.controller?.animateCamera(CameraUpdate.newCameraPosition(
+                await _baseMap.getNewCameraPosition()));
+          },
+          child: const Icon(Icons.my_location)),
     ));
   }
 
-  // void addFavouritesCarousel() {
-  //   _baseMap.addWidget(
-  //     Container(child: _dockingStationCarousel.buildCarousel()),
-  //   );
-  // }
+  void addDockingStationCard() {
+    _baseMap.addWidget(Align(
+      alignment: Alignment.bottomCenter,
+      child: Container(height: 200, child: DockStation(key: dockingStationKey)),
+    ));
+  }
 }

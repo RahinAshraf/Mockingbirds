@@ -1,38 +1,49 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:veloplan/helpers/navigation_helpers/navigation_helpers.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
-import 'package:veloplan/models/map_models/base_map_model.dart';
-import 'package:veloplan/screens/navigation/turn_by_turn_screen.dart';
+import 'package:veloplan/models/itinerary.dart';
 import '../../models/map_models/base_map_with_route_model.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
+import '../../popups.dart';
 
 /// Map screen showing and focusing on a a selected journey
 /// Author(s): Elisabeth Halvorsen k20077737,
 
 class MapRoutePage extends StatefulWidget {
-  // const MapPage({Key? key}) : super(key: key);
-  final List<LatLng> _journey;
-  MapRoutePage(this._journey);
+  final Itinerary _itinerary;
+  MapRoutePage(this._itinerary);
+
   @override
-  _MapRoutePageState createState() => _MapRoutePageState(_journey);
+  _MapRoutePageState createState() => _MapRoutePageState(this._itinerary);
 }
 
 class _MapRoutePageState extends State<MapRoutePage> {
   LatLng currentLatLng = getLatLngFromSharedPrefs();
-  late BaseMapboxMap _baseMap;
   late BaseMapboxRouteMap _baseMapWithRoute;
-  final List<LatLng> _journey;
+  final Itinerary _itinerary;
+  _MapRoutePageState(this._itinerary) {}
 
-  _MapRoutePageState(this._journey);
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: ScopedModelDescendant<MapModel>(
         builder: (BuildContext context, Widget? child, MapModel model) {
-      _baseMapWithRoute = BaseMapboxRouteMap(_journey, model);
+      _baseMapWithRoute = BaseMapboxRouteMap(_itinerary, model);
       addPositionZoom();
-      startTurnByTurn(context, _journey);
+      addGoBackButton();
+      print("---------------" + _itinerary.myDestinations.toString());
+      if (calculateDistance(currentLatLng, _itinerary.myDestinations![0]) <
+          0.02) {
+        startTurnByTurn(context, _itinerary);
+      }
+
       return SafeArea(child: Stack(children: _baseMapWithRoute.getWidgets()));
     }));
   }
@@ -53,17 +64,43 @@ class _MapRoutePageState extends State<MapRoutePage> {
   }
 
   /// adds turn a turn by turn to our list of widgets
-  void startTurnByTurn(BuildContext context, List<LatLng> subJourney) {
+  void startTurnByTurn(BuildContext context, Itinerary itinerary) {
+    Popups popup = new Popups();
     _baseMapWithRoute.addWidget(Container(
-      alignment: Alignment(0, 0),
+      alignment: Alignment(0.9, 0.7),
       child: FloatingActionButton(
-          heroTag: "start_turn_by_trun",
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => TurnByTurn(subJourney)),
-            );
-          }),
+        heroTag: "start_turn_by_trun",
+        onPressed: () {
+          showDialog(
+              useRootNavigator: false,
+              context: context,
+              builder: (BuildContext context) =>
+                  popup.buildPopupDialogRedirect(context, itinerary));
+        },
+        child: const Text("GO"),
+        backgroundColor: Colors.green,
+      ),
+    ));
+  }
+
+  /// add a reroute button to navbar
+  void addGoBackButton() {
+    _baseMapWithRoute.addWidget(Container(
+      alignment: Alignment(-0.9, -0.90),
+      child: FloatingActionButton(
+        heroTag: "back",
+        onPressed: () {
+          try {
+            Navigator.of(context).pop(true);
+          } catch (e) {
+            log("failed to push replacement");
+          }
+        },
+        child: const Icon(
+          Icons.arrow_back,
+        ),
+        backgroundColor: Colors.red,
+      ),
     ));
   }
 }

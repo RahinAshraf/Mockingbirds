@@ -1,6 +1,11 @@
+import 'dart:async';
+
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:tuple/tuple.dart';
+import 'package:veloplan/helpers/navigation_helpers/navigation_conversions_helpers.dart';
 import 'package:veloplan/helpers/navigation_helpers/navigation_helpers.dart';
+import 'package:veloplan/helpers/shared_prefs.dart';
+import 'package:veloplan/models/itinerary.dart';
 import 'package:veloplan/providers/route_manager.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:veloplan/models/map_models/base_map_model.dart';
@@ -11,37 +16,43 @@ import 'package:veloplan/utilities/travel_type.dart';
 /// Author(s): Fariha Choudhury k20059723, Elisabeth Koren Halvorsen k20077737
 
 class BaseMapboxRouteMap extends BaseMapboxMap {
-  late final List<LatLng> _journey;
-  Map<String, Object> _fills = {};
-  final Set<Symbol> _polylineSymbols = {};
-  String _totalDistanceAndTime = 'No route';
-  final RouteManager _manager = RouteManager();
-  late Map _routeResponse;
+  late List<LatLng> _journey;
+  final Itinerary _itinerary;
+  Map<String, Object> fills = {};
+  final Set<Symbol> polylineSymbols = {};
+  final RouteManager manager = RouteManager();
+  late Map<dynamic, dynamic> _routeResponse;
+  // LatLng _startPosition = getLatLngFromSharedPrefs();
 
-  // BaseMapboxRouteMap(this._journey, MapModel model) : super(model);
-  BaseMapboxRouteMap(this._journey, MapModel model) : super(model);
+  BaseMapboxRouteMap(this._itinerary, MapModel model) : super(model) {
+    _journey = convertDocksToLatLng(_itinerary.docks!)!;
+  }
 
   /// Initialise map features
   @override
   void onMapCreated(MapboxMapController controller) async {
-    this.controller = controller;
-    model.setController(controller);
-    model.fetchDockingStations();
+    await baseMapCreated(controller);
     _displayJourneyAndRefocus(_journey);
-    controller.onSymbolTapped.add(onSymbolTapped);
   }
+
+  /// Retrieves the [stationData] of the docking station [symbol] that was tapped
+  @override
+  Future<void> onSymbolTapped(Symbol symbol) async {}
 
   /// Display journey and refocus camera position
   void _displayJourneyAndRefocus(List<LatLng> journey) {
-    _setJourney(journey);
+    setBaseJourney(journey);
     _refocusCamera(journey);
-    setPolylineMarkers(controller!, journey, _polylineSymbols);
+    //setPolylineMarkers(controller!, journey, polylineSymbols); - renamed
+    setLocationMarkers(controller!, journey, polylineSymbols);
   }
 
   /// Refocus camera positioning to focus on the [journey] polyline
   void _refocusCamera(List<LatLng> journey) {
-    LatLng center = getCenter(journey);
-    Tuple2<LatLng, LatLng> corners = getCornerCoordinates(journey);
+    List<LatLng> points = journey;
+    points.add(_itinerary.myDestinations![0]);
+    LatLng center = getCenter(points);
+    Tuple2<LatLng, LatLng> corners = getCornerCoordinates(points);
     double zoom = getZoom(calculateDistance(center, corners.item1));
 
     cameraPosition = CameraPosition(
@@ -52,47 +63,55 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
   }
 
   /// Sets the [journey] geometry
-  void _setJourney(List<LatLng> journey) async {
+  void setBaseJourney(List<LatLng> journey) async {
     List<dynamic> journeyPoints = [];
+    double totalDistance = 0.0;
+    double totalDuration = 0.0;
+
     if (journey.length > 1) {
-      _routeResponse = await _manager.getDirections(
-          journey[0], journey[1], NavigationType.walking);
+      //WALKING:
+      _routeResponse = await manager.getDirections(
+          _itinerary.myDestinations![0], journey[0], NavigationType.walking);
+
+      //update local vars ---
+      totalDistance += await manager.getDistance() as num;
+      totalDuration += await manager.getDuration() as num;
+      for (dynamic a in _routeResponse['geometry']!['coordinates']) {
+        journeyPoints.add(a);
+      }
+
       for (int i = 0; i < journey.length - 1; ++i) {
-        var directions = await _manager.getDirections(
+        //CYCLING:
+        var directions = await manager.getDirections(
             journey[i], journey[i + 1], NavigationType.cycling);
+
+        //update local vars ---
+        totalDistance += await manager.getDistance() as num;
+        totalDuration += await manager.getDuration() as num;
         for (dynamic a in directions['geometry']!['coordinates']) {
           journeyPoints.add(a);
         }
         _routeResponse['geometry']
             .update("coordinates", (value) => journeyPoints);
+        _routeResponse.update("distance", (value) => totalDistance);
+        _routeResponse.update("duration", (value) => totalDuration);
       }
-      _displayJourney();
+      //set distance and duration of whole journey: don't do this if you will reuse distance and duration within this class
+
+      manager.setDistance(_routeResponse['distance']);
+      manager.setDuration(_routeResponse['duration']);
+      manager.setGeometry(_routeResponse['geometry']);
+
+      displayJourney();
     }
   }
 
   /// Draws out the journey onto map
-  void _displayJourney() async {
-    _fills = await setFills(_fills, _routeResponse['geometry']);
-    addFills(controller!, _fills, model);
-    _setDistanceAndTime();
-  }
-
-  /// Sets distance and time
-  void _setDistanceAndTime() async {
-    try {
-      var duration = await _manager.getDistance() as double; //meters
-      var distance = await _manager.getDuration() as double; //sec
-      _totalDistanceAndTime = "distance: " +
-          (distance / 1000).truncate().toString() +
-          ", duration: " +
-          (duration / 60).truncate().toString();
-    } catch (e) {
-      _totalDistanceAndTime = "Route not avalible";
-    }
-  }
-
-  /// Gets the [_totalDistanceAndTime] of a journey
-  String _getTotalDistance() {
-    return _totalDistanceAndTime;
+  void displayJourney() async {
+    fills = await setFills(
+        fills,
+        manager
+            .getGeometry()); //_routeResponse['geometry']); - can use local var instead but i've set it anyway
+    addFills(controller!, fills, model);
   }
 }

@@ -1,12 +1,16 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:veloplan/screens/forgot_password_screen.dart';
 import 'package:veloplan/styles/styling.dart';
 import 'package:veloplan/widgets/pickers/bottom_date_picker.dart';
 import 'package:veloplan/widgets/pickers/image_picker.dart';
 
+/// Widget which displays and operates the Authentication Form for Log In and Sign Up
+/// Author(s): Eduard Ragea k20067643
 class AuthForm extends StatefulWidget {
   const AuthForm(this.submitFn, this.isLoading, {Key? key}) : super(key: key);
 
@@ -41,36 +45,42 @@ class _AuthFormState extends State<AuthForm> {
   final TextEditingController _dateController = TextEditingController();
   DateTime _dateTime = DateTime.now();
 
+  /// Pass the currently choosen [image] to the [_userImageFile] variable.
   void _pickedImage(File image) {
     _userImageFile = image;
   }
 
-  void _trySubmit() {
+  /// Check if the form is valid and if so, save it and call
+  /// the function passed through the constructor.
+  Future _trySubmit() async {
     final isValid = _formKey.currentState!.validate();
     FocusScope.of(context).unfocus();
 
-    // if (_userImageFile == null && !_isLogin) {
-    //   Scaffold.of(context).showSnackBar(
-    //     SnackBar(
-    //       content: Text('Please pick an image.'),
-    //     ),
-    //   );
-    //   return;
-    // }
-
     if (isValid) {
       _formKey.currentState!.save();
-      widget.submitFn(
-        _userEmail.trim(),
-        _userPassword.trim(),
-        _userName.trim(),
-        _firstName,
-        _lastName,
-        _userImageFile,
-        _dateTime,
-        _isLogin,
-        context,
-      );
+      final query = await FirebaseFirestore.instance
+          .collection('users')
+          .where('username', isEqualTo: _userName.trim())
+          .get();
+      if (!query.docs.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("This username is already taken"),
+          ),
+        );
+      } else {
+        widget.submitFn(
+          _userEmail.trim(),
+          _userPassword.trim(),
+          _userName.trim(),
+          _firstName,
+          _lastName,
+          _userImageFile,
+          _dateTime,
+          _isLogin,
+          context,
+        );
+      }
     }
   }
 
@@ -181,6 +191,11 @@ class _AuthFormState extends State<AuthForm> {
                     if (value.length < 7) {
                       return 'Password must be at least 7 characters long.';
                     }
+                    String pattern =
+                        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{7,}$';
+                    RegExp regExp = new RegExp(pattern);
+                    if (!regExp.hasMatch(value))
+                      return 'Your password must have at least 1 Upper Case, 1 Lower Case and 1 Number.';
                     return null;
                   },
                   decoration: const InputDecoration(
@@ -229,7 +244,6 @@ class _AuthFormState extends State<AuthForm> {
                     },
                     onTap: () {
                       FocusScope.of(context).requestFocus(FocusNode());
-                      //_selectDate();
                       showCupertinoModalPopup<void>(
                         context: context,
                         builder: (BuildContext context) {
@@ -286,6 +300,17 @@ class _AuthFormState extends State<AuthForm> {
                         },
                       ),
                     ],
+                  ),
+                if (_isLogin)
+                  TextButton(
+                    child: Text('Forgot my password'),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => ForgotPasswordScreen(),
+                        ),
+                      );
+                    },
                   ),
               ],
             ),

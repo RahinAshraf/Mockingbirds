@@ -1,44 +1,59 @@
-import 'dart:math';
+import 'dart:developer';
+import 'dart:math' as math;
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-
 import 'package:mapbox_gl/mapbox_gl.dart';
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:flutter/services.dart';
+import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart';
 import 'package:timeline_tile/timeline_tile.dart';
-import 'package:veloplan/helpers/database_manager.dart';
+import 'package:veloplan/models/itinerary_manager.dart';
+import 'package:veloplan/models/path.dart';
+import '../helpers/navigation_helpers/navigation_conversions_helpers.dart';
+import '../models/itinerary.dart';
+import 'navigation/map_with_route_screen.dart';
+import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 import 'package:veloplan/navbar.dart';
-import 'package:veloplan/screens/navigation/map_screen.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
 
-import '../helpers/navigation_helpers/navigation_conversion_helpers.dart';
-import 'navigation/map_with_route_screen.dart';
+/// Class useful to present the chosen docking stations and destinations by the user, distances and durations about their itinerary, a code for people to create a group
+///Author(s): Nicole, Marija, Liliana, Hristina
 
 class SummaryJourneyScreen extends StatefulWidget {
-  List<LatLng> points;
-  SummaryJourneyScreen(this.points, {Key? key}) : super(key: key);
+  late Itinerary itinerary;
+  bool cameFromSchedule;
+  final DatabaseManager _databaseManager = DatabaseManager();
+  SummaryJourneyScreen(this.itinerary, this.cameFromSchedule, {Key? key})
+      : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => SummaryJourneyScreenState();
+  State<StatefulWidget> createState() => SummaryJourneyScreenState(
+      this.itinerary, this.cameFromSchedule, this._databaseManager);
 }
 
 class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
-  final DatabaseManager _databaseManager = DatabaseManager();
+  bool cameFromSchedule;
   bool isInGroup = false;
   late String groupID = "";
   late String organiser = "";
-  late List<List<double?>?> points;
+  late List<List<double?>?> pointsInDoubles;
+  late List<LatLng> pointsCoord;
+  late Itinerary _itinerary;
+  final DatabaseManager _databaseManager;
+  late List<Path> paths;
+  late ItineraryManager _itineraryManager;
+
+  SummaryJourneyScreenState(
+      this._itinerary, this.cameFromSchedule, this._databaseManager) {
+    _itineraryManager = new ItineraryManager(_itinerary);
+    paths = _itineraryManager.getPaths();
+  }
 
   @override
   void initState() {
-    points = convertLatLngToDouble(widget.points)!;
+    pointsInDoubles = convertDocksToDouble(widget.itinerary.docks!)!;
     _setData();
-
     super.initState();
   }
 
@@ -50,7 +65,6 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
   }
 
   _setData() async {
-    print('1');
     var res;
     var user = await _databaseManager.getByKey(
         'users', _databaseManager.getCurrentUser()!.uid);
@@ -59,24 +73,16 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
       var group = await _databaseManager.getByEquality(
           'group', 'code', user.data()!['group']);
       res = await _getGroupOwner(group);
-      points = [];
-      group.docs.forEach((element) {
-        var geoList = element.data()['points'];
-        for(int i = 0; i< geoList.length;i++){
-          points.add([geoList[i].latitude,geoList[i].longitude]);
-        }
-
-      });
+      pointsInDoubles = [];
     }
     setState(() {
       isInGroup = hasGroup;
       organiser = user.data()!['username'];
-      if (isInGroup) {
+      if (isInGroup && !cameFromSchedule) {
         organiser = res.data()!['username'];
       }
     });
   }
-
 
   Future<DocumentSnapshot<Map<String, dynamic>>> _getGroupOwner(
       QuerySnapshot<Map<String, dynamic>> group) {
@@ -87,35 +93,69 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
     return tempr;
   }
 
-  void _createGroup() async {
-    print("GDGGDG");
+  String _padWithZeroes(String textToPad) {
+    while (textToPad.length < 6) {
+      textToPad = '0' + textToPad;
+    }
+    return textToPad;
+  }
+
+  @visibleForTesting
+  void createGroup() async {
     var ownerID = _databaseManager.getCurrentUser()?.uid;
     List list = [];
     list.add(ownerID);
-    String destination = "";
-    Random rng = Random();
+    math.Random rng = math.Random();
     String code = rng.nextInt(999999).toString();
+    code = _padWithZeroes(code);
     var x = await _databaseManager.getByEquality('group', 'code', code);
     while (x.size != 0) {
       code = rng.nextInt(999999).toString();
+      code = _padWithZeroes(code);
+
       x = await _databaseManager.getByEquality('group', 'code', code);
     }
     List<GeoPoint> geoList = [];
-    for(int i = 0; i < points.length;i++){
-      geoList.add(GeoPoint(points[i]![0]!,points[i]![1]!));
+    var destinationsIndouble =
+        convertLatLngToDouble(_itinerary.myDestinations!);
+    for (int i = 0; i < destinationsIndouble!.length; i++) {
+      geoList.add(
+          GeoPoint(destinationsIndouble[i]![0]!, destinationsIndouble[i]![1]!));
     }
 
     try {
-      await _databaseManager.addToCollection('group', {
+      await _databaseManager.setByKey(
+          'users', ownerID!, {'group': code}, SetOptions(merge: true));
+      var group = await _databaseManager.addToCollection('group', {
         'code': code,
-        'destination': destination,
         'ownerID': ownerID,
         'memberList': list,
         'createdAt': Timestamp.fromDate(DateTime.now()),
-        'points': geoList,
       });
-      await _databaseManager.setByKey(
-          'users', ownerID!, {'group': code}, SetOptions(merge: true));
+      var journey = await group.collection("itinerary").add({
+        'journeyID': _itinerary.journeyDocumentId,
+        'points': geoList,
+        'date': _itinerary.date,
+        'numberOfCyclists': _itinerary.numberOfCyclists
+      });
+      var dockingStationList = _itinerary.docks!;
+      for (int j = 0; j < geoList.length; j++) {
+        var geo = geoList[j];
+        journey.collection("coordinates").add({
+          'coordinate': geo,
+          'index': j,
+        });
+      }
+
+      for (int i = 0; i < dockingStationList.length; i++) {
+        var station = dockingStationList[i];
+        journey.collection("dockingStations").add({
+          'id': station.stationId,
+          'name': station.name,
+          'location': GeoPoint(station.lat, station.lon),
+          'index': i,
+        });
+      }
 
       setState(() {
         isInGroup = true;
@@ -143,17 +183,17 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
       var temp = await _databaseManager.getByEquality('group', 'code', groupID);
       var userID = _databaseManager.getCurrentUser()?.uid;
       var ownerID;
-      List list=[];
+      List list = [];
       bool wasDeleted = false;
       for (var element in temp.docs) {
         ownerID = element.data()['ownerID'];
-       list  = element.data()['memberList'];
+        list = element.data()['memberList'];
         list.removeWhere((element) => (element == userID));
         if (list.isEmpty) {
           wasDeleted = true;
           element.reference.delete();
         } else {
-          if(ownerID == userID){
+          if (ownerID == userID) {
             _databaseManager
                 .updateByKey('group', element.id, {'ownerID': list[0]});
           }
@@ -163,13 +203,10 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
       }
       await _databaseManager
           .updateByKey('users', userID!, {'group': FieldValue.delete()});
-      if(ownerID == _databaseManager.getCurrentUser()?.uid){
-
-      }
-      else{
+      if (ownerID == _databaseManager.getCurrentUser()?.uid) {
+      } else {
         context.push(NavBar());
       }
-
     } on PlatformException catch (err) {
       var message = 'An error occurred, please check your credentials!';
 
@@ -183,10 +220,9 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
           backgroundColor: Theme.of(context).errorColor,
         ),
       );
-    } catch (err) {
-      //print(err);
-    }
-    var user = await  _databaseManager.getByKey('users', _databaseManager.getCurrentUser()!.uid);
+    } catch (err) {}
+    var user = await _databaseManager.getByKey(
+        'users', _databaseManager.getCurrentUser()!.uid);
     setState(() {
       isInGroup = false;
       organiser = user.data()!['username'];
@@ -196,240 +232,208 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: ListView(
-          children: <Widget>[
-            Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.all(10),
-                color: Theme.of(context).primaryColor,
-                child: const Text(
-                  'Summary of Journey',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 25),
-                )),
-            //const SizedBox(height: 30),
-            Container(
-                height: 120.0,
-                width: 120.0,
-                child: Center(
-                    child: Image.asset('assets/images/summary_journey.png'))),
-            //const SizedBox(height: 30),
-            Container(
-                height: 50,
-                padding: const EdgeInsets.fromLTRB(75, 5, 75, 5),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    elevation: 10.0,
-                    shape: new RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(15.0),
-                    ),
-                  ),
-                  child: Text('Organiser:' + organiser,
-                      style: TextStyle(color: Colors.white)),
-                  onPressed: () {},
-                )),
-            if (isInGroup)
+        appBar: AppBar(
+          title: const Text('Summary of Journey'),
+          leading: IconButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            icon: const Icon(
+              Icons.arrow_back_rounded,
+              size: 30,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        body: SafeArea(
+          child: ListView(
+            children: [
+              const SizedBox(height: 30),
+              SizedBox(
+                  height: 120.0,
+                  width: 120.0,
+                  child: Center(
+                      child: Image.asset('assets/images/summary_journey.png'))),
               Container(
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.all(10),
-                  color: Theme.of(context).primaryColor,
-                  child: FutureBuilder<String>(
-                      future: _getGroup(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return GestureDetector(
-                            child: Text(
-                              "Tap here to copy the code: " + groupID,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 13),
-                            ),
-                            onTap: () {
-                              Clipboard.setData(
-                                ClipboardData(text: groupID),
-                              );
-                            },
-                          );
-                        } else {
-                          return SizedBox(
-                            height: MediaQuery.of(context).size.height / 1.3,
-                            child: Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                          );
-                        }
-                      })),
-            if (!isInGroup)
-              Container(
-                  height: 50,
+                  height: 30,
                   padding: const EdgeInsets.fromLTRB(75, 5, 75, 5),
                   child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      elevation: 10.0,
-                      shape: new RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(15.0),
-                      ),
-                    ),
-                    child: const Text('Share journey',
-                        style: TextStyle(color: Colors.white)),
-                    onPressed: () {
-                      print("PUSHD");
-                      _createGroup();
-                    },
+                    child: Text('Organiser:' + organiser,
+                        style: const TextStyle(color: Colors.white)),
+                    onPressed: () {},
                   )),
-            const SizedBox(height: 20),
-            RichText(
-              text: TextSpan(
-                children: [
-                  WidgetSpan(
-                      child: ImageIcon(
-                        AssetImage("assets/images/logo.png"),
-                        color: Color(0xFF99D2A9),
-                        size: 24,
+              if (isInGroup)
+                if (!cameFromSchedule)
+                  Container(
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.all(10),
+                      color: Theme.of(context).primaryColor,
+                      child: FutureBuilder<String>(
+                          future: _getGroup(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return GestureDetector(
+                                child: SelectableText(
+                                  "Tap here to copy the code: " + groupID,
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 13),
+                                ),
+                                onTap: () {
+                                  Clipboard.setData(
+                                    ClipboardData(text: groupID),
+                                  );
+                                },
+                              );
+                            } else {
+                              return SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height / 1.3,
+                                child: const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              );
+                            }
+                          })),
+              if (!isInGroup)
+                if (_itinerary.date?.day == DateTime.now().day)
+                  Container(
+                      height: 30,
+                      padding: const EdgeInsets.fromLTRB(75, 5, 75, 5),
+                      child: ElevatedButton(
+                        child: const Text('Share journey',
+                            style: TextStyle(color: Colors.white)),
+                        onPressed: () {
+                          createGroup();
+                        },
                       )),
-                  TextSpan(
-                      text: "Planned stops:",
-                      style: TextStyle(color: Color(0xFF99D2A9), fontSize: 25)),
-                ],
-              ),
-            ),
-            const SizedBox(height: 20),
-            TimelineTile(
-              isFirst: true,
-              beforeLineStyle: const LineStyle(
-                thickness: 1.0,
-                color: Color(0XFFe1e1e1),
-              ),
-              indicatorStyle: const IndicatorStyle(
-                padding: EdgeInsets.all(5),
-                width: 10,
-                indicatorXY: 0.0,
-                color: Color(0xFF99D2A9),
-              ),
-              alignment: TimelineAlign.start,
-              endChild: Card(
-                elevation: 1,
-                margin: EdgeInsets.fromLTRB(10.0, 15.0, 20.0, 15.0),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(15.0),
-                      bottomRight: Radius.circular(15.0),
-                      topRight: Radius.circular(15.0),
-                    )),
-                child: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Station 1',
-                        style: TextStyle(
-                          fontSize: 15.0,
-                          color: Color(0xFF99D2A9),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      ImageIcon(
-                        AssetImage("assets/images/logo.png"),
-                        color: Color(0xFF99D2A9),
-                        size: 24,
-                      )
-                    ],
-                  ),
+              const SizedBox(height: 20),
+              RichText(
+                text: const TextSpan(
+                  children: [
+                    TextSpan(
+                        text: "Planned stops:",
+                        style:
+                            TextStyle(color: Color(0xFF99D2A9), fontSize: 25)),
+                  ],
                 ),
               ),
-            ),
-            TimelineTile(
-              isFirst: true,
-              beforeLineStyle: const LineStyle(
-                thickness: 1.0,
-                color: Color(0XFFe1e1e1),
-              ),
-              indicatorStyle: const IndicatorStyle(
-                padding: EdgeInsets.all(5),
-                width: 10,
-                indicatorXY: 0.0,
-                color: Color(0xFF99D2A9),
-              ),
-              alignment: TimelineAlign.start,
-              endChild: Card(
-                elevation: 1,
-                margin: EdgeInsets.fromLTRB(10.0, 15.0, 20.0, 15.0),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(15.0),
-                      bottomRight: Radius.circular(15.0),
-                      topRight: Radius.circular(15.0),
-                    )),
-                child: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Station 2',
-                        style: TextStyle(
-                          fontSize: 15.0,
-                          color: Color(0xFF99D2A9),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      //SizedBox(width: 200.0),
-                      ImageIcon(
-                        AssetImage("assets/images/logo.png"),
-                        color: Color(0xFF99D2A9),
-                        size: 24,
-                      )
-                    ],
-                  ),
+              const SizedBox(height: 20),
+              SingleChildScrollView(
+                child: Column(
+                  children: _generateStops(),
                 ),
               ),
-            ),
-            Container(
-                alignment: Alignment.bottomLeft,
-                padding: const EdgeInsets.all(10),
-                child: const Text(
-                  'Final stop:',
-                  style: TextStyle(color: Color(0xFF99D2A9), fontSize: 18),
-                )),
-            const SizedBox(height: 20),
-            if (isInGroup)
-              Container(
-                  height: 60,
-                  padding: const EdgeInsets.fromLTRB(100, 5, 100, 5),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      elevation: 10.0,
-                      shape: new RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(15.0),
-                      ),
-                    ),
-                    child: const Text('LEAVE GROUP',
-                        style: TextStyle(color: Colors.white)),
-                    onPressed: () {
-                      _leaveGroup();
-                    },
-                  )),
-            Container(
-                padding: const EdgeInsets.fromLTRB(70, 5, 70, 5),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      elevation: 10.0, shape: StadiumBorder()),
-                  child: const Text('START JOURNEY',
-                      style: TextStyle(color: Colors.white)),
+              const SizedBox(height: 20),
+              if (isInGroup)
+                ElevatedButton(
+                  child: const Text('LEAVE GROUP'),
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>  MapRoutePage(convertListDoubleToLatLng(points)!),
-                        )
-                    );
+                    _leaveGroup();
                   },
-                )),
-          ],
+                ),
+              if (_itinerary.date?.day == DateTime.now().day ||
+                  _itinerary.date?.day == null)
+                Container(
+                    padding: const EdgeInsets.fromLTRB(70, 5, 70, 5),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          elevation: 10.0, shape: const StadiumBorder()),
+                      child: const Text('START JOURNEY',
+                          style: TextStyle(color: Colors.white)),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MapRoutePage(_itinerary)),
+                        );
+                      },
+                    )),
+            ],
+          ),
         ));
+  }
+
+  /// generate the distances and durations between the paths, generate station cards
+  List<Widget> _generateStops() {
+    List<Widget> smth = [];
+
+    for (int i = 0; i < _itinerary.docks!.length; i++) {
+      smth.add(StationTempWidget(
+        content: _itinerary.docks![i].name,
+        // time: paths[i].duration,
+        //TODO: Marija -> you can add the distance and duration here or in a seperate widget, whichever is easier for u :)
+        time: 0.0,
+      ));
+    }
+    return smth;
+  }
+
+//TODO: Marija display duration and distance -> paths[i].distance, paths[i].duration, do them as you prefer, thats really important
+//also i have a commented out future builder, for me it did not work, hopefully it does for u
+  _generateStopsFuture() async {
+    _itineraryManager = await new ItineraryManager(_itinerary);
+    paths = _itineraryManager.getPaths();
+  }
+}
+
+class StationTempWidget extends StatelessWidget {
+  const StationTempWidget(
+      {this.first = false,
+      this.last = false,
+      required this.content,
+      required this.time});
+
+  final bool first;
+  final bool last;
+  final String content;
+  final double time;
+
+  @override
+  Widget build(BuildContext context) {
+    return TimelineTile(
+      isFirst: true,
+      beforeLineStyle: const LineStyle(
+        thickness: 1.0,
+        color: Color(0XFFe1e1e1),
+      ),
+      indicatorStyle: const IndicatorStyle(
+        padding: EdgeInsets.all(5),
+        width: 10,
+        indicatorXY: 0.0,
+        color: Color(0xFF99D2A9),
+      ),
+      alignment: TimelineAlign.start,
+      endChild: Card(
+        elevation: 1,
+        margin: const EdgeInsets.fromLTRB(10.0, 15.0, 20.0, 15.0),
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(15.0),
+          bottomRight: Radius.circular(15.0),
+          topRight: Radius.circular(15.0),
+        )),
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                content,
+                style: TextStyle(
+                  fontSize: 15.0,
+                  color: Color(0xFF99D2A9),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                '${time}',
+              )
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
