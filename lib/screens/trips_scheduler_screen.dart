@@ -36,8 +36,4 @@ class _TripSchedulerScreenState extends State<TripSchedulerScreen> {
       ),
     );
   }
-
-  // _onMapCreated(MapboxMapController controller) async {
-  //   this.controller = controller;
-  // }
 }

@@ -9,8 +9,6 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import '../../popups.dart';
 
-import '../../popups.dart';
-
 /// Map screen showing and focusing on a a selected journey
 /// Author(s): Elisabeth Halvorsen k20077737,
 

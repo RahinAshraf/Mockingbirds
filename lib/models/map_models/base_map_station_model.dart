@@ -46,11 +46,7 @@ class BaseMapboxStationMap extends BaseMapboxMap {
     if (selectedSymbol != null) {
       Map<dynamic, dynamic>? stationData = symbol.data;
       DockingStation station = stationData!["station"];
-
       _curentDock = LatLng(station.lat, station.lon);
-      print("SELECTED SYMBOL IS..............: ");
-      print(station.name.toString());
-
       if (station != chosenDock) {
         super.resetCameraPosition(
             _curentDock, cameraPosition.zoom); //refocus on selected dock.

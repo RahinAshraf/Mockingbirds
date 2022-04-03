@@ -39,23 +39,6 @@ class BaseMapboxMap {
     cameraPosition = CameraPosition(target: currentPosition, zoom: 15);
     setMap();
     addWidget(map);
-    // if (_useLiveLocation) {
-    //   _setMapWithLiveLocation();
-    // } else {
-    //   _setMapWithoutLiveLocation();
-    // }
-    // _setMapWithLiveLocation();
-    // addWidget(map);
-// =======
-//   late Symbol? _selectedSymbol;
-//   bool recenter = true;
-
-//   BaseMapboxMap(this.model) {
-//     cameraPosition = CameraPosition(target: currentPosition, zoom: 15);
-//     setMap();
-//     addWidget(map);
-//     // addDockingStationCard();
-// >>>>>>> main
   }
 
   /// Adds a [widget] to [_widgets]
@@ -68,12 +51,6 @@ class BaseMapboxMap {
     return _widgets;
   }
 
-  // @override
-  // void onMapCreated(MapboxMapController controller) async {
-  //   this.controller = controller;
-  //   model.setController(controller);
-  // }
-
   /// Initialize map features
   void onMapCreated(MapboxMapController controller) async {
     await baseMapCreated(controller);
@@ -82,12 +59,8 @@ class BaseMapboxMap {
   Future<void> baseMapCreated(MapboxMapController controller) async {
     this.controller = controller;
     model.setController(controller);
-    timer = Timer.periodic(
-        Duration(seconds: 2), (Timer t) => updateCurrentLocation());
-    if (address == null) {
-      model.fetchDockingStations();
-      model.controller?.onSymbolTapped.add(onSymbolTapped);
-    }
+    await model.fetchDockingStations();
+    controller.onSymbolTapped.add(onSymbolTapped);
   }
 
   /// Updates the current location with the new one
@@ -107,10 +80,6 @@ class BaseMapboxMap {
       Map s = await locService.reverseGeoCode(
           coordinates.latitude, coordinates.longitude);
       address!.sink.add(MapPlace(s['place'], s['location']));
-      print(s['place']);
-      print("Latitdue");
-      print(s['location'].latitude);
-      print(coordinates);
     }
   }
 
@@ -118,7 +87,6 @@ class BaseMapboxMap {
   void _updateCameraPosition() {
     cameraPosition = CameraPosition(target: currentPosition, zoom: 15);
   }
-  //print(coordinates);
 
   /// gets the new [cameraposition]
   Future<CameraPosition> getNewCameraPosition() async {
@@ -132,7 +100,6 @@ class BaseMapboxMap {
     selectedSymbol = symbol;
     if (selectedSymbol != null) {
       Map<dynamic, dynamic>? stationData = symbol.data;
-      print("ON SYMBOL TAPPED");
       displayDockCard(stationData);
     }
   }
@@ -172,11 +139,4 @@ class BaseMapboxMap {
         tilt: cameraPosition.zoom);
     controller!.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
   }
-
-  // void addDockingStationCard() {
-  //   addWidget(Align(
-  //     alignment: Alignment.bottomCenter,
-  //     child: Container(height: 200, child: DockStation(key: dockingStationKey)),
-  //   ));
-  // }
 }
