@@ -56,10 +56,8 @@ class groupManager{
       geoList.add(
           GeoPoint(destinationsIndouble[i]![0]!, destinationsIndouble[i]![1]!));
     }
-print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
     await _databaseManager.setByKey(
         'users', ownerID!, {'group': code}, SetOptions(merge: true));
-    print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
     var group = await _databaseManager.addToCollection('group', {
       'code': code,
       'ownerID': ownerID,
