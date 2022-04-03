@@ -66,7 +66,7 @@ class LocationErrorState extends State<LocationError>
                 ),
               ),
               Text(
-                "Please enable your location permissionS access in order to use VeloPlan. \n After "
+                "Please enable your location permissions access in order to use VeloPlan. \n After "
                 "enabling your locations permissions, please reopen the app to begin your visit \n"
                 "London!",
                 textDirection: TextDirection.ltr,

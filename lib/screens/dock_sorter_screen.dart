@@ -11,11 +11,9 @@ import '../widgets/docking_stations_sorting_widget.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 /// Screen displaying filtered stations around a chosen dock with functionality to sort stations
-/// and view on map
-/// Author(s): Nicole Lehchevska, Fariha Choudhury k20059723
-/// Contributor(s): Marija
-
-/// Edit dock screen displaying map with [DockSorter] panel.
+/// and view on map.
+/// Author(s): Rahin Ashraf, Fariha Choudhury k20059723
+/// Contributor(s): Nicole, Marija
 class DockSorterScreen extends StatefulWidget {
   late final LatLng userCoord;
   final DockingStation? selectedDockStation;
