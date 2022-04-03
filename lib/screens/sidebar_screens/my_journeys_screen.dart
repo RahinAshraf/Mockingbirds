@@ -6,6 +6,8 @@ import 'package:veloplan/styles/texts.dart';
 import 'package:veloplan/styles/texts.dart';
 import 'package:veloplan/widgets/my_journey_card.dart';
 
+import '../../styles/styling.dart';
+
 /// Displays user's started/past journeys.
 /// Author: Tayyibah
 class MyJourneys extends StatefulWidget {
