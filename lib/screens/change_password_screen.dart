@@ -142,17 +142,21 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 controller: _newPassword,
                 validator: (value) {
                   if (value!.isEmpty) {
-                      return 'This field can not be empty';
-                    }
-                    if (value.length < 7) {
-                      return 'Password must be at least 7 characters long.';
-                    }
-                    String pattern =
-                        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{7,}$';
-                    RegExp regExp = new RegExp(pattern);
-                    if (!regExp.hasMatch(value))
-                      return 'Your password must have at least 1 Upper Case, 1 Lower Case and 1 Number.';
-                    return null;
+                    return 'This field can not be empty';
+                  }
+                  if (value.length < 7) {
+                    return 'Password must be at least 7 characters long.';
+                  }
+                  String pattern =
+                      r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{7,}$';
+                  RegExp regExp = new RegExp(pattern);
+                  if (!regExp.hasMatch(value)) {
+                    return 'Your password must have at least 1 Upper Case, 1 Lower Case and 1 Number.';
+                  }
+                  if (value == _currentPassword.text) {
+                    return 'The new password cannot be your current password';
+                  }
+                  return null;
                 },
                 decoration: const InputDecoration(
                     border: OutlineInputBorder(), labelText: 'New Password'),
