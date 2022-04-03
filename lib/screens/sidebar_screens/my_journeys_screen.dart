@@ -31,8 +31,19 @@ class _MyJourneysState extends State<MyJourneys> {
     return Scaffold(
       body: journeyList.isEmpty
           ? Center(
-              child: Text("You haven't made any journeys yet.",
-                  style: CustomTextStyles.placeholderText))
+              child: Column(
+                children: [
+                  SizedBox(height: 100),
+                  Image.asset('assets/images/past_journeys_sidebar.png',
+                      width: 170, height: 170),
+                  SizedBox(height: 40),
+                  Text(
+                    "You haven't made any journeys yet.",
+                    style: sidebarTextStyle,
+                  ),
+                ],
+              ),
+            )
           : Padding(
               padding: const EdgeInsets.symmetric(vertical: 15.0),
               child: ListView.builder(

@@ -5,6 +5,9 @@ import 'package:veloplan/models/weather.dart';
 import 'package:veloplan/providers/weather_manager.dart';
 import 'package:veloplan/styles/colors.dart';
 
+/// Shows weather conditions in sidebar.
+/// Author: Nicole
+/// Contributor: Hristina-Andreea Sararu
 class WeatherScreen extends StatefulWidget {
   @override
   _WeatherScreenState createState() => _WeatherScreenState();
@@ -54,37 +57,42 @@ class _WeatherScreenState extends State<WeatherScreen> {
                 scale: 0.3,
               ),
             )),
-            Column(
-
-                /// TODO: MARIJA AND HRISTINA: Make this look prettier
-                //present some text if the length of journey list is 0 (e.g. 'you havent scheduled any journeys yet')
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Divider(
-                    color: Colors.white,
-                    thickness: 0.2,
-                  ),
-                  Text(weather.current_description),
-                  Text("current temp: " +
-                      weather.getCurrentWeatherTemp().toInt().toString() +
-                      "C"),
-                  Text("current feels like temp: " +
-                      weather
-                          .getCurrentFeelsLikeTemp()
-                          .roundToDouble()
-                          .toString() +
-                      "C"),
-                  const Divider(
-                    color: Colors.white,
-                    thickness: 0.2,
-                  ),
-                  Text("current clouds: " +
-                      weather.getCurrentClouds().toString()),
-                  Text("current visibility: " +
-                      weather.getCurrentVisibility().toString()),
-                  Text("current wind speed: " +
-                      weather.getCurrentWindSpeed().roundToDouble().toString()),
-                ]),
+            Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              SizedBox(height: 50),
+              Text(
+                weather.current_description,
+                style: weatherTextStyle,
+              ),
+              Text(
+                "Temperature: " +
+                    weather.getCurrentWeatherTemp().toInt().toString() +
+                    "C",
+                style: weatherTextStyle,
+              ),
+              Text(
+                "Feels like: " +
+                    weather
+                        .getCurrentFeelsLikeTemp()
+                        .roundToDouble()
+                        .toString() +
+                    "C",
+                style: weatherTextStyle,
+              ),
+              const SizedBox(height: 30),
+              Text(
+                "Clouds: " + weather.getCurrentClouds().toString(),
+                style: weatherTextStyle,
+              ),
+              Text(
+                "Visibility: " + weather.getCurrentVisibility().toString(),
+                style: weatherTextStyle,
+              ),
+              Text(
+                "Wind speed: " +
+                    weather.getCurrentWindSpeed().roundToDouble().toString(),
+                style: weatherTextStyle,
+              ),
+            ]),
           ],
         ),
       ),

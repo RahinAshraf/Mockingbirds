@@ -15,6 +15,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
 import 'package:veloplan/utilities/permissions.dart';
 import 'package:veloplan/widgets/location_permission_error.dart';
+import 'package:flutter/services.dart';
 
 late SharedPreferences sharedPreferences;
 void main() async {
@@ -23,6 +24,9 @@ void main() async {
   liveLocationHelper.initializeLocation();
   sharedPreferences = await SharedPreferences.getInstance();
   MapModel _model = MapModel();
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(ScopedModel<MapModel>(
       model: _model,
       child: MaterialApp(
@@ -77,7 +81,10 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    //final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return FutureBuilder(
       future: Firebase.initializeApp(), // _initialization,
       builder: (context, appSnapshot) {
