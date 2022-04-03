@@ -121,7 +121,6 @@ class _DockSorterScreen extends State<DockSorterScreen> {
       child: TextButton(
         onPressed: () {
           try {
-            //Navigator.pop(context, widget.selectedDockStation); //put what you want to send back to jp here instead of " widget.selectedDockStation"
             Navigator.pop(context, _baseMapWithStation.chosenDock);
           } catch (e) {
             alert.showSnackBarErrorMessage(

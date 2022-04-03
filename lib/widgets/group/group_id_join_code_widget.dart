@@ -1,5 +1,4 @@
-import 'dart:ffi';
-
+// import 'dart:ffi';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
@@ -65,15 +64,16 @@ class GroupIdState extends State<GroupId> {
     }
   }
 
-  Future<Itinerary> _getDataFromGroup(QuerySnapshot<Map<String, dynamic>> group) async {
+  Future<Itinerary> _getDataFromGroup(
+      QuerySnapshot<Map<String, dynamic>> group) async {
     List<DockingStation> _docks = [];
     var geoList = [];
     var _myDestinations;
     var _numberOfCyclists;
-    for(var element in group.docs ){
+    for (var element in group.docs) {
       var itinerary = await element.reference.collection('itinerary').get();
       var journeyIDs = itinerary.docs.map((e) => e.id).toList();
-      for( var journeyID in journeyIDs){
+      for (var journeyID in journeyIDs) {
         var journey = await element.reference
             .collection('itinerary')
             .doc(journeyID)
@@ -81,12 +81,14 @@ class GroupIdState extends State<GroupId> {
         _numberOfCyclists = journey.data()!['numberOfCyclists'];
         geoList = journey.data()!['points'];
         var stationCollection =
-        await journey.reference.collection("dockingStations").get();
+            await journey.reference.collection("dockingStations").get();
         var stationMap = stationCollection.docs;
-        _docks = List.filled(stationMap.length, DockingStation("fill","fill",true,false,-1,-1,-1,10,20), growable: false);
-        for(var station in stationMap)({
-          _docks[station.data()['index']] = (
-            DockingStation(
+        _docks = List.filled(stationMap.length,
+            DockingStation("fill", "fill", true, false, -1, -1, -1, 10, 20),
+            growable: false);
+        for (var station in stationMap)
+          ({
+            _docks[station.data()['index']] = (DockingStation(
               station.data()['id'],
               station.data()['name'],
               true,
@@ -96,24 +98,22 @@ class GroupIdState extends State<GroupId> {
               -1,
               station.data()['location'].longitude,
               station.data()['location'].latitude,
-            )
-          )
-        });
-        var coordinateCollection = await journey.reference.collection("coordinates").get();
+            ))
+          });
+        var coordinateCollection =
+            await journey.reference.collection("coordinates").get();
         var coordMap = coordinateCollection.docs;
-        geoList = List.filled(coordMap.length, GeoPoint(10,20));
+        geoList = List.filled(coordMap.length, GeoPoint(10, 20));
         for (var value in coordMap) {
-          geoList[value.data()['index']]= value.data()['coordinate'];
+          geoList[value.data()['index']] = value.data()['coordinate'];
         }
       }
       List<List<double>> tempList = [];
       for (int i = 0; i < geoList.length; i++) {
         tempList.add([geoList[i].latitude, geoList[i].longitude]);
-
       }
 
       _myDestinations = convertListDoubleToLatLng(tempList);
-
     }
     return Itinerary.navigation(_docks, _myDestinations, _numberOfCyclists);
   }

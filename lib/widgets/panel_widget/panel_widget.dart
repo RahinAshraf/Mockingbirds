@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -32,8 +31,8 @@ import 'package:veloplan/widgets/panel_widget/panel_widget_exts.dart';
 ///
 /// It is an interactive panel the user can slide up or down,
 /// when wanting to input their desired locations for the journey.
-/// Author(s) : Rahin
-/// Contributor: Nicole, Eduard
+/// Author: Rahin
+/// Contributor(s): Nicole, Eduard, Fariha, Marija
 class PanelWidget extends PanelWidgetBase {
   late Map<int, DockingStation> dockingStationMap;
   PanelWidget(
@@ -95,6 +94,7 @@ class PanelWidgetState extends State<PanelWidget> {
   static const String fromLabelKey = "From";
   final Alerts alert = Alerts();
   late Map<int, DockingStation> dockMap;
+  bool _isButtonEnabled = true;
 
   ///Adds a new dynamic widget to the list of destinations for the journey
   addDynamic() {
@@ -326,8 +326,9 @@ class PanelWidgetState extends State<PanelWidget> {
                   color: CustomColors.green,
                   borderRadius: BorderRadius.circular(20),
                 ),
-                message:
-                    'Please specify the starting location of your trip and add destinations by clicking the + button. Tapping on the location in the map is another way of adding a stop to your trip! Ensure there are no blank destinations when you do so. You can also reorder your destinations. Simply hold and drag menu button. When you are done, click START.',
+                message: widget.isScheduled
+                    ? 'Please specify the starting location of your trip and add destinations by clicking the + button. Tapping on the location in the map is another way of adding a stop to your trip! Ensure there are no blank destinations when you do so. You can also reorder your destinations. Simply hold and drag menu button. When you are done, click SAVE.'
+                    : 'Please specify the starting location of your trip and add destinations by clicking the + button. Tapping on the location in the map is another way of adding a stop to your trip! Ensure there are no blank destinations when you do so. You can also reorder your destinations. You can edit your closest dock if you wish. Simply hold and drag menu button. When you are done, click START.',
                 showDuration: const Duration(seconds: 3),
                 child: const Icon(Icons.info_outline_rounded,
                     size: 25.0, color: Colors.green),
@@ -420,6 +421,7 @@ class PanelWidgetState extends State<PanelWidget> {
     if (breaksConstraints()) {
       return;
     }
+    await Future.delayed(const Duration(seconds: 2));
     List<List<double?>?> tempList = [];
     tempList.addAll(staticListMap.values);
     tempList.addAll(widget.selectedCoords);
@@ -443,6 +445,7 @@ class PanelWidgetState extends State<PanelWidget> {
     if (breaksConstraints()) {
       return;
     }
+    await Future.delayed(const Duration(seconds: 2));
     List<List<double?>?> tempList = [];
     tempList.addAll(staticListMap.values);
     tempList.addAll(widget.selectedCoords);
