@@ -97,7 +97,7 @@ class _MapRoutePageState extends State<MapRoutePage> {
           }
         },
         child: const Icon(Icons.arrow_back, key: Key("back")),
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.white,
       ),
     ));
   }

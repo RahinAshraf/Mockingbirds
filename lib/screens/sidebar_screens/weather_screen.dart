@@ -39,7 +39,7 @@ class _WeatherPageState extends State<WeatherPage> {
     return Scaffold(
       backgroundColor: whiteReplacement,
       appBar: AppBar(
-        leading: BackButton(key: Key("back"), color: Colors.red),
+        leading: BackButton(key: Key("back"), color: Colors.white),
         title: const Text('Weather'),
       ),
       body: SafeArea(

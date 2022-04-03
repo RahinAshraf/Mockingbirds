@@ -236,6 +236,7 @@ class _AuthFormState extends State<AuthForm> {
                         builder: (BuildContext context) {
                           return BottomDatePicker(
                             CupertinoDatePicker(
+                              key: Key("datePicker"),
                               mode: CupertinoDatePickerMode.date,
                               initialDateTime: _dateTime,
                               maximumDate: DateTime.now(),
@@ -280,7 +281,10 @@ class _AuthFormState extends State<AuthForm> {
                         style: authTextStyle,
                       ),
                       TextButton(
-                        child: Text(_isLogin ? 'Sign up' : 'Log in'),
+                        child: Text(
+                          _isLogin ? 'Sign up' : 'Log in',
+                          key: Key("signUpButton"),
+                        ),
                         onPressed: () {
                           setState(() {
                             _isLogin = !_isLogin;

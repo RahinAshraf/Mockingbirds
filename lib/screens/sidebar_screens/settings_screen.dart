@@ -126,7 +126,7 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          leading: BackButton(key: Key("back"), color: Colors.red),
+          leading: BackButton(key: Key("back"), color: Colors.white),
           title: const Text('Settings')),
       body: ListView(
         children: [

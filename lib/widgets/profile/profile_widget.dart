@@ -23,6 +23,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
     return ClipOval(
       child: Material(
         child: Ink.image(
+          key: Key("imageProfile"),
           image: image,
           fit: BoxFit.cover,
           width: 128,
@@ -42,6 +43,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
           child: Icon(
             widget.isEdit ? Icons.add_a_photo : Icons.edit,
             color: Colors.white,
+            key: Key("editImageIcon"),
             size: 20,
           ),
         ),
