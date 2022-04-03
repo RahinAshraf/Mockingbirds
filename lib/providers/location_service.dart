@@ -1,9 +1,8 @@
 import 'dart:async';
-
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import 'package:mapbox_gl/mapbox_gl.dart';
-import '../.env.dart';
+import 'package:veloplan/.env.dart';
 
 class LocationService {
   final String key = MAPBOX_ACCESS_TOKEN; //Mapbox api key

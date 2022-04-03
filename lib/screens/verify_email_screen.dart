@@ -35,7 +35,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
     }
   }
 
-  /// Delete the timer when the screen is closed so it will 
+  /// Delete the timer when the screen is closed so it will
   /// not continue run in the background of other screens.
   @override
   void dispose() {
