@@ -59,11 +59,13 @@ class HistoryHelper {
         .get();
 
     for (DocumentSnapshot doc in list.docs) {
-      var dock = await dockingStationManager()
-          .checkStationById(doc.get('stationId'))
-          .then((value) {
-        stationsInJourney.add(DockingStation.map(doc, value));
-      });
+      if (doc != null) {
+        var dock = await dockingStationManager()
+            .checkStationById(doc.get('stationId'))
+            .then((value) {
+          stationsInJourney.add(DockingStation.map(doc, value!));
+        });
+      }
     }
     return stationsInJourney;
   }

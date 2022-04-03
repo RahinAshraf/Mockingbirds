@@ -39,12 +39,20 @@ class FavouriteHelper {
     List<DockingStation> favourites = [];
     var docs = await DatabaseManager().getUserSubcollection('favourites');
     for (DocumentSnapshot doc in docs.docs) {
-      var dock = await dockingStationManager()
-          .checkStationById(doc.get('stationId'))
-          .then((value) {
-        favourites.add(DockingStation.map(doc, value));
-      });
+      print("in a database ->>>>>>>>>>>>>>>>>>>>>>>" + doc.get('stationId'));
+      if (doc.get('stationId') != null) {
+        var dock = await dockingStationManager()
+            .checkStationById(doc.get('stationId'))
+            .then((value) {
+          favourites.add(DockingStation.map(doc, value!));
+        });
+      }
     }
+    print("---------------<#####3333333333>>>>>>> printing fav ");
+    for (var fav in favourites) {
+      print(fav.name + " .  ");
+    }
+
     return favourites;
   }
 
