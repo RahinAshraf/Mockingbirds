@@ -10,11 +10,10 @@ import '../providers/docking_station_manager.dart';
 import '../widgets/docking_stations_sorting_widget.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-/// The edit dock screen which is useful for selecting docking stations and favouriting docking station cards
-/// Author(s): Nicole, Fariha Choudhury
-/// Contributor: Marija
-
-/// Edit dock screen displaying map with [DockSorter] panel.
+/// Screen displaying filtered stations around a chosen dock with functionality to sort stations
+/// and view on map.
+/// Author(s): Rahin Ashraf, Fariha Choudhury k20059723
+/// Contributor(s): Nicole, Marija
 class DockSorterScreen extends StatefulWidget {
   late final LatLng userCoord;
   final DockingStation? selectedDockStation;

@@ -170,7 +170,8 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
       }
       this.dockName = _itinerary.docks![_currentStation].name;
     }
-    removePolylineMarkers(controller!, _journey, _polylineSymbols);
+    // removePolylineMarkers(controller!, _journey, _polylineSymbols);
+    removeMarkers(controller!, _polylineSymbols);
     removeFills(controller, _polylineSymbols, fills);
     _displayJourney();
   }

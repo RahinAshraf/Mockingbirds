@@ -59,15 +59,16 @@ class _NavBarState extends State<NavBar> {
     context.push(SummaryJourneyScreen(_itinerary, false));
   }
 
-  Future<Itinerary> _getDataFromGroup(QuerySnapshot<Map<String, dynamic>> group) async {
+  Future<Itinerary> _getDataFromGroup(
+      QuerySnapshot<Map<String, dynamic>> group) async {
     List<DockingStation> _docks = [];
     var geoList = [];
     var _myDestinations;
     var _numberOfCyclists;
-    for(var element in group.docs ){
+    for (var element in group.docs) {
       var itinerary = await element.reference.collection('itinerary').get();
       var journeyIDs = itinerary.docs.map((e) => e.id).toList();
-      for( var journeyID in journeyIDs){
+      for (var journeyID in journeyIDs) {
         var journey = await element.reference
             .collection('itinerary')
             .doc(journeyID)
@@ -75,39 +76,39 @@ class _NavBarState extends State<NavBar> {
         _numberOfCyclists = journey.data()!['numberOfCyclists'];
         geoList = journey.data()!['points'];
         var stationCollection =
-        await journey.reference.collection("dockingStations").get();
+            await journey.reference.collection("dockingStations").get();
         var stationMap = stationCollection.docs;
-        _docks = List.filled(stationMap.length, DockingStation("fill","fill",true,false,-1,-1,-1,10,20), growable: false);
-        for(var station in stationMap)({
-          _docks[station.data()['index']] = (
-              DockingStation(
-                station.data()['id'],
-                station.data()['name'],
-                true,
-                false,
-                -1,
-                -1,
-                -1,
-                station.data()['location'].longitude,
-                station.data()['location'].latitude,
-              )
-          )
-        });
-        var coordinateCollection = await journey.reference.collection("coordinates").get();
+        _docks = List.filled(stationMap.length,
+            DockingStation("fill", "fill", true, false, -1, -1, -1, 10, 20),
+            growable: false);
+        for (var station in stationMap)
+          ({
+            _docks[station.data()['index']] = (DockingStation(
+              station.data()['id'],
+              station.data()['name'],
+              true,
+              false,
+              -1,
+              -1,
+              -1,
+              station.data()['location'].longitude,
+              station.data()['location'].latitude,
+            ))
+          });
+        var coordinateCollection =
+            await journey.reference.collection("coordinates").get();
         var coordMap = coordinateCollection.docs;
-        geoList = List.filled(coordMap.length, GeoPoint(10,20));
+        geoList = List.filled(coordMap.length, GeoPoint(10, 20));
         for (var value in coordMap) {
-          geoList[value.data()['index']]= value.data()['coordinate'];
+          geoList[value.data()['index']] = value.data()['coordinate'];
         }
       }
       List<List<double>> tempList = [];
       for (int i = 0; i < geoList.length; i++) {
         tempList.add([geoList[i].latitude, geoList[i].longitude]);
-
       }
 
       _myDestinations = convertListDoubleToLatLng(tempList)?.toList();
-
     }
     return Itinerary.navigation(_docks, _myDestinations, _numberOfCyclists);
   }
@@ -128,8 +129,7 @@ class _NavBarState extends State<NavBar> {
             child: FloatingActionButton(
               heroTag: "btn2",
               onPressed: () {
-                if (!_isInGroup)
-                  _onTabTapped(1);
+                if (!_isInGroup) _onTabTapped(1);
                 showDialog(
                     useRootNavigator: false,
                     context: context,

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
@@ -103,7 +102,7 @@ class _JourneyPlanner extends State<JourneyPlanner> {
             numberOfCyclists: widget.numberOfCyclists ?? 1,
             selectedCoords: coordsList,
             staticListMap: staticCordMap,
-            dockList: dockList,
+            dockingStationMap: dockList,
             isScheduled: widget.isScheduled,
             journeyDate: widget.journeyDate!,
           ),

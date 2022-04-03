@@ -37,23 +37,6 @@ class BaseMapboxMap {
     cameraPosition = CameraPosition(target: currentPosition, zoom: 15);
     setMap();
     addWidget(map);
-    // if (_useLiveLocation) {
-    //   _setMapWithLiveLocation();
-    // } else {
-    //   _setMapWithoutLiveLocation();
-    // }
-    // _setMapWithLiveLocation();
-    // addWidget(map);
-// =======
-//   late Symbol? _selectedSymbol;
-//   bool recenter = true;
-
-//   BaseMapboxMap(this.model) {
-//     cameraPosition = CameraPosition(target: currentPosition, zoom: 15);
-//     setMap();
-//     addWidget(map);
-//     // addDockingStationCard();
-// >>>>>>> main
   }
 
   /// Adds a [widget] to [_widgets]
@@ -66,19 +49,8 @@ class BaseMapboxMap {
     return _widgets;
   }
 
-  // @override
-  // void onMapCreated(MapboxMapController controller) async {
-  //   this.controller = controller;
-  //   model.setController(controller);
-  // }
-
   /// Initialize map features
   void onMapCreated(MapboxMapController controller) async {
-// <<<<<<< HEAD
-//     timer = Timer.periodic(
-//         Duration(seconds: 40), (Timer t) => updateCurrentLocation());
-//     updateCurrentLocation();
-// =======
     await baseMapCreated(controller);
   }
 

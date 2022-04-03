@@ -12,7 +12,6 @@ class ChangePasswordScreen extends StatefulWidget {
 }
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
-
   TextEditingController _currentPassword = new TextEditingController();
 
   TextEditingController _newPassword = new TextEditingController();

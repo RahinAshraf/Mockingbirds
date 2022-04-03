@@ -51,7 +51,6 @@ abstract class PanelWidgetBase extends StatefulWidget {
     final selectedCoords = widget.selectedCoords;
     final tempPosition = selectedCoords.length;
     final result = await context.openSearch();
-    print("Navigator_Navigator_Navigator => $tempPosition");
     final feature = result as Feature?;
     if (feature != null) {
       textEditingController.text = feature.placeName ?? "N/A";
@@ -60,16 +59,5 @@ abstract class PanelWidgetBase extends StatefulWidget {
         onAddressAdded.call(featureCord);
       }
     }
-  }
-
-  ///The logic to restrict the user from being able to start a journey without defining at least one destination for the journey
-  bool oneDestinationMustBeSpecified(
-      PanelWidget widget, BuildContext context, Alerts alert) {
-    if (widget.listDynamic.isEmpty) {
-      alert.showSnackBarErrorMessage(
-          context, alert.chooseAtLeastOneDestinationMessage);
-      return true;
-    }
-    return false;
   }
 }
