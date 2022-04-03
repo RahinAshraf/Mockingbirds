@@ -28,11 +28,11 @@ class TimelineItem extends StatelessWidget {
       beforeLineStyle: timelineTileBeforeLineStyle,
       indicatorStyle: timelineTileIndicatorStyle,
       alignment: TimelineAlign.manual,
-      lineXY: 0.65,
+      lineXY: 0.72,
       endChild: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          // mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Row(
               children: [
@@ -74,7 +74,7 @@ class TimelineItem extends StatelessWidget {
             borderRadius: BorderRadius.all(
           Radius.circular(15.0),
         )),
-        child: Container(
+        child: Padding(
           padding: const EdgeInsets.all(15.0),
           child: Text(
             content,

@@ -146,16 +146,11 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
             child: FutureBuilder<List<Path>>(
               future: pathsFuture,
               builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  if (snapshot.hasData) {
-                    // _itineraryManager.printPaths();
-                    return Column(
-                      children: _generateStops(),
-                    );
-                  } else {
-                    return Text(
-                        'Snapshot has error: ${snapshot.hasError}, and ${snapshot.data}.');
-                  }
+                if (snapshot.connectionState == ConnectionState.done &&
+                    snapshot.hasData) {
+                  return Column(
+                    children: _generateStops(),
+                  );
                 } else {
                   return Container(
                     height: MediaQuery.of(context).size.height / 3,
@@ -232,11 +227,9 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
           children: [
             Column(
               children: [
-                Expanded(
-                  child: Text(
-                    '${organiser}',
-                    style: Theme.of(context).textTheme.headline2,
-                  ),
+                Text(
+                  '${organiser}',
+                  style: Theme.of(context).textTheme.headline2,
                 ),
                 Text(
                   'Organiser',
