@@ -2,16 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart'
     as LatLong;
 import 'package:veloplan/alerts.dart';
-import '../../models/docking_station.dart';
-import '../../providers/docking_station_manager.dart';
-import '../../providers/location_service.dart';
-import '../../screens/dock_sorter_screen.dart';
-import 'package:mapbox_gl/mapbox_gl.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:veloplan/providers/location_service.dart';
 import 'package:veloplan/screens/dock_sorter_screen.dart';
+import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:rxdart/rxdart.dart';
 
 /// Helper class to build the bubble underneath every location TextField.
 /// Author: Rahin,

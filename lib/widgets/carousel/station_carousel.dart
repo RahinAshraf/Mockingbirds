@@ -4,10 +4,9 @@ import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:veloplan/widgets/carousel/custom_carousel.dart';
 import 'package:veloplan/widgets/docking_station_card.dart';
-
-import '../../helpers/shared_prefs.dart';
-import '../../providers/path_provider.dart';
-import '../../helpers/database_helpers/favourite_helper.dart';
+import 'package:veloplan/helpers/shared_prefs.dart';
+import 'package:veloplan/providers/path_provider.dart';
+import 'package:veloplan/helpers/database_helpers/favourite_helper.dart';
 
 ///Class that loads information of docking stations into cards and builds a carousel
 ///Author(s): Tayyibah, Nicole

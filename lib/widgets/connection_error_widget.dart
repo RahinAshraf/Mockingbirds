@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import '../styles/styling.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 /// Widget to display a connection error
 /// Author(s): Fariha Choudhury k20059723, Hristina-Andreea Sararu k20036771
