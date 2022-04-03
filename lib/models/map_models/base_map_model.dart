@@ -10,8 +10,6 @@ import 'package:veloplan/providers/location_service.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:veloplan/.env.dart';
 import '../../screens/journey_planner_screen.dart';
-import 'package:veloplan/scoped_models/map_model.dart';
-import 'package:veloplan/.env.dart';
 import 'package:veloplan/widgets/docking_station_widget.dart';
 
 /// Class to display a mapbox map with other possible widgets on top

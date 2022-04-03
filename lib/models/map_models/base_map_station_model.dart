@@ -1,11 +1,8 @@
-import 'package:flutter/widgets.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:tuple/tuple.dart';
 import 'package:veloplan/helpers/navigation_helpers/navigation_helpers.dart';
 import 'package:veloplan/models/docking_station.dart';
-import 'package:veloplan/models/itinerary.dart';
 import 'package:veloplan/models/map_models/base_map_model.dart';
-import 'package:veloplan/models/map_models/base_map_with_route_model.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:veloplan/helpers/navigation_helpers/map_drawings.dart';
 

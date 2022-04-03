@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/screens/navigation/polyline_turn_by_turn_screen.dart';
 import 'package:veloplan/screens/navigation/turn_by_turn_screen.dart';
@@ -7,6 +6,7 @@ import 'package:veloplan/screens/trips_scheduler_screen.dart';
 import 'package:veloplan/widgets/group/group_id_join_code_widget.dart';
 import 'package:veloplan/widgets/popup_widget.dart';
 import 'package:veloplan/utilities/alert_type.dart';
+import 'package:intl/intl.dart';
 import 'helpers/navigation_helpers/navigation_conversions_helpers.dart';
 import 'models/itinerary.dart';
 
@@ -117,7 +117,7 @@ class Popups {
               context,
               MaterialPageRoute(
                   builder: (context) => MapUpdatedRoutePage(itinerary)));
-          if (response || response == null || !response) {
+          if (response == null || response || !response) {
             Navigator.of(context).pop(true);
           }
         },

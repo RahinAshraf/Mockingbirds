@@ -72,3 +72,17 @@ const scheduleScreenCalendarStyle = CalendarStyle(
   // markerSize: 5,
   markersMaxCount: 1,
 );
+
+// Styling for favourites and past journeys sidebar
+const TextStyle sidebarTextStyle = TextStyle(
+    fontSize: 20.0,
+    color: (Color(0xFF99D2A9)),
+    fontWeight: FontWeight.w700,
+    fontStyle: FontStyle.italic);
+
+// Styling for weather
+const TextStyle weatherTextStyle = TextStyle(
+    fontSize: 25.0,
+    color: (Color(0xFF99D2A9)),
+    fontWeight: FontWeight.w700,
+    fontStyle: FontStyle.italic);

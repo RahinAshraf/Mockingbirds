@@ -26,7 +26,7 @@ class LocationService {
   //Given coordinates, it will return the name of the place of those coordinates
   Future<Map> reverseGeoCode(double lat, double lng) async {
     String url =
-        "https://api.mapbox.com/geocoding/v5/mapbox.places/$lng,$lat.json?access_token=$MAPBOX_ACCESS_TOKEN";
+        "https://api.mapbox.com/geocoding/v5/mapbox.places/$lng,$lat.json?access_token=$key";
     var response = await http.get(Uri.parse(url));
     var json = convert.jsonDecode(response.body);
     Map feature = json['features'][0];
@@ -41,23 +41,6 @@ class LocationService {
 
   void close() {
     _feature.close();
-  }
-
-  //gets the coords of a place
-  Future<List> getPlaceCoordsInLondon(String input) async {
-    if (input.isEmpty) {
-      return [];
-    }
-
-    final String url =
-        "https://api.mapbox.com/geocoding/v5/mapbox.places/$input.json?limit=1&proximity=-0.12542189962264239,51.50218910230291&bbox=-0.591614,51.265980,0.279053,51.707474&access_token=$key"; //geocoding Api url request for data based on the users input, only showing retrieving matching results that are in London
-    var response = await http.get(Uri.parse(url));
-    var json = convert.jsonDecode(response.body);
-
-    List placeCoords = json['features'][0]['geometry']['coordinates'];
-    List placeCoordsReversed = placeCoords.reversed
-        .toList(); //switch (lng,lat) from server, to (lat,lng) to keep consistent with app
-    return placeCoordsReversed;
   }
 
   //gets the coords of a place

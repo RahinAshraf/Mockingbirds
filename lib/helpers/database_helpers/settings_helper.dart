@@ -1,7 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
-
 /// Helpers for interacting with settings
 /// Author(s): Eduard Ragea k20067643
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 Future<bool> checkCurrentPassword(String password) async {
   final currentUser = FirebaseAuth.instance.currentUser;

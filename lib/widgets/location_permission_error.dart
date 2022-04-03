@@ -52,6 +52,7 @@ class LocationErrorState extends State<LocationError>
   Widget build(BuildContext context) {
     print("BuildContext => $context");
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Center(
         child: Container(
           color: Colors.white,
