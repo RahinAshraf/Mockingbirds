@@ -37,7 +37,8 @@ samples, guidance on mobile development, and a full API reference.
 - lib/screens/navigation/turn_by_turn_screen.dart: 
     * dormmom.com, Jul 20, 2021, flutter_mapbox_navigation 0.0.26, https://pub.dev/packages/flutter_mapbox_navigation
     * AB Satyaprakash, Feb 20, 2022, https://github.com/Imperial-lord/mapbox-flutter
-
+- lib/main.dart:
+    * https://www.kindacode.com/article/how-to-disable-landscape-mode-in-flutter/
 
 ## Design Decisions 
 - Mapbox Navigation Package has issues with turn by turn direction.
