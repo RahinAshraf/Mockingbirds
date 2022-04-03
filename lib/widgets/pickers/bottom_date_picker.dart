@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
+/// Pop Up widget for choosing a date
+/// Author(s): Eduard Ragea k20067643
 class BottomDatePicker extends StatefulWidget {
 
   final CupertinoDatePicker picker;

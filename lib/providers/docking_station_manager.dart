@@ -62,8 +62,15 @@ class dockingStationManager {
 
   /// get all stations with number empty docks
   List<DockingStation> getAllStationsWithAvailableSpace(int numberOfDocks) {
+    return getAllStationsWithAvailableSpaceHandler(
+        numberOfDocks, this.stations);
+  }
+
+  /// get all stations with number empty docks
+  List<DockingStation> getAllStationsWithAvailableSpaceHandler(
+      int numberOfDocks, List<DockingStation> inputStations) {
     List<DockingStation> openStations = [];
-    for (var station in stations) {
+    for (var station in inputStations) {
       if (station.numberOfEmptyDocks >= numberOfDocks) {
         openStations.add(station);
       }
@@ -166,9 +173,20 @@ class dockingStationManager {
   /// Get the closest available docking stations by given docking station and stations, minimum of available bikes to leave
   DockingStation getClosestDockWithAvailableSpace(
       LatLong.LatLng userLocation, int number_of_empty_spaces) {
+    return getClosestDockWithAvailableSpaceHandler(
+        userLocation, number_of_empty_spaces, this.stations);
+  }
+
+  /// Get the closest available docking stations by given docking station and stations, minimum of available bikes to leave
+  DockingStation getClosestDockWithAvailableSpaceHandler(
+      LatLong.LatLng userLocation,
+      int number_of_empty_spaces,
+      List<DockingStation> inputStations) {
     List<DockingStation> filtered_stations =
-        sortDocksByDistanceFromGivenLocation(userLocation,
-            getAllStationsWithAvailableSpace(number_of_empty_spaces));
+        sortDocksByDistanceFromGivenLocation(
+            userLocation,
+            getAllStationsWithAvailableSpaceHandler(
+                number_of_empty_spaces, inputStations));
     if (filtered_stations[0] != null)
       return filtered_stations[0];
     else {
@@ -250,12 +268,20 @@ class dockingStationManager {
   }
 
   /* import the docking station from the tfl api and check its updated info*/
-  Future<DockingStation> checkStationById(String dockId) async {
+  //TODO: refactor code -> shitty code
+  Future<DockingStation?> checkStationById(String dockId) async {
     var data =
         await http.get(Uri.parse("https://api.tfl.gov.uk/BikePoint/${dockId}"));
+    if (data == null) {
+      await Future.delayed(const Duration(seconds: 20));
+    }
     late DockingStation newStation;
     var station = json.decode(data.body);
     try {
+      print(station["id"] +
+          "      " +
+          station["commonName"] +
+          "-----------------__________-debug stations__________--------");
       newStation = DockingStation(
           station["id"],
           station["commonName"],
@@ -302,25 +328,37 @@ class dockingStationManager {
     List<DockingStation> newStations = [];
     var data = await http.get(Uri.parse(
         "https://api.tfl.gov.uk/Place?lat=${coord.latitude}&lon=${coord.longitude}&radius=${radius}&type=BikePoint"));
-    var jsonData = json.decode(data.body);
-    for (var station in jsonData) {
-      try {
-        DockingStation newStation = DockingStation(
-            station["id"],
-            station["commonName"],
-            station["additionalProperties"][1]["value"] == "true",
-            station["additionalProperties"][2]["value"] == "true",
-            int.parse(station["additionalProperties"][6]["value"]),
-            int.parse(station["additionalProperties"][7]["value"]),
-            int.parse(station["additionalProperties"][8]["value"]),
-            station["lon"],
-            station["lat"]);
+    var station = json.decode(data.body);
+    // var jsonData = json.decode(data.body);
 
-        if (!newStation.isLocked) {
-          newStations.add(newStation);
-        }
-      } on FormatException {}
+    // var jsonDataMap = jsonData;
+    // print("station manager ->>>>>>>>>>>>>>>>" + jsonData.toString());
+    // if ((jsonDataMap as Map<String, dynamic>).length > 1) {
+    // for (var station in jsonData) {false
+    if (data == null) {
+      await Future.delayed(const Duration(seconds: 20));
     }
+    try {
+      DockingStation newStation = DockingStation(
+          station["id"],
+          station["commonName"],
+          station["additionalProperties"][1]["value"] == "true",
+          station["additionalProperties"][2]["value"] == "true",
+          int.parse(station["additionalProperties"][6]["value"]),
+          int.parse(station["additionalProperties"][7]["value"]),
+          int.parse(station["additionalProperties"][8]["value"]),
+          station["lon"],
+          station["lat"]);
+
+      if (!newStation.isLocked) {
+        newStations.add(newStation);
+      }
+    } on FormatException {}
     return newStations;
   }
+  // }
+  // else {
+  // print(" i am a loser");
+  // }
+  // }
 }

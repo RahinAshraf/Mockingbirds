@@ -4,6 +4,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:veloplan/helpers/live_location_helper.dart';
 
+/// Move the store information in shared preference's on
+/// device's local storage to current user's Firebase document.
 Future updateDistanceOnServer(userID) async {
   await FirebaseFirestore.instance.collection('users').doc(userID).update({
     'distance':
