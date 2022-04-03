@@ -56,7 +56,7 @@ class FavouriteHelper {
 
   ///Toggles between adding or removing a docking station from favourites.
   void toggleFavourite(String stationId, String name) async {
-    var favouriteList = await getUserFavourites();
+    var favouriteList = await this.getUserFavourites();
     if (isFavouriteStation(stationId, favouriteList)) {
       DockingStation favouriteStation = favouriteList
           .firstWhere((DockingStation f) => (f.stationId == stationId));

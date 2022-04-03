@@ -49,19 +49,48 @@ main() {
 
   // test('Get user favourites', () async {
   //   List<QueryDocumentSnapshot<Map<String, dynamic>>> temp = [];
-  //   helper.addFavourite(stationId, name);
+  //   temp.add(value)
+  //   helper.addFavourite("id1", "name1");
   //   helper.addFavourite("id2", "name2");
   //   when(mockDBManager.getUserSubcollection("favourites"))
   //       .thenAnswer((_) async => favouriteDocs);
   //   when(favouriteDocs.docs).thenReturn(temp);
-  //   var list = await helper.getUserFavourites();
-  //   expect(list.length, 2);
+  //   helper.toggleFavourite("newstation", "station3");
+  //   (verify(mockDBManager.addToSubCollection(favouritesReference, {
+  //     'stationId': "newstation",
+  //     'name': "station3",
+  //   })).called(1));
+  //   // expect(favouriteDocs.docs, 2);
+  // });
+
+  // test('Toggling new docking station adds to database', () async {
+  //   List<QueryDocumentSnapshot<Map<String, dynamic>>> temp = [];
+  //   //   helper.addFavourite("id2", "name2");
+  //   when(mockDBManager.getUserSubcollection("favourites"))
+  //       .thenAnswer((_) async => favouriteDocs);
+  //   when(favouriteDocs.docs).thenReturn(temp);
+  //   helper.toggleFavourite("id1", "station1");
+  //   (verify(mockDBManager.addToSubCollection(favouritesReference, {
+  //     'stationId': "id1",
+  //     'name': "station1",
+  //   })).called(1)); //helper.toggleFavourite("id1", "station1");
+  //   // verify()
   // });
 
   test('Toggling new docking station adds to database', () async {
-    when(helper.getUserFavourites()).thenAnswer((_) async => favouriteList);
+    MockQueryDocumentSnapshot mock = MockQueryDocumentSnapshot();
+    helper.addFavourite("id2", "name2");
+    when(mockDBManager.getUserSubcollection("favourites"))
+        .thenAnswer((_) async => favouriteDocs);
+    // when(favouriteDocs.docs).thenReturn(mock);
+    // when(temp.data).thenReturn(_responseMap);
+
     helper.toggleFavourite("id1", "station1");
-    verify()
+    (verify(mockDBManager.addToSubCollection(favouritesReference, {
+      'stationId': "id1",
+      'name': "station1",
+    })).called(1)); //helper.toggleFavourite("id1", "station1");
+    // verify()
   });
 
   test('Add to favourites', () {

@@ -7,14 +7,13 @@ import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 
 ///Creates a card for a docking station, to include its name, number of bikes and empty bikes.
 ///Author: Tayyibah Uddin
-///Contributor: Fariha Choudhury, Nicole Lehchevska, Hristina-Andreea Sararu k20036771
+///Contributor: Fariha Choudhury, Nicole Lehchevska, Hristina-Andreea Sararu
 
 class DockingStationCard extends StatefulWidget {
   late DockingStation dockTemp;
 
   DockingStationCard();
 
-//I have commented this for now but if you want to make a card by just passing a station:
   DockingStationCard.station(DockingStation station) {
     this.dockTemp = station;
   }
@@ -24,10 +23,10 @@ class DockingStationCard extends StatefulWidget {
 }
 
 class _DockingStationCardState extends State<DockingStationCard> {
-  final _helper = FavouriteHelper(DatabaseManager()); //change name
+  final _helper = FavouriteHelper(DatabaseManager());
   List<DockingStation> _favourites = [];
   bool _isFavouriteButtonEnabled = true;
-  bool _isFavourited = false;
+  // bool _isFavourited = false;
   var _manager = dockingStationManager();
 
   @override
@@ -36,8 +35,8 @@ class _DockingStationCardState extends State<DockingStationCard> {
       if (mounted)
         setState(() {
           _favourites = data;
-          _isFavourited = _helper.isFavouriteStation(
-              widget.dockTemp.stationId, _favourites);
+          // _isFavourited = _helper.isFavouriteStation(
+          //     widget.dockTemp.stationId, _favourites);
         });
     });
 
@@ -81,7 +80,7 @@ class _DockingStationCardState extends State<DockingStationCard> {
                   ),
                   const Divider(
                     color: Color(0xFF99D2A9),
-                    thickness: 5,
+                    thickness: 3,
                   ),
                   if (widget.dockTemp.numberOfBikes != null)
                     Row(
@@ -153,7 +152,7 @@ class _DockingStationCardState extends State<DockingStationCard> {
               await _helper.getUserFavourites();
           setState(() {
             _favourites = updatedFavourites;
-            _isFavourited = !_isFavourited;
+            // _isFavourited = !_isFavourited;
           });
         }
       },
@@ -163,7 +162,9 @@ class _DockingStationCardState extends State<DockingStationCard> {
   Icon getFaveButton() {
     return Icon(
       Icons.favorite,
-      color: _isFavourited ? Colors.red : Colors.grey,
+      color: _helper.isFavouriteStation(widget.dockTemp.stationId, _favourites)
+          ? Colors.red
+          : Colors.grey,
     );
   }
 
