@@ -2,10 +2,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 
-class ForgotPasswordScreen extends StatelessWidget {
-  TextEditingController emailController = new TextEditingController();
+class ForgotPasswordScreen extends StatefulWidget {
 
   ForgotPasswordScreen({Key? key}) : super(key: key);
+
+  @override
+  State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
+}
+
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
+  TextEditingController emailController = new TextEditingController();
 
   Future sendPasswordResetEmail(String email, BuildContext context) async {
     try {
@@ -36,7 +42,7 @@ class ForgotPasswordScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Reset Password'),
       ),
-      body: Column(
+      body: ListView(
         children: [
           const SizedBox(height: 35),
           Container(
