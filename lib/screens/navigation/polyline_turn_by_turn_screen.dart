@@ -38,8 +38,8 @@ class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
   _MapUpdatedRoutePageState(this._itinerary) {}
   @override
   Widget build(BuildContext context) {
-    final panelHeightClosed = MediaQuery.of(context).size.height * 0.1;
-    final panelHeightOpen = MediaQuery.of(context).size.height * 0.4;
+    final panelHeightClosed = MediaQuery.of(context).size.height * 0.12;
+    final panelHeightOpen = MediaQuery.of(context).size.height * 0.3;
     return Scaffold(body: ScopedModelDescendant<MapModel>(
         builder: (BuildContext context, Widget? child, MapModel model) {
       _baseMapWithUpdatedRoute = MapWithRouteUpdated(
@@ -60,6 +60,7 @@ class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
           _baseMapWithUpdatedRoute,
         ),
       );
+
       ///* listen to isAtGoal if is at goal redirect
     }));
   }
