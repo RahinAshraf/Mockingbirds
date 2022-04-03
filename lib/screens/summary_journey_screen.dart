@@ -129,7 +129,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
-                    child: const Text('Share journey'),
+                    child: const Text('Share Journey'),
                     onPressed: () {
                       createGroup();
                     },
@@ -172,7 +172,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
             children: [
               if (isInGroup && !cameFromSchedule)
                 ElevatedButton(
-                  child: const Text('LEAVE GROUP'),
+                  child: const Text('Leave Group'),
                   onPressed: () {
                     _leaveGroup();
                   },
@@ -180,7 +180,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
               SizedBox(width: 10.0),
               if (DateTime.now().isSameDate(_itinerary.date!))
                 ElevatedButton(
-                  child: const Text('START JOURNEY'),
+                  child: const Text('Start Journey'),
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -190,7 +190,8 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
                   },
                 ),
             ],
-          )
+          ),
+          const SizedBox(height: 15),
         ],
       ),
       appBar: AppBar(
@@ -231,9 +232,11 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
           children: [
             Column(
               children: [
-                Text(
-                  '${organiser}',
-                  style: Theme.of(context).textTheme.headline2,
+                Expanded(
+                  child: Text(
+                    '${organiser}',
+                    style: Theme.of(context).textTheme.headline2,
+                  ),
                 ),
                 Text(
                   'Organiser',

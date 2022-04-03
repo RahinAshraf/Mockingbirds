@@ -58,7 +58,7 @@ class TimelineItem extends StatelessWidget {
                 SizedBox(width: 3.0),
                 Expanded(
                   child: Text(
-                    '${duration.ceil()} min',
+                    '${(duration / 60).ceil()} min',
                     style: CustomTextStyles.timelinePathInfo,
                   ),
                 ),
@@ -74,16 +74,14 @@ class TimelineItem extends StatelessWidget {
             borderRadius: BorderRadius.all(
           Radius.circular(15.0),
         )),
-        child: Padding(
+        child: Container(
           padding: const EdgeInsets.all(15.0),
-          child: Expanded(
-            child: Text(
-              content,
-              style: TextStyle(
-                fontSize: 15.0,
-                color: Colors.black54,
-                fontWeight: FontWeight.bold,
-              ),
+          child: Text(
+            content,
+            style: TextStyle(
+              fontSize: 15.0,
+              color: Colors.black54,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ),
