@@ -3,6 +3,7 @@ import 'package:veloplan/helpers/database_helpers/history_helper.dart';
 import 'package:veloplan/models/itinerary.dart';
 import 'package:veloplan/styles/colors.dart';
 import 'package:veloplan/styles/texts.dart';
+import 'package:veloplan/styles/texts.dart';
 import 'package:veloplan/widgets/my_journey_card.dart';
 
 /// Displays user's started/past journeys.

@@ -5,6 +5,8 @@ import 'package:veloplan/models/weather.dart';
 import 'package:veloplan/providers/weather_manager.dart';
 import 'package:veloplan/styles/colors.dart';
 
+import '../../styles/styling.dart';
+
 /// Shows weather conditions in sidebar.
 /// Author: Nicole
 /// Contributor: Hristina-Andreea Sararu
