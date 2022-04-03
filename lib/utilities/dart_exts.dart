@@ -21,8 +21,6 @@ extension BuildContextExt on BuildContext {
     );
   }
 
-  //// THIS?????????//??/?///
-
   Future<R?> pushAndRemoveUntil<R>(Widget route) {
     return Navigator.of(this).pushAndRemoveUntil(
         MaterialPageRoute(

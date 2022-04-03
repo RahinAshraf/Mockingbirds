@@ -94,7 +94,6 @@ class PanelWidgetState extends State<PanelWidget> {
   static const String fromLabelKey = "From";
   final Alerts alert = Alerts();
   late Map<int, DockingStation> dockMap;
-  bool _isButtonEnabled = true;
 
   ///Adds a new dynamic widget to the list of destinations for the journey
   addDynamic() {

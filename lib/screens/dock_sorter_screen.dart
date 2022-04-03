@@ -72,26 +72,16 @@ class _DockSorterScreen extends State<DockSorterScreen> {
       maxHeight: panelHeightOpen,
       borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
       controller: panelController,
-      body: SafeArea(
-        child: Stack(
-          children: [
-            SizedBox(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
-                child: ScopedModelDescendant<MapModel>(builder:
-                    (BuildContext context, Widget? child, MapModel model) {
-                  _baseMapWithStation = BaseMapboxStationMap(
-                    _docks,
-                    userCoordinates,
-                    model,
-                  );
-                  addBackButton();
-                  return SafeArea(
-                      child: Stack(children: _baseMapWithStation.getWidgets()));
-                })),
-          ],
-        ),
-      ),
+      body: ScopedModelDescendant<MapModel>(
+          builder: (BuildContext context, Widget? child, MapModel model) {
+        _baseMapWithStation = BaseMapboxStationMap(
+          _docks,
+          userCoordinates,
+          model,
+        );
+        addBackButton();
+        return Stack(children: _baseMapWithStation.getWidgets());
+      }),
       panelBuilder: (controller) => DockSorter(
         userCoordinates,
         controller: controller,

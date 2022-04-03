@@ -1,12 +1,10 @@
 import 'dart:convert';
 import 'dart:developer';
-
 import "package:http/http.dart" as http;
 import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart'
     as LatLong;
 import 'package:veloplan/.env.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
-
 import '../models/docking_station.dart';
 import '../models/path.dart';
 

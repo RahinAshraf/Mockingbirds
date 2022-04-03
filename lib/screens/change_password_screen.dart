@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:veloplan/helpers/database_helpers/settings_helper.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   ChangePasswordScreen({Key? key}) : super(key: key);
@@ -9,7 +10,6 @@ class ChangePasswordScreen extends StatefulWidget {
 }
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
-
   TextEditingController _currentPassword = new TextEditingController();
 
   TextEditingController _newPassword = new TextEditingController();
@@ -42,22 +42,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     final currentUser = FirebaseAuth.instance.currentUser;
 
     await currentUser!.updatePassword(password);
-  }
-
-  Future<bool> checkCurrentPassword(String password) async {
-    final currentUser = FirebaseAuth.instance.currentUser;
-
-    final authCredential = EmailAuthProvider.credential(
-        email: currentUser!.email!, password: password);
-
-    try {
-      final authResult =
-          await currentUser.reauthenticateWithCredential(authCredential);
-
-      return authResult.user != null;
-    } catch (e) {
-      return false;
-    }
   }
 
   @override
