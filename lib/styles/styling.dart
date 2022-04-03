@@ -11,12 +11,15 @@ ButtonStyle popupDialogButtonStyle = ButtonStyle(
 
 // Timeline Tile Package
 const timelineTileIndicatorStyle = IndicatorStyle(
-    padding: EdgeInsets.all(5),
+    padding: EdgeInsets.all(0),
     width: 10,
-    indicatorXY: 0.0,
-    color: Colors.green);
-const timelineTileBeforeLineStyle =
-    LineStyle(thickness: 1.0, color: Color(0XFFe1e1e1));
+    indicatorXY: 0.5,
+    drawGap: true,
+    color: Color(0x80FF8C01));
+const timelineTileBeforeLineStyle = const LineStyle(
+  thickness: 1.5,
+  color: Color(0XFFe1e1e1),
+);
 
 // Schedule Screen
 const scheduleScreenCalendarStyle = CalendarStyle(

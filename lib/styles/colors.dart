@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class CustomColors {
   static Color green = const Color(0xFF99D2A9);
+  static Color orange = const Color(0x80FF8C01);
   static Color appBarTextColor = Colors.white;
   static Color lightModeScaffoldColour = Colors.white;
   static Color whiteReplacement =

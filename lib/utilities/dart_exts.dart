@@ -3,8 +3,8 @@ import 'package:veloplan/providers/location_service.dart';
 import 'package:veloplan/screens/place_search_screen.dart';
 import 'package:veloplan/styles/colors.dart';
 
-/// Helper extensions for [PanelWidget].
-/// @author: Rahin Ashraf - k20034059
+/// Helper extensions.
+/// Author: Rahin Ashraf
 extension BuildContextExt on BuildContext {
   Future<dynamic> openSearch() {
     return Navigator.of(this).push(MaterialPageRoute(
@@ -59,5 +59,11 @@ extension WidgetExts on dynamic {
       borderRadius: BorderRadius.circular(radius),
       borderSide: BorderSide(color: color, width: width),
     );
+  }
+}
+
+extension DateOnlyCompare on DateTime {
+  bool isSameDate(DateTime date) {
+    return day == date.day && month == date.month && year == date.year;
   }
 }

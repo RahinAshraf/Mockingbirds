@@ -64,4 +64,12 @@ class CustomTextStyles {
       TextStyle(fontSize: 15.0, color: Colors.black54);
   static TextStyle userMessageTextStyle =
       TextStyle(fontSize: 15.0, color: Colors.white);
+
+  // Timeline in Summary of Journey
+  static TextStyle timelinePathInfo = TextStyle(
+      fontSize: 13.0,
+      color: Colors.black54,
+      fontStyle: FontStyle.italic,
+      fontWeight: FontWeight.w600,
+      fontFamily: 'Montserrat');
 }
