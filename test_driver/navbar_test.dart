@@ -275,14 +275,13 @@ Future<void> main() async {
       await driver?.scroll(sidebar, -500, 0, Duration(seconds: 2));
       await driver?.waitUntilNoTransientCallbacks();
       assert(navBarPage != null);
-      assert(profilePageButton != null);
-      await driver?.tap(profilePageButton);
-      await driver?.waitUntilNoTransientCallbacks();
-      assert(profileScreen != null);
-      assert(navBarPage == null);
+      // assert(profilePageButton != null);
+      // await driver?.tap(profilePageButton);
+      // await driver?.waitUntilNoTransientCallbacks();
+      // assert(profileScreen != null);
+      // assert(navBarPage == null);
     });
   });
-
   //! make another group with information inside of the different screens
 }
 

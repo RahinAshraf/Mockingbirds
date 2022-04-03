@@ -75,7 +75,6 @@ Future<void> main() async {
       assert(snackbar == null);
       await driver?.waitFor(find.byType("NavBar"));
       assert(navBarPage == null);
-      // driver?.close();
     });
   });
 }
