@@ -130,7 +130,6 @@ class _NavBarState extends State<NavBar> {
               heroTag: "btn2",
               onPressed: () {
                 if (!_isInGroup) {
-                  _onTabTapped(1);
                   showDialog(
                       useRootNavigator: false,
                       context: context,
@@ -138,9 +137,9 @@ class _NavBarState extends State<NavBar> {
                           popup.buildPopupDialogNewJourney(context));
                 }
                 if (_isInGroup) {
-                  _onTabTapped(1);
                   _getGroupInfo();
                 }
+                _onTabTapped(1);
               },
               child: const Icon(
                 Icons.directions_bike,
@@ -165,7 +164,7 @@ class _NavBarState extends State<NavBar> {
   }
 
   List<BottomNavigationBarItem> _retrieveNavItems() {
-    return [
+    return const [
       BottomNavigationBarItem(
         icon: Icon(Icons.format_align_justify_sharp),
         label: '',

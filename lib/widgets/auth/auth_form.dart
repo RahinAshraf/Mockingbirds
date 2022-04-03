@@ -9,6 +9,8 @@ import 'package:veloplan/widgets/pickers/bottom_date_picker.dart';
 import 'package:veloplan/widgets/pickers/image_picker.dart';
 import 'package:veloplan/styles/texts.dart';
 
+/// Widget which displays and operates the Authentication Form for Log In and Sign Up
+/// Author(s): Eduard Ragea k20067643
 class AuthForm extends StatefulWidget {
   const AuthForm(this.submitFn, this.isLoading, {Key? key}) : super(key: key);
 
@@ -43,10 +45,13 @@ class _AuthFormState extends State<AuthForm> {
   final TextEditingController _dateController = TextEditingController();
   DateTime _dateTime = DateTime.now();
 
+  /// Pass the currently choosen [image] to the [_userImageFile] variable.
   void _pickedImage(File image) {
     _userImageFile = image;
   }
 
+  /// Check if the form is valid and if so, save it and call
+  /// the function passed through the constructor.
   Future _trySubmit() async {
     final isValid = _formKey.currentState!.validate();
     FocusScope.of(context).unfocus();
@@ -184,14 +189,16 @@ class _AuthFormState extends State<AuthForm> {
                       return 'This field can not be empty';
                     }
                     _confirmPassword = value;
-                    if (value.length < 7) {
-                      return 'Password must be at least 7 characters long.';
+                    if (!_isLogin) {
+                      if (value.length < 7) {
+                        return 'Password must be at least 7 characters long.';
+                      }
+                      String pattern =
+                          r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{7,}$';
+                      RegExp regExp = new RegExp(pattern);
+                      if (!regExp.hasMatch(value))
+                        return 'Your password must have at least 1 Upper Case, 1 Lower Case and 1 Number.';
                     }
-                    String pattern =
-                        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{7,}$';
-                    RegExp regExp = new RegExp(pattern);
-                    if (!regExp.hasMatch(value))
-                      return 'Your password must have at least 1 Upper Case, 1 Lower Case and 1 Number.';
                     return null;
                   },
                   decoration: const InputDecoration(
@@ -240,7 +247,6 @@ class _AuthFormState extends State<AuthForm> {
                     },
                     onTap: () {
                       FocusScope.of(context).requestFocus(FocusNode());
-                      //_selectDate();
                       showCupertinoModalPopup<void>(
                         context: context,
                         builder: (BuildContext context) {

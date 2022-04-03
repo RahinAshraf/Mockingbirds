@@ -10,8 +10,10 @@ import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:veloplan/widgets/docking_stations_sorting_widget.dart';
 
-/// Edit dock screen for selecting docking stations consisting of a map and [DockSorter] widget.
-/// Author(s): Rahin Ashraf, Fariha Choudhury
+/// Screen displaying filtered stations around a chosen dock with functionality to sort stations
+/// and view on map.
+/// Author(s): Rahin Ashraf, Fariha Choudhury k20059723
+/// Contributor(s): Nicole, Marija
 class DockSorterScreen extends StatefulWidget {
   late final LatLng userCoord;
   final DockingStation? selectedDockStation;

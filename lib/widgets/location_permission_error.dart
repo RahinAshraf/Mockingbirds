@@ -27,7 +27,7 @@ class LocationErrorState extends State<LocationError>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    print("BuildContextrrr_isGranted => $state");
+    print("BuildContext_isGranted => $state");
     if (mounted && state == AppLifecycleState.resumed) {
       PermissionUtils.instance.getLocation(context).listen((status) {
         if (status == Permissions.ALLOW_WHILE_USING_APP ||
@@ -66,8 +66,8 @@ class LocationErrorState extends State<LocationError>
                 ),
               ),
               Text(
-                "Please enable your location permission access in order to use VeloPlan. \n After "
-                "enabling your locations permissions, please close and reopen the app to begin your visit \n"
+                "Please enable your location permissions access in order to use VeloPlan. \n After "
+                "enabling your locations permissions, please reopen the app to begin your visit \n"
                 "London!",
                 textDirection: TextDirection.ltr,
                 textAlign: TextAlign.center,

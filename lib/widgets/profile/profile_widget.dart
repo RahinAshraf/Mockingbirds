@@ -6,6 +6,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:veloplan/styles/colors.dart';
 
+/// Widget for displaying the profile picture.
+/// Author(s): Eduard Ragea k20067643
 class ProfileWidget extends StatefulWidget {
   String imagePath;
   final VoidCallback onClicked;
@@ -54,6 +56,35 @@ class _ProfileWidgetState extends State<ProfileWidget> {
     );
   }
 
+  Widget _buildEditIcon(Color color) => _buildCircle(
+        color: Colors.white,
+        all: 3,
+        child: _buildCircle(
+          color: color,
+          all: 8,
+          child: Icon(
+            Icons.add_a_photo,
+            color: Colors.white,
+            size: 20,
+          ),
+        ),
+      );
+
+  Widget _buildCircle({
+    required Widget child,
+    required double all,
+    required Color color,
+  }) =>
+      ClipOval(
+        child: Container(
+          padding: EdgeInsets.all(all),
+          color: color,
+          child: child,
+        ),
+      );
+
+  /// Show a bottom picker to choose between taking a picture
+  /// with camera or choosing one form gallery.
   void _showPicker() {
     showModalBottomSheet(
         context: context,
@@ -82,6 +113,8 @@ class _ProfileWidgetState extends State<ProfileWidget> {
         });
   }
 
+  /// Take or choose a picture for profile and update it on server.
+  /// Show error in case the operation fails.
   Future _setPicture(bool isCamera) async {
     final _userID = FirebaseAuth.instance.currentUser!.uid;
     final _pickedImageFile = await ImagePicker().pickImage(
@@ -111,31 +144,4 @@ class _ProfileWidgetState extends State<ProfileWidget> {
       setState(() {});
     }
   }
-
-  Widget _buildEditIcon(Color color) => _buildCircle(
-        color: Colors.white,
-        all: 3,
-        child: _buildCircle(
-          color: color,
-          all: 8,
-          child: Icon(
-            Icons.add_a_photo,
-            color: Colors.white,
-            size: 20,
-          ),
-        ),
-      );
-
-  Widget _buildCircle({
-    required Widget child,
-    required double all,
-    required Color color,
-  }) =>
-      ClipOval(
-        child: Container(
-          padding: EdgeInsets.all(all),
-          color: color,
-          child: child,
-        ),
-      );
 }

@@ -14,7 +14,8 @@ import 'package:veloplan/providers/location_service.dart';
 import 'package:veloplan/screens/dock_sorter_screen.dart';
 
 /// Helper class to build the bubble underneath every location TextField.
-/// Author(s) : Rahin
+/// Author: Rahin,
+/// Contributor(s): Fariha
 class PanelExtensions {
   final locationService = LocationService();
   BuildContext? context;
@@ -36,6 +37,7 @@ class PanelExtensions {
       Map<int, DockingStation> latLngMap,
       bool isFrom,
       int numberCyclists,
+      bool isScheduled,
       {int position = -1}) {
     BehaviorSubject<String> dockText = BehaviorSubject();
     return Row(
@@ -67,43 +69,50 @@ class PanelExtensions {
           ),
         ),
         Expanded(
-          child: IconButton(
-              onPressed: () async {
-                if (placeTextController.text.isEmpty) {
-                  alert.showSnackBarErrorMessage(
-                      context!, alert.fillInLocationBeforeEditingDockMesssage);
-                  print("hello");
-                  return;
-                }
-                List temp = await locationService
-                    .getPlaceCoords(placeTextController.text);
+          child: !isScheduled
+              ? IconButton(
+                  onPressed: () async {
+                    if (placeTextController.text.isEmpty) {
+                      alert.showSnackBarErrorMessage(context!,
+                          alert.fillInLocationBeforeEditingDockMesssage);
+                      return;
+                    }
+                    List temp = await locationService
+                        .getPlaceCoords(placeTextController.text);
 
-                final result = await Navigator.push<DockingStation>(
-                    context!,
-                    MaterialPageRoute(
-                        builder: (context) => DockSorterScreen(
-                              convertDestinationLocationFromDoublesToLatLng(
-                                  temp.first, temp.last),
-                              selectedDockStation: DockingStation("ds1ID",
-                                  "ds1", true, true, 10, 11, 12, 15.6, 89.0),
-                            )));
+                    final result = await Navigator.push<DockingStation>(
+                        context!,
+                        MaterialPageRoute(
+                            builder: (context) => DockSorterScreen(
+                                  convertDestinationLocationFromDoublesToLatLng(
+                                      temp.first, temp.last),
+                                  selectedDockStation: DockingStation(
+                                      "ds1ID",
+                                      "ds1",
+                                      true,
+                                      true,
+                                      10,
+                                      11,
+                                      12,
+                                      15.6,
+                                      89.0),
+                                )));
 
-                print("hey result --=> ${result?.name}");
-
-                checkInputLocation(
-                    placeTextController,
-                    editDockTextEditController,
-                    latLngMap,
-                    position,
-                    isFrom,
-                    numberCyclists,
-                    address: result?.name,
-                    closesDockLatLng: result);
-              },
-              padding: const EdgeInsets.all(0),
-              icon: const Icon(
-                Icons.navigate_next_outlined,
-              )),
+                    checkInputLocation(
+                        placeTextController,
+                        editDockTextEditController,
+                        latLngMap,
+                        position,
+                        isFrom,
+                        numberCyclists,
+                        address: result?.name,
+                        closesDockLatLng: result);
+                  },
+                  padding: const EdgeInsets.all(0),
+                  icon: const Icon(
+                    Icons.navigate_next_outlined,
+                  ))
+              : Text(""),
           flex: 0,
         ),
       ],
@@ -168,24 +177,14 @@ class PanelExtensions {
 
     if (null == closesDockLatLng) {
       if (isFrom) {
-        var temp = _stationManager.getClosestDockWithAvailableSpace(
-            latlngPlace, numberOfCyclists);
         closestDock = _stationManager.getClosestDockWithAvailableBikes(
             latlngPlace, numberOfCyclists);
-        print(
-            "closest dock info  dock with available BIKES ${closestDock.name} compared to SPACES ${temp.name} ---- num: ${numberOfCyclists}");
       } else {
-        var temp = _stationManager.getClosestDockWithAvailableBikes(
-            latlngPlace, numberOfCyclists);
         closestDock = _stationManager.getClosestDockWithAvailableSpace(
             latlngPlace, numberOfCyclists);
-        print(
-            "closest dock info  dock with available SPACES ${closestDock.name} compared to BIKES ${temp.name} ------ num: ${numberOfCyclists}");
       }
       editDockTextEditController.text = closestDock.name;
       latLngMap[position] = closestDock;
-      print("closet dock ${closestDock.name}");
-      print("PRIIIINTING => $position");
       this._dockingStation = closestDock;
     } else {
       editDockTextEditController.text = address!;
