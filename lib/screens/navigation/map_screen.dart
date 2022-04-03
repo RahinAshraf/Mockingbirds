@@ -39,11 +39,11 @@ class _MapPageState extends State<MapPage> {
       group.docs.forEach((element) {
         Timestamp timestamp = element.data()['createdAt'];
         var memberList = element.data()['memberList'];
-        if (DateTime.now().difference(timestamp.toDate()) > Duration(days: 1)) {
+        if (DateTime.now().difference(timestamp.toDate()) > Duration(days: 2)) {
           element.reference.delete();
           for (String member in memberList) {
-            _databaseManager.setByKey(
-                'users', member, {'group': null}, SetOptions(merge: true));
+            _databaseManager.setByKey('users', member,
+                {'group': FieldValue.delete()}, SetOptions(merge: true));
           }
         }
       });

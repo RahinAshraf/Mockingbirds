@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 import 'package:veloplan/screens/edit_profile_screen.dart';
@@ -8,6 +9,8 @@ import 'package:veloplan/helpers/new_scroll_behavior.dart';
 import 'package:veloplan/screens/splash_screen.dart';
 import 'package:veloplan/widgets/profile/profile_page_header.dart';
 
+/// Screen for the profile of the current user
+/// Author(s): Eduard Ragea k20067643
 class Profile extends StatefulWidget {
   final String userID;
   static const routeName = '/user';
@@ -21,6 +24,8 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   final DatabaseManager _databaseManager = DatabaseManager();
 
+  /// Build custom appbar with link to edit profile.
+  /// Update the page after closing edit profile page.
   PreferredSizeWidget _buildAppBar(context, data) {
     return AppBar(
       centerTitle: true,
@@ -73,6 +78,8 @@ class _ProfileState extends State<Profile> {
               snapshot.data!.data() as Map<String, dynamic>;
           return Scaffold(
             appBar: _buildAppBar(context, data),
+            /// Let the user refresh the profile so they can see
+            /// an update in statistics.
             body: RefreshIndicator(
               onRefresh: () async {
                 setState(() {});

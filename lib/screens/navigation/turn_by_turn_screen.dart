@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_mapbox_navigation/library.dart';
 import 'package:veloplan/helpers/database_helpers/statistics_helper.dart';
@@ -9,7 +8,8 @@ import 'package:veloplan/navbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 /// A splash screen displaying turn by turn navigation for a journey.
-/// Author(s): Fariha Choudhury k20059723, Elisabeth Halvorsen k20077737, Eduard Ragea k20067643
+/// Author(s): Fariha Choudhury k20059723, Elisabeth Halvorsen k20077737,
+/// Contributor(s): Eduard Ragea k20067643
 /// Reference: dormmom.com, Jul 20, 2021, flutter_mapbox_navigation 0.0.26, https://pub.dev/packages/flutter_mapbox_navigation
 
 class TurnByTurn extends StatefulWidget {
@@ -82,6 +82,7 @@ class _TurnByTurnState extends State<TurnByTurn> {
   Future<void> _onRouteEvent(e) async {
     distanceRemaining = await directions.distanceRemaining;
     durationRemaining = await directions.durationRemaining;
+    /// Update the distance went at every navigation update in shared preferences.
     if (distance == null) {
       distance = distanceRemaining;
     } else {
