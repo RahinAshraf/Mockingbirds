@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../models/itinerary.dart';
 import '../../helpers/database_helpers/history_helper.dart';
 import '../../widgets/my_journey_card.dart';
+import 'package:veloplan/styles/styling.dart';
 
 ///Displays users started journeys
 ///Author: Tayyibah
@@ -30,9 +31,18 @@ class _MyJourneysState extends State<MyJourneys> {
   Widget build(BuildContext build) {
     return Scaffold(
       body: journeyList.isEmpty
-          ? const SafeArea(
-              child: Center(child: Text("You haven't made any journeys yet.")),
-            )
+          ? SafeArea(
+              child: Center(
+                  child: Column(children: [
+              SizedBox(height: 100),
+              Image.asset('assets/images/past_journeys_sidebar.png',
+                  width: 170, height: 170),
+              SizedBox(height: 40),
+              Text(
+                "You haven't made any journeys yet.",
+                style: sidebarTextStyle,
+              )
+            ])))
           : Stack(
               children: [
                 ListView.builder(
