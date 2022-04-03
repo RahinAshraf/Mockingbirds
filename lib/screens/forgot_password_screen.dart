@@ -2,11 +2,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 
+/// Screen where the user sends password reset email
+/// Author(s): Eduard Ragea k20067643
 class ForgotPasswordScreen extends StatelessWidget {
   TextEditingController emailController = new TextEditingController();
 
   ForgotPasswordScreen({Key? key}) : super(key: key);
 
+  /// Send a password reset email to the current user and
+  /// close the screen.
+  /// Handle errors by showing snackbars.
   Future sendPasswordResetEmail(String email, BuildContext context) async {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);

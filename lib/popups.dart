@@ -117,7 +117,7 @@ class Popups {
               context,
               MaterialPageRoute(
                   builder: (context) => MapUpdatedRoutePage(itinerary)));
-          if (response || response == null|| !response) {
+          if (response || response == null || !response) {
             Navigator.of(context).pop(true);
           }
         },

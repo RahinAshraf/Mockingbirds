@@ -5,6 +5,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+/// Widget for displaying the profile picture
+/// Author(s): Eduard Ragea k20067643, 
 class ProfileWidget extends StatefulWidget {
   String imagePath;
   final VoidCallback onClicked;
@@ -60,6 +62,8 @@ class _ProfileWidgetState extends State<ProfileWidget> {
         ),
       );
 
+  /// Show a bottom picker to choose between taking a picture
+  /// with camera or choosing one form gallery.
   void showPicker() {
     showModalBottomSheet(
         context: context,
@@ -88,6 +92,8 @@ class _ProfileWidgetState extends State<ProfileWidget> {
         });
   }
 
+  /// Take or choose a picture for profile and update it on server.
+  /// Show error in case the operation fails.
   Future setPicture(bool isCamera) async {
     final _userID = FirebaseAuth.instance.currentUser!.uid;
     final _pickedImageFile = await ImagePicker().pickImage(
