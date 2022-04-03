@@ -54,21 +54,6 @@ class _MyJourneysState extends State<MyJourneys> {
                 );
         },
       ),
-
-      //  journeyList.isEmpty
-      //     ? const SafeArea(
-      //         child: Center(child: Text("You haven't made any journeys yet.")),
-      //       )
-      //     : Stack(
-      //         children: [
-      //           ListView.builder(
-      //             itemCount: journeyList.length,
-      //             itemBuilder: (context, index) {
-      //               return MyJourneyCard(journeyList[index]);
-      //             },
-      //           ),
-      //         ],
-      //       ),
       appBar: AppBar(
         title: const Text('My Journeys'),
       ),
