@@ -5,6 +5,7 @@ import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:mockito/annotations.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:veloplan/helpers/database_helpers/database_manager.dart';
+import 'package:veloplan/helpers/database_helpers/group_manager.dart';
 import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/models/itinerary_manager.dart';
 import 'package:veloplan/models/path.dart';
@@ -32,10 +33,11 @@ import 'join_group_test.mocks.dart';
 void main() {
   late MockDatabaseManager mockDBManager;
   late GroupIdState _groupIdState;
+ late  groupManager _groupManager;
 
   setUp(() {
     mockDBManager = MockDatabaseManager();
-   _groupIdState = GroupIdState(mockDBManager);
+   _groupManager = groupManager(mockDBManager);
   });
 
   test('Joining existing group works', () async {
@@ -113,7 +115,7 @@ void main() {
     when(mockDBManager.getCurrentUser()).thenReturn(user);
     when(user.uid).thenReturn("testingID");
 
-    await _groupIdState.joinGroup(code);
+    await _groupManager.joinGroup(code);
 
     verify(mockDBManager.setByKey('users', 'testingID', any,any)).called(1);
     verify(mockDBManager.updateByKey('group', 'id', any));

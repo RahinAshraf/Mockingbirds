@@ -1,5 +1,5 @@
 import 'dart:developer';
-import 'dart:math' as math;
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart';
 import 'package:timeline_tile/timeline_tile.dart';
+import 'package:veloplan/helpers/database_helpers/group_manager.dart';
 import 'package:veloplan/models/itinerary_manager.dart';
 import 'package:veloplan/models/path.dart';
 import '../helpers/navigation_helpers/navigation_conversions_helpers.dart';
@@ -32,7 +33,7 @@ class SummaryJourneyScreen extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() =>
-      SummaryJourneyScreenState(_itineraryManager , this.cameFromSchedule, this._databaseManager);
+      SummaryJourneyScreenState(_itineraryManager , this.cameFromSchedule, this._databaseManager, groupManager(this._databaseManager));
 }
 
 class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
@@ -47,8 +48,9 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
   final DatabaseManager _databaseManager;
   late List<Path> paths;
   late ItineraryManager _itineraryManager;
+  final groupManager _groupManager;
 
-  SummaryJourneyScreenState(this._itineraryManager, this.cameFromSchedule, this._databaseManager) {
+  SummaryJourneyScreenState(this._itineraryManager, this.cameFromSchedule, this._databaseManager, this._groupManager) {
     paths = _itineraryManager.getPaths();
     _itinerary = _itineraryManager.getItinerary();
   }
@@ -75,7 +77,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
     if (hasGroup) {
       var group = await _databaseManager.getByEquality(
           'group', 'code', user.data()!['group']);
-      res = await _getGroupOwner(group);
+      res = await _groupManager.getGroupOwnerRef(group);
       pointsInDoubles = [];
 
     }
@@ -88,140 +90,39 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
     });
   }
 
-  Future<DocumentSnapshot<Map<String, dynamic>>> _getGroupOwner(
-      QuerySnapshot<Map<String, dynamic>> group) {
-    var tempr;
-    group.docs.forEach((element) {
-      tempr = _databaseManager.getByKey('users', element.data()['ownerID']);
-    });
-    return tempr;
-  }
 
-  String _padWithZeroes(String textToPad){
-    while (textToPad.length<6){
-      textToPad = '0'+ textToPad;
-    }
-    return textToPad;
-  }
+
 
   @visibleForTesting
   Future<void> createGroup() async {
-    var ownerID = _databaseManager.getCurrentUser()?.uid;
-    List list = [];
-    list.add(ownerID);
-    math.Random rng = math.Random();
-    String code = rng.nextInt(999999).toString();
-    code = _padWithZeroes(code);
-    var x = await _databaseManager.getByEquality('group', 'code', code);
-    while (x.size != 0) {
-      code = rng.nextInt(999999).toString();
-      code = _padWithZeroes(code);
+    await _groupManager.createGroup(_itinerary);
+    setState(() {
+      isInGroup = true;
+    });
 
-      x = await _databaseManager.getByEquality('group', 'code', code);
-    }
-    List<GeoPoint> geoList = [];
-    var destinationsIndouble =
-    convertLatLngToDouble(_itinerary.myDestinations!);
-    for (int i = 0; i < destinationsIndouble!.length; i++) {
-      geoList.add(
-          GeoPoint(destinationsIndouble[i]![0]!, destinationsIndouble[i]![1]!));
-    }
-    try {
-      await _databaseManager.setByKey(
-          'users', ownerID!, {'group': code}, SetOptions(merge: true));
-      var group =  await _databaseManager.addToCollection('group', {
-        'code': code,
-        'ownerID': ownerID,
-        'memberList': list,
-        'createdAt': Timestamp.fromDate(DateTime.now()),
-      });
-      var journey = await group.collection("itinerary").add({
-        'journeyID': _itinerary.journeyDocumentId,
-        'points': geoList,
-        'date': _itinerary.date,
-        'numberOfCyclists': _itinerary.numberOfCyclists
-      });
-      var dockingStationList = _itinerary.docks!;
-      for(int j = 0; j< geoList.length; j++){
-        var geo = geoList[j];
-        _databaseManager.addToSubCollection(journey.collection("coordinates"),{
-          'coordinate': geo,
-          'index': j,
-        });
-      }
-      for (int i = 0; i < dockingStationList.length; i++) {
-        var station = dockingStationList[i];
-        _databaseManager.addToSubCollection(journey.collection("dockingStations"),{
-          'id': station.stationId,
-          'name': station.name,
-          'location': GeoPoint(station.lat, station.lon),
-          'index':i,
-        });
-      }
-
-      setState(() {
-        isInGroup = true;
-      });
-    } on PlatformException catch (err) {
-      var message = 'An error occurred';
-
-      if (err.message != null) {
-        message = err.message!;
-      }
-    }  catch (err) {
-      print(err);
-    }
   }
 
   Future<void> leaveGroup() async {
-    try {
-      var groupResponse = await _databaseManager.getByEquality('group', 'code', groupID);
-      var userID = _databaseManager.getCurrentUser()?.uid;
-      var ownerID;
-      List list = [];
-      for (var element in groupResponse.docs) {
-        ownerID = element.data()['ownerID'];
-        list = element.data()['memberList'];
-        list.removeWhere((element) => (element == userID));
-        if (list.isEmpty) {
-          element.reference.delete();
-        } else {
-          if (ownerID == userID) {
-            _databaseManager
-                .updateByKey('group', element.id, {'ownerID': list[0]});
-          }
-          _databaseManager
-              .updateByKey('group', element.id, {'memberList': list});
-        }
-      }
-      await _databaseManager
-          .updateByKey('users', userID!, {'group': FieldValue.delete()});
-      if (ownerID == _databaseManager.getCurrentUser()?.uid) {
-      } else {
-        context.push(NavBar());
-      }
-      var user = await _databaseManager.getByKey(
-          'users', _databaseManager.getCurrentUser()!.uid);
-      setState(() {
-        isInGroup = false;
-        organiser = user.data()!['username'];
+    var userID = _databaseManager.getCurrentUser()?.uid;
+    var user = await _databaseManager.getByKey(
+        'users',userID!);
+    groupID = user.data()!['group'];
 
-      });
+    var ownerID = await _groupManager.leaveGroup(groupID);
 
-    } on PlatformException catch (err) {
-      var message = 'An error occurred, please check your credentials!';
+    if (ownerID == _databaseManager.getCurrentUser()?.uid) {
+    } else {
+      context.push(NavBar());
+    }
 
-      if (err.message != null) {
-        message = err.message!;
-      }
-    } on FirebaseAuthException catch (err) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(err.message!),
-          backgroundColor: Theme.of(context).errorColor,
-        ),
-      );
-    } catch (err) {}
+
+    setState(() {
+      isInGroup = false;
+      organiser = user.data()!['username'];
+
+    });
+
+
 
   }
 

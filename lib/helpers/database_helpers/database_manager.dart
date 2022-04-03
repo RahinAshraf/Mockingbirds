@@ -63,7 +63,10 @@ class DatabaseManager {
   Future<void> setByKey(
       String collection, String key, Map<String, dynamic> value,
       [SetOptions? options]) async {
-    await _database.collection(collection).doc(key).set(value, options);
+    await _database
+        .collection(collection)
+        .doc(key)
+        .set(value, options);
   }
 
   Future<void> updateByKey(

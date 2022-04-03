@@ -7,22 +7,22 @@ import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:veloplan/helpers/database_helpers/database_manager.dart';
+import 'package:veloplan/helpers/database_helpers/group_manager.dart';
 import 'package:veloplan/helpers/navigation_helpers/navigation_conversions_helpers.dart';
 import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/models/itinerary.dart';
 import 'package:veloplan/models/itinerary_manager.dart';
 import 'package:veloplan/models/path.dart';
-import 'package:veloplan/screens/summary_journey_screen.dart';
 import 'create_group_test.mocks.dart';
 
 @GenerateMocks([DatabaseManager, User,QuerySnapshot<Map<String, dynamic>>, DocumentReference<Map<String, dynamic>>, CollectionReference<Map<String, dynamic>>, ItineraryManager])
 void main() {
 
-  late SummaryJourneyScreenState _summaryJourneyScreenState;
   late MockItineraryManager itManager;
   late MockDatabaseManager mockDBManagager;
   late Itinerary _itinerary;
   late MockUser user;
+  late groupManager _groupManager;
 
   var docks = [DockingStation("test1", 'test1', true, false, 2, 2, 4, 20, 30),DockingStation("test2", 'test2', true, false, 2, 2, 4, 10, 10) ];
 
@@ -36,7 +36,7 @@ void main() {
     mockDBManagager = MockDatabaseManager();
     when(itManager.getItinerary()).thenReturn(_itinerary);
     when(itManager.getPaths()).thenReturn(path);
-    _summaryJourneyScreenState =  SummaryJourneyScreenState(itManager, false, mockDBManagager);
+    _groupManager =  groupManager(mockDBManagager);
   });
 
   test('Creating group works', () async {
@@ -47,14 +47,14 @@ void main() {
     CollectionReference<Map<String, dynamic>> coordinatesRef = MockCollectionReference();
     QuerySnapshot<Map<String, dynamic>> groupResponse =MockQuerySnapshot();
     List<GeoPoint> geoList = [];
-    var destinationsIndouble = convertLatLngToDouble(_itinerary.myDestinations!);
-      for (int i = 0; i < destinationsIndouble!.length; i++) {
-        geoList.add(
-            GeoPoint(destinationsIndouble[i]![0]!, destinationsIndouble[i]![1]!));
-      }
+    var destinationsInDouble = convertLatLngToDouble(_itinerary.myDestinations!);
+    for (int i = 0; i < destinationsInDouble!.length; i++) {
+      geoList.add(
+          GeoPoint(destinationsInDouble[i]![0]!, destinationsInDouble[i]![1]!));
+    }
 
     String testID = "testingID";
-      List listOfAnswers = [2,0];
+    List listOfAnswers = [2,0];
 
     when(user.uid).thenReturn(testID);
     when(mockDBManagager.getCurrentUser()).thenReturn(user);
@@ -76,7 +76,7 @@ void main() {
     when(journey.collection('coordinates')).thenAnswer((_) => coordinatesRef);
     when(journey.collection('dockingStations')).thenAnswer((_) => dockingRef);
 
-    await _summaryJourneyScreenState.createGroup();
+    await _groupManager.createGroup(_itinerary);
     verify(mockDBManagager.getByEquality('group', 'code', any)).called(2);
     verify(mockDBManagager.addToCollection('group', any)).called(1);
     verify(mockDBManagager.addToSubCollection(coordinatesRef, any)).called(geoList.length);
@@ -120,7 +120,7 @@ void main() {
     when(journey.collection('coordinates')).thenAnswer((_) => coordinatesRef);
     when(journey.collection('dockingStations')).thenAnswer((_) => dockingRef);
 
-    await _summaryJourneyScreenState.createGroup();
+    await _groupManager.createGroup(_itinerary);
 
     verify(mockDBManagager.addToCollection('group', any)).called(1);
     verify(mockDBManagager.addToSubCollection(coordinatesRef, any)).called(geoList.length);

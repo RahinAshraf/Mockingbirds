@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:veloplan/helpers/database_helpers/group_manager.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:veloplan/models/map_models/base_map_model.dart';
 import '../../helpers/database_helpers/database_manager.dart';
@@ -21,34 +22,19 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> {
   LatLng currentPosition = getLatLngFromSharedPrefs();
   late BaseMapboxMap _baseMap;
-  DatabaseManager _databaseManager = DatabaseManager();
+   DatabaseManager _databaseManager = DatabaseManager();
+late groupManager _groupManager;
+
+_MapPageState(){
+  _groupManager = groupManager(_databaseManager);
+  }
 
   @override
   void initState() {
-    _deleteOldGroup();
+    _groupManager.deleteOldGroup();
     super.initState();
   }
 
-  Future<void> _deleteOldGroup() async {
-    var user = await _databaseManager.getByKey(
-        'users', _databaseManager.getCurrentUser()!.uid);
-    var hasGroup = user.data()!.keys.contains('group');
-    if (hasGroup) {
-      var group = await _databaseManager.getByEquality(
-          'group', 'code', user.data()!['group']);
-      group.docs.forEach((element) {
-        Timestamp timestamp = element.data()['createdAt'];
-        var memberList = element.data()['memberList'];
-        if (DateTime.now().difference(timestamp.toDate()) > Duration(days: 2)) {
-          element.reference.delete();
-          for (String member in memberList) {
-            _databaseManager.setByKey(
-                'users', member, {'group': FieldValue.delete()}, SetOptions(merge: true));
-          }
-        }
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {

@@ -4,6 +4,7 @@ import 'dart:collection';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:veloplan/helpers/database_helpers/group_manager.dart';
 import 'package:veloplan/models/itinerary_manager.dart';
 import 'package:veloplan/models/path.dart';
 import 'package:flutter/foundation.dart';
@@ -31,10 +32,11 @@ void main(){
 
   var docks = [DockingStation("test1", 'test1', true, false, 2, 2, 4, 20, 30),DockingStation("test2", 'test2', true, false, 2, 2, 4, 10, 10) ];
 
-  late SummaryJourneyScreenState _summaryJourneyScreenState;
+
   late MockItineraryManager itManager;
   late MockDatabaseManager mockDBManagager;
   late Itinerary _itinerary;
+  late groupManager _groupManager;
   late MockUser user;
 
   setUp(() {
@@ -48,7 +50,7 @@ void main(){
     when(itManager.getItinerary()).thenReturn(_itinerary);
     user = MockUser();
 
-    _summaryJourneyScreenState = SummaryJourneyScreenState(itManager, false, mockDBManagager);
+    _groupManager =  groupManager(mockDBManagager);
 
   });
 
@@ -77,9 +79,8 @@ void main(){
     when(groupDoc.data()).thenReturn(map);
     when(userResponse.data()).thenReturn(userMap);
     when(groupDoc.reference).thenReturn(reference);
-    _summaryJourneyScreenState.groupID = groupID;
 
-    await  _summaryJourneyScreenState.leaveGroup();
+    await  _groupManager.leaveGroup(groupID);
 
     verify(reference.delete()).called(1);
     verify(mockDBManagager
