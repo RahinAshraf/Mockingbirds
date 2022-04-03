@@ -188,14 +188,16 @@ class _AuthFormState extends State<AuthForm> {
                       return 'This field can not be empty';
                     }
                     _confirmPassword = value;
-                    if (value.length < 7) {
-                      return 'Password must be at least 7 characters long.';
+                    if (!_isLogin) {
+                      if (value.length < 7) {
+                        return 'Password must be at least 7 characters long.';
+                      }
+                      String pattern =
+                          r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{7,}$';
+                      RegExp regExp = new RegExp(pattern);
+                      if (!regExp.hasMatch(value))
+                        return 'Your password must have at least 1 Upper Case, 1 Lower Case and 1 Number.';
                     }
-                    String pattern =
-                        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{7,}$';
-                    RegExp regExp = new RegExp(pattern);
-                    if (!regExp.hasMatch(value))
-                      return 'Your password must have at least 1 Upper Case, 1 Lower Case and 1 Number.';
                     return null;
                   },
                   decoration: const InputDecoration(

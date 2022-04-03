@@ -4,10 +4,16 @@ import 'package:email_validator/email_validator.dart';
 
 /// Screen where the user sends password reset email
 /// Author(s): Eduard Ragea k20067643
-class ForgotPasswordScreen extends StatelessWidget {
-  TextEditingController emailController = new TextEditingController();
+class ForgotPasswordScreen extends StatefulWidget {
 
   ForgotPasswordScreen({Key? key}) : super(key: key);
+
+  @override
+  State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
+}
+
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
+  TextEditingController emailController = new TextEditingController();
 
   /// Send a password reset email to the current user and
   /// close the screen.
@@ -41,7 +47,7 @@ class ForgotPasswordScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Reset Password'),
       ),
-      body: Column(
+      body: ListView(
         children: [
           const SizedBox(height: 35),
           Container(
