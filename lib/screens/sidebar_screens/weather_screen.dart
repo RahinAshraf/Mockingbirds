@@ -1,18 +1,13 @@
-import 'dart:async';
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:veloplan/models/weather.dart';
 import 'package:veloplan/providers/weather_manager.dart';
 import 'package:veloplan/styles/styling.dart';
-// import 'package:veloplan/widgets/weather_popup_card.dart';
 
 /// Shows weather conditions in sidebar.
-/// Author: Nicole,
+/// Author: Nicole
 /// Contributor: Hristina-Andreea Sararu
-///
 class WeatherPage extends StatefulWidget {
   @override
   _WeatherPageState createState() => _WeatherPageState();
