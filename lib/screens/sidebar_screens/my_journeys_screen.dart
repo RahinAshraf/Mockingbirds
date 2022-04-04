@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../../models/itinerary.dart';
-import '../../screens/splash_screen.dart';
+import 'package:veloplan/models/itinerary.dart';
+import 'package:veloplan/helpers/database_helpers/history_helper.dart';
+import 'package:veloplan/widgets/my_journey_card.dart';
+import 'package:veloplan/styles/styling.dart';
 import '../../helpers/database_helpers/database_manager.dart';
-import '../../helpers/database_helpers/history_helper.dart';
-import '../../widgets/my_journey_card.dart';
-import '../../styles/styling.dart';
+import '../../screens/splash_screen.dart';
 
 ///Displays users started journeys
 ///Author: Tayyibah Uddin

@@ -4,10 +4,10 @@ import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/helpers/navigation_helpers/navigation_helpers.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:veloplan/models/itinerary.dart';
-import '../../models/map_models/base_map_with_route_model.dart';
+import 'package:veloplan/models/map_models/base_map_with_route_model.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
-import '../../popups.dart';
+import 'package:veloplan/popups.dart';
 
 /// Map screen showing and focusing on a a selected journey
 /// Author(s): Elisabeth Halvorsen k20077737,

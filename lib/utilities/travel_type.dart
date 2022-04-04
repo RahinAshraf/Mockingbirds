@@ -3,6 +3,7 @@
 
 enum NavigationType { cycling, walking }
 
+/// Gets corresponding [String] for navigation [type]
 String getNavigationType(NavigationType type) {
   switch (type) {
     case NavigationType.cycling:
