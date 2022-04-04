@@ -5,7 +5,7 @@ import 'package:veloplan/screens/navigation/turn_by_turn_screen.dart';
 import 'package:veloplan/screens/trips_scheduler_screen.dart';
 import 'package:veloplan/widgets/group/group_id_join_code_widget.dart';
 import 'package:veloplan/widgets/popup_widget.dart';
-import 'package:veloplan/utilities/enums.dart/alert_type.dart';
+import 'package:veloplan/utilities/enums/alert_type.dart';
 import 'package:intl/intl.dart';
 import 'helpers/navigation_helpers/navigation_conversions_helpers.dart';
 import 'models/itinerary.dart';
