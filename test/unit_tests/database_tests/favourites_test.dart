@@ -51,7 +51,6 @@ main() {
 
     (verifyNever(mockDBManager.addToSubCollection(favouritesReference, {
       'stationId': "bikepoints1",
-      'name': "limehouse",
     })));
   });
 
@@ -62,14 +61,12 @@ main() {
 
     (verify(mockDBManager.addToSubCollection(favouritesReference, {
       'stationId': "bikepoints3",
-      'name': "london bridge",
     })).called(1));
   });
   test('Add to favourites correctly calls the database', () {
     helper.addFavourite("new station id");
     (verify(mockDBManager.addToSubCollection(favouritesReference, {
       'stationId': "new station id",
-      'name': "new name",
     })).called(1));
   });
 

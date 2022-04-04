@@ -32,15 +32,12 @@ main() {
   List<DockingStation> historyList = [station1, station2];
 
   setUp(() {
-    String userId = "name";
-    name = "name";
-    stationId = "station1";
     historyReference = MockCollectionReference();
     when(mockDBManager.getUserSubCollectionReference("journeys"))
         .thenAnswer((_) => historyReference);
 
     helper = HistoryHelper(mockDBManager);
-    when(user.uid).thenReturn(userId);
+    when(user.uid).thenReturn("margaret");
     when(mockDBManager.getCurrentUser()).thenReturn(user);
   });
 
@@ -56,7 +53,6 @@ main() {
     verify(mockDBManager.addSubCollectiontoSubCollectionByDocumentId(
         "documentId", "docking_stations", historyReference, {
       'stationId': station1.stationId,
-      'name': station1.name,
     })).called(1);
   });
 
@@ -69,9 +65,4 @@ main() {
             documentId, "docking_stations", historyReference, any))
         .called(2);
   });
-
-  // test('Add docking station for each station in a journey to database', () {
-  //   helper.createJourneyEntry(historyList);
-  //   verify(helper.addDockingStation(station1, "test")).called(2);
-  // });
 }
