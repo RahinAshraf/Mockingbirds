@@ -31,7 +31,7 @@ void main() {
       await tester.pumpWidget(MaterialApp(home: connectionError));
       expect(
           find.text(
-              "No Internet Connection Found \n Check your internet connection"),
+              "No Internet Connection Found!  \n \n Please check your internet connection."),
           findsOneWidget);
       expect(find.text("Ooops!"), findsOneWidget);
     });
