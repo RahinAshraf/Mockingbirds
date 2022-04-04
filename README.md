@@ -2,43 +2,14 @@
 
 # Team *Mockingbirds* Large Group project
 
-## Team members
-- *Rahin Ashraf - k20034059*
-- *Marija Buivyte - k20082541*
-- *Fariha Choudhury - k20059723*
-- *Elisabeth Halvorsen - k20077737*
-- *Nicole Lehchevska - k20041914*
-- *Eduard Ragea - k20067643*
-- *Hristina-Andreea Sararu - k20036771*
-- *Lilianna Szabo - k20070238*
-- *Tayyibah Uddin - k20059556*
-
-
-
-A Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-
-
 ## -- README Report -- ##
 
-## References:
-- lib/screens/navigation/turn_by_turn_screen.dart: 
-    * dormmom.com, Jul 20, 2021, flutter_mapbox_navigation 0.0.26, https://pub.dev/packages/flutter_mapbox_navigation
-    * AB Satyaprakash, Feb 20, 2022, https://github.com/Imperial-lord/mapbox-flutter
-- lib/main.dart:
-    * https://www.kindacode.com/article/how-to-disable-landscape-mode-in-flutter/
+## What is Veloplan?
+
+Veloplan helps you to get the most out of Satanders bicycle hire system everyday, making planning and taking trips around London with friends and family simple and stress-free. The app allows groups or individuals to plan an itinerary, with several destinations, and arranges a route that considers the number of bikes and free spaces needed with reliable and accurate information. Everything you need is in one place - you will be navigated turn by turn to you destinations, and can choose to be redirected during a journey when docking stations lose availability. Journeys can also be planned ahead of time, and you can invite others to create group journeys so no one is missed. 
+
+
+
 
 ## Design Decisions 
 - Mapbox Navigation Package has issues with turn by turn direction.
@@ -59,3 +30,21 @@ samples, guidance on mobile development, and a full API reference.
     - (See sections 10.4.c.ii of https://developers.google.com/maps/terms-20180207). 
     - (Sources: https://stackoverflow.com/questions/57572927/open-google-maps-app-and-display-turn-by-turn-navigation-inside-flutter-webview, https://stackoverflow.com/questions/24531391/is-it-possible-to-create-turn-by-turn-gps-navigation-app-on-android-ios-using-go)
     - Resorted to switching Map APIs to Mapbox midway through project
+
+## References:
+- lib/screens/navigation/turn_by_turn_screen.dart: 
+    * dormmom.com, Jul 20, 2021, flutter_mapbox_navigation 0.0.26, https://pub.dev/packages/flutter_mapbox_navigation
+    * AB Satyaprakash, Feb 20, 2022, https://github.com/Imperial-lord/mapbox-flutter
+- lib/main.dart:
+    * https://www.kindacode.com/article/how-to-disable-landscape-mode-in-flutter/
+
+## Team members
+- *Rahin Ashraf - k20034059*
+- *Marija Buivyte - k20082541*
+- *Fariha Choudhury - k20059723*
+- *Elisabeth Halvorsen - k20077737*
+- *Nicole Lehchevska - k20041914*
+- *Eduard Ragea - k20067643*
+- *Hristina-Andreea Sararu - k20036771*
+- *Lilianna Szabo - k20070238*
+- *Tayyibah Uddin - k20059556*
