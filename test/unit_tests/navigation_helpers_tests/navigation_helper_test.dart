@@ -45,7 +45,7 @@ void main() {
     });
 
     test('different locations distance should be returned', () {
-      expect(getMidpoint(zeroCoord, zeroCoord), const LatLng(45, 0));
+      expect(getMidpoint(zeroCoord, zeroCoord), const LatLng(0, 0));
     });
   });
 
