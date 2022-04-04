@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:veloplan/alerts.dart';
 import 'package:veloplan/helpers/live_location_helper.dart';
 import 'package:veloplan/navbar.dart';
 import 'package:veloplan/screens/auth_screen.dart';
@@ -18,6 +19,7 @@ import 'package:veloplan/widgets/location_permission_error.dart';
 import 'package:flutter/services.dart';
 
 late SharedPreferences sharedPreferences;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   LiveLocationHelper liveLocationHelper = LiveLocationHelper();
@@ -49,6 +51,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   late Permission permission;
   PermissionStatus permissionStatus = PermissionStatus.denied;
+  Alerts alerts = Alerts();
 
   Future<void> requestForPermission() async {
     final status = await Permission.location.request();
@@ -60,54 +63,58 @@ class _MyAppState extends State<MyApp> {
   void requestPermission() {
     if (mounted) {
       PermissionUtils.instance.getLocation(context).listen((status) {
-        if (status == Permissions.DENY) {
-          context.pushAndRemoveUntil(LocationError());
-        } else if (status == Permissions.ASK_EVERYTIME) {
-          // Show permission
-          requestPermission();
-        }
-      });
+        try {
+          if (status == Permissions.DENY) {
+            context.pushAndRemoveUntil(LocationError());
+          }
+          else if (status == Permissions.ASK_EVERYTIME) {
+            // Show permission
+            requestPermission();
+          }
+        } catch (e) {
+          alerts.showSnackBarErrorMessage(context, "Enable location permissions on your settings for VeloPlan");
+      }
     }
-  }
+  );
+}}
 
-  @override
-  void initState() {
-    Timer(Duration(seconds: 10), () {
-      requestPermission();
-    });
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
-    //final Future<FirebaseApp> _initialization = Firebase.initializeApp();
-    return FutureBuilder(
-      future: Firebase.initializeApp(), // _initialization,
-      builder: (context, appSnapshot) {
-        return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'Veloplan',
-            theme: CustomTheme.defaultTheme,
-            home: appSnapshot.connectionState != ConnectionState.done
-                ? const SplashScreen()
-                : StreamBuilder(
-                    stream: FirebaseAuth.instance.authStateChanges(),
-                    builder: (ctx, userSnapshot) {
-                      if (userSnapshot.connectionState ==
-                          ConnectionState.waiting) {
-                        return const SplashScreen();
-                      }
-                      if (userSnapshot.hasData) {
-                        return const VerifyEmailScreen();
-                      }
-                      return const AuthScreen();
-                    },
-                  ));
-      },
-    );
-  }
+@override
+void initState() {
+  Timer(Duration(seconds: 10), () {
+    requestPermission();
+  });
+  super.initState();
 }
+
+@override
+Widget build(BuildContext context) {
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+  //final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+  return FutureBuilder(
+    future: Firebase.initializeApp(), // _initialization,
+    builder: (context, appSnapshot) {
+      return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Veloplan',
+          theme: CustomTheme.defaultTheme,
+          home: appSnapshot.connectionState != ConnectionState.done
+              ? const SplashScreen()
+              : StreamBuilder(
+            stream: FirebaseAuth.instance.authStateChanges(),
+            builder: (ctx, userSnapshot) {
+              if (userSnapshot.connectionState ==
+                  ConnectionState.waiting) {
+                return const SplashScreen();
+              }
+              if (userSnapshot.hasData) {
+                return const VerifyEmailScreen();
+              }
+              return const AuthScreen();
+            },
+          ));
+    },
+  );
+}}

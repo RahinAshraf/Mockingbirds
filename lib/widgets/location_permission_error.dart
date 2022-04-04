@@ -27,15 +27,16 @@ class LocationErrorState extends State<LocationError>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    print("BuildContextrrr_isGranted => $state");
     if (mounted && state == AppLifecycleState.resumed) {
       PermissionUtils.instance.getLocation(context).listen((status) {
         if (status == Permissions.ALLOW_WHILE_USING_APP ||
             status == Permissions.ALLOW_ALL_TIME) {
           FirebaseAuth.instance.signOut();
           context.pushAndRemoveUntil(AuthScreen());
-        } else {
-          print("Permission is $status");
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(builder: (context) => const AuthScreen()),
+          // );
         }
       });
     }
@@ -50,12 +51,11 @@ class LocationErrorState extends State<LocationError>
 
   @override
   Widget build(BuildContext context) {
-    print("BuildContext => $context");
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Center(
-        child: Container(
-          color: Colors.white,
+    return Scaffold(
+    body: Container(
+      height: MediaQuery.of(context).size.height,
+      width:MediaQuery.of(context).size.width,
+      color: Colors.white,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -87,7 +87,6 @@ class LocationErrorState extends State<LocationError>
             ],
           ),
         ),
-      ),
     );
   }
 
