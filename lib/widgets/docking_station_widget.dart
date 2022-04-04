@@ -3,7 +3,7 @@ import 'package:veloplan/widgets/docking_station_card.dart';
 import 'package:veloplan/models/docking_station.dart';
 
 /// Creates a widget which displays the docking station card when a symbol is tapped.
-/// Author: Hristina-Andreea Sararu k20036771
+/// Author: Hristina-Andreea Sararu
 
 class DockStation extends StatefulWidget {
   DockStation({Key? key}) : super(key: key);
@@ -33,7 +33,7 @@ class DockStationState extends State<DockStation> {
             ? Container()
             : Stack(
                 children: [
-                 new DockingStationCard.station(station!),
+                  new DockingStationCard.station(station!),
                   Align(
                     alignment: Alignment.topRight,
                     child: IconButton(

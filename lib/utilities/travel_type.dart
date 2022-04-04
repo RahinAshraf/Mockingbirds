@@ -1,5 +1,5 @@
 /// Navigation enumerated types
-/// Author(s): Fariha Choudhury k20059723, Elisabeth Halvorsen k20077737
+/// Author(s): Fariha Choudhury , Elisabeth Halvorsen
 
 enum NavigationType { cycling, walking }
 
