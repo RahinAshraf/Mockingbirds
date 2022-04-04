@@ -343,6 +343,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
                       child: const Text('START JOURNEY',
                           style: TextStyle(color: Colors.white)),
                       onPressed: () {
+                        
                         Navigator.push(
                           context,
                           MaterialPageRoute(
