@@ -18,7 +18,7 @@ class JourneyLandingPanelWidget extends StatefulWidget {
 class _JourneyLandingPanelWidget extends State<JourneyLandingPanelWidget> {
   @override
   Widget build(BuildContext context) => Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Column(
             children: [
@@ -34,7 +34,9 @@ class _JourneyLandingPanelWidget extends State<JourneyLandingPanelWidget> {
                     return Text("Next stop: ${dockName}",
                         style: journeyLandingTextStyle);
                   }),
-              SizedBox(height: 30, width: 30),
+              SizedBox(
+                height: 20,
+              ),
               Row(children: [
                 ValueListenableBuilder(
                     valueListenable: widget.baseMapWithUpdatedRoute.duration,
@@ -56,15 +58,16 @@ class _JourneyLandingPanelWidget extends State<JourneyLandingPanelWidget> {
                     valueListenable: widget.baseMapWithUpdatedRoute.distance,
                     builder:
                         (BuildContext context, num distance, Widget? child) {
-                      return Row(children: [
+                      return Expanded(
+                          child: Row(children: [
                         ImageIcon(
-                          AssetImage("assets/icon/bicycle.png"),
+                          AssetImage("assets/images/bicycle.png"),
                           color: Colors.black,
-                          size: 25,
+                          size: 22,
                         ),
                         Text("Distance: ${distance}m",
                             style: journeyLandingTextStyle)
-                      ]);
+                      ]));
                     })
               ])
             ],

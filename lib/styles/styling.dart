@@ -73,23 +73,21 @@ const scheduleScreenCalendarStyle = CalendarStyle(
   markersMaxCount: 1,
 );
 
-// Styling for journey landing screen
-
-const TextStyle journeyLandingTextStyle =
-    TextStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 20);
-const TextStyle journeyTextStyle = TextStyle(
-    fontStyle: FontStyle.italic, fontWeight: FontWeight.w500, fontSize: 18);
-
 // Styling for favourites and past journeys sidebar
 const TextStyle sidebarTextStyle = TextStyle(
     fontSize: 20.0,
     color: (Color(0xFF99D2A9)),
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w700,
     fontStyle: FontStyle.italic);
 
 // Styling for weather
 const TextStyle weatherTextStyle = TextStyle(
     fontSize: 25.0,
     color: (Color(0xFF99D2A9)),
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w700,
     fontStyle: FontStyle.italic);
+
+const TextStyle journeyLandingTextStyle =
+    TextStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 16);
+const TextStyle journeyTextStyle = TextStyle(
+    fontStyle: FontStyle.italic, fontWeight: FontWeight.w500, fontSize: 18);
