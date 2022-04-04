@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:veloplan/helpers/database_helpers/database_manager.dart';
-import 'package:veloplan/helpers/database_helpers/favourite_helper.dart';
-import 'package:veloplan/models/docking_station.dart';
-import 'package:veloplan/widgets/docking_station_card.dart';
-import 'package:veloplan/screens/splash_screen.dart';
+import '../../helpers/database_helpers/database_manager.dart';
+import '../../helpers/database_helpers/favourite_helper.dart';
+import '../../models/docking_station.dart';
+import '../../screens/splash_screen.dart';
+import '../../widgets/docking_station_card.dart';
 
 ///Loads users favourited docking stations and displays them in a list view.
-///@author Tayyibah Uddin
+///Author: Tayyibah Uddin
 class Favourite extends StatefulWidget {
   @override
   _FavouriteState createState() => _FavouriteState();

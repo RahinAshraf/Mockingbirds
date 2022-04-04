@@ -1,12 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:veloplan/screens/change_password_screen.dart';
+import '../../screens/change_password_screen.dart';
 
 /// Settings screen where user can log out and change theme of the app.
-/// @author: Tayyibah
+/// Author(s): Tayyibah Uddin, Eduard
 class Settings extends StatelessWidget {
   const Settings({Key? key}) : super(key: key);
 
@@ -64,8 +63,9 @@ class Settings extends StatelessWidget {
   }
 
   void changePassword(context) async {
-    var result = await Navigator.of(context).push(MaterialPageRoute(builder: ((context) => ChangePasswordScreen())));
-    if(result == true) {
+    var result = await Navigator.of(context).push(
+        MaterialPageRoute(builder: ((context) => ChangePasswordScreen())));
+    if (result == true) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Your password has been successfully updated"),

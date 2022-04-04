@@ -21,124 +21,55 @@ main() {
   var mockDBManager = MockDatabaseManager();
   var user = MockUser();
   late MockCollectionReference<Object?> favouritesReference;
-  late MockQuerySnapshot<Object?> favouriteDocs;
-  late String name;
-  late String stationId;
   late FavouriteHelper helper;
 
-  DockingStation station1 =
-      DockingStation("id1", "station1", true, false, 7, 10, 20, 60.11, 32.11);
-  DockingStation station2 =
-      DockingStation("id2", "station2", true, false, 4, 16, 20, 20.1, 32.10);
+  DockingStation station1 = DockingStation(
+      "bikepoints1", "limehouse", true, false, 7, 10, 20, 60.11, 32.11);
+  DockingStation station2 = DockingStation(
+      "bikepoints2", "stepney", true, false, 4, 16, 20, 20.1, 32.10);
+
+  station1.setDocumentId = "1234";
+  station2.setDocumentId = "5678";
+
   List<DockingStation> favouriteList = [station1, station2];
 
   setUp(() {
-    String userId = "name";
-    name = "name";
-    stationId = "station1";
     favouritesReference = MockCollectionReference();
     when(mockDBManager.getUserSubCollectionReference("favourites"))
         .thenAnswer((_) => favouritesReference);
-    favouriteDocs = MockQuerySnapshot<Object?>();
-
     helper = FavouriteHelper(mockDBManager);
-
-    when(user.uid).thenReturn(userId);
+    when(user.uid).thenReturn("bob");
     when(mockDBManager.getCurrentUser()).thenReturn(user);
   });
 
-  // test('Get user favourites', () async {
-  //   List<QueryDocumentSnapshot<Map<String, dynamic>>> temp = [];
-  //   temp.add(value)
-  //   helper.addFavourite("id1", "name1");
-  //   helper.addFavourite("id2", "name2");
-  //   when(mockDBManager.getUserSubcollection("favourites"))
-  //       .thenAnswer((_) async => favouriteDocs);
-  //   when(favouriteDocs.docs).thenReturn(temp);
-  //   helper.toggleFavourite("newstation", "station3");
-  //   (verify(mockDBManager.addToSubCollection(favouritesReference, {
-  //     'stationId': "newstation",
-  //     'name': "station3",
-  //   })).called(1));
-  //   // expect(favouriteDocs.docs, 2);
-  // });
+  test('Toggling favourited docking station deletes it from database', () {
+    helper.toggleFavourite("bikepoints1", "limehouse", favouriteList);
 
-  // test('Toggling new docking station adds to database', () async {
-  //   List<QueryDocumentSnapshot<Map<String, dynamic>>> temp = [];
-  //   //   helper.addFavourite("id2", "name2");
-  //   when(mockDBManager.getUserSubcollection("favourites"))
-  //       .thenAnswer((_) async => favouriteDocs);
-  //   when(favouriteDocs.docs).thenReturn(temp);
-  //   helper.toggleFavourite("id1", "station1");
-  //   (verify(mockDBManager.addToSubCollection(favouritesReference, {
-  //     'stationId': "id1",
-  //     'name': "station1",
-  //   })).called(1)); //helper.toggleFavourite("id1", "station1");
-  //   // verify()
-  // });
-
-  test('Toggling favourited docking station deletes it from database',
-      () async {
-    // MockQueryDocumentSnapshot mock = MockQueryDocumentSnapshot();
-    // helper.addFavourite("id2", "name2");
-    // when(mockDBManager.getUserSubcollection("favourites"))
-    //     .thenAnswer((_) async => favouriteDocs);
-    // when(favouriteDocs.docs).thenReturn(mock);
-    // when(temp.data).thenReturn(_responseMap);
-    DockingStation station1 =
-        DockingStation("id1", "station1", true, false, 7, 10, 20, 60.11, 32.11);
-    DockingStation station2 =
-        DockingStation("id2", "station2", true, false, 4, 16, 20, 20.1, 32.10);
-    station1.setDocumentId = "wassup";
-    station2.setDocumentId = "wassup2";
-    List<DockingStation> favouriteList = [station1, station2];
-
-    helper.toggleFavourite("id1", "station1", favouriteList);
-
-    (verify(mockDBManager.deleteDocument(favouritesReference, "wassup"))
+    (verify(mockDBManager.deleteDocument(
+            favouritesReference, station1.documentId))
         .called(1));
 
     (verifyNever(mockDBManager.addToSubCollection(favouritesReference, {
-      'stationId': "id1",
-      'name': "station1",
+      'stationId': "bikepoints1",
+      'name': "limehouse",
     })));
-    //
-    ////helper.toggleFavourite("id1", "station1");
-    // verify()
   });
 
   test('Toggling new docking station adds to database', () async {
-    // MockQueryDocumentSnapshot mock = MockQueryDocumentSnapshot();
-    // helper.addFavourite("id2", "name2");
-    // when(mockDBManager.getUserSubcollection("favourites"))
-    //     .thenAnswer((_) async => favouriteDocs);
-    // when(favouriteDocs.docs).thenReturn(mock);
-    // when(temp.data).thenReturn(_responseMap);
-    DockingStation station1 =
-        DockingStation("id1", "station1", true, false, 7, 10, 20, 60.11, 32.11);
-    DockingStation station2 =
-        DockingStation("id2", "station2", true, false, 4, 16, 20, 20.1, 32.10);
-    station1.setDocumentId = "wassup";
-    station2.setDocumentId = "wassup2";
-    List<DockingStation> favouriteList = [station1, station2];
-
-    helper.toggleFavourite("id3", "station3", favouriteList);
+    helper.toggleFavourite("bikepoints3", "london bridge", favouriteList);
 
     (verifyNever(mockDBManager.deleteDocument(favouritesReference, any)));
 
     (verify(mockDBManager.addToSubCollection(favouritesReference, {
-      'stationId': "id3",
-      'name': "station3",
+      'stationId': "bikepoints3",
+      'name': "london bridge",
     })).called(1));
-    //
-    ////helper.toggleFavourite("id1", "station1");
-    // verify()
   });
   test('Add to favourites correctly calls the database', () {
-    helper.addFavourite(stationId, name);
+    helper.addFavourite("new station id", "new name");
     (verify(mockDBManager.addToSubCollection(favouritesReference, {
-      'stationId': stationId,
-      'name': name,
+      'stationId': "new station id",
+      'name': "new name",
     })).called(1));
   });
 
@@ -150,14 +81,12 @@ main() {
   });
 
   test('Returns true if station is in users favourites', () {
-    String stationId = "id1";
-    bool result = helper.isFavouriteStation(stationId, favouriteList);
+    bool result = helper.isFavouriteStation("bikepoints1", favouriteList);
     expect(result, true);
   });
 
   test('Returns false if a station is not in users favourites', () {
-    String stationId = "id3";
-    bool result = helper.isFavouriteStation(stationId, favouriteList);
+    bool result = helper.isFavouriteStation("new station id", favouriteList);
     expect(result, false);
   });
 }

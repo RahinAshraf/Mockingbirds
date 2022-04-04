@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:veloplan/screens/splash_screen.dart';
-import '../../helpers/database_helpers/database_manager.dart';
 import '../../models/itinerary.dart';
+import '../../screens/splash_screen.dart';
+import '../../helpers/database_helpers/database_manager.dart';
 import '../../helpers/database_helpers/history_helper.dart';
 import '../../widgets/my_journey_card.dart';
 
-///Displays users started journeys (history)
-///Author: Tayyibah
+///Displays users started journeys
+///Author: Tayyibah Uddin
 
 class MyJourneys extends StatefulWidget {
   @override
