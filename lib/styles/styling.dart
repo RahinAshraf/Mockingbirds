@@ -86,3 +86,8 @@ const TextStyle weatherTextStyle = TextStyle(
     color: (Color(0xFF99D2A9)),
     fontWeight: FontWeight.w700,
     fontStyle: FontStyle.italic);
+
+const TextStyle journeyLandingTextStyle =
+    TextStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 16);
+const TextStyle journeyTextStyle = TextStyle(
+    fontStyle: FontStyle.italic, fontWeight: FontWeight.w500, fontSize: 18);

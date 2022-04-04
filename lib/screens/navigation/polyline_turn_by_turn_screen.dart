@@ -7,6 +7,8 @@ import 'package:veloplan/models/itinerary.dart';
 import 'package:veloplan/models/map_models/base_map_with_route_updated_model.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:veloplan/widgets/journey_landing_panel_widget.dart';
 
 /// Map screen focused on a user's live location
 /// Author(s): Elisabeth Halvorsen k20077737
@@ -25,6 +27,7 @@ class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
   Timer? timer;
   bool finished = false;
   final Itinerary _itinerary;
+  final panelController = PanelController();
 
   @override
   void initState() {
@@ -34,6 +37,8 @@ class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
   _MapUpdatedRoutePageState(this._itinerary) {}
   @override
   Widget build(BuildContext context) {
+    final panelHeightClosed = MediaQuery.of(context).size.height * 0.12;
+    final panelHeightOpen = MediaQuery.of(context).size.height * 0.3;
     return Scaffold(body: ScopedModelDescendant<MapModel>(
         builder: (BuildContext context, Widget? child, MapModel model) {
       _baseMapWithUpdatedRoute = MapWithRouteUpdated(
@@ -43,19 +48,28 @@ class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
       );
       addPositionZoom();
       addStopTurnByTurn(context);
-      return SafeArea(
-          child: Stack(children: _baseMapWithUpdatedRoute.getWidgets()));
+      return SlidingUpPanel(
+        padding: const EdgeInsets.fromLTRB(16.0, 4.0, 16.0, 4.0),
+        minHeight: panelHeightClosed,
+        maxHeight: panelHeightOpen,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        controller: panelController,
+        body: Stack(children: _baseMapWithUpdatedRoute.getWidgets()),
+        panelBuilder: (panelController) => JourneyLandingPanelWidget(
+          _baseMapWithUpdatedRoute,
+        ),
+      );
 
       ///* listen to isAtGoal if is at goal redirect
     }));
   }
 
-  /// add positional zoom to our widgets
+  /// Add positional zoom to our widgets.
   void addPositionZoom() {
     _baseMapWithUpdatedRoute.addWidget(Container(
-      alignment: Alignment(0.9, 0.90),
+      alignment: Alignment(0.9, -0.90),
       child: FloatingActionButton(
-        heroTag: "center_to_current_loaction",
+        heroTag: "center_to_current_location",
         onPressed: () {
           _baseMapWithUpdatedRoute.recenter = true;
         },
