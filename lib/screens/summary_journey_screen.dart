@@ -68,28 +68,33 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
   Future<String> _getGroup() async {
     var user = await _databaseManager.getByKey(
         'users', _databaseManager.getCurrentUser()!.uid);
-    groupID = user.data()!['group'];
-    return user.data()!['group'];
+    if (user.data() != null) {
+      groupID = user.data()!['group'];
+      return user.data()!['group'];
+    }
+    return "";
   }
 
   _setData() async {
     var owner;
     var user = await _databaseManager.getByKey(
         'users', _databaseManager.getCurrentUser()!.uid);
-    var hasGroup = user.data()!.keys.contains('group');
-    if (hasGroup) {
-      var group = await _databaseManager.getByEquality(
-          'group', 'code', user.data()!['group']);
-      owner = await _groupManager.getGroupOwnerRef(group);
-      pointsInDoubles = [];
-    }
-    setState(() {
-      isInGroup = hasGroup;
-      organiser = user.data()!['username'];
-      if (isInGroup && !cameFromSchedule) {
-        organiser = owner.data()!['username'];
+    if (user.data() != null) {
+      var hasGroup = user.data()!.keys.contains('group');
+      if (hasGroup) {
+        var group = await _databaseManager.getByEquality(
+            'group', 'code', user.data()!['group']);
+        owner = await _groupManager.getGroupOwnerRef(group);
+        pointsInDoubles = [];
       }
-    });
+      setState(() {
+        isInGroup = hasGroup;
+        organiser = user.data()!['username'];
+        if (isInGroup && !cameFromSchedule && owner.data()!=null) {
+          organiser = owner.data()!['username'];
+        }
+      });
+    }
   }
 
 
@@ -108,20 +113,23 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
     var userID = _databaseManager.getCurrentUser()?.uid;
     var user = await _databaseManager.getByKey(
         'users',userID!);
-    groupID = user.data()!['group'];
+    if (user.data() != null) {
+      groupID = user.data()!['group'];
 
-    var ownerID = await _groupManager.leaveGroup(groupID);
+      var ownerID = await _groupManager.leaveGroup(groupID);
 
-    if (ownerID == _databaseManager.getCurrentUser()?.uid) {
-    } else {
-      context.push(NavBar());
+      if (ownerID == _databaseManager
+          .getCurrentUser()
+          ?.uid) {} else {
+        context.push(NavBar());
+      }
     }
-
 
     setState(() {
       isInGroup = false;
-      organiser = user.data()!['username'];
-
+      if (user.data() != null) {
+        organiser = user.data()!['username'];
+      }
     });
 
 
