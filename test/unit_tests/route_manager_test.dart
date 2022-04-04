@@ -25,13 +25,29 @@ void main() {
     geometry = _manager2.getGeometry();
   });
 
+  /// Returns [true] if [enumeratedValue] is an Enumerated Type
+  bool isEnum(dynamic enumeratedValue) {
+    final splitEnum = enumeratedValue.toString().split('.');
+    return splitEnum.length > 1 &&
+        splitEnum[0] == enumeratedValue.runtimeType.toString();
+  }
+
+  /// Range check is used as route data depends on live traffic and road works
+  bool checkInRange(double result, double expected) {
+    if (result < expected + 15 && result > expected - 15) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   test('getDirections for walking route creates a Map', () async {
     _routeResponse = await _manager.getDirections(
         journey[0], journey[1], NavigationType.walking);
 
     expect(_routeResponse.isEmpty, false);
-    expect(_routeResponse['distance'], 511.797);
-    expect(_routeResponse['duration'], 376.207);
+    expect(checkInRange(_routeResponse['distance'], 511.797), true);
+    expect(checkInRange(_routeResponse['duration'], 376.207), true);
   });
 
   test('getDirections for cycling route creates a Map', () async {
@@ -39,8 +55,8 @@ void main() {
         journey[0], journey[1], NavigationType.cycling);
 
     expect(_routeResponse.isEmpty, false);
-    expect(_routeResponse['distance'], 510.9);
-    expect(_routeResponse['duration'], 234.1);
+    expect(checkInRange(_routeResponse['distance'], 510.9), true);
+    expect(checkInRange(_routeResponse['duration'], 234.1), true);
   });
 
   test(
@@ -51,8 +67,8 @@ void main() {
     expect(response.isEmpty, false);
     expect(response['routes'][0]['geometry']['coordinates'][0],
         [-0.130317, 51.506059]);
-    expect(response['routes'][0]['distance'], 6791.35);
-    expect(response['routes'][0]['duration'], 4799.211);
+    expect(checkInRange(response['routes'][0]['distance'], 6791.35), true);
+    expect(checkInRange(response['routes'][0]['duration'], 4799.211), true);
   });
   test(
       'getRoute for cycling route produces a response with corresponding geometry, distance and duration',
@@ -62,16 +78,12 @@ void main() {
     expect(response.isEmpty, false);
     expect(response['routes'][0]['geometry']['coordinates'][0],
         [-0.130317, 51.506059]);
-    expect(response['routes'][0]['distance'], 7543.4);
-    expect(response['routes'][0]['duration'], 2100.6);
+    expect(checkInRange(response['routes'][0]['distance'], 7543.4), true);
+    expect(checkInRange(response['routes'][0]['duration'], 2100.6), true);
   });
 
   group('get geometry, distance and duration for walking and cycling ', () {
     test('getGeometry returns correct information', () async {
-      // var _cyclingResponse = await _manager.getDirections(
-      //     journey[1], journey[2], NavigationType.cycling);
-      // var cyclingGeometry = _cyclingResponse['geometry'];
-      // expect(await _manager.getGeometry(), cyclingGeometry);
       var _walkingResponse = await _manager.getDirections(
           journey[1], journey[2], NavigationType.walking);
       var walkingGeometry = _walkingResponse['geometry'];
@@ -81,10 +93,6 @@ void main() {
     test(
         'getDistance for cycling and walking route returns correct information',
         () async {
-      // var _cyclingResponse = await _manager.getDirections(
-      //     journey[0], journey[1], NavigationType.cycling);
-      // var cyclingDistance = _cyclingResponse['distance'];
-      // expect(await _manager.getDistance(), cyclingDistance);
       var _walkingResponse = await _manager.getDirections(
           journey[0], journey[1], NavigationType.walking);
       var walkingDistance = _walkingResponse['distance'];
@@ -94,17 +102,12 @@ void main() {
     test(
         'getDuration for cycling and walking route returns correct information',
         () async {
-      // var _cyclingResponse = await _manager.getDirections(
-      //     journey[0], journey[1], NavigationType.cycling);
-      // var cyclingDuration = _cyclingResponse['duration'];
-      // expect(await _manager.getDuration(), cyclingDuration);
       var _walkingResponse = await _manager.getDirections(
           journey[0], journey[1], NavigationType.walking);
       var walkingDuration = _walkingResponse['duration'];
       expect(await _manager.getDuration(), walkingDuration);
     });
 
-    //again - for same points
     test(
         'getGeometry returns correct information for directions to the same point by walking ',
         () async {
@@ -201,6 +204,14 @@ void main() {
 
     test('navigation type cycling returns String cycling', () async {
       expect(getNavigationType(NavigationType.cycling), 'cycling');
+    });
+
+    test('navigation type walking returns Enumerated type', () async {
+      expect(isEnum(NavigationType.walking), true);
+    });
+
+    test('navigation type cycling  returns Enumerated type', () async {
+      expect(isEnum(NavigationType.cycling), true);
     });
   });
 }

@@ -45,11 +45,11 @@ class ConnectionError extends StatelessWidget {
                 )),
             SizedBox(height: 20),
             Text(
-              "No Internet Connection Found \n Check your internet connection",
+              "No Internet Connection Found!  \n \n Please check your internet connection.",
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Color(0xFF99D2A9),
-                fontSize: 15,
+                fontSize: 16,
               ),
             ),
           ],
