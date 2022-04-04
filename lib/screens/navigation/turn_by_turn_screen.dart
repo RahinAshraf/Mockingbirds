@@ -4,6 +4,7 @@ import 'package:flutter_mapbox_navigation/library.dart';
 import 'package:veloplan/helpers/database_helpers/statistics_helper.dart';
 import 'package:veloplan/helpers/live_location_helper.dart';
 import 'package:veloplan/navbar.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 
 /// A splash screen displaying turn by turn navigation for a journey.
