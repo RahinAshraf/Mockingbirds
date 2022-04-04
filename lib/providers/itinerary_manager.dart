@@ -8,7 +8,7 @@ import 'package:veloplan/utilities/travel_type.dart';
 class ItineraryManager {
   late Itinerary _itinerary;
   List<Path> _wholeTrip = [];
-  int _currentIndex = 0;
+  // int _currentIndex = 0;
   late Map _routeResponse;
   final RouteManager _manager = RouteManager();
 
@@ -70,16 +70,16 @@ class ItineraryManager {
   }
 
   /// Update the current path that the user is on, useful for redirecting
-  void updatePath(Path newPath) {
-    _wholeTrip[_currentIndex] = newPath;
-  }
+  // void updatePath(Path newPath) {
+  //   _wholeTrip[_currentIndex] = newPath;
+  // }
 
   /// Update the waypoint index of the itinerary
-  void setIndex(int i) {
-    _currentIndex = i;
-  }
+  // void setIndex(int i) {
+  //   _currentIndex = i;
+  // }
 
-  int getIndex() {
-    return _currentIndex;
-  }
+  // int getIndex() {
+  //   return _currentIndex;
+  // }
 }

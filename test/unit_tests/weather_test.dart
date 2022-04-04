@@ -2,6 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:veloplan/models/weather.dart';
 import 'package:veloplan/providers/weather_manager.dart';
 
+/// Tests that test the weather functionality
+/// Author: Nicole Lehchevska k20041914
 void main() {
   final WeatherManager weatherManager = WeatherManager();
   Weather test_weather = Weather(

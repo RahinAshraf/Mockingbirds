@@ -111,7 +111,7 @@ class dockingStationManager {
     return R * c;
   }
 
-  /// Return all the 788 stations
+  /// Return all the 790 stations, may change depending on api
   List<DockingStation> getStations() {
     return stations;
   }
@@ -153,7 +153,7 @@ class dockingStationManager {
   List<DockingStation> get10ClosestDocks(LatLong.LatLng userLocation) {
     List<DockingStation> filteredStations =
         sortDocksByDistanceFromGivenLocation(userLocation, stations);
-    if (filteredStations.isNotEmpty && filteredStations.length > 4) {
+    if (filteredStations.isNotEmpty && filteredStations.length > 9) {
       return filteredStations.take(10).toList();
     } else {
       return filteredStations;
@@ -222,6 +222,11 @@ class dockingStationManager {
     }
   }
 
+  /// Method useful for testing
+  void removeStations(int range) {
+    stations.removeRange(range, stations.length);
+  }
+
   ///  Get the 10 closest available docking stations by given location and stations, number of available bikes to get
   List<DockingStation> get10ClosestDocksWithAvailableBikes(
       LatLong.LatLng userLocation, int numberOfBikeSpaces) {
@@ -250,8 +255,14 @@ class dockingStationManager {
 
   /// Import a docking station from the tfl api, update its info
   Future<DockingStation> checkStation(DockingStation dock) async {
+    /// make the api call to tfl
     var data = await http
         .get(Uri.parse("https://api.tfl.gov.uk/BikePoint/${dock.stationId}"));
+    while (data == null) {
+      await Future.delayed(const Duration(seconds: 20));
+      data = await http
+          .get(Uri.parse("https://api.tfl.gov.uk/BikePoint/${dock.stationId}"));
+    }
     var station = json.decode(data.body);
     try {
       dock.setNumberOfBikes =
@@ -269,18 +280,24 @@ class dockingStationManager {
   /* import the docking station from the tfl api and check its updated info*/
   //TODO: refactor code -> shitty code
   Future<DockingStation?> checkStationById(String dockId) async {
+    // print("------------dock id in check statin by id" + dockId.toString());
+
+    /// make the api call to tfl
     var data =
         await http.get(Uri.parse("https://api.tfl.gov.uk/BikePoint/${dockId}"));
-    if (data == null) {
+
+    /// make the api calls until it doesnt return null
+    while (data == null) {
       await Future.delayed(const Duration(seconds: 20));
+      data = await http
+          .get(Uri.parse("https://api.tfl.gov.uk/BikePoint/${dockId}"));
     }
+    print("-----------------check station by id---------" +
+        (data == null).toString());
     late DockingStation newStation;
     var station = json.decode(data.body);
     try {
-      print(station["id"] +
-          "      " +
-          station["commonName"] +
-          "-----------------__________-debug stations__________--------");
+      print("station id------" + station["id"]);
       newStation = DockingStation(
           station["id"],
           station["commonName"],
@@ -291,8 +308,19 @@ class dockingStationManager {
           int.parse(station["additionalProperties"][8]["value"]),
           station["lon"],
           station["lat"]);
+      // print(newStation.stationId +
+      //     "      " +
+      //     newStation.name +
+      //     "-----------------__________-debug stations__________--------");
     } on FormatException {}
-    return newStation;
+
+    /// return an empty dock if there is no data from the api call
+    if (newStation != null) {
+      return newStation;
+    } else {
+      print("Returning an empty dock from checkStationById ");
+      DockingStation.empty();
+    }
   }
 
   /// Update the docking station info and check for available spaces
@@ -324,40 +352,42 @@ class dockingStationManager {
   /// import the docking stations from the tfl api by a set radius and coordinates
   Future<List<DockingStation>> importStationsByRadius(
       int radius, LatLng coord) async {
-    List<DockingStation> newStations = [];
+    /// make the api call to tfl
     var data = await http.get(Uri.parse(
         "https://api.tfl.gov.uk/Place?lat=${coord.latitude}&lon=${coord.longitude}&radius=${radius}&type=BikePoint"));
-    var station = json.decode(data.body);
-    // var jsonData = json.decode(data.body);
 
-    // var jsonDataMap = jsonData;
-    // print("station manager ->>>>>>>>>>>>>>>>" + jsonData.toString());
-    // if ((jsonDataMap as Map<String, dynamic>).length > 1) {
-    // for (var station in jsonData) {false
-    if (data == null) {
+    /// make the api calls until it doesnt return null
+    while (data == null) {
       await Future.delayed(const Duration(seconds: 20));
+      data = await http.get(Uri.parse(
+          "https://api.tfl.gov.uk/Place?lat=${coord.latitude}&lon=${coord.longitude}&radius=${radius}&type=BikePoint"));
     }
-    try {
-      DockingStation newStation = DockingStation(
-          station["id"],
-          station["commonName"],
-          station["additionalProperties"][1]["value"] == "true",
-          station["additionalProperties"][2]["value"] == "true",
-          int.parse(station["additionalProperties"][6]["value"]),
-          int.parse(station["additionalProperties"][7]["value"]),
-          int.parse(station["additionalProperties"][8]["value"]),
-          station["lon"],
-          station["lat"]);
 
-      if (!newStation.isLocked) {
-        newStations.add(newStation);
-      }
-    } on FormatException {}
-    return newStations;
+    List<DockingStation> newStations = [];
+    var stations = json.decode(data.body);
+    for (var station in stations) {
+      try {
+        DockingStation newStation = DockingStation(
+            station["id"],
+            station["commonName"],
+            station["additionalProperties"][1]["value"] == "true",
+            station["additionalProperties"][2]["value"] == "true",
+            int.parse(station["additionalProperties"][6]["value"]),
+            int.parse(station["additionalProperties"][7]["value"]),
+            int.parse(station["additionalProperties"][8]["value"]),
+            station["lon"],
+            station["lat"]);
+
+        if (!newStation.isLocked) {
+          newStations.add(newStation);
+        }
+      } on FormatException {}
+    }
+    if (newStations.length > 0) {
+      return newStations;
+    } else {
+      print("Returning an empty list from importStationsByRadius ");
+      return newStations;
+    }
   }
-  // }
-  // else {
-  // print(" i am a loser");
-  // }
-  // }
 }
