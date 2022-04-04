@@ -71,30 +71,34 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
   Future<String> _getGroup() async {
     var user = await _databaseManager.getByKey(
         'users', _databaseManager.getCurrentUser()!.uid);
-    groupID = user.data()!['group'];
-    return user.data()!['group'];
+    if (user.data() != null) {
+      groupID = user.data()!['group'];
+      return user.data()!['group'];
+    }
+    return "";
   }
 
   _setData() async {
     var owner;
     var user = await _databaseManager.getByKey(
         'users', _databaseManager.getCurrentUser()!.uid);
-    var hasGroup = user.data()!.keys.contains('group');
-    if (hasGroup) {
-      var group = await _databaseManager.getByEquality(
-          'group', 'code', user.data()!['group']);
-      owner = await _groupManager.getGroupOwnerRef(group);
-      pointsInDoubles = [];
-    }
-    setState(() {
-      isInGroup = hasGroup;
-      organiser = user.data()!['username'];
-      if (isInGroup && !cameFromSchedule) {
-        organiser = owner.data()!['username'];
+    if (user.data() != null) {
+      var hasGroup = user.data()!.keys.contains('group');
+      if (hasGroup) {
+        var group = await _databaseManager.getByEquality(
+            'group', 'code', user.data()!['group']);
+        owner = await _groupManager.getGroupOwnerRef(group);
+        pointsInDoubles = [];
       }
-    });
+      setState(() {
+        isInGroup = hasGroup;
+        organiser = user.data()!['username'];
+        if (isInGroup && !cameFromSchedule) {
+          organiser = owner.data()!['username'];
+        }
+      });
+    }
   }
-
   @visibleForTesting
   Future<void> createGroup() async {
     await _groupManager.createGroup(_itinerary);
@@ -104,21 +108,26 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
   }
 
   Future<void> leaveGroup() async {
-    var userID = _databaseManager.getCurrentUser()?.uid;
+    var userID = _databaseManager
+        .getCurrentUser()
+        ?.uid;
     var user = await _databaseManager.getByKey('users', userID!);
-    groupID = user.data()!['group'];
+    if (user.data() != null) {
+      groupID = user.data()!['group'];
 
-    var ownerID = await _groupManager.leaveGroup(groupID);
+      var ownerID = await _groupManager.leaveGroup(groupID);
 
-    if (ownerID == _databaseManager.getCurrentUser()?.uid) {
-    } else {
-      context.push(NavBar());
+      if (ownerID == _databaseManager
+          .getCurrentUser()
+          ?.uid) {} else {
+        context.push(NavBar());
+      }
+
+      setState(() {
+        isInGroup = false;
+        organiser = user.data()!['username'];
+      });
     }
-
-    setState(() {
-      isInGroup = false;
-      organiser = user.data()!['username'];
-    });
   }
 
   @override
@@ -214,7 +223,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
                   },
                 ),
               SizedBox(width: 10.0),
-              if (DateTime.now().isSameDate(_itinerary.date!))
+              if (_itinerary.date!= null && DateTime.now().isSameDate(_itinerary.date!))
                 ElevatedButton(
                   child: const Text('Start Journey'),
                   onPressed: () {
@@ -239,17 +248,20 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
   /// Generates timeline items for the planned stops.
   List<Widget> _generateStops() {
     List<Widget> stops = [];
-    for (int i = 0; i < _itinerary.docks!.length; i++) {
-      stops.add(
-        TimelineItem(
-          first: i == 0 ? true : false,
-          last: i == _itinerary.docks!.length - 1 ? true : false,
-          content: _itinerary.docks![i].name,
-          duration: paths[i].duration,
-          distance: paths[i].distance,
-          destination: _itinerary.myDestinations![i].toString(),
-        ),
-      );
+    if (_itinerary.docks != null) {
+      for (int i = 0; i < _itinerary.docks!.length; i++) {
+        stops.add(
+          TimelineItem(
+            first: i == 0 ? true : false,
+            last: i == _itinerary.docks!.length - 1 ? true : false,
+            content: _itinerary.docks![i].name,
+            duration: paths[i].duration,
+            distance: paths[i].distance,
+            destination: _itinerary.myDestinations![i].toString(),
+          ),
+        );
+      }
+
     }
     return stops;
   }

@@ -41,25 +41,29 @@ class _NavBarState extends State<NavBar> {
   void _isInAGroup() async {
     var user = await _databaseManager.getByKey(
         'users', _databaseManager.getCurrentUser()!.uid);
-    var hasGroup = user.data()!.keys.contains('group');
-    setState(() {
-      if (_isInGroup == null) {
-        _isInGroup = false;
-      } else {
-        _isInGroup = hasGroup;
-      }
-    });
+    if (user.data() != null) {
+      var hasGroup = user.data()!.keys.contains('group');
+      setState(() {
+        if (_isInGroup == null) {
+          _isInGroup = false;
+        } else {
+          _isInGroup = hasGroup;
+        }
+      });
+    }
   }
 
   _getGroupInfo() async {
     var user = await _databaseManager.getByKey(
         'users', _databaseManager.getCurrentUser()!.uid);
-    var group = await _databaseManager.getByEquality(
-        'group', 'code', user.data()!['group']);
+    if (user.data() != null) {
+      var group = await _databaseManager.getByEquality(
+          'group', 'code', user.data()!['group']);
 
-    var _itinerary = await _groupManager.getItineraryFromGroup(group);
+      var _itinerary = await _groupManager.getItineraryFromGroup(group);
 
-    context.push(SummaryJourneyScreen(_itinerary, false));
+      context.push(SummaryJourneyScreen(_itinerary, false));
+    }
   }
 
   @override
