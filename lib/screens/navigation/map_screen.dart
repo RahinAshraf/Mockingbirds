@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:veloplan/helpers/database_helpers/group_manager.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:veloplan/models/map_models/base_map_model.dart';
 import 'package:veloplan/helpers/database_helpers/database_manager.dart';
@@ -21,11 +22,16 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> {
   LatLng currentPosition = getLatLngFromSharedPrefs();
   late BaseMapboxMap _baseMap;
-  DatabaseManager _databaseManager = DatabaseManager();
+   DatabaseManager _databaseManager = DatabaseManager();
+late groupManager _groupManager;
+
+_MapPageState(){
+  _groupManager = groupManager(_databaseManager);
+  }
 
   @override
   void initState() {
-    _deleteOldGroup();
+    _groupManager.deleteOldGroup();
     super.initState();
   }
 
