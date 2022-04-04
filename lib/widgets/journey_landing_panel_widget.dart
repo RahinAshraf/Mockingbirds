@@ -60,11 +60,13 @@ class _JourneyLandingPanelWidget extends State<JourneyLandingPanelWidget> {
                         (BuildContext context, num distance, Widget? child) {
                       return Expanded(
                           child: Row(children: [
-                        ImageIcon(
-                          AssetImage("assets/images/bicycle.png"),
-                          color: Colors.black,
-                          size: 22,
-                        ),
+                        widget.baseMapWithUpdatedRoute.currentStation == 0
+                            ? Icon(Icons.directions_walk, size: 22, color: Colors.black,)
+                            : ImageIcon(
+                                AssetImage("assets/images/bicycle.png"),
+                                color: Colors.black,
+                                size: 22,
+                              ),
                         Text("Distance: ${distance}m",
                             style: journeyLandingTextStyle)
                       ]));
