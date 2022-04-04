@@ -39,19 +39,19 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
   final userID = FirebaseAuth.instance.currentUser!.uid;
 
   List<dynamic> _journeyPoints = [];
-  int _currentStation = 0;
+  int currentStation = 0;
   bool buttonPressed = true;
   dockingStationManager _dockManager = dockingStationManager();
   MapWithRouteUpdated(MapModel model, this.context, this._itinerary)
       : super(_itinerary, model) {
     _docks = _itinerary.docks!;
-    this.dockName.value = _itinerary.docks![_currentStation].name;
+    this.dockName.value = _itinerary.docks![currentStation].name;
     this._journey = convertDocksToLatLng(_itinerary.docks!)!;
     this.numberCyclists = _itinerary.numberOfCyclists!;
   }
 
   void checkAndUpdateDock() async {
-    if (_currentStation >= _journey.length) {
+    if (currentStation >= _journey.length) {
       print(
           "---------------------got into check and update checker-------------------");
       return;
@@ -59,15 +59,15 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
     print("---------------------dock checker-------------------");
 
     bool isDockFree = await _dockManager.checkDockWithAvailableSpace(
-        _docks[_currentStation], numberCyclists);
+        _docks[currentStation], numberCyclists);
 
     // bool isChecked = await _docks[0].checkDockWithAvailableSpace(_docks[0], 5);
     print("--------------------- checker FINISHED -------------------" +
         isDockFree.toString());
 
     if (!isDockFree) {
-      _docks[_currentStation] = _dockManager.getClosestDockWithAvailableSpace(
-          _journey[_currentStation], numberCyclists);
+      _docks[currentStation] = _dockManager.getClosestDockWithAvailableSpace(
+          _journey[currentStation], numberCyclists);
     }
   }
 
@@ -158,14 +158,14 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
       return;
     }
     double distance =
-        calculateDistance(currentPosition, _journey[_currentStation]);
+        calculateDistance(currentPosition, _journey[currentStation]);
     if (distance < 0.02) {
-      ++_currentStation;
-      if (_currentStation >= _journey.length) {
+      ++currentStation;
+      if (currentStation >= _journey.length) {
         isAtGoal = true;
         return;
       }
-      this.dockName.value = _itinerary.docks![_currentStation].name;
+      this.dockName.value = _itinerary.docks![currentStation].name;
     }
     // removePolylineMarkers(controller!, _journey, _polylineSymbols);
     removeMarkers(controller!, _polylineSymbols);
@@ -193,10 +193,10 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
 
   /// sets the next section of the bike route
   Future<void> _setRouteType() async {
-    if (_currentStation >= _journey.length) {
+    if (currentStation >= _journey.length) {
       return;
     }
-    if (_currentStation > 0) {
+    if (currentStation > 0) {
       await _setInitRoute(NavigationType.cycling);
     } else {
       await _setInitRoute(NavigationType.walking);
@@ -207,7 +207,7 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
   /// sets the route
   Future<void> _setInitRoute(NavigationType type) async {
     _routeResponse = await manager.getDirections(
-        currentPosition, _journey[_currentStation], type);
+        currentPosition, _journey[currentStation], type);
     //update local vars ---
     num distance = await manager.getDistance() as num;
     num duration = await manager.getDuration() as num;

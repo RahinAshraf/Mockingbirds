@@ -22,6 +22,7 @@ import 'package:veloplan/helpers/navigation_helpers/navigation_conversions_helpe
 import 'package:veloplan/popups.dart';
 import 'package:veloplan/helpers/database_helpers/history_helper.dart';
 import 'package:veloplan/widgets/panel_widget/panel_widget_exts.dart';
+import '../../helpers/database_helpers/database_manager.dart';
 
 /// Renders [PanelWidget] used in [JourneyPlanner] screen.
 ///
@@ -451,7 +452,7 @@ class PanelWidgetState extends State<PanelWidget> {
     tempList.addAll(staticListMap.values);
     tempList.addAll(widget.selectedCoords);
     List<LatLng>? points = convertListDoubleToLatLng(tempList);
-    HistoryHelper historyHelper = HistoryHelper();
+    HistoryHelper historyHelper = HistoryHelper(DatabaseManager());
     List<DockingStation> selectedDocks = dockMap.values.toList();
     Itinerary _itinerary = new Itinerary.navigation(
         selectedDocks, points, widget.numberOfCyclists);

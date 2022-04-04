@@ -51,10 +51,8 @@ class ConnectivityProvider extends ChangeNotifier {
         connectionExists = true;
       } else {
         connectionExists = false;
-        print("No Internet Connection");
       }
     } on SocketException catch (_) {
-      print("No Internet Connection");
       connectionExists = false;
     }
     return connectionExists;

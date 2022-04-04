@@ -5,7 +5,7 @@ import 'package:veloplan/widgets/textfield_widget.dart';
 import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 
 /// Screen for the editing current users's profile
-/// Author(s): Eduard Ragea k20067643
+/// Author(s): Eduard Ragea
 class EditProfile extends StatefulWidget {
   final Map<String, dynamic> data;
   const EditProfile(this.data, {Key? key}) : super(key: key);
