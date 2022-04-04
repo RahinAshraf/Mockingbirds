@@ -2,18 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:veloplan/screens/summary_journey_screen.dart';
-import '../../models/itinerary.dart';
+import 'package:veloplan/models/itinerary.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
-import '../../styles/colors.dart';
-import '../../styles/styling.dart';
-import '../../styles/texts.dart';
+import 'package:veloplan/styles/colors.dart';
+import 'package:veloplan/styles/styling.dart';
+import 'package:veloplan/styles/texts.dart';
 
 /// Suggester itineraries that contain biggest sights in London for under 30 min.
 /// from: https://londonblog.tfl.gov.uk/2019/11/05/santander-cycles-sightseeing/?intcmp=60245
 /// attributions to animators <a href="https://www.vecteezy.com/free-vector/london">London Vectors by Vecteezy</a>
 /// <a href="https://www.vecteezy.com/free-vector/london-bus">London Bus Vectors by Vecteezy</a>
 ///Author: Nicole Lehchevska
-///
 class SuggestedItinerary extends StatefulWidget {
   @override
   _SuggestedItineraryState createState() => _SuggestedItineraryState();
