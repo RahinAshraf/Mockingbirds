@@ -33,18 +33,19 @@ class _FavouriteState extends State<Favourite> {
             return SplashScreen();
           }
           return _favourites.isEmpty
-              ? Center(
+              ? Column(
                   key: Key("noFavourites"),
-                  child: Column(children: [
-                    SizedBox(height: 100),
-                    Image.asset('assets/images/favourites_sidebar.png',
-                        width: 170, height: 170),
-                    SizedBox(height: 40),
-                    Text(
-                      "You haven't added any favourites yet.",
-                      style: CustomTextStyles.sidebarTextStyle,
-                    )
-                  ]))
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                      Image.asset('assets/images/favourites_sidebar.png',
+                          width: 140, height: 140),
+                      SizedBox(height: 10),
+                      Text(
+                        "You haven't added any favourites yet.",
+                        style: CustomTextStyles.sidebarTextStyle,
+                        textAlign: TextAlign.center,
+                      )
+                    ])
               : Padding(
                   padding:
                       const EdgeInsets.only(top: 15.0, left: 15.0, right: 15.0),

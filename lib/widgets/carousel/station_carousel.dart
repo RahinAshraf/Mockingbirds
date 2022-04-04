@@ -44,30 +44,23 @@ class DockingStationCarousel {
         future: _selectFiltering(filter),
         builder: (context, snapshot) {
           var height = MediaQuery.of(context).size.height * 0.23;
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasData) {
-              if (snapshot.data!.length == 0) {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset('assets/images/bike.png', height: 100),
-                    SizedBox(height: 10),
-                    Text('Nothing to see here.',
-                        style: CustomTextStyles.placeholderText),
-                  ],
-                );
-              }
-              return Container(
-                alignment: Alignment.center,
-                height: height,
-                child: CustomCarousel(cards: dockingStationCards),
+          if (snapshot.connectionState == ConnectionState.done &&
+              snapshot.hasData) {
+            if (snapshot.data!.length == 0) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset('assets/images/bike.png', height: 100),
+                  SizedBox(height: 10),
+                  Text('Nothing to see here.',
+                      style: CustomTextStyles.placeholderText),
+                ],
               );
             } else {
               return Container(
                 alignment: Alignment.center,
                 height: height,
-                child: Text(
-                    'snapshot.hasError: ${snapshot.hasError}.\nThe error: ${snapshot.error}'),
+                child: CustomCarousel(cards: dockingStationCards),
               );
             }
           } else {
@@ -91,9 +84,10 @@ class DockingStationCarousel {
 
   /// Retrieves 10 filtered by distance cards closest to given [userCoordinates].
   Future<List<Widget>> _retrieve10FilteredByDistanceCards() async {
-    return _stationManager.importStationsByRadius(1000, userCoordinates!).then(
-        (value) => createDockingCards(
-            _stationManager.get10ClosestDocks(userCoordinates!)));
+    //! TODO Nicole
+    // return _stationManager.importStationsByRadius(1000, userCoordinates!).then(
+    return _stationManager.importStations().then((value) => createDockingCards(
+        _stationManager.get10ClosestDocks(userCoordinates!)));
   }
 
   /// Retrieve the filtered cards for edit dock. Get 10 cards that are the closest to the given location
