@@ -18,10 +18,6 @@ import 'package:veloplan/styles/styling.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
 import 'package:veloplan/widgets/dynamic_widget.dart';
 import 'package:veloplan/widgets/panel_widget/panel_widgets_base.dart';
-import '../../providers/location_service.dart';
-import '../../helpers/navigation_helpers/navigation_conversions_helpers.dart';
-import '../../models/docking_station.dart';
-import '../dynamic_widget.dart';
 import 'package:veloplan/helpers/navigation_helpers/navigation_conversions_helpers.dart';
 import 'package:veloplan/popups.dart';
 import 'package:veloplan/helpers/database_helpers/history_helper.dart';
@@ -239,6 +235,7 @@ class PanelWidgetState extends State<PanelWidget> {
             focusedBorder:
                 circularInputBorder(width: 2.0, color: CustomColors.green),
             suffixIcon: IconButton(
+              key: Key("myLocation"),
               onPressed: () {
                 _useCurrentLocationButtonHandler(
                     controller, label, isFrom, numberCyclists);
@@ -311,6 +308,7 @@ class PanelWidgetState extends State<PanelWidget> {
                 padding: EdgeInsets.all(0),
                 icon: const Icon(
                   Icons.arrow_back,
+                  key: Key("back"),
                   size: 25,
                   color: Colors.green,
                 ),
@@ -404,6 +402,7 @@ class PanelWidgetState extends State<PanelWidget> {
               SizedBox(
                 width: MediaQuery.of(context).size.width / 2,
                 child: ElevatedButton(
+                  key: Key("start"),
                   onPressed:
                       widget.isScheduled ? _handleSaveClick : _handleStartClick,
                   child: widget.isScheduled ? text("SAVE") : text("START"),

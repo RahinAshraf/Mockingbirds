@@ -1,5 +1,5 @@
 import "package:http/http.dart" as http;
-import '../models/weather.dart';
+import 'package:veloplan/models/weather.dart';
 import 'dart:convert';
 
 class WeatherManager {

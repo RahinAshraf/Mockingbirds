@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:math' as math;
 import 'dart:async';
 import 'package:flutter/material.dart';
@@ -240,6 +239,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
             },
             icon: const Icon(
               Icons.arrow_back_rounded,
+              key: Key("back"),
               size: 30,
               color: Colors.white,
             ),
