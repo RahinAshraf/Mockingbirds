@@ -30,22 +30,22 @@ class _FakeQuerySnapshot_1<T extends Object?> extends _i1.Fake
 class _FakeDocumentSnapshot_2<T extends Object?> extends _i1.Fake
     implements _i2.DocumentSnapshot<T> {}
 
-class _FakeUserMetadata_3 extends _i1.Fake implements _i3.UserMetadata {}
+class _FakeDocumentReference_3<T extends Object?> extends _i1.Fake
+    implements _i2.DocumentReference<T> {}
 
-class _FakeIdTokenResult_4 extends _i1.Fake implements _i3.IdTokenResult {}
+class _FakeUserMetadata_4 extends _i1.Fake implements _i3.UserMetadata {}
 
-class _FakeUserCredential_5 extends _i1.Fake implements _i3.UserCredential {}
+class _FakeIdTokenResult_5 extends _i1.Fake implements _i3.IdTokenResult {}
 
-class _FakeConfirmationResult_6 extends _i1.Fake
+class _FakeUserCredential_6 extends _i1.Fake implements _i3.UserCredential {}
+
+class _FakeConfirmationResult_7 extends _i1.Fake
     implements _i3.ConfirmationResult {}
 
-class _FakeUser_7 extends _i1.Fake implements _i3.User {}
+class _FakeUser_8 extends _i1.Fake implements _i3.User {}
 
-class _FakeFirebaseFirestore_8 extends _i1.Fake
+class _FakeFirebaseFirestore_9 extends _i1.Fake
     implements _i2.FirebaseFirestore {}
-
-class _FakeDocumentReference_9<T extends Object?> extends _i1.Fake
-    implements _i2.DocumentReference<T> {}
 
 class _FakeQuery_10<T extends Object?> extends _i1.Fake
     implements _i2.Query<T> {}
@@ -120,12 +120,14 @@ class MockDatabaseManager extends _i1.Mock implements _i4.DatabaseManager {
           returnValue: Future<void>.value(),
           returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
   @override
-  _i5.Future<void> addToCollection(
+  _i5.Future<_i2.DocumentReference<Map<String, dynamic>>> addToCollection(
           String? collection, Map<String, dynamic>? value) =>
       (super.noSuchMethod(
-          Invocation.method(#addToCollection, [collection, value]),
-          returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
+              Invocation.method(#addToCollection, [collection, value]),
+              returnValue:
+                  Future<_i2.DocumentReference<Map<String, dynamic>>>.value(
+                      _FakeDocumentReference_3<Map<String, dynamic>>()))
+          as _i5.Future<_i2.DocumentReference<Map<String, dynamic>>>);
   @override
   _i5.Future<void> addToSubCollection(
           _i2.CollectionReference<Object?>? subcollection,
@@ -197,7 +199,7 @@ class MockUser extends _i1.Mock implements _i3.User {
   @override
   _i3.UserMetadata get metadata =>
       (super.noSuchMethod(Invocation.getter(#metadata),
-          returnValue: _FakeUserMetadata_3()) as _i3.UserMetadata);
+          returnValue: _FakeUserMetadata_4()) as _i3.UserMetadata);
   @override
   List<_i3.UserInfo> get providerData =>
       (super.noSuchMethod(Invocation.getter(#providerData),
@@ -219,20 +221,20 @@ class MockUser extends _i1.Mock implements _i3.User {
           [bool? forceRefresh = false]) =>
       (super.noSuchMethod(Invocation.method(#getIdTokenResult, [forceRefresh]),
               returnValue:
-                  Future<_i3.IdTokenResult>.value(_FakeIdTokenResult_4()))
+                  Future<_i3.IdTokenResult>.value(_FakeIdTokenResult_5()))
           as _i5.Future<_i3.IdTokenResult>);
   @override
   _i5.Future<_i3.UserCredential> linkWithCredential(
           _i3.AuthCredential? credential) =>
       (super.noSuchMethod(Invocation.method(#linkWithCredential, [credential]),
               returnValue:
-                  Future<_i3.UserCredential>.value(_FakeUserCredential_5()))
+                  Future<_i3.UserCredential>.value(_FakeUserCredential_6()))
           as _i5.Future<_i3.UserCredential>);
   @override
   _i5.Future<_i3.UserCredential> linkWithPopup(_i6.AuthProvider? provider) =>
       (super.noSuchMethod(Invocation.method(#linkWithPopup, [provider]),
               returnValue:
-                  Future<_i3.UserCredential>.value(_FakeUserCredential_5()))
+                  Future<_i3.UserCredential>.value(_FakeUserCredential_6()))
           as _i5.Future<_i3.UserCredential>);
   @override
   _i5.Future<_i3.ConfirmationResult> linkWithPhoneNumber(String? phoneNumber,
@@ -240,7 +242,7 @@ class MockUser extends _i1.Mock implements _i3.User {
       (super.noSuchMethod(
               Invocation.method(#linkWithPhoneNumber, [phoneNumber, verifier]),
               returnValue: Future<_i3.ConfirmationResult>.value(
-                  _FakeConfirmationResult_6()))
+                  _FakeConfirmationResult_7()))
           as _i5.Future<_i3.ConfirmationResult>);
   @override
   _i5.Future<_i3.UserCredential> reauthenticateWithCredential(
@@ -248,7 +250,7 @@ class MockUser extends _i1.Mock implements _i3.User {
       (super.noSuchMethod(
               Invocation.method(#reauthenticateWithCredential, [credential]),
               returnValue:
-                  Future<_i3.UserCredential>.value(_FakeUserCredential_5()))
+                  Future<_i3.UserCredential>.value(_FakeUserCredential_6()))
           as _i5.Future<_i3.UserCredential>);
   @override
   _i5.Future<void> reload() =>
@@ -265,7 +267,7 @@ class MockUser extends _i1.Mock implements _i3.User {
   @override
   _i5.Future<_i3.User> unlink(String? providerId) =>
       (super.noSuchMethod(Invocation.method(#unlink, [providerId]),
-              returnValue: Future<_i3.User>.value(_FakeUser_7()))
+              returnValue: Future<_i3.User>.value(_FakeUser_8()))
           as _i5.Future<_i3.User>);
   @override
   _i5.Future<void> updateEmail(String? newEmail) =>
@@ -330,7 +332,7 @@ class MockCollectionReference<T extends Object?> extends _i1.Mock
   @override
   _i2.FirebaseFirestore get firestore =>
       (super.noSuchMethod(Invocation.getter(#firestore),
-          returnValue: _FakeFirebaseFirestore_8()) as _i2.FirebaseFirestore);
+          returnValue: _FakeFirebaseFirestore_9()) as _i2.FirebaseFirestore);
   @override
   Map<String, dynamic> get parameters =>
       (super.noSuchMethod(Invocation.getter(#parameters),
@@ -339,12 +341,12 @@ class MockCollectionReference<T extends Object?> extends _i1.Mock
   _i5.Future<_i2.DocumentReference<T>> add(T? data) =>
       (super.noSuchMethod(Invocation.method(#add, [data]),
               returnValue: Future<_i2.DocumentReference<T>>.value(
-                  _FakeDocumentReference_9<T>()))
+                  _FakeDocumentReference_3<T>()))
           as _i5.Future<_i2.DocumentReference<T>>);
   @override
   _i2.DocumentReference<T> doc([String? path]) => (super.noSuchMethod(
       Invocation.method(#doc, [path]),
-      returnValue: _FakeDocumentReference_9<T>()) as _i2.DocumentReference<T>);
+      returnValue: _FakeDocumentReference_3<T>()) as _i2.DocumentReference<T>);
   @override
   _i2.CollectionReference<R> withConverter<R extends Object?>(
           {_i2.FromFirestore<R>? fromFirestore,
@@ -491,7 +493,7 @@ class MockDocumentReference<T extends Object?> extends _i1.Mock
   @override
   _i2.FirebaseFirestore get firestore =>
       (super.noSuchMethod(Invocation.getter(#firestore),
-          returnValue: _FakeFirebaseFirestore_8()) as _i2.FirebaseFirestore);
+          returnValue: _FakeFirebaseFirestore_9()) as _i2.FirebaseFirestore);
   @override
   String get id =>
       (super.noSuchMethod(Invocation.getter(#id), returnValue: '') as String);
@@ -545,6 +547,6 @@ class MockDocumentReference<T extends Object?> extends _i1.Mock
       (super.noSuchMethod(
               Invocation.method(#withConverter, [],
                   {#fromFirestore: fromFirestore, #toFirestore: toFirestore}),
-              returnValue: _FakeDocumentReference_9<R>())
+              returnValue: _FakeDocumentReference_3<R>())
           as _i2.DocumentReference<R>);
 }
