@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:veloplan/utilities/enums.dart/location_enums.dart';
+import 'package:veloplan/utilities/enums/location_enums.dart';
 
 /// Handles location permission statuses for the live location of the user
 /// Author: Rahin Ashraf

@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:geocode/geocode.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/providers/route_manager.dart';
-import 'package:veloplan/utilities/enums.dart/travel_type.dart';
+import 'package:veloplan/utilities/enums/travel_type.dart';
 
 /// Unit tests for route_manager.dart and travel_type.dart
 /// Author: Fariha Choudhury k20059723

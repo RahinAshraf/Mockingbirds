@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
-import 'package:veloplan/utilities/enums.dart/location_enums.dart';
+import 'package:veloplan/utilities/enums/location_enums.dart';
 import 'package:veloplan/utilities/permissions.dart';
 import '../screens/reopen_app_screen.dart';
 
