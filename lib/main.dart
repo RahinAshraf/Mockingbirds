@@ -2,10 +2,12 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:veloplan/alerts.dart';
 import 'package:veloplan/helpers/live_location_helper.dart';
 import 'package:veloplan/navbar.dart';
+import 'package:veloplan/providers/connectivity_provider.dart';
 import 'package:veloplan/screens/auth_screen.dart';
 import 'package:veloplan/screens/splash_screen.dart';
 import 'package:veloplan/screens/verify_email_screen.dart';
@@ -13,8 +15,11 @@ import 'package:veloplan/styles/theme.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:veloplan/utilities/enums.dart/connectivity_status_enums.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
+import 'package:veloplan/utilities/enums.dart/location_enums.dart';
 import 'package:veloplan/utilities/permissions.dart';
+import 'package:veloplan/widgets/connection_error_widget.dart';
 import 'package:veloplan/widgets/location_permission_error.dart';
 import 'package:flutter/services.dart';
 
@@ -29,16 +34,27 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-  runApp(ScopedModel<MapModel>(
-      model: _model,
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        initialRoute: '/',
-        routes: {
-          '/': (context) => const MyApp(),
-          '/map': (context) => NavBar()
-        },
-      )));
+  runApp(
+    ChangeNotifierProvider(
+        create: (context) => ConnectivityProvider(),
+        child: Consumer<ConnectivityProvider>(
+            builder: (context, connectivityProvider, child) {
+          return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              home: connectivityProvider.connectionStatus !=
+                      ConnectivityStatus.Offline
+                  ? ScopedModel<MapModel>(
+                      model: _model,
+                      child: MaterialApp(
+                        initialRoute: '/',
+                        routes: {
+                          '/': (context) => const MyApp(),
+                          '/map': (context) => NavBar()
+                        },
+                      ))
+                  : const ConnectionError());
+        })),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -60,6 +76,7 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  /// Request permission for user's current location
   void requestPermission() {
     if (mounted) {
       PermissionUtils.instance.getLocation(context).listen((status) {

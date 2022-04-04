@@ -1,13 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import '../widgets/profile/profile_widget.dart';
-import '../widgets/textfield_widget.dart';
-import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 import 'package:veloplan/widgets/profile/profile_widget.dart';
 import 'package:veloplan/widgets/textfield_widget.dart';
+import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 
 /// Screen for the editing current users's profile
-/// Author(s): Eduard Ragea k20067643
+/// Author(s): Eduard Ragea
 class EditProfile extends StatefulWidget {
   final Map<String, dynamic> data;
   const EditProfile(this.data, {Key? key}) : super(key: key);
@@ -100,6 +98,7 @@ class _EditProfileState extends State<EditProfile> {
       },
       child: Scaffold(
         appBar: AppBar(
+          key: Key("appBarNameEditProfile"),
           backgroundColor: Colors.white,
           foregroundColor: Colors.green,
           elevation: 0,
@@ -113,6 +112,7 @@ class _EditProfileState extends State<EditProfile> {
                 },
                 child: const Icon(
                   Icons.check,
+                  key: Key("confirmEditProfile"),
                   size: 26.0,
                   color: Colors.green,
                 ),
@@ -128,6 +128,7 @@ class _EditProfileState extends State<EditProfile> {
             ProfileWidget(widget.data['image_url'], () async {}, true),
             const SizedBox(height: 24),
             TextFieldWidget(
+              key: Key("firstNameEditP"),
               label: 'First Name',
               text: widget.data['firstName'],
               onChanged: (firstName) {
@@ -136,6 +137,7 @@ class _EditProfileState extends State<EditProfile> {
             ),
             const SizedBox(height: 24),
             TextFieldWidget(
+              key: Key("lastNameEditP"),
               label: 'Last Name',
               text: widget.data['lastName'],
               onChanged: (lastName) {
@@ -144,6 +146,7 @@ class _EditProfileState extends State<EditProfile> {
             ),
             const SizedBox(height: 24),
             TextFieldWidget(
+              key: Key("usernameNameEditP"),
               label: 'Username',
               text: widget.data['username'],
               onChanged: (username) {

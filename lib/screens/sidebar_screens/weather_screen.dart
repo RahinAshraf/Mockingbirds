@@ -41,6 +41,7 @@ class _WeatherPageState extends State<WeatherPage> {
     return Scaffold(
       backgroundColor: whiteReplacement,
       appBar: AppBar(
+        leading: BackButton(key: Key("back"), color: Colors.white),
         title: const Text('Weather'),
       ),
       body: SafeArea(
@@ -48,51 +49,56 @@ class _WeatherPageState extends State<WeatherPage> {
           children: [
             const SizedBox(height: 30),
             SizedBox(
-                // height: 150.0,
-                // width: 150.0,
+                key: Key("weatherIcon"),
                 child: Center(
-              child: Image.network(
-                //late problem sort it
-                'http://openweathermap.org/img/w/${weather.current_icon}.png',
-                scale: 0.3,
-              ),
-            )),
-            Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              SizedBox(height: 50),
-              Text(
-                weather.current_description,
-                style: weatherTextStyle,
-              ),
-              Text(
-                "Temperature: " +
-                    weather.getCurrentWeatherTemp().toInt().toString() +
-                    "C",
-                style: weatherTextStyle,
-              ),
-              Text(
-                "Feels like: " +
-                    weather
-                        .getCurrentFeelsLikeTemp()
-                        .roundToDouble()
-                        .toString() +
-                    "C",
-                style: weatherTextStyle,
-              ),
-              const SizedBox(height: 30),
-              Text(
-                "Clouds: " + weather.getCurrentClouds().toString(),
-                style: weatherTextStyle,
-              ),
-              Text(
-                "Visibility: " + weather.getCurrentVisibility().toString(),
-                style: weatherTextStyle,
-              ),
-              Text(
-                "Wind speed: " +
-                    weather.getCurrentWindSpeed().roundToDouble().toString(),
-                style: weatherTextStyle,
-              ),
-            ]),
+                  child: Image.network(
+                    //late problem sort it
+                    'http://openweathermap.org/img/w/${weather.current_icon}.png',
+                    scale: 0.3,
+                  ),
+                )),
+            Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                key: Key("weatnerInfo"),
+                children: [
+                  SizedBox(height: 50),
+                  Text(
+                    weather.current_description,
+                    style: weatherTextStyle,
+                  ),
+                  Text(
+                    "Temperature: " +
+                        weather.getCurrentWeatherTemp().toInt().toString() +
+                        "C",
+                    style: weatherTextStyle,
+                  ),
+                  Text(
+                    "Feels like: " +
+                        weather
+                            .getCurrentFeelsLikeTemp()
+                            .roundToDouble()
+                            .toString() +
+                        "C",
+                    style: weatherTextStyle,
+                  ),
+                  const SizedBox(height: 30),
+                  Text(
+                    "Clouds: " + weather.getCurrentClouds().toString(),
+                    style: weatherTextStyle,
+                  ),
+                  Text(
+                    "Visibility: " + weather.getCurrentVisibility().toString(),
+                    style: weatherTextStyle,
+                  ),
+                  Text(
+                    "Wind speed: " +
+                        weather
+                            .getCurrentWindSpeed()
+                            .roundToDouble()
+                            .toString(),
+                    style: weatherTextStyle,
+                  ),
+                ]),
           ],
         ),
       ),

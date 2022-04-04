@@ -3,7 +3,7 @@ import 'package:veloplan/providers/location_service.dart';
 import 'package:veloplan/screens/journey_planner_screen.dart';
 import 'package:veloplan/styles/colors.dart';
 
-/// Author(s): Rahin Ashraf - k20034059
+/// Author(s): Rahin Ashraf
 class PlaceSearchScreen extends StatefulWidget {
   late LocationService locService;
   bool? isPop;
@@ -31,7 +31,7 @@ class PlaceSearchScreenState extends State<PlaceSearchScreen> {
                 decoration: InputDecoration(
                   prefixIcon: IconButton(
                     icon: Icon(Icons.arrow_back_rounded,
-                        color: CustomColors.green),
+                        key: Key("back"), color: CustomColors.green),
                     onPressed: () {
                       if (widget.isPop ?? false) {
                         Navigator.pop(context);

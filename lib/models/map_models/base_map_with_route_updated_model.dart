@@ -14,46 +14,44 @@ import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/helpers/live_location_helper.dart';
-import 'package:veloplan/utilities/travel_type.dart';
-import '../docking_station.dart';
+import 'package:veloplan/utilities/enums.dart/travel_type.dart';
+import 'package:veloplan/models/docking_station.dart';
 
 /// Map screen focused on a user's live location
 /// Author(s): Elisabeth Halvorsen k20077737
 /// Contributor(s): Eduard Ragea k20067643
-
 class MapWithRouteUpdated extends BaseMapboxRouteMap {
   late List<LatLng> _journey;
   late List<DockingStation> _docks;
   final Itinerary _itinerary;
   final BuildContext context;
   late int numberCyclists;
-  // Timer? timer;
   final Set<Symbol> _polylineSymbols = {};
   bool isAtGoal = false;
   bool firstLoactionCompleted = true;
   late Map<dynamic, dynamic> _routeResponse;
+  Timer? timer;
 
-  //TODO: Marija attributes for distance, duration and dock name should be presented on the screen
-  num distance = 0;
-  num duration = 0;
-  String dockName = "";
+  ValueNotifier<num> distance = ValueNotifier(0);
+  ValueNotifier<num> duration = ValueNotifier(0);
+  ValueNotifier<String> dockName = ValueNotifier("");
 
   final userID = FirebaseAuth.instance.currentUser!.uid;
 
   List<dynamic> _journeyPoints = [];
-  int _currentStation = 0;
+  int currentStation = 0;
   bool buttonPressed = true;
   dockingStationManager _dockManager = dockingStationManager();
   MapWithRouteUpdated(MapModel model, this.context, this._itinerary)
       : super(_itinerary, model) {
     _docks = _itinerary.docks!;
-    this.dockName = _itinerary.docks![_currentStation].name;
+    this.dockName.value = _itinerary.docks![currentStation].name;
     this._journey = convertDocksToLatLng(_itinerary.docks!)!;
     this.numberCyclists = _itinerary.numberOfCyclists!;
   }
 
   void checkAndUpdateDock() async {
-    if (_currentStation >= _journey.length) {
+    if (currentStation >= _journey.length) {
       print(
           "---------------------got into check and update checker-------------------");
       return;
@@ -61,15 +59,15 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
     print("---------------------dock checker-------------------");
 
     bool isDockFree = await _dockManager.checkDockWithAvailableSpace(
-        _docks[_currentStation], numberCyclists);
+        _docks[currentStation], numberCyclists);
 
     // bool isChecked = await _docks[0].checkDockWithAvailableSpace(_docks[0], 5);
     print("--------------------- checker FINISHED -------------------" +
         isDockFree.toString());
 
     if (!isDockFree) {
-      _docks[_currentStation] = _dockManager.getClosestDockWithAvailableSpace(
-          _journey[_currentStation], numberCyclists);
+      _docks[currentStation] = _dockManager.getClosestDockWithAvailableSpace(
+          _journey[currentStation], numberCyclists);
     }
   }
 
@@ -94,7 +92,7 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
   /// Initialize periodic timer for updating location and camera position
   /// Calculate and store the distance travelled between timer steps on the device
   void updateLocationAndCameraTimer() {
-    timer = Timer.periodic(Duration(seconds: 10), (Timer t) async {
+    timer = Timer.periodic(Duration(seconds: 1), (Timer t) async {
       if (isAtGoal) {
         t.cancel();
       }
@@ -110,11 +108,11 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
 
   /// Initialize periodic timer to update the route displayed
   void updateRouteTimer() {
-    timer = Timer.periodic(Duration(seconds: 15), (Timer t) {
+    timer = Timer.periodic(Duration(seconds: 30), (Timer t) async {
       if (isAtGoal) {
         t.cancel();
       }
-      updateRoute();
+      await updateRoute();
     });
   }
 
@@ -127,7 +125,7 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
 
   /// Initialize periodic timer to check if it's necessary to redirect to another docking station
   void updateDockTimer() {
-    timer = Timer.periodic(Duration(seconds: 15), (Timer t) {
+    timer = Timer.periodic(Duration(minutes: 5), (Timer t) {
       if (isAtGoal) {
         t.cancel();
       }
@@ -152,7 +150,7 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
   }
 
   /// Update route
-  void updateRoute() {
+  Future updateRoute() async {
     print(
         "---------------_______________------------------updating route to navbar _________________--------");
     if (isAtGoal) {
@@ -160,15 +158,14 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
       return;
     }
     double distance =
-        calculateDistance(currentPosition, _journey[_currentStation]);
-    if (distance < 0.01) {
-      ++_currentStation;
-      if (_currentStation >= _journey.length) {
-        print("we got to the goal!!!");
+        calculateDistance(currentPosition, _journey[currentStation]);
+    if (distance < 0.02) {
+      ++currentStation;
+      if (currentStation >= _journey.length) {
         isAtGoal = true;
         return;
       }
-      this.dockName = _itinerary.docks![_currentStation].name;
+      this.dockName.value = _itinerary.docks![currentStation].name;
     }
     // removePolylineMarkers(controller!, _journey, _polylineSymbols);
     removeMarkers(controller!, _polylineSymbols);
@@ -184,7 +181,7 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
   }
 
   /// set the route
-  void setRoute() async {
+  Future setRoute() async {
     _journeyPoints = [];
     await _setRouteType();
     manager.setDistance(_routeResponse['distance'].toDouble());
@@ -196,31 +193,34 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
 
   /// sets the next section of the bike route
   Future<void> _setRouteType() async {
-    if (_currentStation >= _journey.length) {
+    if (currentStation >= _journey.length) {
       return;
     }
-    if (_currentStation > 0) {
+    if (currentStation > 0) {
       await _setInitRoute(NavigationType.cycling);
     } else {
       await _setInitRoute(NavigationType.walking);
     }
     manager.setGeometry(_routeResponse['geometry']);
-    print("set bike route done");
   }
 
   /// sets the route
   Future<void> _setInitRoute(NavigationType type) async {
-    print("current station num:" + _currentStation.toString());
     _routeResponse = await manager.getDirections(
-        currentPosition, _journey[_currentStation], type);
+        currentPosition, _journey[currentStation], type);
     //update local vars ---
     num distance = await manager.getDistance() as num;
     num duration = await manager.getDuration() as num;
     for (dynamic a in _routeResponse['geometry']!['coordinates']) {
       _journeyPoints.add(a);
     }
-    this.distance = distance;
-    this.duration = duration;
+    final prefDistance = sharedPreferences.getDouble('distance');
+    sharedPreferences.setDouble(
+        'distance',
+        (prefDistance ?? 0) +
+            (this.distance.value - distance).abs().toDouble());
+    this.distance.value = distance;
+    this.duration.value = duration;
     _routeResponse['geometry'].update("coordinates", (value) => _journeyPoints);
   }
 

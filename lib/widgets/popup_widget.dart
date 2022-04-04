@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:veloplan/styles/styling.dart';
-import 'package:veloplan/utilities/alert_type.dart';
-
-import '../models/weather.dart';
+import 'package:veloplan/utilities/enums.dart/alert_type.dart';
 
 /// Creates a generic popup widget.
 ///
@@ -11,14 +9,18 @@ import '../models/weather.dart';
 ///
 /// This widget has [type] property of [AlertType]. It determines the
 /// image that should be rendered for the widget.
+///
+/// Author(s) Marija
 class PopupWidget extends StatelessWidget {
-  PopupWidget(
-      {required this.title,
-      required this.text,
-      required this.children,
-      required this.type,
-      });
+  PopupWidget({
+    required this.key,
+    required this.title,
+    required this.text,
+    required this.children,
+    required this.type,
+  });
 
+  final Key key;
   final String title;
   final String text;
   final List<PopupButtonWidget> children;

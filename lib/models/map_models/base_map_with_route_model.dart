@@ -1,16 +1,14 @@
 import 'dart:async';
-
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:tuple/tuple.dart';
 import 'package:veloplan/helpers/navigation_helpers/navigation_conversions_helpers.dart';
 import 'package:veloplan/helpers/navigation_helpers/navigation_helpers.dart';
-import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:veloplan/models/itinerary.dart';
 import 'package:veloplan/providers/route_manager.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:veloplan/models/map_models/base_map_model.dart';
 import 'package:veloplan/helpers/navigation_helpers/map_drawings.dart';
-import 'package:veloplan/utilities/travel_type.dart';
+import 'package:veloplan/utilities/enums.dart/travel_type.dart';
 
 /// Class to display a mapbox map with a route and other possible widgets
 /// Author(s): Fariha Choudhury k20059723, Elisabeth Koren Halvorsen k20077737

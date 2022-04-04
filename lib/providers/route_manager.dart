@@ -2,7 +2,7 @@ import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:veloplan/.env.dart';
-import 'package:veloplan/utilities/travel_type.dart';
+import 'package:veloplan/utilities/enums.dart/travel_type.dart';
 
 /// Route provider for fetching journey details from the  Mapbox directions API
 /// Author(s): Fariha Choudhury k20059723, Elisabeth Halvorsen k20077737
@@ -33,15 +33,11 @@ class RouteManager {
     if (type.isEmpty) {
       return null;
     }
-    print("SOUR: " + source.toString());
-    print("DEST: " + destination.toString());
     String url =
         '$_baseUrl/$type/${source.longitude},${source.latitude};${destination.longitude},${destination.latitude}?alternatives=true&continue_straight=true&geometries=geojson&language=en&overview=full&steps=true&access_token=$_accessToken';
-    print(url);
     try {
       _dio.options.contentType = Headers.jsonContentType;
       final responseData = await _dio.get(url);
-      print(responseData);
       return responseData.data;
     } catch (e) {
       final errorMessage = e.toString();

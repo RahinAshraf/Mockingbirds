@@ -9,7 +9,7 @@ import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/providers/location_service.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:veloplan/.env.dart';
-import '../../screens/journey_planner_screen.dart';
+import 'package:veloplan/screens/journey_planner_screen.dart';
 import 'package:veloplan/widgets/docking_station_widget.dart';
 
 /// Class to display a mapbox map with other possible widgets on top
@@ -27,7 +27,6 @@ class BaseMapboxMap {
   late MapboxMapController? controller;
   late Symbol? selectedSymbol;
   bool recenter = true;
-  late Timer timer;
   // late final bool _useLiveLocation;
 
   late final StreamController<MapPlace>? address;
@@ -65,7 +64,9 @@ class BaseMapboxMap {
   Future<void> updateCurrentLocation() async {
     Location newCurrentLocation = Location();
     LocationData _newLocationData = await newCurrentLocation.getLocation();
-    // sharedPreferences.clear();
+    final distanceTravelled = sharedPreferences.getDouble('distance');
+    sharedPreferences.clear();
+    sharedPreferences.setDouble('distance', distanceTravelled ?? 0);
     sharedPreferences.setDouble('latitude', _newLocationData.latitude!);
     sharedPreferences.setDouble('longitude', _newLocationData.longitude!);
     currentPosition =
@@ -113,6 +114,7 @@ class BaseMapboxMap {
   /// Initialises map with live location
   void setMap() {
     map = MapboxMap(
+      key: Key("map"),
       accessToken: accessToken,
       initialCameraPosition: cameraPosition,
       onMapCreated: onMapCreated,

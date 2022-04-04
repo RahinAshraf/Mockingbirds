@@ -1,8 +1,7 @@
 import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart'
     as LatLong;
 import 'package:veloplan/models/docking_station.dart';
-
-import '../providers/location_service.dart';
+import 'package:veloplan/providers/location_service.dart';
 
 /// A class useful for creating a common path between two points, a point and a docking station, docking station and a docking station. It stores the durations and distances
 /// and updates them when called with the path provider
