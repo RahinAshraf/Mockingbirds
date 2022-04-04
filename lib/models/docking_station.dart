@@ -42,7 +42,7 @@ class DockingStation {
   DockingStation.map(DocumentSnapshot document, DockingStation tempDock) {
     _documentId = document.id;
     _stationId = document.get('stationId');
-    _name = document.get('name');
+    _name = tempDock.name;
     //dockmanager check station spaces
     _numberOfBikes = tempDock.numberOfBikes;
     _numberOfEmptyDocks = tempDock.numberOfEmptyDocks;

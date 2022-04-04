@@ -43,7 +43,7 @@ main() {
   });
 
   test('Toggling favourited docking station deletes it from database', () {
-    helper.toggleFavourite("bikepoints1", "limehouse", favouriteList);
+    helper.toggleFavourite("bikepoints1", favouriteList);
 
     (verify(mockDBManager.deleteDocument(
             favouritesReference, station1.documentId))
@@ -56,7 +56,7 @@ main() {
   });
 
   test('Toggling new docking station adds to database', () async {
-    helper.toggleFavourite("bikepoints3", "london bridge", favouriteList);
+    helper.toggleFavourite("bikepoints3", favouriteList);
 
     (verifyNever(mockDBManager.deleteDocument(favouritesReference, any)));
 
@@ -66,7 +66,7 @@ main() {
     })).called(1));
   });
   test('Add to favourites correctly calls the database', () {
-    helper.addFavourite("new station id", "new name");
+    helper.addFavourite("new station id");
     (verify(mockDBManager.addToSubCollection(favouritesReference, {
       'stationId': "new station id",
       'name': "new name",

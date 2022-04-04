@@ -14,7 +14,7 @@ class Favourite extends StatefulWidget {
 
 class _FavouriteState extends State<Favourite> {
   late List<DockingStation> _favourites;
-  var _helper = FavouriteHelper(DatabaseManager());
+  var _favouriteHelper = FavouriteHelper(DatabaseManager());
 
   @override
   void initState() {
@@ -22,7 +22,7 @@ class _FavouriteState extends State<Favourite> {
   }
 
   Future<List<DockingStation>> setFavourites() async {
-    this._favourites = await _helper.getUserFavourites();
+    this._favourites = await _favouriteHelper.getUserFavourites();
     return _favourites;
   }
 
@@ -33,8 +33,7 @@ class _FavouriteState extends State<Favourite> {
         future: setFavourites(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return SplashScreen(); //replace with our splash screen
-
+            return SplashScreen();
           }
           return _favourites.isEmpty
               ? const Center(child: Text("You haven't added any favourites."))

@@ -36,12 +36,6 @@ class HistoryHelper {
     });
   }
 
-  ///Calculates the current date and adds as a field to journey
-  // Future<void> addJourneyTime(journeyDocumentId) {
-  //   final DateTime timeNow = DateTime.now();
-  //   return _journeys.doc(journeyDocumentId).set({'date': timeNow});
-  // }
-
   Future<void> addJourneyTime(journeyDocumentId) {
     final DateTime timeNow = DateTime.now();
     return _databaseManager.setSubCollectionByDocumentId(
@@ -55,11 +49,6 @@ class HistoryHelper {
   Future<List<DockingStation>> getDockingStationsInJourney(
       journeyDocumentId) async {
     List<DockingStation> stationsInJourney = [];
-
-    // var list = await _journeys
-    //     .doc(journeyDocumentId)
-    //     .collection('docking_stations')
-    //     .get();
 
     var list = await _databaseManager.getDocumentsFromSubCollection(
       _journeys,
