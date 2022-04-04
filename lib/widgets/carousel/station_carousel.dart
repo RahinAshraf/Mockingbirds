@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart';
+import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 import 'package:veloplan/helpers/database_helpers/favourite_helper.dart';
 import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
@@ -17,6 +18,7 @@ class DockingStationCarousel {
   late List<Widget> dockingStationCards = [];
   List<Map> carouselData = [];
   LatLng? userCoordinates;
+  final _helper = FavouriteHelper(DatabaseManager()); //change name
 
   /// Generates [dockingStationCards] from the data in [docks].
   List<Widget> createDockingCards(List<DockingStation> docks) {
@@ -94,10 +96,12 @@ class DockingStationCarousel {
             _stationManager.get10ClosestDocks(userCoordinates!)));
   }
 
-  /// Retrieves 10 (or less) favourited cards closest to given [userCoordinates].
+  /// Retrieve the filtered cards for edit dock. Get 10 cards that are the closest to the given location
   Future<List<Widget>> _retrieve10FilteredFavouritesCards() async {
-    return await FavouriteHelper.getUserFavourites().then((value) =>
-        createDockingCards(
-            _stationManager.get10ClosestDocksFav(userCoordinates!, value)));
+    List<DockingStation> favourites = [];
+    favourites = await _helper.getUserFavourites();
+    final dockingStationManager _stationManager = dockingStationManager();
+    return createDockingCards(
+        _stationManager.get10ClosestDocksFav(userCoordinates!, favourites));
   }
 }

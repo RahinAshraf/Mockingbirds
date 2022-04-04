@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:tuple/tuple.dart';
 import 'package:veloplan/helpers/navigation_helpers/navigation_conversions_helpers.dart';

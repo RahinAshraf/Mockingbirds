@@ -6,14 +6,16 @@ import 'package:veloplan/helpers/database_helpers/favourite_helper.dart';
 import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
 
+import '../helpers/database_helpers/database_manager.dart';
+
 /// Creates a card for a docking station, to include its name, number of bikes and empty bikes.
 /// Author: Tayyibah Uddin
 /// Contributors: Fariha, Nicole, Hristina, Marija
 class DockingStationCard extends StatefulWidget {
-  late DockingStation dockTemp;
+  late DockingStation dock;
 
   DockingStationCard.station(DockingStation station) {
-    this.dockTemp = station;
+    this.dock = station;
   }
 
   @override
@@ -21,28 +23,25 @@ class DockingStationCard extends StatefulWidget {
 }
 
 class _DockingStationCardState extends State<DockingStationCard> {
-  final _helper = FavouriteHelper();
-  var _manager = dockingStationManager();
+  final _helper = FavouriteHelper(DatabaseManager());
   List<DockingStation> _favourites = [];
   bool _isFavouriteButtonEnabled = true;
-  bool _isFavourited = false;
+  var _manager = dockingStationManager();
 
   @override
   void initState() {
-    FavouriteHelper.getUserFavourites().then((data) {
+    _helper.getUserFavourites().then((data) {
       if (mounted)
         setState(() {
           _favourites = data;
-          _isFavourited = _helper.isFavouriteStation(
-              widget.dockTemp.stationId, _favourites);
         });
     });
 
-    // makes an API call with dock id and updates the info about the dock
-    _manager.checkStation(widget.dockTemp).then((value) {
+    // Makes an API call using docking station ID to update information about the dock
+    _manager.checkStation(widget.dock).then((value) {
       if (mounted)
         setState(() {
-          widget.dockTemp.assign(value);
+          widget.dock.assign(value);
         });
     });
     super.initState();
@@ -51,7 +50,8 @@ class _DockingStationCardState extends State<DockingStationCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 1,
+      key: Key("dockCard"),
+      elevation: 1.0,
       color: Colors.white,
       shadowColor: CustomColors.green,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
@@ -67,12 +67,11 @@ class _DockingStationCardState extends State<DockingStationCard> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    widget.dockTemp.name,
+                    widget.dock.name,
                     style: CustomTextStyles.dockingStationCardNameStyle,
                     textAlign: TextAlign.center,
                   ),
                   Divider(
-                    color: CustomColors.green,
                     thickness: 3,
                   ),
                   Row(
@@ -81,12 +80,12 @@ class _DockingStationCardState extends State<DockingStationCard> {
                       Row(
                         children: [
                           ImageIcon(
-                            AssetImage("assets/images/dock.png"),
+                            AssetImage("assets/images/logo.png"),
                             color: CustomColors.green,
                             size: 30,
                           ),
                           Text(
-                            'Bikes: ${widget.dockTemp.numberOfBikes.toString()}',
+                            'Bikes: ${widget.dock.numberOfBikes.toString()}',
                             style: CustomTextStyles.dockingStationCardTextStyle,
                           ),
                         ],
@@ -94,12 +93,12 @@ class _DockingStationCardState extends State<DockingStationCard> {
                       Row(
                         children: [
                           ImageIcon(
-                            AssetImage("assets/images/logo.png"),
+                            AssetImage("assets/images/dock.png"),
                             color: CustomColors.green,
                             size: 30,
                           ),
                           Text(
-                            'Spaces: ${widget.dockTemp.numberOfEmptyDocks.toString()}',
+                            'Spaces: ${widget.dock.numberOfEmptyDocks.toString()}',
                             style: CustomTextStyles.dockingStationCardTextStyle,
                           ),
                         ],
@@ -118,25 +117,30 @@ class _DockingStationCardState extends State<DockingStationCard> {
   /// Returns favourite button.
   IconButton _buildFaveButton() {
     return IconButton(
-      icon:
-          Icon(Icons.favorite, color: _isFavourited ? Colors.red : Colors.grey),
+      icon: getFaveButtonColours(),
       onPressed: () async {
         if (_isFavouriteButtonEnabled) {
           _disableFavButton();
 
           _helper.toggleFavourite(
-            widget.dockTemp.stationId,
-            widget.dockTemp.name,
-          );
+              widget.dock.stationId, await _helper.getUserFavourites());
 
           List<DockingStation> updatedFavourites =
-              await FavouriteHelper.getUserFavourites();
+              await _helper.getUserFavourites();
           setState(() {
             _favourites = updatedFavourites;
-            _isFavourited = !_isFavourited;
           });
         }
       },
+    );
+  }
+
+  Icon getFaveButtonColours() {
+    return Icon(
+      Icons.favorite,
+      color: _helper.isFavouriteStation(widget.dock.stationId, _favourites)
+          ? Color.fromARGB(255, 214, 93, 77)
+          : Colors.grey,
     );
   }
 

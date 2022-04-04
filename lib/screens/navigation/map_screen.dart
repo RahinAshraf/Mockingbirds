@@ -71,6 +71,7 @@ class _MapPageState extends State<MapPage> {
       child: FloatingActionButton(
           elevation: 8.0,
           heroTag: "center_to_current_location",
+          key: Key("position_Zoom"),
           onPressed: () async {
             _baseMap.controller?.animateCamera(CameraUpdate.newCameraPosition(
                 await _baseMap.getNewCameraPosition()));

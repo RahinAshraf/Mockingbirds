@@ -4,8 +4,7 @@ import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:veloplan/models/weather.dart';
 import 'package:veloplan/providers/weather_manager.dart';
 import 'package:veloplan/styles/colors.dart';
-
-import '../../styles/styling.dart';
+import 'package:veloplan/styles/texts.dart';
 
 /// Shows weather conditions in sidebar.
 /// Author: Nicole
@@ -17,9 +16,8 @@ class WeatherScreen extends StatefulWidget {
 
 class _WeatherScreenState extends State<WeatherScreen> {
   Weather weather = Weather.defaultvalue();
-  String weatherIcon = "10n";
+  String weatherIcon = "1";
   WeatherManager _weatherManager = WeatherManager();
-  // Timer? timer;
   LatLng currentPosition = getLatLngFromSharedPrefs();
 
   @override
@@ -34,7 +32,6 @@ class _WeatherScreenState extends State<WeatherScreen> {
           this.weatherIcon = _weatherManager.all_weather_data.current_icon;
         });
     });
-    // startWeather();
     super.initState();
   }
 
@@ -43,60 +40,60 @@ class _WeatherScreenState extends State<WeatherScreen> {
     return Scaffold(
       backgroundColor: CustomColors.whiteReplacement,
       appBar: AppBar(
+        leading: BackButton(key: Key("back"), color: Colors.white),
         title: const Text('Weather'),
       ),
-      body: SafeArea(
-        child: ListView(
-          children: [
-            const SizedBox(height: 30),
-            SizedBox(
-                // height: 150.0,
-                // width: 150.0,
-                child: Center(
-              child: Image.network(
-                //late problem sort it
-                'http://openweathermap.org/img/w/${weather.current_icon}.png',
-                scale: 0.3,
-              ),
-            )),
-            Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              SizedBox(height: 50),
-              Text(
-                weather.current_description,
-                style: weatherTextStyle,
-              ),
-              Text(
-                "Temperature: " +
-                    weather.getCurrentWeatherTemp().toInt().toString() +
-                    "C",
-                style: weatherTextStyle,
-              ),
-              Text(
-                "Feels like: " +
-                    weather
-                        .getCurrentFeelsLikeTemp()
-                        .roundToDouble()
-                        .toString() +
-                    "C",
-                style: weatherTextStyle,
-              ),
-              const SizedBox(height: 30),
-              Text(
-                "Clouds: " + weather.getCurrentClouds().toString(),
-                style: weatherTextStyle,
-              ),
-              Text(
-                "Visibility: " + weather.getCurrentVisibility().toString(),
-                style: weatherTextStyle,
-              ),
-              Text(
-                "Wind speed: " +
-                    weather.getCurrentWindSpeed().roundToDouble().toString(),
-                style: weatherTextStyle,
-              ),
-            ]),
-          ],
-        ),
+      body: ListView(
+        children: [
+          const SizedBox(height: 30),
+          SizedBox(
+              key: Key("weatherIcon"),
+              child: Center(
+                child: Image.network(
+                  'http://openweathermap.org/img/w/${weather.current_icon}.png',
+                  scale: 0.3,
+                ),
+              )),
+          Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              key: Key("weatnerInfo"),
+              children: [
+                SizedBox(height: 50),
+                Text(
+                  weather.current_description,
+                  style: CustomTextStyles.weatherTextStyle,
+                ),
+                Text(
+                  "Temperature: " +
+                      weather.getCurrentWeatherTemp().toInt().toString() +
+                      "°C",
+                  style: CustomTextStyles.weatherTextStyle,
+                ),
+                Text(
+                  "Feels like: " +
+                      weather
+                          .getCurrentFeelsLikeTemp()
+                          .roundToDouble()
+                          .toString() +
+                      "°C",
+                  style: CustomTextStyles.weatherTextStyle,
+                ),
+                const SizedBox(height: 30),
+                Text(
+                  "Clouds: " + weather.getCurrentClouds().toString(),
+                  style: CustomTextStyles.weatherTextStyle,
+                ),
+                Text(
+                  "Visibility: " + weather.getCurrentVisibility().toString(),
+                  style: CustomTextStyles.weatherTextStyle,
+                ),
+                Text(
+                  "Wind speed: " +
+                      weather.getCurrentWindSpeed().roundToDouble().toString(),
+                  style: CustomTextStyles.weatherTextStyle,
+                ),
+              ]),
+        ],
       ),
     );
   }

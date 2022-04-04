@@ -72,4 +72,19 @@ class CustomTextStyles {
       fontStyle: FontStyle.italic,
       fontWeight: FontWeight.w600,
       fontFamily: 'Montserrat');
+
+  // Styling for favourites and past journeys sidebar
+  static TextStyle sidebarTextStyle = TextStyle(
+      fontSize: 20.0,
+      color: (Color(0xFF99D2A9)),
+      fontWeight: FontWeight.w700,
+      fontStyle: FontStyle.italic,
+      fontFamily: 'Montserrat');
+
+// Styling for weather
+  static TextStyle weatherTextStyle = TextStyle(
+      fontSize: 25.0,
+      color: (Color(0xFF99D2A9)),
+      fontWeight: FontWeight.w700,
+      fontStyle: FontStyle.italic);
 }

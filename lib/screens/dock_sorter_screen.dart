@@ -12,7 +12,7 @@ import 'package:veloplan/widgets/docking_stations_sorting_widget.dart';
 
 /// Screen displaying filtered stations around a chosen dock with functionality to sort stations
 /// and view on map.
-/// Author(s): Rahin Ashraf, Fariha Choudhury k20059723
+/// Author(s): Rahin Ashraf, Fariha Choudhury
 /// Contributor(s): Nicole, Marija
 class DockSorterScreen extends StatefulWidget {
   late final LatLng userCoord;

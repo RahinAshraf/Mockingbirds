@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 /// Screen  where the use can change their password.
-/// Author(s): Eduard Ragea k20067643
+/// Author(s): Eduard Ragea
 class ChangePasswordScreen extends StatefulWidget {
   ChangePasswordScreen({Key? key}) : super(key: key);
 

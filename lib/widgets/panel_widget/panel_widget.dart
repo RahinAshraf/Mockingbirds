@@ -22,6 +22,7 @@ import 'package:veloplan/helpers/navigation_helpers/navigation_conversions_helpe
 import 'package:veloplan/popups.dart';
 import 'package:veloplan/helpers/database_helpers/history_helper.dart';
 import 'package:veloplan/widgets/panel_widget/panel_widget_exts.dart';
+import '../../helpers/database_helpers/database_manager.dart';
 
 /// Renders [PanelWidget] used in [JourneyPlanner] screen.
 ///
@@ -232,6 +233,7 @@ class PanelWidgetState extends State<PanelWidget> {
             focusedBorder:
                 circularInputBorder(width: 2.0, color: CustomColors.green),
             suffixIcon: IconButton(
+              key: Key("myLocation"),
               onPressed: () {
                 _useCurrentLocationButtonHandler(
                     controller, label, isFrom, numberCyclists);
@@ -304,6 +306,7 @@ class PanelWidgetState extends State<PanelWidget> {
                 padding: EdgeInsets.all(0),
                 icon: const Icon(
                   Icons.arrow_back,
+                  key: Key("back"),
                   size: 25,
                   color: Colors.green,
                 ),
@@ -383,6 +386,7 @@ class PanelWidgetState extends State<PanelWidget> {
           child: SizedBox(
             width: MediaQuery.of(context).size.width / 2,
             child: ElevatedButton(
+              key: Key("start"),
               onPressed:
                   widget.isScheduled ? _handleSaveClick : _handleStartClick,
               child: widget.isScheduled ? Text("SAVE") : Text("START"),
@@ -429,7 +433,7 @@ class PanelWidgetState extends State<PanelWidget> {
     tempList.addAll(staticListMap.values);
     tempList.addAll(widget.selectedCoords);
     List<LatLng>? points = convertListDoubleToLatLng(tempList);
-    HistoryHelper historyHelper = HistoryHelper();
+    HistoryHelper historyHelper = HistoryHelper(DatabaseManager());
     List<DockingStation> selectedDocks = dockMap.values.toList();
     Itinerary _itinerary = new Itinerary.navigation(
         selectedDocks, points, widget.numberOfCyclists);

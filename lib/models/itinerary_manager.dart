@@ -11,9 +11,7 @@ class ItineraryManager {
   late Map _routeResponse;
   final RouteManager _manager = RouteManager();
 
-  ItineraryManager(this._itinerary) {
-    // _setJourney();
-  }
+  ItineraryManager(this._itinerary);
 
   /// Sets the [journey] and paths
   Future<List<Path>> setJourney() async {
@@ -54,8 +52,6 @@ class ItineraryManager {
       }
     }
     return _wholeTrip;
-    //uncomment if you want to test it!
-    // printPaths();
   }
 
   List<Path> getPaths() {

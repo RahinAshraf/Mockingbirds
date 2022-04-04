@@ -12,7 +12,7 @@ import 'package:veloplan/widgets/popup_widget.dart';
 
 /// Generic popups used thorough the app.
 /// Author(s) Marija
-/// Contributors: Nicole, Fariha, Rahin
+/// Contributors: Nicole, Fariha, Rahin, Elisabeth
 class Popups {
   PopupWidget buildPopupDialogNewJourney(BuildContext context) {
     List<PopupButtonWidget> children = [
@@ -37,6 +37,7 @@ class Popups {
           }),
     ];
     return PopupWidget(
+        key: Key("proceedTrip"),
         title: "Choose how to proceed with your trip!",
         text: "Only one way to find out.",
         children: children,
@@ -48,6 +49,7 @@ class Popups {
     List<LatLng> subJourney = convertDocksToLatLng(itinerary.docks!)!;
     List<PopupButtonWidget> children = [
       PopupButtonWidget(
+        // key: Key("redirect"),
         text: "Yes, redirect me",
         onPressed: () async {
           final response = await Navigator.push(
@@ -70,6 +72,7 @@ class Popups {
           }),
     ];
     return PopupWidget(
+        key: Key("info"),
         title:
             "Would you like to be automatically redirected to available stations?",
         text: "Only one way to find out.",
@@ -90,6 +93,7 @@ class Popups {
           }),
     ];
     return PopupWidget(
+        key: Key("suceeded"),
         title: "Journey scheduled successfully!",
         text:
             "Your journey has been scheduled for ${formattedDate}. Check the details in the calendar."
@@ -109,6 +113,7 @@ class Popups {
           }),
     ];
     return PopupWidget(
+        key: Key("confirm"),
         title: "Confirmation required",
         text: "Are you sure you want to delete this trip?",
         children: children,

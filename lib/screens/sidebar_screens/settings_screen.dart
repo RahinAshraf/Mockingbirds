@@ -6,7 +6,7 @@ import 'package:veloplan/screens/change_password_screen.dart';
 import 'package:veloplan/helpers/database_helpers/settings_helper.dart';
 
 /// Settings screen where user can log out, change their password or delete their account.
-/// Author(s): Tayyibah, Eduard Ragea k20067643
+/// Author(s): Tayyibah Uddin, Eduard Ragea
 class Settings extends StatelessWidget {
   const Settings({Key? key}) : super(key: key);
 
@@ -97,7 +97,7 @@ class Settings extends StatelessWidget {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(
-                              "An error has occured, please check your password and try again"),
+                              "An error has occurred, please check your password and try again"),
                           backgroundColor: Theme.of(context).errorColor,
                         ),
                       );
@@ -133,11 +133,14 @@ class Settings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
+      appBar: AppBar(
+          leading: BackButton(key: Key("back"), color: Colors.white),
+          title: const Text('Settings')),
       body: ListView(
         children: [
           const SizedBox(height: 10),
           ListTile(
+            key: Key("logOut"),
             leading: const Icon(Icons.logout),
             title: const Text('Log Out'),
             onTap: () {
@@ -146,11 +149,13 @@ class Settings extends StatelessWidget {
             },
           ),
           ListTile(
+            key: Key("changePassword"),
             leading: const Icon(Icons.password),
             title: const Text('Change password'),
             onTap: () => changePassword(context),
           ),
           ListTile(
+            key: Key("deleteAccount"),
             leading: const Icon(Icons.delete),
             title: const Text('Delete account'),
             onTap: () => deleteAccount(context),

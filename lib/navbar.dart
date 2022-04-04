@@ -139,7 +139,10 @@ class _NavBarState extends State<NavBar> {
   List<BottomNavigationBarItem> _retrieveNavItems() {
     return const [
       BottomNavigationBarItem(
-        icon: Icon(Icons.format_align_justify_sharp),
+        icon: Icon(
+          Icons.format_align_justify_sharp,
+          key: Key("sideBar"),
+        ),
         label: '',
       ),
       BottomNavigationBarItem(
@@ -147,7 +150,7 @@ class _NavBarState extends State<NavBar> {
         label: '',
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.person),
+        icon: Icon(Icons.person, key: Key("profile")),
         label: '',
       ),
     ];

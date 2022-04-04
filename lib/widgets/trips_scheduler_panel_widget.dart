@@ -64,6 +64,7 @@ class _TripSchedulerPanelWidget extends State<TripSchedulerPanelWidget> {
               ),
               const SizedBox(width: 10),
               Flexible(
+                key: Key("now"),
                 fit: FlexFit.tight,
                 child: ElevatedButton(
                   onPressed: () async {
@@ -76,6 +77,7 @@ class _TripSchedulerPanelWidget extends State<TripSchedulerPanelWidget> {
                 width: 6,
               ),
               Flexible(
+                key: Key("later"),
                 fit: FlexFit.tight,
                 child: ElevatedButton(
                   onPressed: () => _selectDate(context),

@@ -26,6 +26,7 @@ class MessageBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
+      key: Key("messageBubble"),
       padding: const EdgeInsets.all(10.0),
       child: Column(
         key: const Key('alignmentKey'),

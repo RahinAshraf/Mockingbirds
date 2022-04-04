@@ -13,12 +13,14 @@ import 'package:veloplan/utilities/alert_type.dart';
 /// Author: Marija
 class PopupWidget extends StatelessWidget {
   PopupWidget({
+    required this.key,
     required this.title,
     required this.text,
     required this.children,
     required this.type,
   });
 
+  final Key key;
   final String title;
   final String text;
   final List<PopupButtonWidget> children;

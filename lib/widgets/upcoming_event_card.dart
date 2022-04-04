@@ -23,6 +23,7 @@ class UpcomingEventCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      key: Key("eventCard"),
       elevation: 2,
       margin: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
       shape: const RoundedRectangleBorder(
