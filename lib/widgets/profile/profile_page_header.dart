@@ -66,11 +66,13 @@ class _ProfilePageHeaderState extends State<ProfilePageHeader> {
           Text(
             '${data['firstName']} ${data['lastName']}',
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+            key: Key("profileName"),
           ),
           const SizedBox(height: 4),
           Text(
             data['email'],
             style: const TextStyle(color: Colors.grey),
+            key: Key("profileEmail"),
           ),
           const SizedBox(height: 4),
           Text(
@@ -96,6 +98,7 @@ class _ProfilePageHeaderState extends State<ProfilePageHeader> {
                   builder: (context, snapshot) {
                     return Text(
                       (distance).toStringAsFixed(2),
+                      key: Key('distanceStats'),
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     );
@@ -125,6 +128,7 @@ class _ProfilePageHeaderState extends State<ProfilePageHeader> {
                   builder: (context, snapshot) {
                     return Text(
                       '$journeys',
+                      key: Key('journeyStats'),
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     );
@@ -158,6 +162,7 @@ class _ProfilePageHeaderState extends State<ProfilePageHeader> {
             widget.data['image_url'],
             () async {},
             widget.isCurrentUser,
+            key: Key("profileImage"),
           ),
           const SizedBox(height: 24),
           buildName(widget.data),

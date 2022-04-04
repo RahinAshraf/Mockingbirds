@@ -53,6 +53,7 @@ class PanelExtensions {
                 //  editDockTextEditController.text = snapshot.requireData;
               }
               return TextField(
+                key: Key(isFrom.toString()),
                 enabled: false,
                 controller: editDockTextEditController,
                 decoration: InputDecoration(

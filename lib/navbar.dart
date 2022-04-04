@@ -127,6 +127,7 @@ class _NavBarState extends State<NavBar> {
             height: 80.0,
             width: 80.0,
             child: FloatingActionButton(
+              key: Key("bike"),
               heroTag: "btn2",
               onPressed: () {
                 if (!_isInGroup) _onTabTapped(1);
@@ -165,7 +166,10 @@ class _NavBarState extends State<NavBar> {
   List<BottomNavigationBarItem> _retrieveNavItems() {
     return const [
       BottomNavigationBarItem(
-        icon: Icon(Icons.format_align_justify_sharp),
+        icon: Icon(
+          Icons.format_align_justify_sharp,
+          key: Key("sideBar"),
+        ),
         label: '',
       ),
       BottomNavigationBarItem(
@@ -173,7 +177,7 @@ class _NavBarState extends State<NavBar> {
         label: '',
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.person),
+        icon: Icon(Icons.person, key: Key("profile")),
         label: '',
       ),
     ];
