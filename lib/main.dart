@@ -63,58 +63,54 @@ class _MyAppState extends State<MyApp> {
   void requestPermission() {
     if (mounted) {
       PermissionUtils.instance.getLocation(context).listen((status) {
-        try {
-          if (status == Permissions.DENY) {
-            context.pushAndRemoveUntil(LocationError());
-          }
-          else if (status == Permissions.ASK_EVERYTIME) {
-            // Show permission
-            requestPermission();
-          }
-        } catch (e) {
-          alerts.showSnackBarErrorMessage(context, "Enable location permissions on your settings for VeloPlan");
-      }
+        if (status == Permissions.DENY) {
+          context.pushAndRemoveUntil(LocationError());
+        } else if (status == Permissions.ASK_EVERYTIME) {
+          // Show permission
+          requestPermission();
+        }
+      });
     }
-  );
-}}
+  }
 
-@override
-void initState() {
-  Timer(Duration(seconds: 10), () {
-    requestPermission();
-  });
-  super.initState();
+  @override
+  void initState() {
+    Timer(Duration(seconds: 10), () {
+      requestPermission();
+    });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    //final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+    return FutureBuilder(
+      future: Firebase.initializeApp(), // _initialization,
+      builder: (context, appSnapshot) {
+        return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'Veloplan',
+            theme: CustomTheme.defaultTheme,
+            home: appSnapshot.connectionState != ConnectionState.done
+                ? const SplashScreen()
+                : StreamBuilder(
+                    stream: FirebaseAuth.instance.authStateChanges(),
+                    builder: (ctx, userSnapshot) {
+                      if (userSnapshot.connectionState ==
+                          ConnectionState.waiting) {
+                        return const SplashScreen();
+                      }
+                      if (userSnapshot.hasData) {
+                        return const VerifyEmailScreen();
+                      }
+                      return const AuthScreen();
+                    },
+                  ));
+      },
+    );
+  }
 }
-
-@override
-Widget build(BuildContext context) {
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
-  //final Future<FirebaseApp> _initialization = Firebase.initializeApp();
-  return FutureBuilder(
-    future: Firebase.initializeApp(), // _initialization,
-    builder: (context, appSnapshot) {
-      return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'Veloplan',
-          theme: CustomTheme.defaultTheme,
-          home: appSnapshot.connectionState != ConnectionState.done
-              ? const SplashScreen()
-              : StreamBuilder(
-            stream: FirebaseAuth.instance.authStateChanges(),
-            builder: (ctx, userSnapshot) {
-              if (userSnapshot.connectionState ==
-                  ConnectionState.waiting) {
-                return const SplashScreen();
-              }
-              if (userSnapshot.hasData) {
-                return const VerifyEmailScreen();
-              }
-              return const AuthScreen();
-            },
-          ));
-    },
-  );
-}}

@@ -9,7 +9,6 @@ class PermissionUtils{
 
   BehaviorSubject<Permissions> _locationPermission = BehaviorSubject();
   Stream<Permissions> get locationPermission => _locationPermission.stream;
-  //PermissionStatus? permissionStatus;
 
   static final PermissionUtils _permissionUtils = PermissionUtils._internal();
 
@@ -24,7 +23,6 @@ class PermissionUtils{
 
   void checkPermissions({required BuildContext context}) async {
     final status = await Permission.location.status;
-    print("status => $status");
     switch(status){
       case PermissionStatus.denied:
         _locationPermission.sink.add(Permissions.DENY);
