@@ -10,7 +10,8 @@ class DatabaseManager {
   User? getCurrentUser() {
     return FirebaseAuth.instance.currentUser;
   }
-@deprecated
+
+  @deprecated
   CollectionReference<Object?> getUserSubCollectionReference(
       String collectionName) {
     return FirebaseFirestore.instance
@@ -78,13 +79,16 @@ class DatabaseManager {
     return await FirebaseFirestore.instance.collection(collection).add(value);
   }
 
-
-
-  Future<DocumentReference<Object?>> addToSubCollection(CollectionReference<Object?> subcollection,
+  Future<DocumentReference<Object?>> addToSubCollection(
+      CollectionReference<Object?> subcollection,
       Map<String, dynamic> value) async {
-   return await subcollection.add(value);
+    return await subcollection.add(value);
   }
 
+  // Future<void> addToSubCollection(CollectionReference<Object?> subcollection,
+  //     Map<String, dynamic> value) async {
+  //   await subcollection.add(value);
+  // }
 
   Future<void> addSubCollectiontoSubCollectionByDocumentId(
       documentId,
