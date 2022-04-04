@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
@@ -13,6 +14,7 @@ import 'package:veloplan/styles/texts.dart';
 /// attributions to animators <a href="https://www.vecteezy.com/free-vector/london">London Vectors by Vecteezy</a>
 /// <a href="https://www.vecteezy.com/free-vector/london-bus">London Bus Vectors by Vecteezy</a>
 ///Author: Nicole Lehchevska
+///
 class SuggestedItinerary extends StatefulWidget {
   @override
   _SuggestedItineraryState createState() => _SuggestedItineraryState();
@@ -50,22 +52,25 @@ class _SuggestedItineraryState extends State<SuggestedItinerary> {
   };
   @override
   void initState() {
+    //asign itineraries
     List<Itinerary> itineraries = [];
 
     this._hydeLoop = new Itinerary.suggestedTrip(
         _hydeParkLoopCoord.keys.toList(),
         "Hyde Park Loop",
-        _hydeParkLoopCoord.values.toList());
+        _hydeParkLoopCoord.values.toList(),
+        DateTime.now());
 
     itineraries.add(_hydeLoop);
     this._royalLoop = new Itinerary.suggestedTrip(_royalLoopCoord.keys.toList(),
-        "Royal Loop", _royalLoopCoord.values.toList());
+        "Royal Loop", _royalLoopCoord.values.toList(), DateTime.now());
     itineraries.add(_royalLoop);
 
     this._thamesLoop = new Itinerary.suggestedTrip(
         _thamesLoopCoord.keys.toList(),
         "Thames Loop",
-        _thamesLoopCoord.values.toList());
+        _thamesLoopCoord.values.toList(),
+        DateTime.now());
     itineraries.add(_thamesLoop);
   }
 

@@ -57,7 +57,6 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
 
   SummaryJourneyScreenState(this._itineraryManager, this.cameFromSchedule,
       this._databaseManager, this._groupManager) {
-    paths = _itineraryManager.getPaths();
     _itinerary = _itineraryManager.getItinerary();
   }
 
