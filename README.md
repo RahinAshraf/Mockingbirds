@@ -42,6 +42,20 @@ All decisions were discussed with and agreed upon by the client.
 - lib/main.dart:
     * https://www.kindacode.com/article/how-to-disable-landscape-mode-in-flutter/
 
+## Future developments:
+1. AI feature for predicting availability in each docking station.
+2. Notifications: have a toggle in the settings to turn it on/off.                                                       
+    Note: If a docking station is full or the weather conditions are not good enough for a journey, the user should be alerted.
+3. Incentivising short journeys: encourage users to make journeys longer than 30 minutes and plan a stop in the middle.          
+• Have a toggle in the settings to turn it on/off;                                                                           
+• Find the closest docking station to the journey;
+• Warning if existing journey gets too close to the limit (5 - 10 minutes before);
+• Add a timer to the navigation screen that changes the colour when close to 30 minutes;
+• Recalculate the length based on the average speed to see it user makes it in
+30 minutes.
+
+4. Update profile: enable short descriptions for users and have toggle ‘follow’ or ‘unfollow’ for sharing information with other users.
+
 ## Who are we?
 
 - *Rahin Ashraf - k20034059*
