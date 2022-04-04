@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../models/itinerary.dart';
-import '../../helpers/database_helpers/history_helper.dart';
-import '../../widgets/my_journey_card.dart';
+import 'package:veloplan/models/itinerary.dart';
+import 'package:veloplan/helpers/database_helpers/history_helper.dart';
+import 'package:veloplan/widgets/my_journey_card.dart';
 import 'package:veloplan/styles/styling.dart';
 
 ///Displays users started journeys

@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:veloplan/helpers/database_helpers/settings_helper.dart';
 
 /// Screen  where the use can change their password.
 /// Author(s): Eduard Ragea k20067643
@@ -34,7 +33,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     FocusScope.of(context).unfocus();
 
     if (isValid && currentPasswordIsValid) {
-
       await updateUserPassword(_newPassword.text);
 
       Navigator.of(context).pop(true);
@@ -49,7 +47,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   }
 
   /// Check if the current password is valid by reauthenicating
-  /// the user. 
+  /// the user.
   /// Return false in case the reauthentication does not succeed.
   Future<bool> checkCurrentPassword(String password) async {
     final currentUser = FirebaseAuth.instance.currentUser;

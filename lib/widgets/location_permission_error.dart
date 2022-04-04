@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
 import 'package:veloplan/utilities/permissions.dart';
-import '../screens/auth_screen.dart';
+import 'package:veloplan/screens/auth_screen.dart';
 
 ///Widget to display a Location error
 ///@author: Rahin Ashraf k20034059

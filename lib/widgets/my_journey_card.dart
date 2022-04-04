@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../models/itinerary.dart';
-import '../widgets/carousel/station_carousel.dart';
+import 'package:veloplan/models/itinerary.dart';
+import 'package:veloplan/widgets/carousel/station_carousel.dart';
 
 ///Creates a card for a started journey, to include its start time and planned docking stations
 ///Author: Tayyibah

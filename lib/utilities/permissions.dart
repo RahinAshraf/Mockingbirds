@@ -2,22 +2,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rxdart/rxdart.dart';
 
-enum Permissions {
-  ALLOW_ALL_TIME, DENY, ASK_EVERYTIME, ALLOW_WHILE_USING_APP
-}
-class PermissionUtils{
+enum Permissions { ALLOW_ALL_TIME, DENY, ASK_EVERYTIME, ALLOW_WHILE_USING_APP }
 
+class PermissionUtils {
   BehaviorSubject<Permissions> _locationPermission = BehaviorSubject();
   Stream<Permissions> get locationPermission => _locationPermission.stream;
   //PermissionStatus? permissionStatus;
 
   static final PermissionUtils _permissionUtils = PermissionUtils._internal();
 
-  static PermissionUtils get instance => _permissionUtils; 
+  static PermissionUtils get instance => _permissionUtils;
 
   PermissionUtils._internal();
 
-  Stream<Permissions> getLocation(BuildContext context){
+  Stream<Permissions> getLocation(BuildContext context) {
     checkPermissions(context: context);
     return locationPermission;
   }
@@ -25,7 +23,7 @@ class PermissionUtils{
   void checkPermissions({required BuildContext context}) async {
     final status = await Permission.location.status;
     print("status => $status");
-    switch(status){
+    switch (status) {
       case PermissionStatus.denied:
         _locationPermission.sink.add(Permissions.DENY);
         break;
@@ -43,11 +41,9 @@ class PermissionUtils{
         _locationPermission.sink.add(Permissions.DENY);
         break;
     }
-
   }
 
-  void dispose(){
+  void dispose() {
     _locationPermission.close();
   }
-
 }

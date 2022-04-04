@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../providers/location_service.dart';
-import '../screens/place_search_screen.dart';
-import '../styles/colors.dart';
+import 'package:veloplan/providers/location_service.dart';
+import 'package:veloplan/screens/place_search_screen.dart';
+import 'package:veloplan/styles/colors.dart';
 
 /// Helper extensions for [PanelWidget].
 /// @author: Rahin Ashraf - k20034059
