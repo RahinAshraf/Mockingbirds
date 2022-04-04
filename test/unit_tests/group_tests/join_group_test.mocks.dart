@@ -143,6 +143,43 @@ class MockDatabaseManager extends _i1.Mock implements _i5.DatabaseManager {
                   _FakeDocumentReference_3<Object?>()))
           as _i6.Future<_i2.DocumentReference<Object?>>);
   @override
+  _i6.Future<void> addSubCollectiontoSubCollectionByDocumentId(
+          dynamic documentId,
+          String? newSubollection,
+          _i2.CollectionReference<Object?>? subcollection,
+          Map<String, dynamic>? value) =>
+      (super.noSuchMethod(
+          Invocation.method(#addSubCollectiontoSubCollectionByDocumentId,
+              [documentId, newSubollection, subcollection, value]),
+          returnValue: Future<void>.value(),
+          returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
+  @override
+  _i6.Future<void> setSubCollectionByDocumentId(
+          String? documentId,
+          _i2.CollectionReference<Object?>? subcollection,
+          Map<String, dynamic>? value) =>
+      (super.noSuchMethod(
+          Invocation.method(#setSubCollectionByDocumentId,
+              [documentId, subcollection, value]),
+          returnValue: Future<void>.value(),
+          returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
+  @override
+  _i6.Future<_i2.QuerySnapshot<Map<String, dynamic>>>
+      getDocumentsFromSubCollection(
+              _i2.CollectionReference<Object?>? collection,
+              dynamic documentId,
+              String? subcollection) =>
+          (super.noSuchMethod(
+                  Invocation.method(#getDocumentsFromSubCollection, [
+                    collection,
+                    documentId,
+                    subcollection
+                  ]),
+                  returnValue:
+                      Future<_i2.QuerySnapshot<Map<String, dynamic>>>.value(
+                          _FakeQuerySnapshot_1<Map<String, dynamic>>()))
+              as _i6.Future<_i2.QuerySnapshot<Map<String, dynamic>>>);
+  @override
   _i6.Future<void> signOut() =>
       (super.noSuchMethod(Invocation.method(#signOut, []),
           returnValue: Future<void>.value(),

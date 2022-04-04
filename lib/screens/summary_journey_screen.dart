@@ -27,13 +27,17 @@ class SummaryJourneyScreen extends StatefulWidget {
   var _itineraryManager;
 
   final DatabaseManager _databaseManager = DatabaseManager();
-  SummaryJourneyScreen(this.itinerary,this.cameFromSchedule,{Key? key}) : super(key: key){
+  SummaryJourneyScreen(this.itinerary,this.cameFromSchedule,{Key? key}) : super(key: key) {
     _itineraryManager = new ItineraryManager(itinerary);
+  }
+
+    @override
+    State<StatefulWidget> createState() =>
+        SummaryJourneyScreenState(_itineraryManager , this.cameFromSchedule, this._databaseManager, groupManager(this._databaseManager));
 
 
-  @override
-  State<StatefulWidget> createState() =>
-      SummaryJourneyScreenState(_itineraryManager , this.cameFromSchedule, this._databaseManager, groupManager(this._databaseManager));
+
+
 }
 
 class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
@@ -185,7 +189,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
                             } else {
                               return SizedBox(
                                 height:
-                                    MediaQuery.of(context).size.height / 1.3,
+                                MediaQuery.of(context).size.height / 1.3,
                                 child: const Center(
                                   child: CircularProgressIndicator(),
                                 ),
@@ -211,7 +215,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
                     TextSpan(
                         text: "Planned stops:",
                         style:
-                            TextStyle(color: Color(0xFF99D2A9), fontSize: 25)),
+                        TextStyle(color: Color(0xFF99D2A9), fontSize: 25)),
                   ],
                 ),
               ),
@@ -278,9 +282,9 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
 class StationTempWidget extends StatelessWidget {
   const StationTempWidget(
       {this.first = false,
-      this.last = false,
-      required this.content,
-      required this.time});
+        this.last = false,
+        required this.content,
+        required this.time});
 
   final bool first;
   final bool last;
@@ -307,10 +311,10 @@ class StationTempWidget extends StatelessWidget {
         margin: const EdgeInsets.fromLTRB(10.0, 15.0, 20.0, 15.0),
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(15.0),
-          bottomRight: Radius.circular(15.0),
-          topRight: Radius.circular(15.0),
-        )),
+              bottomLeft: Radius.circular(15.0),
+              bottomRight: Radius.circular(15.0),
+              topRight: Radius.circular(15.0),
+            )),
         child: Padding(
           padding: const EdgeInsets.all(15.0),
           child: Row(

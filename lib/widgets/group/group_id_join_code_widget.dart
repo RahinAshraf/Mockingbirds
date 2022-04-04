@@ -15,9 +15,8 @@ class GroupId extends StatefulWidget {
   final DatabaseManager _databaseManager = DatabaseManager();
 
   @override
-  State<StatefulWidget> createState() => GroupIdState( _databaseManager);;
+  State<StatefulWidget> createState() => GroupIdState(_databaseManager);
 }
-
 /// Renders a popup widget to join an existing journey with a 6-digit number.
 ///
 /// A user is asked to input a 6-digit code, which is stored in [fullPin]
