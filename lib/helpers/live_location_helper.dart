@@ -4,6 +4,7 @@ import 'package:latlong2/latlong.dart';
 
 late SharedPreferences sharedPreferences;
 
+///Author: Rahin Ashraf
 class LiveLocationHelper {
   void initializeLocation() async {
     sharedPreferences = await SharedPreferences.getInstance();
