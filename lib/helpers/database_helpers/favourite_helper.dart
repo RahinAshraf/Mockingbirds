@@ -42,7 +42,7 @@ class FavouriteHelper {
     return favourites;
   }
 
-/// Deletes every single favourite documents.
+  /// Deletes every single favourite documents.
   Future deleteUsersFavourites() async {
     _databaseManager.deleteCollection(_favourites);
   }
