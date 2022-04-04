@@ -7,6 +7,13 @@ import 'package:veloplan/screens/profile_screen.dart';
 import 'package:veloplan/screens/summary_journey_screen.dart';
 import 'package:veloplan/sidebar.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
+
+import 'helpers/database_helpers/database_manager.dart';
+import 'helpers/database_helpers/group_manager.dart';
+
+import 'helpers/navigation_helpers/navigation_conversions_helpers.dart';
+import 'models/docking_station.dart';
+import 'models/itinerary.dart';
 import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 import 'package:veloplan/helpers/navigation_helpers/navigation_conversions_helpers.dart';
 import 'package:veloplan/models/docking_station.dart';
@@ -24,9 +31,12 @@ class _NavBarState extends State<NavBar> {
   final DatabaseManager _databaseManager = DatabaseManager();
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   bool _isInGroup = false;
+  late final groupManager _groupManager;
   final _currentUser = FirebaseAuth.instance.currentUser!.uid;
-
   final Popups popup = Popups();
+  _NavBarState(){
+     _groupManager = groupManager(_databaseManager);
+  }
 
   var screens = [
     Placeholder(),
@@ -53,64 +63,12 @@ class _NavBarState extends State<NavBar> {
     var group = await _databaseManager.getByEquality(
         'group', 'code', user.data()!['group']);
 
-    var _itinerary = await _getDataFromGroup(group);
+    var _itinerary = await _groupManager.getItineraryFromGroup(group);
 
     context.push(SummaryJourneyScreen(_itinerary, false));
   }
 
-  Future<Itinerary> _getDataFromGroup(
-      QuerySnapshot<Map<String, dynamic>> group) async {
-    List<DockingStation> _docks = [];
-    var geoList = [];
-    var _myDestinations;
-    var _numberOfCyclists;
-    for (var element in group.docs) {
-      var itinerary = await element.reference.collection('itinerary').get();
-      var journeyIDs = itinerary.docs.map((e) => e.id).toList();
-      for (var journeyID in journeyIDs) {
-        var journey = await element.reference
-            .collection('itinerary')
-            .doc(journeyID)
-            .get();
-        _numberOfCyclists = journey.data()!['numberOfCyclists'];
-        geoList = journey.data()!['points'];
-        var stationCollection =
-            await journey.reference.collection("dockingStations").get();
-        var stationMap = stationCollection.docs;
-        _docks = List.filled(stationMap.length,
-            DockingStation("fill", "fill", true, false, -1, -1, -1, 10, 20),
-            growable: false);
-        for (var station in stationMap)
-          ({
-            _docks[station.data()['index']] = (DockingStation(
-              station.data()['id'],
-              station.data()['name'],
-              true,
-              false,
-              -1,
-              -1,
-              -1,
-              station.data()['location'].longitude,
-              station.data()['location'].latitude,
-            ))
-          });
-        var coordinateCollection =
-            await journey.reference.collection("coordinates").get();
-        var coordMap = coordinateCollection.docs;
-        geoList = List.filled(coordMap.length, GeoPoint(10, 20));
-        for (var value in coordMap) {
-          geoList[value.data()['index']] = value.data()['coordinate'];
-        }
-      }
-      List<List<double>> tempList = [];
-      for (int i = 0; i < geoList.length; i++) {
-        tempList.add([geoList[i].latitude, geoList[i].longitude]);
-      }
 
-      _myDestinations = convertListDoubleToLatLng(tempList)?.toList();
-    }
-    return Itinerary.navigation(_docks, _myDestinations, _numberOfCyclists);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -136,7 +94,6 @@ class _NavBarState extends State<NavBar> {
                     builder: (BuildContext context) =>
                         popup.buildPopupDialogNewJourney(context));
                 if (_isInGroup) {
-                  //_onTabTapped(1);
                   _getGroupInfo();
                 }
               },
