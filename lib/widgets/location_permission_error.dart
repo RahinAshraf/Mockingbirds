@@ -4,6 +4,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
 import 'package:veloplan/utilities/permissions.dart';
 import '../screens/auth_screen.dart';
+import '../screens/reopen_app_screen.dart';
 
 ///Widget to display a Location error
 ///@author: Rahin Ashraf k20034059
@@ -32,11 +33,7 @@ class LocationErrorState extends State<LocationError>
         if (status == Permissions.ALLOW_WHILE_USING_APP ||
             status == Permissions.ALLOW_ALL_TIME) {
           FirebaseAuth.instance.signOut();
-          context.pushAndRemoveUntil(AuthScreen());
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(builder: (context) => const AuthScreen()),
-          // );
+          context.pushAndRemoveUntil(reopenApp());
         }
       });
     }
