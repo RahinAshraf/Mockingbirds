@@ -20,8 +20,9 @@ class TripSchedulerPanelWidget extends StatefulWidget {
 /// Authors: Rahin, Marija
 class _TripSchedulerPanelWidget extends State<TripSchedulerPanelWidget> {
   final int maximumNumberOfCyclists = 6; // max number of cyclists allowed
-  int numberOfCyclists = 1; // min one cyclist allowed
+  int numberOfCyclists = 1;
   DateTime selectedDate = DateTime.now();
+
   @override
   Widget build(BuildContext context) => Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -66,18 +67,7 @@ class _TripSchedulerPanelWidget extends State<TripSchedulerPanelWidget> {
                 fit: FlexFit.tight,
                 child: ElevatedButton(
                   onPressed: () async {
-                    final response = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => JourneyPlanner(
-                                  numberOfCyclists: numberOfCyclists,
-                                  journeyDate: DateTime.now(),
-                                )));
-                    if (response) {
-                      Navigator.of(context).pop(true);
-                    } else {
-                      Navigator.of(context).pop();
-                    }
+                    _navigate(DateTime.now(), false);
                   },
                   child: const Text('Now'),
                 ),
@@ -128,19 +118,20 @@ class _TripSchedulerPanelWidget extends State<TripSchedulerPanelWidget> {
     if (pickedDate != null) {
       setState(() {
         selectedDate = pickedDate;
-        navigate();
+        _navigate(selectedDate, true);
       });
     }
   }
 
-  void navigate() async {
+  /// Handles the click 'Now' and 'Later' button clicks.
+  void _navigate(DateTime date, bool isScheduled) async {
     final response = await Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => JourneyPlanner(
                   numberOfCyclists: numberOfCyclists,
-                  journeyDate: selectedDate,
-                  isScheduled: true,
+                  journeyDate: date,
+                  isScheduled: isScheduled,
                 )));
     if (response) {
       Navigator.of(context).pop(true);

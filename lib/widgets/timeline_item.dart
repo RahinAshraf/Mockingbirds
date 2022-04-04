@@ -32,7 +32,7 @@ class TimelineItem extends StatelessWidget {
       endChild: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
         child: Column(
-          // mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Row(
               children: [

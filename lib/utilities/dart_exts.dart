@@ -3,7 +3,7 @@ import 'package:veloplan/providers/location_service.dart';
 import 'package:veloplan/screens/place_search_screen.dart';
 import 'package:veloplan/styles/colors.dart';
 
-/// Helper extensions.
+/// Helper extensions for [PanelWidget].
 /// Author: Rahin Ashraf
 extension BuildContextExt on BuildContext {
   Future<dynamic> openSearch() {
@@ -59,11 +59,5 @@ extension WidgetExts on dynamic {
       borderRadius: BorderRadius.circular(radius),
       borderSide: BorderSide(color: color, width: width),
     );
-  }
-}
-
-extension DateOnlyCompare on DateTime {
-  bool isSameDate(DateTime date) {
-    return day == date.day && month == date.month && year == date.year;
   }
 }

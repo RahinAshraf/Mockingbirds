@@ -5,9 +5,8 @@ import 'package:veloplan/styles/colors.dart';
 import 'package:veloplan/styles/texts.dart';
 import 'package:veloplan/widgets/carousel/station_carousel.dart';
 
-/// Creates a card for a started journey, to include its start time and planned docking stations
+/// Creates a card for a started journey, to include its start time and planned docking stations.
 /// Author: Tayyibah
-/// Contributor: Marija
 class MyJourneyCard extends StatefulWidget {
   late Itinerary journey;
   DockingStationCarousel stationCarousel = DockingStationCarousel();

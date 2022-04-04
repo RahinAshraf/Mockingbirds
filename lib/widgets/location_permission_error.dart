@@ -1,15 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:veloplan/screens/auth_screen.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
 import 'package:veloplan/utilities/permissions.dart';
-import '../screens/auth_screen.dart';
-
-///Widget to display a Location error
-///@author: Rahin Ashraf k20034059
 
 /// Builds a widget displaying a circular progression indicator and an error message
 /// for when the live location is not enabled.
+/// Author: Rahin Ashraf k20034059
+/// Contributor: Marija
 class LocationError extends StatefulWidget {
   @override
   LocationErrorState createState() {
@@ -21,7 +20,7 @@ class LocationErrorState extends State<LocationError>
     with WidgetsBindingObserver {
   LocationErrorState() {}
 
-  void goToSettings() async {
+  void _goToSettings() async {
     await openAppSettings();
   }
 
@@ -50,9 +49,7 @@ class LocationErrorState extends State<LocationError>
 
   @override
   Widget build(BuildContext context) {
-    print("BuildContext => $context");
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       home: Center(
         child: Container(
           color: Colors.white,
@@ -78,11 +75,8 @@ class LocationErrorState extends State<LocationError>
                 key: Key('LocationErrorText'),
               ),
               ElevatedButton(
-                onPressed: goToSettings,
-                child: Text(
-                  "ENABLE",
-                  textDirection: TextDirection.ltr,
-                ),
+                onPressed: _goToSettings,
+                child: Text("ENABLE", textDirection: TextDirection.ltr),
               ),
             ],
           ),

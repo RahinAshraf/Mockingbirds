@@ -18,9 +18,7 @@ class Alerts {
   /// Shows snack bar error [message] to user.
   void showSnackBarErrorMessage(BuildContext context, message) {
     SnackBar snackBar = SnackBar(
-      content: Text(
-        message,
-      ),
+      content: Text(message),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }

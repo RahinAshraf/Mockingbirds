@@ -11,6 +11,7 @@ import 'package:veloplan/helpers/navigation_helpers/navigation_conversions_helpe
 import 'package:veloplan/models/itinerary_manager.dart';
 import 'package:veloplan/models/path.dart';
 import 'package:veloplan/models/itinerary.dart';
+import 'package:veloplan/utilities/datetime_exts.dart';
 import 'package:veloplan/widgets/timeline_item.dart';
 import 'package:veloplan/styles/colors.dart';
 import 'package:veloplan/screens/navigation/map_with_route_screen.dart';

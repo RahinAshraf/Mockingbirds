@@ -131,10 +131,7 @@ class GroupIdState extends State<GroupId> {
     return AlertDialog(
       titlePadding: const EdgeInsets.fromLTRB(18.0, 18.0, 18.0, 0.0),
       title: const Center(
-        child: Text(
-          "Enter PIN",
-          textAlign: TextAlign.center,
-        ),
+        child: Text("Enter PIN", textAlign: TextAlign.center),
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -144,18 +141,17 @@ class GroupIdState extends State<GroupId> {
             child: Column(
               children: [
                 TextField(
-                  maxLength: 6,
-                  decoration: InputDecoration(
-                    labelText: 'PIN Code',
-                    errorText: _errorText,
-                  ),
-                  onChanged: (pin) {
-                    setState(() {
-                      exists = null;
-                      fullPin = pin;
-                    });
-                  },
-                ),
+                    maxLength: 6,
+                    decoration: InputDecoration(
+                      labelText: 'PIN Code',
+                      errorText: _errorText,
+                    ),
+                    onChanged: (pin) {
+                      setState(() {
+                        exists = null;
+                        fullPin = pin;
+                      });
+                    }),
                 const SizedBox(
                   height: 10,
                 ),

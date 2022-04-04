@@ -11,7 +11,7 @@ import 'package:veloplan/widgets/carousel/station_carousel.dart';
 /// [DockingStationCarousel]. It then displays the cards
 /// and can be sorted based on options given in [_DockSorter.dropdownItems].
 /// By default, cards are sorted by [_DockSorter.selectedFilter].
-/// Authors: Nicole, Marija
+/// Authors: Nicole, Marija, Tayyibah
 class DockSorter extends StatefulWidget {
   final DockingStation? selectedDockStation;
   late final LatLng userCoord;
@@ -87,12 +87,13 @@ class _DockSorter extends State<DockSorter> {
           ),
         ),
         Divider(),
-        buildCarousel(selectedFilter),
+        _buildCarousel(selectedFilter),
       ],
     );
   }
 
-  FutureBuilder<List> buildCarousel(String filter) {
+  /// Builds a carousel with cards for a selected [filter].
+  FutureBuilder<List> _buildCarousel(String filter) {
     return DockingStationCarousel(userCoordinates)
         .buildFilteredCarousel(filter);
   }

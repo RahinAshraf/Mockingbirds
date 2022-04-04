@@ -69,10 +69,7 @@ class PopupWidget extends StatelessWidget {
         ]),
         Align(
           alignment: const Alignment(0, -0.37),
-          child: Image.asset(
-            type.imagePath,
-            height: 72,
-          ),
+          child: Image.asset(type.imagePath, height: 72),
         ),
       ],
     );
