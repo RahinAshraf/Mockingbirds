@@ -1,9 +1,14 @@
 class Message {
-  final String questionText;
-  final String questionAnswer;
-  final String topic;
-  final bool launch;
+  final String _questionText;
+  final String _questionAnswer;
+  final String _topic;
+  final bool _launch;
 
-  Message(this.questionText, this.questionAnswer, this.topic,
-      [this.launch = false]);
+  Message(this._questionText, this._questionAnswer, this._topic,
+      [this._launch = false]);
+
+  String get questionText => _questionText;
+  String get questionAnswer => _questionAnswer;
+  String get topic => _topic;
+  bool get launch => _launch;
 }

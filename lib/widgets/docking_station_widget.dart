@@ -33,7 +33,7 @@ class DockStationState extends State<DockStation> {
             ? Container()
             : Stack(
                 children: [
-                  DockingStationCard.station(station!),
+                 new DockingStationCard.station(station!),
                   Align(
                     alignment: Alignment.topRight,
                     child: IconButton(

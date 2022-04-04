@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
-import 'package:veloplan/helpers/database_helpers/database_manager.dart';
+import '../../helpers/database_helpers/database_manager.dart';
 
-import 'package:veloplan/widgets/auth/auth_form.dart';
+import '../../widgets/auth/auth_form.dart';
 
 /// Screen for the user authentication - Signing Up and Logging In
 /// Author(s): Eduard Ragea k20067643
