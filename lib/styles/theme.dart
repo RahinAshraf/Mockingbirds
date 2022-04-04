@@ -52,7 +52,10 @@ class CustomTheme {
             shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(30.0)))),
       ),
-      dividerColor: Color(0x4D99D2A9),
+      dividerTheme: DividerThemeData(
+        color: Color(0x4D99D2A9),
+        thickness: 1.5,
+      ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           textStyle: const TextStyle(color: Color(0xFF99D2A9)),

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/helpers/navigation_helpers/navigation_conversions_helpers.dart';
 import 'package:veloplan/models/itinerary.dart';
 import 'package:veloplan/screens/navigation/polyline_turn_by_turn_screen.dart';
 import 'package:veloplan/screens/navigation/turn_by_turn_screen.dart';
 import 'package:veloplan/screens/trips_scheduler_screen.dart';
+import 'package:veloplan/utilities/alert_type.dart';
 import 'package:veloplan/widgets/group_id_join_code_widget.dart';
 import 'package:veloplan/widgets/popup_widget.dart';
-import 'package:veloplan/utilities/alert_type.dart';
-import 'package:intl/intl.dart';
 
-/// Generic popups used thorough the app
+/// Generic popups used thorough the app.
 /// Author(s) Marija
 /// Contributors: Nicole, Fariha, Rahin
 class Popups {
@@ -41,19 +41,6 @@ class Popups {
         text: "Only one way to find out.",
         children: children,
         type: AlertType.question);
-  }
-
-  PopupWidget buildPopupDialogStationAvailabilityIsPredicted(
-      BuildContext context) {
-    List<PopupButtonWidget> children = [
-      PopupButtonWidget(text: "Return", onPressed: () {}),
-      PopupButtonWidget(text: "Continue", onPressed: () {}),
-    ];
-    return PopupWidget(
-        title: "The docking station availability is predicted!",
-        text: "It may not be accurate the day of the journey.",
-        children: children,
-        type: AlertType.warning);
   }
 
   PopupWidget buildPopupDialogRedirect(

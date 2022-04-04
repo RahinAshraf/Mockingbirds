@@ -1,16 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:veloplan/helpers/database_helpers/database_manager.dart';
+import 'package:veloplan/helpers/navigation_helpers/navigation_conversions_helpers.dart';
+import 'package:veloplan/models/docking_station.dart';
+import 'package:veloplan/models/itinerary.dart';
 import 'package:veloplan/popups.dart';
 import 'package:veloplan/screens/navigation/map_screen.dart';
 import 'package:veloplan/screens/profile_screen.dart';
 import 'package:veloplan/screens/summary_journey_screen.dart';
 import 'package:veloplan/sidebar.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
-import 'helpers/database_helpers/database_manager.dart';
-import 'helpers/navigation_helpers/navigation_conversions_helpers.dart';
-import 'models/docking_station.dart';
-import 'models/itinerary.dart';
 
 /// Defines the bottom navigation bar, allows you to move between the map, profile and sidebar.
 /// Authors:  Elisabeth, Rahin, Tayyibah
@@ -25,8 +25,6 @@ class _NavBarState extends State<NavBar> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   bool _isInGroup = false;
   final _currentUser = FirebaseAuth.instance.currentUser!.uid;
-
-  final Popups popup = Popups();
 
   var screens = [
     Placeholder(),
@@ -123,32 +121,7 @@ class _NavBarState extends State<NavBar> {
         ),
         drawer: SideBar(),
         key: scaffoldKey,
-        floatingActionButton: SizedBox(
-            height: 80.0,
-            width: 80.0,
-            child: FloatingActionButton(
-              heroTag: "btn2",
-              onPressed: () {
-                if (!_isInGroup) {
-                  showDialog(
-                      useRootNavigator: false,
-                      context: context,
-                      builder: (BuildContext context) =>
-                          popup.buildPopupDialogNewJourney(context));
-                }
-                if (_isInGroup) {
-                  _getGroupInfo();
-                }
-                _onTabTapped(1);
-              },
-              child: const Icon(
-                Icons.directions_bike,
-                color: Colors.green,
-                size: 50,
-              ),
-              elevation: 8.0,
-              backgroundColor: Colors.white,
-            )),
+        floatingActionButton: _createBikeButton(),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: _createNavBar());
   }
@@ -158,7 +131,7 @@ class _NavBarState extends State<NavBar> {
       type: BottomNavigationBarType.fixed,
       iconSize: 33,
       currentIndex: currentIndex,
-      onTap: _onTabTapped, // (index) => setState(() => currentIndex = index),
+      onTap: _onTabTapped, // (index) => setState(() => currentIndex = index)
       items: _retrieveNavItems(),
     );
   }
@@ -186,5 +159,36 @@ class _NavBarState extends State<NavBar> {
           ? scaffoldKey.currentState!.openDrawer()
           : currentIndex = index;
     });
+  }
+
+  Widget _createBikeButton() {
+    return SizedBox(
+      height: 80.0,
+      width: 80.0,
+      child: FloatingActionButton(
+        heroTag: "bike_button",
+        onPressed: () {
+          _onTabTapped(1);
+          if (!_isInGroup) {
+            Popups popup = Popups();
+            showDialog(
+                useRootNavigator: false,
+                context: context,
+                builder: (BuildContext context) =>
+                    popup.buildPopupDialogNewJourney(context));
+          }
+          if (_isInGroup) {
+            _getGroupInfo();
+          }
+        },
+        child: Icon(
+          Icons.directions_bike,
+          color: Colors.green,
+          size: 50,
+        ),
+        elevation: 8.0,
+        backgroundColor: Colors.white,
+      ),
+    );
   }
 }

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 import 'package:veloplan/navbar.dart';
 
-/// Screen for the email verification UI
+/// Screen for the email verification UI.
 /// Author(s): Eduard Ragea k20067643
 class VerifyEmailScreen extends StatefulWidget {
   const VerifyEmailScreen({Key? key}) : super(key: key);
@@ -35,7 +35,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
     }
   }
 
-  /// Delete the timer when the screen is closed so it will 
+  /// Delete the timer when the screen is closed so it will
   /// not continue run in the background of other screens.
   @override
   void dispose() {
