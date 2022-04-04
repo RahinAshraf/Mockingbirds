@@ -17,24 +17,22 @@ Veloplan helps you to get the most out of Satanders bicycle hire system everyday
 
 ## Design Decisions 
 
-We chose to make a switch from using the Google Maps API to Mapbox, due to a conflict with Googles Terms of Services.(See sections 10.4.c.ii of https://developers.google.com/maps/terms-20180207). This was a major setback mid development and as a result, there were several limitations with mapbox packages that we had to deal with.
+We chose to make a switch from using the Google Maps API to Mapbox, due to a conflict with Googles Terms of Services. (See sections 10.4.c.ii of https://developers.google.com/maps/terms-20180207). This was a major setback mid development and as a result, there were several limitations with mapbox packages that we had to deal with.
 
 1. The Mapbox Navigation Package has open issues (https://github.com/eopeter/flutter_mapbox_navigation/issues/145):
-    - Turn by turn navigation can only be used once in an app run.
+    - Turn by turn navigation can only be used once in an app run
     - Could not do redirecting with flutter_mapbox_navigation
  To compromise, we implemented an additional feature that uses polyline navigation which successfuly redirects the user during journeys.
 
 2. Mapbox did not support clustering symbols
     - https://github.com/flutter-mapbox-gl/maps/pull/797
 
-All decisions were discussed with and agreed up by the client. 
+All decisions were discussed with and agreed upon by the client. 
 
 ## Known bugs
 
-
-- journey_planner_screen.dart and panel_widget.dart
-    - Journey planning produces the list of chosen docking stations in an incorrect order on very rare occassions (bug could not be recreated during testing but presence is speculated)
-    - Due to API calls 
+- When planning a journey and entering starting/destination points, on rare occassions, the list in the sumarry page is presented in an incorrect order. This has not be resolved as it could not be recreated during testing, and is likely due to API calls which we could not control.
+- 
 
 
 ## References:
@@ -44,7 +42,8 @@ All decisions were discussed with and agreed up by the client.
 - lib/main.dart:
     * https://www.kindacode.com/article/how-to-disable-landscape-mode-in-flutter/
 
-## Team members
+## Who are we?
+
 - *Rahin Ashraf - k20034059*
 - *Marija Buivyte - k20082541*
 - *Fariha Choudhury - k20059723*
