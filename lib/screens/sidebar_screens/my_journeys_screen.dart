@@ -33,19 +33,21 @@ class _MyJourneysState extends State<MyJourneys> {
       body: journeyList.isEmpty
           ? SafeArea(
               child: Center(
+                  key: Key("noJourneys"),
                   child: Column(children: [
-              SizedBox(height: 100),
-              Image.asset('assets/images/past_journeys_sidebar.png',
-                  width: 170, height: 170),
-              SizedBox(height: 40),
-              Text(
-                "You haven't made any journeys yet.",
-                style: sidebarTextStyle,
-              )
-            ])))
+                    SizedBox(height: 100),
+                    Image.asset('assets/images/past_journeys_sidebar.png',
+                        width: 170, height: 170),
+                    SizedBox(height: 40),
+                    Text(
+                      "You haven't made any journeys yet.",
+                      style: sidebarTextStyle,
+                    )
+                  ])))
           : Stack(
               children: [
                 ListView.builder(
+                  key: Key("allJourneys"),
                   itemCount: journeyList.length,
                   itemBuilder: (context, index) {
                     return MyJourneyCard(journeyList[index]);
@@ -54,6 +56,7 @@ class _MyJourneysState extends State<MyJourneys> {
               ],
             ),
       appBar: AppBar(
+        leading: BackButton(key: Key("back"), color: Colors.white),
         title: const Text('My Journeys'),
       ),
     );

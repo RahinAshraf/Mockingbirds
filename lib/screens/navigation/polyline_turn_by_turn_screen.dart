@@ -73,6 +73,7 @@ class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
         onPressed: () {
           try {
             _baseMapWithUpdatedRoute.isAtGoal = true;
+            // Navigator.of(context).pop(true);
             Navigator.of(context).popUntil((route) => route.isFirst);
           } catch (e) {
             log("failed to push replacement");

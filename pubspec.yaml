@@ -59,8 +59,11 @@ dependencies:
   table_calendar: ^3.0.5
 
 
-
 dev_dependencies:
+  flutter_driver:
+    sdk: flutter
+  test: any
+  #! need?
   code_builder: ^4.0.0
   firebase_auth_mocks: ^0.8.2
   fake_cloud_firestore:	1.2.2
@@ -68,7 +71,6 @@ dev_dependencies:
   mockito: ^5.1.0
   flutter_test:
     sdk: flutter
-  test:
 
 flutter_icons:
   image_path: "assets/images/logo.png"

@@ -46,6 +46,7 @@ class _ProfileState extends State<Profile> {
             child: const Icon(
               Icons.edit,
               size: 26.0,
+              key: Key("editProfileButton"),
               color: Colors.green,
             ),
           ),

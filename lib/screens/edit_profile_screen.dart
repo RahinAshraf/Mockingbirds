@@ -98,6 +98,7 @@ class _EditProfileState extends State<EditProfile> {
       },
       child: Scaffold(
         appBar: AppBar(
+          key: Key("appBarNameEditProfile"),
           backgroundColor: Colors.white,
           foregroundColor: Colors.green,
           elevation: 0,
@@ -111,6 +112,7 @@ class _EditProfileState extends State<EditProfile> {
                 },
                 child: const Icon(
                   Icons.check,
+                  key: Key("confirmEditProfile"),
                   size: 26.0,
                   color: Colors.green,
                 ),
@@ -126,6 +128,7 @@ class _EditProfileState extends State<EditProfile> {
             ProfileWidget(widget.data['image_url'], () async {}, true),
             const SizedBox(height: 24),
             TextFieldWidget(
+              key: Key("firstNameEditP"),
               label: 'First Name',
               text: widget.data['firstName'],
               onChanged: (firstName) {
@@ -134,6 +137,7 @@ class _EditProfileState extends State<EditProfile> {
             ),
             const SizedBox(height: 24),
             TextFieldWidget(
+              key: Key("lastNameEditP"),
               label: 'Last Name',
               text: widget.data['lastName'],
               onChanged: (lastName) {
@@ -142,6 +146,7 @@ class _EditProfileState extends State<EditProfile> {
             ),
             const SizedBox(height: 24),
             TextFieldWidget(
+              key: Key("usernameNameEditP"),
               label: 'Username',
               text: widget.data['username'],
               onChanged: (username) {

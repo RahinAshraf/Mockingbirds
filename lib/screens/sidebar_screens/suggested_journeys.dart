@@ -75,6 +75,7 @@ class _SuggestedItineraryState extends State<SuggestedItinerary> {
       backgroundColor: whiteReplacement,
       appBar: AppBar(
         title: const Text('Suggested Journeys'),
+        leading: BackButton(key: Key("back"), color: Colors.white),
       ),
       body: SafeArea(
         child: ListView(

@@ -239,6 +239,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
             },
             icon: const Icon(
               Icons.arrow_back_rounded,
+              key: Key("back"),
               size: 30,
               color: Colors.white,
             ),

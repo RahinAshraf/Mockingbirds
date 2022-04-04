@@ -235,6 +235,7 @@ class PanelWidgetState extends State<PanelWidget> {
             focusedBorder:
                 circularInputBorder(width: 2.0, color: CustomColors.green),
             suffixIcon: IconButton(
+              key: Key("myLocation"),
               onPressed: () {
                 _useCurrentLocationButtonHandler(
                     controller, label, isFrom, numberCyclists);
@@ -307,6 +308,7 @@ class PanelWidgetState extends State<PanelWidget> {
                 padding: EdgeInsets.all(0),
                 icon: const Icon(
                   Icons.arrow_back,
+                  key: Key("back"),
                   size: 25,
                   color: Colors.green,
                 ),
@@ -400,6 +402,7 @@ class PanelWidgetState extends State<PanelWidget> {
               SizedBox(
                 width: MediaQuery.of(context).size.width / 2,
                 child: ElevatedButton(
+                  key: Key("start"),
                   onPressed:
                       widget.isScheduled ? _handleSaveClick : _handleStartClick,
                   child: widget.isScheduled ? text("SAVE") : text("START"),

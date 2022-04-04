@@ -11,7 +11,7 @@ class Settings extends StatelessWidget {
   const Settings({Key? key}) : super(key: key);
 
   /// This function deletes the current user's account by
-  /// deleting first the documents in the journeys and schedules 
+  /// deleting first the documents in the journeys and schedules
   /// subcollections.
   /// Show a popup to confirm deleting by reentering the password
   /// to avoid deleting it by input mistake.
@@ -133,11 +133,14 @@ class Settings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
+      appBar: AppBar(
+          leading: BackButton(key: Key("back"), color: Colors.white),
+          title: const Text('Settings')),
       body: ListView(
         children: [
           const SizedBox(height: 10),
           ListTile(
+            key: Key("logOut"),
             leading: const Icon(Icons.logout),
             title: const Text('Log Out'),
             onTap: () {
@@ -146,11 +149,13 @@ class Settings extends StatelessWidget {
             },
           ),
           ListTile(
+            key: Key("changePassword"),
             leading: const Icon(Icons.password),
             title: const Text('Change password'),
             onTap: () => changePassword(context),
           ),
           ListTile(
+            key: Key("deleteAccount"),
             leading: const Icon(Icons.delete),
             title: const Text('Delete account'),
             onTap: () => deleteAccount(context),
