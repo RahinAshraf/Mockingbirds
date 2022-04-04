@@ -6,7 +6,7 @@ import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/helpers/database_helpers/group_manager.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:veloplan/models/map_models/base_map_model.dart';
-import '../../helpers/database_helpers/database_manager.dart';
+import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:veloplan/widgets/docking_station_widget.dart';
@@ -35,6 +35,26 @@ _MapPageState(){
     super.initState();
   }
 
+  Future<void> _deleteOldGroup() async {
+    var user = await _databaseManager.getByKey(
+        'users', _databaseManager.getCurrentUser()!.uid);
+    var hasGroup = user.data()!.keys.contains('group');
+    if (hasGroup) {
+      var group = await _databaseManager.getByEquality(
+          'group', 'code', user.data()!['group']);
+      group.docs.forEach((element) {
+        Timestamp timestamp = element.data()['createdAt'];
+        var memberList = element.data()['memberList'];
+        if (DateTime.now().difference(timestamp.toDate()) > Duration(days: 2)) {
+          element.reference.delete();
+          for (String member in memberList) {
+            _databaseManager.setByKey('users', member,
+                {'group': FieldValue.delete()}, SetOptions(merge: true));
+          }
+        }
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +71,7 @@ _MapPageState(){
     _baseMap.addWidget(Container(
       alignment: Alignment(0.9, 0.90),
       child: FloatingActionButton(
+          key: Key("position_Zoom"),
           heroTag: "center_to_current_loaction",
           onPressed: () async {
             _baseMap.controller?.animateCamera(CameraUpdate.newCameraPosition(

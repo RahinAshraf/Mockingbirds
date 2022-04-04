@@ -9,7 +9,7 @@ import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/providers/location_service.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:veloplan/.env.dart';
-import '../../screens/journey_planner_screen.dart';
+import 'package:veloplan/screens/journey_planner_screen.dart';
 import 'package:veloplan/widgets/docking_station_widget.dart';
 
 /// Class to display a mapbox map with other possible widgets on top
@@ -27,7 +27,6 @@ class BaseMapboxMap {
   late MapboxMapController? controller;
   late Symbol? selectedSymbol;
   bool recenter = true;
-  late Timer timer;
   // late final bool _useLiveLocation;
 
   late final StreamController<MapPlace>? address;
@@ -37,23 +36,6 @@ class BaseMapboxMap {
     cameraPosition = CameraPosition(target: currentPosition, zoom: 15);
     setMap();
     addWidget(map);
-    // if (_useLiveLocation) {
-    //   _setMapWithLiveLocation();
-    // } else {
-    //   _setMapWithoutLiveLocation();
-    // }
-    // _setMapWithLiveLocation();
-    // addWidget(map);
-// =======
-//   late Symbol? _selectedSymbol;
-//   bool recenter = true;
-
-//   BaseMapboxMap(this.model) {
-//     cameraPosition = CameraPosition(target: currentPosition, zoom: 15);
-//     setMap();
-//     addWidget(map);
-//     // addDockingStationCard();
-// >>>>>>> main
   }
 
   /// Adds a [widget] to [_widgets]
@@ -66,19 +48,8 @@ class BaseMapboxMap {
     return _widgets;
   }
 
-  // @override
-  // void onMapCreated(MapboxMapController controller) async {
-  //   this.controller = controller;
-  //   model.setController(controller);
-  // }
-
   /// Initialize map features
   void onMapCreated(MapboxMapController controller) async {
-// <<<<<<< HEAD
-//     timer = Timer.periodic(
-//         Duration(seconds: 40), (Timer t) => updateCurrentLocation());
-//     updateCurrentLocation();
-// =======
     await baseMapCreated(controller);
   }
 
@@ -141,6 +112,7 @@ class BaseMapboxMap {
   /// Initialises map with live location
   void setMap() {
     map = MapboxMap(
+      key: Key("map"),
       accessToken: accessToken,
       initialCameraPosition: cameraPosition,
       onMapCreated: onMapCreated,

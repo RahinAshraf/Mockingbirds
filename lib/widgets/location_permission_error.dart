@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
 import 'package:veloplan/utilities/permissions.dart';
-import '../screens/auth_screen.dart';
+import 'package:veloplan/screens/auth_screen.dart';
 
 ///Widget to display a Location error
 ///@author: Rahin Ashraf k20034059
@@ -66,8 +66,8 @@ class LocationErrorState extends State<LocationError>
                 ),
               ),
               Text(
-                "Please enable your location permission access in order to use VeloPlan. \n After "
-                "enabling your locations permissions, please close and reopen the app to begin your visit \n"
+                "Please enable your location permissions access in order to use VeloPlan. \n After "
+                "enabling your locations permissions, please reopen the app to begin your visit \n"
                 "London!",
                 textDirection: TextDirection.ltr,
                 textAlign: TextAlign.center,

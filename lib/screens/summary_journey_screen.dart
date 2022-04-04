@@ -29,7 +29,7 @@ class SummaryJourneyScreen extends StatefulWidget {
   final DatabaseManager _databaseManager = DatabaseManager();
   SummaryJourneyScreen(this.itinerary,this.cameFromSchedule,{Key? key}) : super(key: key){
     _itineraryManager = new ItineraryManager(itinerary);
-  }
+
 
   @override
   State<StatefulWidget> createState() =>
@@ -37,7 +37,6 @@ class SummaryJourneyScreen extends StatefulWidget {
 }
 
 class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
-
   bool cameFromSchedule;
   bool isInGroup = false;
   late String groupID = "";
@@ -79,7 +78,6 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
           'group', 'code', user.data()!['group']);
       owner = await _groupManager.getGroupOwnerRef(group);
       pointsInDoubles = [];
-
     }
     setState(() {
       isInGroup = hasGroup;
@@ -137,6 +135,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
             },
             icon: const Icon(
               Icons.arrow_back_rounded,
+              key: Key("back"),
               size: 30,
               color: Colors.white,
             ),
@@ -160,7 +159,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
                     onPressed: () {},
                   )),
               if (isInGroup)
-                if(!cameFromSchedule)
+                if (!cameFromSchedule)
                   Container(
                       alignment: Alignment.center,
                       padding: const EdgeInsets.all(10),
@@ -185,7 +184,8 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
                               );
                             } else {
                               return SizedBox(
-                                height: MediaQuery.of(context).size.height / 1.3,
+                                height:
+                                    MediaQuery.of(context).size.height / 1.3,
                                 child: const Center(
                                   child: CircularProgressIndicator(),
                                 ),
@@ -211,7 +211,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
                     TextSpan(
                         text: "Planned stops:",
                         style:
-                        TextStyle(color: Color(0xFF99D2A9), fontSize: 25)),
+                            TextStyle(color: Color(0xFF99D2A9), fontSize: 25)),
                   ],
                 ),
               ),
@@ -239,6 +239,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
                       child: const Text('START JOURNEY',
                           style: TextStyle(color: Colors.white)),
                       onPressed: () {
+
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -277,9 +278,9 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
 class StationTempWidget extends StatelessWidget {
   const StationTempWidget(
       {this.first = false,
-        this.last = false,
-        required this.content,
-        required this.time});
+      this.last = false,
+      required this.content,
+      required this.time});
 
   final bool first;
   final bool last;
@@ -306,10 +307,10 @@ class StationTempWidget extends StatelessWidget {
         margin: const EdgeInsets.fromLTRB(10.0, 15.0, 20.0, 15.0),
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(15.0),
-              bottomRight: Radius.circular(15.0),
-              topRight: Radius.circular(15.0),
-            )),
+          bottomLeft: Radius.circular(15.0),
+          bottomRight: Radius.circular(15.0),
+          topRight: Radius.circular(15.0),
+        )),
         child: Padding(
           padding: const EdgeInsets.all(15.0),
           child: Row(

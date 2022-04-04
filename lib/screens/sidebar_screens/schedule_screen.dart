@@ -1,10 +1,10 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:veloplan/helpers/database_helpers/schedule_helper.dart';
-import 'package:veloplan/models/itinerary.dart';
-import 'package:veloplan/styles/styling.dart';
-import 'package:veloplan/widgets/upcoming_event_card.dart';
+import '../../helpers/database_helpers/schedule_helper.dart';
+import '../../models/itinerary.dart';
+import '../../styles/styling.dart';
+import '../../widgets/upcoming_event_card.dart';
 
 class ScheduleScreen extends StatefulWidget {
   const ScheduleScreen({Key? key}) : super(key: key);
@@ -42,6 +42,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     return Scaffold(
       backgroundColor: whiteReplacement,
       appBar: AppBar(
+        leading: BackButton(key: Key("back"), color: Colors.white),
         title: const Text('Schedule'),
       ),
       body: ListView(
@@ -57,6 +58,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           _getEventsForDay(_selectedDay).isEmpty
               ? Container(
                   child: Column(
+                    key: Key("noJourneys"),
                     children: [
                       Image.asset('assets/images/bike.png',
                           height: MediaQuery.of(context).size.height / 3.5),
@@ -71,6 +73,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
               : Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
                   child: Column(
+                    key: Key("eventCards"),
                     children: _getEventsForDay(_selectedDay)
                         .map((Itinerary event) => UpcomingEventCard(
                               event: event,
@@ -100,6 +103,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   /// Builds calendar for the schedule page.
   Widget _buildCalendar() {
     return TableCalendar(
+      key: Key("calendar"),
       eventLoader: _getEventsForDay,
       calendarStyle: scheduleScreenCalendarStyle,
       calendarFormat: _calendarFormat,

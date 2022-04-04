@@ -15,7 +15,7 @@ import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/helpers/live_location_helper.dart';
 import 'package:veloplan/utilities/travel_type.dart';
-import '../docking_station.dart';
+import 'package:veloplan/models/docking_station.dart';
 
 /// Map screen focused on a user's live location
 /// Author(s): Elisabeth Halvorsen k20077737
@@ -27,11 +27,11 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
   final Itinerary _itinerary;
   final BuildContext context;
   late int numberCyclists;
-  // Timer? timer;
   final Set<Symbol> _polylineSymbols = {};
   bool isAtGoal = false;
   bool firstLoactionCompleted = true;
   late Map<dynamic, dynamic> _routeResponse;
+  Timer? timer;
 
   //TODO: Marija attributes for distance, duration and dock name should be presented on the screen
   num distance = 0;
@@ -94,7 +94,7 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
   /// Initialize periodic timer for updating location and camera position
   /// Calculate and store the distance travelled between timer steps on the device
   void updateLocationAndCameraTimer() {
-    timer = Timer.periodic(Duration(seconds: 10), (Timer t) async {
+    timer = Timer.periodic(Duration(seconds: 1), (Timer t) async {
       if (isAtGoal) {
         t.cancel();
       }
@@ -110,7 +110,7 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
 
   /// Initialize periodic timer to update the route displayed
   void updateRouteTimer() {
-    timer = Timer.periodic(Duration(seconds: 15), (Timer t) {
+    timer = Timer.periodic(Duration(seconds: 30), (Timer t) {
       if (isAtGoal) {
         t.cancel();
       }
@@ -127,7 +127,7 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
 
   /// Initialize periodic timer to check if it's necessary to redirect to another docking station
   void updateDockTimer() {
-    timer = Timer.periodic(Duration(seconds: 15), (Timer t) {
+    timer = Timer.periodic(Duration(minutes: 5), (Timer t) {
       if (isAtGoal) {
         t.cancel();
       }
@@ -153,8 +153,6 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
 
   /// Update route
   void updateRoute() {
-    print(
-        "---------------_______________------------------updating route to navbar _________________--------");
     if (isAtGoal) {
       reRoute();
       return;
@@ -164,13 +162,13 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
     if (distance < 0.01) {
       ++_currentStation;
       if (_currentStation >= _journey.length) {
-        print("we got to the goal!!!");
         isAtGoal = true;
         return;
       }
       this.dockName = _itinerary.docks![_currentStation].name;
     }
-    removePolylineMarkers(controller!, _journey, _polylineSymbols);
+    // removePolylineMarkers(controller!, _journey, _polylineSymbols);
+    removeMarkers(controller!, _polylineSymbols);
     removeFills(controller, _polylineSymbols, fills);
     _displayJourney();
   }
@@ -204,12 +202,10 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
       await _setInitRoute(NavigationType.walking);
     }
     manager.setGeometry(_routeResponse['geometry']);
-    print("set bike route done");
   }
 
   /// sets the route
   Future<void> _setInitRoute(NavigationType type) async {
-    print("current station num:" + _currentStation.toString());
     _routeResponse = await manager.getDirections(
         currentPosition, _journey[_currentStation], type);
     //update local vars ---

@@ -5,13 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 ///Author: Lilliana
 ///Contributor: Tayyibah
 class DatabaseManager {
-  late FirebaseFirestore _database;
-  late final _userId;
-
-  DatabaseManager() {
-    _database = FirebaseFirestore.instance;
-    _userId = FirebaseAuth.instance.currentUser!.uid;
-  }
+  DatabaseManager() {}
 
   User? getCurrentUser() {
     return FirebaseAuth.instance.currentUser;
@@ -19,18 +13,17 @@ class DatabaseManager {
 @deprecated
   CollectionReference<Object?> getUserSubCollectionReference(
       String collectionName) {
-    return _database
+    return FirebaseFirestore.instance
         .collection('users')
-        .doc(_userId)
+        .doc(getCurrentUser()!.uid)
         .collection(collectionName);
   }
 
-
   Future<QuerySnapshot<Object?>> getUserSubcollection(
       String subcollection) async {
-    return await _database
+    return await FirebaseFirestore.instance
         .collection('users')
-        .doc(_userId)
+        .doc(FirebaseAuth.instance.currentUser!.uid)
         .collection(subcollection)
         .get();
   }
@@ -49,7 +42,7 @@ class DatabaseManager {
 
   Future<QuerySnapshot<Map<String, dynamic>>> getByEquality(
       String collection, String field, String equalTo) async {
-    return await _database
+    return await FirebaseFirestore.instance
         .collection(collection)
         .where(field, isEqualTo: equalTo)
         .get();
@@ -57,13 +50,16 @@ class DatabaseManager {
 
   Future<DocumentSnapshot<Map<String, dynamic>>> getByKey(
       String collection, String key) async {
-    return await _database.collection(collection).doc(key).get();
+    return await FirebaseFirestore.instance
+        .collection(collection)
+        .doc(key)
+        .get();
   }
 
   Future<void> setByKey(
       String collection, String key, Map<String, dynamic> value,
       [SetOptions? options]) async {
-    await _database
+    await FirebaseFirestore.instance
         .collection(collection)
         .doc(key)
         .set(value, options);
@@ -71,12 +67,15 @@ class DatabaseManager {
 
   Future<void> updateByKey(
       String collection, String key, Map<String, dynamic> value) async {
-    await _database.collection(collection).doc(key).update(value);
+    await FirebaseFirestore.instance
+        .collection(collection)
+        .doc(key)
+        .update(value);
   }
 
   Future<DocumentReference<Map<String, dynamic>>> addToCollection(
       String collection, Map<String, dynamic> value) async {
-   return await _database.collection(collection).add(value);
+    return await FirebaseFirestore.instance.collection(collection).add(value);
   }
 
 
@@ -86,6 +85,26 @@ class DatabaseManager {
    return await subcollection.add(value);
   }
 
+
+  Future<void> addSubCollectiontoSubCollectionByDocumentId(
+      documentId,
+      String newSubollection,
+      CollectionReference<Object?> subcollection,
+      Map<String, dynamic> value) {
+    return subcollection.doc(documentId).collection(newSubollection).add(value);
+  }
+
+  Future<void> setSubCollectionByDocumentId(String documentId,
+      CollectionReference<Object?> subcollection, Map<String, dynamic> value) {
+    return subcollection.doc(documentId).set(value);
+  }
+
+  Future<QuerySnapshot<Map<String, dynamic>>> getDocumentsFromSubCollection(
+      CollectionReference<Object?> collection,
+      documentId,
+      String subcollection) async {
+    return await collection.doc(documentId).collection(subcollection).get();
+  }
 
   Future<void> signOut() async {
     FirebaseAuth.instance.signOut();

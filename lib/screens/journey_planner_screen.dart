@@ -1,13 +1,10 @@
 import 'dart:async';
-import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/models/map_models/base_map_model.dart';
-import '../widgets/panel_widget/panel_widget.dart';
-import '../providers/location_service.dart';
 import 'package:veloplan/widgets/panel_widget/panel_widget.dart';
 import 'package:veloplan/providers/location_service.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -103,7 +100,7 @@ class _JourneyPlanner extends State<JourneyPlanner> {
             numberOfCyclists: widget.numberOfCyclists ?? 1,
             selectedCoords: coordsList,
             staticListMap: staticCordMap,
-            dockList: dockList,
+            dockingStationMap: dockList,
             isScheduled: widget.isScheduled,
             journeyDate: widget.journeyDate!,
           ),

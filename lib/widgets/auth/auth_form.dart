@@ -188,14 +188,16 @@ class _AuthFormState extends State<AuthForm> {
                       return 'This field can not be empty';
                     }
                     _confirmPassword = value;
-                    if (value.length < 7) {
-                      return 'Password must be at least 7 characters long.';
+                    if (!_isLogin) {
+                      if (value.length < 7) {
+                        return 'Password must be at least 7 characters long.';
+                      }
+                      String pattern =
+                          r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{7,}$';
+                      RegExp regExp = new RegExp(pattern);
+                      if (!regExp.hasMatch(value))
+                        return 'Your password must have at least 1 Upper Case, 1 Lower Case and 1 Number.';
                     }
-                    String pattern =
-                        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{7,}$';
-                    RegExp regExp = new RegExp(pattern);
-                    if (!regExp.hasMatch(value))
-                      return 'Your password must have at least 1 Upper Case, 1 Lower Case and 1 Number.';
                     return null;
                   },
                   decoration: const InputDecoration(
@@ -249,6 +251,7 @@ class _AuthFormState extends State<AuthForm> {
                         builder: (BuildContext context) {
                           return BottomDatePicker(
                             CupertinoDatePicker(
+                              key: Key("datePicker"),
                               mode: CupertinoDatePickerMode.date,
                               initialDateTime: _dateTime,
                               maximumDate: DateTime.now(),
@@ -277,6 +280,7 @@ class _AuthFormState extends State<AuthForm> {
                   SizedBox(
                     width: MediaQuery.of(context).size.width / 1.5,
                     child: ElevatedButton(
+                      key: Key("logIn"),
                       child: Text(_isLogin ? 'Log In' : 'Sign Up'),
                       onPressed: _trySubmit,
                     ),
@@ -292,7 +296,10 @@ class _AuthFormState extends State<AuthForm> {
                         style: authTextStyle,
                       ),
                       TextButton(
-                        child: Text(_isLogin ? 'Sign up' : 'Log in'),
+                        child: Text(
+                          _isLogin ? 'Sign up' : 'Log in',
+                          key: Key("signUpButton"),
+                        ),
                         onPressed: () {
                           setState(() {
                             _isLogin = !_isLogin;

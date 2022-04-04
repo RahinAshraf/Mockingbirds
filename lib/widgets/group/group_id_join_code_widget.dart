@@ -1,5 +1,4 @@
-import 'dart:ffi';
-
+// import 'dart:ffi';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
@@ -16,7 +15,7 @@ class GroupId extends StatefulWidget {
   final DatabaseManager _databaseManager = DatabaseManager();
 
   @override
-  State<StatefulWidget> createState() => GroupIdState( _databaseManager);
+  State<StatefulWidget> createState() => GroupIdState( _databaseManager);;
 }
 
 /// Renders a popup widget to join an existing journey with a 6-digit number.

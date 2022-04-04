@@ -1,9 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:veloplan/helpers/database_helpers/settings_helper.dart';
 
 /// Screen  where the use can change their password.
-/// Author(s): Eduard Ragea k20067643
+/// Author(s): Eduard Ragea
 class ChangePasswordScreen extends StatefulWidget {
   ChangePasswordScreen({Key? key}) : super(key: key);
 
@@ -12,7 +11,6 @@ class ChangePasswordScreen extends StatefulWidget {
 }
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
-
   TextEditingController _currentPassword = new TextEditingController();
 
   TextEditingController _newPassword = new TextEditingController();
@@ -35,7 +33,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     FocusScope.of(context).unfocus();
 
     if (isValid && currentPasswordIsValid) {
-
       await updateUserPassword(_newPassword.text);
 
       Navigator.of(context).pop(true);
@@ -50,7 +47,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   }
 
   /// Check if the current password is valid by reauthenicating
-  /// the user. 
+  /// the user.
   /// Return false in case the reauthentication does not succeed.
   Future<bool> checkCurrentPassword(String password) async {
     final currentUser = FirebaseAuth.instance.currentUser;
@@ -146,6 +143,15 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   }
                   if (value.length < 7) {
                     return 'Password must be at least 7 characters long.';
+                  }
+                  String pattern =
+                      r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{7,}$';
+                  RegExp regExp = new RegExp(pattern);
+                  if (!regExp.hasMatch(value)) {
+                    return 'Your password must have at least 1 Upper Case, 1 Lower Case and 1 Number.';
+                  }
+                  if (value == _currentPassword.text) {
+                    return 'The new password cannot be your current password';
                   }
                   return null;
                 },

@@ -12,7 +12,7 @@ import 'models/itinerary.dart';
 
 /// Generic popups used thorough the app
 /// Author(s) Marija
-/// Contributors: Nicole
+/// Contributors: Nicole, Fariha, Rahin, Elisabeth
 
 class Popups {
   // Questions
@@ -23,7 +23,7 @@ class Popups {
         onPressed: () async {
           final response = await Navigator.push(context,
               MaterialPageRoute(builder: (context) => TripSchedulerScreen()));
-          if (response == null || response) {
+          if (response || response == null) {
             Navigator.of(context).pop(true);
           }
         },
@@ -39,6 +39,7 @@ class Popups {
           }),
     ];
     return PopupWidget(
+        key: Key("proceedTrip"),
         title: "Choose how to proceed with your trip!",
         text: "Only one way to find out.",
         children: children,
@@ -51,6 +52,7 @@ class Popups {
       PopupButtonWidget(text: "Continue", onPressed: () {}),
     ];
     return PopupWidget(
+        key: Key("tripWarning"),
         title: "Are you sure you want to proceed?",
         text: "Your trip exceeds 30 minutes.",
         children: children,
@@ -64,6 +66,7 @@ class Popups {
       PopupButtonWidget(text: "Continue", onPressed: () {}),
     ];
     return PopupWidget(
+        key: Key("warning"),
         title: "Are you sure you want to proceed?",
         text: "Your intermediate trip exceeds 30 minutes.",
         children: children,
@@ -78,6 +81,7 @@ class Popups {
       PopupButtonWidget(text: "Continue", onPressed: () {}),
     ];
     return PopupWidget(
+        key: Key("warning"),
         title: "The docking station availability is predicted!",
         text: "It may not be accurate the day of the journey.",
         children: children,
@@ -89,6 +93,7 @@ class Popups {
       PopupButtonWidget(text: "Leave", onPressed: () {}),
     ];
     return PopupWidget(
+        key: Key("info"),
         title: "Journey starting soon!",
         text: "You will be redirected automatically.",
         children: children,
@@ -100,6 +105,7 @@ class Popups {
       PopupButtonWidget(text: "Leave", onPressed: () {}),
     ];
     return PopupWidget(
+        key: Key("weather"),
         title: "Weather",
         text: "You will be redirected automatically.",
         children: [],
@@ -111,13 +117,14 @@ class Popups {
     List<LatLng> subJourney = convertDocksToLatLng(itinerary.docks!)!;
     List<PopupButtonWidget> children = [
       PopupButtonWidget(
+        // key: Key("redirect"),
         text: "Yes, redirect me",
         onPressed: () async {
           final response = await Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => MapUpdatedRoutePage(itinerary)));
-          if (response == null || response || !response) {
+          if (response || response == null || !response) {
             Navigator.of(context).pop(true);
           }
         },
@@ -133,6 +140,7 @@ class Popups {
           }),
     ];
     return PopupWidget(
+        key: Key("info"),
         title:
             "Would you like to be automatically redirected to available stations?",
         text: "Only one way to find out.",
@@ -153,9 +161,11 @@ class Popups {
           }),
     ];
     return PopupWidget(
+        key: Key("suceeded"),
         title: "Journey scheduled successfully!",
         text:
-            "Your journey has been scheduled for ${formattedDate}. Check the details in the calendar.",
+            "Your journey has been scheduled for ${formattedDate}. Check the details in the calendar."
+            "\n The closest docking station may vary depending on availability on the day!",
         children: children,
         type: AlertType.warning);
   }
@@ -171,6 +181,7 @@ class Popups {
           }),
     ];
     return PopupWidget(
+        key: Key("confirm"),
         title: "Confirmation required",
         text: "Are you sure you want to delete this trip?",
         children: children,

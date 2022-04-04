@@ -1,10 +1,10 @@
 import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:veloplan/models/message.dart';
-import 'package:veloplan/styles/styling.dart';
-import 'package:veloplan/utilities/help_bot_manager.dart';
-import 'package:veloplan/widgets/message_bubble_widget.dart';
+import '../../models/message.dart';
+import '../../styles/styling.dart';
+import '../../utilities/help_bot_manager.dart';
+import '../../widgets/message_bubble_widget.dart';
 
 HelpBotManager questions = HelpBotManager();
 
@@ -40,6 +40,7 @@ class _HelpScreenState extends State<HelpScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: BackButton(key: Key("back"), color: Colors.red),
         title: const Text('HelpBot'),
       ),
       body: Column(
@@ -63,6 +64,7 @@ class _HelpScreenState extends State<HelpScreen> {
             ),
             padding: const EdgeInsets.fromLTRB(5.0, 10.0, 0.0, 10.0),
             child: SingleChildScrollView(
+              key: Key("questions"),
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: choices,
@@ -108,7 +110,8 @@ class _HelpScreenState extends State<HelpScreen> {
   void _displayQuestions() {
     choices.add(
       _getOutlinedButton(
-        content: const Icon(Icons.arrow_back, color: Colors.green),
+        content:
+            const Icon(Icons.arrow_back, key: Key("back"), color: Colors.green),
         onPressed: () {
           setState(() {
             choices = _displayTopics();

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:veloplan/screens/summary_journey_screen.dart';
-import '../../models/itinerary.dart';
+import 'package:veloplan/models/itinerary.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
-import '../../styles/styling.dart';
+import 'package:veloplan/styles/styling.dart';
 
 /// Suggester itineraries that contain biggest sights in London for under 30 min.
 /// from: https://londonblog.tfl.gov.uk/2019/11/05/santander-cycles-sightseeing/?intcmp=60245
@@ -75,6 +75,7 @@ class _SuggestedItineraryState extends State<SuggestedItinerary> {
       backgroundColor: whiteReplacement,
       appBar: AppBar(
         title: const Text('Suggested Journeys'),
+        leading: BackButton(key: Key("back"), color: Colors.white),
       ),
       body: SafeArea(
         child: ListView(

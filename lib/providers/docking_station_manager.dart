@@ -4,8 +4,7 @@ import 'package:mapbox_gl/mapbox_gl.dart';
 import 'dart:math';
 import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart'
     as LatLong;
-
-import '../models/docking_station.dart';
+import 'package:veloplan/models/docking_station.dart';
 
 //Author: Nicole, Lilliana
 

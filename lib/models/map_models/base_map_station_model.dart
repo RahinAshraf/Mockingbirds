@@ -1,11 +1,8 @@
-import 'package:flutter/widgets.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:tuple/tuple.dart';
 import 'package:veloplan/helpers/navigation_helpers/navigation_helpers.dart';
 import 'package:veloplan/models/docking_station.dart';
-import 'package:veloplan/models/itinerary.dart';
 import 'package:veloplan/models/map_models/base_map_model.dart';
-import 'package:veloplan/models/map_models/base_map_with_route_model.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:veloplan/helpers/navigation_helpers/map_drawings.dart';
 
@@ -22,9 +19,9 @@ class BaseMapboxStationMap extends BaseMapboxMap {
     this._journey,
     this._curentDock,
     MapModel model,
-  ) : super(model); //false
+  ) : super(model);
 
-  late DockingStation chosenDock; //= _chosenDock;
+  late DockingStation chosenDock;
   late List<DockingStation> dockingStations;
 
   /// Initialise map features
@@ -35,7 +32,6 @@ class BaseMapboxStationMap extends BaseMapboxMap {
   }
 
   /// Calls [onSymbolTapped] functionality for docking station markers on maps that do not [_displayPolyline]
-  @override
   void onMarkerTapped(MapboxMapController controller) {
     controller.onSymbolTapped.add(onSymbolTapped);
   }
@@ -52,11 +48,11 @@ class BaseMapboxStationMap extends BaseMapboxMap {
         super.resetCameraPosition(
             _curentDock, cameraPosition.zoom); //refocus on selected dock.
         removeMarkers(controller!, filteredDockSymbols);
-        // assign index 1 as red:
         dockingStations.remove(station);
         dockingStations.insert(0, station);
-        // redisplay marker symbols:
-        displayFeaturesAndRefocus(dockingStations, dockingStations[0]);
+        displayFeaturesAndRefocus(
+            dockingStations, dockingStations[0]); //1st=red, rest=yellow
+
         chosenDock = station;
       }
     }
@@ -73,8 +69,7 @@ class BaseMapboxStationMap extends BaseMapboxMap {
       List<DockingStation> stations, DockingStation focus) {
     stations.remove(focus); //remove index 0 - will be red
     setRedMarkers(controller!, [focus], filteredDockSymbols); //add red
-    setYellowMarkers(
-        controller!, stations, filteredDockSymbols); //add rest as yellow
+    setYellowMarkers(controller!, stations, filteredDockSymbols); //adds yellows
     stations.insert(0, focus); //put red back into first index
   }
 

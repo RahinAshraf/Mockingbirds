@@ -50,6 +50,15 @@ class _DockSorter extends State<DockSorter> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              // !  remove?
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Icon(Icons.arrow_back_rounded,
+                    key: Key("back"), color: Colors.green),
+              ),
+              //!
               Row(
                 children: [
                   const Text("Sort by: "),
