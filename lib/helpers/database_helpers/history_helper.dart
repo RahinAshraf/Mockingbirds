@@ -32,7 +32,6 @@ class HistoryHelper {
     return _databaseManager.addSubCollectiontoSubCollectionByDocumentId(
         documentId, "docking_stations", _journeys, {
       'stationId': station.stationId,
-      'name': station.name,
     });
   }
 
