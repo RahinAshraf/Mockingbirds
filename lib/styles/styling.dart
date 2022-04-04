@@ -84,10 +84,13 @@ const TextStyle sidebarTextStyle = TextStyle(
 
 // Styling for weather
 const TextStyle weatherTextStyle = TextStyle(
-    fontSize: 25.0,
+    fontSize: 20.0,
     color: (Color(0xFF99D2A9)),
-    fontWeight: FontWeight.w700,
+    fontWeight: FontWeight.w500,
     fontStyle: FontStyle.italic);
 
 // Styling for forgot password screen
-const TextStyle forgotPasswordTextStyle = TextStyle(fontSize: 20);
+const TextStyle forgotPasswordTextStyle = TextStyle(
+  fontSize: 20,
+  color: (Color(0xFF99D2A9)),
+);
