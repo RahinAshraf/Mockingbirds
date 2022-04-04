@@ -1,8 +1,5 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
-import 'package:mapbox_gl/mapbox_gl.dart';
-import 'package:latlong2/latlong.dart' as LatLong;
 
 final dockingStationManager stationManager5Docks = dockingStationManager();
 final dockingStationManager stationManager2Docks = dockingStationManager();
