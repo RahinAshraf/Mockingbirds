@@ -17,9 +17,7 @@ Veloplan helps you to get the most out of Satanders bicycle hire system everyday
 
 ## Design Decisions 
 
-All decisions were discussed with and agreed up by the client. 
-
-We chose to make a switch from using the Google Maps API to Mapbox, due to a conflict with Googles Terms of Services. There are several limitations with mapbox packages that we had to deal with.
+We chose to make a switch from using the Google Maps API to Mapbox, due to a conflict with Googles Terms of Services.(See sections 10.4.c.ii of https://developers.google.com/maps/terms-20180207). This was a major setback mid development and as a result, there were several limitations with mapbox packages that we had to deal with.
 
 1. The Mapbox Navigation Package has open issues (https://github.com/eopeter/flutter_mapbox_navigation/issues/145):
     - Turn by turn navigation can only be used once in an app run.
@@ -29,17 +27,15 @@ We chose to make a switch from using the Google Maps API to Mapbox, due to a con
 2. Mapbox did not support clustering symbols
     - https://github.com/flutter-mapbox-gl/maps/pull/797
 
+All decisions were discussed with and agreed up by the client. 
+
 ## Known bugs
+
+
 - journey_planner_screen.dart and panel_widget.dart
     - Journey planning produces the list of chosen docking stations in an incorrect order on very rare occassions (bug could not be recreated during testing but presence is speculated)
     - Due to API calls 
 
-
-## Drawbacks faced during development
-- Google Maps API and Directions API for turn-by-turn directions was not possible without breaching Google Maps privacy policy. 
-    - (See sections 10.4.c.ii of https://developers.google.com/maps/terms-20180207). 
-    - (Sources: https://stackoverflow.com/questions/57572927/open-google-maps-app-and-display-turn-by-turn-navigation-inside-flutter-webview, https://stackoverflow.com/questions/24531391/is-it-possible-to-create-turn-by-turn-gps-navigation-app-on-android-ios-using-go)
-    - Resorted to switching Map APIs to Mapbox midway through project
 
 ## References:
 - lib/screens/navigation/turn_by_turn_screen.dart: 
