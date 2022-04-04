@@ -12,21 +12,21 @@ import 'package:veloplan/widgets/panel_widget/panel_widget_exts.dart';
 /// - red cross, to delete a location from the journey planner list
 /// - TextField, which redirects the user to [PlaceSearchScreen] to insert a location to the journey planner list
 /// - menu item icon, to indicate to the user that the list is reorderable via dragging
-/// @author: Rahin Ashraf - k20034059
+
+/// Author: Rahin
+/// Contributor(s): Fariha
 class DynamicWidget extends StatelessWidget {
   final TextEditingController placeTextController = TextEditingController();
   final TextEditingController editDockTextEditController =
       TextEditingController();
   List<List<double?>?>? selectedCoords;
-  List<List<double?>?>? selectedDocks;
   Function(int)? onDelete;
   int position = -1;
-  final locationService = LocationService();
   final Map? coordDataMap;
   late Map<int, DockingStation> latLngMap;
-  List<double?>? dock;
-  // TODO: isFrom is false because this is the dynamic widget which is not the from
-  bool isFrom = false;
+  bool isFrom =
+      false; //isFrom is false because this is the dynamic widget which is not the from
+  late bool isScheduled;
   int numberOfCyclists = 1;
 
   /// Set the position of the selected coordinates list to the passed in index.
@@ -53,6 +53,7 @@ class DynamicWidget extends StatelessWidget {
       this.coordDataMap,
       required this.latLngMap,
       required this.isFrom,
+      required this.isScheduled,
       required this.numberOfCyclists})
       : super(key: key);
   // late DockingStation closetDockStation;
@@ -131,6 +132,7 @@ class DynamicWidget extends StatelessWidget {
                   latLngMap,
                   isFrom,
                   numberOfCyclists,
+                  isScheduled,
                   position: position,
                 )
               ],
@@ -196,9 +198,7 @@ class DynamicWidget extends StatelessWidget {
     double longitudeOfPlace = response['location'].longitude;
     List<double?> currentLocationCoords = [latitudeOfPlace, longitudeOfPlace];
     controller.text = place;
-
     checkInputLocation();
-
     if (position > ((selectedCoords?.length) ?? 0) - 1 ||
         (selectedCoords?.isEmpty ?? true)) {
       selectedCoords?.add(currentLocationCoords);

@@ -22,11 +22,11 @@ class _AuthScreenState extends State<AuthScreen> {
 
   /// Authenticate the user with Firebase.
   /// Log in with [email] and [password] if [isLogin] is true. In the case
-  /// of signing up, vreate a user on Firebase Authentication. 
-  /// Set url to default profile pictore if 
+  /// of signing up, vreate a user on Firebase Authentication.
+  /// Set url to default profile pictore if
   /// none is choosen, otherwise save it to Firebase Storage.
   /// Create a document for the user in the Cloud Firestore with their details.
-  /// Set state in order to deactivate and activate the Log In/Sign Up button, 
+  /// Set state in order to deactivate and activate the Log In/Sign Up button,
   /// so the user can't perform this action twice in the same time.
   /// Handle errors by showing snackbars with the message.
   void _submitAuthForm(
@@ -113,7 +113,7 @@ class _AuthScreenState extends State<AuthScreen> {
       });
     } catch (err) {
       // In case of any other kind of failure the
-      // function should be able to called again. 
+      // function should be able to called again.
       setState(() {
         _isLoading = false;
       });

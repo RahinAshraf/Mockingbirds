@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 import 'package:flutter/material.dart';
 import '../../models/itinerary.dart';
 

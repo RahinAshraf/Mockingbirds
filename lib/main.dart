@@ -14,7 +14,7 @@ import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
 import 'package:veloplan/utilities/permissions.dart';
-import 'package:veloplan/widgets/locationPermissionError.dart';
+import 'package:veloplan/widgets/location_permission_error.dart';
 import 'package:flutter/services.dart';
 
 late SharedPreferences sharedPreferences;
@@ -60,7 +60,6 @@ class _MyAppState extends State<MyApp> {
   void requestPermission() {
     if (mounted) {
       PermissionUtils.instance.getLocation(context).listen((status) {
-        print("requestPermission => $status");
         if (status == Permissions.DENY) {
           context.pushAndRemoveUntil(LocationError());
         } else if (status == Permissions.ASK_EVERYTIME) {

@@ -12,7 +12,7 @@ import 'models/itinerary.dart';
 
 /// Generic popups used thorough the app
 /// Author(s) Marija
-/// Contributors: Nicole, Elisabeth
+/// Contributors: Nicole, Fariha, Rahin, Elisabeth
 
 class Popups {
   // Questions
@@ -23,7 +23,7 @@ class Popups {
         onPressed: () async {
           final response = await Navigator.push(context,
               MaterialPageRoute(builder: (context) => TripSchedulerScreen()));
-          if (response == null || response) {
+          if (response || response == null) {
             Navigator.of(context).pop(true);
           }
         },
@@ -124,7 +124,7 @@ class Popups {
               context,
               MaterialPageRoute(
                   builder: (context) => MapUpdatedRoutePage(itinerary)));
-          if (response == null || response || !response) {
+          if (response || response == null || !response) {
             Navigator.of(context).pop(true);
           }
         },
@@ -164,7 +164,8 @@ class Popups {
         key: Key("suceeded"),
         title: "Journey scheduled successfully!",
         text:
-            "Your journey has been scheduled for ${formattedDate}. Check the details in the calendar.",
+            "Your journey has been scheduled for ${formattedDate}. Check the details in the calendar."
+            "\n The closest docking station may vary depending on availability on the day!",
         children: children,
         type: AlertType.warning);
   }
