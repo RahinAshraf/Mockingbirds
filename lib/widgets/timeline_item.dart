@@ -11,11 +11,13 @@ class TimelineItem extends StatelessWidget {
       {this.first = false,
       this.last = false,
       required this.content,
+      required this.destination,
       required this.duration,
       required this.distance});
 
   final bool first;
   final bool last;
+  final String destination;
   final String content;
   final double distance;
   final double duration;
@@ -77,7 +79,8 @@ class TimelineItem extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(15.0),
           child: Text(
-            content,
+            '${content}',
+            // '${destination} \n ${content}',
             style: TextStyle(
               fontSize: 15.0,
               color: Colors.black54,
