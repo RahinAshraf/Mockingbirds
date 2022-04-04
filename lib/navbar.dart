@@ -43,7 +43,11 @@ class _NavBarState extends State<NavBar> {
         'users', _databaseManager.getCurrentUser()!.uid);
     var hasGroup = user.data()!.keys.contains('group');
     setState(() {
-      _isInGroup = hasGroup;
+      if (_isInGroup == null) {
+        _isInGroup = false;
+      } else {
+        _isInGroup = hasGroup;
+      }
     });
   }
 
