@@ -1,12 +1,8 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:veloplan/utilities/connectivity_status_enums.dart';
-import 'package:veloplan/providers/connectivity_provider.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
   /// Returns [true] if [enumeratedValue] is an Enumerated Type
   bool isEnum(dynamic enumeratedValue) {
     final splitEnum = enumeratedValue.toString().split('.');

@@ -85,10 +85,6 @@ void main() {
 
   group('get geometry, distance and duration for walking and cycling ', () {
     test('getGeometry returns correct information', () async {
-      // var _cyclingResponse = await _manager.getDirections(
-      //     journey[1], journey[2], NavigationType.cycling);
-      // var cyclingGeometry = _cyclingResponse['geometry'];
-      // expect(await _manager.getGeometry(), cyclingGeometry);
       var _walkingResponse = await _manager.getDirections(
           journey[1], journey[2], NavigationType.walking);
       var walkingGeometry = _walkingResponse['geometry'];
@@ -98,10 +94,6 @@ void main() {
     test(
         'getDistance for cycling and walking route returns correct information',
         () async {
-      // var _cyclingResponse = await _manager.getDirections(
-      //     journey[0], journey[1], NavigationType.cycling);
-      // var cyclingDistance = _cyclingResponse['distance'];
-      // expect(await _manager.getDistance(), cyclingDistance);
       var _walkingResponse = await _manager.getDirections(
           journey[0], journey[1], NavigationType.walking);
       var walkingDistance = _walkingResponse['distance'];
@@ -111,10 +103,6 @@ void main() {
     test(
         'getDuration for cycling and walking route returns correct information',
         () async {
-      // var _cyclingResponse = await _manager.getDirections(
-      //     journey[0], journey[1], NavigationType.cycling);
-      // var cyclingDuration = _cyclingResponse['duration'];
-      // expect(await _manager.getDuration(), cyclingDuration);
       var _walkingResponse = await _manager.getDirections(
           journey[0], journey[1], NavigationType.walking);
       var walkingDuration = _walkingResponse['duration'];
