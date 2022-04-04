@@ -59,6 +59,11 @@ class DockingStation {
     _stationId = document.get('stationId');
     _name = document.get('name');
   }
+
+  ///Creates an instance of a docking station including its station id when added to suggested journeys
+  DockingStation.assignId(String id) {
+    _stationId = id;
+  }
   set setStationId(String temp) {
     _stationId = temp;
   }
@@ -112,16 +117,18 @@ class DockingStation {
         _lat = 0.0;
 
 // Overload function for assignment operator
-  void assign(DockingStation other) {
-    this._stationId = other.stationId;
-    this._name = other.name;
-    this._numberOfBikes = other._numberOfBikes;
-    this._numberOfEmptyDocks = other.numberOfEmptyDocks;
-    this._numberOfAllDocks = other._numberOfAllDocks;
-    this._isInstalled = other._isInstalled;
-    this._isLocked = other.isLocked;
-    this._lon = other.lon;
-    this._lat = other.lat;
+  void assign(DockingStation? other) {
+    if (other != null) {
+      this._stationId = other.stationId;
+      this._name = other.name;
+      this._numberOfBikes = other._numberOfBikes;
+      this._numberOfEmptyDocks = other.numberOfEmptyDocks;
+      this._numberOfAllDocks = other._numberOfAllDocks;
+      this._isInstalled = other._isInstalled;
+      this._isLocked = other.isLocked;
+      this._lon = other.lon;
+      this._lat = other.lat;
+    }
   }
 
   LatLng getLatlng() {

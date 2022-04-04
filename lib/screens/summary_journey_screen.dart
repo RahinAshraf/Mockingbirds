@@ -1,11 +1,8 @@
 import 'dart:developer';
 import 'dart:math' as math;
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-
 import 'package:mapbox_gl/mapbox_gl.dart';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
@@ -16,37 +13,39 @@ import 'package:veloplan/models/path.dart';
 import '../helpers/navigation_helpers/navigation_conversions_helpers.dart';
 import '../models/itinerary.dart';
 import 'navigation/map_with_route_screen.dart';
-import 'dart:async';
-import 'package:mapbox_gl/mapbox_gl.dart';
-
 import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 import 'package:veloplan/navbar.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
 
 /// Class useful to present the chosen docking stations and destinations by the user, distances and durations about their itinerary, a code for people to create a group
-///Author(s): Nicole, Marija, Lilliana, Hristina
+///Author(s): Nicole, Marija, Liliana, Hristina
 
 class SummaryJourneyScreen extends StatefulWidget {
   late Itinerary itinerary;
-  SummaryJourneyScreen(this.itinerary, {Key? key}) : super(key: key);
+  bool cameFromSchedule;
+  final DatabaseManager _databaseManager = DatabaseManager();
+  SummaryJourneyScreen(this.itinerary, this.cameFromSchedule, {Key? key})
+      : super(key: key);
 
   @override
-  State<StatefulWidget> createState() =>
-      SummaryJourneyScreenState(this.itinerary);
+  State<StatefulWidget> createState() => SummaryJourneyScreenState(
+      this.itinerary, this.cameFromSchedule, this._databaseManager);
 }
 
 class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
-  final DatabaseManager _databaseManager = DatabaseManager();
+  bool cameFromSchedule;
   bool isInGroup = false;
   late String groupID = "";
   late String organiser = "";
   late List<List<double?>?> pointsInDoubles;
   late List<LatLng> pointsCoord;
   late Itinerary _itinerary;
+  final DatabaseManager _databaseManager;
   late List<Path> paths;
   late ItineraryManager _itineraryManager;
 
-  SummaryJourneyScreenState(this._itinerary) {
+  SummaryJourneyScreenState(
+      this._itinerary, this.cameFromSchedule, this._databaseManager) {
     _itineraryManager = new ItineraryManager(_itinerary);
     paths = _itineraryManager.getPaths();
   }
@@ -79,7 +78,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
     setState(() {
       isInGroup = hasGroup;
       organiser = user.data()!['username'];
-      if (isInGroup) {
+      if (isInGroup && !cameFromSchedule) {
         organiser = res.data()!['username'];
       }
     });
@@ -94,15 +93,26 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
     return tempr;
   }
 
-  void _createGroup() async {
+  String _padWithZeroes(String textToPad) {
+    while (textToPad.length < 6) {
+      textToPad = '0' + textToPad;
+    }
+    return textToPad;
+  }
+
+  @visibleForTesting
+  void createGroup() async {
     var ownerID = _databaseManager.getCurrentUser()?.uid;
     List list = [];
     list.add(ownerID);
     math.Random rng = math.Random();
     String code = rng.nextInt(999999).toString();
+    code = _padWithZeroes(code);
     var x = await _databaseManager.getByEquality('group', 'code', code);
     while (x.size != 0) {
       code = rng.nextInt(999999).toString();
+      code = _padWithZeroes(code);
+
       x = await _databaseManager.getByEquality('group', 'code', code);
     }
     List<GeoPoint> geoList = [];
@@ -114,39 +124,38 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
     }
 
     try {
-      await _databaseManager.addToCollection('group', {
+      await _databaseManager.setByKey(
+          'users', ownerID!, {'group': code}, SetOptions(merge: true));
+      var group = await _databaseManager.addToCollection('group', {
         'code': code,
         'ownerID': ownerID,
         'memberList': list,
         'createdAt': Timestamp.fromDate(DateTime.now()),
       });
-      await _databaseManager.setByKey(
-          'users', ownerID!, {'group': code}, SetOptions(merge: true));
-
-      var group = await _databaseManager.getByEquality('group', 'code', code);
-      group.docs.forEach((element) async {
-        element.reference.collection('itinerary').add({
-          'journeyID': _itinerary.journeyDocumentId,
-          'points': geoList,
-          'date': _itinerary.date,
-          'numberOfCyclists': _itinerary.numberOfCyclists
-        });
-        var journey = await element.reference
-            .collection('itinerary')
-            .where('journeyID', isEqualTo: _itinerary.journeyDocumentId)
-            .get();
-        var dockingStationList = _itinerary.docks!;
-        for (int i = 0; i < dockingStationList.length; i++) {
-          var station = dockingStationList[i];
-          journey.docs.forEach((jour) {
-            jour.reference.collection("dockingStations").add({
-              'id': station.stationId,
-              'name': station.name,
-              'location': GeoPoint(station.lat, station.lon),
-            });
-          });
-        }
+      var journey = await group.collection("itinerary").add({
+        'journeyID': _itinerary.journeyDocumentId,
+        'points': geoList,
+        'date': _itinerary.date,
+        'numberOfCyclists': _itinerary.numberOfCyclists
       });
+      var dockingStationList = _itinerary.docks!;
+      for (int j = 0; j < geoList.length; j++) {
+        var geo = geoList[j];
+        journey.collection("coordinates").add({
+          'coordinate': geo,
+          'index': j,
+        });
+      }
+
+      for (int i = 0; i < dockingStationList.length; i++) {
+        var station = dockingStationList[i];
+        journey.collection("dockingStations").add({
+          'id': station.stationId,
+          'name': station.name,
+          'location': GeoPoint(station.lat, station.lon),
+          'index': i,
+        });
+      }
 
       setState(() {
         isInGroup = true;
@@ -254,37 +263,39 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
                     onPressed: () {},
                   )),
               if (isInGroup)
-                Container(
-                    alignment: Alignment.center,
-                    padding: const EdgeInsets.all(10),
-                    color: Theme.of(context).primaryColor,
-                    child: FutureBuilder<String>(
-                        future: _getGroup(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return GestureDetector(
-                              child: Text(
-                                "Tap here to copy the code: " + groupID,
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 13),
-                              ),
-                              onTap: () {
-                                Clipboard.setData(
-                                  ClipboardData(text: groupID),
-                                );
-                              },
-                            );
-                          } else {
-                            return SizedBox(
-                              height: MediaQuery.of(context).size.height / 1.3,
-                              child: const Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                            );
-                          }
-                        })),
+                if (!cameFromSchedule)
+                  Container(
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.all(10),
+                      color: Theme.of(context).primaryColor,
+                      child: FutureBuilder<String>(
+                          future: _getGroup(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return GestureDetector(
+                                child: SelectableText(
+                                  "Tap here to copy the code: " + groupID,
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 13),
+                                ),
+                                onTap: () {
+                                  Clipboard.setData(
+                                    ClipboardData(text: groupID),
+                                  );
+                                },
+                              );
+                            } else {
+                              return SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height / 1.3,
+                                child: const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              );
+                            }
+                          })),
               if (!isInGroup)
                 if (_itinerary.date?.day == DateTime.now().day)
                   Container(
@@ -294,8 +305,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
                         child: const Text('Share journey',
                             style: TextStyle(color: Colors.white)),
                         onPressed: () {
-                          print("PUSHD");
-                          _createGroup();
+                          createGroup();
                         },
                       )),
               const SizedBox(height: 20),

@@ -98,7 +98,6 @@ class DockingStationCarousel {
         (index) => DockingStationCard.station(
               carouselData[index]["station"],
             ));
-
     return dockingStationCards;
   }
 

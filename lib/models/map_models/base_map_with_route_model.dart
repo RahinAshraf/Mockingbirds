@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:tuple/tuple.dart';
 import 'package:veloplan/helpers/navigation_helpers/navigation_conversions_helpers.dart';
@@ -17,7 +19,7 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
   late List<LatLng> _journey;
   final Itinerary _itinerary;
   Map<String, Object> fills = {};
-  final Set<Symbol> _polylineSymbols = {};
+  final Set<Symbol> polylineSymbols = {};
   final RouteManager manager = RouteManager();
   late Map<dynamic, dynamic> _routeResponse;
   // LatLng _startPosition = getLatLngFromSharedPrefs();
@@ -33,11 +35,16 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
     _displayJourneyAndRefocus(_journey);
   }
 
+  /// Retrieves the [stationData] of the docking station [symbol] that was tapped
+  @override
+  Future<void> onSymbolTapped(Symbol symbol) async {}
+
   /// Display journey and refocus camera position
   void _displayJourneyAndRefocus(List<LatLng> journey) {
     setBaseJourney(journey);
     _refocusCamera(journey);
-    setPolylineMarkers(controller!, journey, _polylineSymbols);
+    //setPolylineMarkers(controller!, journey, polylineSymbols); - renamed
+    setLocationMarkers(controller!, journey, polylineSymbols);
   }
 
   /// Refocus camera positioning to focus on the [journey] polyline
@@ -65,8 +72,6 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
       //WALKING:
       _routeResponse = await manager.getDirections(
           _itinerary.myDestinations![0], journey[0], NavigationType.walking);
-      // _routeResponse = await manager.getDirections(
-      // _startPosition, journey[0], NavigationType.walking);
 
       //update local vars ---
       totalDistance += await manager.getDistance() as num;
@@ -92,6 +97,7 @@ class BaseMapboxRouteMap extends BaseMapboxMap {
         _routeResponse.update("duration", (value) => totalDuration);
       }
       //set distance and duration of whole journey: don't do this if you will reuse distance and duration within this class
+
       manager.setDistance(_routeResponse['distance']);
       manager.setDuration(_routeResponse['duration']);
       manager.setGeometry(_routeResponse['geometry']);

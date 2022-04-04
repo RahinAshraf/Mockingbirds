@@ -40,7 +40,7 @@ class FavouriteHelper {
       var dock = await dockingStationManager()
           .checkStationById(doc.get('stationId'))
           .then((value) {
-        favourites.add(DockingStation.map(doc, value));
+        favourites.add(DockingStation.map(doc, value!));
       });
     }
     return favourites;
@@ -53,7 +53,6 @@ class FavouriteHelper {
 
   ///Toggles between adding or removing a docking station from favourites.
   void toggleFavourite(String stationId, List<DockingStation> faveList) async {
-    // var favouriteList = await this.getUserFavourites();
     if (isFavouriteStation(stationId, faveList)) {
       DockingStation favouriteStation =
           faveList.firstWhere((DockingStation f) => (f.stationId == stationId));
@@ -72,7 +71,6 @@ class FavouriteHelper {
     if (station == null) {
       return false;
     } else {
-      print("yessssss");
       return true;
     }
   }

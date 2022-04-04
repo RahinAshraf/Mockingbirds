@@ -11,6 +11,7 @@ class DatabaseManager {
     return FirebaseAuth.instance.currentUser;
   }
 
+  @deprecated
   CollectionReference<Object?> getUserSubCollectionReference(
       String collectionName) {
     return FirebaseFirestore.instance
@@ -73,9 +74,9 @@ class DatabaseManager {
         .update(value);
   }
 
-  Future<void> addToCollection(
+  Future<DocumentReference<Map<String, dynamic>>> addToCollection(
       String collection, Map<String, dynamic> value) async {
-    await FirebaseFirestore.instance.collection(collection).add(value);
+    return await FirebaseFirestore.instance.collection(collection).add(value);
   }
 
   Future<void> addToSubCollection(CollectionReference<Object?> subcollection,

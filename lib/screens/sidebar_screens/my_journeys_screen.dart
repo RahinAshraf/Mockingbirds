@@ -4,6 +4,7 @@ import '../../screens/splash_screen.dart';
 import '../../helpers/database_helpers/database_manager.dart';
 import '../../helpers/database_helpers/history_helper.dart';
 import '../../widgets/my_journey_card.dart';
+import '../../styles/styling.dart';
 
 ///Displays users started journeys
 ///Author: Tayyibah Uddin
@@ -38,10 +39,18 @@ class _MyJourneysState extends State<MyJourneys> {
             return SplashScreen(); //replace with our splash screen
           }
           return _journeyList.isEmpty
-              ? const SafeArea(
-                  child:
-                      Center(child: Text("You haven't made any journeys yet.")),
-                )
+              ? SafeArea(
+                  child: Center(
+                      child: Column(children: [
+                  SizedBox(height: 100),
+                  Image.asset('assets/images/past_journeys_sidebar.png',
+                      width: 170, height: 170),
+                  SizedBox(height: 40),
+                  Text(
+                    "You haven't made any journeys yet.",
+                    style: sidebarTextStyle,
+                  )
+                ])))
               : Stack(
                   children: [
                     ListView.builder(

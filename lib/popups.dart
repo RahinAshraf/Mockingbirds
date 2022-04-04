@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/screens/navigation/polyline_turn_by_turn_screen.dart';
 import 'package:veloplan/screens/navigation/turn_by_turn_screen.dart';
-import 'package:veloplan/screens/sidebar_screens/schedule_screen.dart';
 import 'package:veloplan/screens/trips_scheduler_screen.dart';
 import 'package:veloplan/widgets/group/group_id_join_code_widget.dart';
 import 'package:veloplan/widgets/popup_widget.dart';
 import 'package:veloplan/utilities/alert_type.dart';
+import 'package:intl/intl.dart';
 import 'helpers/navigation_helpers/navigation_conversions_helpers.dart';
 import 'models/itinerary.dart';
 
 /// Generic popups used thorough the app
 /// Author(s) Marija
-/// Contributors: Nicole
+/// Contributors: Nicole, Fariha, Rahin
 
 class Popups {
   // Questions
@@ -156,7 +155,8 @@ class Popups {
     return PopupWidget(
         title: "Journey scheduled successfully!",
         text:
-            "Your journey has been scheduled for ${formattedDate}. Check the details in the calendar.",
+            "Your journey has been scheduled for ${formattedDate}. Check the details in the calendar."
+            "\n The closest docking station may vary depending on availability on the day!",
         children: children,
         type: AlertType.warning);
   }

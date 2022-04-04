@@ -2,6 +2,9 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+import '../helpers/navigation_helpers/navigation_conversions_helpers.dart';
+import '../providers/docking_station_manager.dart';
+import 'docking_station.dart';
 import 'package:veloplan/helpers/navigation_helpers/navigation_conversions_helpers.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:veloplan/models/docking_station.dart';
@@ -36,9 +39,14 @@ class Itinerary {
     _date = (document.get('date')).toDate();
     _docks = stationList;
   }
-  Itinerary.suggestedTrip(List<LatLng> _myDest, String str) {
+  Itinerary.suggestedTrip(
+      List<LatLng> _myDest, String str, List<String> bikePoints) {
     _myDestinations = _myDest;
     _journeyDocumentId = str;
+
+    for (int i = 0; i < bikePoints.length; i++) {
+      updateDock(bikePoints[i]);
+    }
   }
 
   ///Creates a scheduled journey from firebase to include its planned date, document id
@@ -56,6 +64,13 @@ class Itinerary {
     _date = (document.get('date')).toDate();
     _numberOfCyclists = document.get('numberOfCyclists');
     updateDocks();
+  }
+
+  // checks the information of only one docking station, useful for suggested journeys
+  void updateDock(String id) async {
+    dockingStationManager _stationManager = dockingStationManager();
+    var tempDock = await _stationManager.checkStationById(id);
+    _docks!.add(tempDock!);
   }
 
   void updateDocks() async {

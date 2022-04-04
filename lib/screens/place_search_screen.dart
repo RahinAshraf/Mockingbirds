@@ -3,7 +3,7 @@ import 'package:veloplan/providers/location_service.dart';
 import 'package:veloplan/screens/journey_planner_screen.dart';
 import 'package:veloplan/styles/colors.dart';
 
-/// @author: Rahin Ashraf - k20034059
+/// Author(s): Rahin Ashraf
 class PlaceSearchScreen extends StatefulWidget {
   late LocationService locService;
   bool? isPop;
