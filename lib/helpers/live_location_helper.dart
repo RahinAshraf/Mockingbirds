@@ -4,6 +4,7 @@ import 'package:veloplan/alerts.dart';
 
 late SharedPreferences sharedPreferences;
 
+///Author: Rahin Ashraf
 class LiveLocationHelper {
   Alerts alert = Alerts();
 

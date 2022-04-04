@@ -11,6 +11,7 @@ import 'package:veloplan/popups.dart';
 
 /// Map screen showing and focusing on a a selected journey
 /// Author(s): Elisabeth Halvorsen k20077737,
+/// Contributor(s): Fariha Choudhury k20059723
 
 class MapRoutePage extends StatefulWidget {
   final Itinerary _itinerary;
