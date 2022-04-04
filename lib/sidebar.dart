@@ -74,7 +74,7 @@ class SideBar extends StatelessWidget {
     );
   }
 
-  _renderScreen(BuildContext context, int i) async {
+  _renderScreen(BuildContext context, int i) {
     switch (i) {
       case 0:
         Navigator.of(context).push(MaterialPageRoute(

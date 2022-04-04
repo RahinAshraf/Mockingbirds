@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-/// Helper functions for database usage
+/// Helper functions for database usage.
 /// Author: Lilianna
 /// Contributor: Tayyibah
 class DatabaseManager {
@@ -11,7 +11,6 @@ class DatabaseManager {
     return FirebaseAuth.instance.currentUser;
   }
 
-  @deprecated
   CollectionReference<Object?> getUserSubCollectionReference(
       String collectionName) {
     return FirebaseFirestore.instance
