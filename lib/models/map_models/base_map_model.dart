@@ -27,7 +27,6 @@ class BaseMapboxMap {
   late MapboxMapController? controller;
   late Symbol? selectedSymbol;
   bool recenter = true;
-  late Timer timer;
   // late final bool _useLiveLocation;
 
   late final StreamController<MapPlace>? address;
@@ -113,6 +112,7 @@ class BaseMapboxMap {
   /// Initialises map with live location
   void setMap() {
     map = MapboxMap(
+      key: Key("map"),
       accessToken: accessToken,
       initialCameraPosition: cameraPosition,
       onMapCreated: onMapCreated,

@@ -65,6 +65,7 @@ class _MapPageState extends State<MapPage> {
     _baseMap.addWidget(Container(
       alignment: Alignment(0.9, 0.90),
       child: FloatingActionButton(
+          key: Key("position_Zoom"),
           heroTag: "center_to_current_loaction",
           onPressed: () async {
             _baseMap.controller?.animateCamera(CameraUpdate.newCameraPosition(
