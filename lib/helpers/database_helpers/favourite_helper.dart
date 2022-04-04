@@ -55,11 +55,12 @@ class FavouriteHelper {
   }
 
   ///Toggles between adding or removing a docking station from favourites.
-  void toggleFavourite(String stationId, String name) async {
-    var favouriteList = await this.getUserFavourites();
-    if (isFavouriteStation(stationId, favouriteList)) {
-      DockingStation favouriteStation = favouriteList
-          .firstWhere((DockingStation f) => (f.stationId == stationId));
+  void toggleFavourite(
+      String stationId, String name, List<DockingStation> faveList) async {
+    // var favouriteList = await this.getUserFavourites();
+    if (isFavouriteStation(stationId, faveList)) {
+      DockingStation favouriteStation =
+          faveList.firstWhere((DockingStation f) => (f.stationId == stationId));
       String? favouriteDocumentId = favouriteStation.documentId;
       await deleteFavourite(favouriteDocumentId);
     } else {
@@ -75,6 +76,7 @@ class FavouriteHelper {
     if (station == null) {
       return false;
     } else {
+      print("yessssss");
       return true;
     }
   }

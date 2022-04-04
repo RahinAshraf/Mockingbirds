@@ -77,23 +77,64 @@ main() {
   //   // verify()
   // });
 
-  test('Toggling new docking station adds to database', () async {
-    MockQueryDocumentSnapshot mock = MockQueryDocumentSnapshot();
-    helper.addFavourite("id2", "name2");
-    when(mockDBManager.getUserSubcollection("favourites"))
-        .thenAnswer((_) async => favouriteDocs);
+  test('Toggling favourited docking station deletes it from database',
+      () async {
+    // MockQueryDocumentSnapshot mock = MockQueryDocumentSnapshot();
+    // helper.addFavourite("id2", "name2");
+    // when(mockDBManager.getUserSubcollection("favourites"))
+    //     .thenAnswer((_) async => favouriteDocs);
     // when(favouriteDocs.docs).thenReturn(mock);
     // when(temp.data).thenReturn(_responseMap);
+    DockingStation station1 =
+        DockingStation("id1", "station1", true, false, 7, 10, 20, 60.11, 32.11);
+    DockingStation station2 =
+        DockingStation("id2", "station2", true, false, 4, 16, 20, 20.1, 32.10);
+    station1.setDocumentId = "wassup";
+    station2.setDocumentId = "wassup2";
+    List<DockingStation> favouriteList = [station1, station2];
 
-    helper.toggleFavourite("id1", "station1");
-    (verify(mockDBManager.addToSubCollection(favouritesReference, {
+    helper.toggleFavourite("id1", "station1", favouriteList);
+
+    (verify(mockDBManager.deleteDocument(favouritesReference, "wassup"))
+        .called(1));
+
+    (verifyNever(mockDBManager.addToSubCollection(favouritesReference, {
       'stationId': "id1",
       'name': "station1",
-    })).called(1)); //helper.toggleFavourite("id1", "station1");
+    })));
+    //
+    ////helper.toggleFavourite("id1", "station1");
     // verify()
   });
 
-  test('Add to favourites', () {
+  test('Toggling new docking station adds to database', () async {
+    // MockQueryDocumentSnapshot mock = MockQueryDocumentSnapshot();
+    // helper.addFavourite("id2", "name2");
+    // when(mockDBManager.getUserSubcollection("favourites"))
+    //     .thenAnswer((_) async => favouriteDocs);
+    // when(favouriteDocs.docs).thenReturn(mock);
+    // when(temp.data).thenReturn(_responseMap);
+    DockingStation station1 =
+        DockingStation("id1", "station1", true, false, 7, 10, 20, 60.11, 32.11);
+    DockingStation station2 =
+        DockingStation("id2", "station2", true, false, 4, 16, 20, 20.1, 32.10);
+    station1.setDocumentId = "wassup";
+    station2.setDocumentId = "wassup2";
+    List<DockingStation> favouriteList = [station1, station2];
+
+    helper.toggleFavourite("id3", "station3", favouriteList);
+
+    (verifyNever(mockDBManager.deleteDocument(favouritesReference, any)));
+
+    (verify(mockDBManager.addToSubCollection(favouritesReference, {
+      'stationId': "id3",
+      'name': "station3",
+    })).called(1));
+    //
+    ////helper.toggleFavourite("id1", "station1");
+    // verify()
+  });
+  test('Add to favourites correctly calls the database', () {
     helper.addFavourite(stationId, name);
     (verify(mockDBManager.addToSubCollection(favouritesReference, {
       'stationId': stationId,
@@ -101,19 +142,12 @@ main() {
     })).called(1));
   });
 
-  test('Delete from favourites', () {
+  test('Delete from favourites correctly calls the database', () {
     helper.deleteFavourite("favouriteDocumentId");
     (verify(mockDBManager.deleteDocument(
             favouritesReference, "favouriteDocumentId"))
         .called(1));
   });
-
-  // test('Get user favourites', () {
-  //   helper.deleteFavourite("favouriteDocumentId");
-  //   (verify(mockDBManager.deleteDocument(
-  //           favouritesReference, "favouriteDocumentId"))
-  //       .called(1));
-  // });
 
   test('Returns true if station is in users favourites', () {
     String stationId = "id1";

@@ -137,10 +137,8 @@ class _DockingStationCardState extends State<DockingStationCard> {
         if (_isFavouriteButtonEnabled) {
           _disableFavButton();
 
-          _helper.toggleFavourite(
-            widget.dockTemp.stationId,
-            widget.dockTemp.name,
-          );
+          _helper.toggleFavourite(widget.dockTemp.stationId,
+              widget.dockTemp.name, await _helper.getUserFavourites());
 
           List<DockingStation> updatedFavourites =
               await _helper.getUserFavourites();

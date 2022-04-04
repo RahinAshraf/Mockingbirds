@@ -127,4 +127,8 @@ class DockingStation {
   LatLng getLatlng() {
     return new LatLng(this._lat, this._lon);
   }
+
+  void updateDocumentId(String s) {
+    this._documentId = s;
+  }
 }
