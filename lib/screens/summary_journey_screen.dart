@@ -70,14 +70,14 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
   }
 
   _setData() async {
-    var res;
+    var owner;
     var user = await _databaseManager.getByKey(
         'users', _databaseManager.getCurrentUser()!.uid);
     var hasGroup = user.data()!.keys.contains('group');
     if (hasGroup) {
       var group = await _databaseManager.getByEquality(
           'group', 'code', user.data()!['group']);
-      res = await _groupManager.getGroupOwnerRef(group);
+      owner = await _groupManager.getGroupOwnerRef(group);
       pointsInDoubles = [];
 
     }
@@ -85,7 +85,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
       isInGroup = hasGroup;
       organiser = user.data()!['username'];
       if (isInGroup && !cameFromSchedule) {
-        organiser = res.data()!['username'];
+        organiser = owner.data()!['username'];
       }
     });
   }
