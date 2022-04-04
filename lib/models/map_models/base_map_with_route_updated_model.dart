@@ -214,6 +214,9 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
     for (dynamic a in _routeResponse['geometry']!['coordinates']) {
       _journeyPoints.add(a);
     }
+    final prefDistance = sharedPreferences.getDouble('distance');
+    sharedPreferences.setDouble(
+          'distance', (prefDistance ?? 0) + (this.distance.value - distance).abs().toDouble());
     this.distance.value = distance;
     this.duration.value = duration;
     _routeResponse['geometry'].update("coordinates", (value) => _journeyPoints);
