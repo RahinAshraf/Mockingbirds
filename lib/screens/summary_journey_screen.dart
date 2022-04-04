@@ -99,6 +99,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
       });
     }
   }
+
   @visibleForTesting
   Future<void> createGroup() async {
     await _groupManager.createGroup(_itinerary);
@@ -108,19 +109,18 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
   }
 
   Future<void> leaveGroup() async {
-    var userID = _databaseManager
-        .getCurrentUser()
-        ?.uid;
+    var userID = _databaseManager.getCurrentUser()?.uid;
     var user = await _databaseManager.getByKey('users', userID!);
     if (user.data() != null) {
       groupID = user.data()!['group'];
 
       var ownerID = await _groupManager.leaveGroup(groupID);
 
-      if (ownerID == _databaseManager
-          .getCurrentUser()
-          ?.uid) {} else {
-        context.push(NavBar());
+      if (ownerID == _databaseManager.getCurrentUser()?.uid) {
+      } else {
+        // context.push(NavBar());
+        // TODO : MARIJA
+        Navigator.pop(context);
       }
 
       setState(() {
@@ -223,7 +223,8 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
                   },
                 ),
               SizedBox(width: 10.0),
-              if (_itinerary.date!= null && DateTime.now().isSameDate(_itinerary.date!))
+              if (_itinerary.date != null &&
+                  DateTime.now().isSameDate(_itinerary.date!))
                 ElevatedButton(
                   child: const Text('Start Journey'),
                   onPressed: () {
@@ -261,7 +262,6 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
           ),
         );
       }
-
     }
     return stops;
   }

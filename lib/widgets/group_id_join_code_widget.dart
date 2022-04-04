@@ -24,7 +24,7 @@ class GroupIdState extends State<GroupId> {
   late List<LatLng>? points;
   late final groupManager _groupManager;
   String fullPin = ''; // user's entered pin code
-   bool successfulJoin = false;
+  bool successfulJoin = false;
   bool? exists = null;
   DatabaseManager _databaseManager;
   late Itinerary _itinerary;
@@ -53,11 +53,8 @@ class GroupIdState extends State<GroupId> {
           'users', _databaseManager.getCurrentUser()!.uid);
       if (user.data() != null) {
         var hasGroup = user.data()!.keys.contains('group');
-        if (!hasGroup) {
-          _itinerary = await _groupManager.joinGroup(code);
-        }
-        context.push(
-            SummaryJourneyScreen(_itinerary, false));
+        _itinerary = await _groupManager.joinGroup(code);
+        context.push(SummaryJourneyScreen(_itinerary, false));
         setState(() {
           successfulJoin = hasGroup;
           exists = true;
@@ -112,8 +109,8 @@ class GroupIdState extends State<GroupId> {
                                 successfulJoin != null &&
                                 exists! &&
                                 successfulJoin) {
-                              context.push(
-                                  SummaryJourneyScreen(_itinerary, false));
+                              // context.push(
+                              //     SummaryJourneyScreen(_itinerary, false));
                             }
                             if (!successfulJoin) {}
                           }
