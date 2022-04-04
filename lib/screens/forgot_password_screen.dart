@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 
 /// Screen where the user sends password reset email
-/// Author(s): Eduard Ragea k20067643
+/// Author(s): Eduard Ragea
 class ForgotPasswordScreen extends StatefulWidget {
-
   ForgotPasswordScreen({Key? key}) : super(key: key);
 
   @override

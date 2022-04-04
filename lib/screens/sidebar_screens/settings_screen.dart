@@ -1,20 +1,19 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:veloplan/screens/change_password_screen.dart';
-import 'package:veloplan/helpers/database_helpers/settings_helper.dart';
+import '../../screens/change_password_screen.dart';
+import '../../helpers/database_helpers/settings_helper.dart';
 
 /// Settings screen where user can log out, change their password or delete their account.
-/// @Author(s): Tayyibah, Eduard Ragea k20067643
+/// Author(s): Tayyibah Uddin, Eduard Ragea
+
 class Settings extends StatelessWidget {
   const Settings({Key? key}) : super(key: key);
 
-  /// This function deletes the current user's account by
-  /// deleting first the documents in the journeys and schedules
+  /// Deletes user's account by deleting first the documents in the journeys and schedules
   /// subcollections.
-  /// Show a popup to confirm deleting by reentering the password
-  /// to avoid deleting it by input mistake.
+  /// Show a popup to confirm deletion by re-entering password
   void deleteAccount(BuildContext context) {
     TextEditingController passwordController = TextEditingController();
     final defaultProfilePictureURL =
