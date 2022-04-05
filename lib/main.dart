@@ -16,7 +16,6 @@ import 'package:veloplan/screens/splash_screen.dart';
 import 'package:veloplan/screens/verify_email_screen.dart';
 import 'package:veloplan/styles/theme.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
-import 'package:veloplan/utilities/connectivity_status_enums.dart';
 import 'package:veloplan/utilities/enums/connectivity_status_enums.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
 import 'package:veloplan/utilities/enums/location_enums.dart';
