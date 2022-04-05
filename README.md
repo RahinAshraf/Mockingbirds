@@ -60,6 +60,10 @@ These features could not be complete due to time constraints:
 
 The link for deployment will be provided at a later date.
 
+## Important notes:
+
+As we are using mapbox, we are on a free trial version that expires a month after submission.
+
 ## Who are we?
 
 - *Rahin Ashraf - k20034059*
