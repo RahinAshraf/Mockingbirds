@@ -12,7 +12,3 @@ void main() {
   test('Test printPaths', () async {});
   test('Test printPaths when null', () async {});
 }
-//! TODO
-///_setJourney
-///getPaths
-///printPaths
