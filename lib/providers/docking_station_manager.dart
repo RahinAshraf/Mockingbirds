@@ -189,9 +189,6 @@ class dockingStationManager {
     if (filtered_stations[0] != null)
       return filtered_stations[0];
     else {
-      //! TODO:turn to null or write a handler
-      print(
-          "----------------------------it was called on an empty docking station-------------------------------");
       return DockingStation.empty();
     }
   }
@@ -277,10 +274,6 @@ class dockingStationManager {
     late DockingStation newStation;
     var station = json.decode(data.body);
     try {
-      print(station["id"] +
-          "      " +
-          station["commonName"] +
-          "-----------------__________-debug stations__________--------");
       newStation = DockingStation(
           station["id"],
           station["commonName"],
@@ -328,12 +321,6 @@ class dockingStationManager {
     var data = await http.get(Uri.parse(
         "https://api.tfl.gov.uk/Place?lat=${coord.latitude}&lon=${coord.longitude}&radius=${radius}&type=BikePoint"));
     var station = json.decode(data.body);
-    // var jsonData = json.decode(data.body);
-
-    // var jsonDataMap = jsonData;
-    // print("station manager ->>>>>>>>>>>>>>>>" + jsonData.toString());
-    // if ((jsonDataMap as Map<String, dynamic>).length > 1) {
-    // for (var station in jsonData) {false
     if (data == null) {
       await Future.delayed(const Duration(seconds: 20));
     }
@@ -355,9 +342,4 @@ class dockingStationManager {
     } on FormatException {}
     return newStations;
   }
-  // }
-  // else {
-  // print(" i am a loser");
-  // }
-  // }
 }

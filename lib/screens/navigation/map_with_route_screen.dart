@@ -39,7 +39,6 @@ class _MapRoutePageState extends State<MapRoutePage> {
       _baseMapWithRoute = BaseMapboxRouteMap(_itinerary, model);
       addPositionZoom();
       addGoBackButton();
-      print("---------------" + _itinerary.myDestinations.toString());
       if (calculateDistance(currentLatLng, _itinerary.myDestinations![0]) <
           0.02) {
         startTurnByTurn(context, _itinerary);

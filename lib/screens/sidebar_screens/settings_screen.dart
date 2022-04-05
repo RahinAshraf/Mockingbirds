@@ -87,8 +87,13 @@ class Settings extends StatelessWidget {
                         }
                       } on FirebaseAuthException catch (e) {
                         if (e.code == 'requires-recent-login') {
-                          print(
-                              'The user must reauthenticate before this operation can be executed.');
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                  "The user must reauthenticate before this operation can be executed"),
+                              backgroundColor: Theme.of(context).errorColor,
+                            ),
+                          );
                         }
                       }
                       Navigator.of(c).pop();
