@@ -29,7 +29,7 @@ import '../../helpers/database_helpers/database_manager.dart';
 /// It is an interactive panel the user can slide up or down,
 /// when wanting to input their desired locations for the journey.
 /// Author: Rahin
-/// Contributor(s): Nicole, Eduard, Fariha, Marija
+/// Contributor(s): Nicole, Eduard, Fariha, Marija, Tayyibah
 class PanelWidget extends PanelWidgetBase {
   late Map<int, DockingStation> dockingStationMap;
   PanelWidget(

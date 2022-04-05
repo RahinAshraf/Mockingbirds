@@ -7,7 +7,6 @@ import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 import 'package:veloplan/helpers/database_helpers/favourite_helper.dart';
 import 'package:veloplan/models/docking_station.dart';
 import 'favourites_test.mocks.dart';
-import 'favourites_test.mocks.dart';
 
 @GenerateMocks([
   DatabaseManager,

@@ -7,7 +7,7 @@ import 'package:veloplan/utilities/permissions.dart';
 import '../screens/reopen_app_screen.dart';
 
 ///Widget to display a Location error
-///Author: Rahin Ashraf k20034059
+///Author: Rahin Ashraf
 
 /// Builds a widget displaying a circular progression indicator and an error message
 /// for when the live location is not enabled.
