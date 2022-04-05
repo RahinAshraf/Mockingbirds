@@ -41,23 +41,26 @@ class _JourneyLandingPanelWidget extends State<JourneyLandingPanelWidget> {
                 valueListenable: widget.baseMapWithUpdatedRoute.duration,
                 builder: (BuildContext context, num time, Widget? child) {
                   String t = (time.toDouble() / 60.0).toStringAsFixed(0);
-                  return Row(children: [
-                    Icon(
-                      Icons.timelapse,
-                    ),
-                    Text("Time: ${t} minutes",
-                        style: CustomTextStyles.journeyLandingTextStyle),
-                    VerticalDivider(
-                      color: Colors.black,
-                      thickness: 2,
-                    )
-                  ]);
+                  return Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.timelapse,
+                        ),
+                        Text("Time: ${t} minutes",
+                            style: CustomTextStyles.journeyLandingTextStyle),
+                        VerticalDivider(
+                          color: Colors.black,
+                          thickness: 2,
+                        )
+                      ]);
                 }),
             ValueListenableBuilder(
                 valueListenable: widget.baseMapWithUpdatedRoute.distance,
                 builder: (BuildContext context, num distance, Widget? child) {
                   return Expanded(
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         widget.baseMapWithUpdatedRoute.currentStation == 0
                             ? Icon(
