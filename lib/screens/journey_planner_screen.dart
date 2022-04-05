@@ -60,8 +60,6 @@ class _JourneyPlanner extends State<JourneyPlanner> {
   @override
   Widget build(BuildContext context) {
     Map<String, List<double?>> staticCordMap = {};
-    Map<String, List<double?>> staticDockMap = {};
-    print("numberOfCyclists: ${widget.numberOfCyclists}");
 
     return Scaffold(
         body: Stack(children: [

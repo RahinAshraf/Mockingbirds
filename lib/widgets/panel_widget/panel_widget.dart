@@ -409,7 +409,6 @@ class PanelWidgetState extends State<PanelWidget> {
     tempList.addAll(staticListMap.values);
     tempList.addAll(widget.selectedCoords);
     ScheduleHelper helper = ScheduleHelper();
-    print("Templist => ${tempList}");
     helper.createScheduleEntry(
         widget.journeyDate, tempList, widget.numberOfCyclists);
     // Navigate back to the previous screen, useful for tbt

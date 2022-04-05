@@ -280,17 +280,9 @@ class dockingStationManager {
       /// make the api call to tfl
       var data = await http
           .get(Uri.parse("https://api.tfl.gov.uk/BikePoint/${dockId}"));
-
-      /// make the api calls until it doesnt return null
-      // while (data == null) {
-      //   await Future.delayed(const Duration(seconds: 20));
-      //   data = await http
-      //       .get(Uri.parse("https://api.tfl.gov.uk/BikePoint/${dockId}"));
-      // }
       late DockingStation newStation;
       var station = json.decode(data.body);
       try {
-        print("station id------" + station["id"]);
         newStation = DockingStation(
             station["id"],
             station["commonName"],
@@ -378,7 +370,6 @@ class dockingStationManager {
       if (newStations.length > 0) {
         return newStations;
       } else {
-        print("Returning an empty list from importStationsByRadius ");
         return newStations;
       }
     } else {
