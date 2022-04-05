@@ -61,9 +61,4 @@ class Weather {
   double convertKelvinToCelsius(double kel) {
     return kel - 273.15;
   }
-
-  void printWeather() {
-    print(
-        " $current_temp , $current_feels_like, $current_clouds , $current_visibility , $current_wind_speed , $current_description, $current_icon");
-  }
 }

@@ -11,7 +11,7 @@ import 'package:firebase_auth_platform_interface/firebase_auth_platform_interfac
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:veloplan/helpers/database_helpers/database_manager.dart' as _i5;
 import 'package:veloplan/models/itinerary.dart' as _i4;
-import 'package:veloplan/models/itinerary_manager.dart' as _i8;
+import 'package:veloplan/providers/itinerary_manager.dart' as _i8;
 import 'package:veloplan/models/path.dart' as _i9;
 
 // ignore_for_file: type=lint

@@ -11,8 +11,8 @@ import 'package:firebase_auth_platform_interface/firebase_auth_platform_interfac
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:veloplan/helpers/database_helpers/database_manager.dart' as _i5;
 import 'package:veloplan/models/itinerary.dart' as _i4;
-import 'package:veloplan/models/itinerary_manager.dart' as _i8;
 import 'package:veloplan/models/path.dart' as _i9;
+import 'package:veloplan/providers/itinerary_manager.dart' as _i8;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -566,6 +566,11 @@ class MockItineraryManager extends _i1.Mock implements _i8.ItineraryManager {
   }
 
   @override
+  _i6.Future<List<_i9.Path>> setJourney() =>
+      (super.noSuchMethod(Invocation.method(#setJourney, []),
+              returnValue: Future<List<_i9.Path>>.value(<_i9.Path>[]))
+          as _i6.Future<List<_i9.Path>>);
+  @override
   List<_i9.Path> getPaths() =>
       (super.noSuchMethod(Invocation.method(#getPaths, []),
           returnValue: <_i9.Path>[]) as List<_i9.Path>);
@@ -576,17 +581,6 @@ class MockItineraryManager extends _i1.Mock implements _i8.ItineraryManager {
   @override
   void printPaths() => super.noSuchMethod(Invocation.method(#printPaths, []),
       returnValueForMissingStub: null);
-  @override
-  void updatePath(_i9.Path? newPath) =>
-      super.noSuchMethod(Invocation.method(#updatePath, [newPath]),
-          returnValueForMissingStub: null);
-  @override
-  void setIndex(int? i) => super.noSuchMethod(Invocation.method(#setIndex, [i]),
-      returnValueForMissingStub: null);
-  @override
-  int getIndex() =>
-      (super.noSuchMethod(Invocation.method(#getIndex, []), returnValue: 0)
-          as int);
 }
 
 /// A class which mocks [DocumentSnapshot].

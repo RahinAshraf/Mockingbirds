@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:timeline_tile/timeline_tile.dart';
+import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:veloplan/screens/summary_journey_screen.dart';
 import 'package:veloplan/models/itinerary.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
@@ -7,9 +9,12 @@ import 'package:veloplan/styles/colors.dart';
 import 'package:veloplan/styles/styling.dart';
 import 'package:veloplan/styles/texts.dart';
 
-/// Suggested itineraries that contain popular touristic sights in London in under 30 minutes.
-/// Author: Nicole Lehchevska
-/// Contributor: Marija
+/// Suggester itineraries that contain biggest sights in London for under 30 min.
+/// from: https://londonblog.tfl.gov.uk/2019/11/05/santander-cycles-sightseeing/?intcmp=60245
+/// attributions to animators <a href="https://www.vecteezy.com/free-vector/london">London Vectors by Vecteezy</a>
+/// <a href="https://www.vecteezy.com/free-vector/london-bus">London Bus Vectors by Vecteezy</a>
+///Author: Nicole Lehchevska
+///
 class SuggestedItinerary extends StatefulWidget {
   @override
   _SuggestedItineraryState createState() => _SuggestedItineraryState();
@@ -17,9 +22,9 @@ class SuggestedItinerary extends StatefulWidget {
 
 class _SuggestedItineraryState extends State<SuggestedItinerary> {
   late Itinerary _hydeLoop;
+  dockingStationManager _manager = dockingStationManager();
   late Itinerary _royalLoop;
   late Itinerary _thamesLoop;
-
   Map<LatLng, String> _hydeParkLoopCoord = {
     LatLng(51.5031, -0.1526): "BikePoints_191",
     LatLng(51.50883, -0.17166): "BikePoints_248",
@@ -47,21 +52,26 @@ class _SuggestedItineraryState extends State<SuggestedItinerary> {
   };
   @override
   void initState() {
+    //asign itineraries
     List<Itinerary> itineraries = [];
 
-    this._hydeLoop = Itinerary.suggestedTrip(_hydeParkLoopCoord.keys.toList(),
-        "Hyde Park Loop", _hydeParkLoopCoord.values.toList(), DateTime.now());
-    itineraries.add(_hydeLoop);
+    this._hydeLoop = new Itinerary.suggestedTrip(
+        _hydeParkLoopCoord.keys.toList(),
+        "Hyde Park Loop",
+        _hydeParkLoopCoord.values.toList(),
+        DateTime.now());
 
-    this._royalLoop = Itinerary.suggestedTrip(_royalLoopCoord.keys.toList(),
+    itineraries.add(_hydeLoop);
+    this._royalLoop = new Itinerary.suggestedTrip(_royalLoopCoord.keys.toList(),
         "Royal Loop", _royalLoopCoord.values.toList(), DateTime.now());
     itineraries.add(_royalLoop);
 
-    this._thamesLoop = Itinerary.suggestedTrip(_thamesLoopCoord.keys.toList(),
-        "Thames Loop", _thamesLoopCoord.values.toList(), DateTime.now());
+    this._thamesLoop = new Itinerary.suggestedTrip(
+        _thamesLoopCoord.keys.toList(),
+        "Thames Loop",
+        _thamesLoopCoord.values.toList(),
+        DateTime.now());
     itineraries.add(_thamesLoop);
-
-    super.initState();
   }
 
   @override
@@ -75,17 +85,18 @@ class _SuggestedItineraryState extends State<SuggestedItinerary> {
       body: SafeArea(
         child: ListView(
           children: [
-            const SizedBox(height: 10),
+            const SizedBox(height: 30),
             Padding(
               padding: EdgeInsets.only(left: 15.0, bottom: 15.0, top: 15.0),
               child: Text('Explore London',
                   style: Theme.of(context).textTheme.headline1),
             ),
             Column(
-              children: [
-                TimelineItem(_royalLoop, 0),
-                TimelineItem(_hydeLoop, 1),
-                TimelineItem(_thamesLoop, 2)
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                TimelineItem(_royalLoop, 1),
+                TimelineItem(_hydeLoop, 2),
+                TimelineItem(_thamesLoop, 3)
               ],
             ),
           ],
@@ -95,7 +106,9 @@ class _SuggestedItineraryState extends State<SuggestedItinerary> {
   }
 }
 
-/// Creates a timeline tile with [ItineraryCard].
+/// Creates a timeline tile.
+/// The list [upcomingEventCards] should already contain all the events
+/// of a user on the same date, sorted from earliest to latest.
 class TimelineItem extends StatelessWidget {
   final Itinerary journey;
   final int index;
@@ -106,16 +119,16 @@ class TimelineItem extends StatelessWidget {
     return TimelineTile(
       isFirst: index == 0 ? true : false,
       beforeLineStyle: timelineTileBeforeLineStyle,
-      indicatorStyle: timelineTileIndicatorXYStart,
+      indicatorStyle: timelineTileIndicatorStyle,
       alignment: TimelineAlign.manual,
-      lineXY: 0.05,
+      lineXY: 0.10,
       endChild:
           ItineraryCard(title: journey.journeyDocumentId!, journey: journey),
     );
   }
 }
 
-/// Generates a card for the suggested journey.
+/// Generates an event card for schedule screen.
 class ItineraryCard extends StatelessWidget {
   const ItineraryCard({required this.title, required this.journey});
 
@@ -126,7 +139,7 @@ class ItineraryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 1,
-      margin: const EdgeInsets.fromLTRB(10.0, 0.0, 20.0, 10.0),
+      margin: const EdgeInsets.fromLTRB(10.0, 10.0, 20.0, 5.0),
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
         bottomLeft: Radius.circular(15.0),
@@ -137,15 +150,28 @@ class ItineraryCard extends StatelessWidget {
         padding: const EdgeInsets.only(
             bottom: 15.0, left: 15.0, right: 15.0, top: 15.0),
         child: Column(
-          children: [
+          children: <Widget>[
             ListTile(
               title: Text(title, style: Theme.of(context).textTheme.headline2),
             ),
-            SizedBox(
-              height: 200.0,
-              width: 200.0,
-              child: _retrieveImage(title),
-            ),
+            if (this.title == "Royal Loop")
+              SizedBox(
+                  height: 200.0,
+                  width: 200.0,
+                  child:
+                      Center(child: Image.asset('assets/images/bigBen.png'))),
+            if (this.title == "Hyde Park Loop")
+              SizedBox(
+                  height: 200.0,
+                  width: 200.0,
+                  child:
+                      Center(child: Image.asset('assets/images/hydePark.png'))),
+            if (this.title == "Thames Loop")
+              SizedBox(
+                  height: 200.0,
+                  width: 200.0,
+                  child: Center(
+                      child: Image.asset('assets/images/westminster.png'))),
             Row(
               children: [
                 const SizedBox(width: 15.0),
@@ -171,14 +197,5 @@ class ItineraryCard extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  /// Retrieve the image for the suggested journey card.
-  _retrieveImage(title) {
-    if (title == "Royal Loop") return Image.asset('assets/images/bigBen.png');
-    if (title == "Hyde Park Loop")
-      return Image.asset('assets/images/hydePark.png');
-    if (title == "Thames Loop")
-      return Image.asset('assets/images/westminster.png');
   }
 }

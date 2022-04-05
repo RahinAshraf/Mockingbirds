@@ -2,6 +2,9 @@ import 'package:flutter_mapbox_navigation/library.dart';
 import 'package:test/test.dart';
 import 'package:veloplan/helpers/navigation_helpers/navigation_conversions_helpers.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:veloplan/models/docking_station.dart';
+import 'package:veloplan/providers/docking_station_manager.dart';
+import '../docking_station_tests/docking_stations_values.dart';
 
 /// Tests for navigation_conversions_helpers.dart
 /// Author(s): Elisabeth Koren Halvorsen k20077737, Fariha Choudhury k20059723
@@ -16,6 +19,9 @@ void main() {
   List<LatLng> emptyList = [];
 
   LatLng zeroCoord = LatLng(0, 0);
+
+  dockingStationManager stationManager2Docks = dockingStationManager();
+  List<DockingStation> dockingStationsList = get2DummyDocks().stations;
 
   group('convert LatLng to waypoint', () {
     test('LatLng with empty name should return waypoint with empty name', () {
@@ -125,4 +131,59 @@ void main() {
       }
     });
   });
+
+  group('test list of lat longs to list of list of doubles', () {
+    test("List of LatLngs is converted to list of doubles", () {
+      var doubles = convertLatLngToDouble(prettyCoords);
+      expect(doubles?.length, prettyCoords.length);
+      for (int i = 0; i < doubles!.length; ++i) {
+        expect(doubles[i]![0], prettyCoords[i].latitude);
+        expect(doubles[i]![1], prettyCoords[i].longitude);
+      }
+    });
+
+    test(
+        'Empty list of LatLngs with should return empty list of list of doubles of the same size',
+        () {
+      var doubles = convertLatLngToDouble(emptyList);
+      expect(doubles!.length, 0);
+    });
+  });
+
+  group('test list of docking station to list of list of doubles', () {
+    test("List of Docking stations is converted to list of doubles", () {
+      var doubles = convertDocksToDouble(dockingStationsList);
+      expect(doubles!.length, dockingStationsList.length);
+
+      for (int i = 0; i < doubles.length; ++i) {
+        expect(doubles[i]![0], dockingStationsList[i].lat);
+      }
+    });
+
+    test(
+        'Empty list of LatLngs with should return empty list of list of doubles of the same size',
+        () {
+      List<DockingStation> emptyDockingStationsList = [];
+      var doubles = convertDocksToDouble(emptyDockingStationsList);
+      expect(doubles!.length, 0);
+    });
+  });
+
+//// FARIHA TO DO:
+//   /// /// Convert list of [DockingStation]s into a list of [LatLng]s
+// List<LatLng>? convertDocksToLatLng(List<DockingStation> docks) {
+//   try {
+//     List<LatLng> myList = [];
+//     if (docks.length > 0) {
+//       for (int i = 0; i < docks.length; i++) {
+//         myList.add(LatLng(docks[i].lat, docks[i].lon));
+//       }
+//     }
+//     return myList;
+//   } on StateError {
+//     return null;
+//   } catch (e) {
+//     return null;
+//   }
+// }
 }

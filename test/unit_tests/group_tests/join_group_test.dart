@@ -7,7 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 import 'package:veloplan/helpers/database_helpers/group_manager.dart';
 import 'package:veloplan/models/docking_station.dart';
-import 'package:veloplan/models/itinerary_manager.dart';
+import 'package:veloplan/providers/itinerary_manager.dart';
 import 'package:veloplan/models/path.dart';
 import 'package:veloplan/models/itinerary.dart';
 import 'join_group_test.mocks.dart';

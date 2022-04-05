@@ -18,12 +18,6 @@ IndicatorStyle timelineTileIndicatorStyle = IndicatorStyle(
     drawGap: true,
     color: CustomColors.lighterOrange);
 
-IndicatorStyle timelineTileIndicatorXYStart = IndicatorStyle(
-    indicatorXY: 0,
-    width: 10,
-    drawGap: true,
-    color: CustomColors.lighterOrange);
-
 const timelineTileBeforeLineStyle = const LineStyle(
   thickness: 1.5,
   color: Color(0XFFe1e1e1),

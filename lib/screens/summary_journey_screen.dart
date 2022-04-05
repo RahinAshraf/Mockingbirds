@@ -6,7 +6,7 @@ import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart';
 import 'package:veloplan/helpers/database_helpers/group_manager.dart';
 import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 import 'package:veloplan/helpers/navigation_helpers/navigation_conversions_helpers.dart';
-import 'package:veloplan/models/itinerary_manager.dart';
+import 'package:veloplan/providers/itinerary_manager.dart';
 import 'package:veloplan/models/path.dart';
 import 'package:veloplan/models/itinerary.dart';
 import 'package:veloplan/styles/texts.dart';
