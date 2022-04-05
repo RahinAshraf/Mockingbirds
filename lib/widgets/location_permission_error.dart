@@ -1,16 +1,19 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:veloplan/screens/reopen_app_screen.dart';
+import 'package:veloplan/styles/texts.dart';
+import 'package:veloplan/styles/theme.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
 import 'package:veloplan/utilities/enums/location_enums.dart';
 import 'package:veloplan/utilities/permissions.dart';
-import '../screens/reopen_app_screen.dart';
 
-///Widget to display a Location error
-///Author: Rahin Ashraf
-
+/// Widget to display a location permissions error.
+///
 /// Builds a widget displaying a circular progression indicator and an error message
 /// for when the live location is not enabled.
+/// Author: Rahin Ashraf
+/// Contributor: Marija
 class LocationError extends StatefulWidget {
   @override
   LocationErrorState createState() {
@@ -22,8 +25,8 @@ class LocationErrorState extends State<LocationError>
     with WidgetsBindingObserver {
   LocationErrorState() {}
 
-  /// Opens user's setting app
-  void goToSettings() async {
+  /// Opens user's settings app.
+  void _goToSettings() async {
     await openAppSettings();
   }
 
@@ -50,40 +53,52 @@ class LocationErrorState extends State<LocationError>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        color: Colors.white,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: EdgeInsets.all(15),
-              child: CircularProgressIndicator(
-                color: Colors.green,
+    return Theme(
+      data: CustomTheme.defaultTheme,
+      child: Scaffold(
+        body: SafeArea(
+          child: Stack(
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/images/suggested_trips.png',
+                    width: 170,
+                    height: 170,
+                  ),
+                  const SizedBox(height: 15),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Text(
+                      "Please enable your location permission access in order to use VeloPlan."
+                      "\n After enabling your locations permissions, please close and reopen the app to begin your visit in London!",
+                      style: CustomTextStyles.infoTextStyle,
+                      textAlign: TextAlign.center,
+                      key: Key('LocationErrorText'),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 18,
+                  ),
+                  ElevatedButton(
+                    onPressed: _goToSettings,
+                    child: Text(
+                      "ENABLE",
+                    ),
+                  ),
+                ],
               ),
-            ),
-            Text(
-              "Please enable your location permissions access in order to use VeloPlan. \n After "
-              "enabling your locations permissions, please reopen the app to begin your visit \n"
-              "London!",
-              textDirection: TextDirection.ltr,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.green,
-                fontSize: 18,
+              Align(
+                alignment: Alignment.topRight,
+                child: Image.asset(
+                  'assets/images/right_bubbles_shapes.png',
+                  width: 170,
+                  height: 170,
+                ),
               ),
-              key: Key('LocationErrorText'),
-            ),
-            ElevatedButton(
-              onPressed: goToSettings,
-              child: Text(
-                "ENABLE",
-                textDirection: TextDirection.ltr,
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

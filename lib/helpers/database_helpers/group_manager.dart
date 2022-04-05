@@ -5,7 +5,7 @@ import '../../models/docking_station.dart';
 import '../navigation_helpers/navigation_conversions_helpers.dart';
 import 'database_manager.dart';
 
-///Author: Liliana
+/// Author: Lilianna
 class groupManager {
   late DatabaseManager _databaseManager;
 

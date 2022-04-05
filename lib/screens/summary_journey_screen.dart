@@ -6,7 +6,7 @@ import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart';
 import 'package:veloplan/helpers/database_helpers/group_manager.dart';
 import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 import 'package:veloplan/helpers/navigation_helpers/navigation_conversions_helpers.dart';
-import 'package:veloplan/models/itinerary_manager.dart';
+import 'package:veloplan/providers/itinerary_manager.dart';
 import 'package:veloplan/models/path.dart';
 import 'package:veloplan/models/itinerary.dart';
 import 'package:veloplan/styles/texts.dart';
@@ -60,9 +60,9 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
 
   @override
   void initState() {
+    pathsFuture = _loadPaths();
     pointsInDoubles = convertDocksToDouble(widget.itinerary.docks!)!;
     _setData();
-    // pathsFuture = _loadPaths();
     super.initState();
   }
 
@@ -143,7 +143,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
                   alignment: Alignment.center,
                   height: 40,
                   padding: const EdgeInsets.all(10),
-                  color: CustomColors.orange,
+                  color: CustomColors.lighterOrange,
                   child: FutureBuilder<String>(
                       future: _getGroup(),
                       builder: (context, snapshot) {
@@ -191,7 +191,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
           const SizedBox(height: 15),
           Container(
             child: FutureBuilder<List<Path>>(
-              future: _loadPaths(),
+              future: pathsFuture,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done &&
                     snapshot.hasData) {

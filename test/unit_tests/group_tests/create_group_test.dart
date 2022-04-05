@@ -11,7 +11,7 @@ import 'package:veloplan/helpers/database_helpers/group_manager.dart';
 import 'package:veloplan/helpers/navigation_helpers/navigation_conversions_helpers.dart';
 import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/models/itinerary.dart';
-import 'package:veloplan/models/itinerary_manager.dart';
+import 'package:veloplan/providers/itinerary_manager.dart';
 import 'package:veloplan/models/path.dart';
 import 'create_group_test.mocks.dart';
 

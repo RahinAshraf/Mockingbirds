@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:veloplan/models/map_models/base_map_with_route_updated_model.dart';
-import 'package:veloplan/styles/styling.dart';
+import 'package:veloplan/styles/texts.dart';
 
 // Useful widget for displaying information about next docking station, distance and time in polyline_turn_by_turn_screen.
 
@@ -22,7 +22,7 @@ class _JourneyLandingPanelWidget extends State<JourneyLandingPanelWidget> {
         children: [
           Column(
             children: [
-              Text('Journey', style: journeyTextStyle),
+              Text('Journey', style: CustomTextStyles.journeyTextStyle),
               const Divider(
                 color: Colors.black,
                 thickness: 3,
@@ -32,7 +32,7 @@ class _JourneyLandingPanelWidget extends State<JourneyLandingPanelWidget> {
                   builder:
                       (BuildContext context, String dockName, Widget? child) {
                     return Text("Next stop: ${dockName}",
-                        style: journeyLandingTextStyle);
+                        style: CustomTextStyles.journeyLandingTextStyle);
                   }),
               SizedBox(
                 height: 20,
@@ -47,7 +47,7 @@ class _JourneyLandingPanelWidget extends State<JourneyLandingPanelWidget> {
                           Icons.timelapse,
                         ),
                         Text("Time: ${t} minutes",
-                            style: journeyLandingTextStyle),
+                            style: CustomTextStyles.journeyLandingTextStyle),
                         VerticalDivider(
                           color: Colors.black,
                           thickness: 2,
@@ -75,7 +75,7 @@ class _JourneyLandingPanelWidget extends State<JourneyLandingPanelWidget> {
                             distance >= 1000
                                 ? "Distance: ${(distance / 1000).toStringAsFixed(2)}km"
                                 : "Distance: ${distance.toStringAsFixed(0)}m",
-                            style: journeyLandingTextStyle)
+                            style: CustomTextStyles.journeyLandingTextStyle)
                       ]));
                     })
               ])

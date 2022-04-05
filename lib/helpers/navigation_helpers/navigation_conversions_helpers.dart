@@ -41,6 +41,7 @@ List<LatLng>? convertListDoubleToLatLng(List<List<double?>?> points) {
   }
 }
 
+/// Convert a list of [LatLng] points into a list of [double]s
 List<List<double?>?>? convertLatLngToDouble(List<LatLng?> points) {
   try {
     List<List<double?>?> myList = [];
@@ -55,6 +56,7 @@ List<List<double?>?>? convertLatLngToDouble(List<LatLng?> points) {
   }
 }
 
+/// Convert a list of [DockingStation]s into a list of [double]s of the docking station's Latlng
 List<List<double?>?>? convertDocksToDouble(List<DockingStation> docks) {
   try {
     List<List<double?>?> myList = [];
@@ -69,6 +71,7 @@ List<List<double?>?>? convertDocksToDouble(List<DockingStation> docks) {
   }
 }
 
+/// Convert list of [DockingStation]s into a list of [LatLng]s
 List<LatLng>? convertDocksToLatLng(List<DockingStation> docks) {
   try {
     List<LatLng> myList = [];
@@ -83,34 +86,4 @@ List<LatLng>? convertDocksToLatLng(List<DockingStation> docks) {
   } catch (e) {
     return null;
   }
-}
-
-List<List<double?>?> convertStringToList(String points) {
-  List<List<double?>?> res = [];
-  String num = '';
-  double numDouble;
-  List<double> temp = [];
-  for (int i = 0; i < points.length; i++) {
-    if (points.substring(i, i + 1) == '[') {
-    } else if (points.substring(i, i + 1) == ']') {
-      print(num);
-      numDouble = double.parse(num);
-      temp.add(numDouble);
-      num = '';
-      numDouble = 0;
-      res.add(temp);
-      temp = [];
-    } else if (points.substring(i, i + 1) == ',') {
-      print(num);
-      numDouble = double.parse(num);
-      temp.add(numDouble);
-      num = '';
-      numDouble = 0;
-    } else if (points.substring(i, i + 1) == ' ') {
-    } else {
-      num = num + points.substring(i, i + 1);
-    }
-  }
-
-  return res;
 }
