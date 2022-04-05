@@ -33,8 +33,3 @@ CalendarStyle scheduleScreenCalendarStyle = CalendarStyle(
       BoxDecoration(color: Color(0XFFFBAB4B), shape: BoxShape.circle),
   markersMaxCount: 1,
 );
-
-const TextStyle journeyLandingTextStyle =
-    TextStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 16);
-const TextStyle journeyTextStyle = TextStyle(
-    fontStyle: FontStyle.italic, fontWeight: FontWeight.w500, fontSize: 18);
