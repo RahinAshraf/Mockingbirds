@@ -28,12 +28,12 @@ All decisions were discussed with and agreed upon by the client.
 
 ## Possible known bugs
 
-- When planning a journey and entering starting/destination points, the list in the sumarry page is very rarely presented in the wrong order. This is possibly due to API calls, but we could not resolve this as it was not reproducible during testing.
+- When planning a journey and entering starting/destination points, the list in the summary page is very rarely presented in the wrong order. We suspect this is due to API calls, and we could not resolve it as was irreproducible during testing.
 
 ## Limitations
 
 - Due to Firebase,  it can take a while for data used in the 'favourites' and 'my journeys' screens to load and the colour of favourited cards to change.
-- When launching the application, it can take a while for the landing screen to load due to all of the API calls that need to be made initially. 
+- When launching the application, it can take a while for the landing screen to load due to all of the API calls initially made. 
 
 ## Future developments:
 
