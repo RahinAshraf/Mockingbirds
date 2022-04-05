@@ -3,8 +3,8 @@ import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/helpers/navigation_helpers/map_drawings.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
 
-/// Class to store scoped models related to navigation
-/// Author(s): Fariha Choudhury k20059723, Elisabeth Halvorsen k20077737,
+/// Class to store scoped models related to navigation.
+/// Author(s): Fariha Choudhury k20059723, Elisabeth Halvorsen k20077737
 class MapModel extends Model {
   late MapboxMapController? controller;
   final Set<Symbol> dockSymbols = {};

@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:veloplan/helpers/database_helpers/database_manager.dart';
+import 'package:veloplan/helpers/database_helpers/group_manager.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
 import 'package:veloplan/models/itinerary.dart';
 import 'package:veloplan/models/map_models/base_map_with_route_updated_model.dart';
@@ -86,6 +88,7 @@ class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
         heroTag: "stop_journey",
         onPressed: () {
           try {
+            //TODO: LILI leave group afterwards
             _baseMapWithUpdatedRoute.isAtGoal = true;
             // Navigator.of(context).pop(true);
             Navigator.of(context).popUntil((route) => route.isFirst);

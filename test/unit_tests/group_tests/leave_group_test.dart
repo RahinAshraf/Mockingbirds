@@ -94,4 +94,84 @@ void main() {
     verify(mockDBManagager.updateByKey(
         'users', userID, {'group': FieldValue.delete()})).called(1);
   });
+  test('Leave group works when the current user is owner and is not alone', () async {
+    String userID = "userID";
+    String username = "test";
+    String otherusername = "othertest";
+    String groupID = "groupID";
+    String otherID = "otherID";
+    DocumentSnapshot<Map<String,dynamic>> userResponse = MockDocumentSnapshot();
+    DocumentReference<Map<String,dynamic>> reference = MockDocumentReference();
+    QuerySnapshot<Map<String, dynamic>> groupResponse =MockQuerySnapshot();
+    var groupDoc = MockQueryDocumentSnapshot();
+    List<String> memberList=[userID, otherID];
+    when(user.uid).thenReturn(userID);
+    when(mockDBManagager.getCurrentUser()).thenReturn(user);
+    List<QueryDocumentSnapshot<Map<String,dynamic>>> temp = [];
+    temp.add(groupDoc);
+    Map<String,dynamic> map = {'ownerID': userID,'memberList': memberList };
+    when(mockDBManagager.getByEquality('group', 'code', groupID)).thenAnswer((_) async => groupResponse);
+    when(groupResponse.docs).thenReturn(temp);
+
+    Map<String,dynamic> userMap = {'username': username};
+    Map<String,dynamic> otherMap = {'username': otherusername};
+    when(mockDBManagager.getByKey(
+        'users', userID)).thenAnswer((_) async=> userResponse);
+    when(groupResponse.size).thenReturn(0);
+    when(groupDoc.data()).thenReturn(map);
+    when(userResponse.data()).thenReturn(userMap);
+    when(userResponse.data()).thenReturn(otherMap);
+    when(groupDoc.reference).thenReturn(reference);
+    when(groupDoc.id).thenReturn('id');
+
+    await  _groupManager.leaveGroup(groupID);
+
+    verify(mockDBManagager
+        .updateByKey('group', 'id', any)).called(2);
+    verify(mockDBManagager
+        .updateByKey('users', userID, {'group': FieldValue.delete()})).called(1);
+
+
+  });
+
+  test('Leave group works when the current user is not owner and is not alone', () async {
+    String userID = "userID";
+    String username = "test";
+    String otherusername = "othertest";
+    String groupID = "groupID";
+    String otherID = "otherID";
+    DocumentSnapshot<Map<String,dynamic>> userResponse = MockDocumentSnapshot();
+    DocumentReference<Map<String,dynamic>> reference = MockDocumentReference();
+    QuerySnapshot<Map<String, dynamic>> groupResponse =MockQuerySnapshot();
+    var groupDoc = MockQueryDocumentSnapshot();
+    List<String> memberList=[userID, otherID];
+    when(user.uid).thenReturn(userID);
+    when(mockDBManagager.getCurrentUser()).thenReturn(user);
+    List<QueryDocumentSnapshot<Map<String,dynamic>>> temp = [];
+    temp.add(groupDoc);
+    Map<String,dynamic> map = {'ownerID': otherID,'memberList': memberList };
+    when(mockDBManagager.getByEquality('group', 'code', groupID)).thenAnswer((_) async => groupResponse);
+    when(groupResponse.docs).thenReturn(temp);
+
+    Map<String,dynamic> userMap = {'username': username};
+    Map<String,dynamic> otherMap = {'username': otherusername};
+    when(mockDBManagager.getByKey(
+        'users', userID)).thenAnswer((_) async=> userResponse);
+    when(groupResponse.size).thenReturn(0);
+    when(groupDoc.data()).thenReturn(map);
+    when(userResponse.data()).thenReturn(userMap);
+    when(userResponse.data()).thenReturn(otherMap);
+    when(groupDoc.reference).thenReturn(reference);
+    when(groupDoc.id).thenReturn('id');
+
+    await  _groupManager.leaveGroup(groupID);
+
+    verify(mockDBManagager
+        .updateByKey('group', 'id', any)).called(1);
+    verify(mockDBManagager
+        .updateByKey('users', userID, {'group': FieldValue.delete()})).called(1);
+
+
+  });
+
 }

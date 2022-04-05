@@ -37,10 +37,11 @@ class Itinerary {
     _date = (document.get('date')).toDate();
     _docks = stationList;
   }
-  Itinerary.suggestedTrip(
-      List<LatLng> _myDest, String str, List<String> bikePoints) {
+  Itinerary.suggestedTrip(List<LatLng> _myDest, String str,
+      List<String> bikePoints, DateTime timestamp) {
     _myDestinations = _myDest;
     _journeyDocumentId = str;
+    _date = timestamp;
 
     for (int i = 0; i < bikePoints.length; i++) {
       updateDock(bikePoints[i]);

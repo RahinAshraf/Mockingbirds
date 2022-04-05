@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:veloplan/styles/colors.dart';
 
-/// Creates a custom carousel that must be populated with a list of cards on instantiation
-/// Author: Tayyiba
+/// Creates a custom carousel that must be populated with a list of cards on instantiation.
+/// Author: Tayyibah
 class CustomCarousel extends StatefulWidget {
   final List<Widget> cards;
 
-  const CustomCarousel({
-    Key? key,
-    required this.cards,
-  }) : super(key: key);
+  const CustomCarousel({Key? key, required this.cards}) : super(key: key);
 
   @override
   CustomCarouselState createState() => CustomCarouselState();
@@ -20,7 +18,6 @@ class CustomCarouselState extends State<CustomCarousel>
   late List<Widget> cards;
   late PageController _pageController;
   late TabController _tabController;
-
   int _position = 0;
 
   @override
@@ -50,7 +47,7 @@ class CustomCarouselState extends State<CustomCarousel>
                 return imageSlider(position);
               }),
         ),
-        //Flexible(child: buildIndicator())
+        buildIndicator()
       ],
     );
   }
@@ -70,7 +67,7 @@ class CustomCarouselState extends State<CustomCarousel>
         count: cards.length,
         effect: ScrollingDotsEffect(
           fixedCenter: true,
-          activeDotColor: Colors.green.shade200,
+          activeDotColor: CustomColors.green,
           dotHeight: 8,
           dotWidth: 8,
         ),

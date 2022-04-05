@@ -2,7 +2,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:geocode/geocode.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/providers/route_manager.dart';
-import 'package:veloplan/utilities/travel_type.dart';
 
 /// Unit tests for itinerary class
 /// Author: Nicole Lehchevska K20041914

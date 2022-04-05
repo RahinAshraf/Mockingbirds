@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 import 'package:veloplan/navbar.dart';
 
-/// Screen for the email verification UI
+/// Screen for the email verification UI.
 /// Author(s): Eduard Ragea k20067643
 class VerifyEmailScreen extends StatefulWidget {
   const VerifyEmailScreen({Key? key}) : super(key: key);
@@ -124,15 +124,15 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                         SizedBox(
                           width: MediaQuery.of(context).size.width,
                           child: ElevatedButton.icon(
-                            icon: const Icon(Icons.email, size: 32),
+                            icon: const Icon(Icons.email, size: 30),
                             label: canResendEmail
                                 ? const Text(
                                     'Resend Email',
-                                    style: TextStyle(fontSize: 24),
+                                    style: TextStyle(fontSize: 20),
                                   )
                                 : const Text(
                                     'Wait 1 minute to resend',
-                                    style: TextStyle(fontSize: 24),
+                                    style: TextStyle(fontSize: 20),
                                   ),
                             onPressed: canResendEmail
                                 ? () => sendVerification()

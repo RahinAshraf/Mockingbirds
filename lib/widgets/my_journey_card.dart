@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:veloplan/models/itinerary.dart';
+import 'package:veloplan/styles/colors.dart';
+import 'package:veloplan/styles/texts.dart';
 import 'package:veloplan/widgets/carousel/station_carousel.dart';
 
-///Creates a card for a started journey, to include its start time and planned docking stations
-///Author: Tayyibah
+/// Creates a card for a started journey, to include its start time and planned docking stations.
+/// Author: Tayyibah
 class MyJourneyCard extends StatefulWidget {
   late Itinerary journey;
-  DockingStationCarousel stationCarousel =
-      DockingStationCarousel.test(); //change this
+  DockingStationCarousel stationCarousel = DockingStationCarousel();
   late List<Widget> stationCards;
 
   MyJourneyCard(Itinerary journey) {
@@ -21,42 +23,37 @@ class MyJourneyCard extends StatefulWidget {
 
 class _MyJourneyCardState extends State<MyJourneyCard> {
   @override
-  void initState() {
-    super.initState();
+  Widget build(BuildContext context) {
+    DateTime date = widget.journey.date!;
+    _addDateCard(date);
+    return widget.stationCarousel.buildCarousel(widget.stationCards);
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 1.0,
-      shadowColor: Colors.green[200],
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-      clipBehavior: Clip.antiAlias,
-      child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.journey.date!.toString(),
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Container(
-                      child: widget.stationCarousel
-                          .buildCarousel(widget.stationCards)),
-                ],
+  /// Generates and adds card with a [date] to the carousel.
+  void _addDateCard(date) {
+    var cardToAdd = Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: Card(
+          elevation: 1,
+          color: Colors.white,
+          shadowColor: CustomColors.green,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                '${DateFormat.MMMMEEEEd().format(widget.journey.date!)}, ${date.year}',
+                style: CustomTextStyles.headline2,
               ),
-            ),
-          ],
-        ),
-      ),
-    );
+              Text(
+                '${DateFormat('hh:mm a').format(date)}',
+                style: CustomTextStyles.placeholderText,
+              ),
+            ],
+          ),
+        ));
+    widget.stationCards.insert(0, cardToAdd);
   }
 }

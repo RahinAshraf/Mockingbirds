@@ -10,8 +10,8 @@ import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/providers/itinerary_manager.dart';
 import 'package:veloplan/models/path.dart';
 import 'package:veloplan/models/itinerary.dart';
-import 'package:veloplan/widgets/group/group_id_join_code_widget.dart';
 import 'join_group_test.mocks.dart';
+import 'package:veloplan/widgets/group_id_join_code_widget.dart';
 
 @GenerateMocks([
   DatabaseManager,

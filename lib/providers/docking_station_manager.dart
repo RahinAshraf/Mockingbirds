@@ -1,14 +1,14 @@
 import 'dart:convert';
-import "package:http/http.dart" as http;
+import 'package:http/http.dart' as http;
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'dart:math';
 import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart'
     as LatLong;
 import 'package:veloplan/models/docking_station.dart';
 
-//Author: Nicole, Lilliana
-
-/// The handler of docking stations which makes api calls, updates data, sorts docking stations and filters them in different ways
+/// The handler of docking stations which makes api calls, updates data,
+/// sorts docking stations and filters them in different ways.
+/// Authors: Nicole, Lilianna
 class dockingStationManager {
   List<DockingStation> stations = [];
 

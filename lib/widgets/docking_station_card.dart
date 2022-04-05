@@ -1,20 +1,19 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import '../helpers/database_helpers/favourite_helper.dart';
-import '../models/docking_station.dart';
-import '../providers/docking_station_manager.dart';
+import 'package:veloplan/styles/colors.dart';
+import 'package:veloplan/styles/texts.dart';
+import 'package:veloplan/helpers/database_helpers/favourite_helper.dart';
+import 'package:veloplan/models/docking_station.dart';
+import 'package:veloplan/providers/docking_station_manager.dart';
+
 import '../helpers/database_helpers/database_manager.dart';
 
-///Creates a card for a docking station, to include its name, number of bikes and empty bikes.
-///Author: Tayyibah Uddin
-///Contributor(s): Fariha Choudhury, Nicole Lehchevska, Hristina-Andreea Sararu
-
+/// Creates a card for a docking station, to include its name, number of bikes and empty bikes.
+/// Author: Tayyibah Uddin
+/// Contributors: Fariha, Nicole, Hristina, Marija
 class DockingStationCard extends StatefulWidget {
   late DockingStation dock;
 
-  DockingStationCard();
-
-  ///Create an instance of a card by passing in a DockingStation
   DockingStationCard.station(DockingStation station) {
     this.dock = station;
   }
@@ -38,7 +37,7 @@ class _DockingStationCardState extends State<DockingStationCard> {
         });
     });
 
-    //Makes an API call using docking station ID to update information about the dock
+    // Makes an API call using docking station ID to update information about the dock
     _manager.checkStation(widget.dock).then((value) {
       if (mounted)
         setState(() {
@@ -53,74 +52,57 @@ class _DockingStationCardState extends State<DockingStationCard> {
     return Card(
       key: Key("dockCard"),
       elevation: 1.0,
-      shadowColor: Colors.green[200],
+      color: Colors.white,
+      shadowColor: CustomColors.green,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-      clipBehavior: Clip.antiAlias,
       child: Padding(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(8),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            buildFaveButton(),
+            _buildFaveButton(),
             const SizedBox(width: 10),
-            Expanded(
+            Flexible(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     widget.dock.name,
-                    style: const TextStyle(
-                      fontSize: 17.0,
-                      color: Color(0xFF99D2A9),
-                      fontWeight: FontWeight.w700,
-                    ),
+                    style: CustomTextStyles.dockingStationCardNameStyle,
+                    textAlign: TextAlign.center,
                   ),
-                  const Divider(
+                  Divider(
                     thickness: 3,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Column(children: [
-                        Row(
-                          children: [
-                            ImageIcon(
-                              AssetImage("assets/images/logo.png"),
-                              color: Color(0xFF99D2A9),
-                              size: 30,
-                            ),
-                            Text(
-                              'Bikes: ${widget.dock.numberOfBikes.toString()}',
-                              style: const TextStyle(
-                                fontSize: 15.0,
-                                color: Color(0xFF99D2A9),
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ],
-                        )
-                      ]),
-                      Column(children: [
-                        Row(
-                          children: [
-                            ImageIcon(
-                              AssetImage("assets/images/dock.png"),
-                              color: Color(0xFF99D2A9),
-                              size: 30,
-                            ),
-                            Text(
-                              'Spaces: ${widget.dock.numberOfEmptyDocks.toString()}',
-                              style: const TextStyle(
-                                fontSize: 15.0,
-                                color: Color(0xFF99D2A9),
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ],
-                        )
-                      ]),
+                      Row(
+                        children: [
+                          ImageIcon(
+                            AssetImage("assets/images/logo.png"),
+                            color: CustomColors.green,
+                            size: 30,
+                          ),
+                          Text(
+                            'Bikes: ${widget.dock.numberOfBikes.toString()}',
+                            style: CustomTextStyles.dockingStationCardTextStyle,
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          ImageIcon(
+                            AssetImage("assets/images/dock.png"),
+                            color: CustomColors.green,
+                            size: 30,
+                          ),
+                          Text(
+                            'Spaces: ${widget.dock.numberOfEmptyDocks.toString()}',
+                            style: CustomTextStyles.dockingStationCardTextStyle,
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ],
@@ -132,7 +114,8 @@ class _DockingStationCardState extends State<DockingStationCard> {
     );
   }
 
-  IconButton buildFaveButton() {
+  /// Returns favourite button.
+  IconButton _buildFaveButton() {
     return IconButton(
       icon: getFaveButtonColours(),
       onPressed: () async {
@@ -161,8 +144,8 @@ class _DockingStationCardState extends State<DockingStationCard> {
     );
   }
 
-  ///Disables favourite button for 3 seconds after button click
-  ///to prevent spamming the database
+  /// Disables favourite button for 3 seconds after button click
+  /// to prevent spamming the database.
   void _disableFavButton() {
     _isFavouriteButtonEnabled = false;
     Timer(const Duration(seconds: 3), () => _isFavouriteButtonEnabled = true);

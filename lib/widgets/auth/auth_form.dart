@@ -5,12 +5,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:veloplan/screens/forgot_password_screen.dart';
-import 'package:veloplan/styles/styling.dart';
 import 'package:veloplan/widgets/pickers/bottom_date_picker.dart';
 import 'package:veloplan/widgets/pickers/image_picker.dart';
+import 'package:veloplan/styles/texts.dart';
 
 /// Widget which displays and operates the Authentication Form for Log In and Sign Up
-/// Author(s): Eduard Ragea k20067643
+/// Author(s): Eduard Ragea
 class AuthForm extends StatefulWidget {
   const AuthForm(this.submitFn, this.isLoading, {Key? key}) : super(key: key);
 
@@ -104,7 +104,8 @@ class _AuthFormState extends State<AuthForm> {
                 if (_isLogin)
                   Container(
                     padding: const EdgeInsets.all(10),
-                    child: const Text('Welcome back!', style: welcomeTextStyle),
+                    child: Text('Welcome back!',
+                        style: Theme.of(context).textTheme.headline1),
                   ),
                 if (!_isLogin) const SizedBox(height: 50),
                 if (!_isLogin) UserImagePicker(_pickedImage),
@@ -293,7 +294,7 @@ class _AuthFormState extends State<AuthForm> {
                         _isLogin
                             ? 'Don\'t have an account?'
                             : 'Already have an account?',
-                        style: authTextStyle,
+                        style: CustomTextStyles.authTextStyle,
                       ),
                       TextButton(
                         child: Text(

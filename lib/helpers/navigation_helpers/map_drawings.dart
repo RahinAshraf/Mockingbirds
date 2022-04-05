@@ -1,7 +1,6 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
-import '../../models/docking_station.dart';
+import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/widgets/docking_station_widget.dart';
 
 /// Helper methods related to adding layers to the map
@@ -41,8 +40,7 @@ void addFills(MapboxMapController? controller, Map fills, _model) async {
         lineWidth: 5,
       ),
     );
-    _model.setController(controller); //MOVE THIS OUT OF ADDFILLS -----????
-    // await controller.addSymbolLayer(sourceId, layerId, properties)
+    _model.setController(controller);
   } catch (e) {}
 }
 

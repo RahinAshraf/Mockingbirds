@@ -1,11 +1,7 @@
-// import 'dart:ffi';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 import 'package:veloplan/helpers/database_helpers/group_manager.dart';
-import 'package:veloplan/helpers/navigation_helpers/navigation_conversions_helpers.dart';
-import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/models/itinerary.dart';
 import 'package:veloplan/screens/summary_journey_screen.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
@@ -17,36 +13,28 @@ class GroupId extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => GroupIdState(_databaseManager);
 }
+
 /// Renders a popup widget to join an existing journey with a 6-digit number.
 ///
 /// A user is asked to input a 6-digit code, which is stored in [fullPin]
 /// variable. If the code is correct, user 'joins' the group and is then
 /// redirected to corresponding [SummaryJourneyScreen].
+/// Authors: Lilianna, Marija
 class GroupIdState extends State<GroupId> {
-
   late List<LatLng>? points;
   late final groupManager _groupManager;
   String fullPin = ''; // user's entered pin code
-  late bool successfulJoin;
   bool? exists = null;
   DatabaseManager _databaseManager;
   late Itinerary _itinerary;
-  GroupIdState(this._databaseManager){
-     _groupManager = groupManager(_databaseManager);
+  GroupIdState(this._databaseManager) {
+    _groupManager = groupManager(_databaseManager);
   }
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  /// Adds user to an group, if the given [code] is correct and sets that group [exists].
+  /// Adds user to a group, if the given [code] is correct and sets that group [exists].
   @visibleForTesting
-  joinGroup(String code) async {
+  _joinGroup(String code) async {
     var group = await _databaseManager.getByEquality('group', 'code', code);
-    var list = [];
-    String id = "";
-
     if (group.size == 0) {
       setState(() {
         exists = false;
@@ -54,17 +42,16 @@ class GroupIdState extends State<GroupId> {
     } else {
       var user = await _databaseManager.getByKey(
           'users', _databaseManager.getCurrentUser()!.uid);
-      var hasGroup = user.data()!.keys.contains('group');
-      if(!hasGroup) {
+      if (user.data() != null) {
         _itinerary = await _groupManager.joinGroup(code);
+        Navigator.pop(context); // pops the 'Enter PIN' alert dialog
+        context.push(SummaryJourneyScreen(_itinerary, false));
+        setState(() {
+          exists = true;
+        });
       }
-      setState(() {
-        successfulJoin = hasGroup;
-        exists = true;
-      });
     }
   }
-
 
   /// Returns an error message if the entered code is incorrect.
   String? get _errorText {
@@ -78,10 +65,7 @@ class GroupIdState extends State<GroupId> {
     return AlertDialog(
       titlePadding: const EdgeInsets.fromLTRB(18.0, 18.0, 18.0, 0.0),
       title: const Center(
-        child: Text(
-          "Enter PIN",
-          textAlign: TextAlign.center,
-        ),
+        child: Text("Enter PIN", textAlign: TextAlign.center),
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -91,18 +75,17 @@ class GroupIdState extends State<GroupId> {
             child: Column(
               children: [
                 TextField(
-                  maxLength: 6,
-                  decoration: InputDecoration(
-                    labelText: 'PIN Code',
-                    errorText: _errorText,
-                  ),
-                  onChanged: (pin) {
-                    setState(() {
-                      exists = null;
-                      fullPin = pin;
-                    });
-                  },
-                ),
+                    maxLength: 6,
+                    decoration: InputDecoration(
+                      labelText: 'PIN Code',
+                      errorText: _errorText,
+                    ),
+                    onChanged: (pin) {
+                      setState(() {
+                        exists = null;
+                        fullPin = pin;
+                      });
+                    }),
                 const SizedBox(
                   height: 10,
                 ),
@@ -111,14 +94,8 @@ class GroupIdState extends State<GroupId> {
                   child: ElevatedButton(
                     onPressed: fullPin.length == 6
                         ? () async {
-                      await joinGroup(fullPin);
-                      if(exists!=null && successfulJoin!=null && exists! && successfulJoin) {
-                        context.push(SummaryJourneyScreen(_itinerary, false));
-                      }
-                      if(!successfulJoin){
-                        Text("You're already in a group. Try leaving first.");
-                      }
-                    }
+                            await _joinGroup(fullPin);
+                          }
                         : null,
                     child: const Text('Confirm'),
                   ),

@@ -144,7 +144,7 @@ Future<void> main() async {
       await driver?.waitUntilNoTransientCallbacks();
       assert(weatherScreen != null);
       assert(find.byValueKey("weatherIcon") != null);
-      assert(find.byValueKey("weatnerInfo") != null);
+      assert(find.byValueKey("weatherInfo") != null);
       assert(backButton != null);
       await driver?.tap(backButton);
 

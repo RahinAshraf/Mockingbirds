@@ -11,26 +11,24 @@ import 'package:veloplan/widgets/carousel/station_carousel.dart';
 /// [DockingStationCarousel]. It then displays the cards
 /// and can be sorted based on options given in [_DockSorter.dropdownItems].
 /// By default, cards are sorted by [_DockSorter.selectedFilter].
-
+/// Authors: Nicole, Marija, Tayyibah
 class DockSorter extends StatefulWidget {
   final DockingStation? selectedDockStation;
+  late final LatLng userCoord;
 
   DockSorter(this.userCoord,
       {Key? key,
       required ScrollController controller,
       required this.selectedDockStation})
       : super(key: key);
-  late final LatLng userCoord;
+
   @override
   _DockSorter createState() => _DockSorter();
 }
 
 class _DockSorter extends State<DockSorter> {
-  ScrollController controller = ScrollController();
   late LatLng userCoordinates;
-  late DockingStationCarousel _dockingStations;
   List<String> dropdownItems = ['Distance', 'Favourites'];
-  int setterDropdown = -1;
   String selectedFilter = 'Distance';
   cords.LatLng? selectedDockStation;
 
@@ -38,27 +36,19 @@ class _DockSorter extends State<DockSorter> {
   void initState() {
     selectedDockStation = cords.LatLng(widget.selectedDockStation?.lat ?? 0,
         widget.selectedDockStation?.lon ?? 0);
-
     userCoordinates = super.widget.userCoord;
     super.initState();
-    _dockingStations = DockingStationCarousel(userCoordinates);
   }
 
   @override
-  Widget build(BuildContext context) => ListView(
-        children: [
-          Row(
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.only(top: 12.0, left: 12.0, right: 12.0),
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // !  remove?
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Icon(Icons.arrow_back_rounded,
-                    key: Key("back"), color: Colors.green),
-              ),
-              //!
               Row(
                 children: [
                   const Text("Sort by: "),
@@ -82,25 +72,29 @@ class _DockSorter extends State<DockSorter> {
                     onChanged: (String? newFilter) {
                       setState(() {
                         selectedFilter = newFilter!;
-                        buildCarousel(newFilter);
                       });
                     },
                   ),
                 ],
               ),
+              Tooltip(
+                message:
+                    'Click on the map to select your preferred docking station. Once you are done, click the back button, and the docking station will be automatically updated.',
+                child: const Icon(Icons.info_outline_rounded,
+                    size: 25.0, color: Colors.green),
+              ),
             ],
           ),
-          const Padding(
-            padding: EdgeInsets.only(bottom: 10.0),
-            child: Divider(),
-          ),
-          buildCarousel(selectedFilter)
-          // _dockingStations.build(selectedFilter),
-        ],
-      );
+        ),
+        Divider(),
+        _buildCarousel(selectedFilter),
+      ],
+    );
+  }
 
-  FutureBuilder<List> buildCarousel(var newSelectedFilter) {
-    var dockSt = DockingStationCarousel(userCoordinates);
-    return dockSt.build(newSelectedFilter);
+  /// Builds a carousel with cards for a selected [filter].
+  FutureBuilder<List> _buildCarousel(String filter) {
+    return DockingStationCarousel(userCoordinates)
+        .buildFilteredCarousel(filter);
   }
 }
