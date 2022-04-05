@@ -8,7 +8,7 @@ class CustomColors {
   static Color lightModeScaffoldColour = Colors.white;
   static Color whiteReplacement =
       Color(0xFFf5f5f5); // replacement for too bright Colors.white
-  static Color userMessageBubbleColor = Color(0xFF99D2A9);
+  static Color userMessageBubbleColor = CustomColors.green;
   static Color botMessageBubbleColor = Colors.white;
 
   static MaterialColor lightGreen = const MaterialColor(

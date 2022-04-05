@@ -58,7 +58,7 @@ class CustomTheme {
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          textStyle: const TextStyle(color: Color(0xFF99D2A9)),
+          textStyle: TextStyle(color: CustomColors.green),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
           side: const BorderSide(color: Color(0x4D99D2A9), width: 1.0),
