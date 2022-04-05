@@ -89,7 +89,6 @@ class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
         heroTag: "stop_journey",
         onPressed: () {
           try {
-            // TODO: LILI leave group afterwards
             _baseMapWithUpdatedRoute.isAtGoal = true;
             Navigator.of(context).popUntil((route) => route.isFirst);
           } catch (e) {

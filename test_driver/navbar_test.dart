@@ -276,6 +276,3 @@ Future<void> main() async {
   });
   //! make another group with information inside of the different screens
 }
-
-//TODO: add scheduled joruneys
-// TODO: add some history

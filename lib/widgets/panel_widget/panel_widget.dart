@@ -141,7 +141,6 @@ class PanelWidgetState extends State<PanelWidget> {
   }
 
   ///Listens to the map and adds the place that the user taps on the map, to the Journey Planner as a new location.
-//TODO what do we do with isFrom here?
   void _listToMapClick() {
     final selectedCoords = widget.selectedCoords;
 
