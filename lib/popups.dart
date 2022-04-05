@@ -29,11 +29,12 @@ class Popups {
       PopupButtonWidget(
           text: "Join a journey",
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pop(
+                context); // pops the alert dialog for join/plan journey
             showDialog(
                 useRootNavigator: false,
                 context: context,
-                builder: (BuildContext context) => GroupId());
+                builder: (BuildContext context) => GroupId()); // pushes
           }),
     ];
     return PopupWidget(

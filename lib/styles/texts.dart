@@ -87,4 +87,10 @@ class CustomTextStyles {
       color: (Color(0xFF99D2A9)),
       fontWeight: FontWeight.w700,
       fontStyle: FontStyle.italic);
+
+  static TextStyle organiserSubtitleText = TextStyle(
+      color: Colors.black54,
+      fontWeight: FontWeight.bold,
+      fontSize: 16,
+      fontFamily: 'Montserrat');
 }

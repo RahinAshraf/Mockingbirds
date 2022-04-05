@@ -37,7 +37,7 @@ class GroupIdState extends State<GroupId> {
     super.initState();
   }
 
-  /// Adds user to an group, if the given [code] is correct and sets that group [exists].
+  /// Adds user to a group, if the given [code] is correct and sets that group [exists].
   @visibleForTesting
   joinGroup(String code) async {
     var group = await _databaseManager.getByEquality('group', 'code', code);
@@ -54,6 +54,7 @@ class GroupIdState extends State<GroupId> {
       if (user.data() != null) {
         var hasGroup = user.data()!.keys.contains('group');
         _itinerary = await _groupManager.joinGroup(code);
+        Navigator.pop(context);
         context.push(SummaryJourneyScreen(_itinerary, false));
         setState(() {
           successfulJoin = hasGroup;
@@ -105,14 +106,6 @@ class GroupIdState extends State<GroupId> {
                     onPressed: fullPin.length == 6
                         ? () async {
                             await joinGroup(fullPin);
-                            if (exists != null &&
-                                successfulJoin != null &&
-                                exists! &&
-                                successfulJoin) {
-                              // context.push(
-                              //     SummaryJourneyScreen(_itinerary, false));
-                            }
-                            if (!successfulJoin) {}
                           }
                         : null,
                     child: const Text('Confirm'),
