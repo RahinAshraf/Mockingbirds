@@ -55,20 +55,8 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
   }
 
   void checkAndUpdateDock() async {
-    if (currentStation >= _journey.length) {
-      print(
-          "---------------------got into check and update checker-------------------");
-      return;
-    }
-    print("---------------------dock checker-------------------");
-
     bool isDockFree = await _dockManager.checkDockWithAvailableSpace(
         _docks[currentStation], numberCyclists);
-
-    // bool isChecked = await _docks[0].checkDockWithAvailableSpace(_docks[0], 5);
-    print("--------------------- checker FINISHED -------------------" +
-        isDockFree.toString());
-
     if (!isDockFree) {
       _docks[currentStation] = _dockManager.getClosestDockWithAvailableSpace(
           _journey[currentStation], numberCyclists);
@@ -105,10 +93,6 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
       final currentLocation = getLatLngFromSharedPrefs();
       distanceTravelled += calculateDistance(oldLocation, currentLocation);
       String n = distanceTravelled.toString();
-      print("Dist traveled:  " +
-          n +
-          "------------------------------------------------");
-      // sharedPreferences.setDouble('distance', distanceTravelled);
       oldLocation = LatLng(getLatLngFromSharedPrefs().latitude,
           getLatLngFromSharedPrefs().longitude);
       _updateCameraPosition();
@@ -136,9 +120,6 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
           .doc(userID)
           .get();
       final data = va.data();
-      print('data: ' +
-          data!['distance'].toString() +
-          "------------------------------------------------");
     });
   }
 
@@ -170,8 +151,6 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
 
   /// Update route
   Future updateRoute() async {
-    // print(
-    //     "---------------_______________------------------updating route to navbar _________________--------");
     if (isAtGoal) {
       reRoute();
       return;

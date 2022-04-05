@@ -56,8 +56,8 @@ void removeFills(MapboxMapController? controller, Set<Symbol> polylineSymbols,
   } catch (e) {}
 }
 
-/// DOCK DATA SYMBOLS -- docking station data
-
+/// Docking station marker
+///
 /// Adds symbol layer to map for every docking station in London
 void placeDockMarkers(MapboxMapController controller,
     List<DockingStation> docks, Set<Symbol> dockSymbols) async {
@@ -84,7 +84,8 @@ void setRedMarkers(MapboxMapController controller, List<DockingStation> docks,
   }
 }
 
-///// ADDS SYMBOL LAYERS TO CONTROLLER WITH BIKE INFO :
+/// Adds symbol layers to controller with bike information:
+///
 /// Adds marker
 void addDockSymbol(MapboxMapController controller, Set<Symbol> symbolsSet,
     DockingStation station, String marker, double iconSize) async {
