@@ -49,6 +49,8 @@ These features could not be complete due to time constraints:
 - lib/screens/navigation/turn_by_turn_screen.dart: 
     * dormmom.com, Jul 20, 2021, flutter_mapbox_navigation 0.0.26, https://pub.dev/packages/flutter_mapbox_navigation
     * AB Satyaprakash, Feb 20, 2022, https://github.com/Imperial-lord/mapbox-flutter
+ - lib/screens/sidebar_screens/suggested_journeys.dart:
+    * https://londonblog.tfl.gov.uk/2019/11/05/santander-cycles-sightseeing/?intcmp=60245
 
 
 ## Who are we?
