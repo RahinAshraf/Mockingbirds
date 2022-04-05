@@ -256,25 +256,30 @@ class dockingStationManager {
   /// Import a docking station from the tfl api, update its info
   Future<DockingStation> checkStation(DockingStation dock) async {
     /// make the api call to tfl
-    var data = await http
-        .get(Uri.parse("https://api.tfl.gov.uk/BikePoint/${dock.stationId}"));
-    while (data == null) {
-      await Future.delayed(const Duration(seconds: 20));
-      data = await http
+    if (dock.lat != 0.0) {
+      var data = await http
           .get(Uri.parse("https://api.tfl.gov.uk/BikePoint/${dock.stationId}"));
+      while (data == null) {
+        await Future.delayed(const Duration(seconds: 20));
+        data = await http.get(
+            Uri.parse("https://api.tfl.gov.uk/BikePoint/${dock.stationId}"));
+      }
+      var station = json.decode(data.body);
+      try {
+        dock.setNumberOfBikes =
+            int.parse(station["additionalProperties"][6]["value"]);
+        dock.setNumberOfEmptyDocks =
+            int.parse(station["additionalProperties"][7]["value"]);
+        dock.setNumberOfAllDocks =
+            int.parse(station["additionalProperties"][8]["value"]);
+        dock.setIsInstalled = true;
+        dock.setisLocked =
+            station["additionalProperties"][2]["value"] == "true";
+      } on FormatException {}
+      return dock;
+    } else {
+      return DockingStation.empty();
     }
-    var station = json.decode(data.body);
-    try {
-      dock.setNumberOfBikes =
-          int.parse(station["additionalProperties"][6]["value"]);
-      dock.setNumberOfEmptyDocks =
-          int.parse(station["additionalProperties"][7]["value"]);
-      dock.setNumberOfAllDocks =
-          int.parse(station["additionalProperties"][8]["value"]);
-      dock.setIsInstalled = true;
-      dock.setisLocked = station["additionalProperties"][2]["value"] == "true";
-    } on FormatException {}
-    return dock;
   }
 
   /* import the docking station from the tfl api and check its updated info*/
@@ -282,44 +287,49 @@ class dockingStationManager {
   Future<DockingStation?> checkStationById(String dockId) async {
     // print("------------dock id in check statin by id" + dockId.toString());
 
-    /// make the api call to tfl
-    var data =
-        await http.get(Uri.parse("https://api.tfl.gov.uk/BikePoint/${dockId}"));
-
-    /// make the api calls until it doesnt return null
-    while (data == null) {
-      await Future.delayed(const Duration(seconds: 20));
-      data = await http
+    if (!dockId.isEmpty) {
+      /// make the api call to tfl
+      var data = await http
           .get(Uri.parse("https://api.tfl.gov.uk/BikePoint/${dockId}"));
-    }
-    print("-----------------check station by id---------" +
-        (data == null).toString());
-    late DockingStation newStation;
-    var station = json.decode(data.body);
-    try {
-      print("station id------" + station["id"]);
-      newStation = DockingStation(
-          station["id"],
-          station["commonName"],
-          station["additionalProperties"][1]["value"] == "true",
-          station["additionalProperties"][2]["value"] == "true",
-          int.parse(station["additionalProperties"][6]["value"]),
-          int.parse(station["additionalProperties"][7]["value"]),
-          int.parse(station["additionalProperties"][8]["value"]),
-          station["lon"],
-          station["lat"]);
-      // print(newStation.stationId +
-      //     "      " +
-      //     newStation.name +
-      //     "-----------------__________-debug stations__________--------");
-    } on FormatException {}
 
-    /// return an empty dock if there is no data from the api call
-    if (newStation != null) {
-      return newStation;
+      /// make the api calls until it doesnt return null
+      while (data == null) {
+        await Future.delayed(const Duration(seconds: 20));
+        data = await http
+            .get(Uri.parse("https://api.tfl.gov.uk/BikePoint/${dockId}"));
+      }
+      print("-----------------check station by id---------" +
+          (data == null).toString());
+      late DockingStation newStation;
+      var station = json.decode(data.body);
+      try {
+        print("station id------" + station["id"]);
+        newStation = DockingStation(
+            station["id"],
+            station["commonName"],
+            station["additionalProperties"][1]["value"] == "true",
+            station["additionalProperties"][2]["value"] == "true",
+            int.parse(station["additionalProperties"][6]["value"]),
+            int.parse(station["additionalProperties"][7]["value"]),
+            int.parse(station["additionalProperties"][8]["value"]),
+            station["lon"],
+            station["lat"]);
+        // print(newStation.stationId +
+        //     "      " +
+        //     newStation.name +
+        //     "-----------------__________-debug stations__________--------");
+      } on FormatException {}
+
+      /// return an empty dock if there is no data from the api call
+      if (newStation != null) {
+        return newStation;
+      } else {
+        print("Returning an empty dock from checkStationById ");
+        DockingStation.empty();
+      }
     } else {
       print("Returning an empty dock from checkStationById ");
-      DockingStation.empty();
+      return DockingStation.empty();
     }
   }
 
@@ -352,42 +362,46 @@ class dockingStationManager {
   /// import the docking stations from the tfl api by a set radius and coordinates
   Future<List<DockingStation>> importStationsByRadius(
       int radius, LatLng coord) async {
-    /// make the api call to tfl
-    var data = await http.get(Uri.parse(
-        "https://api.tfl.gov.uk/Place?lat=${coord.latitude}&lon=${coord.longitude}&radius=${radius}&type=BikePoint"));
-
-    /// make the api calls until it doesnt return null
-    while (data == null) {
-      await Future.delayed(const Duration(seconds: 20));
-      data = await http.get(Uri.parse(
+    if (radius > 0) {
+      /// make the api call to tfl
+      var data = await http.get(Uri.parse(
           "https://api.tfl.gov.uk/Place?lat=${coord.latitude}&lon=${coord.longitude}&radius=${radius}&type=BikePoint"));
-    }
 
-    List<DockingStation> newStations = [];
-    var stations = json.decode(data.body);
-    for (var station in stations) {
-      try {
-        DockingStation newStation = DockingStation(
-            station["id"],
-            station["commonName"],
-            station["additionalProperties"][1]["value"] == "true",
-            station["additionalProperties"][2]["value"] == "true",
-            int.parse(station["additionalProperties"][6]["value"]),
-            int.parse(station["additionalProperties"][7]["value"]),
-            int.parse(station["additionalProperties"][8]["value"]),
-            station["lon"],
-            station["lat"]);
+      /// make the api calls until it doesnt return null
+      while (data == null) {
+        await Future.delayed(const Duration(seconds: 20));
+        data = await http.get(Uri.parse(
+            "https://api.tfl.gov.uk/Place?lat=${coord.latitude}&lon=${coord.longitude}&radius=${radius}&type=BikePoint"));
+      }
 
-        if (!newStation.isLocked) {
-          newStations.add(newStation);
-        }
-      } on FormatException {}
-    }
-    if (newStations.length > 0) {
-      return newStations;
+      List<DockingStation> newStations = [];
+      var stations = json.decode(data.body);
+      for (var station in stations) {
+        try {
+          DockingStation newStation = DockingStation(
+              station["id"],
+              station["commonName"],
+              station["additionalProperties"][1]["value"] == "true",
+              station["additionalProperties"][2]["value"] == "true",
+              int.parse(station["additionalProperties"][6]["value"]),
+              int.parse(station["additionalProperties"][7]["value"]),
+              int.parse(station["additionalProperties"][8]["value"]),
+              station["lon"],
+              station["lat"]);
+
+          if (!newStation.isLocked) {
+            newStations.add(newStation);
+          }
+        } on FormatException {}
+      }
+      if (newStations.length > 0) {
+        return newStations;
+      } else {
+        print("Returning an empty list from importStationsByRadius ");
+        return newStations;
+      }
     } else {
-      print("Returning an empty list from importStationsByRadius ");
-      return newStations;
+      return [];
     }
   }
 }

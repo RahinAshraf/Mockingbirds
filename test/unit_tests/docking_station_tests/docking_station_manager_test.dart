@@ -163,14 +163,11 @@ void main() {
 
   test('Get 10 Closest docks with less than 10 closest docking stations',
       () async {
-    dockingStationManager man = dockingStationManager();
-    await man.importStations();
-    var list = man.get10ClosestDocks(userLocation);
-
+    var list = stationManager10Docks.get10ClosestDocks(userLocation);
     list.removeLast();
-    expect(list[0].name, "Binfield Road, Stockwell");
-    expect(list[1].name, "Clapham Road, Lingham Street, Stockwell");
-    expect(list[2].name, "Clarence Walk, Stockwell");
+    expect(list[0].name, "Normandy Road, Stockwell");
+    expect(list[1].name, "Sidney Road, Stockwell");
+    expect(list[2].name, "Caldwell Street, Stockwell");
     expect(list[3].name, "Teversham Lane, Stockwell");
     expect(list[4].name, "Sidney Road, Stockwell");
     expect(list[5].name, "Albert Square, Stockwell");
@@ -266,27 +263,28 @@ void main() {
     stationManager5Docks = get5DummyDocks();
   });
   test('Send invalid api call for checkstation() ', () async {
-    expect(
-        await stationManager5Docks.checkStation(DockingStation.empty()), null);
+    var d = await stationManager5Docks.checkStation(DockingStation.empty());
+    expect(d.lon, DockingStation.empty().lon);
   });
   test('Send invalid api call for importStationsByRadius()', () async {
-    expect(await stationManager5Docks.importStationsByRadius(0, userLocation),
-        null);
+    expect(
+        await stationManager5Docks.importStationsByRadius(0, userLocation), []);
   });
   test('Send invalid api call for checkStationById()', () async {
-    expect(await stationManager5Docks.checkStationById(""), null);
+    var d = await stationManager5Docks.checkStationById("");
+    expect(d!.lon, DockingStation.empty().lon);
   });
   test('Check dock with available space on an invalid call', () async {
     expect(
         await stationManager5Docks.checkDockWithAvailableSpace(
             DockingStation.empty(), 0),
-        null);
+        true);
   });
   test('Check dock with available bikes on an invalid call', () async {
     expect(
         await stationManager5Docks.checkDockWithAvailableBikes(
             DockingStation.empty(), 0),
-        null);
+        true);
   });
 
   test('Get 10 Closest docks fav', () async {
