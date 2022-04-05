@@ -4,14 +4,19 @@ import 'package:veloplan/screens/place_search_screen.dart';
 import 'package:veloplan/styles/colors.dart';
 
 /// Helper extensions for [PanelWidget].
-/// Author: Rahin Ashraf -
+/// Author: Rahin Ashraf
+
+/// Extension to help control navigation through app
 extension BuildContextExt on BuildContext {
+
+  ///Helper to open the place search screen
   Future<dynamic> openSearch() {
     return Navigator.of(this).push(MaterialPageRoute(
         builder: (settings) =>
             PlaceSearchScreen(LocationService(), isPop: true)));
   }
 
+  ///Given a widget, push this widget onto the stack
   Future<R?> push<R>(Widget route) {
     return Navigator.push<R>(
       this,
@@ -21,6 +26,7 @@ extension BuildContextExt on BuildContext {
     );
   }
 
+  ///Push the given route onto the navigator, and then remove all the previous routes until the predicate returns true
   Future<R?> pushAndRemoveUntil<R>(Widget route) {
     return Navigator.of(this).pushAndRemoveUntil(
         MaterialPageRoute(
@@ -29,12 +35,17 @@ extension BuildContextExt on BuildContext {
         (route) => route.isCurrent);
   }
 
+  ///Go back to the previous screen in the stack
   void pop() {
     Navigator.of(this).pop();
   }
+
 }
 
+///Extension to reduce length of code due to the repetitiveness of creating widgets that are commonly used
 extension WidgetExts on dynamic {
+
+  ///Creates a text widget with modified default styling
   Widget text(String text,
       {FontWeight fontWeight = FontWeight.normal, double fontSize = 20}) {
     return Text(
@@ -43,6 +54,7 @@ extension WidgetExts on dynamic {
     );
   }
 
+  ///Creates a Floating Action Button with modified default styling
   FloatingActionButton buildFloatingActionButton(
       {Function()? onPressed, IconData iconData = Icons.add}) {
     return FloatingActionButton(
@@ -53,6 +65,7 @@ extension WidgetExts on dynamic {
     );
   }
 
+  ///Creates a Circular Input Border with modified default styling
   OutlineInputBorder circularInputBorder(
       {double radius = 10.0, Color color = Colors.black, double width = 1.0}) {
     return OutlineInputBorder(
@@ -60,4 +73,5 @@ extension WidgetExts on dynamic {
       borderSide: BorderSide(color: color, width: width),
     );
   }
+
 }
