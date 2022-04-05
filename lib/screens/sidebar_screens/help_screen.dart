@@ -110,8 +110,8 @@ class _HelpScreenState extends State<HelpScreen> {
   void _displayQuestions() {
     choices.add(
       _getOutlinedButton(
-        content: const Icon(Icons.arrow_back,
-            key: Key("back_topic"), color: Colors.green),
+        content:
+            const Icon(Icons.arrow_back, key: Key("back"), color: Colors.green),
         onPressed: () {
           setState(() {
             choices = _displayTopics();

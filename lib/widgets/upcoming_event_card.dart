@@ -43,7 +43,7 @@ class UpcomingEventCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Upcoming trip',
+              Text('Upcoming Trip',
                   style: Theme.of(context).textTheme.headline2),
               SizedBox(height: 20.0),
               Text("Tap on the card to view journey itinerary.",

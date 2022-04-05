@@ -105,7 +105,7 @@ class _DockSorterScreen extends State<DockSorterScreen> {
   /// Redirects user back to the Journey Planner with [chosenDock].
   void addBackButton() {
     _baseMapWithStation.addWidget(Align(
-      alignment: Alignment(-0.9, -0.80),
+      alignment: Alignment(-0.95, -0.9),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           primary: Colors.white,
