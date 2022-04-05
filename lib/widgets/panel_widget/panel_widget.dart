@@ -22,7 +22,7 @@ import 'package:veloplan/helpers/navigation_helpers/navigation_conversions_helpe
 import 'package:veloplan/popups.dart';
 import 'package:veloplan/helpers/database_helpers/history_helper.dart';
 import 'package:veloplan/widgets/panel_widget/panel_widget_exts.dart';
-import '../../helpers/database_helpers/database_manager.dart';
+import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 
 /// Renders [PanelWidget] used in [JourneyPlanner] screen.
 ///
@@ -141,7 +141,6 @@ class PanelWidgetState extends State<PanelWidget> {
   }
 
   ///Listens to the map and adds the place that the user taps on the map, to the Journey Planner as a new location.
-//TODO what do we do with isFrom here?
   void _listToMapClick() {
     final selectedCoords = widget.selectedCoords;
 
@@ -409,7 +408,6 @@ class PanelWidgetState extends State<PanelWidget> {
     tempList.addAll(staticListMap.values);
     tempList.addAll(widget.selectedCoords);
     ScheduleHelper helper = ScheduleHelper();
-    print("Templist => ${tempList}");
     helper.createScheduleEntry(
         widget.journeyDate, tempList, widget.numberOfCyclists);
     // Navigate back to the previous screen, useful for tbt

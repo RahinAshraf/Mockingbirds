@@ -6,6 +6,13 @@ import 'package:veloplan/models/itinerary.dart';
 import 'package:veloplan/screens/summary_journey_screen.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
 
+/// Renders a popup widget to join an existing journey with a 6-digit number.
+///
+/// A user is asked to input a 6-digit code, which is stored in [GroupIdState.fullPin]
+/// variable. If the code is correct, user 'joins' the group and is then
+/// redirected to corresponding [SummaryJourneyScreen].
+/// Authors: Lilianna, Marija
+
 class GroupId extends StatefulWidget {
   GroupId({Key? key}) : super(key: key);
   final DatabaseManager _databaseManager = DatabaseManager();
@@ -14,12 +21,6 @@ class GroupId extends StatefulWidget {
   State<StatefulWidget> createState() => GroupIdState(_databaseManager);
 }
 
-/// Renders a popup widget to join an existing journey with a 6-digit number.
-///
-/// A user is asked to input a 6-digit code, which is stored in [fullPin]
-/// variable. If the code is correct, user 'joins' the group and is then
-/// redirected to corresponding [SummaryJourneyScreen].
-/// Authors: Lilianna, Marija
 class GroupIdState extends State<GroupId> {
   late List<LatLng>? points;
   late final groupManager _groupManager;

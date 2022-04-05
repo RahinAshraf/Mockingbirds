@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:veloplan/widgets/profile/profile_widget.dart';
 
-/// Widget for displaying the profile page header
+/// Widget for displaying the profile page header.
 /// Author(s): Eduard Ragea k20067643
 class ProfilePageHeader extends StatefulWidget {
   final Map<String, dynamic> data;

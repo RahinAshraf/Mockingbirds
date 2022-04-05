@@ -41,7 +41,6 @@ class _MapRoutePageState extends State<MapRoutePage> {
       addPositionZoom();
       addGoBackButton();
       addStopPolylineRoute(context);
-      print("---------------" + _itinerary.myDestinations.toString());
       if (calculateDistance(currentLatLng, _itinerary.myDestinations![0]) <
           0.02) {
         startTurnByTurn(context, _itinerary);

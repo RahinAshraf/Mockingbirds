@@ -25,7 +25,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>MGLMapboxAccessToken</key>
-	<string>pk.eyJ1IjoibW9ja2luZ2JpcmRkZCIsImEiOiJjbDFkbGNidXEwYWR0M2NsbjZ4OWl4bHpuIn0.qKlsWhLo2SuKGzhceHM9KA</string>
+	<string>pk.eyJ1IjoibW9ja2luZ2JpcmRzc2VnIiwiYSI6ImNsMWxraDhiYjBiazUzY215bmVoZm14eDcifQ.BP1RlcZFxcdILJrvIE1vFA</string>
 	<key>NSCameraUsageDescription</key>
 	<string>We need access to your camera to let you take an image</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>

@@ -168,22 +168,4 @@ void main() {
       expect(doubles!.length, 0);
     });
   });
-
-//// FARIHA TO DO:
-//   /// /// Convert list of [DockingStation]s into a list of [LatLng]s
-// List<LatLng>? convertDocksToLatLng(List<DockingStation> docks) {
-//   try {
-//     List<LatLng> myList = [];
-//     if (docks.length > 0) {
-//       for (int i = 0; i < docks.length; i++) {
-//         myList.add(LatLng(docks[i].lat, docks[i].lon));
-//       }
-//     }
-//     return myList;
-//   } on StateError {
-//     return null;
-//   } catch (e) {
-//     return null;
-//   }
-// }
 }

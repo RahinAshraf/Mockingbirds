@@ -10,7 +10,7 @@ import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:rxdart/rxdart.dart';
 
 /// Helper class to build the bubble underneath every location TextField.
-/// Author: Rahin Ashraf,
+/// Author: Rahin Ashraf
 /// Contributor(s): Fariha Choudhury
 class PanelExtensions {
   final locationService = LocationService();

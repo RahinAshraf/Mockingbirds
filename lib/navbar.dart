@@ -140,6 +140,5 @@ class _NavBarState extends State<NavBar> {
       var _itinerary = await _groupManager.getItineraryFromGroup(group);
       context.push(SummaryJourneyScreen(_itinerary, false));
     }
-    // TODO: if it doesn't work, make an else statement
   }
 }

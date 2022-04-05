@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+/// Text field widget for the editing the profile page.
+/// Author: Tayyibah, Fariha
 class TextFieldWidget extends StatefulWidget {
   final int maxLines;
   final String label;

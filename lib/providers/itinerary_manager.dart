@@ -15,7 +15,6 @@ class ItineraryManager {
   /// Sets the [journey] and paths
   Future<List<Path>> setJourney() async {
     if (_itinerary.docks!.length > 1) {
-      print(_itinerary.docks!.length);
       //WALKING:
       _routeResponse = await _manager.getDirections(
           _itinerary.myDestinations![

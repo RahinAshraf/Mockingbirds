@@ -5,7 +5,6 @@ import 'package:veloplan/utilities/enums/location_enums.dart';
 
 /// Handles location permission statuses for the live location of the user
 /// Author: Rahin Ashraf
-
 class PermissionUtils {
   BehaviorSubject<Permissions> _locationPermission = BehaviorSubject();
   Stream<Permissions> get locationPermission => _locationPermission.stream;

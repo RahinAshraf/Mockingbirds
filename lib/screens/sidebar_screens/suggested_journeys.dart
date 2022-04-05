@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
@@ -52,7 +51,8 @@ class _SuggestedItineraryState extends State<SuggestedItinerary> {
   };
   @override
   void initState() {
-    //asign itineraries
+    super.initState();
+    // assign itineraries
     List<Itinerary> itineraries = [];
 
     this._hydeLoop = new Itinerary.suggestedTrip(

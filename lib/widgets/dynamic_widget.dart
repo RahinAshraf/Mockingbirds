@@ -12,7 +12,6 @@ import 'package:veloplan/widgets/panel_widget/panel_widget_exts.dart';
 /// - red cross, to delete a location from the journey planner list
 /// - TextField, which redirects the user to [PlaceSearchScreen] to insert a location to the journey planner list
 /// - menu item icon, to indicate to the user that the list is reorderable via dragging
-
 /// Author: Rahin
 /// Contributor(s): Fariha
 class DynamicWidget extends StatelessWidget {

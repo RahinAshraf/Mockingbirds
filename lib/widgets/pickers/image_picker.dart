@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-/// Widget for displaying and picking a profile picture
+/// Widget for displaying and picking a profile picture.
 /// Author(s): Eduard Ragea
 class UserImagePicker extends StatefulWidget {
   const UserImagePicker(this.imagePickFn, {Key? key}) : super(key: key);
