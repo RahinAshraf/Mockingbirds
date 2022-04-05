@@ -3,7 +3,9 @@ import 'package:veloplan/providers/location_service.dart';
 import 'package:veloplan/screens/journey_planner_screen.dart';
 import 'package:veloplan/styles/colors.dart';
 
-/// Author(s): Rahin Ashraf
+///Screen for users to specify a location for the journey through the use of a search bar.
+///As the user types for a location, a drop down list of relevant matches to what the user searches for is displayed
+/// Author(s): Rahin
 class PlaceSearchScreen extends StatefulWidget {
   late LocationService locService;
   bool? isPop;
