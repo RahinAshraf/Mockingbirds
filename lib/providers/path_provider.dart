@@ -1,13 +1,11 @@
 import 'dart:convert';
-
-import 'dart:developer';
 import "package:http/http.dart" as http;
 import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart'
     as LatLong;
 import 'package:veloplan/.env.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
-import '../models/docking_station.dart';
-import '../models/path.dart';
+import 'package:veloplan/models/docking_station.dart';
+import 'package:veloplan/models/path.dart';
 
 /// A class that manages paths. It calculates the distances and duration between a single to many points, it sorts stations based on that
 class PathProvider {

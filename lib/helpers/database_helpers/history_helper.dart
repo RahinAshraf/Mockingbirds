@@ -29,7 +29,7 @@ class HistoryHelper {
     DockingStation station,
     documentId,
   ) {
-    return _databaseManager.addSubCollectiontoSubCollectionByDocumentId(
+    return _databaseManager.addSubCollectiontoCollectionByDocumentId(
         documentId, "docking_stations", _journeys, {
       'stationId': station.stationId,
     });

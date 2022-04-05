@@ -1,7 +1,6 @@
 import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/models/itinerary.dart';
 import 'package:veloplan/models/path.dart';
-
 import 'package:veloplan/providers/route_manager.dart';
 import 'package:veloplan/utilities/travel_type.dart';
 
@@ -12,12 +11,10 @@ class ItineraryManager {
   late Map _routeResponse;
   final RouteManager _manager = RouteManager();
 
-  ItineraryManager(this._itinerary) {
-    _setJourney();
-  }
+  ItineraryManager(this._itinerary);
 
   /// Sets the [journey] and paths
-  void _setJourney() async {
+  Future<List<Path>> setJourney() async {
     if (_itinerary.docks!.length > 1) {
       print(_itinerary.docks!.length);
       //WALKING:
@@ -54,8 +51,7 @@ class ItineraryManager {
             directions["duration"].toDouble()));
       }
     }
-    //uncomment if you want to test it!
-    // printPaths();
+    return _wholeTrip;
   }
 
   List<Path> getPaths() {

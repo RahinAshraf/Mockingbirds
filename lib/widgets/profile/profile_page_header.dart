@@ -36,7 +36,10 @@ class _ProfilePageHeaderState extends State<ProfilePageHeader> {
   /// and stores it in the journeys variable.
   Future getJourneys() async {
     final snapshot = await FirebaseFirestore.instance
-        .collection('users').doc(user).collection('journeys').get();
+        .collection('users')
+        .doc(user)
+        .collection('journeys')
+        .get();
     journeys = snapshot.size;
   }
 
@@ -161,7 +164,6 @@ class _ProfilePageHeaderState extends State<ProfilePageHeader> {
           ProfileWidget(
             widget.data['image_url'],
             () async {},
-            widget.isCurrentUser,
             key: Key("profileImage"),
           ),
           const SizedBox(height: 24),

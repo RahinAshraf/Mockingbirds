@@ -1,8 +1,7 @@
-import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:veloplan/screens/journey_planner_screen.dart';
 import 'package:veloplan/screens/trips_scheduler_screen.dart';
-import 'package:veloplan/styles/styling.dart';
+import 'package:veloplan/styles/texts.dart';
 
 class TripSchedulerPanelWidget extends StatefulWidget {
   @override
@@ -18,24 +17,26 @@ class TripSchedulerPanelWidget extends StatefulWidget {
 /// (in that case, the user is directed straight to the [JourneyPlanner]),
 /// or later (a date picker shows up and a trip is scheduled
 /// for the future).
+/// Authors: Rahin, Marija
 class _TripSchedulerPanelWidget extends State<TripSchedulerPanelWidget> {
   final int maximumNumberOfCyclists = 6; // max number of cyclists allowed
-  int numberOfCyclists = 1; // min one cyclist allowed
+  int numberOfCyclists = 1;
   DateTime selectedDate = DateTime.now();
+
   @override
   Widget build(BuildContext context) => Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Text(
             'Please fill in the following details of your trip.',
-            style: infoTextStyle,
+            style: CustomTextStyles.infoTextStyle,
           ),
           Row(
             children: [
               SizedBox(
                 width: (MediaQuery.of(context).size.width / 2) - 24,
-                child: const Text("Number of cyclists in the group:",
-                    style: tripSchedulerTextStyle),
+                child: Text("Number of cyclists in the group:",
+                    style: CustomTextStyles.tripSchedulerTextStyle),
               ),
               const SizedBox(width: 10),
               IconButton(
@@ -43,7 +44,8 @@ class _TripSchedulerPanelWidget extends State<TripSchedulerPanelWidget> {
                 icon: const Icon(Icons.remove_rounded, color: Colors.black),
               ),
               const Spacer(),
-              Text('$numberOfCyclists', style: cyclistNumberTextStyle),
+              Text('$numberOfCyclists',
+                  style: CustomTextStyles.cyclistNumberTextStyle),
               const Spacer(),
               IconButton(
                 onPressed: _incrementCounter,
@@ -55,9 +57,9 @@ class _TripSchedulerPanelWidget extends State<TripSchedulerPanelWidget> {
             children: [
               SizedBox(
                 width: (MediaQuery.of(context).size.width / 2) - 24,
-                child: const Text(
+                child: Text(
                   "When would you like to cycle?",
-                  style: tripSchedulerTextStyle,
+                  style: CustomTextStyles.tripSchedulerTextStyle,
                 ),
               ),
               const SizedBox(width: 10),
@@ -66,18 +68,7 @@ class _TripSchedulerPanelWidget extends State<TripSchedulerPanelWidget> {
                 fit: FlexFit.tight,
                 child: ElevatedButton(
                   onPressed: () async {
-                    final response = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => JourneyPlanner(
-                                  numberOfCyclists: numberOfCyclists,
-                                  journeyDate: DateTime.now(),
-                                )));
-                    if (response) {
-                      Navigator.of(context).pop(true);
-                    } else {
-                      Navigator.of(context).pop();
-                    }
+                    _navigate(DateTime.now(), false);
                   },
                   child: const Text('Now'),
                 ),
@@ -129,19 +120,20 @@ class _TripSchedulerPanelWidget extends State<TripSchedulerPanelWidget> {
     if (pickedDate != null) {
       setState(() {
         selectedDate = pickedDate;
-        navigate();
+        _navigate(selectedDate, true);
       });
     }
   }
 
-  void navigate() async {
+  /// Handles the click 'Now' and 'Later' button clicks.
+  void _navigate(DateTime date, bool isScheduled) async {
     final response = await Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => JourneyPlanner(
                   numberOfCyclists: numberOfCyclists,
-                  journeyDate: selectedDate,
-                  isScheduled: true,
+                  journeyDate: date,
+                  isScheduled: isScheduled,
                 )));
     if (response) {
       Navigator.of(context).pop(true);

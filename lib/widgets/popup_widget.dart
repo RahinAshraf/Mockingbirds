@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:veloplan/styles/styling.dart';
+import 'package:veloplan/styles/texts.dart';
 import 'package:veloplan/utilities/alert_type.dart';
 
 /// Creates a generic popup widget.
@@ -9,8 +10,7 @@ import 'package:veloplan/utilities/alert_type.dart';
 ///
 /// This widget has [type] property of [AlertType]. It determines the
 /// image that should be rendered for the widget.
-///
-/// Author(s) Marija
+/// Author: Marija
 class PopupWidget extends StatelessWidget {
   PopupWidget({
     required this.key,
@@ -71,10 +71,7 @@ class PopupWidget extends StatelessWidget {
         ]),
         Align(
           alignment: const Alignment(0, -0.37),
-          child: Image.asset(
-            type.imagePath,
-            height: 72,
-          ),
+          child: Image.asset(type.imagePath, height: 72),
         ),
       ],
     );
@@ -99,7 +96,7 @@ class PopupButtonWidget extends StatelessWidget {
           child: Text(
             text,
             textAlign: TextAlign.center,
-            style: popupDialogButtonTextStyle,
+            style: CustomTextStyles.popupDialogButtonTextStyle,
           ),
         ),
       ),

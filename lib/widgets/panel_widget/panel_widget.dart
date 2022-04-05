@@ -14,7 +14,7 @@ import 'package:veloplan/providers/location_service.dart';
 import 'package:veloplan/screens/journey_planner_screen.dart';
 import 'package:veloplan/screens/summary_journey_screen.dart';
 import 'package:veloplan/styles/colors.dart';
-import 'package:veloplan/styles/styling.dart';
+import 'package:veloplan/styles/texts.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
 import 'package:veloplan/widgets/dynamic_widget.dart';
 import 'package:veloplan/widgets/panel_widget/panel_widgets_base.dart';
@@ -198,9 +198,6 @@ class PanelWidgetState extends State<PanelWidget> {
   ///Builds the static row of components which are displayed permanently. Statically built, as every journey
   ///needs to specify a starting point. [controller] is the TextField used to input and display the destination the user is
   ///to start their journey from. [hintText] is the text to describe the purpose of each TextField to the user.
-
-  ///Function which builds the static row of components which are displayed permanently. Statically built, as every journey
-  ///needs to specify a starting point
   Widget _buildStatic(TextEditingController controller,
       {String? hintText,
       required BuildContext context,
@@ -316,21 +313,11 @@ class PanelWidgetState extends State<PanelWidget> {
               ),
               Text(
                 "Explore London",
-                style: infoTextStyle,
+                style: CustomTextStyles.infoTextStyle,
               ),
               Tooltip(
-                preferBelow: false,
-                margin: EdgeInsets.all(10.0),
-                padding: EdgeInsets.all(10.0),
-                textStyle: TextStyle(color: Colors.white),
-                decoration: BoxDecoration(
-                  color: CustomColors.green,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                message: widget.isScheduled
-                    ? 'Please specify the starting location of your trip and add destinations by clicking +. Tap the map to add another location, ensure there are no blank destinations when you do so! You can reorder your destinations, hold and drag menu buttons. SAVE when finished.'
-                    : 'Please specify the starting location of your trip and add destinations by clicking +. Tap the map to add another location, ensure there are no blank destinations when you do so! You can reorder your destinations, hold and drag menu buttons. You can edit your closest dock using >. START when finished.',
-                showDuration: const Duration(seconds: 3),
+                message:
+                    'Please specify the starting location of your trip and add destinations by clicking the + button. Tapping on the location in the map is another way of adding a stop to your trip! Ensure there are no blank destinations when you do so. You can also reorder your destinations. Simply hold and drag menu button. When you are done, click START/SAVE.',
                 child: const Icon(Icons.info_outline_rounded,
                     size: 25.0, color: Colors.green),
               ),
@@ -386,30 +373,24 @@ class PanelWidgetState extends State<PanelWidget> {
                   ),
                 ],
               ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                child: buildFloatingActionButton(onPressed: addDynamic),
+              ),
             ],
           ),
         ),
         SizedBox(child: Divider(), width: MediaQuery.of(context).size.width),
         Padding(
           padding: const EdgeInsets.only(bottom: 5.0, top: 5.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              buildFloatingActionButton(onPressed: addDynamic),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: const Text('OR'),
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width / 2,
-                child: ElevatedButton(
-                  key: Key("start"),
-                  onPressed:
-                      widget.isScheduled ? _handleSaveClick : _handleStartClick,
-                  child: widget.isScheduled ? text("SAVE") : text("START"),
-                ),
-              ),
-            ],
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width / 2,
+            child: ElevatedButton(
+              key: Key("start"),
+              onPressed:
+                  widget.isScheduled ? _handleSaveClick : _handleStartClick,
+              child: widget.isScheduled ? Text("SAVE") : Text("START"),
+            ),
           ),
         ),
       ],
@@ -461,7 +442,7 @@ class PanelWidgetState extends State<PanelWidget> {
     //go to the summary of journey screen
     final response =
         await context.push(SummaryJourneyScreen(_itinerary, false));
-    if (response || response == null) {
+    if (response == null || response) {
       Navigator.of(context).pop(true);
     } else {
       Navigator.of(context).pop();

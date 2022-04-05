@@ -1,3 +1,4 @@
+/// Represents a question message used in [HelpBotManager].
 class Message {
   final String _questionText;
   final String _questionAnswer;

@@ -46,16 +46,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       appBar: AppBar(
         title: Text('Reset Password'),
       ),
-      body: ListView(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const SizedBox(height: 35),
           Container(
               height: 170.0,
               width: 170.0,
-              alignment: Alignment.topRight,
               child: Image.asset('assets/images/forgot_password_icon.png')),
           Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -64,7 +63,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       style: TextStyle(fontSize: 20),
                       textAlign: TextAlign.center,
                     ),
-                    const SizedBox(height: 25),
+                    const SizedBox(height: 15),
                     TextFormField(
                       key: ValueKey('email'),
                       controller: emailController,
@@ -85,9 +84,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         labelText: 'Email Address',
                       ),
                     ),
-                    const SizedBox(height: 25),
+                    const SizedBox(height: 10),
                     ElevatedButton(
-                      child: Text('Send password reset email'),
+                      child: Text('Send email'),
                       onPressed: () =>
                           sendPasswordResetEmail(emailController.text, context),
                     ),

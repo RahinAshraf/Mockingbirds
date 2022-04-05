@@ -1,6 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:veloplan/helpers/database_helpers/database_manager.dart';
+import 'package:veloplan/helpers/database_helpers/group_manager.dart';
 import 'package:veloplan/popups.dart';
 import 'package:veloplan/screens/navigation/map_screen.dart';
 import 'package:veloplan/screens/profile_screen.dart';
@@ -8,19 +9,8 @@ import 'package:veloplan/screens/summary_journey_screen.dart';
 import 'package:veloplan/sidebar.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
 
-import 'helpers/database_helpers/database_manager.dart';
-import 'helpers/database_helpers/group_manager.dart';
-
-import 'helpers/navigation_helpers/navigation_conversions_helpers.dart';
-import 'models/docking_station.dart';
-import 'models/itinerary.dart';
-import 'package:veloplan/helpers/database_helpers/database_manager.dart';
-import 'package:veloplan/helpers/navigation_helpers/navigation_conversions_helpers.dart';
-import 'package:veloplan/models/docking_station.dart';
-import 'package:veloplan/models/itinerary.dart';
-
-/// Defines the bottom navigation bar, allows you to move between the map, profile and sidebar
-/// @author  Elisabeth, Rahin, Tayyibah
+/// Defines the bottom navigation bar, allows you to move between the map, profile and sidebar.
+/// Authors:  Elisabeth, Rahin, Tayyibah
 class NavBar extends StatefulWidget {
   @override
   _NavBarState createState() => _NavBarState();
@@ -28,14 +18,14 @@ class NavBar extends StatefulWidget {
 
 class _NavBarState extends State<NavBar> {
   int currentIndex = 1; // index of the screens
+  late final groupManager _groupManager;
   final DatabaseManager _databaseManager = DatabaseManager();
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   bool _isInGroup = false;
-  late final groupManager _groupManager;
   final _currentUser = FirebaseAuth.instance.currentUser!.uid;
-  final Popups popup = Popups();
-  _NavBarState(){
-     _groupManager = groupManager(_databaseManager);
+
+  _NavBarState() {
+    _groupManager = groupManager(_databaseManager);
   }
 
   var screens = [
@@ -51,60 +41,43 @@ class _NavBarState extends State<NavBar> {
   void _isInAGroup() async {
     var user = await _databaseManager.getByKey(
         'users', _databaseManager.getCurrentUser()!.uid);
-    var hasGroup = user.data()!.keys.contains('group');
-    setState(() {
-      _isInGroup = hasGroup;
-    });
+    if (user.data() != null) {
+      var hasGroup = user.data()!.keys.contains('group');
+      setState(() {
+        if (_isInGroup == null) {
+          _isInGroup = false;
+        } else {
+          _isInGroup = hasGroup;
+        }
+      });
+    }
   }
 
   _getGroupInfo() async {
     var user = await _databaseManager.getByKey(
         'users', _databaseManager.getCurrentUser()!.uid);
-    var group = await _databaseManager.getByEquality(
-        'group', 'code', user.data()!['group']);
+    if (user.data() != null) {
+      var group = await _databaseManager.getByEquality(
+          'group', 'code', user.data()!['group']);
 
-    var _itinerary = await _groupManager.getItineraryFromGroup(group);
+      var _itinerary = await _groupManager.getItineraryFromGroup(group);
 
-    context.push(SummaryJourneyScreen(_itinerary, false));
+      context.push(SummaryJourneyScreen(_itinerary, false));
+    }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
     screens.add(Profile(_currentUser));
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         body: IndexedStack(
           index: currentIndex,
           children: screens, // keeps the screens alive
         ),
         drawer: SideBar(),
         key: scaffoldKey,
-        floatingActionButton: SizedBox(
-            height: 80.0,
-            width: 80.0,
-            child: FloatingActionButton(
-              key: Key("bike"),
-              heroTag: "btn2",
-              onPressed: () {
-                if (!_isInGroup) _onTabTapped(1);
-                showDialog(
-                    useRootNavigator: false,
-                    context: context,
-                    builder: (BuildContext context) =>
-                        popup.buildPopupDialogNewJourney(context));
-                if (_isInGroup) {
-                  _getGroupInfo();
-                }
-              },
-              child: const Icon(
-                Icons.directions_bike,
-                color: Colors.green,
-                size: 50,
-              ),
-              elevation: 8.0,
-              backgroundColor: Colors.white,
-            )),
+        floatingActionButton: _createBikeButton(),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: _createNavBar());
   }
@@ -114,7 +87,7 @@ class _NavBarState extends State<NavBar> {
       type: BottomNavigationBarType.fixed,
       iconSize: 33,
       currentIndex: currentIndex,
-      onTap: _onTabTapped, // (index) => setState(() => currentIndex = index),
+      onTap: _onTabTapped, // (index) => setState(() => currentIndex = index)
       items: _retrieveNavItems(),
     );
   }
@@ -145,5 +118,37 @@ class _NavBarState extends State<NavBar> {
           ? scaffoldKey.currentState!.openDrawer()
           : currentIndex = index;
     });
+  }
+
+  Widget _createBikeButton() {
+    return SizedBox(
+      height: 80.0,
+      width: 80.0,
+      child: FloatingActionButton(
+        heroTag: "bike_button",
+        key: Key("bike"),
+        onPressed: () {
+          _onTabTapped(1);
+          if (!_isInGroup) {
+            Popups popup = Popups();
+            showDialog(
+                useRootNavigator: false,
+                context: context,
+                builder: (BuildContext context) =>
+                    popup.buildPopupDialogNewJourney(context));
+          }
+          if (_isInGroup) {
+            _getGroupInfo();
+          }
+        },
+        child: Icon(
+          Icons.directions_bike,
+          color: Colors.green,
+          size: 50,
+        ),
+        elevation: 8.0,
+        backgroundColor: Colors.white,
+      ),
+    );
   }
 }

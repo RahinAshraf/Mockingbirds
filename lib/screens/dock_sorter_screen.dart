@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:scoped_model/scoped_model.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:veloplan/alerts.dart';
 import 'package:veloplan/helpers/shared_prefs.dart';
-import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/models/map_models/base_map_station_model.dart';
+import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
-import '../providers/docking_station_manager.dart';
-import '../widgets/docking_stations_sorting_widget.dart';
-import 'package:scoped_model/scoped_model.dart';
+import 'package:veloplan/widgets/docking_stations_sorting_widget.dart';
 
 /// Screen displaying filtered stations around a chosen dock with functionality to sort stations
 /// and view on map.
@@ -62,7 +62,6 @@ class _DockSorterScreen extends State<DockSorterScreen> {
     final panelHeightClosed = MediaQuery.of(context).size.height * 0.4;
     final panelHeightOpen = MediaQuery.of(context).size.height * 0.4;
     getFilteredDocks(userCoordinates);
-
     return Scaffold(
         body: SlidingUpPanel(
       padding: const EdgeInsets.only(left: 10, right: 10),
@@ -88,7 +87,7 @@ class _DockSorterScreen extends State<DockSorterScreen> {
     ));
   }
 
-  /// Set the [filteredDockingStations] list and [editDockTextEditController] to base map
+  /// Sets the [filteredDockingStations] list and [editDockTextEditController] to base map.
   void setBaseMapFeatures() {
     _baseMapWithStation.setStationList(filteredDockingStations, _docks);
   }
@@ -103,11 +102,16 @@ class _DockSorterScreen extends State<DockSorterScreen> {
         .add(_baseMapWithStation.onSymbolTapped);
   }
 
-  ///Redirects user back to the Journey Planner with [chosenDock].
+  /// Redirects user back to the Journey Planner with [chosenDock].
   void addBackButton() {
-    _baseMapWithStation.addWidget(Container(
-      padding: EdgeInsets.all(50),
-      child: TextButton(
+    _baseMapWithStation.addWidget(Align(
+      alignment: Alignment(-0.95, -0.9),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          primary: Colors.white,
+          shape: CircleBorder(),
+          padding: EdgeInsets.all(8),
+        ),
         onPressed: () {
           try {
             Navigator.pop(context, _baseMapWithStation.chosenDock);
@@ -116,8 +120,7 @@ class _DockSorterScreen extends State<DockSorterScreen> {
                 context, "Hold on! We're loading some data...");
           }
         },
-        child: const Icon(Icons.arrow_back_rounded,
-            color: Color.fromARGB(255, 122, 193, 124)),
+        child: Icon(Icons.arrow_back_rounded, color: Colors.green),
       ),
     ));
   }

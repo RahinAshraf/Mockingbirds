@@ -2,6 +2,9 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:scoped_model/scoped_model.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:veloplan/helpers/live_location_helper.dart';
@@ -11,15 +14,12 @@ import 'package:veloplan/screens/auth_screen.dart';
 import 'package:veloplan/screens/splash_screen.dart';
 import 'package:veloplan/screens/verify_email_screen.dart';
 import 'package:veloplan/styles/theme.dart';
-import 'package:scoped_model/scoped_model.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:veloplan/utilities/connectivity_status_enums.dart';
 import 'package:veloplan/utilities/dart_exts.dart';
 import 'package:veloplan/utilities/permissions.dart';
 import 'package:veloplan/widgets/connection_error_widget.dart';
 import 'package:veloplan/widgets/location_permission_error.dart';
-import 'package:flutter/services.dart';
 
 late SharedPreferences sharedPreferences;
 void main() async {
@@ -99,7 +99,6 @@ class _MyAppState extends State<MyApp> {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    //final Future<FirebaseApp> _initialization = Firebase.initializeApp();
     return FutureBuilder(
       future: Firebase.initializeApp(), // _initialization,
       builder: (context, appSnapshot) {

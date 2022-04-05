@@ -1,16 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-///Helper functions for database usage
-///Author: Lilliana
-///Contributor: Tayyibah
+/// Helper functions for database usage.
+/// Author: Lilianna
+/// Contributor: Tayyibah
 class DatabaseManager {
   DatabaseManager() {}
 
+  /// Return the current user
   User? getCurrentUser() {
     return FirebaseAuth.instance.currentUser;
   }
-@deprecated
+
+  ///Return a reference to the user's given subcollection
   CollectionReference<Object?> getUserSubCollectionReference(
       String collectionName) {
     return FirebaseFirestore.instance
@@ -19,6 +21,7 @@ class DatabaseManager {
         .collection(collectionName);
   }
 
+  ///Return the user's given subcollection
   Future<QuerySnapshot<Object?>> getUserSubcollection(
       String subcollection) async {
     return await FirebaseFirestore.instance
@@ -28,6 +31,7 @@ class DatabaseManager {
         .get();
   }
 
+  /// Delete the given collection
   Future deleteCollection(CollectionReference<Object?> collection) async {
     var snapshots = await collection.get();
     for (var doc in snapshots.docs) {
@@ -35,11 +39,13 @@ class DatabaseManager {
     }
   }
 
+  /// Delete the given document
   Future<void> deleteDocument(
       CollectionReference<Object?> collection, String documentId) {
     return collection.doc(documentId).delete();
   }
 
+  ///Get a document by one of its fields
   Future<QuerySnapshot<Map<String, dynamic>>> getByEquality(
       String collection, String field, String equalTo) async {
     return await FirebaseFirestore.instance
@@ -48,6 +54,7 @@ class DatabaseManager {
         .get();
   }
 
+  ///Get a document by its key
   Future<DocumentSnapshot<Map<String, dynamic>>> getByKey(
       String collection, String key) async {
     return await FirebaseFirestore.instance
@@ -56,6 +63,7 @@ class DatabaseManager {
         .get();
   }
 
+  ///Set a document's value by its collection name and key
   Future<void> setByKey(
       String collection, String key, Map<String, dynamic> value,
       [SetOptions? options]) async {
@@ -65,6 +73,7 @@ class DatabaseManager {
         .set(value, options);
   }
 
+///Update the document's value by it's key
   Future<void> updateByKey(
       String collection, String key, Map<String, dynamic> value) async {
     await FirebaseFirestore.instance
@@ -73,32 +82,35 @@ class DatabaseManager {
         .update(value);
   }
 
+  /// Add a new document into the given collection given by collection name
   Future<DocumentReference<Map<String, dynamic>>> addToCollection(
       String collection, Map<String, dynamic> value) async {
     return await FirebaseFirestore.instance.collection(collection).add(value);
   }
-
-
-
-  Future<DocumentReference<Object?>> addToSubCollection(CollectionReference<Object?> subcollection,
+/// Add a new document into the given collection given by reference
+  Future<DocumentReference<Object?>> addToSubCollection(
+      CollectionReference<Object?> subcollection,
       Map<String, dynamic> value) async {
-   return await subcollection.add(value);
+    return await subcollection.add(value);
   }
 
-
-  Future<void> addSubCollectiontoSubCollectionByDocumentId(
+  /// Add a new document into a subcollection
+  Future<void> addSubCollectiontoCollectionByDocumentId(
       documentId,
-      String newSubollection,
+      String newSubcollection,
       CollectionReference<Object?> subcollection,
       Map<String, dynamic> value) {
-    return subcollection.doc(documentId).collection(newSubollection).add(value);
+    return subcollection.doc(documentId).collection(newSubcollection).add(value);
   }
 
+  ///Set the value of a subcollection's document
   Future<void> setSubCollectionByDocumentId(String documentId,
       CollectionReference<Object?> subcollection, Map<String, dynamic> value) {
     return subcollection.doc(documentId).set(value);
   }
 
+
+  ///Return a documents from a given document's subcollection
   Future<QuerySnapshot<Map<String, dynamic>>> getDocumentsFromSubCollection(
       CollectionReference<Object?> collection,
       documentId,
@@ -106,6 +118,8 @@ class DatabaseManager {
     return await collection.doc(documentId).collection(subcollection).get();
   }
 
+
+  /// Sign out
   Future<void> signOut() async {
     FirebaseAuth.instance.signOut();
   }

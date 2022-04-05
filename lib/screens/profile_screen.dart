@@ -107,11 +107,6 @@ class _ProfileState extends State<Profile> {
                           child: ScrollConfiguration(
                             behavior: NewScrollBehavior(),
                             child: TabBar(
-                              labelPadding:
-                                  const EdgeInsets.symmetric(horizontal: 22.0),
-                              labelColor: Colors.green,
-                              unselectedLabelColor: Colors.grey[400],
-                              indicatorWeight: 2,
                               indicatorColor: Colors.green,
                               indicatorSize: TabBarIndicatorSize.label,
                               tabs: const [
@@ -149,7 +144,6 @@ class _ProfileState extends State<Profile> {
             ),
           );
         }
-
         return const SplashScreen();
       },
     );

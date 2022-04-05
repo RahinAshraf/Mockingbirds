@@ -1,7 +1,6 @@
 import 'package:flutter_mapbox_navigation/library.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
-
-import '../../models/docking_station.dart';
+import 'package:veloplan/models/docking_station.dart';
 
 /// Helper methods related to converting LatLng to WayPoints
 /// Author(s): Elisabeth Koren Halvorsen k20077737, Fariha Choudhury k20059723, Rahin Ashraf - k20034059
