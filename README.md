@@ -23,6 +23,8 @@ The chosen development framework is Flutter and Firebase for authentication and 
 - For simplicity, group journeys exist for a maximum of a day and users can partake in one at a time.
 - Users must be within 20 meters of the position specified for the starting point to begin a journey.  
 - We removed the regex validator from the Log In form as if the user changes their password through firebase with one that doesn't match all criterias, they wouldn't be able to log in. We cannot modify the Firebase password reset sample.
+- If user wants to go through email verification, they should not use a KCL email due to the fact that outlook either blocks the email or autopresses the link. We suggest using a gmail account.
+
 
 All decisions were discussed with and agreed upon by the client. 
 
