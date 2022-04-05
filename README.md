@@ -29,7 +29,7 @@ All decisions were discussed with and agreed upon by the client.
 ## Possible known bugs
 
 - When planning a journey and entering starting/destination points, the list in the summary page is very rarely presented in the wrong order. We suspect this is due to API calls, and we could not resolve it as was irreproducible during testing.
-- The docking statiosn very rarely throw exceptions, this is due to API calls. 
+- The docking stations very rarely throw exceptions, this is due to API calls. 
 
 ## Limitations
 
