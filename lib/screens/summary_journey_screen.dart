@@ -60,9 +60,9 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
 
   @override
   void initState() {
+    pathsFuture = _loadPaths();
     pointsInDoubles = convertDocksToDouble(widget.itinerary.docks!)!;
     _setData();
-    // pathsFuture = _loadPaths();
     super.initState();
   }
 
@@ -143,7 +143,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
                   alignment: Alignment.center,
                   height: 40,
                   padding: const EdgeInsets.all(10),
-                  color: CustomColors.orange,
+                  color: CustomColors.lighterOrange,
                   child: FutureBuilder<String>(
                       future: _getGroup(),
                       builder: (context, snapshot) {
@@ -191,7 +191,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
           const SizedBox(height: 15),
           Container(
             child: FutureBuilder<List<Path>>(
-              future: _loadPaths(),
+              future: pathsFuture,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done &&
                     snapshot.hasData) {

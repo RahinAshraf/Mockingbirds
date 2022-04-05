@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 
 class CustomColors {
-  static Color green = const Color(0xFF99D2A9);
-  static Color orange = const Color(0x80FF8C01);
-  static Color lighterGreen = const Color(0x8099D2A9);
-  static Color appBarTextColor = Colors.white;
   static Color lightModeScaffoldColour = Colors.white;
   static Color whiteReplacement =
-      Color(0xFFf5f5f5); // replacement for too bright Colors.white
+      Color(0xFFf5f5f5); // replacement for too bright white color
+  static Color appBarTextColor = Colors.white;
+
+  static Color green = const Color(0xFF99D2A9); // 100%
+  static Color lighterGreen = const Color(0x8099D2A9); // 50%
+
+  static Color orange = const Color(0xFFFF8C01); // 100%
+  static Color lighterOrange = const Color(0x80FF8C01); // 50%
+
   static Color userMessageBubbleColor = CustomColors.green;
   static Color botMessageBubbleColor = Colors.white;
 

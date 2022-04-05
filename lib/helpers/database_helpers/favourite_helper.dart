@@ -42,11 +42,6 @@ class FavouriteHelper {
     return favourites;
   }
 
-  /// Deletes every single favourite documents.
-  Future deleteUsersFavourites() async {
-    _databaseManager.deleteCollection(_favourites);
-  }
-
   ///Toggles between adding or removing a docking station from favourites.
   void toggleFavourite(String stationId, List<DockingStation> faveList) async {
     if (isFavouriteStation(stationId, faveList)) {

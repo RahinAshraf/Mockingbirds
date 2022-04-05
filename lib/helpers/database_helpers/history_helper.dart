@@ -78,29 +78,4 @@ class HistoryHelper {
     }
     return journeyList;
   }
-
-  ///Deletes docking station subcollection and then deletes journey entry
-  ///from the database.
-  void deleteJourneyEntryWithDockingStations(String journeyDocumentId) async {
-    deleteDockingStations(journeyDocumentId);
-    deleteJourneyEntry(journeyDocumentId);
-  }
-
-  ///Deletes docking station subcollection from a given journey.
-  void deleteDockingStations(String journeyDocumentId) async {
-    var dockingStations =
-        _journeys.doc(journeyDocumentId).collection("docking_stations");
-
-    QuerySnapshot<Object?> dockingStationDocuments =
-        await dockingStations.get();
-
-    for (DocumentSnapshot doc in dockingStationDocuments.docs) {
-      dockingStations.doc(doc.id).delete();
-    }
-  }
-
-  ///Deletes a given journey
-  void deleteJourneyEntry(String journeyDocumentId) {
-    _databaseManager.deleteDocument(_journeys, journeyDocumentId);
-  }
 }

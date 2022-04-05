@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:veloplan/models/map_models/base_map_with_route_updated_model.dart';
-import 'package:veloplan/styles/styling.dart';
+import 'package:veloplan/styles/texts.dart';
 
-// Useful widget for displaying information about next docking station, distance and time in polyline_turn_by_turn_screen.
-
-// Author: Hristina Andreea Sararu
+/// Displays info about next docking station, distance and time in [MapUpdatedRoutePage].
+/// Author: Hristina Andreea Sararu
 class JourneyLandingPanelWidget extends StatefulWidget {
   MapWithRouteUpdated baseMapWithUpdatedRoute;
 
@@ -20,46 +19,48 @@ class _JourneyLandingPanelWidget extends State<JourneyLandingPanelWidget> {
   Widget build(BuildContext context) => Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Column(
+          Text('Journey', style: CustomTextStyles.journeyTextStyle),
+          const Divider(
+            color: Colors.black,
+            thickness: 3,
+          ),
+          ValueListenableBuilder(
+              valueListenable: widget.baseMapWithUpdatedRoute.dockName,
+              builder: (BuildContext context, String dockName, Widget? child) {
+                return Text(
+                  "Next stop: ${dockName}",
+                  style: CustomTextStyles.journeyTextStyle,
+                  textAlign: TextAlign.center,
+                );
+              }),
+          SizedBox(
+            height: 20,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('Journey', style: journeyTextStyle),
-              const Divider(
-                color: Colors.black,
-                thickness: 3,
-              ),
               ValueListenableBuilder(
-                  valueListenable: widget.baseMapWithUpdatedRoute.dockName,
-                  builder:
-                      (BuildContext context, String dockName, Widget? child) {
-                    return Text("Next stop: ${dockName}",
-                        style: journeyLandingTextStyle);
+                  valueListenable: widget.baseMapWithUpdatedRoute.duration,
+                  builder: (BuildContext context, num time, Widget? child) {
+                    String t = (time.toDouble() / 60.0).toStringAsFixed(0);
+                    return Row(children: [
+                      Icon(
+                        Icons.timelapse,
+                      ),
+                      Text(" Time: ${t} minutes",
+                          style: CustomTextStyles.journeyLandingTextStyle),
+                      VerticalDivider(
+                        color: Colors.black,
+                        thickness: 2,
+                      )
+                    ]);
                   }),
-              SizedBox(
-                height: 20,
-              ),
-              Row(children: [
-                ValueListenableBuilder(
-                    valueListenable: widget.baseMapWithUpdatedRoute.duration,
-                    builder: (BuildContext context, num time, Widget? child) {
-                      String t = (time.toDouble() / 60.0).toStringAsFixed(0);
-                      return Row(children: [
-                        Icon(
-                          Icons.timelapse,
-                        ),
-                        Text("Time: ${t} minutes",
-                            style: journeyLandingTextStyle),
-                        VerticalDivider(
-                          color: Colors.black,
-                          thickness: 2,
-                        )
-                      ]);
-                    }),
-                ValueListenableBuilder(
-                    valueListenable: widget.baseMapWithUpdatedRoute.distance,
-                    builder:
-                        (BuildContext context, num distance, Widget? child) {
-                      return Expanded(
-                          child: Row(children: [
+              ValueListenableBuilder(
+                valueListenable: widget.baseMapWithUpdatedRoute.distance,
+                builder: (BuildContext context, num distance, Widget? child) {
+                  return Expanded(
+                    child: Row(
+                      children: [
                         widget.baseMapWithUpdatedRoute.currentStation == 0
                             ? Icon(
                                 Icons.directions_walk,
@@ -73,12 +74,14 @@ class _JourneyLandingPanelWidget extends State<JourneyLandingPanelWidget> {
                               ),
                         Text(
                             distance >= 1000
-                                ? "Distance: ${(distance / 1000).toStringAsFixed(2)}km"
-                                : "Distance: ${distance.toStringAsFixed(0)}m",
-                            style: journeyLandingTextStyle)
-                      ]));
-                    })
-              ])
+                                ? "Distance: ${(distance / 1000).toStringAsFixed(2)} km"
+                                : "Distance: ${distance.toStringAsFixed(0)} m",
+                            style: CustomTextStyles.journeyLandingTextStyle)
+                      ],
+                    ),
+                  );
+                },
+              )
             ],
           )
         ],

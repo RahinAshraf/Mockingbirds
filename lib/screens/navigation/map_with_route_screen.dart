@@ -8,6 +8,7 @@ import 'package:veloplan/models/map_models/base_map_with_route_model.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:veloplan/popups.dart';
+import 'package:veloplan/styles/colors.dart';
 
 /// Map screen showing and focusing on a a selected journey
 /// Author(s): Elisabeth Halvorsen k20077737,
@@ -39,6 +40,7 @@ class _MapRoutePageState extends State<MapRoutePage> {
       _baseMapWithRoute = BaseMapboxRouteMap(_itinerary, model);
       addPositionZoom();
       addGoBackButton();
+      addStopPolylineRoute(context);
       print("---------------" + _itinerary.myDestinations.toString());
       if (calculateDistance(currentLatLng, _itinerary.myDestinations![0]) <
           0.02) {
@@ -60,6 +62,7 @@ class _MapRoutePageState extends State<MapRoutePage> {
               CameraUpdate.newCameraPosition(_baseMapWithRoute.cameraPosition));
         },
         child: const Icon(Icons.my_location),
+        backgroundColor: CustomColors.green,
       ),
     ));
   }
@@ -79,7 +82,7 @@ class _MapRoutePageState extends State<MapRoutePage> {
                   popup.buildPopupDialogRedirect(context, itinerary));
         },
         child: const Text("GO"),
-        backgroundColor: Colors.green,
+        backgroundColor: CustomColors.green,
       ),
     ));
   }
@@ -101,5 +104,28 @@ class _MapRoutePageState extends State<MapRoutePage> {
         backgroundColor: Colors.white,
       ),
     ));
+  }
+
+  /// Add a stop polyline route button to the screen.
+  void addStopPolylineRoute(BuildContext context) {
+    _baseMapWithRoute.addWidget(
+      Container(
+        alignment: Alignment(0.9, -0.90),
+        child: FloatingActionButton(
+          heroTag: "stop_polyline",
+          onPressed: () {
+            try {
+              Navigator.of(context).popUntil((route) => route.isFirst);
+            } catch (e) {
+              log("Failed to push replacement");
+            }
+          },
+          child: const Icon(
+            Icons.close_rounded,
+          ),
+          backgroundColor: CustomColors.orange,
+        ),
+      ),
+    );
   }
 }
