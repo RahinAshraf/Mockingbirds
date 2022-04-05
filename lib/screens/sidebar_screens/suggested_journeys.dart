@@ -152,8 +152,7 @@ class ItineraryCard extends StatelessWidget {
         child: Column(
           children: <Widget>[
             ListTile(
-              title: Text(title,
-                  style: CustomTextStyles.eventCardDetailsTextStyle),
+              title: Text(title, style: Theme.of(context).textTheme.headline2),
             ),
             if (this.title == "Royal Loop")
               SizedBox(
