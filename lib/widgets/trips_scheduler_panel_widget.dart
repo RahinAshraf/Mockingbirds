@@ -3,11 +3,6 @@ import 'package:veloplan/screens/journey_planner_screen.dart';
 import 'package:veloplan/screens/trips_scheduler_screen.dart';
 import 'package:veloplan/styles/texts.dart';
 
-class TripSchedulerPanelWidget extends StatefulWidget {
-  @override
-  _TripSchedulerPanelWidget createState() => _TripSchedulerPanelWidget();
-}
-
 /// Renders a panel widget used in [TripSchedulerScreen].
 ///
 /// A user is asked to input [numberOfCyclists], which is limited to
@@ -18,6 +13,13 @@ class TripSchedulerPanelWidget extends StatefulWidget {
 /// or later (a date picker shows up and a trip is scheduled
 /// for the future).
 /// Authors: Rahin, Marija
+///Author(s): Rahin , Marija
+
+class TripSchedulerPanelWidget extends StatefulWidget {
+  @override
+  _TripSchedulerPanelWidget createState() => _TripSchedulerPanelWidget();
+}
+
 class _TripSchedulerPanelWidget extends State<TripSchedulerPanelWidget> {
   final int maximumNumberOfCyclists = 6; // max number of cyclists allowed
   int numberOfCyclists = 1;
@@ -125,7 +127,7 @@ class _TripSchedulerPanelWidget extends State<TripSchedulerPanelWidget> {
     }
   }
 
-  /// Handles the click 'Now' and 'Later' button clicks.
+  ///Pass on the necessary data when navigating from the trip scheduler panel widget.
   void _navigate(DateTime date, bool isScheduled) async {
     final response = await Navigator.push(
         context,

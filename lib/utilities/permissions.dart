@@ -16,7 +16,7 @@ class PermissionUtils {
 
   PermissionUtils._internal();
 
-  /// Gets the location of the live location of the user
+  /// Gets the location permission of the live location of the user
   Stream<Permissions> getLocation(BuildContext context) {
     checkPermissions(context: context);
     return locationPermission;
