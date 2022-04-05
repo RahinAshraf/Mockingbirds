@@ -43,6 +43,7 @@ These features could not be complete due to time constraints:
 - Allow users to create group journeys for prescheduled trips. 
 - The profile page will be extended to include groups and 'about' information, and allow following/unfollowing other users.
 - The weather feature will be extended to alert users about poor weather while planning trips.
+- Group journey information will be displayed on the 'my journeys' page. The information for this is already saved in the database. 
 
 ## References list:
 

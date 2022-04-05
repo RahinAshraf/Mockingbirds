@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +36,9 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
   ValueNotifier<num> distance = ValueNotifier(0);
   ValueNotifier<num> duration = ValueNotifier(0);
   ValueNotifier<String> dockName = ValueNotifier("");
+  double distanceTravelled = 0;
+  LatLng oldLocation = LatLng(getLatLngFromSharedPrefs().latitude,
+      getLatLngFromSharedPrefs().longitude);
 
   final userID = FirebaseAuth.instance.currentUser!.uid;
 
@@ -96,11 +100,17 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
       if (isAtGoal) {
         t.cancel();
       }
-      final oldLocation = getLatLngFromSharedPrefs();
+
       await updateCurrentLocation();
       final currentLocation = getLatLngFromSharedPrefs();
-      final distanceTravelled = calculateDistance(oldLocation, currentLocation);
-      sharedPreferences.setDouble('distance', distanceTravelled);
+      distanceTravelled += calculateDistance(oldLocation, currentLocation);
+      String n = distanceTravelled.toString();
+      print("Dist traveled:  " +
+          n +
+          "------------------------------------------------");
+      // sharedPreferences.setDouble('distance', distanceTravelled);
+      oldLocation = LatLng(getLatLngFromSharedPrefs().latitude,
+          getLatLngFromSharedPrefs().longitude);
       _updateCameraPosition();
       _updateLiveCameraPosition();
     });
@@ -119,7 +129,16 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
   /// Create a timer just for constantly updating the distance travelled to server.
   void createStatisticsTimer() {
     timer = Timer.periodic(Duration(minutes: 1), (Timer t) async {
-      await updateDistanceOnServer(userID);
+      await incrementActivityDistance(userID, distanceTravelled * 1000);
+      distanceTravelled = 0;
+      final va = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userID)
+          .get();
+      final data = va.data();
+      print('data: ' +
+          data!['distance'].toString() +
+          "------------------------------------------------");
     });
   }
 
@@ -151,8 +170,8 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
 
   /// Update route
   Future updateRoute() async {
-    print(
-        "---------------_______________------------------updating route to navbar _________________--------");
+    // print(
+    //     "---------------_______________------------------updating route to navbar _________________--------");
     if (isAtGoal) {
       reRoute();
       return;

@@ -90,7 +90,7 @@ Future<void> main() async {
       await driver?.enterText("Testing");
       find.bySemanticsLabel("Testing");
       await driver?.tap(usernameEditProfileField);
-      await driver?.enterText("Testing is really fun");
+      await driver?.enterText("Testing is really fun!");
       find.bySemanticsLabel("Testing is Fun");
     });
 

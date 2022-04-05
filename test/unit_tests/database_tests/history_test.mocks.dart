@@ -140,12 +140,12 @@ class MockDatabaseManager extends _i1.Mock implements _i4.DatabaseManager {
   @override
   _i5.Future<void> addSubCollectiontoSubCollectionByDocumentId(
           dynamic documentId,
-          String? newSubollection,
+          String? newSubcollection,
           _i2.CollectionReference<Object?>? subcollection,
           Map<String, dynamic>? value) =>
       (super.noSuchMethod(
           Invocation.method(#addSubCollectiontoSubCollectionByDocumentId,
-              [documentId, newSubollection, subcollection, value]),
+              [documentId, newSubcollection, subcollection, value]),
           returnValue: Future<void>.value(),
           returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
   @override

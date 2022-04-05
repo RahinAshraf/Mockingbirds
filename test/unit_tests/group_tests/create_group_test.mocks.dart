@@ -143,7 +143,7 @@ class MockDatabaseManager extends _i1.Mock implements _i5.DatabaseManager {
                   _FakeDocumentReference_3<Object?>()))
           as _i6.Future<_i2.DocumentReference<Object?>>);
   @override
-  _i6.Future<void> addSubCollectiontoSubCollectionByDocumentId(
+  _i6.Future<void> addSubCollectiontoCollectionByDocumentId(
           dynamic documentId,
           String? newSubollection,
           _i2.CollectionReference<Object?>? subcollection,

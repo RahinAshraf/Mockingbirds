@@ -251,11 +251,11 @@ class dockingStationManager {
     if (dock.lat != 0.0) {
       var data = await http
           .get(Uri.parse("https://api.tfl.gov.uk/BikePoint/${dock.stationId}"));
-      while (data == null) {
-        await Future.delayed(const Duration(seconds: 20));
-        data = await http.get(
-            Uri.parse("https://api.tfl.gov.uk/BikePoint/${dock.stationId}"));
-      }
+      // while (data == null) {
+      //   await Future.delayed(const Duration(seconds: 20));
+      //   data = await http.get(
+      //       Uri.parse("https://api.tfl.gov.uk/BikePoint/${dock.stationId}"));
+      // }
       var station = json.decode(data.body);
       try {
         dock.setNumberOfBikes =
@@ -282,13 +282,11 @@ class dockingStationManager {
           .get(Uri.parse("https://api.tfl.gov.uk/BikePoint/${dockId}"));
 
       /// make the api calls until it doesnt return null
-      while (data == null) {
-        await Future.delayed(const Duration(seconds: 20));
-        data = await http
-            .get(Uri.parse("https://api.tfl.gov.uk/BikePoint/${dockId}"));
-      }
-      print("-----------------check station by id---------" +
-          (data == null).toString());
+      // while (data == null) {
+      //   await Future.delayed(const Duration(seconds: 20));
+      //   data = await http
+      //       .get(Uri.parse("https://api.tfl.gov.uk/BikePoint/${dockId}"));
+      // }
       late DockingStation newStation;
       var station = json.decode(data.body);
       try {
@@ -350,12 +348,12 @@ class dockingStationManager {
       var data = await http.get(Uri.parse(
           "https://api.tfl.gov.uk/Place?lat=${coord.latitude}&lon=${coord.longitude}&radius=${radius}&type=BikePoint"));
 
-      /// make the api calls until it doesnt return null
-      while (data == null) {
-        await Future.delayed(const Duration(seconds: 20));
-        data = await http.get(Uri.parse(
-            "https://api.tfl.gov.uk/Place?lat=${coord.latitude}&lon=${coord.longitude}&radius=${radius}&type=BikePoint"));
-      }
+      // /// make the api calls until it doesnt return null
+      // while (data == null) {
+      //   await Future.delayed(const Duration(seconds: 20));
+      //   data = await http.get(Uri.parse(
+      //       "https://api.tfl.gov.uk/Place?lat=${coord.latitude}&lon=${coord.longitude}&radius=${radius}&type=BikePoint"));
+      // }
 
       List<DockingStation> newStations = [];
       var stations = json.decode(data.body);
