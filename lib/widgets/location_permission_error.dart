@@ -13,6 +13,7 @@ import 'package:veloplan/utilities/permissions.dart';
 /// Builds a widget displaying a circular progression indicator and an error message
 /// for when the live location is not enabled.
 /// Author: Rahin Ashraf
+/// Contributor: Marija
 class LocationError extends StatefulWidget {
   @override
   LocationErrorState createState() {
@@ -56,45 +57,44 @@ class LocationErrorState extends State<LocationError>
       data: CustomTheme.defaultTheme,
       child: Scaffold(
         body: SafeArea(
-          child: Column(
+          child: Stack(
             children: [
-              Align(
-                alignment: Alignment.topRight,
-                child: Image.asset(
-                  'assets/images/right_bubbles_shapes.png',
-                  width: 170,
-                  height: 170,
-                ),
-              ),
-              const SizedBox(height: 20),
-              Padding(
-                padding: EdgeInsets.all(16),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/images/suggested_trips.png',
-                      width: 150,
-                      height: 150,
-                    ),
-                    const SizedBox(height: 18),
-                    Text(
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/images/suggested_trips.png',
+                    width: 170,
+                    height: 170,
+                  ),
+                  const SizedBox(height: 15),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Text(
                       "Please enable your location permission access in order to use VeloPlan."
                       "\n After enabling your locations permissions, please close and reopen the app to begin your visit in London!",
                       style: CustomTextStyles.infoTextStyle,
                       textAlign: TextAlign.center,
                       key: Key('LocationErrorText'),
                     ),
-                    const SizedBox(
-                      height: 18,
+                  ),
+                  const SizedBox(
+                    height: 18,
+                  ),
+                  ElevatedButton(
+                    onPressed: _goToSettings,
+                    child: Text(
+                      "ENABLE",
                     ),
-                    ElevatedButton(
-                      onPressed: _goToSettings,
-                      child: Text(
-                        "ENABLE",
-                      ),
-                    ),
-                  ],
+                  ),
+                ],
+              ),
+              Align(
+                alignment: Alignment.topRight,
+                child: Image.asset(
+                  'assets/images/right_bubbles_shapes.png',
+                  width: 170,
+                  height: 170,
                 ),
               ),
             ],
