@@ -13,10 +13,12 @@ The chosen development framework is Flutter and Firebase for authentication and 
 
 ## Design Decisions
 
-We chose to make a switch from using the Google Maps API to Mapbox, due to a conflict with Googles Terms of Services. (See sections 10.4.c.ii of https://developers.google.com/maps/terms-20180207). This was a major setback mid development and as a result, there were several limitations with mapbox packages that we had to deal with. For example, the Mapbox Navigation Package has open issues (https://github.com/eopeter/flutter_mapbox_navigation/issues/145):
+- We chose to make a switch from using the Google Maps API to Mapbox, due to a conflict with Googles Terms of Services. (See sections 10.4.c.ii of https://developers.google.com/maps/terms-20180207). This was a major setback mid development and as a result, there were several limitations with mapbox packages that we had to deal with. For example, the Mapbox Navigation Package has open issues (https://github.com/eopeter/flutter_mapbox_navigation/issues/145):
+
     - Turn by turn navigation can only be used once in an app run
     - Could not do redirecting with flutter_mapbox_navigation. The package is new and very unstable, so it doesn't allow modifications without the application crashing.
-         To compromise, we implemented an additional feature that uses polyline navigation which successfuly navigates and updates the users destinations during journeys.
+
+- To compromise, we implemented an additional feature that uses polyline navigation which successfuly navigates and updates the users destinations during journeys.
 
 - For simplicity, group journeys exist for a maximum of a day and users can partake in one at a time.
 - Users must be within 20 meters of the position specified for the starting point to begin a journey.  
