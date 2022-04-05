@@ -46,7 +46,6 @@ void main() async {
                   ? ScopedModel<MapModel>(
                       model: _model,
                       child: MaterialApp(
-                        debugShowCheckedModeBanner: false,
                         initialRoute: '/',
                         routes: {
                           '/': (context) => const MyApp(),

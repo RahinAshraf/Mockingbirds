@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:veloplan/styles/colors.dart';
 
 /// Widget to display a connection error
 /// Author(s): Fariha Choudhury , Hristina-Andreea Sararu
@@ -30,17 +29,17 @@ class ConnectionError extends StatelessWidget {
               alignment: Alignment.center,
               child: Padding(
                 padding: EdgeInsets.all(15.0),
-                child: CircularProgressIndicator(color: CustomColors.green),
+                child: CircularProgressIndicator(color: Color(0xFF99D2A9)),
               ),
             ),
             SizedBox(height: 20),
             Container(
                 alignment: Alignment.center,
                 padding: const EdgeInsets.all(10),
-                child: Text(
+                child: const Text(
                   "Ooops!",
                   style: TextStyle(
-                      color: CustomColors.green,
+                      color: Color(0xFF99D2A9),
                       fontWeight: FontWeight.w500,
                       fontSize: 25),
                 )),
@@ -49,7 +48,7 @@ class ConnectionError extends StatelessWidget {
               "No Internet Connection Found!  \n \n Please check your internet connection.",
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: CustomColors.green,
+                color: Color(0xFF99D2A9),
                 fontSize: 16,
               ),
             ),
