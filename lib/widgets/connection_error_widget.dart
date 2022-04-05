@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 /// Widget to display a connection error
-/// Author(s): Fariha Choudhury k20059723, Hristina-Andreea Sararu k20036771
+/// Author(s): Fariha Choudhury , Hristina-Andreea Sararu
 
 /// Builds a widget displaying a cirucular progression indicator and error message
 /// for when no internet connection is established.
