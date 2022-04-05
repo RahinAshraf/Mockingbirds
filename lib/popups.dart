@@ -6,15 +6,9 @@ import 'package:veloplan/models/itinerary.dart';
 import 'package:veloplan/screens/navigation/polyline_turn_by_turn_screen.dart';
 import 'package:veloplan/screens/navigation/turn_by_turn_screen.dart';
 import 'package:veloplan/screens/trips_scheduler_screen.dart';
-<<<<<<< Updated upstream
-=======
 import 'package:veloplan/utilities/enums/alert_type.dart';
->>>>>>> Stashed changes
 import 'package:veloplan/widgets/group_id_join_code_widget.dart';
 import 'package:veloplan/widgets/popup_widget.dart';
-import 'package:veloplan/utilities/enums/alert_type.dart';
-import 'helpers/navigation_helpers/navigation_conversions_helpers.dart';
-import 'models/itinerary.dart';
 
 /// Generic popups used thorough the app.
 /// Author(s) Marija
@@ -40,7 +34,7 @@ class Popups {
             showDialog(
                 useRootNavigator: false,
                 context: context,
-                builder: (BuildContext context) => GroupId()); // pushes
+                builder: (BuildContext context) => GroupId()); // pushes PIN alert dialog
           }),
     ];
     return PopupWidget(
