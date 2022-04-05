@@ -2,7 +2,7 @@ import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:veloplan/.env.dart';
-import 'package:veloplan/utilities/travel_type.dart';
+import 'package:veloplan/utilities/enums/travel_type.dart';
 
 /// Route provider for fetching journey details from the  Mapbox directions API
 /// Author(s): Fariha Choudhury k20059723, Elisabeth Halvorsen k20077737

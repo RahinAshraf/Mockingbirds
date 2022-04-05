@@ -1,6 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:veloplan/providers/location_service.dart';
 
+/// Unit tests for location_service.dart
+/// Author: Rahin Ashraf
 void main() {
   final LocationService locationService = LocationService();
 
@@ -10,20 +12,18 @@ void main() {
         [51.500978, -0.1425615]);
     expect(await locationService.getPlaceCoords('Big Ben, London'),
         [51.50068575, -0.124592]);
-    expect(await locationService.getPlaceCoords('Bush house'),
-        [-24.766932, 26.172756]);
+    expect(await locationService.getPlaceCoords('Bush house, London'),
+        [51.616024, 0.268797]);
   });
 
-  //the app is targeted at London tourist, so to input non-London locations should not return the coordinates of non-London locations
+  /// the app is targeted at London tourist, so to input non-London locations should not return the coordinates of non-London locations
   test(
       'Calling method on non-London locations does not retrieve the results for non-London locations',
       () async {
-    expect(
-        await locationService.getPlaceCoords('Madrid'),
-        isNot(equals([
-          41.1101274,
-          -3.77000115
-        ]))); //[41.1101274, -3.77000115] coordinates of Madrid, Spain
+    expect(await locationService.getPlaceCoords('Madrid'),
+        isNot(equals([41.1101274, -3.77000115])));
+
+    ///[41.1101274, -3.77000115] coordinates of Madrid, Spain
     expect(
         await locationService.getPlaceCoords('Paris'),
         isNot(equals([
