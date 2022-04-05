@@ -168,78 +168,50 @@ void main() {
     expect(list[0].name, "Normandy Road, Stockwell");
     expect(list[1].name, "Sidney Road, Stockwell");
     expect(list[2].name, "Caldwell Street, Stockwell");
-    expect(list[3].name, "Teversham Lane, Stockwell");
-    expect(list[4].name, "Sidney Road, Stockwell");
-    expect(list[5].name, "Albert Square, Stockwell");
-    expect(list[6].name, "Courland Grove, Wandsworth Road");
-    expect(list[7].name, "Hartington Road, Stockwell");
-    expect(list[8].name, "Normandy Road, Stockwell");
+    expect(list[3].name, "Albert Square, Stockwell");
+    expect(list[4].name, "Binfield Road, Stockwell");
+    expect(list[5].name, "Clapham Road, Lingham Street, Stockwell");
+    expect(list[6].name, "Teversham Lane, Stockwell");
+    expect(list[7].name, "Clarence Walk, Stockwell");
+    expect(list[8].name, "Hartington Road, Stockwell");
     expect(list.length, 9);
   });
 
   test('Get 10 Closest docks with more than than 10 closest docking stations',
       () async {
-    // get random names + one more -11
-    dockingStationManager man = dockingStationManager();
-    await man.importStations();
-    man.removeStations(10);
-    expect(man.stations.length, 10);
+    var list = stationManager10Docks.get10ClosestDocks(userLocation);
 
-    var list = man.get10ClosestDocks(userLocation);
-
-    expect(list[0].name, "Sedding Street, Sloane Square");
-    expect(list[1].name, "Park Street, Bankside");
-    expect(list[2].name, "New Globe Walk, Bankside");
-    expect(list[3].name, "Broadcasting House, Marylebone");
-    expect(list[4].name, "Phillimore Gardens, Kensington");
-    expect(list[5].name, "Christopher Street, Liverpool Street");
-    expect(list[6].name, "River Street , Clerkenwell");
-    expect(list[7].name, "St. Chad\'s Street, King\'s Cross");
-    expect(list[8].name, "Charlbert Street, St. John\'s Wood");
-    expect(list[9].name, "Maida Vale, Maida Vale");
+    expect(list[0].name, "Normandy Road, Stockwell");
+    expect(list[1].name, "Sidney Road, Stockwell");
+    expect(list[2].name, "Caldwell Street, Stockwell");
+    expect(list[3].name, "Albert Square, Stockwell");
+    expect(list[4].name, "Binfield Road, Stockwell");
+    expect(list[5].name, "Clapham Road, Lingham Street, Stockwell");
+    expect(list[6].name, "Teversham Lane, Stockwell");
+    expect(list[7].name, "Clarence Walk, Stockwell");
+    expect(list[8].name, "Hartington Road, Stockwell");
+    expect(list.length, 10);
   });
 
   test('Sort the docks by distance with given docks and user location',
       () async {
-    // get random names + one more -11
-    dockingStationManager man = dockingStationManager();
-    await man.importStations();
-    man.removeStations(10);
-    expect(man.stations.length, 10);
+    var list = stationManager10Docks.sortDocksByDistanceFromGivenLocation(
+        userLocation, stationManager2Docks.stations);
 
-    var list =
-        man.sortDocksByDistanceFromGivenLocation(userLocation, man.stations);
-
-    expect(list[0].name, "Sedding Street, Sloane Square");
-    expect(list[1].name, "Park Street, Bankside");
-    expect(list[2].name, "New Globe Walk, Bankside");
-    expect(list[3].name, "Broadcasting House, Marylebone");
-    expect(list[4].name, "Phillimore Gardens, Kensington");
-    expect(list[5].name, "Christopher Street, Liverpool Street");
-    expect(list[6].name, "River Street , Clerkenwell");
-    expect(list[7].name, "St. Chad\'s Street, King\'s Cross");
-    expect(list[8].name, "Charlbert Street, St. John\'s Wood");
-    expect(list[9].name, "Maida Vale, Maida Vale");
+    expect(list[0].name, "Binfield Road, Stockwell");
+    expect(list[1].name, "Tallis Street, Temple");
+    expect(list.length, 2);
   });
   test('Filter the docks by distance with given dock', () async {
-    // get random names + one more -11
-    dockingStationManager man = dockingStationManager();
-    await man.importStations();
-    man.removeStations(10);
-    expect(man.stations.length, 10);
+    var list = stationManager5Docks
+        .filterAllDockingStationsByDistance(stationManager2Docks.stations[1]);
 
-    var list = man.filterAllDockingStationsByDistance(man.stations[4]);
-
-    expect(list[0].name, "Sedding Street, Sloane Square");
-    expect(list[1].name, "Phillimore Gardens, Kensington");
-    expect(list[2].name, "Broadcasting House, Marylebone");
-    expect(list[3].name, "New Globe Walk, Bankside");
-    expect(list[4].name, "Maida Vale, Maida Vale");
-    expect(list[5].name, "Charlbert Street, St. John\'s Wood");
-    expect(list[6].name, "Park Street, Bankside");
-    expect(list[7].name, "St. Chad\'s Street, King\'s Cross");
-    expect(list[8].name, "River Street , Clerkenwell");
-    expect(list[9].name, "Christopher Street, Liverpool Street");
+    expect(list[0].name, "Tallis Street, Temple");
+    expect(list[1].name, "Binfield Road, Stockwell");
+    expect(list[2].name, "Abyssinia Close, Clapham Junction");
+    expect(list[3].name, "Hurlingham Park, Parsons Green");
+    expect(list[4].name, "Little Brook Green, Brook Green");
+    expect(list.length, 5);
   });
   test('Get the closest docks with available space', () async {
     expect(
@@ -288,36 +260,67 @@ void main() {
   });
 
   test('Get 10 Closest docks fav', () async {
-    // get random names + one more -11
-    dockingStationManager man = dockingStationManager();
-    await man.importStations();
-    man.removeStations(10);
-    expect(man.stations.length, 10);
+    var list = stationManager2Docks.get10ClosestDocksFav(
+        userLocation, stationManager2Docks.stations);
 
-    var list =
-        man.get10ClosestDocksFav(userLocation, stationManager5Docks.stations);
+    expect(list[0].name, "Binfield Road, Stockwell");
+    expect(list[1].name, "Tallis Street, Temple");
+    expect(list.length, 2);
+  });
 
-    expect(list[0].name, "Sedding Street, Sloane Square");
-    expect(list[1].name, "Park Street, Bankside");
-    expect(list[2].name, "New Globe Walk, Bankside");
-    expect(list[3].name, "Broadcasting House, Marylebone");
-    expect(list[4].name, "Phillimore Gardens, Kensington");
-    expect(list[5].name, "Christopher Street, Liverpool Street");
-    expect(list[6].name, "River Street , Clerkenwell");
-    expect(list[7].name, "St. Chad\'s Street, King\'s Cross");
-    expect(list[8].name, "Charlbert Street, St. John\'s Wood");
-    expect(list[9].name, "Maida Vale, Maida Vale");
+  test('Get 10 Closest docks fav', () async {
+    var list = stationManager10Docks.get10ClosestDocksFav(
+        userLocation, stationManager10Docks.stations);
+
+    expect(list.length, 10);
+  });
+
+  test('Get 10 Closest docks with available space', () async {
+    var list = stationManager10Docks.get10ClosestDocksWithAvailableBikes(
+        userLocation, 1);
+
+    expect(list[0].name, "Normandy Road, Stockwell");
+    expect(list[5].name, "Clapham Road, Lingham Street, Stockwell");
+    expect(list[9].name, "Courland Grove, Wandsworth Road");
+    expect(list.length, 10);
+  });
+  test('Get 10 Closest docks with available space and zero as number of people',
+      () async {
+    var list = stationManager10Docks.get10ClosestDocksWithAvailableBikes(
+        userLocation, 1);
+
+    expect(list[0].name, "Normandy Road, Stockwell");
+    expect(list[5].name, "Clapham Road, Lingham Street, Stockwell");
+    expect(list[9].name, "Courland Grove, Wandsworth Road");
+    expect(list.length, 10);
+  });
+  test('Get 10 Closest docks with available bikes', () async {
+    var list = stationManager10Docks.get10ClosestDocksWithAvailableBikes(
+        userLocation, 20);
+
+    expect(list[0].name, "Caldwell Street, Stockwell");
+    expect(list[1].name, "Clapham Road, Lingham Street, Stockwell");
+    expect(list.length, 2);
+  });
+  test('Get the distance between two docsk', () async {
+    var distance = stationManager2Docks.distanceBtw2Points(
+        stationManager2Docks.stations[0], stationManager2Docks.stations[1]);
+
+    expect(distance, 0.04231588647304585);
   });
 
   ///filterAllDockingStationsByDistanc----- donee
   ///sortDocksByDistanceFromGivenLocatio----- done
   ///get10ClosestDocks ---------------------- done
   ///getClosestDockWithAvailableSpaceHandler ---- donee
-  ///get10ClosestDocksWithAvailableBikes -- easy after i add the values
-  ///get10ClosestDocksWithAvailableSpace -- easy after i add the values
-  ///checkStationById --- write checkers
+  ///get10ClosestDocksWithAvailableBikes -- easy after i add the value donees
+  ///get10ClosestDocksWithAvailableSpace -- easy after i add the value donees
+  ///checkStationById --- write checker donees
+
   ///checkDockWithAvailableSpace - write checkers
+
   ///checkDockWithAvailableBikes write checkers
-  ///get10ClosestDocksFav
-  ///importStationsByRadius --- write checkers
+  ///
+  ///get10ClosestDocksFa doneev
+  ///importStationsByRadius --- write checker donees
 }

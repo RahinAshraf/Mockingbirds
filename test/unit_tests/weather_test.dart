@@ -42,4 +42,14 @@ void main() {
     expect(weatherManager.all_weather_data.convertKelvinToCelsius(278.77),
         5.6200000000000045);
   });
+  test('Calling method on a empty weather', () {
+    Weather w = Weather.empty();
+    expect(w.getCurrentClouds(), 0);
+    expect(w.getCurrentFeelsLikeTemp(), -273.15);
+    expect(w.getCurrentVisibility(), 0);
+    expect(w.getCurrentWeatherIcon(), "");
+    expect(w.getCurrentWeatherTemp(), -273.15);
+    expect(w.getCurrentWindSpeed(), 0.0);
+    expect(w.convertKelvinToCelsius(278.77), 5.6200000000000045);
+  });
 }

@@ -64,24 +64,4 @@ class Path {
   void initialiseDock2(var place) {
     this.des2Name = place;
   }
-
-  void printPath() {
-    print("-----path:  des1: " +
-        des1.toString() +
-        " des2: " +
-        des2.toString() +
-        " dock1: " +
-        doc1.name.toString() +
-        "   " +
-        doc1.getLatlng().toString() +
-        " dock2: " +
-        doc2.name.toString() +
-        "   " +
-        doc2.getLatlng().toString() +
-        " distance: " +
-        distance.toString() +
-        " . duration:  " +
-        duration.toString() +
-        " ");
-  }
 }

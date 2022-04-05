@@ -189,9 +189,6 @@ class dockingStationManager {
     if (filtered_stations[0] != null)
       return filtered_stations[0];
     else {
-      //! TODO:turn to null or write a handler
-      print(
-          "----------------------------it was called on an empty docking station-------------------------------");
       return DockingStation.empty();
     }
   }
@@ -220,11 +217,6 @@ class dockingStationManager {
     } else {
       return filteredStations;
     }
-  }
-
-  /// Method useful for testing
-  void removeStations(int range) {
-    stations.removeRange(range, stations.length);
   }
 
   ///  Get the 10 closest available docking stations by given location and stations, number of available bikes to get
@@ -282,11 +274,8 @@ class dockingStationManager {
     }
   }
 
-  /* import the docking station from the tfl api and check its updated info*/
-  //TODO: refactor code -> shitty code
+  /// import the docking station from the tfl api and check its updated info///
   Future<DockingStation?> checkStationById(String dockId) async {
-    // print("------------dock id in check statin by id" + dockId.toString());
-
     if (!dockId.isEmpty) {
       /// make the api call to tfl
       var data = await http
@@ -314,21 +303,15 @@ class dockingStationManager {
             int.parse(station["additionalProperties"][8]["value"]),
             station["lon"],
             station["lat"]);
-        // print(newStation.stationId +
-        //     "      " +
-        //     newStation.name +
-        //     "-----------------__________-debug stations__________--------");
       } on FormatException {}
 
       /// return an empty dock if there is no data from the api call
       if (newStation != null) {
         return newStation;
       } else {
-        print("Returning an empty dock from checkStationById ");
         DockingStation.empty();
       }
     } else {
-      print("Returning an empty dock from checkStationById ");
       return DockingStation.empty();
     }
   }
