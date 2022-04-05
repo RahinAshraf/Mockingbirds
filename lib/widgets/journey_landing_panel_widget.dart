@@ -71,7 +71,10 @@ class _JourneyLandingPanelWidget extends State<JourneyLandingPanelWidget> {
                                 color: Colors.black,
                                 size: 22,
                               ),
-                        Text("Distance: ${distance}m",
+                        Text(
+                            distance >= 1000
+                                ? "Distance: ${(distance / 1000).toStringAsFixed(2)}km"
+                                : "Distance: ${distance.toStringAsFixed(0)}m",
                             style: journeyLandingTextStyle)
                       ]));
                     })
