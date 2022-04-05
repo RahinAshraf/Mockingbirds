@@ -2,6 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:veloplan/models/weather.dart';
 import 'package:veloplan/providers/weather_manager.dart';
 
+/// Tests that test the weather functionality
+/// Author: Nicole Lehchevska k20041914
 void main() {
   final WeatherManager weatherManager = WeatherManager();
   Weather test_weather = Weather(
@@ -10,11 +12,13 @@ void main() {
 
   test('Calling method on a empty weather', () {
     expect(weatherManager.all_weather_data.getCurrentClouds(), 100);
-    expect(weatherManager.all_weather_data.getCurrentFeelsLikeTemp(), -273.15);
-    expect(weatherManager.all_weather_data.getCurrentVisibility(), 100);
-    expect(weatherManager.all_weather_data.getCurrentWeatherIcon(), "");
-    expect(weatherManager.all_weather_data.getCurrentWeatherTemp(), -273.15);
-    expect(weatherManager.all_weather_data.getCurrentWindSpeed(), 0.0);
+    expect(weatherManager.all_weather_data.getCurrentFeelsLikeTemp(),
+        5.6200000000000045);
+    expect(weatherManager.all_weather_data.getCurrentVisibility(), 4300);
+    expect(weatherManager.all_weather_data.getCurrentWeatherIcon(), "04d");
+    expect(weatherManager.all_weather_data.getCurrentWeatherTemp(),
+        8.110000000000014);
+    expect(weatherManager.all_weather_data.getCurrentWindSpeed(), 4.12);
     expect(weatherManager.all_weather_data.convertKelvinToCelsius(273.15), 0.0);
   });
   test('Weather is returned correctly', () {
@@ -37,5 +41,15 @@ void main() {
     expect(weatherManager.all_weather_data.getCurrentWindSpeed(), 4.12);
     expect(weatherManager.all_weather_data.convertKelvinToCelsius(278.77),
         5.6200000000000045);
+  });
+  test('Calling method on a empty weather', () {
+    Weather w = Weather.empty();
+    expect(w.getCurrentClouds(), 0);
+    expect(w.getCurrentFeelsLikeTemp(), -273.15);
+    expect(w.getCurrentVisibility(), 0);
+    expect(w.getCurrentWeatherIcon(), "");
+    expect(w.getCurrentWeatherTemp(), -273.15);
+    expect(w.getCurrentWindSpeed(), 0.0);
+    expect(w.convertKelvinToCelsius(278.77), 5.6200000000000045);
   });
 }

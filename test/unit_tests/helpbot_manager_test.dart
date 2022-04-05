@@ -11,7 +11,7 @@ void main() {
   setUp(() {
     _helpBotManager = HelpBotManager();
     message1 = Message('How do I delete test?', 'Go to tests', 'Test');
-    message3 = Message('How do I delete test?', 'Go to tests', 'Test', '');
+    message3 = Message('How do I delete test?', 'Go to tests', 'Test', 'true');
     message2 = Message('How do I  test?', 'Go to tests', 'Test2');
     _helpBotManager.questions = {
       'Test': [message1, message3],
@@ -32,7 +32,7 @@ void main() {
   });
 
   test(' Correctly returns the correct leunch for messages', () async {
-    expect(_helpBotManager.getLaunch(message1), false);
-    expect(_helpBotManager.getLaunch(message3), true);
+    expect(_helpBotManager.getLaunch(message1), "");
+    expect(_helpBotManager.getLaunch(message3), "true");
   });
 }
