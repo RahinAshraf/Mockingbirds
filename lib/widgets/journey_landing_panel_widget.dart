@@ -17,7 +17,7 @@ class JourneyLandingPanelWidget extends StatefulWidget {
 class _JourneyLandingPanelWidget extends State<JourneyLandingPanelWidget> {
   @override
   Widget build(BuildContext context) => Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text('Journey', style: CustomTextStyles.journeyTextStyle),
           const Divider(
@@ -27,8 +27,11 @@ class _JourneyLandingPanelWidget extends State<JourneyLandingPanelWidget> {
           ValueListenableBuilder(
               valueListenable: widget.baseMapWithUpdatedRoute.dockName,
               builder: (BuildContext context, String dockName, Widget? child) {
-                return Text("Next stop: ${dockName}",
-                    style: CustomTextStyles.journeyTextStyle);
+                return Text(
+                  "Next stop: ${dockName}",
+                  style: CustomTextStyles.journeyTextStyle,
+                  textAlign: TextAlign.center,
+                );
               }),
           SizedBox(
             height: 20,
@@ -55,9 +58,10 @@ class _JourneyLandingPanelWidget extends State<JourneyLandingPanelWidget> {
                     );
                   }),
               ValueListenableBuilder(
-                  valueListenable: widget.baseMapWithUpdatedRoute.distance,
-                  builder: (BuildContext context, num distance, Widget? child) {
-                    return Row(children: [
+                valueListenable: widget.baseMapWithUpdatedRoute.distance,
+                builder: (BuildContext context, num distance, Widget? child) {
+                  return Row(
+                    children: [
                       widget.baseMapWithUpdatedRoute.currentStation == 0
                           ? Icon(
                               Icons.directions_walk,
@@ -71,8 +75,10 @@ class _JourneyLandingPanelWidget extends State<JourneyLandingPanelWidget> {
                             ),
                       Text(" Distance: ${distance} m",
                           style: CustomTextStyles.journeyLandingTextStyle)
-                    ]);
-                  })
+                    ],
+                  );
+                },
+              )
             ],
           )
         ],

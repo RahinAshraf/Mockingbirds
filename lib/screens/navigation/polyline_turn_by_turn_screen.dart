@@ -37,8 +37,8 @@ class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
   _MapUpdatedRoutePageState(this._itinerary) {}
   @override
   Widget build(BuildContext context) {
-    final panelHeightClosed = MediaQuery.of(context).size.height * 0.18;
-    final panelHeightOpen = MediaQuery.of(context).size.height * 0.18;
+    final panelHeightClosed = MediaQuery.of(context).size.height * 0.23;
+    final panelHeightOpen = MediaQuery.of(context).size.height * 0.23;
     return Scaffold(body: ScopedModelDescendant<MapModel>(
         builder: (BuildContext context, Widget? child, MapModel model) {
       _baseMapWithUpdatedRoute = MapWithRouteUpdated(
