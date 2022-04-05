@@ -143,7 +143,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
                   alignment: Alignment.center,
                   height: 40,
                   padding: const EdgeInsets.all(10),
-                  color: CustomColors.orange,
+                  color: CustomColors.lighterOrange,
                   child: FutureBuilder<String>(
                       future: _getGroup(),
                       builder: (context, snapshot) {

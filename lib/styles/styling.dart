@@ -16,7 +16,7 @@ IndicatorStyle timelineTileIndicatorStyle = IndicatorStyle(
     width: 10,
     indicatorXY: 0.5,
     drawGap: true,
-    color: CustomColors.orange);
+    color: CustomColors.lighterOrange);
 
 const timelineTileBeforeLineStyle = const LineStyle(
   thickness: 1.5,

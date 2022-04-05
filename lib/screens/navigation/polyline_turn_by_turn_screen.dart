@@ -99,7 +99,7 @@ class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
         child: const Icon(
           Icons.close_rounded,
         ),
-        backgroundColor: CustomColors.fluidOrange,
+        backgroundColor: CustomColors.orange,
       ),
     ));
   }
