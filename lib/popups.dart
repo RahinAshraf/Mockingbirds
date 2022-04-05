@@ -34,7 +34,8 @@ class Popups {
             showDialog(
                 useRootNavigator: false,
                 context: context,
-                builder: (BuildContext context) => GroupId()); // pushes PIN alert dialog
+                builder: (BuildContext context) =>
+                    GroupId()); // pushes PIN alert dialog
           }),
     ];
     return PopupWidget(

@@ -117,8 +117,6 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
 
       if (ownerID == _databaseManager.getCurrentUser()?.uid) {
       } else {
-        // context.push(NavBar());
-        // TODO : MARIJA
         Navigator.pop(context);
       }
 

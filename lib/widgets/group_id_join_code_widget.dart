@@ -24,7 +24,6 @@ class GroupIdState extends State<GroupId> {
   late List<LatLng>? points;
   late final groupManager _groupManager;
   String fullPin = ''; // user's entered pin code
-  bool successfulJoin = false;
   bool? exists = null;
   DatabaseManager _databaseManager;
   late Itinerary _itinerary;
@@ -32,18 +31,10 @@ class GroupIdState extends State<GroupId> {
     _groupManager = groupManager(_databaseManager);
   }
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
   /// Adds user to a group, if the given [code] is correct and sets that group [exists].
   @visibleForTesting
-  joinGroup(String code) async {
+  _joinGroup(String code) async {
     var group = await _databaseManager.getByEquality('group', 'code', code);
-    var list = [];
-    String id = "";
-
     if (group.size == 0) {
       setState(() {
         exists = false;
@@ -52,12 +43,10 @@ class GroupIdState extends State<GroupId> {
       var user = await _databaseManager.getByKey(
           'users', _databaseManager.getCurrentUser()!.uid);
       if (user.data() != null) {
-        var hasGroup = user.data()!.keys.contains('group');
         _itinerary = await _groupManager.joinGroup(code);
-        Navigator.pop(context);
+        Navigator.pop(context); // pops the 'Enter PIN' alert dialog
         context.push(SummaryJourneyScreen(_itinerary, false));
         setState(() {
-          successfulJoin = hasGroup;
           exists = true;
         });
       }
@@ -105,7 +94,7 @@ class GroupIdState extends State<GroupId> {
                   child: ElevatedButton(
                     onPressed: fullPin.length == 6
                         ? () async {
-                            await joinGroup(fullPin);
+                            await _joinGroup(fullPin);
                           }
                         : null,
                     child: const Text('Confirm'),
