@@ -254,8 +254,8 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
             last: i == _itinerary.docks!.length - 1 ? true : false,
             content: _itinerary.docks![i].name,
             destination: _itinerary.myDestinations![i].toString(),
-            duration: paths[i].duration,
-            distance: paths[i].distance,
+            duration: paths[i + 1].duration,
+            distance: paths[i + 1].distance,
           ),
         );
       }
