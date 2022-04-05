@@ -32,29 +32,6 @@ class _NavBarState extends State<NavBar> {
     MapPage(),
   ];
 
-  Future<bool> _isInAGroup() async {
-    var user = await _databaseManager.getByKey(
-        'users', _databaseManager.getCurrentUser()!.uid);
-    if (user.data() != null) {
-      var hasGroup = user.data()!.keys.contains('group');
-      return hasGroup;
-    }
-    return false;
-  }
-
-
-  _getGroupInfo() async {
-    var user = await _databaseManager.getByKey(
-        'users', _databaseManager.getCurrentUser()!.uid);
-    if (user.data() != null && user.data()!.keys.contains('group')) {
-      var group = await _databaseManager.getByEquality(
-          'group', 'code', user.data()!['group']);
-      var _itinerary = await _groupManager.getItineraryFromGroup(group);
-      context.push(SummaryJourneyScreen(_itinerary, false));
-    }
-    // TODO: if it doesn't work, make an else statement
-  }
-
   @override
   Widget build(BuildContext context) {
     screens.add(Profile(_currentUser));
@@ -140,5 +117,29 @@ class _NavBarState extends State<NavBar> {
         backgroundColor: Colors.white,
       ),
     );
+  }
+
+  /// Returns whether a user already has a group or not.
+  Future<bool> _isInAGroup() async {
+    var user = await _databaseManager.getByKey(
+        'users', _databaseManager.getCurrentUser()!.uid);
+    if (user.data() != null) {
+      var hasGroup = user.data()!.keys.contains('group');
+      return hasGroup;
+    }
+    return false;
+  }
+
+  /// Retrieves group info and redirects to summary of journey screen.
+  _getGroupInfo() async {
+    var user = await _databaseManager.getByKey(
+        'users', _databaseManager.getCurrentUser()!.uid);
+    if (user.data() != null && user.data()!.keys.contains('group')) {
+      var group = await _databaseManager.getByEquality(
+          'group', 'code', user.data()!['group']);
+      var _itinerary = await _groupManager.getItineraryFromGroup(group);
+      context.push(SummaryJourneyScreen(_itinerary, false));
+    }
+    // TODO: if it doesn't work, make an else statement
   }
 }
