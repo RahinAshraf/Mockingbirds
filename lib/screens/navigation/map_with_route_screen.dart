@@ -112,7 +112,7 @@ class _MapRoutePageState extends State<MapRoutePage> {
       Container(
         alignment: Alignment(0.9, -0.80),
         child: FloatingActionButton(
-          heroTag: "stop_journey",
+          heroTag: "stop_polyline",
           onPressed: () {
             try {
               Navigator.of(context).popUntil((route) => route.isFirst);
