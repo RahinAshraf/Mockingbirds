@@ -1,10 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:veloplan/screens/summary_journey_screen.dart';
 import 'package:veloplan/models/itinerary.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:veloplan/styles/colors.dart';
 import 'package:veloplan/styles/styling.dart';
+import 'package:veloplan/styles/texts.dart';
 
 /// Suggester itineraries that contain biggest sights in London for under 30 min.
 /// from: https://londonblog.tfl.gov.uk/2019/11/05/santander-cycles-sightseeing/?intcmp=60245
@@ -55,24 +58,26 @@ class _SuggestedItineraryState extends State<SuggestedItinerary> {
     this._hydeLoop = new Itinerary.suggestedTrip(
         _hydeParkLoopCoord.keys.toList(),
         "Hyde Park Loop",
-        _hydeParkLoopCoord.values.toList());
+        _hydeParkLoopCoord.values.toList(),
+        DateTime.now());
 
     itineraries.add(_hydeLoop);
     this._royalLoop = new Itinerary.suggestedTrip(_royalLoopCoord.keys.toList(),
-        "Royal Loop", _royalLoopCoord.values.toList());
+        "Royal Loop", _royalLoopCoord.values.toList(), DateTime.now());
     itineraries.add(_royalLoop);
 
     this._thamesLoop = new Itinerary.suggestedTrip(
         _thamesLoopCoord.keys.toList(),
         "Thames Loop",
-        _thamesLoopCoord.values.toList());
+        _thamesLoopCoord.values.toList(),
+        DateTime.now());
     itineraries.add(_thamesLoop);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: whiteReplacement,
+      backgroundColor: CustomColors.whiteReplacement,
       appBar: AppBar(
         title: const Text('Suggested Journeys'),
         leading: BackButton(key: Key("back"), color: Colors.white),
@@ -81,9 +86,10 @@ class _SuggestedItineraryState extends State<SuggestedItinerary> {
         child: ListView(
           children: [
             const SizedBox(height: 30),
-            const Padding(
+            Padding(
               padding: EdgeInsets.only(left: 15.0, bottom: 15.0, top: 15.0),
-              child: Text('Explore London', style: upcomingJourneysTextStyle),
+              child: Text('Explore London',
+                  style: Theme.of(context).textTheme.headline1),
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -146,7 +152,7 @@ class ItineraryCard extends StatelessWidget {
         child: Column(
           children: <Widget>[
             ListTile(
-              title: Text(title, style: eventCardTitleTextStyle),
+              title: Text(title, style: Theme.of(context).textTheme.headline2),
             ),
             if (this.title == "Royal Loop")
               SizedBox(
@@ -171,7 +177,7 @@ class ItineraryCard extends StatelessWidget {
                 const SizedBox(width: 15.0),
                 TextButton(
                   style: TextButton.styleFrom(
-                    textStyle: eventCardDetailsTextStyle,
+                    textStyle: CustomTextStyles.eventCardDetailsTextStyle,
                   ),
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(

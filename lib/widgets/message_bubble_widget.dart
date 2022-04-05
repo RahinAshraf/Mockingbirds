@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:veloplan/styles/styling.dart';
+import 'package:veloplan/styles/colors.dart';
+import 'package:veloplan/styles/texts.dart';
 
 const String botName = 'HelpBot';
 const String userName = 'You';
@@ -15,6 +16,7 @@ const String userName = 'You';
 /// By default, the chat bubble is created for bots' messages, therefore
 /// [isSentByBot] equals to true. If [isSentByBot] is set to false,
 /// the chat bubble is created for the user.
+/// Author: Marija
 class MessageBubble extends StatelessWidget {
   const MessageBubble({required this.content, this.isSentByBot = true});
 
@@ -33,7 +35,7 @@ class MessageBubble extends StatelessWidget {
         children: [
           Text(
             isSentByBot ? botName : userName,
-            style: messageAuthorTextStyle,
+            style: CustomTextStyles.messageAuthorTextStyle,
           ),
           Material(
             borderRadius: isSentByBot
@@ -48,13 +50,17 @@ class MessageBubble extends StatelessWidget {
                     bottomRight: Radius.circular(30.0),
                   ),
             elevation: 5.0,
-            color: isSentByBot ? botMessageBubbleColor : userMessageBubbleColor,
+            color: isSentByBot
+                ? CustomColors.botMessageBubbleColor
+                : CustomColors.userMessageBubbleColor,
             child: Padding(
               padding:
                   const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
               child: Text(
                 content,
-                style: isSentByBot ? botMessageTextStyle : userMessageTextStyle,
+                style: isSentByBot
+                    ? CustomTextStyles.botMessageTextStyle
+                    : CustomTextStyles.userMessageTextStyle,
               ),
             ),
           ),

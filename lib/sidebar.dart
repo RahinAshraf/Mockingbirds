@@ -1,70 +1,65 @@
 import 'package:flutter/material.dart';
-import 'package:veloplan/screens/sidebar_screens/my_journeys_screen.dart';
-import 'package:veloplan/screens/sidebar_screens/suggested_journeys.dart';
-import 'package:veloplan/screens/sidebar_screens/weather_screen.dart';
-import 'screens/sidebar_screens/schedule_screen.dart';
 import 'screens/sidebar_screens/favourite_screen.dart';
 import 'screens/sidebar_screens/help_screen.dart';
 import 'screens/sidebar_screens/my_journeys_screen.dart';
-import 'package:veloplan/screens/sidebar_screens/favourite_screen.dart';
-import 'package:veloplan/screens/sidebar_screens/help_screen.dart';
-import 'package:veloplan/screens/sidebar_screens/schedule_screen.dart';
-import 'package:veloplan/screens/sidebar_screens/settings_screen.dart';
+import 'screens/sidebar_screens/schedule_screen.dart';
+import 'screens/sidebar_screens/settings_screen.dart';
+import 'screens/sidebar_screens/suggested_journeys.dart';
+import 'screens/sidebar_screens/weather_screen.dart';
 
-/// Defines the sidebar
+/// Defines the sidebar.
 /// Author: Tayyibah
+/// Contributor(s): Elisabeth, Nicole
 class SideBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Drawer(
-        child: ListView(
-          children: [
-            Image.asset(
-              'assets/images/right_bubbles_shapes.png',
-              height: 150,
-              alignment: Alignment.topRight,
-            ),
-            _buildSidebarItem(
-              text: 'Schedule',
-              icon: Icons.date_range,
-              onClicked: () => _renderScreen(context, 0),
-            ),
-            _buildSidebarItem(
-              text: 'My Journeys',
-              icon: Icons.history,
-              onClicked: () => _renderScreen(context, 1),
-            ),
-            _buildSidebarItem(
-              text: 'Favourites',
-              icon: Icons.favorite,
-              onClicked: () => _renderScreen(context, 2),
-            ),
-            _buildSidebarItem(
-              text: 'Suggested Trips',
-              icon: Icons.route,
-              onClicked: () => _renderScreen(context, 3),
-            ),
-            _buildSidebarItem(
-              text: 'Weather',
-              icon: Icons.sunny,
-              onClicked: () => _renderScreen(context, 4),
-            ),
-            const SizedBox(height: 24),
-            const Divider(color: Colors.grey),
-            const SizedBox(height: 24),
-            _buildSidebarItem(
-              text: 'Help',
-              icon: Icons.chat_bubble_outlined,
-              onClicked: () => _renderScreen(context, 5),
-            ),
-            _buildSidebarItem(
-              text: 'Settings',
-              icon: Icons.settings,
-              onClicked: () => _renderScreen(context, 6),
-            ),
-          ],
-        ),
+    return Drawer(
+      child: ListView(
+        children: [
+          Image.asset(
+            'assets/images/right_bubbles_shapes.png',
+            height: 150,
+            alignment: Alignment.topRight,
+          ),
+          _buildSidebarItem(
+            text: 'Schedule',
+            icon: Icons.date_range,
+            onClicked: () => _renderScreen(context, 0),
+          ),
+          _buildSidebarItem(
+            text: 'My Journeys',
+            icon: Icons.history,
+            onClicked: () => _renderScreen(context, 1),
+          ),
+          _buildSidebarItem(
+            text: 'Favourites',
+            icon: Icons.favorite,
+            onClicked: () => _renderScreen(context, 2),
+          ),
+          _buildSidebarItem(
+            text: 'Suggested Trips',
+            icon: Icons.route,
+            onClicked: () => _renderScreen(context, 3),
+          ),
+          _buildSidebarItem(
+            text: 'Weather',
+            icon: Icons.sunny,
+            onClicked: () => _renderScreen(context, 4),
+          ),
+          const SizedBox(height: 24),
+          const Divider(),
+          const SizedBox(height: 24),
+          _buildSidebarItem(
+            text: 'Help',
+            icon: Icons.chat_bubble_outlined,
+            onClicked: () => _renderScreen(context, 5),
+          ),
+          _buildSidebarItem(
+            text: 'Settings',
+            icon: Icons.settings,
+            onClicked: () => _renderScreen(context, 6),
+          ),
+        ],
       ),
     );
   }
@@ -79,7 +74,7 @@ class SideBar extends StatelessWidget {
     );
   }
 
-  _renderScreen(BuildContext context, int i) async {
+  _renderScreen(BuildContext context, int i) {
     switch (i) {
       case 0:
         Navigator.of(context).push(MaterialPageRoute(
@@ -103,7 +98,7 @@ class SideBar extends StatelessWidget {
         break;
       case 4:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => WeatherPage(),
+          builder: (context) => WeatherScreen(),
         ));
         break;
       case 5:

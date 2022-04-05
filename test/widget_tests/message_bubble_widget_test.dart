@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:veloplan/styles/colors.dart';
 import 'package:veloplan/styles/styling.dart';
+import 'package:veloplan/styles/texts.dart';
 import 'package:veloplan/widgets/message_bubble_widget.dart';
 
 /// Tests for [MessageBubble] widget.
@@ -50,9 +52,10 @@ void main() {
       var testBorder = testMaterialWidget.borderRadius as BorderRadius;
 
       expect(testColumnAlignment.crossAxisAlignment, CrossAxisAlignment.start);
-      expect(testMessageAuthorTextStyle.style, messageAuthorTextStyle);
-      expect(testMessageTextStyle.style, botMessageTextStyle);
-      expect(testMaterialWidget.color, botMessageBubbleColor);
+      expect(testMessageAuthorTextStyle.style,
+          CustomTextStyles.messageAuthorTextStyle);
+      expect(testMessageTextStyle.style, CustomTextStyles.botMessageTextStyle);
+      expect(testMaterialWidget.color, CustomColors.botMessageBubbleColor);
       expect(testBorder.topLeft, Radius.zero);
     });
 
@@ -71,9 +74,10 @@ void main() {
       var testBorder = testMaterialWidget.borderRadius as BorderRadius;
 
       expect(testColumnAlignment.crossAxisAlignment, CrossAxisAlignment.end);
-      expect(testMessageAuthorTextStyle.style, messageAuthorTextStyle);
-      expect(testMessageTextStyle.style, userMessageTextStyle);
-      expect(testMaterialWidget.color, userMessageBubbleColor);
+      expect(testMessageAuthorTextStyle.style,
+          CustomTextStyles.messageAuthorTextStyle);
+      expect(testMessageTextStyle.style, CustomTextStyles.userMessageTextStyle);
+      expect(testMaterialWidget.color, CustomColors.userMessageBubbleColor);
       expect(testBorder.topRight, Radius.zero);
     });
   });

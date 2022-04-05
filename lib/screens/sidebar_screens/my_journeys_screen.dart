@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:veloplan/models/itinerary.dart';
+import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 import 'package:veloplan/helpers/database_helpers/history_helper.dart';
+import 'package:veloplan/models/itinerary.dart';
+import 'package:veloplan/screens/splash_screen.dart';
+import 'package:veloplan/styles/colors.dart';
+import 'package:veloplan/styles/texts.dart';
 import 'package:veloplan/widgets/my_journey_card.dart';
-import 'package:veloplan/styles/styling.dart';
-import '../../helpers/database_helpers/database_manager.dart';
-import '../../screens/splash_screen.dart';
 
-///Displays users started journeys
-///Author: Tayyibah Uddin
-
+/// Displays user's started/past journeys.
+/// Author: Tayyibah
 class MyJourneys extends StatefulWidget {
   @override
   _MyJourneysState createState() => _MyJourneysState();
@@ -16,13 +16,7 @@ class MyJourneys extends StatefulWidget {
 
 class _MyJourneysState extends State<MyJourneys> {
   late List<Itinerary> _journeyList;
-
   var _helper = HistoryHelper(DatabaseManager());
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   Future<List<Itinerary>> setHistory() async {
     this._journeyList = await _helper.getAllJourneyDocuments();
@@ -36,32 +30,38 @@ class _MyJourneysState extends State<MyJourneys> {
         future: setHistory(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return SplashScreen(); //replace with our splash screen
+            return SplashScreen();
           }
           return _journeyList.isEmpty
-              ? SafeArea(
-                  child: Center(
-                      key: Key("noJourneys"),
-                      child: Column(children: [
-                        SizedBox(height: 100),
-                        Image.asset('assets/images/past_journeys_sidebar.png',
-                            width: 170, height: 170),
-                        SizedBox(height: 40),
-                        Text(
-                          "You haven't made any journeys yet.",
-                          style: sidebarTextStyle,
-                        )
-                      ])))
-              : Stack(
-                  children: [
-                    ListView.builder(
-                      key: Key("allJourneys"),
-                      itemCount: _journeyList.length,
-                      itemBuilder: (context, index) {
-                        return MyJourneyCard(_journeyList[index]);
-                      },
-                    ),
-                  ],
+              ? Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: Column(
+                    key: Key("noJourneys"),
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset('assets/images/past_journeys_sidebar.png',
+                          width: 170, height: 170),
+                      SizedBox(height: 10),
+                      Text(
+                        "You haven't made any journeys yet.",
+                        style: CustomTextStyles.sidebarTextStyle,
+                        textAlign: TextAlign.center,
+                      )
+                    ],
+                  ),
+                )
+              : Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 15.0),
+                  child: ListView.builder(
+                    key: Key("allJourneys"),
+                    itemCount: _journeyList.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                          padding: EdgeInsets.symmetric(vertical: 5.0),
+                          height: MediaQuery.of(context).size.height * 0.30,
+                          child: MyJourneyCard(_journeyList[index]));
+                    },
+                  ),
                 );
         },
       ),
@@ -69,6 +69,7 @@ class _MyJourneysState extends State<MyJourneys> {
         leading: BackButton(key: Key("back"), color: Colors.white),
         title: const Text('My Journeys'),
       ),
+      backgroundColor: CustomColors.whiteReplacement,
     );
   }
 }

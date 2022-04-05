@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../../models/itinerary.dart';
+import 'package:veloplan/models/itinerary.dart';
 
 /// Helper functions to add or remove a scheduled itinerary from the database.
 /// An itinerary includes a list of destinations and the time the trip should start.
 /// Author: Tayyibah
+/// Contributor: Marija
 class ScheduleHelper {
   late CollectionReference _schedules;
   late final _user_id;
@@ -17,6 +18,7 @@ class ScheduleHelper {
     _schedules = _db.collection('users').doc(_user_id).collection('schedules');
   }
 
+  /// Saves a schedule entry to database with [scheduleDate], [numberOfCyclists], and [points].
   void createScheduleEntry(DateTime scheduleDate, List<List<double?>?> points,
       int numberOfCyclists) {
     List<GeoPoint> geoList = [];
@@ -42,7 +44,7 @@ class ScheduleHelper {
     });
   }
 
-  /// Deletes a single scheduled entry from database.
+  /// Deletes a single scheduled [entry] from database.
   Future<void> deleteSingleScheduledEntry(Itinerary entry) async {
     _schedules.doc(entry.journeyDocumentId!).delete();
   }

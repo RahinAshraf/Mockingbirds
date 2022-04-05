@@ -6,7 +6,7 @@ import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:veloplan/widgets/trips_scheduler_panel_widget.dart';
 
 /// Trip scheduler screen displaying map with [TripSchedulerPanelWidget] panel.
-/// Author(s): Rahin, Marija
+/// Author: Rahin Ashraf
 class TripSchedulerScreen extends StatefulWidget {
   const TripSchedulerScreen({Key? key}) : super(key: key);
   @override

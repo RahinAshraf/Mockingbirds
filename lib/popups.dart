@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:veloplan/helpers/navigation_helpers/navigation_conversions_helpers.dart';
+import 'package:veloplan/models/itinerary.dart';
 import 'package:veloplan/screens/navigation/polyline_turn_by_turn_screen.dart';
 import 'package:veloplan/screens/navigation/turn_by_turn_screen.dart';
 import 'package:veloplan/screens/trips_scheduler_screen.dart';
-import 'package:veloplan/widgets/group/group_id_join_code_widget.dart';
-import 'package:veloplan/widgets/popup_widget.dart';
 import 'package:veloplan/utilities/enums/alert_type.dart';
-import 'package:intl/intl.dart';
-import 'helpers/navigation_helpers/navigation_conversions_helpers.dart';
-import 'models/itinerary.dart';
+import 'package:veloplan/widgets/group_id_join_code_widget.dart';
+import 'package:veloplan/widgets/popup_widget.dart';
 
-/// Generic popups used thorough the app
+/// Generic popups used thorough the app.
 /// Author(s) Marija
 /// Contributors: Nicole, Fariha, Rahin, Elisabeth
-
 class Popups {
-  // Questions
   PopupWidget buildPopupDialogNewJourney(BuildContext context) {
     List<PopupButtonWidget> children = [
       PopupButtonWidget(
@@ -31,11 +29,13 @@ class Popups {
       PopupButtonWidget(
           text: "Join a journey",
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pop(
+                context); // pops the alert dialog for join/plan journey
             showDialog(
                 useRootNavigator: false,
                 context: context,
-                builder: (BuildContext context) => GroupId());
+                builder: (BuildContext context) =>
+                    GroupId()); // pushes PIN alert dialog
           }),
     ];
     return PopupWidget(
@@ -44,72 +44,6 @@ class Popups {
         text: "Only one way to find out.",
         children: children,
         type: AlertType.question);
-  }
-
-  PopupWidget buildPopupDialogTripExceedsTime(BuildContext context) {
-    List<PopupButtonWidget> children = [
-      PopupButtonWidget(text: "Edit Journey", onPressed: () {}),
-      PopupButtonWidget(text: "Continue", onPressed: () {}),
-    ];
-    return PopupWidget(
-        key: Key("tripWarning"),
-        title: "Are you sure you want to proceed?",
-        text: "Your trip exceeds 30 minutes.",
-        children: children,
-        type: AlertType.question);
-  }
-
-  PopupWidget buildPopupDialogIntermediateTripExceedsTime(
-      BuildContext context) {
-    List<PopupButtonWidget> children = [
-      PopupButtonWidget(text: "Edit Journey", onPressed: () {}),
-      PopupButtonWidget(text: "Continue", onPressed: () {}),
-    ];
-    return PopupWidget(
-        key: Key("warning"),
-        title: "Are you sure you want to proceed?",
-        text: "Your intermediate trip exceeds 30 minutes.",
-        children: children,
-        type: AlertType.question);
-  }
-
-  // Warnings
-  PopupWidget buildPopupDialogStationAvailabilityIsPredicted(
-      BuildContext context) {
-    List<PopupButtonWidget> children = [
-      PopupButtonWidget(text: "Return", onPressed: () {}),
-      PopupButtonWidget(text: "Continue", onPressed: () {}),
-    ];
-    return PopupWidget(
-        key: Key("warning"),
-        title: "The docking station availability is predicted!",
-        text: "It may not be accurate the day of the journey.",
-        children: children,
-        type: AlertType.warning);
-  }
-
-  PopupWidget buildPopupDialogJourneyStartingSoon(BuildContext context) {
-    List<PopupButtonWidget> children = [
-      PopupButtonWidget(text: "Leave", onPressed: () {}),
-    ];
-    return PopupWidget(
-        key: Key("info"),
-        title: "Journey starting soon!",
-        text: "You will be redirected automatically.",
-        children: children,
-        type: AlertType.warning);
-  }
-
-  PopupWidget buildWeather(BuildContext context, weather, weatherIcon) {
-    List<PopupButtonWidget> children = [
-      PopupButtonWidget(text: "Leave", onPressed: () {}),
-    ];
-    return PopupWidget(
-        key: Key("weather"),
-        title: "Weather",
-        text: "You will be redirected automatically.",
-        children: [],
-        type: AlertType.warning);
   }
 
   PopupWidget buildPopupDialogRedirect(
