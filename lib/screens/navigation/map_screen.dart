@@ -35,27 +35,6 @@ class _MapPageState extends State<MapPage> {
     super.initState();
   }
 
-  Future<void> _deleteOldGroup() async {
-    var user = await _databaseManager.getByKey(
-        'users', _databaseManager.getCurrentUser()!.uid);
-    var hasGroup = user.data()!.keys.contains('group');
-    if (hasGroup) {
-      var group = await _databaseManager.getByEquality(
-          'group', 'code', user.data()!['group']);
-      group.docs.forEach((element) {
-        Timestamp timestamp = element.data()['createdAt'];
-        var memberList = element.data()['memberList'];
-        if (DateTime.now().difference(timestamp.toDate()) > Duration(days: 2)) {
-          element.reference.delete();
-          for (String member in memberList) {
-            _databaseManager.setByKey('users', member,
-                {'group': FieldValue.delete()}, SetOptions(merge: true));
-          }
-        }
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
