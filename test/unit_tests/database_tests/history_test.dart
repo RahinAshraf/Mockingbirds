@@ -50,7 +50,7 @@ main() {
 
   test('Add docking station subcollection to database', () async {
     helper.addDockingStation(station1, "documentId");
-    verify(mockDBManager.addSubCollectiontoSubCollectionByDocumentId(
+    verify(mockDBManager.addSubCollectiontoCollectionByDocumentId(
         "documentId", "docking_stations", historyReference, {
       'stationId': station1.stationId,
     })).called(1);
@@ -61,7 +61,7 @@ main() {
     String documentId = "";
     when(documentReference.id).thenReturn(documentId);
     helper.createJourneyEntry(historyList);
-    verify(mockDBManager.addSubCollectiontoSubCollectionByDocumentId(
+    verify(mockDBManager.addSubCollectiontoCollectionByDocumentId(
             documentId, "docking_stations", historyReference, any))
         .called(2);
   });

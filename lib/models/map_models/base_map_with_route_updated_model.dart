@@ -84,7 +84,7 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
   /// sets all our timers
   void _setTimers() {
     updateLocationAndCameraTimer();
-    createStatisticsTimer();
+    //createStatisticsTimer();
     updateRouteTimer();
     updateDockTimer();
   }
@@ -117,11 +117,11 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
   }
 
   /// Create a timer just for constantly updating the distance travelled to server.
-  void createStatisticsTimer() {
-    timer = Timer.periodic(Duration(minutes: 1), (Timer t) async {
-      await updateDistanceOnServer(userID);
-    });
-  }
+  // void createStatisticsTimer() {
+  //   timer = Timer.periodic(Duration(minutes: 1), (Timer t) async {
+  //     await updateDistanceOnServer(userID);
+  //   });
+  // }
 
   /// Initialize periodic timer to check if it's necessary to redirect to another docking station
   void updateDockTimer() {
@@ -215,8 +215,9 @@ class MapWithRouteUpdated extends BaseMapboxRouteMap {
       _journeyPoints.add(a);
     }
     final prefDistance = sharedPreferences.getDouble('distance');
-    sharedPreferences.setDouble(
+    await sharedPreferences.setDouble(
           'distance', (prefDistance ?? 0) + (this.distance.value - distance).abs().toDouble());
+    await updateDistanceOnServer(userID);
     this.distance.value = distance;
     this.duration.value = duration;
     _routeResponse['geometry'].update("coordinates", (value) => _journeyPoints);

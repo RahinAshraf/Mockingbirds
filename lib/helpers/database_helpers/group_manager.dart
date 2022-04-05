@@ -10,6 +10,7 @@ class groupManager {
 
   groupManager(this._databaseManager) {}
 
+  /// Deletes the user's old group if it's older than 2 days.
   Future<void> deleteOldGroup() async {
     var user = await _databaseManager.getByKey(
         'users', _databaseManager.getCurrentUser()!.uid);
@@ -34,6 +35,9 @@ class groupManager {
     }
   }
 
+
+  ///Creates a new group and saves it in the database with the given itinerary.
+  ///The code is randomised and checked if it is unique.
   Future<void> createGroup(Itinerary _itinerary) async {
     var ownerID = _databaseManager.getCurrentUser()?.uid;
     List list = [];
@@ -91,6 +95,8 @@ class groupManager {
     }
   }
 
+
+  ///Return the username of the group owner
   String getGroupOwner(QuerySnapshot<Map<String, dynamic>> group) {
     var tempr;
     group.docs.forEach((element) {
@@ -99,6 +105,7 @@ class groupManager {
     return tempr;
   }
 
+  ///Return a reference to a group owner
   Future<DocumentSnapshot<Map<String, dynamic>>> getGroupOwnerRef(
       QuerySnapshot<Map<String, dynamic>> group) {
     var tempr;
@@ -108,6 +115,9 @@ class groupManager {
     return tempr;
   }
 
+  ///Takes the user out of their current group.
+  ///If the user was the only member, the group gets deleted.
+  ///If the user was the organiser, somebody else automatically becomes the organiser.
   Future<String> leaveGroup(String groupID) async {
     var groupResponse =
         await _databaseManager.getByEquality('group', 'code', groupID);
@@ -150,6 +160,8 @@ class groupManager {
     return _itinerary;
   }
 
+  /// Return the group's data as an itinerary.
+  /// The information about Docking Station which is not saved is filled with dummy data.
   Future<Itinerary> getItineraryFromGroup(
       QuerySnapshot<Map<String, dynamic>> group) async {
     List<DockingStation> _docks = [];
@@ -206,6 +218,8 @@ class groupManager {
     return Itinerary.navigation(_docks, _myDestinations, _numberOfCyclists);
   }
 
+
+/// Pads the string with zeroes so the length is correct.
   String _padWithZeroes(String textToPad) {
     while (textToPad.length < 6) {
       textToPad = '0' + textToPad;
