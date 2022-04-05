@@ -90,7 +90,7 @@ class _MapRoutePageState extends State<MapRoutePage> {
   /// add a reroute button to navbar
   void addGoBackButton() {
     _baseMapWithRoute.addWidget(Container(
-      alignment: Alignment(-0.9, -0.80),
+      alignment: Alignment(-0.9, -0.90),
       child: FloatingActionButton(
         heroTag: "back",
         onPressed: () {
@@ -110,7 +110,7 @@ class _MapRoutePageState extends State<MapRoutePage> {
   void addStopPolylineRoute(BuildContext context) {
     _baseMapWithRoute.addWidget(
       Container(
-        alignment: Alignment(0.9, -0.80),
+        alignment: Alignment(0.9, -0.90),
         child: FloatingActionButton(
           heroTag: "stop_polyline",
           onPressed: () {

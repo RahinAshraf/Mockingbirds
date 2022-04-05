@@ -68,7 +68,7 @@ class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
   void addPositionZoom() {
     _baseMapWithUpdatedRoute.addWidget(
       Container(
-        alignment: Alignment(0.9, -0.80),
+        alignment: Alignment(0.9, -0.90),
         child: FloatingActionButton(
           backgroundColor: CustomColors.green,
           heroTag: "center_to_current_location",
@@ -84,12 +84,11 @@ class _MapUpdatedRoutePageState extends State<MapUpdatedRoutePage> {
   /// Add a reroute button to navbar.
   void addStopTurnByTurn(BuildContext context) {
     _baseMapWithUpdatedRoute.addWidget(Container(
-      alignment: Alignment(-0.9, -0.80),
+      alignment: Alignment(-0.9, -0.90),
       child: FloatingActionButton(
         heroTag: "stop_journey",
         onPressed: () {
           try {
-            // TODO: LILI leave group afterwards
             _baseMapWithUpdatedRoute.isAtGoal = true;
             Navigator.of(context).popUntil((route) => route.isFirst);
           } catch (e) {
