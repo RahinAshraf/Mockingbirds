@@ -4,7 +4,7 @@ import 'package:veloplan/screens/place_search_screen.dart';
 import 'package:veloplan/styles/colors.dart';
 
 /// Helper extensions for [PanelWidget].
-/// Author: Rahin Ashraf
+/// Author: Rahin Ashraf - k20034059
 extension BuildContextExt on BuildContext {
   Future<dynamic> openSearch() {
     return Navigator.of(this).push(MaterialPageRoute(

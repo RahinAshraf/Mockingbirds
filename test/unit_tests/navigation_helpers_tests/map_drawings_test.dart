@@ -6,7 +6,7 @@ import 'package:veloplan/helpers/navigation_helpers/map_drawings.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart';
 import 'package:veloplan/providers/route_manager.dart';
-import 'package:veloplan/utilities/travel_type.dart';
+import 'package:veloplan/utilities/enums/travel_type.dart';
 
 /// Tests for map_drawings.dart (only setFills can be tested using automated tests - see manual testing for more)
 /// Author(s):  Fariha Choudhury k20059723
@@ -25,19 +25,6 @@ Future<void> main() async {
   Map<String, dynamic> _fills = {};
   Map _routeResponse = await _manager.getDirections(
       prettyCoords[0], prettyCoords[1], NavigationType.cycling);
-
-  testWidgets("Mapbox", (WidgetTester tester) async {
-    MapboxGlPlatform stuff = MapboxGlPlatform.createInstance.call();
-    MapboxMapController controller = new MapboxMapController(
-        mapboxGlPlatform: stuff,
-        initialCameraPosition:
-            CameraPosition(target: LatLng(-50, 1), zoom: 15));
-    var mapboxMap = tester.firstWidget(find.byType(MapboxMap)) as MapboxMap;
-    mapboxMap.onMapCreated!(controller);
-    mapboxMap.onStyleLoadedCallback!();
-
-    tester.binding.scheduleWarmUpFrame();
-  });
 
   test('setFills populates a Map with geometries', () async {
     _fills = await setFills(_fills, _routeResponse);

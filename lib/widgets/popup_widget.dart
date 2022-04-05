@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:veloplan/styles/styling.dart';
-import 'package:veloplan/styles/texts.dart';
-import 'package:veloplan/utilities/alert_type.dart';
+import 'package:veloplan/utilities/enums/alert_type.dart';
 
 /// Creates a generic popup widget.
 ///
