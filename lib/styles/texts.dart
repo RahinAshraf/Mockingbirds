@@ -95,4 +95,10 @@ class CustomTextStyles {
       fontWeight: FontWeight.w700,
       fontStyle: FontStyle.italic,
       fontFamily: 'Montserrat');
+
+  // Journey landing panel widget
+  static TextStyle journeyLandingTextStyle =
+      TextStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 16);
+  static TextStyle journeyTextStyle = TextStyle(
+      fontStyle: FontStyle.italic, fontWeight: FontWeight.w500, fontSize: 18);
 }
