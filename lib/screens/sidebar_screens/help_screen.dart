@@ -41,7 +41,7 @@ class _HelpScreenState extends State<HelpScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(key: Key("back"), color: Colors.white),
-        title: const Text('HelpBot'),
+        title: const Text('VeloBot'),
       ),
       body: Column(
         children: [

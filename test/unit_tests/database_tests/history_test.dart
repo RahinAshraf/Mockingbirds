@@ -62,7 +62,7 @@ main() {
     when(documentReference.id).thenReturn(documentId);
     helper.createJourneyEntry(historyList);
     verify(mockDBManager.addSubCollectiontoSubCollectionByDocumentId(
-            documentId, "docking_stations", historyReference, any))
-        .called(2);
+            documentId, "docking_stations", historyReference,{ 'stationId':station1.stationId}))
+        .called(1);
   });
 }

@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 class DatabaseManager {
   DatabaseManager() {}
 
+  /// Return the current user
   User? getCurrentUser() {
     return FirebaseAuth.instance.currentUser;
   }
@@ -19,7 +20,9 @@ class DatabaseManager {
         .collection(collectionName);
   }
 
+
   /// Returns query snapshots from an existing users subcollection.
+
   Future<QuerySnapshot<Object?>> getUserSubcollection(
       String subcollection) async {
     return await FirebaseFirestore.instance
@@ -52,7 +55,9 @@ class DatabaseManager {
         .get();
   }
 
+
   /// Returns a document  from a collection given the document ID.
+
   Future<DocumentSnapshot<Map<String, dynamic>>> getByKey(
       String collection, String key) async {
     return await FirebaseFirestore.instance
@@ -71,6 +76,7 @@ class DatabaseManager {
         .set(value, options);
   }
 
+
   /// Updates the value of a document in a subcollection given its document ID.
   Future<void> updateByKey(
       String collection, String key, Map<String, dynamic> value) async {
@@ -80,11 +86,13 @@ class DatabaseManager {
         .update(value);
   }
 
+
   /// Adds a value to a collection and returns its document reference.
   Future<DocumentReference<Map<String, dynamic>>> addToCollection(
       String collection, Map<String, dynamic> value) async {
     return await FirebaseFirestore.instance.collection(collection).add(value);
   }
+
 
   /// Adds value to a subcollection given its reference and returns a reference to the new document.
   Future<DocumentReference<Object?>> addToSubCollection(
@@ -93,14 +101,16 @@ class DatabaseManager {
     return await subcollection.add(value);
   }
 
+
   /// Adds a value to a subcollection within a subcollection given a document ID.
   Future<void> addSubCollectiontoSubCollectionByDocumentId(
       documentId,
-      String newSubollection,
+      String newSubcollection,
       CollectionReference<Object?> subcollection,
       Map<String, dynamic> value) {
-    return subcollection.doc(documentId).collection(newSubollection).add(value);
+    return subcollection.doc(documentId).collection(newSubcollection).add(value);
   }
+
 
   /// Sets value of document in a subcollection given its reference and document ID.
   Future<void> setSubCollectionByDocumentId(String documentId,
