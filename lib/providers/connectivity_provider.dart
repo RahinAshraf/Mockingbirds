@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:veloplan/utilities/connectivity_status_enums.dart';
+import 'package:veloplan/utilities/enums/connectivity_status_enums.dart';
 
 /// Connectivity Provider to identify internet connection changes.
 /// Author(s): Fariha Choudhury k20059723

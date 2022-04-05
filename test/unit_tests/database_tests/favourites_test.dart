@@ -13,7 +13,8 @@ import 'favourites_test.mocks.dart';
   User,
   CollectionReference<Object?>,
   DocumentSnapshot,
-  QuerySnapshot<Object?>
+  QuerySnapshot<Object?>,
+  DocumentReference,
 ], customMocks: [
   MockSpec<QueryDocumentSnapshot>(unsupportedMembers: {#data}),
 ])
@@ -30,7 +31,7 @@ main() {
 
   station1.setDocumentId = "1234";
   station2.setDocumentId = "5678";
-
+  var thing = MockDocumentReference();
   List<DockingStation> favouriteList = [station1, station2];
 
   setUp(() {
@@ -40,6 +41,8 @@ main() {
     helper = FavouriteHelper(mockDBManager);
     when(user.uid).thenReturn("bob");
     when(mockDBManager.getCurrentUser()).thenReturn(user);
+    when(mockDBManager.addToSubCollection(favouritesReference, any))
+        .thenAnswer((_) async => MockDocumentReference());
   });
 
   test('Toggling favourited docking station deletes it from database', () {

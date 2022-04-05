@@ -6,7 +6,7 @@ import 'package:veloplan/helpers/navigation_helpers/map_drawings.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:mapbox_gl_platform_interface/mapbox_gl_platform_interface.dart';
 import 'package:veloplan/providers/route_manager.dart';
-import 'package:veloplan/utilities/travel_type.dart';
+import 'package:veloplan/utilities/enums/travel_type.dart';
 
 /// Tests for map_drawings.dart (only setFills can be tested using automated tests - see manual testing for more)
 /// Author(s):  Fariha Choudhury k20059723

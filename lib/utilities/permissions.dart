@@ -1,13 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:veloplan/utilities/enums/location_enums.dart';
 
-enum Permissions { ALLOW_ALL_TIME, DENY, ASK_EVERYTIME, ALLOW_WHILE_USING_APP }
+/// Handles location permission statuses for the live location of the user
+/// Author: Rahin Ashraf
 
 class PermissionUtils {
   BehaviorSubject<Permissions> _locationPermission = BehaviorSubject();
   Stream<Permissions> get locationPermission => _locationPermission.stream;
-  //PermissionStatus? permissionStatus;
 
   static final PermissionUtils _permissionUtils = PermissionUtils._internal();
 
@@ -15,14 +16,15 @@ class PermissionUtils {
 
   PermissionUtils._internal();
 
+  /// Gets the location of the live location of the user
   Stream<Permissions> getLocation(BuildContext context) {
     checkPermissions(context: context);
     return locationPermission;
   }
 
+  /// Checks for the [PermissionStatus] of the user
   void checkPermissions({required BuildContext context}) async {
     final status = await Permission.location.status;
-    print("status => $status");
     switch (status) {
       case PermissionStatus.denied:
         _locationPermission.sink.add(Permissions.DENY);
