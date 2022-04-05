@@ -43,39 +43,42 @@ class _JourneyLandingPanelWidget extends State<JourneyLandingPanelWidget> {
                   valueListenable: widget.baseMapWithUpdatedRoute.duration,
                   builder: (BuildContext context, num time, Widget? child) {
                     String t = (time.toDouble() / 60.0).toStringAsFixed(0);
-                    return Row(
-                      children: [
-                        Icon(
-                          Icons.timelapse,
-                        ),
-                        Text(" Time: ${t} minutes",
-                            style: CustomTextStyles.journeyLandingTextStyle),
-                        VerticalDivider(
-                          color: Colors.black,
-                          thickness: 2,
-                        )
-                      ],
-                    );
+                    return Row(children: [
+                      Icon(
+                        Icons.timelapse,
+                      ),
+                      Text(" Time: ${t} minutes",
+                          style: CustomTextStyles.journeyLandingTextStyle),
+                      VerticalDivider(
+                        color: Colors.black,
+                        thickness: 2,
+                      )
+                    ]);
                   }),
               ValueListenableBuilder(
                 valueListenable: widget.baseMapWithUpdatedRoute.distance,
                 builder: (BuildContext context, num distance, Widget? child) {
-                  return Row(
-                    children: [
-                      widget.baseMapWithUpdatedRoute.currentStation == 0
-                          ? Icon(
-                              Icons.directions_walk,
-                              size: 22,
-                              color: Colors.black,
-                            )
-                          : ImageIcon(
-                              AssetImage("assets/images/bicycle.png"),
-                              color: Colors.black,
-                              size: 22,
-                            ),
-                      Text(" Distance: ${distance} m",
-                          style: CustomTextStyles.journeyLandingTextStyle)
-                    ],
+                  return Expanded(
+                    child: Row(
+                      children: [
+                        widget.baseMapWithUpdatedRoute.currentStation == 0
+                            ? Icon(
+                                Icons.directions_walk,
+                                size: 22,
+                                color: Colors.black,
+                              )
+                            : ImageIcon(
+                                AssetImage("assets/images/bicycle.png"),
+                                color: Colors.black,
+                                size: 22,
+                              ),
+                        Text(
+                            distance >= 1000
+                                ? "Distance: ${(distance / 1000).toStringAsFixed(2)} km"
+                                : "Distance: ${distance.toStringAsFixed(0)} m",
+                            style: CustomTextStyles.journeyLandingTextStyle)
+                      ],
+                    ),
                   );
                 },
               )

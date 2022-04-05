@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:veloplan/styles/colors.dart';
 import 'package:veloplan/styles/texts.dart';
 
-const String botName = 'HelpBot';
+const String botName = 'VeloBot';
 const String userName = 'You';
 
 /// Creates a chat bubble used in [HelpPage].

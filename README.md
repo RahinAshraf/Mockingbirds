@@ -29,6 +29,7 @@ All decisions were discussed with and agreed upon by the client.
 ## Possible known bugs
 
 - When planning a journey and entering starting/destination points, the list in the summary page is very rarely presented in the wrong order. We suspect this is due to API calls, and we could not resolve it as was irreproducible during testing.
+- The docking stations very rarely throw exceptions, this is due to API calls. 
 
 ## Limitations
 
@@ -43,12 +44,15 @@ These features could not be complete due to time constraints:
 - Allow users to create group journeys for prescheduled trips. 
 - The profile page will be extended to include groups and 'about' information, and allow following/unfollowing other users.
 - The weather feature will be extended to alert users about poor weather while planning trips.
+- Group journey information will be displayed on the 'my journeys' page. The information for this is already saved in the database. 
 
 ## References list:
 
 - lib/screens/navigation/turn_by_turn_screen.dart: 
     * dormmom.com, Jul 20, 2021, flutter_mapbox_navigation 0.0.26, https://pub.dev/packages/flutter_mapbox_navigation
     * AB Satyaprakash, Feb 20, 2022, https://github.com/Imperial-lord/mapbox-flutter
+ - lib/screens/sidebar_screens/suggested_journeys.dart:
+    * https://londonblog.tfl.gov.uk/2019/11/05/santander-cycles-sightseeing/?intcmp=60245
 
 
 ## Who are we?
