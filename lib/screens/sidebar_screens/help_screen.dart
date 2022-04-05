@@ -7,10 +7,6 @@ import 'package:veloplan/widgets/message_bubble_widget.dart';
 
 HelpBotManager questions = HelpBotManager();
 
-/// The default URL for sending enquiries.
-const String url =
-    'mailto:k20082541@kcl.ac.uk?subject=Help%20with%20app&body=Help%20me!';
-
 class HelpScreen extends StatefulWidget {
   const HelpScreen({Key? key}) : super(key: key);
   @override
@@ -23,6 +19,7 @@ class HelpScreen extends StatefulWidget {
 /// and [choices], which are the categories/topics that user can choose
 /// to ask questions from.
 /// Authors: Lilianna, Marija
+/// Contributor: Tayyibah
 class _HelpScreenState extends State<HelpScreen> {
   List<MessageBubble> _conversation = [
     MessageBubble(content: 'Hello. How can I help you?')
@@ -76,13 +73,13 @@ class _HelpScreenState extends State<HelpScreen> {
     );
   }
 
-  /// Launches a given url (in our case, opens a mailing app).
-  _sendMail() async {
+  /// Launches a given url (in our case, opens a mailing app or a website).
+  _openUrl(Message message) async {
     // Android and iOS
     try {
-      await launch(url);
+      await launch(message.launch);
     } catch (e) {
-      throw 'Could not launch $url';
+      throw 'Could not launch.';
     }
   }
 
@@ -131,8 +128,8 @@ class _HelpScreenState extends State<HelpScreen> {
               _conversation.add(
                   MessageBubble(content: questions.getQuestionAnswer(message)));
               choices = _displayTopics();
-              if (questions.getLaunch(message)) {
-                _sendMail();
+              if (questions.getLaunch(message) != "") {
+                _openUrl(message);
               }
             });
           },
