@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:veloplan/styles/colors.dart';
 
+// Author: Hristina-Andreea Sararu K20036771
+// While the app is loading, a splash screen will be displayed.
+
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
   @override
