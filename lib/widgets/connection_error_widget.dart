@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:veloplan/styles/colors.dart';
 
 /// Widget to display a connection error
-/// Author(s): Fariha Choudhury , Hristina-Andreea Sararu
-
-/// Builds a widget displaying a cirucular progression indicator and error message
+///
+/// Builds a widget displaying a circular progression indicator and error message
 /// for when no internet connection is established.
+/// Author(s): Fariha Choudhury , Hristina-Andreea Sararu
 class ConnectionError extends StatelessWidget {
   const ConnectionError({Key? key}) : super(key: key);
 

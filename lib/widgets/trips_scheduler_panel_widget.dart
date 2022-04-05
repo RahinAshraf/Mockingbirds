@@ -13,8 +13,6 @@ import 'package:veloplan/styles/texts.dart';
 /// or later (a date picker shows up and a trip is scheduled
 /// for the future).
 /// Authors: Rahin, Marija
-///Author(s): Rahin , Marija
-
 class TripSchedulerPanelWidget extends StatefulWidget {
   @override
   _TripSchedulerPanelWidget createState() => _TripSchedulerPanelWidget();

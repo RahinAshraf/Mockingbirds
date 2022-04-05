@@ -11,8 +11,6 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:veloplan/widgets/docking_station_widget.dart';
 
-import '../../styles/colors.dart';
-
 /// Map screen focused on a user's live location.
 /// Author(s): Fariha Choudhury k20059723, Elisabeth Halvorsen k20077737,
 class MapPage extends StatefulWidget {

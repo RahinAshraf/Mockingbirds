@@ -22,7 +22,7 @@ import 'package:veloplan/helpers/navigation_helpers/navigation_conversions_helpe
 import 'package:veloplan/popups.dart';
 import 'package:veloplan/helpers/database_helpers/history_helper.dart';
 import 'package:veloplan/widgets/panel_widget/panel_widget_exts.dart';
-import '../../helpers/database_helpers/database_manager.dart';
+import 'package:veloplan/helpers/database_helpers/database_manager.dart';
 
 /// Renders [PanelWidget] used in [JourneyPlanner] screen.
 ///

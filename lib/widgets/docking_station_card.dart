@@ -5,7 +5,6 @@ import 'package:veloplan/styles/texts.dart';
 import 'package:veloplan/helpers/database_helpers/favourite_helper.dart';
 import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/providers/docking_station_manager.dart';
-
 import '../helpers/database_helpers/database_manager.dart';
 
 /// Creates a card for a docking station, to include its name, number of bikes and empty bikes.
