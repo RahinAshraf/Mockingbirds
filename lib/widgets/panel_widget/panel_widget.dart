@@ -29,7 +29,7 @@ import '../../helpers/database_helpers/database_manager.dart';
 /// It is an interactive panel the user can slide up or down,
 /// when wanting to input their desired locations for the journey.
 /// Author: Rahin
-/// Contributor(s): Nicole, Eduard, Fariha, Marija
+/// Contributor(s): Nicole, Eduard, Fariha, Marija, Tayyibah
 class PanelWidget extends PanelWidgetBase {
   late Map<int, DockingStation> dockingStationMap;
   PanelWidget(
@@ -442,7 +442,7 @@ class PanelWidgetState extends State<PanelWidget> {
     //go to the summary of journey screen
     final response =
         await context.push(SummaryJourneyScreen(_itinerary, false));
-    if (response == null || response) {
+    if (response || response == null) {
       Navigator.of(context).pop(true);
     } else {
       Navigator.of(context).pop();

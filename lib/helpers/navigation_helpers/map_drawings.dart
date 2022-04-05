@@ -40,8 +40,7 @@ void addFills(MapboxMapController? controller, Map fills, _model) async {
         lineWidth: 5,
       ),
     );
-    _model.setController(controller); //MOVE THIS OUT OF ADDFILLS -----????
-    // await controller.addSymbolLayer(sourceId, layerId, properties)
+    _model.setController(controller);
   } catch (e) {}
 }
 

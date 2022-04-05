@@ -15,7 +15,7 @@ import 'package:veloplan/providers/docking_station_manager.dart';
 import 'package:veloplan/scoped_models/map_model.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/helpers/live_location_helper.dart';
-import 'package:veloplan/utilities/travel_type.dart';
+import 'package:veloplan/utilities/enums/travel_type.dart';
 import 'package:veloplan/models/docking_station.dart';
 
 /// Map screen focused on a user's live location

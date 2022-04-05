@@ -33,18 +33,23 @@ class _MyJourneysState extends State<MyJourneys> {
             return SplashScreen();
           }
           return _journeyList.isEmpty
-              ? Center(
-                  key: Key("noJourneys"),
-                  child: Column(children: [
-                    SizedBox(height: 100),
-                    Image.asset('assets/images/past_journeys_sidebar.png',
-                        width: 170, height: 170),
-                    SizedBox(height: 40),
-                    Text(
-                      "You haven't made any journeys yet.",
-                      style: CustomTextStyles.sidebarTextStyle,
-                    )
-                  ]))
+              ? Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: Column(
+                    key: Key("noJourneys"),
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset('assets/images/past_journeys_sidebar.png',
+                          width: 170, height: 170),
+                      SizedBox(height: 10),
+                      Text(
+                        "You haven't made any journeys yet.",
+                        style: CustomTextStyles.sidebarTextStyle,
+                        textAlign: TextAlign.center,
+                      )
+                    ],
+                  ),
+                )
               : Padding(
                   padding: const EdgeInsets.symmetric(vertical: 15.0),
                   child: ListView.builder(

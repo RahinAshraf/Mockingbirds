@@ -56,7 +56,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
               )),
           Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              key: Key("weatnerInfo"),
+              key: Key("weatherInfo"),
               children: [
                 SizedBox(height: 50),
                 Text(
@@ -84,7 +84,9 @@ class _WeatherScreenState extends State<WeatherScreen> {
                   style: CustomTextStyles.weatherTextStyle,
                 ),
                 Text(
-                  "Visibility: " + weather.getCurrentVisibility().toString(),
+                  "Visibility: " +
+                      weather.getCurrentVisibility().toString() +
+                      " m",
                   style: CustomTextStyles.weatherTextStyle,
                 ),
                 Text(

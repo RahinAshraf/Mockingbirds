@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'colors.dart';
 
 class CustomTextStyles {
   static TextStyle headline1 = TextStyle(
@@ -25,12 +26,12 @@ class CustomTextStyles {
 
   static TextStyle dockingStationCardTextStyle = TextStyle(
     fontSize: 15.0,
-    color: Color(0xFF99D2A9),
+    color: CustomColors.green,
     fontWeight: FontWeight.w700,
   );
 
   static TextStyle dockingStationCardNameStyle = TextStyle(
-      fontSize: 16.0, color: Color(0xFF99D2A9), fontWeight: FontWeight.w500);
+      fontSize: 16.0, color: CustomColors.green, fontWeight: FontWeight.w500);
 
   // Popups
   static TextStyle popupDialogTextStyle = TextStyle(
@@ -65,7 +66,7 @@ class CustomTextStyles {
   static TextStyle userMessageTextStyle =
       TextStyle(fontSize: 15.0, color: Colors.white);
 
-  // Timeline in Summary of Journey
+  // Summary of Journey
   static TextStyle timelinePathInfo = TextStyle(
       fontSize: 13.0,
       color: Colors.black54,
@@ -73,10 +74,16 @@ class CustomTextStyles {
       fontWeight: FontWeight.w600,
       fontFamily: 'Montserrat');
 
-  // Styling for favourites and past journeys sidebar
+  static TextStyle organiserSubtitleText = TextStyle(
+      color: Colors.black54,
+      fontWeight: FontWeight.bold,
+      fontSize: 16,
+      fontFamily: 'Montserrat');
+
+  // Favourites and Past Journeys
   static TextStyle sidebarTextStyle = TextStyle(
       fontSize: 20.0,
-      color: (Color(0xFF99D2A9)),
+      color: (CustomColors.green),
       fontWeight: FontWeight.w700,
       fontStyle: FontStyle.italic,
       fontFamily: 'Montserrat');
@@ -84,7 +91,8 @@ class CustomTextStyles {
 // Styling for weather
   static TextStyle weatherTextStyle = TextStyle(
       fontSize: 25.0,
-      color: (Color(0xFF99D2A9)),
+      color: (CustomColors.green),
       fontWeight: FontWeight.w700,
-      fontStyle: FontStyle.italic);
+      fontStyle: FontStyle.italic,
+      fontFamily: 'Montserrat');
 }

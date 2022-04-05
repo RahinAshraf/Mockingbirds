@@ -10,7 +10,7 @@ import 'package:veloplan/widgets/pickers/image_picker.dart';
 import 'package:veloplan/styles/texts.dart';
 
 /// Widget which displays and operates the Authentication Form for Log In and Sign Up
-/// Author(s): Eduard Ragea k20067643
+/// Author(s): Eduard Ragea
 class AuthForm extends StatefulWidget {
   const AuthForm(this.submitFn, this.isLoading, {Key? key}) : super(key: key);
 

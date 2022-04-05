@@ -4,7 +4,7 @@ import 'package:veloplan/styles/styling.dart';
 
 // Useful widget for displaying information about next docking station, distance and time in polyline_turn_by_turn_screen.
 
-// Author: Hristina Andreea Sararu K20036771
+// Author: Hristina Andreea Sararu
 class JourneyLandingPanelWidget extends StatefulWidget {
   MapWithRouteUpdated baseMapWithUpdatedRoute;
 

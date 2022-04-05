@@ -21,7 +21,6 @@ class _NavBarState extends State<NavBar> {
   late final groupManager _groupManager;
   final DatabaseManager _databaseManager = DatabaseManager();
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-  bool _isInGroup = false;
   final _currentUser = FirebaseAuth.instance.currentUser!.uid;
 
   _NavBarState() {
@@ -32,39 +31,6 @@ class _NavBarState extends State<NavBar> {
     Placeholder(),
     MapPage(),
   ];
-
-  void initState() {
-    _isInAGroup();
-    super.initState();
-  }
-
-  void _isInAGroup() async {
-    var user = await _databaseManager.getByKey(
-        'users', _databaseManager.getCurrentUser()!.uid);
-    if (user.data() != null) {
-      var hasGroup = user.data()!.keys.contains('group');
-      setState(() {
-        if (_isInGroup == null) {
-          _isInGroup = false;
-        } else {
-          _isInGroup = hasGroup;
-        }
-      });
-    }
-  }
-
-  _getGroupInfo() async {
-    var user = await _databaseManager.getByKey(
-        'users', _databaseManager.getCurrentUser()!.uid);
-    if (user.data() != null) {
-      var group = await _databaseManager.getByEquality(
-          'group', 'code', user.data()!['group']);
-
-      var _itinerary = await _groupManager.getItineraryFromGroup(group);
-
-      context.push(SummaryJourneyScreen(_itinerary, false));
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -127,17 +93,18 @@ class _NavBarState extends State<NavBar> {
       child: FloatingActionButton(
         heroTag: "bike_button",
         key: Key("bike"),
-        onPressed: () {
-          _onTabTapped(1);
-          if (!_isInGroup) {
+        onPressed: () async {
+          var hasGroup = await _isInAGroup();
+          if (hasGroup == false) {
+            _onTabTapped(1);
             Popups popup = Popups();
             showDialog(
                 useRootNavigator: false,
                 context: context,
                 builder: (BuildContext context) =>
                     popup.buildPopupDialogNewJourney(context));
-          }
-          if (_isInGroup) {
+          } else {
+            _onTabTapped(1);
             _getGroupInfo();
           }
         },
@@ -150,5 +117,29 @@ class _NavBarState extends State<NavBar> {
         backgroundColor: Colors.white,
       ),
     );
+  }
+
+  /// Returns whether a user already has a group or not.
+  Future<bool> _isInAGroup() async {
+    var user = await _databaseManager.getByKey(
+        'users', _databaseManager.getCurrentUser()!.uid);
+    if (user.data() != null) {
+      var hasGroup = user.data()!.keys.contains('group');
+      return hasGroup;
+    }
+    return false;
+  }
+
+  /// Retrieves group info and redirects to summary of journey screen.
+  _getGroupInfo() async {
+    var user = await _databaseManager.getByKey(
+        'users', _databaseManager.getCurrentUser()!.uid);
+    if (user.data() != null && user.data()!.keys.contains('group')) {
+      var group = await _databaseManager.getByEquality(
+          'group', 'code', user.data()!['group']);
+      var _itinerary = await _groupManager.getItineraryFromGroup(group);
+      context.push(SummaryJourneyScreen(_itinerary, false));
+    }
+    // TODO: if it doesn't work, make an else statement
   }
 }

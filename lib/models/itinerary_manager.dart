@@ -2,7 +2,7 @@ import 'package:veloplan/models/docking_station.dart';
 import 'package:veloplan/models/itinerary.dart';
 import 'package:veloplan/models/path.dart';
 import 'package:veloplan/providers/route_manager.dart';
-import 'package:veloplan/utilities/travel_type.dart';
+import 'package:veloplan/utilities/enums/travel_type.dart';
 
 class ItineraryManager {
   late Itinerary _itinerary;
@@ -58,7 +58,7 @@ class ItineraryManager {
     return _wholeTrip;
   }
 
-  Itinerary getItinerary(){
+  Itinerary getItinerary() {
     return _itinerary;
   }
 

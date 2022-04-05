@@ -9,12 +9,11 @@ import 'package:veloplan/helpers/navigation_helpers/navigation_conversions_helpe
 import 'package:veloplan/models/itinerary_manager.dart';
 import 'package:veloplan/models/path.dart';
 import 'package:veloplan/models/itinerary.dart';
+import 'package:veloplan/styles/texts.dart';
 import 'package:veloplan/utilities/datetime_exts.dart';
 import 'package:veloplan/widgets/timeline_item.dart';
 import 'package:veloplan/styles/colors.dart';
 import 'package:veloplan/screens/navigation/map_with_route_screen.dart';
-import 'package:veloplan/navbar.dart';
-import 'package:veloplan/utilities/dart_exts.dart';
 
 /// Displays the summary of journey screen.
 ///
@@ -118,8 +117,6 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
 
       if (ownerID == _databaseManager.getCurrentUser()?.uid) {
       } else {
-        // context.push(NavBar());
-        // TODO : MARIJA
         Navigator.pop(context);
       }
 
@@ -256,9 +253,9 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
             first: i == 0 ? true : false,
             last: i == _itinerary.docks!.length - 1 ? true : false,
             content: _itinerary.docks![i].name,
+            destination: _itinerary.myDestinations![i].toString(),
             duration: paths[i].duration,
             distance: paths[i].distance,
-            destination: _itinerary.myDestinations![i].toString(),
           ),
         );
       }
@@ -272,7 +269,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
       padding: EdgeInsets.all(15),
       child: Container(
         decoration: BoxDecoration(
-          color: Color(0x8099D2A9),
+          color: CustomColors.lighterGreen,
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         padding: EdgeInsets.fromLTRB(25.0, 10.0, 25.0, 10.0),
@@ -287,11 +284,7 @@ class SummaryJourneyScreenState extends State<SummaryJourneyScreen> {
                 ),
                 Text(
                   'Organiser',
-                  style: TextStyle(
-                      color: Colors.black54,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      fontFamily: 'Montserrat'),
+                  style: CustomTextStyles.organiserSubtitleText,
                 ),
               ],
             ),

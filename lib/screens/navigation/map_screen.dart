@@ -22,11 +22,11 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> {
   LatLng currentPosition = getLatLngFromSharedPrefs();
   late BaseMapboxMap _baseMap;
-   DatabaseManager _databaseManager = DatabaseManager();
-late groupManager _groupManager;
+  DatabaseManager _databaseManager = DatabaseManager();
+  late groupManager _groupManager;
 
-_MapPageState(){
-  _groupManager = groupManager(_databaseManager);
+  _MapPageState() {
+    _groupManager = groupManager(_databaseManager);
   }
 
   @override
@@ -71,6 +71,7 @@ _MapPageState(){
     );
   }
 
+  /// Adds centration button to map to refocus [CameraPosition] to user's live location
   void addPositionZoom() async {
     _baseMap.addWidget(Container(
       alignment: Alignment(0.9, 0.90),
@@ -86,6 +87,7 @@ _MapPageState(){
     ));
   }
 
+  /// Adds docking station card widgets to map, to be displayed when bike symbols are tapped
   void addDockingStationCard() {
     _baseMap.addWidget(Align(
       alignment: Alignment.bottomCenter,
