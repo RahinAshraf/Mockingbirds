@@ -4,6 +4,8 @@ import 'dart:convert' as convert;
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:veloplan/.env.dart';
 
+///Author: Rahin Ashraf
+
 class LocationService {
   final String key = MAPBOX_ACCESS_TOKEN; //Mapbox api key
 

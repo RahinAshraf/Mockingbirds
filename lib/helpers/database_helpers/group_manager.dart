@@ -5,13 +5,11 @@ import '../../models/docking_station.dart';
 import '../navigation_helpers/navigation_conversions_helpers.dart';
 import 'database_manager.dart';
 
-class groupManager{
+///Author: Liliana
+class groupManager {
   late DatabaseManager _databaseManager;
 
-  groupManager(this._databaseManager){
-
-  }
-
+  groupManager(this._databaseManager) {}
 
   Future<void> deleteOldGroup() async {
     var user = await _databaseManager.getByKey(
@@ -26,14 +24,13 @@ class groupManager{
         if (DateTime.now().difference(timestamp.toDate()) > Duration(days: 2)) {
           element.reference.delete();
           for (String member in memberList) {
-            _databaseManager.setByKey(
-                'users', member, {'group': FieldValue.delete()}, SetOptions(merge: true));
+            _databaseManager.setByKey('users', member,
+                {'group': FieldValue.delete()}, SetOptions(merge: true));
           }
         }
       });
     }
   }
-
 
   Future<void> createGroup(Itinerary _itinerary) async {
     var ownerID = _databaseManager.getCurrentUser()?.uid;
@@ -51,7 +48,7 @@ class groupManager{
     }
     List<GeoPoint> geoList = [];
     var destinationsIndouble =
-    convertLatLngToDouble(_itinerary.myDestinations!);
+        convertLatLngToDouble(_itinerary.myDestinations!);
     for (int i = 0; i < destinationsIndouble!.length; i++) {
       geoList.add(
           GeoPoint(destinationsIndouble[i]![0]!, destinationsIndouble[i]![1]!));
@@ -80,8 +77,8 @@ class groupManager{
     }
     for (int i = 0; i < dockingStationList.length; i++) {
       var station = dockingStationList[i];
-      _databaseManager.addToSubCollection(
-          journey.collection("dockingStations"), {
+      _databaseManager
+          .addToSubCollection(journey.collection("dockingStations"), {
         'id': station.stationId,
         'name': station.name,
         'location': GeoPoint(station.lat, station.lon),
@@ -90,14 +87,14 @@ class groupManager{
     }
   }
 
-  String getGroupOwner(
-      QuerySnapshot<Map<String, dynamic>> group) {
+  String getGroupOwner(QuerySnapshot<Map<String, dynamic>> group) {
     var tempr;
     group.docs.forEach((element) {
       tempr = element.data()['ownerID'];
     });
     return tempr;
   }
+
   Future<DocumentSnapshot<Map<String, dynamic>>> getGroupOwnerRef(
       QuerySnapshot<Map<String, dynamic>> group) {
     var tempr;
@@ -108,7 +105,8 @@ class groupManager{
   }
 
   Future<String> leaveGroup(String groupID) async {
-    var groupResponse = await _databaseManager.getByEquality('group', 'code', groupID);
+    var groupResponse =
+        await _databaseManager.getByEquality('group', 'code', groupID);
     var userID = _databaseManager.getCurrentUser()?.uid;
     var ownerID;
     List list = [];
@@ -123,8 +121,7 @@ class groupManager{
           _databaseManager
               .updateByKey('group', element.id, {'ownerID': list[0]});
         }
-        _databaseManager
-            .updateByKey('group', element.id, {'memberList': list});
+        _databaseManager.updateByKey('group', element.id, {'memberList': list});
       }
       await _databaseManager
           .updateByKey('users', userID!, {'group': FieldValue.delete()});
@@ -132,37 +129,33 @@ class groupManager{
     return ownerID;
   }
 
-Future<Itinerary> joinGroup(String code) async {
- Itinerary _itinerary;
-  var group = await _databaseManager.getByEquality('group', 'code', code);
-  var list = [];
-  _itinerary = await getItineraryFromGroup(group);
-  String id = "";
-  group.docs.forEach((element) async {
-    id = element.id;
-    list = element.data()['memberList'];
-    list.add(_databaseManager
-        .getCurrentUser()
-        ?.uid);
-    _databaseManager.setByKey(
-        'users',
-        _databaseManager.getCurrentUser()!.uid,
-        {'group': element.data()['code']},
-        SetOptions(merge: true));
-  });
-  await _databaseManager.updateByKey('group', id, {'memberList': list});
-  return _itinerary;
-}
+  Future<Itinerary> joinGroup(String code) async {
+    Itinerary _itinerary;
+    var group = await _databaseManager.getByEquality('group', 'code', code);
+    var list = [];
+    _itinerary = await getItineraryFromGroup(group);
+    String id = "";
+    group.docs.forEach((element) async {
+      id = element.id;
+      list = element.data()['memberList'];
+      list.add(_databaseManager.getCurrentUser()?.uid);
+      _databaseManager.setByKey('users', _databaseManager.getCurrentUser()!.uid,
+          {'group': element.data()['code']}, SetOptions(merge: true));
+    });
+    await _databaseManager.updateByKey('group', id, {'memberList': list});
+    return _itinerary;
+  }
 
-  Future<Itinerary> getItineraryFromGroup(QuerySnapshot<Map<String, dynamic>> group) async {
+  Future<Itinerary> getItineraryFromGroup(
+      QuerySnapshot<Map<String, dynamic>> group) async {
     List<DockingStation> _docks = [];
     var geoList = [];
     var _myDestinations;
     var _numberOfCyclists;
-    for(var element in group.docs ){
+    for (var element in group.docs) {
       var itinerary = await element.reference.collection('itinerary').get();
       var journeyIDs = itinerary.docs.map((e) => e.id).toList();
-      for( var journeyID in journeyIDs){
+      for (var journeyID in journeyIDs) {
         var journey = await element.reference
             .collection('itinerary')
             .doc(journeyID)
@@ -170,53 +163,47 @@ Future<Itinerary> joinGroup(String code) async {
         _numberOfCyclists = journey.data()!['numberOfCyclists'];
         geoList = journey.data()!['points'];
         var stationCollection =
-        await journey.reference.collection("dockingStations").get();
+            await journey.reference.collection("dockingStations").get();
         var stationList = stationCollection.docs;
-        _docks = List.filled(stationList.length, DockingStation("fill","fill",true,false,-1,-1,-1,10,20), growable: false);
-        for(var station in stationList)({
-          _docks[station.data()['index']] = (
-              DockingStation(
-                station.data()['id'],
-                station.data()['name'],
-                true,
-                false,
-                -1,
-                -1,
-                -1,
-                station.data()['location'].longitude,
-                station.data()['location'].latitude,
-              )
-          )
-        });
-        var coordinateCollection = await journey.reference.collection("coordinates").get();
+        _docks = List.filled(stationList.length,
+            DockingStation("fill", "fill", true, false, -1, -1, -1, 10, 20),
+            growable: false);
+        for (var station in stationList)
+          ({
+            _docks[station.data()['index']] = (DockingStation(
+              station.data()['id'],
+              station.data()['name'],
+              true,
+              false,
+              -1,
+              -1,
+              -1,
+              station.data()['location'].longitude,
+              station.data()['location'].latitude,
+            ))
+          });
+        var coordinateCollection =
+            await journey.reference.collection("coordinates").get();
         var coordMap = coordinateCollection.docs;
-        geoList = List.filled(coordMap.length, GeoPoint(10,20));
+        geoList = List.filled(coordMap.length, GeoPoint(10, 20));
         for (var value in coordMap) {
-          geoList[value.data()['index']]= value.data()['coordinate'];
+          geoList[value.data()['index']] = value.data()['coordinate'];
         }
       }
       List<List<double>> tempList = [];
       for (int i = 0; i < geoList.length; i++) {
         tempList.add([geoList[i].latitude, geoList[i].longitude]);
-
       }
 
       _myDestinations = convertListDoubleToLatLng(tempList);
-
     }
     return Itinerary.navigation(_docks, _myDestinations, _numberOfCyclists);
   }
 
-
-
-
-
-
-  String _padWithZeroes(String textToPad){
-    while (textToPad.length<6){
-      textToPad = '0'+ textToPad;
+  String _padWithZeroes(String textToPad) {
+    while (textToPad.length < 6) {
+      textToPad = '0' + textToPad;
     }
     return textToPad;
   }
-
 }

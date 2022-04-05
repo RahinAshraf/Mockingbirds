@@ -26,19 +26,6 @@ Future<void> main() async {
   Map _routeResponse = await _manager.getDirections(
       prettyCoords[0], prettyCoords[1], NavigationType.cycling);
 
-  testWidgets("Mapbox", (WidgetTester tester) async {
-    MapboxGlPlatform stuff = MapboxGlPlatform.createInstance.call();
-    MapboxMapController controller = new MapboxMapController(
-        mapboxGlPlatform: stuff,
-        initialCameraPosition:
-            CameraPosition(target: LatLng(-50, 1), zoom: 15));
-    var mapboxMap = tester.firstWidget(find.byType(MapboxMap)) as MapboxMap;
-    mapboxMap.onMapCreated!(controller);
-    mapboxMap.onStyleLoadedCallback!();
-
-    tester.binding.scheduleWarmUpFrame();
-  });
-
   test('setFills populates a Map with geometries', () async {
     _fills = await setFills(_fills, _routeResponse);
     expect(_fills.isNotEmpty, true);
